@@ -10,9 +10,14 @@
 #import "ProjectListCell.h"
 
 #import "MineAttentionInvestCell.h"
+#import "MineAttentionInvestOrganizationCell.h"
+#import "MineAttentionInvestThinkTankCell.h"
 
-#import "ProjectListProBaseModel.h"
 #import "ProjectListProModel.h"
+#import "MineCollectionProjectModel.h"
+
+
+#import "MineCollectionInvestModel.h"
 
 #import "MineCollectionInvestorBaseModel.h"
 #import "MineCollectionListModel.h"
@@ -38,6 +43,8 @@
 @property (nonatomic, strong) NSMutableArray *projectArray;
 @property (nonatomic, strong) NSMutableArray *investArray;
 
+@property (nonatomic, strong) NSMutableArray *identifyArray;
+
 @end
 
 @implementation MineAttentionVC
@@ -50,6 +57,9 @@
     }
     if (!_investArray) {
         _investArray  = [NSMutableArray array];
+    }
+    if (!_identifyArray) {
+        _identifyArray = [NSMutableArray array];
     }
     _selectedTableView = 0;  //默认显示第一个视图
     _identyType = @"0";       //默认请求项目
@@ -100,6 +110,7 @@
         }
         if (_selectedTableView == 1) {
             [_investArray removeAllObjects];
+            [_identifyArray removeAllObjects];
         }
     }
     
@@ -108,19 +119,19 @@
         if ([status integerValue] == 200) {
             //项目
             if (_selectedTableView == 0) {
-                NSArray *dataArray = [ProjectListProBaseModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+                NSArray *dataArray = [MineCollectionProjectModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
                 for (NSInteger i = 0; i < dataArray.count; i ++) {
                     ProjectListProModel *listModel = [ProjectListProModel new];
-                    ProjectListProBaseModel *baseModel = dataArray[i];
-                    listModel.startPageImage = baseModel.project.startPageImage;
-                    listModel.abbrevName = baseModel.project.abbrevName;
-                    listModel.address = baseModel.project.address;
-                    listModel.fullName = baseModel.project.fullName;
-                    listModel.status = baseModel.project.financestatus.name;
+                    MineCollectionProjectModel *baseModel = dataArray[i];
+                    listModel.startPageImage = baseModel.startPageImage;
+                    listModel.abbrevName = baseModel.abbrevName;
+                    listModel.address = baseModel.address;
+                    listModel.fullName = baseModel.fullName;
+                    listModel.status = baseModel.financestatus.name;
                     //少一个areas 数组
-                    
-                    listModel.collectionCount = baseModel.project.collectionCount;
-                    Roadshows *roadshows = baseModel.project.roadshows[0];
+                    listModel.areas = [baseModel.industoryType componentsSeparatedByString:@"，"];
+                    listModel.collectionCount = baseModel.collectionCount;
+                    MineRoadshows *roadshows = baseModel.roadshows[0];
                     listModel.financeTotal = roadshows.roadshowplan.financeTotal;
                     listModel.financedMount = roadshows.roadshowplan.financedMount;
                     listModel.endDate = roadshows.roadshowplan.endDate;
@@ -130,22 +141,27 @@
                 }
                 
             }
-            NSLog(@"数组个数---%ld",_projectArray.count);
+//            NSLog(@"数组个数---%ld",_projectArray.count);
             //投资
             if (_selectedTableView == 1) {
-                NSArray *dataArray = [MineCollectionInvestorBaseModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+                NSArray *dataArray = [MineCollectionInvestModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
                 for (NSInteger i =0; i < dataArray.count; i ++) {
-                    MineCollectionInvestorBaseModel *baseModel = dataArray[i];
+                    MineCollectionInvestModel *baseModel = dataArray[i];
                     MineCollectionListModel *listModel = [MineCollectionListModel new];
-                    listModel.headSculpture = baseModel.usersByUserId.headSculpture;
-                    listModel.name = baseModel.usersByUserId.name;
-                    MineCollectionAuthentics *authentics = baseModel.usersByUserId.authentics[0];
+                    listModel.headSculpture = baseModel.usersByUserCollectedId.headSculpture;
+//                    listModel.name = baseModel.usersByUserId.name;
+                    MAuthentics *authentics = baseModel.usersByUserCollectedId.authentics[0];
+                    listModel.name = authentics.name;
                     listModel.position = authentics.position;
                     listModel.identiyTypeId = authentics.identiytype.name;
                     listModel.companyName = authentics.companyName;
-                    listModel.companyAddress = authentics.companyAddress;
-                    //领域
-                    
+                    NSString *city = authentics.city.name;
+                    NSString *province = authentics.city.province.name;
+                    listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province,city];
+                    listModel.areas = [authentics.industoryArea componentsSeparatedByString:@"，"];
+                    listModel.introduce = authentics.introduce;
+                    //身份
+                    [_identifyArray addObject:authentics.identiytype.name];
                     [_investArray addObject:listModel];
                 }
             }
@@ -361,19 +377,46 @@
         return cell;
     }
     
-    static NSString * cellId =@"MineAttentionInvestCell";
-    MineAttentionInvestCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (cell == nil) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+    if (_identifyArray.count && _investArray.count) {
+        
+        if ([_identifyArray[indexPath.row] isEqualToString:@"个人投资者"]) {
+            static NSString * cellId =@"MineAttentionInvestCell";
+            MineAttentionInvestCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (cell == nil) {
+                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+                
+            }
+                cell.model = _investArray[indexPath.row];
+           
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
+        }
+        if ([_identifyArray[indexPath.row] isEqualToString:@"机构投资者"]) {
+            static NSString *cellId = @"MineAttentionInvestOrganizationCell";
+            MineAttentionInvestOrganizationCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (cell == nil) {
+                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+            }
+            cell.model = _investArray[indexPath.row];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
+        }
+        
+        if ([_identifyArray[indexPath.row] isEqualToString:@"智囊团"]) {
+            static NSString *cellId = @"MineAttentionInvestThinkTankCell";
+            MineAttentionInvestThinkTankCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (cell == nil) {
+                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil ] lastObject];
+            }
+            cell.model = _investArray[indexPath.row];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
+        }
         
     }
-    if (_investArray.count) {
-        cell.model = _investArray[indexPath.row];
-    }
-    
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    return cell;
-    
+   
+    return nil;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -396,7 +439,7 @@
     tableView.mj_header.automaticallyChangeAlpha = YES;
     [tableView.mj_header beginRefreshing];
     tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
-    
+//    tableView.mj_footer.hidden = YES;
     [_scrollView addSubview:tableView];
 }
 

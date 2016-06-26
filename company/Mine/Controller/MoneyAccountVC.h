@@ -10,4 +10,11 @@
 
 @interface MoneyAccountVC : RootViewController
 
+@property (nonatomic, copy) NSString *profit;
+@property (nonatomic, copy) NSString *borrowerUserNumber;
+@property (nonatomic, copy) NSString *fullName;
+@property (nonatomic, copy) NSString *abbrevName;
+
+@property (nonatomic, strong) NSMutableDictionary *dataDic;
+
 @end

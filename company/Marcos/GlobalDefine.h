@@ -365,10 +365,18 @@
 //我的活动
 #define LOGO_ACTIVITY_LIST @"requestMineAction.action"
 
-//我的金条账户
-#define LOGO_GOLD_ACCOUNT @"requestGoldAccount.action"
-//金条交易明细
-#define LOGO_GOLD_DETAIL @"requestGoldTradList.action"
+//我的金条账户总数
+#define LOGO_GOLD_ACCOUNT @"requestUserGoldCount.action"
+//当日用户获得金条信息
+#define REQUEST_USER_GOLD_GETCOUNT @"requestUserGoldGetInfo.action"
+//金条交易明细流水
+#define LOGO_GOLD_DETAIL @"requestUserGoldTradeList.action"
+//金条积累规则
+#define REQUEST_GOLD_GET_RULE @"requestGoldGetRule.action"
+//金条使用规则
+#define REQUEST_GOLD_USE_RULE @"requestGoldUseRule.action"
+//邀请送金条
+#define REQUEST_INVITE_CODE @"requestInviteCode.action"
 
 
 //项目中心

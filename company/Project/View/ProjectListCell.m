@@ -37,18 +37,32 @@
     [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.startPageImage]] placeholderImage:[UIImage new]];
     
     //根据状态判断 状态图片
-    if (!model.status) {
-        _statusImage.hidden = YES;
-    }
+//    if (!model.status) {
+//        _statusImage.hidden = YES;
+//    }
     if ([model.status isEqualToString:@"待路演"]) {
-        _statusImage.image = [UIImage imageNamed:@"invest_noroad"];
+        _statusImage.image = [UIImage imageNamed:@"icon_noroad"];
     }
+    
     if ([model.status isEqualToString:@"路演中"]) {
-        _statusImage.image = [UIImage imageNamed:@"invest_roading"];
+        _statusImage.image = [UIImage imageNamed:@"icon_roading"];
     }
+    
     if ([model.status isEqualToString:@"预选"]) {
         _statusImage.image = [UIImage imageNamed:@"invest_yuxuan"];
     }
+    
+    if ([model.status isEqualToString:@"融资中"]) {
+        //
+        UIImage * image = [UIImage imageNamed:@"icon_raising"];
+        _statusImage.image =  image;
+    }
+    
+    if ([model.status isEqualToString:@"融资成功"]) {
+        _statusImage.image = [UIImage imageNamed:@"icon_raised"];
+    }
+    
+
     
     //隐藏多余的 label
     for (NSInteger i =model.areas.count; i < _labelArray.count; i ++) {

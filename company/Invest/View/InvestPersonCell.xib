@@ -111,6 +111,10 @@
                             <action selector="attentionClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Ecm-pA-CUm"/>
                         </connections>
                     </button>
+                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nYv-sC-jeC">
+                        <rect key="frame" x="92" y="146" width="240" height="13.5"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="MwA-ML-Bsn" secondAttribute="trailing" constant="8" id="0Gm-Bs-wmf"/>
@@ -159,7 +163,7 @@
                 <outletCollection property="btnArray" destination="9VE-rz-hiO" id="uvc-hH-Q3n"/>
                 <outletCollection property="btnArray" destination="3kg-LA-2Wp" id="Fza-i8-5RW"/>
             </connections>
-            <point key="canvasLocation" x="244.5" y="-28"/>
+            <point key="canvasLocation" x="161.5" y="-23"/>
         </tableViewCell>
     </objects>
     <resources>

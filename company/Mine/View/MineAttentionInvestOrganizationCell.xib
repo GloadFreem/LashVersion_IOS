@@ -103,6 +103,14 @@
                     <constraint firstItem="kql-n4-de3" firstAttribute="leading" secondItem="9wA-Uo-3I4" secondAttribute="leading" id="yz5-Zj-qgv"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="address" destination="9wA-Uo-3I4" id="dqd-Q2-xPh"/>
+                <outlet property="icon" destination="e92-UV-KqR" id="tU5-Hq-ZbP"/>
+                <outlet property="name" destination="qNY-oj-QMg" id="NmW-WK-niN"/>
+                <outletCollection property="btnArray" destination="gci-20-dPE" id="JBX-0B-nJW"/>
+                <outletCollection property="btnArray" destination="Q1p-jD-w83" id="Ikj-gt-esF"/>
+                <outletCollection property="btnArray" destination="TpC-HQ-QGa" id="tf1-a6-slf"/>
+            </connections>
             <point key="canvasLocation" x="227.5" y="275.5"/>
         </tableViewCell>
     </objects>

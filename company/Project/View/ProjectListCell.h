@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *iconImage;
 
 @property (weak, nonatomic) IBOutlet UIImageView *statusImage;
+
 @property (weak, nonatomic) IBOutlet UILabel *projectLabel;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 

@@ -31,4 +31,5 @@
 @property (nonatomic, assign) Boolean flag;
 
 @property (nonatomic, assign) Boolean attended;
+
 @end

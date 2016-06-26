@@ -28,21 +28,25 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1RZ-5N-ktN">
-                            <rect key="frame" x="22" y="27" width="12" height="20"/>
-                            <state key="normal" backgroundImage="leftBack"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1RZ-5N-ktN">
+                            <rect key="frame" x="12" y="27" width="32" height="20"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="32" id="cav-xu-smw"/>
+                                <constraint firstAttribute="height" constant="20" id="lN8-wv-h5Q"/>
+                            </constraints>
+                            <state key="normal" image="leftBack"/>
                             <connections>
                                 <action selector="leftBack:" destination="-1" eventType="touchUpInside" id="0Rt-mC-vWi"/>
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="账户现有金条" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xdB-K6-eWu">
-                            <rect key="frame" x="22" y="76" width="78" height="13"/>
+                            <rect key="frame" x="12" y="76" width="78" height="13"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="82" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZSn-TT-Prv">
-                            <rect key="frame" x="156" y="102" width="63" height="47"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZSn-TT-Prv">
+                            <rect key="frame" x="187.5" y="102" width="0.0" height="47"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="47" id="RVO-O1-eAf"/>
                             </constraints>
@@ -51,7 +55,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="根" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vqy-M4-4JP">
-                            <rect key="frame" x="222" y="133" width="12" height="12"/>
+                            <rect key="frame" x="190.5" y="133" width="12" height="12"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="12" id="ozO-Yl-VKi"/>
                             </constraints>
@@ -68,7 +72,7 @@
                         <constraint firstItem="CpN-P6-rmg" firstAttribute="centerY" secondItem="1RZ-5N-ktN" secondAttribute="centerY" id="03t-4E-Cll"/>
                         <constraint firstAttribute="height" constant="324" id="6eh-3n-4JW"/>
                         <constraint firstItem="ZSn-TT-Prv" firstAttribute="centerX" secondItem="5Kq-Hx-FHv" secondAttribute="centerX" id="7bF-CQ-Vrk"/>
-                        <constraint firstItem="1RZ-5N-ktN" firstAttribute="leading" secondItem="5Kq-Hx-FHv" secondAttribute="leading" constant="22" id="Ehy-5o-DHD"/>
+                        <constraint firstItem="1RZ-5N-ktN" firstAttribute="leading" secondItem="5Kq-Hx-FHv" secondAttribute="leading" constant="12" id="Ehy-5o-DHD"/>
                         <constraint firstItem="tbS-pM-uqK" firstAttribute="top" secondItem="ZSn-TT-Prv" secondAttribute="bottom" id="Niy-oy-jac"/>
                         <constraint firstItem="tbS-pM-uqK" firstAttribute="centerX" secondItem="5Kq-Hx-FHv" secondAttribute="centerX" id="RhB-tj-TFa"/>
                         <constraint firstItem="xdB-K6-eWu" firstAttribute="leading" secondItem="1RZ-5N-ktN" secondAttribute="leading" id="SA8-0y-WdF"/>

@@ -8,14 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
+@class Rewardtradetype;
 @interface MineGoldMingxiModel : NSObject
 
-@property (nonatomic, copy) NSString *yearStr;
-@property (nonatomic, copy) NSString *dayStr;
-@property (nonatomic, copy) NSString *titleStr;
-@property (nonatomic, copy) NSString *numberStr;    //
-@property (nonatomic, copy) NSString *contentStr;    //
+
+@property (nonatomic, assign) NSInteger count;
+
+@property (nonatomic, strong) Rewardtradetype *rewardtradetype;
+
+@property (nonatomic, copy) NSString *tradeDate;
+
 @property (nonatomic, assign) BOOL isShow;
 
 
 @end
+
+@interface Rewardtradetype : NSObject
+
+@property (nonatomic, copy) NSString *name;
+
+@end
+

@@ -88,10 +88,7 @@
 
 -(void)refreshHttp
 {
-    _page --;
-    if (_page < 0) {
-        _page = 0;
-    }
+    _page = 0;
     [self startLoadData];
     //    NSLog(@"下拉刷新");
 }
@@ -116,6 +113,12 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
+            NSArray *modelArray = [ActivityViewModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+            for (NSInteger i =0; i < modelArray.count; i ++) {
+                ActivityViewModel *model = modelArray[i];
+                [_dataArray addObject:model];
+            }
+            
             
             [self.tableView reloadData];
             //结束刷新
@@ -124,7 +127,7 @@
         }else{
             //结束刷新
             [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            [self.tableView.mj_footer endRefreshing];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         
         }
@@ -134,7 +137,7 @@
 #pragma mark -tableViewDatasource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    return _dataArray.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -149,10 +152,11 @@
     if (!cell) {
         cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
     }
+    if (_dataArray.count) {
+        cell.model = _dataArray[indexPath.row];
+    }
     [cell.signUpBtn setHidden:YES];
-    if (indexPath.row % 2 == 0) {
-        [cell.expiredImage setHidden:YES];
-        }
+    
     return cell;
 }
 

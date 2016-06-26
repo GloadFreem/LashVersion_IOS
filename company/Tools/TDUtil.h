@@ -554,6 +554,6 @@
 
 //是否是浮点数
 + (BOOL)isPureFloat:(NSString *)string;
-
-
+//阿拉伯转换汉字
++(NSString *)translation:(NSString *)arebic;
 @end

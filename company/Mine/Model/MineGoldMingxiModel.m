@@ -10,21 +10,12 @@
 
 @implementation MineGoldMingxiModel
 
-@synthesize yearStr = _yearStr;
-
--(void)setYearStr:(NSString *)yearStr
-{
-    _yearStr = yearStr;
-}
-
--(NSString*)yearStr
-{
-    if ([_yearStr isEqualToString:@""]) {
-        _isShow = NO;
-    }else{
-        _isShow = YES;
-    }
-    return _yearStr;
-}
 
 @end
+
+
+@implementation Rewardtradetype
+
+@end
+
+

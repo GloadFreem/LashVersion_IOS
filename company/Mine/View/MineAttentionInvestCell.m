@@ -34,15 +34,15 @@
     _name.text = model.name;
     _position.text = model.position;
     //根据状态显示状态图片
-    if ([model.status isEqualToString:@"投资人"]) {
-        _statusImage.image = [UIImage imageNamed:@"invest_investperson"];
-    }
-    if ([model.status isEqualToString:@"投资机构"]) {
-        _statusImage.image = [UIImage imageNamed:@"invest_organization"];
-    }
-    if ([model.status isEqualToString:@"智囊团"]) {
-        _statusImage.image = [UIImage imageNamed:@"invest_thinkTank"];
-    }
+//    if ([model.status isEqualToString:@"投资人"]) {
+//        _statusImage.image = [UIImage imageNamed:@"invest_investperson"];
+//    }
+//    if ([model.status isEqualToString:@"投资机构"]) {
+//        _statusImage.image = [UIImage imageNamed:@"invest_organization"];
+//    }
+//    if ([model.status isEqualToString:@"智囊团"]) {
+//        _statusImage.image = [UIImage imageNamed:@"invest_thinkTank"];
+//    }
     
     _company.text = model.companyName;
     _address.text = model.companyAddress;

@@ -465,7 +465,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_tableViewSelected == 1) {
-        return 150;
+        return 160;
     }
     
     if (_tableViewSelected == 2) {
@@ -477,29 +477,29 @@
     return 150;
 }
 #pragma mark -footerView----
--(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 10)];
-    view.backgroundColor = colorGray;
-    
-    if (_tableViewSelected == 2) {
-        if (section == 1) {
-            return view;
-        }
-        return nil;
-    }
-    return view;
-}
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    if (_tableViewSelected == 2) {
-        if (section == 1) {
-            return 10;
-        }
-        return 0.0000001f;
-    }
-    return 10;
-}
+//-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 10)];
+//    view.backgroundColor = colorGray;
+//    
+//    if (_tableViewSelected == 2) {
+//        if (section == 1) {
+//            return view;
+//        }
+//        return nil;
+//    }
+//    return view;
+//}
+//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    if (_tableViewSelected == 2) {
+//        if (section == 1) {
+//            return 10;
+//        }
+//        return 0.0000001f;
+//    }
+//    return 10;
+//}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (_tableViewSelected == 1) {
@@ -650,7 +650,7 @@
     tableView.tag = index;
     tableView.delegate=self;
     tableView.dataSource=self;
-    tableView.backgroundColor=[UIColor whiteColor];
+    tableView.backgroundColor=[UIColor groupTableViewBackgroundColor];
     
     //设置刷新控件
     tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
@@ -658,6 +658,8 @@
     tableView.mj_header.automaticallyChangeAlpha = YES;
     [tableView.mj_header beginRefreshing];
     tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
+//    tableView.mj_footer.hidden = YES;
+    tableView.mj_footer.automaticallyHidden = NO;
     
     [_subViewScrollView addSubview:tableView];
 }

@@ -10,7 +10,6 @@
 
 @implementation MineGoldMingxiCell
 {
-    UIView *_topContainerView;
     UIImageView *_calenderImage;
     UIImageView *_lineImage;
     UILabel *_yearlabel;
@@ -39,6 +38,10 @@
     _topContainerView = [UIView new];
     _topContainerView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
+    _topLine = [UIImageView new];
+    _topLine.image = [UIImage imageNamed:@"mine_goldline"];
+    [_topContainerView addSubview:_topLine];
+    
     _calenderImage = [UIImageView new];
     _calenderImage.image = [UIImage imageNamed:@"mine_gold_calender"];
     [_topContainerView addSubview:_calenderImage];
@@ -52,6 +55,12 @@
     _lineImage = [UIImageView new];
     _lineImage.image = [UIImage imageNamed:@"mine_goldline"];
     [_topContainerView addSubview:_lineImage];
+    
+    _topLine.sd_layout
+    .centerXEqualToView(_calenderImage)
+    .bottomSpaceToView(_calenderImage,0)
+    .widthIs(1)
+    .topEqualToView(self.contentView);
     
     _calenderImage.sd_layout
     .leftSpaceToView(_topContainerView,40)
@@ -104,7 +113,7 @@
     _secondLine.sd_layout
     .topSpaceToView(_topContainerView,0)
     .centerXEqualToView(_point)
-    .heightIs(80)
+    .bottomEqualToView(self.contentView)
     .widthIs(1);
     
     _dayLabel.sd_layout
@@ -113,7 +122,7 @@
     .heightIs(14);
     
     _whiteImage.sd_layout
-    .topSpaceToView(_topContainerView,0)
+    .topSpaceToView(_topContainerView,5)
     .leftSpaceToView(_point,5)
     .heightIs(64)
     .rightSpaceToView(self.contentView,20);
@@ -157,12 +166,17 @@
 -(void)setModel:(MineGoldMingxiModel *)model
 {
     _model  = model;
+    NSArray *arr = [model.tradeDate componentsSeparatedByString:@" "];
+    NSArray *array = [arr[0] componentsSeparatedByString:@"-"];
     
-    _yearlabel.text = model.yearStr;
-    _dayLabel.text = model.dayStr;
-    _titleLabel.text = model.titleStr;
-    _numLabel.text = model.numberStr;
-    _contentLabel.text = model.contentStr;
+    _yearlabel.text = [NSString stringWithFormat:@"%@年%@月",array[0],array[1]];
+    if (array[2]) {
+        _dayLabel.text = [NSString stringWithFormat:@"%@日",array[2]];
+    }
+    
+    _titleLabel.text = model.rewardtradetype.name;
+    _numLabel.text = [NSString stringWithFormat:@"+ %ld",model.count];
+//    _contentLabel.text = model.contentStr;
     
     if (_model.isShow == YES) {
 //        NSLog(@"设置高度");
@@ -175,7 +189,7 @@
         _topContainerView.sd_layout.heightIs(0);
     }
     
-    [self setupAutoHeightWithBottomView:_whiteImage bottomMargin:10];
+    [self setupAutoHeightWithBottomView:_whiteImage bottomMargin:0];
 }
 
 @end

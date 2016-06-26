@@ -1,18 +1,20 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "AA5E2B662874715740F8A35A631A0A56546A45F4",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "5B24A467953EF4C078D4DF1FC15090D22AE61DE0",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
     "1a0beb16-39a9-491a-8432-0dfbb1476d54++7897" : {
 
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "AA5E2B662874715740F8A35A631A0A56546A45F4" : 0,
-    "1a0beb16-39a9-491a-8432-0dfbb1476d54++7897" : 0
+    "5B24A467953EF4C078D4DF1FC15090D22AE61DE0" : 0,
+    "1a0beb16-39a9-491a-8432-0dfbb1476d54++7897" : 0,
+    "AA5E2B662874715740F8A35A631A0A56546A45F4" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "B1A4EC11-4227-4750-B1F5-B57F4C164030",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "AA5E2B662874715740F8A35A631A0A56546A45F4" : "company\/",
-    "1a0beb16-39a9-491a-8432-0dfbb1476d54++7897" : "company\/company\/Tools\/Camera\/UIImage-Extensions\/"
+    "5B24A467953EF4C078D4DF1FC15090D22AE61DE0" : "LashVersion_IOS\/",
+    "1a0beb16-39a9-491a-8432-0dfbb1476d54++7897" : "company\/company\/Tools\/Camera\/UIImage-Extensions\/",
+    "AA5E2B662874715740F8A35A631A0A56546A45F4" : "company\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "company",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -22,6 +24,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/svn.duapp.com\/appid9kgedf0yca",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1a0beb16-39a9-491a-8432-0dfbb1476d54++7897"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/GloadFreem\/LashVersion_IOS.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5B24A467953EF4C078D4DF1FC15090D22AE61DE0"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/GloadFreem\/VeryFast_iOS.git",

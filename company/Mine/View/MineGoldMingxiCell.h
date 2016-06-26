@@ -9,7 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "MineGoldMingxiModel.h"
 @interface MineGoldMingxiCell : UITableViewCell
-
+{
+    UIView *_topContainerView;
+    
+}
+@property (nonatomic, strong) UIImageView *topLine;
 @property (nonatomic, strong) MineGoldMingxiModel*model;
 
 

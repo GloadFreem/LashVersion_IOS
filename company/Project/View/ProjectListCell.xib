@@ -28,9 +28,6 @@
                             <constraint firstAttribute="width" constant="60" id="Pa2-ks-hH3"/>
                         </constraints>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_noroad.png" translatesAutoresizingMaskIntoConstraints="NO" id="pgG-O6-yju">
-                        <rect key="frame" x="333" y="10" width="27" height="55"/>
-                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="逸景营地" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6CK-Nw-hHd">
                         <rect key="frame" x="84" y="23" width="72" height="18"/>
                         <constraints>
@@ -178,6 +175,13 @@
                             <constraint firstAttribute="width" constant="53" id="puE-2b-i4X"/>
                         </constraints>
                     </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pgG-O6-yju">
+                        <rect key="frame" x="333" y="10" width="27" height="55"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="55" id="iYL-6G-Cnc"/>
+                            <constraint firstAttribute="width" constant="27" id="xQ3-LH-vct"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="Y0O-0s-J4B" firstAttribute="centerY" secondItem="Y18-Lg-bSZ" secondAttribute="centerY" id="28c-iQ-d0y"/>
@@ -261,7 +265,6 @@
     </objects>
     <resources>
         <image name="Avatar-icon.png" width="40" height="40"/>
-        <image name="icon_noroad.png" width="27" height="55"/>
         <image name="image-point.png" width="268" height="1"/>
         <image name="part_image.png" width="375" height="3"/>
     </resources>

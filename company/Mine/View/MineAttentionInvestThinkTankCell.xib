@@ -70,9 +70,9 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新三板挂牌法律顾问服务" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UdP-Yo-waI">
-                        <rect key="frame" x="74" y="80" width="143" height="13"/>
+                        <rect key="frame" x="74" y="80" width="143" height="16"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="13" id="Qjb-KQ-B9m"/>
+                            <constraint firstAttribute="height" constant="16" id="Qjb-KQ-B9m"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -102,6 +102,14 @@
                     <constraint firstItem="8YE-rl-qBX" firstAttribute="top" secondItem="Vch-O8-mVj" secondAttribute="bottom" constant="12" id="sNl-2B-yTV"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="address" destination="XcD-wj-j0R" id="RoS-Z8-Cwf"/>
+                <outlet property="companyName" destination="zHR-UP-EBL" id="bG4-57-gbz"/>
+                <outlet property="icon" destination="6rh-aN-ATY" id="NyL-t1-1Df"/>
+                <outlet property="introduce" destination="UdP-Yo-waI" id="D2l-ix-v6m"/>
+                <outlet property="name" destination="8YE-rl-qBX" id="5iK-ob-W0U"/>
+                <outlet property="position" destination="fXn-ZA-ifY" id="tYJ-EV-SFe"/>
+            </connections>
             <point key="canvasLocation" x="208.5" y="260.5"/>
         </tableViewCell>
     </objects>

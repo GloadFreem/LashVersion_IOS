@@ -67,8 +67,12 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="invest_point.png" translatesAutoresizingMaskIntoConstraints="NO" id="Xl1-1C-qAf">
                         <rect key="frame" x="74" y="69" width="281" height="1"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="invest_investperson.png" translatesAutoresizingMaskIntoConstraints="NO" id="cLP-Yn-7gA">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="invest_investperson" translatesAutoresizingMaskIntoConstraints="NO" id="cLP-Yn-7gA">
                         <rect key="frame" x="317" y="15" width="58" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="0mm-Z6-XwK"/>
+                            <constraint firstAttribute="width" constant="58" id="hl8-nS-KmB"/>
+                        </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GlE-aw-Wur">
                         <rect key="frame" x="74" y="79" width="30" height="15"/>
@@ -147,7 +151,7 @@
     </objects>
     <resources>
         <image name="invest_icon.png" width="51" height="51"/>
-        <image name="invest_investperson.png" width="58" height="18"/>
+        <image name="invest_investperson" width="58" height="18"/>
         <image name="invest_point.png" width="228" height="1"/>
     </resources>
 </document>

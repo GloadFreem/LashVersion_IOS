@@ -8,6 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MineCollectionListModel.h"
+
 @interface MineAttentionInvestThinkTankCell : UITableViewCell
+
+@property (nonatomic, strong) MineCollectionListModel *model;
+
+
+@property (weak, nonatomic) IBOutlet UIImageView *icon;
+
+@property (weak, nonatomic) IBOutlet UILabel *name;
+@property (weak, nonatomic) IBOutlet UILabel *position;
+
+@property (weak, nonatomic) IBOutlet UILabel *companyName;
+
+@property (weak, nonatomic) IBOutlet UILabel *address;
+@property (weak, nonatomic) IBOutlet UILabel *introduce;
 
 @end

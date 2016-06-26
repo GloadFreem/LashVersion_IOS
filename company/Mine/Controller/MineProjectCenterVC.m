@@ -61,8 +61,9 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.bounces = NO;
     [self.view addSubview:_tableView];
-    _tableView.backgroundColor = [UIColor redColor];
+//    _tableView.backgroundColor = [UIColor redColor];
     
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.view.mas_left);

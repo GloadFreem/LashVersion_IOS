@@ -9,7 +9,9 @@
             <connections>
                 <outlet property="avalableAmount" destination="QEF-36-RLH" id="ybs-Ij-sGg"/>
                 <outlet property="freezonAmount" destination="eV1-dO-zg4" id="3UM-8k-jtu"/>
+                <outlet property="leftText" destination="JpH-2R-cag" id="AP3-FL-VBL"/>
                 <outlet property="numLabel" destination="8JN-ZA-q9h" id="gpq-ox-unT"/>
+                <outlet property="rightText" destination="MZq-bL-xQS" id="gDb-96-jXz"/>
                 <outlet property="textLabel" destination="v7j-5I-zf8" id="ykZ-GD-q1U"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

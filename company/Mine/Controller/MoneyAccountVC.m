@@ -8,6 +8,7 @@
 
 #import "MoneyAccountVC.h"
 #import "DealBillVC.h"
+#import "YeePayViewController.h"
 #define SIGNVERIFY @"signVerify"
 
 @interface MoneyAccountVC ()
@@ -25,6 +26,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *avalableAmount;
 @property (weak, nonatomic) IBOutlet UILabel *freezonAmount;
+@property (weak, nonatomic) IBOutlet UILabel *leftText;
+@property (weak, nonatomic) IBOutlet UILabel *rightText;
 
 @end
 
@@ -83,6 +86,7 @@
         
     }else if([DICVFK(xmlDic, @"code") intValue]==1)
     {
+        self.dataDic = [NSMutableDictionary dictionaryWithDictionary:xmlDic];
         _number = DICVFK(xmlDic, @"balance");
         _avalable = DICVFK(xmlDic, @"availableAmount");
         _freezon = DICVFK(xmlDic, @"freezeAmount");
@@ -94,10 +98,13 @@
 -(void)setModel
 {
     _numLabel.text = _number;
-    
+//    _textLabel.text = [TDUtil translation:_number];
     
     _avalableAmount.text = _avalable;
+//    _leftText.text = [TDUtil translation:_avalable];
     _freezonAmount.text = _freezon;
+//    _rightText.text = [TDUtil translation:_freezon];
+    
 }
 
 -(void)sign:(NSString*)signString sel:(SEL)sel
@@ -118,23 +125,26 @@
     switch (sender.tag) {
         case 0:
         {
-            
+            //绑定银行卡
+            [self bindCard];
         }
             break;
         case 1:
         {
-            
+            //充值
+            [self goRecharge];
         }
             break;
         case 2:
         {
+            //交易账单
 //            DealBillVC *vc = [DealBillVC new];
 //            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 3:
         {
-            
+            //资金提现
         }
             break;
             
@@ -143,6 +153,76 @@
     }
     
 }
+#pragma mark-------------------绑卡-----------------------
+-(void)bindCard
+{
+    NSString * str = [TDUtil generateUserPlatformNo];
+    
+    NSMutableDictionary * dic = [NSMutableDictionary new];
+    
+    float mount = [[self.dataDic valueForKey:@"mount"] floatValue]*10000.00;
+    
+    [dic setObject:str forKey:@"platformUserNo"];
+    [dic setObject:@"PLATFORM" forKey:@"feeMode"];
+    [dic setObject:STRING(@"%.2f", mount) forKey:@"amount"];
+    [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
+    [dic setObject:@"ios://bindCardConfirm" forKey:@"callbackUrl"];
+    [dic setObject:notifyUrl forKey:@"notifyUrl"];
+    
+    
+    NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
+    
+    [self sign:signString sel:@selector(requestSignBindCard:)];
+}
+-(void)requestSignBindCard:(ASIHTTPRequest *)request{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    
+    if(jsonDic!=nil)
+    {
+        NSString* code = [jsonDic valueForKey:@"code"];
+        if ([code intValue] == 0) {
+            NSDictionary * data = [jsonDic valueForKey:@"data"];
+            NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:_request,@"req",[data valueForKey:@"sign"],@"sign", nil];
+            YeePayViewController * controller = [[YeePayViewController alloc]init];
+            controller.dic = nil;
+            controller.PostPramDic = dic;
+            controller.title = @"银行卡";
+            controller.titleStr = @"绑定银行卡";
+            controller.state = PayStatusBindCard;
+            controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,toBindBankCard,nil)];
+            [self.navigationController pushViewController:controller animated:YES];
+        }else if([code intValue] == 1){
+            
+        }
+        self.startLoading  =NO;
+        return ;
+    }
+    self.isNetRequestError = YES;
+}
+
+#pragma mark-------------------去充值----------------------
+-(void)goRecharge
+{
+    NSString * str = [TDUtil generateUserPlatformNo];
+    
+    NSMutableDictionary * dic = [NSMutableDictionary new];
+    
+//    [dic setObject:[NSString stringWithFormat:@"%f",_cha] forKey:@"amount"];
+    [dic setObject:str forKey:@"platformUserNo"];
+    [dic setObject:@"PLATFORM" forKey:@"feeMode"];
+    [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
+    [dic setObject:@"ios://finialConfirm" forKey:@"callbackUrl"];
+    [dic setObject:notifyUrl forKey:@"notifyUrl"];
+    
+    NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
+    _request = signString;
+    
+    [self sign:signString sel:@selector(requestRecharge:)];
+}
+
+
 
 -(void)viewWillAppear:(BOOL)animated
 {
