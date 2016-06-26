@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="AppSetSwitchCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yth-Rq-ipY">
+                        <rect key="frame" x="315" y="8" width="43" height="28"/>
+                        <state key="normal" backgroundImage="icon_open.png"/>
+                        <connections>
+                            <action selector="switchBtnClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="jcU-Ka-9i0"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HJt-jX-oyM">
+                        <rect key="frame" x="17" y="11" width="42" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M0M-HA-BpH">
+                        <rect key="frame" x="17" y="42" width="358" height="1"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="aJS-jb-m0j"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Yth-Rq-ipY" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="7em-6y-WhW"/>
+                    <constraint firstAttribute="trailing" secondItem="Yth-Rq-ipY" secondAttribute="trailing" constant="17" id="B7G-HT-hNR"/>
+                    <constraint firstItem="HJt-jX-oyM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="17" id="T6q-3G-Drg"/>
+                    <constraint firstItem="M0M-HA-BpH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="17" id="W7H-Hv-aJv"/>
+                    <constraint firstItem="HJt-jX-oyM" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="iS5-Nx-2Xa"/>
+                    <constraint firstAttribute="trailing" secondItem="M0M-HA-BpH" secondAttribute="trailing" id="jhm-tp-G1K"/>
+                    <constraint firstAttribute="bottom" secondItem="M0M-HA-BpH" secondAttribute="bottom" id="mjW-kw-A1P"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="switchBtn" destination="Yth-Rq-ipY" id="5f0-NF-hs2"/>
+                <outlet property="titlelabel" destination="HJt-jX-oyM" id="Tqf-xY-Tjl"/>
+            </connections>
+            <point key="canvasLocation" x="251.5" y="248"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="icon_open.png" width="43" height="28"/>
+    </resources>
+</document>

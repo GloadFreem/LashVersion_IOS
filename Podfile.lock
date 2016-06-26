@@ -1,0 +1,43 @@
+PODS:
+  - ASIHTTPRequest (1.8.2):
+    - ASIHTTPRequest/ASIWebPageRequest (= 1.8.2)
+    - ASIHTTPRequest/CloudFiles (= 1.8.2)
+    - ASIHTTPRequest/Core (= 1.8.2)
+    - ASIHTTPRequest/S3 (= 1.8.2)
+  - ASIHTTPRequest/ASIWebPageRequest (1.8.2):
+    - ASIHTTPRequest/Core
+  - ASIHTTPRequest/CloudFiles (1.8.2):
+    - ASIHTTPRequest/Core
+  - ASIHTTPRequest/Core (1.8.2):
+    - Reachability
+  - ASIHTTPRequest/S3 (1.8.2):
+    - ASIHTTPRequest/Core
+  - GDataXML-HTML (1.3.0)
+  - MJExtension (3.0.10)
+  - MJRefresh (3.1.0)
+  - Reachability (3.2)
+  - SDWebImage (3.7.6):
+    - SDWebImage/Core (= 3.7.6)
+  - SDWebImage/Core (3.7.6)
+  - SVProgressHUD (2.0.3)
+
+DEPENDENCIES:
+  - ASIHTTPRequest (~> 1.8.2)
+  - GDataXML-HTML (~> 1.3.0)
+  - MJExtension (~> 3.0.10)
+  - MJRefresh (~> 3.1.0)
+  - SDWebImage (~> 3.7.6)
+  - SVProgressHUD (~> 2.0.3)
+
+SPEC CHECKSUMS:
+  ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
+  GDataXML-HTML: 7adc03668cab35c288f1dbb8929a179f0fece898
+  MJExtension: d86aacb740c87519d20e3cca55b6fa4be6cc7548
+  MJRefresh: 743e6404967d1c2c688472ea3ecfde247d872db4
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9
+  SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
+
+PODFILE CHECKSUM: a4e9f679b00c6485e8be4978cbe8b14ba8cceb02
+
+COCOAPODS: 1.0.0

@@ -1,0 +1,70 @@
+//
+//  PrefixHeader.pch
+//  company
+//
+//  Created by Eugene on 16/6/4.
+//  Copyright © 2016年 Eugene. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "RootViewController.h"
+
+#import "NSString+Addition.h"
+#import "IQKeyboardManager.h"
+#import "Masonry.h"
+
+#import "UITableView+SDAutoTableViewCellHeight.h"
+#import "UIView+SDAutoLayout.h"
+#import "SDPhotoBrowser.h"
+
+#import "MJRefresh.h"
+#import "MJExtension.h"
+#import "SVProgressHUD.h"
+
+#import "MeasureTool.h"
+#import "Single.h"
+
+#import "AppDelegate.h"
+
+#pragma mark -激光
+#import "JPUSHService.h"
+#pragma mark- 友盟
+#import "UMSocial.h"
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+
+#import "WXApi.h"
+#import "WXApiObject.h"
+
+#pragma mark- 自定义类别
+#import "UIBarButtonItem+LYJ.h"
+#import "UIViewController+NavBarHidden.h"
+#import "UIView+Extension.h"
+
+#pragma mark -searchbar
+#import "LoadingUtil.h"
+#import "LoadingView.h"
+#import "NSString+SBJSON.h"
+#import "DialogUtil.h"
+#import "SDImageCache.h"
+#import "GlobalDefine.h"
+
+//网络请求
+#import "AES.h"
+#import "NSString+MD5.h"
+
+#import "UConstants.h"
+#import "Reachability.h"
+#import "ASIFormDataRequest.h"
+#import "TDUtil.h"
+#import "HttpUtils.h"
+//加载图片
+#import "UIImageView+WebCache.h"
+#import "UIButton+WebCache.h"
+
+#endif /* PrefixHeader_pch */

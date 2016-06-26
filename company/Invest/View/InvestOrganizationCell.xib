@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="organizationFirst" id="KGk-i7-Jjw" customClass="InvestOrganizationCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="110"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="109.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar-sample-406.png" translatesAutoresizingMaskIntoConstraints="NO" id="p4S-f0-0Mf">
+                        <rect key="frame" x="14" y="22" width="75" height="75"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="75" id="5Na-Ht-68q"/>
+                            <constraint firstAttribute="width" constant="75" id="h7R-uD-hdQ"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="聚英天使企业家领头基金" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1gx-4F-BXt">
+                        <rect key="frame" x="101" y="20" width="187" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="Udd-XT-6mF"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="内部空间那空间阿基诺打开呢安卡哪款安定看看加拿大看那看" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kUg-OA-DQv">
+                        <rect key="frame" x="101" y="50" width="244" height="29"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FkE-eU-NH2">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="10"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="10" id="8eO-Fu-aWB"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="1gx-4F-BXt" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="14G-yz-jPi"/>
+                    <constraint firstItem="kUg-OA-DQv" firstAttribute="top" secondItem="1gx-4F-BXt" secondAttribute="bottom" constant="13" id="1zj-Vq-ssX"/>
+                    <constraint firstItem="p4S-f0-0Mf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="14" id="568-F2-f6b"/>
+                    <constraint firstAttribute="trailing" secondItem="FkE-eU-NH2" secondAttribute="trailing" id="E7B-Eh-op4"/>
+                    <constraint firstAttribute="trailing" secondItem="kUg-OA-DQv" secondAttribute="trailing" constant="30" id="JD4-NG-PZE"/>
+                    <constraint firstItem="FkE-eU-NH2" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="K99-sU-rTS"/>
+                    <constraint firstItem="FkE-eU-NH2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="XQF-PR-KzO"/>
+                    <constraint firstItem="p4S-f0-0Mf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="22" id="hdo-KQ-tdq"/>
+                    <constraint firstItem="kUg-OA-DQv" firstAttribute="leading" secondItem="1gx-4F-BXt" secondAttribute="leading" id="j2d-60-lkR"/>
+                    <constraint firstItem="1gx-4F-BXt" firstAttribute="leading" secondItem="p4S-f0-0Mf" secondAttribute="trailing" constant="12" id="zaP-Xk-mM7"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="content" destination="kUg-OA-DQv" id="bkL-IS-xlb"/>
+                <outlet property="iconImage" destination="p4S-f0-0Mf" id="ECh-Z3-TXV"/>
+                <outlet property="name" destination="1gx-4F-BXt" id="pks-Ph-c1Z"/>
+            </connections>
+            <point key="canvasLocation" x="-97.5" y="200"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Avatar-sample-406.png" width="75" height="75"/>
+    </resources>
+</document>

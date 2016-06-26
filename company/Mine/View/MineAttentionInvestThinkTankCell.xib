@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="MineAttentionInvestThinkTankCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="113"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="112.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vch-O8-mVj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="10"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="10" id="5Y3-b6-NW8"/>
+                        </constraints>
+                    </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="invest_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="6rh-aN-ATY">
+                        <rect key="frame" x="12" y="25" width="51" height="51"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="51" id="NyG-MH-sVF"/>
+                            <constraint firstAttribute="width" constant="51" id="wHm-l2-zkT"/>
+                        </constraints>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="invest_thinkTank.png" translatesAutoresizingMaskIntoConstraints="NO" id="zLN-sw-YqO">
+                        <rect key="frame" x="317" y="15" width="58" height="18"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="欧阳锋" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8YE-rl-qBX">
+                        <rect key="frame" x="74" y="22" width="54" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="0BA-3H-KMI"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="律师" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXn-ZA-ifY">
+                        <rect key="frame" x="140" y="26" width="28" height="14"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="14" id="4RW-vm-RUt"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="北京京都律师事务所" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zHR-UP-EBL">
+                        <rect key="frame" x="74" y="49" width="135" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="pms-S7-9wY"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="invest_point.png" translatesAutoresizingMaskIntoConstraints="NO" id="B46-WI-5jf">
+                        <rect key="frame" x="74" y="69" width="281" height="1"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="北京 | 海淀" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XcD-wj-j0R">
+                        <rect key="frame" x="308" y="52" width="59" height="12"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="12" id="cM1-ct-TUI"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新三板挂牌法律顾问服务" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UdP-Yo-waI">
+                        <rect key="frame" x="74" y="80" width="143" height="13"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="13" id="Qjb-KQ-B9m"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="zHR-UP-EBL" firstAttribute="top" secondItem="8YE-rl-qBX" secondAttribute="bottom" constant="9" id="3Kk-3e-PGN"/>
+                    <constraint firstItem="B46-WI-5jf" firstAttribute="top" secondItem="zHR-UP-EBL" secondAttribute="bottom" constant="5" id="5bV-8d-Nu3"/>
+                    <constraint firstAttribute="trailing" secondItem="Vch-O8-mVj" secondAttribute="trailing" id="5nF-Fe-dqE"/>
+                    <constraint firstItem="UdP-Yo-waI" firstAttribute="leading" secondItem="zHR-UP-EBL" secondAttribute="leading" id="Dqf-DW-k2C"/>
+                    <constraint firstItem="zHR-UP-EBL" firstAttribute="leading" secondItem="8YE-rl-qBX" secondAttribute="leading" id="GzN-ZG-0Qt"/>
+                    <constraint firstItem="XcD-wj-j0R" firstAttribute="bottom" secondItem="zHR-UP-EBL" secondAttribute="bottom" id="JGB-2P-Hin"/>
+                    <constraint firstItem="fXn-ZA-ifY" firstAttribute="leading" secondItem="8YE-rl-qBX" secondAttribute="trailing" constant="12" id="JRY-Oj-vNo"/>
+                    <constraint firstItem="6rh-aN-ATY" firstAttribute="top" secondItem="Vch-O8-mVj" secondAttribute="bottom" constant="15" id="Lc5-NY-DHh"/>
+                    <constraint firstItem="B46-WI-5jf" firstAttribute="leading" secondItem="zHR-UP-EBL" secondAttribute="leading" id="Mh4-uk-8fv"/>
+                    <constraint firstItem="Vch-O8-mVj" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="NQi-g0-16M"/>
+                    <constraint firstItem="zLN-sw-YqO" firstAttribute="top" secondItem="Vch-O8-mVj" secondAttribute="bottom" constant="5" id="NR4-kh-vpY"/>
+                    <constraint firstAttribute="trailing" secondItem="zLN-sw-YqO" secondAttribute="trailing" id="Tdo-Xm-Yug"/>
+                    <constraint firstAttribute="trailing" secondItem="XcD-wj-j0R" secondAttribute="trailing" constant="8" id="WJR-zA-Wj6"/>
+                    <constraint firstAttribute="trailing" secondItem="B46-WI-5jf" secondAttribute="trailing" constant="20" id="WtP-HQ-ZUt"/>
+                    <constraint firstItem="6rh-aN-ATY" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="bqZ-wj-Xfb"/>
+                    <constraint firstItem="Vch-O8-mVj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="ieT-54-f8L"/>
+                    <constraint firstItem="8YE-rl-qBX" firstAttribute="leading" secondItem="6rh-aN-ATY" secondAttribute="trailing" constant="11" id="k9s-FY-XQO"/>
+                    <constraint firstItem="UdP-Yo-waI" firstAttribute="top" secondItem="B46-WI-5jf" secondAttribute="bottom" constant="10" id="oD0-dd-Kc2"/>
+                    <constraint firstItem="fXn-ZA-ifY" firstAttribute="bottom" secondItem="8YE-rl-qBX" secondAttribute="bottom" id="qfA-Cd-EGu"/>
+                    <constraint firstItem="8YE-rl-qBX" firstAttribute="top" secondItem="Vch-O8-mVj" secondAttribute="bottom" constant="12" id="sNl-2B-yTV"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="208.5" y="260.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="invest_icon.png" width="51" height="51"/>
+        <image name="invest_point.png" width="228" height="1"/>
+        <image name="invest_thinkTank.png" width="58" height="18"/>
+    </resources>
+</document>
