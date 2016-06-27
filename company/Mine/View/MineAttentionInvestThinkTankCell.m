@@ -21,7 +21,7 @@
     _introduce.layer.masksToBounds = YES;
     _introduce.layer.borderWidth = 0.5;
     _introduce.layer.borderColor = [UIColor greenColor].CGColor;
-    
+
 }
 
 -(void)setModel:(MineCollectionListModel *)model
@@ -33,6 +33,7 @@
     _companyName.text = model.companyName;
     _address.text = model.companyName;
     _introduce.text = [NSString stringWithFormat:@"  %@  ",model.introduce];
+    
     
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

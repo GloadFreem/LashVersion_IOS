@@ -25,21 +25,6 @@
                         <constraint firstAttribute="height" constant="250" id="coF-TY-kHY"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="王大锤" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nTz-Tf-E7w">
-                    <rect key="frame" x="160" y="175" width="54" height="18"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="18" id="zQJ-vb-swI"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="绿地集团 | CEO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HqY-hc-2ld">
-                    <rect key="frame" x="138.5" y="202" width="97" height="17"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eaf-fU-gVn">
                     <rect key="frame" x="146" y="77" width="83" height="83"/>
                     <constraints>
@@ -50,11 +35,26 @@
                         <action selector="iconDetail:" destination="-1" eventType="touchUpInside" id="LF4-V1-dS4"/>
                     </connections>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="王大锤" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nTz-Tf-E7w">
+                    <rect key="frame" x="160" y="175" width="54" height="18"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="18" id="zQJ-vb-swI"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="绿地集团 | CEO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HqY-hc-2ld">
+                    <rect key="frame" x="139" y="202" width="97" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_iconvip.png" translatesAutoresizingMaskIntoConstraints="NO" id="6bd-tw-Upq">
                     <rect key="frame" x="206" y="137" width="20" height="20"/>
                 </imageView>
                 <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lh0-A9-3of">
-                    <rect key="frame" x="112.5" y="370" width="67.5" height="55"/>
+                    <rect key="frame" x="112" y="370" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="60" id="TN1-2V-6d0"/>
                         <constraint firstAttribute="height" constant="55" id="edF-M1-Lec"/>
@@ -98,7 +98,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CHj-yI-1Rg">
-                    <rect key="frame" x="172.5" y="599" width="30" height="30"/>
+                    <rect key="frame" x="172" y="599" width="30" height="30"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="7RM-zg-nkp"/>
                         <constraint firstAttribute="width" constant="30" id="nMb-5m-8JB"/>
@@ -131,7 +131,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rp8-op-tJC">
-                    <rect key="frame" x="277.5" y="281" width="67.5" height="55"/>
+                    <rect key="frame" x="277" y="281" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="55" id="NHv-aY-Rg3"/>
                         <constraint firstAttribute="width" constant="60" id="ngG-HB-WNZ"/>
@@ -153,7 +153,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CP1-oG-xTZ">
-                    <rect key="frame" x="112.5" y="281" width="67.5" height="55"/>
+                    <rect key="frame" x="112" y="281" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="60" id="AFO-Jm-sGS"/>
                         <constraint firstAttribute="height" constant="55" id="M62-SH-VIP"/>
@@ -220,7 +220,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xlu-EU-kCL">
-                    <rect key="frame" x="277.5" y="370" width="67.5" height="55"/>
+                    <rect key="frame" x="277" y="370" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="60" id="hBu-Cl-PKf"/>
                         <constraint firstAttribute="height" constant="55" id="rGr-XE-0M4"/>

@@ -45,12 +45,12 @@
     }
     
     if ([model.status isEqualToString:@"路演中"]) {
-        _statusImage.image = [UIImage imageNamed:@"icon_roading"];
+        _statusImage.image = [UIImage imageNamed:@"invest_roading"];
     }
     
-    if ([model.status isEqualToString:@"预选"]) {
-        _statusImage.image = [UIImage imageNamed:@"invest_yuxuan"];
-    }
+//    if ([model.status isEqualToString:@"预选"]) {
+//        _statusImage.image = [UIImage imageNamed:@"invest_yuxuan"];
+//    }
     
     if ([model.status isEqualToString:@"融资中"]) {
         //
@@ -59,10 +59,12 @@
     }
     
     if ([model.status isEqualToString:@"融资成功"]) {
-        _statusImage.image = [UIImage imageNamed:@"icon_raised"];
+        _statusImage.image = [UIImage imageNamed:@"invest_raisefund"];
     }
-    
-
+    if ([model.status isEqualToString:@"融资失败"]) {
+        _statusImage.image = [UIImage imageNamed:@"invest_failed@3x"];
+    }
+   
     
     //隐藏多余的 label
     for (NSInteger i =model.areas.count; i < _labelArray.count; i ++) {

@@ -124,6 +124,7 @@
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 
             PerfectViewController * perfect =[PerfectViewController new];
+            perfect.btnTitle = @"完成注册";
             [self.navigationController pushViewController:perfect animated:YES];
             });
             
@@ -134,9 +135,9 @@
         [activity stopAnimating];
     }
     
-    //测试
-    PerfectViewController * perfect =[PerfectViewController new];
-    [self.navigationController pushViewController:perfect animated:YES];
+//    //测试
+//    PerfectViewController * perfect =[PerfectViewController new];
+//    [self.navigationController pushViewController:perfect animated:YES];
     
 }
 

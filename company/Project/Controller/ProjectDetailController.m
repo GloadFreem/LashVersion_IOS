@@ -291,9 +291,12 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSArray *modelArray = [ProjectSceneModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
-            ProjectSceneModel *model = modelArray[0];
+            if (modelArray.count) {
+                ProjectSceneModel *model = modelArray[0];
+                
+                _sceneId = model.sceneId;
+            }
             
-            _sceneId = model.sceneId;
             
             
         }else{

@@ -77,8 +77,9 @@
             }
             
             [_tableView reloadData];
-        }
+        }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];
+        }
     }
     
 }

@@ -550,17 +550,7 @@
     //更换头像
     [self changeIcon];
     
-    for (UIViewController *VC in self.navigationController.viewControllers)
-    {
-        if ([VC isKindOfClass:[MineViewController class]]) {
-            MineViewController *vc = (MineViewController*)VC;
-            
-            //            vc.cityId = _idArray[indexPath.row];
-            //        _city = [NSString stringWithFormat:@"%@",_idArray[indexPath.row]];
-            [vc loadAuthenData];
-            
-        }
-    }
+   
     
 }
 
@@ -594,6 +584,18 @@
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            
+            for (UIViewController *VC in self.navigationController.viewControllers)
+            {
+                if ([VC isKindOfClass:[MineViewController class]]) {
+                    MineViewController *vc = (MineViewController*)VC;
+                    
+                    
+                    [vc loadAuthenData];
+                    
+                }
+            }
+            
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];

@@ -677,7 +677,7 @@ static CGFloat textFieldH = 40;
             
             //获取自身userId
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-            NSString * userId = [[data valueForKey:STATIC_USER_ID] stringValue];
+            NSString * userId = [[data valueForKey:USER_STATIC_USER_ID] stringValue];
             
             //设置属性
             model.userId = userId;

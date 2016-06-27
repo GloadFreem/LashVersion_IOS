@@ -85,10 +85,13 @@
                 }
                 
                 [self.tableView reloadData];
-                
+                [_tableView.mj_header endRefreshing];
+                [_tableView.mj_footer endRefreshing];
 
-            }}else{
-        
+            }
+        }else{
+            [_tableView.mj_header endRefreshing];
+            [_tableView.mj_footer endRefreshing];
         }
     }
 }

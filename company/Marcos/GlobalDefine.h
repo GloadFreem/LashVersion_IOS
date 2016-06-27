@@ -358,6 +358,9 @@
 #define REQUEST_AUTHENTIC_QUICK @"requestAuthenticQuick.action"
 
 
+//资金账户交易账单
+#define REQUEST_TRADE_LIST @"requestTradeList.action"
+
 
 //我的关注
 #define LOGO_ATTENTION_LIST @"requestMineCollection.action"
@@ -433,7 +436,10 @@
 //易宝投标
 #define YEEPAYTENDERNOTIFYURL @"requestTenderNotifyUrl.action"
 
-
+//资金提现
+#define REQUEST_WITH_DRAW @"requestWithDraw.action"
+//充值
+#define REQUEST_ACCOUNT_CHARGE @"requestAccountCharge.action"
 
 
 //版本更新itunes 地址
@@ -447,6 +453,8 @@
 #define toBindBankCard @"toBindBankCard"
 #define YeePayToRegister @"toRegister"
 #define YeePayPlatformID @"10013200657"
+
+#define toUnbindBankCard @"UNBIND_CARD"
 
 #define YeePayToCpTransaction @"toCpTransaction"
 #define ACCOUNT_INFO @"ACCOUNT_INFO"
@@ -475,8 +483,6 @@
 #define STATIC_COMPANY_NAME @"userCompanyName"
 //用户密码
 #define STATIC_USER_PASSWORD @"userPassword"
-//用户Id
-#define STATIC_USER_ID @"userId"
 //用户
 #define STATIC_USER_COUNT_DAYS @"userCountDays"
 //用户头像

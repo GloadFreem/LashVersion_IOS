@@ -15,6 +15,6 @@
 @property (nonatomic, copy) NSString *fullName;
 @property (nonatomic, copy) NSString *abbrevName;
 
-@property (nonatomic, strong) NSMutableDictionary *dataDic;
+@property (nonatomic, strong) NSMutableDictionary *dataDict;
 
 @end

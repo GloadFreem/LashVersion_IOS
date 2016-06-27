@@ -70,7 +70,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新三板挂牌法律顾问服务" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UdP-Yo-waI">
-                        <rect key="frame" x="74" y="80" width="143" height="16"/>
+                        <rect key="frame" x="74" y="80" width="251" height="16"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="Qjb-KQ-B9m"/>
                         </constraints>
@@ -87,6 +87,7 @@
                     <constraint firstItem="zHR-UP-EBL" firstAttribute="leading" secondItem="8YE-rl-qBX" secondAttribute="leading" id="GzN-ZG-0Qt"/>
                     <constraint firstItem="XcD-wj-j0R" firstAttribute="bottom" secondItem="zHR-UP-EBL" secondAttribute="bottom" id="JGB-2P-Hin"/>
                     <constraint firstItem="fXn-ZA-ifY" firstAttribute="leading" secondItem="8YE-rl-qBX" secondAttribute="trailing" constant="12" id="JRY-Oj-vNo"/>
+                    <constraint firstAttribute="trailing" secondItem="UdP-Yo-waI" secondAttribute="trailing" constant="50" id="Lab-PC-ySH"/>
                     <constraint firstItem="6rh-aN-ATY" firstAttribute="top" secondItem="Vch-O8-mVj" secondAttribute="bottom" constant="15" id="Lc5-NY-DHh"/>
                     <constraint firstItem="B46-WI-5jf" firstAttribute="leading" secondItem="zHR-UP-EBL" secondAttribute="leading" id="Mh4-uk-8fv"/>
                     <constraint firstItem="Vch-O8-mVj" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="NQi-g0-16M"/>

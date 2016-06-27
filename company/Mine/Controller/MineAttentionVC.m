@@ -8,6 +8,7 @@
 
 #import "MineAttentionVC.h"
 #import "ProjectListCell.h"
+#import "ProjectNoRoadCell.h"
 
 #import "MineAttentionInvestCell.h"
 #import "MineAttentionInvestOrganizationCell.h"
@@ -44,6 +45,7 @@
 @property (nonatomic, strong) NSMutableArray *investArray;
 
 @property (nonatomic, strong) NSMutableArray *identifyArray;
+@property (nonatomic, strong) NSMutableArray *statusArray;
 
 @end
 
@@ -60,6 +62,9 @@
     }
     if (!_identifyArray) {
         _identifyArray = [NSMutableArray array];
+    }
+    if (!_statusArray) {
+        _statusArray = [NSMutableArray array];
     }
     _selectedTableView = 0;  //默认显示第一个视图
     _identyType = @"0";       //默认请求项目
@@ -136,6 +141,7 @@
                     listModel.financedMount = roadshows.roadshowplan.financedMount;
                     listModel.endDate = roadshows.roadshowplan.endDate;
                     
+                    [_statusArray addObject:baseModel.financestatus.name];
                     [_projectArray addObject:listModel];
                     
                 }
@@ -364,6 +370,20 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_selectedTableView == 0) {
+        
+        if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]) {
+            static NSString *cellId = @"ProjectNoRoadCell";
+            ProjectNoRoadCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (cell == nil) {
+                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            if (_projectArray.count) {
+                cell.model = _projectArray[indexPath.row];
+            }
+            return cell;
+        }
+        
         static NSString * cellId = @"ProjectListCell";
         ProjectListCell * cell =[tableView dequeueReusableCellWithIdentifier:cellId];
         if (cell == nil) {

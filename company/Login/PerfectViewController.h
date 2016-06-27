@@ -10,4 +10,6 @@
 
 @interface PerfectViewController : RootViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
+@property (nonatomic, copy) NSString *btnTitle;
+
 @end

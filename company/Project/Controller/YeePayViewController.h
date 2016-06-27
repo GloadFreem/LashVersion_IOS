@@ -21,6 +21,9 @@
 @property (nonatomic, copy) NSString *fullName;
 @property (nonatomic, copy) NSString *abbrevName;
 
+@property (nonatomic, copy) NSString *tradeCode;
+@property (nonatomic, copy) NSString *chargePartner;
+@property (nonatomic, copy) NSString *drawPartner;
 
 @property (nonatomic, copy) NSString *center;
 

@@ -73,6 +73,8 @@
             [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:1 delegate:self sel:@selector(requestLogin:)];
             if (isSuccess)
             {
+                
+                
                 [_window setRootViewController:_tabBar];
             }else
             {
@@ -171,6 +173,10 @@
         if ([status intValue] == 200) {
             NSLog(@"登陆成功");
             isSuccess = YES;
+            
+            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+            
+            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
             
         }else{
             

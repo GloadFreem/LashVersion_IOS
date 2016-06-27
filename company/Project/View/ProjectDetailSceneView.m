@@ -84,13 +84,16 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSArray *modelArray = [ProjectSceneModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
-            ProjectSceneModel *model = modelArray[0];
+            if (modelArray.count) {
+                ProjectSceneModel *model = modelArray[0];
+                
+                _url = model.audioPath;
+                _sceneId = model.sceneId;
+                [self startLoadComment];
+                [self startLoadPPT];
+                [self startPlay];
+            }
             
-            _url = model.audioPath;
-            _sceneId = model.sceneId;
-            [self startLoadComment];
-            [self startLoadPPT];
-            [self startPlay];
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self textOnly:[jsonDic valueForKey:@"message"]];

@@ -95,7 +95,15 @@
     _iconBtn.layer.cornerRadius = 41.5;
     _iconBtn.layer.masksToBounds = YES;
     
-    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
+    
+//    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
+    
+    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage new] options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (image) {
+            [_iconBtn setBackgroundImage:image forState:UIControlStateNormal];
+        }
+    }];
+    
     _name.text = _nameStr;
     _company.text = _companyStr;
     
@@ -193,7 +201,7 @@
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
     
-    [self sign:signString sel:@selector(requestCheckUserSign:)];
+    [self sign:signString sel:@selector(requestCheckUserSign:) type:1];
     
 }
 
@@ -256,7 +264,7 @@
     
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
-    [self sign:signString sel:@selector(requestSign:)];
+    [self sign:signString sel:@selector(requestSign:) type:0];
     
 }
 
@@ -287,9 +295,9 @@
     }
 }
 
--(void)sign:(NSString*)signString sel:(SEL)sel
+-(void)sign:(NSString*)signString sel:(SEL)sel type:(int)type
 {
-    [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.signPartner,@"partner",signString,@"req",@"sign",@"method",@"",@"sign",@"1",@"type",nil] type:0 delegate:self sel:sel];
+    [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.signPartner,@"partner",signString,@"req",@"sign",@"method",@"",@"sign",STRING(@"%d", type),@"type",nil] type:0 delegate:self sel:sel];
 }
 
 #pragma mark -退出logo界面

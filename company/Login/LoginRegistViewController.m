@@ -149,7 +149,7 @@
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             [data setValue:self.phoneField.text forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
             [data setValue:_password forKey:STATIC_USER_PASSWORD];
-            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:STATIC_USER_ID];
+            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
             
             [data setValue:@"YES" forKey:@"isLogin"];
             

@@ -30,7 +30,9 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *btnTopSpace;
 
 @property (weak, nonatomic) IBOutlet UIView *hiddenView;
+
 @property (nonatomic, assign) BOOL isSelected;
+@property (nonatomic, assign) BOOL selecePic;
 @end
 
 @implementation PerfectViewController
@@ -77,7 +79,13 @@
     }
     
     NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.identifyType,@"ideniyType",@"0",@"isWebchatLogin", nil];
-    UIImage *iconImage = self.iconBtn.currentBackgroundImage;
+    UIImage *iconImage;
+    if (_selecePic) {
+        iconImage= self.iconBtn.currentBackgroundImage;
+    }else{
+        iconImage = [UIImage new];
+    }
+    
     //压缩图片
     iconImage = [TDUtil drawInRectImage:iconImage size:CGSizeMake(300, 300)];
     //保存图片
@@ -239,7 +247,7 @@
     UIImage * image=[info objectForKey:UIImagePickerControllerEditedImage];
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.iconBtn setBackgroundImage:image forState:UIControlStateNormal];
-   
+    _selecePic = YES;
 }
 
 //点击cancle

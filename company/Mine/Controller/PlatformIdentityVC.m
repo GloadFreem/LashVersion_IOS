@@ -7,6 +7,7 @@
 //
 
 #import "PlatformIdentityVC.h"
+#import "PerfectViewController.h"
 
 @interface PlatformIdentityVC ()
 
@@ -49,8 +50,12 @@
     self.navigationItem.title = @"平台身份";
 }
 
-
-- (IBAction)addIdentify:(UIButton *)sender {
+#pragma mark------增加身份-------
+- (IBAction)addIdentify:(UIButton *)sender
+{
+    PerfectViewController *perfect = [PerfectViewController new];
+    
+    [self.navigationController pushViewController:perfect animated:YES];
     
 }
 

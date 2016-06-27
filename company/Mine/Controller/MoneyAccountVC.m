@@ -9,11 +9,17 @@
 #import "MoneyAccountVC.h"
 #import "DealBillVC.h"
 #import "YeePayViewController.h"
-#define SIGNVERIFY @"signVerify"
 
+#import "MineCardVC.h"
+#import "MineAccountRechargeVC.h"
+#define SIGNVERIFY @"signVerify"
+#define WITHDRAW @"requestWithDraw"
 @interface MoneyAccountVC ()
 @property (nonatomic, copy) NSString *request;
 @property (nonatomic, copy) NSString *signPartner;
+@property (nonatomic, copy) NSString *withDrawPartner;
+@property (nonatomic, copy) NSString *tradeCode;
+
 @property (nonatomic, copy) NSString *number;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, copy) NSString *avalable;
@@ -36,12 +42,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    if (!self.dataDict) {
+        self.dataDict = [[NSMutableDictionary alloc]init];
+    }
     //获得partner
     self.signPartner = [TDUtil encryKeyWithMD5:KEY action:SIGNVERIFY];
+    self.withDrawPartner = [TDUtil encryKeyWithMD5:KEY action:WITHDRAW];
+    
     //自定义nav
 //    [self setupNav];
     
-    [self isCheckUserConfirmed];
+    
 }
 
 #pragma mark ----------认证是否是易宝用户-------------
@@ -55,7 +66,7 @@
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
     
-    [self sign:signString sel:@selector(requestCheckUserSign:)];
+    [self sign:signString sel:@selector(requestCheckUserSign:) type:1];
     
 }
 -(void)requestCheckUserSign:(ASIHTTPRequest *)request{
@@ -71,7 +82,6 @@
             NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:_request,@"req",[data valueForKey:@"sign"],@"sign",ACCOUNT_INFO,@"service", nil];
             [self.httpUtil getDataFromYeePayAPIWithOps:@"" postParam:dic type:0 delegate:self sel:@selector(requestCheckUser:)];
         }
-        
     }
 }
 
@@ -86,7 +96,7 @@
         
     }else if([DICVFK(xmlDic, @"code") intValue]==1)
     {
-        self.dataDic = [NSMutableDictionary dictionaryWithDictionary:xmlDic];
+        self.dataDict = [NSMutableDictionary dictionaryWithDictionary:xmlDic];
         _number = DICVFK(xmlDic, @"balance");
         _avalable = DICVFK(xmlDic, @"availableAmount");
         _freezon = DICVFK(xmlDic, @"freezeAmount");
@@ -107,9 +117,9 @@
     
 }
 
--(void)sign:(NSString*)signString sel:(SEL)sel
+-(void)sign:(NSString*)signString sel:(SEL)sel type:(int)type
 {
-    [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.signPartner,@"partner",signString,@"req",@"sign",@"method",@"",@"sign",@"1",@"type",nil] type:0 delegate:self sel:sel];
+    [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.signPartner,@"partner",signString,@"req",@"sign",@"method",@"",@"sign",STRING(@"%d", type),@"type",nil] type:0 delegate:self sel:sel];
 }
 
 
@@ -125,26 +135,34 @@
     switch (sender.tag) {
         case 0:
         {
-            //绑定银行卡
-            [self bindCard];
+            //进入银行卡
+            MineCardVC *vc = [MineCardVC new];
+            vc.dataDict = self.dataDict;
+            [self.navigationController pushViewController:vc animated:YES];
+            
         }
             break;
         case 1:
         {
             //充值
-            [self goRecharge];
+            MineAccountRechargeVC *vc =[MineAccountRechargeVC new];
+            [self.navigationController pushViewController:vc animated:YES];
+//            [self goRecharge];
         }
             break;
         case 2:
         {
             //交易账单
-//            DealBillVC *vc = [DealBillVC new];
-//            [self.navigationController pushViewController:vc animated:YES];
+            DealBillVC *vc = [DealBillVC new];
+            
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 3:
         {
             //资金提现
+            
+            [self toWithdrawConfirm];
         }
             break;
             
@@ -153,28 +171,24 @@
     }
     
 }
-#pragma mark-------------------绑卡-----------------------
--(void)bindCard
+#pragma mark-----------------提现---------------------------
+-(void)toWithdrawConfirm
 {
-    NSString * str = [TDUtil generateUserPlatformNo];
-    
     NSMutableDictionary * dic = [NSMutableDictionary new];
-    
-    float mount = [[self.dataDic valueForKey:@"mount"] floatValue]*10000.00;
-    
-    [dic setObject:str forKey:@"platformUserNo"];
+    _tradeCode =[TDUtil generateTradeNo];
+    [dic setObject:@"CONFIRM" forKey:@"mode"];
     [dic setObject:@"PLATFORM" forKey:@"feeMode"];
-    [dic setObject:STRING(@"%.2f", mount) forKey:@"amount"];
-    [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
-    [dic setObject:@"ios://bindCardConfirm" forKey:@"callbackUrl"];
+    [dic setObject:_tradeCode forKey:@"requestNo"];
+    [dic setObject:@"ios://toWithdrawConfirm:" forKey:@"callbackUrl"];
+    [dic setObject:[TDUtil generateUserPlatformNo] forKey:@"platformUserNo"];
     [dic setObject:notifyUrl forKey:@"notifyUrl"];
-    
-    
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
+    _request = signString;
+    [self sign:signString sel:@selector(requesttoWithdrawSign:) type:0];
     
-    [self sign:signString sel:@selector(requestSignBindCard:)];
 }
--(void)requestSignBindCard:(ASIHTTPRequest *)request{
+
+-(void)requesttoWithdrawSign:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
     NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
@@ -188,46 +202,24 @@
             YeePayViewController * controller = [[YeePayViewController alloc]init];
             controller.dic = nil;
             controller.PostPramDic = dic;
-            controller.title = @"银行卡";
-            controller.titleStr = @"绑定银行卡";
-            controller.state = PayStatusBindCard;
-            controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,toBindBankCard,nil)];
+            controller.title = @"提现";
+            controller.titleStr = @"提现";
+            controller.state = PayToWithdraw;
+            controller.tradeCode = _tradeCode;
+            controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,toWithdraw,nil)];
             [self.navigationController pushViewController:controller animated:YES];
         }else if([code intValue] == 1){
             
         }
-        self.startLoading  =NO;
-        return ;
     }
-    self.isNetRequestError = YES;
 }
-
-#pragma mark-------------------去充值----------------------
--(void)goRecharge
-{
-    NSString * str = [TDUtil generateUserPlatformNo];
-    
-    NSMutableDictionary * dic = [NSMutableDictionary new];
-    
-//    [dic setObject:[NSString stringWithFormat:@"%f",_cha] forKey:@"amount"];
-    [dic setObject:str forKey:@"platformUserNo"];
-    [dic setObject:@"PLATFORM" forKey:@"feeMode"];
-    [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
-    [dic setObject:@"ios://finialConfirm" forKey:@"callbackUrl"];
-    [dic setObject:notifyUrl forKey:@"notifyUrl"];
-    
-    NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
-    _request = signString;
-    
-    [self sign:signString sel:@selector(requestRecharge:)];
-}
-
 
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:YES];
+    [self isCheckUserConfirmed];
 }
 
 -(void)viewWillDisappear:(BOOL)animated

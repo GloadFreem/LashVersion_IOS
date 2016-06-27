@@ -33,5 +33,6 @@
 
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *btnArray;
 
+@property (weak, nonatomic) IBOutlet UIImageView *statusImage;
 
 @end

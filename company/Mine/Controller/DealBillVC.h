@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DealBillVC : UIViewController
+@interface DealBillVC : RootViewController
 
 @end

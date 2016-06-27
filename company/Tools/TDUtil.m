@@ -1304,7 +1304,7 @@
         [dic setObject:[ele stringValue] forKey:[ele name]];
     }
     
-    NSLog(@"%@",dic);
+//    NSLog(@"%@",dic);
     return dic;
 }
 

@@ -18,20 +18,21 @@
 #import "ProjectBannerModel.h"
 #import "ProjectBannerListModel.h"
 #import "ProjectBannerDetailVC.h"
-
+#import "AuthenticInfoBaseModel.h"
 #import "ProjectListProBaseModel.h"
 #import "ProjectListProModel.h"
 
 #import "ProjectDetailController.h"
 #import "ProjectPrepareDetailVC.h"
 
+#define AUTHENINFO @"authenticInfoUser"
 #define PROJECTLIST @"requestProjectList"
 #define BANNERSYSTEM @"bannerSystem"
 #define BannerHeight  SCREENWIDTH * 0.5 + 45
 @interface ProjectViewController ()<UITableViewDataSource,UITableViewDelegate,ProjectBannerViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-
+@property (nonatomic, copy) NSString *authenPartner;
 @property (nonatomic, assign) NSInteger selectedCellNum;//选择显示cell的类型
 
 @property (nonatomic, copy) NSString *bannerPartner; 
@@ -70,15 +71,63 @@
     //获得partner
     self.bannerPartner = [TDUtil encryKeyWithMD5:KEY action:BANNERSYSTEM];
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTLIST];
+    //获得认证partner
+    self.authenPartner = [TDUtil encryKeyWithMD5:KEY action:AUTHENINFO];
     
     [self startLoadBannerData];
     
     [self startLoadData];
-    
+    //下载认证信息
+    [self loadAuthenData];
 
     [self createUI];
     
     
+}
+#pragma mark -下载认证信息
+-(void)loadAuthenData
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
+}
+
+-(void)requestAuthenInfo:(ASIHTTPRequest*)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic != nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
+            
+            AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
+//            authenticModel = baseModel;
+            //            NSLog(@"打印个人信息：----%@",baseModel);
+            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+            [data setValue:baseModel.headSculpture forKey:USER_STATIC_HEADER_PIC];
+            [data setValue:baseModel.telephone forKey:USER_STATIC_TEL];
+            [data setValue:[NSString stringWithFormat:@"%ld",baseModel.userId] forKey:USER_STATIC_USER_ID];
+            
+            NSArray *authenticsArray = baseModel.authentics;
+            ProjectAuthentics *authentics = authenticsArray[0];
+            
+            [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
+            [data setValue:authentics.name forKey:USER_STATIC_NAME];
+            [data setValue:authentics.identiyCarA forKey:USER_STATIC_IDPIC];
+            [data setValue:authentics.identiyCarNo forKey:USER_STATIC_IDNUMBER];
+            [data setValue:authentics.position forKey:USER_STATIC_POSITION];
+            [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
+            [data setValue:authentics.authenticstatus.name forKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+            
+            [data synchronize];
+            
+//            if ([authentics.authenticstatus.name isEqualToString:@"已认证"]) {
+//                _isAuthentic = YES;
+//            }
+        }
+    }
 }
 
 -(void)startLoadData
@@ -393,6 +442,7 @@
         if (_roadModelArray.count) {
             cell.model = _roadModelArray[indexPath.row];
         }
+       [cell.statusImage setHidden:YES];
        cell.selectionStyle = UITableViewCellSelectionStyleNone;
        return cell;
 }

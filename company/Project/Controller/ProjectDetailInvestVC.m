@@ -242,7 +242,7 @@
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
     
-    [self sign:signString sel:@selector(requestCheckUserSign:)];
+    [self sign:signString sel:@selector(requestCheckUserSign:) type:1];
     
 }
 
@@ -321,7 +321,7 @@
     
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
-    [self sign:signString sel:@selector(requestSign:)];
+    [self sign:signString sel:@selector(requestSign:) type:0];
     
 }
 
@@ -332,8 +332,8 @@
     
     if(jsonDic!=nil)
     {
-        NSString* code = [jsonDic valueForKey:@"code"];
-        if ([code intValue] == 0) {
+        NSString* status = [jsonDic valueForKey:@"status"];
+        if ([status intValue] == 200) {
             NSDictionary * data = [jsonDic valueForKey:@"data"];
             NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:_request,@"req",[data valueForKey:@"sign"],@"sign", nil];
             YeePayViewController * controller = [[YeePayViewController alloc]init];
@@ -377,7 +377,7 @@
     
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
-    [self sign:signString sel:@selector(requestSignFinial:)];
+    [self sign:signString sel:@selector(requestSignFinial:) type:0];
 }
 
 
@@ -440,7 +440,7 @@
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
     
-    [self sign:signString sel:@selector(requestRecharge:)];
+    [self sign:signString sel:@selector(requestRecharge:) type:0];
 }
 
 -(void)requestRecharge:(ASIHTTPRequest *)request
@@ -480,9 +480,9 @@
     }
 }
 
--(void)sign:(NSString*)signString sel:(SEL)sel
+-(void)sign:(NSString*)signString sel:(SEL)sel type:(int)type
 {
-    [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.signPartner,@"partner",signString,@"req",@"sign",@"method",@"",@"sign",@"1",@"type",nil] type:0 delegate:self sel:sel];
+    [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.signPartner,@"partner",signString,@"req",@"sign",@"method",@"",@"sign",STRING(@"%d", type),@"type",nil] type:0 delegate:self sel:sel];
 }
 
 #pragma mark -------------------------textFiledDelegate-----------------------------

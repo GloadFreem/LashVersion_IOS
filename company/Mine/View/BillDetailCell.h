@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "BillDetailCellModel.h"
 @interface BillDetailCell : UITableViewCell
+
+@property (nonatomic, strong) UIImageView *topLine;
+
+@property (nonatomic, strong) BillDetailCellModel *model;
 
 @end

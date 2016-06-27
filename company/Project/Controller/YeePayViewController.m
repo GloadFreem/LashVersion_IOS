@@ -16,6 +16,7 @@
 //#import "FinialApplyViewController.h"
 #import "MoneyAccountVC.h"
 
+#define ACCOUNTCGARGE @"requestAccountCharge"
 @interface YeePayViewController ()<UIWebViewDelegate,UIAlertViewDelegate>
 {
     BOOL isGetStatus;
@@ -130,11 +131,12 @@
 /**
  *  提现
  *
- *  @param dic 返回参数
+ *  @param dic 返回参数 toWithdraw
  */
 -(void)toWithdrawConfirm:(NSDictionary*)dic
 {
     NSLog(@"%@",dic);
+    [self back:nil];
     
 }
 
@@ -167,6 +169,7 @@
 {
     NSLog(@"%@",dic);
     
+    _tradeCode = dic[@"requestNo"];
     switch (self.state) {
         case PayStatusConfirm:
             if ([self.center isEqualToString:@"0"]) {
@@ -192,12 +195,52 @@
             [self finialConfirm:dic];
             break;
             
+        case PayStatusAccount:{
+            [self charge];
+            
+            for (UIViewController *VC in self.navigationController.viewControllers){
+                if ([VC isKindOfClass:[MoneyAccountVC class]]) {
+                MoneyAccountVC *vc = (MoneyAccountVC*)VC;
+                    
+                [self.navigationController popToViewController:vc animated:YES];
+                }
+            }
+            
+            [self removeFromParentViewController];
+        }
+            break;
+            case PayToWithdraw:{
+                
+        }
+            break;
         default:
             break;
     }
     
 }
 
+-(void)charge
+{
+    self.chargePartner = [TDUtil encryKeyWithMD5:KEY action:ACCOUNTCGARGE];
+    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.chargePartner,@"partner",_tradeCode,@"tradeCode", nil];
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_ACCOUNT_CHARGE postParam:dic type:0 delegate:self sel:@selector(requestCharge:)];
+}
+-(void)requestCharge:(ASIHTTPRequest *)request
+{
+    NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    
+    NSMutableDictionary* dic = [jsonString JSONValue];
+    if (dic != nil) {
+        NSString *status = [dic objectForKey:@"status"];
+        if ([status integerValue] == 200)  {
+           
+            
+        }
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];
+    }
+    
+}
 /**
  *  绑定银行卡
  */
@@ -219,7 +262,7 @@
     
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
-    [self sign:signString sel:@selector(requestSignBindCard:)];
+    [self sign:signString sel:@selector(requestSignBindCard:) type:0];
 }
 
 
@@ -241,13 +284,13 @@
     
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
-    [self sign:signString sel:@selector(requestSignFinial:)];
+    [self sign:signString sel:@selector(requestSignFinial:) type:0];
 }
 
 
--(void)sign:(NSString*)signString sel:(SEL)sel
+-(void)sign:(NSString*)signString sel:(SEL)sel type:(int)type
 {
-    [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:signString,@"req",@"sign",@"method",@"",@"sign",@"0",@"type",nil] type:0 delegate:self sel:sel];
+    [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:signString,@"req",@"sign",@"method",@"",@"sign",STRING(@"%d", type),@"type",nil] type:0 delegate:self sel:sel];
 }
 
 
