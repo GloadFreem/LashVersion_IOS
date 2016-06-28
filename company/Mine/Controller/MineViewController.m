@@ -163,6 +163,18 @@
             break;
         case 4:
         {
+            if (_identiyTypeId == 1) {//项目方
+                
+            }
+            if (_identiyTypeId == 2) {//投资人
+                
+            }
+            if (_identiyTypeId == 3) {//投资机构
+                
+            }
+            if (_identiyTypeId == 4) {//智囊团
+                
+            }
             MineProjectCenterVC *vc = [MineProjectCenterVC new];
             [self.navigationController  pushViewController:vc animated:YES];
         }

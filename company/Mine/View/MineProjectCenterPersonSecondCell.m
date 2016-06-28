@@ -82,30 +82,30 @@
     
     _firstLabel = [UILabel new];
     _firstLabel.font = BGFont(15);
-    _firstLabel.textColor = [UIColor blueColor];
+    _firstLabel.textColor = color(0, 160, 230, 1);
     _firstLabel.layer.cornerRadius = 3;
     _firstLabel.layer.masksToBounds = YES;
-    _firstLabel.layer.borderColor = [UIColor blueColor].CGColor;
+    _firstLabel.layer.borderColor = color(0, 160, 230, 1).CGColor;
     _firstLabel.layer.borderWidth = 0.5;
     _firstLabel.text = @"体育";
     [self.contentView addSubview:_firstLabel];
     
     _secondLabel = [UILabel new];
     _secondLabel.font = BGFont(15);
-    _secondLabel.textColor = [UIColor blueColor];
+    _secondLabel.textColor = color(0, 160, 230, 1);
     _secondLabel.layer.cornerRadius = 3;
     _secondLabel.layer.masksToBounds = YES;
-    _secondLabel.layer.borderColor = [UIColor blueColor].CGColor;
+    _secondLabel.layer.borderColor = color(0, 160, 230, 1).CGColor;
     _secondLabel.layer.borderWidth = 0.5;
     _secondLabel.text = @"旅游";
     [self.contentView addSubview:_secondLabel];
     
     _thirdLabel = [UILabel new];
     _thirdLabel.font = BGFont(15);
-    _thirdLabel.textColor = [UIColor blueColor];
+    _thirdLabel.textColor = color(0, 160, 230, 1);
     _thirdLabel.layer.cornerRadius = 3;
     _thirdLabel.layer.masksToBounds = YES;
-    _thirdLabel.layer.borderColor = [UIColor blueColor].CGColor;
+    _thirdLabel.layer.borderColor = color(0, 160, 230, 1).CGColor;
     _thirdLabel.layer.borderWidth = 0.5;
     _thirdLabel.text = @"电影";
     [self.contentView addSubview:_thirdLabel];

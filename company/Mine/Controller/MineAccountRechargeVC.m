@@ -18,6 +18,7 @@
 
 @property (nonatomic, copy) NSString *signPartner;
 @property (nonatomic, copy) NSString *request;
+@property (nonatomic, copy) NSString *tradeCode;
 @end
 
 @implementation MineAccountRechargeVC
@@ -123,12 +124,12 @@
     NSString * str = [TDUtil generateUserPlatformNo];
     
     NSMutableDictionary * dic = [NSMutableDictionary new];
-    
+    _tradeCode =[TDUtil generateTradeNo];
     //    [dic setObject:[NSString stringWithFormat:@"%f",_cha] forKey:@"amount"];
     [dic setObject:str forKey:@"platformUserNo"];
     [dic setObject:@"PLATFORM" forKey:@"feeMode"];
     [dic setObject:_textField.text forKey:@"amount"];
-    [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
+    [dic setObject:_tradeCode forKey:@"requestNo"];
     [dic setObject:@"ios://verify" forKey:@"callbackUrl"];
     [dic setObject:notifyUrl forKey:@"notifyUrl"];
     
@@ -141,7 +142,7 @@
 -(void)requestRecharge:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -165,7 +166,7 @@
             //            [controller.dic setValue:mount forKey:@"mount"];
             
             //            [controller.dic setValue:_flagArray[0] forKey:@"currentSelect"];
-            
+            controller.tradeCode = _tradeCode;
             controller.state = PayStatusAccount;
             
             controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,YeePayMent,nil)];

@@ -219,7 +219,7 @@
     _billLabel.sd_layout
     .leftEqualToView(_reasonLabel)
     .heightIs(14)
-    .topSpaceToView(_reasonLabel,5);
+    .topSpaceToView(_reasonLabel,8);
     [_billLabel setSingleLineAutoResizeWithMaxWidth:200];
     
     _wanLabel.sd_layout

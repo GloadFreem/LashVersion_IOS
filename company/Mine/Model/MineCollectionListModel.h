@@ -10,6 +10,9 @@
 
 @interface MineCollectionListModel : NSObject
 
+@property (nonatomic, assign) NSInteger collectCount;
+@property (nonatomic, assign) BOOL collected;
+
 @property (nonatomic, copy) NSString *headSculpture;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *position;

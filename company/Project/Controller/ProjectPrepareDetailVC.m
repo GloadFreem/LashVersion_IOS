@@ -34,7 +34,7 @@
 
 @property (nonatomic, strong) ProjectDetailBaseMOdel *baseModel;
 @property (nonatomic, strong) UIButton *collectBtn;
-@property (nonatomic, assign) BOOL isCollect;
+@property (nonatomic, assign) BOOL isCollect;            //是否关注
 @property (nonatomic, assign) NSInteger collectCount;
 @property (nonatomic, copy) NSString *collectPartner;
 
@@ -101,6 +101,7 @@
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
+    [SVProgressHUD dismiss];
 }
 
 -(void)loadShareData
@@ -268,7 +269,7 @@
 -(void)requestProjectCollect:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //            NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -286,6 +287,8 @@
                 [_collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",_collectCount] forState:UIControlStateNormal];
             }
             
+            
+            
         }else{
             
         }
@@ -295,6 +298,12 @@
 -(void)btnClick:(UIButton*)btn
 {
     if (btn.tag == 0) {
+        
+        if (!_isCollect) {
+            [_attentionVC.projectArray removeObject:_model];
+            [_tableView reloadData];
+        }
+        
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (btn.tag == 1) {
@@ -458,6 +467,8 @@
     [super viewWillDisappear:animated];
     
     self.navigationController.navigationBar.hidden = NO;
+    
+    [SVProgressHUD dismiss];
     
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     

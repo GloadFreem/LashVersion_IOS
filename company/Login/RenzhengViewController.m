@@ -190,7 +190,7 @@
             //项目方
             
             if (indexPath.row == 0) {
-                cell.inputTextField.keyboardType = UIKeyboardTypePhonePad;
+                cell.inputTextField.keyboardType = UIKeyboardTypeDefault;
             }
             //第四个cell的特殊属性
             if (indexPath.row == 3) {
@@ -320,8 +320,8 @@
 //            return;
 //        }
 //    }
-    if (textField.tag == 0 && textField.text.length !=18) {
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查身份证位数"];
+    if (textField.tag == 0 && [TDUtil isidentityCard:textField.text]) {
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入正确的身份证号"];
 //                    return;
     }
     if (![textField.text isEqualToString:@""]) {
@@ -349,8 +349,8 @@
     }
     //检验身份证号码
     NSString *identifyStr = _dataArray[0];
-    if ([identifyStr isEqualToString:@""] || identifyStr.length != 18) {
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查身份证"];
+    if ([identifyStr isEqualToString:@""] || ![TDUtil isidentityCard:identifyStr]) {
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入正确的身份证号"];
         return;
     }
     //检验姓名

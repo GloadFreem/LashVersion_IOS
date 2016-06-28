@@ -16,6 +16,7 @@
 //#import "FinialApplyViewController.h"
 #import "MoneyAccountVC.h"
 
+#define DRAWMONEY @"requestWithDraw"
 #define ACCOUNTCGARGE @"requestAccountCharge"
 @interface YeePayViewController ()<UIWebViewDelegate,UIAlertViewDelegate>
 {
@@ -135,11 +136,34 @@
  */
 -(void)toWithdrawConfirm:(NSDictionary*)dic
 {
+    [self withDraw];
     NSLog(@"%@",dic);
     [self back:nil];
     
 }
 
+-(void)withDraw
+{
+    self.drawPartner = [TDUtil encryKeyWithMD5:KEY action:DRAWMONEY];
+    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.drawPartner,@"partner",_tradeCode,@"tradeCode", nil];
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_WITH_DRAW postParam:dic type:0 delegate:self sel:@selector(requestDraw:)];
+}
+-(void)requestDraw:(ASIHTTPRequest *)request
+{
+    NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    
+    NSMutableDictionary* dic = [jsonString JSONValue];
+    if (dic != nil) {
+        NSString *status = [dic objectForKey:@"status"];
+        if ([status integerValue] == 200)  {
+            
+            
+        }
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];
+    }
+    
+}
 /**
  *  绑定银行卡回调
  *
@@ -547,6 +571,10 @@
     {
         NSString* code = [jsonDic valueForKey:@"code"];
         if ([code intValue] == 0) {
+#pragma mark------将解卡状态改为NO
+            NSUserDefaults* user =[NSUserDefaults standardUserDefaults];
+            [user setValue:@"YES" forKey:@"jiekaremind"];
+            
             NSDictionary * data = [jsonDic valueForKey:@"data"];
             NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:[data valueForKey:@"req"],@"req",[data valueForKey:@"sign"],@"sign", nil];
             self.PostPramDic = dic;

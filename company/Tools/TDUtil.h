@@ -556,4 +556,7 @@
 + (BOOL)isPureFloat:(NSString *)string;
 //阿拉伯转换汉字
 +(NSString *)translation:(NSString *)arebic;
+//是否是身份证号
++(BOOL) isidentityCard:(NSString*)str;
+
 @end

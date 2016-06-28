@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MineAttentionVC.h"
+#import "ProjectListProModel.h"
 
 
 typedef enum{
@@ -30,6 +32,10 @@ typedef enum{
 @property (assign, nonatomic) CGFloat memberHeight;
 @property (assign, nonatomic) CGFloat sceneHeight;
 
+@property (nonatomic, strong) MineAttentionVC *attentionVC;
 
+@property (nonatomic, strong) ProjectListProModel *listModel;
+
+@property (nonatomic, strong) UITableView *tableView;
 
 @end

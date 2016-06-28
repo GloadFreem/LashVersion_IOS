@@ -1482,4 +1482,11 @@
 //    NSLog(@"%@",chinese);
     return chinese;
 }
+
++(BOOL) isidentityCard:(NSString*)str
+{
+    NSString *regex2 = @"^(\\d{14}|\\d{17})(\\d|[xX])$";
+    NSPredicate *identityCardPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex2];
+    return [identityCardPredicate evaluateWithObject:str];
+}
 @end

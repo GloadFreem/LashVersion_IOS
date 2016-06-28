@@ -192,10 +192,13 @@
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            NSDictionary *dic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            _shareurl  = dic[@"url"];
-            _shareImage = dic[@"image"];
+            if (jsonDic[@"data"]) {
+                NSDictionary *dic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
+                _shareurl  = dic[@"url"];
+                _shareImage = dic[@"image"];
+            }
         }
+           
     }
 }
 
@@ -702,7 +705,11 @@
     }
 }
 - (IBAction)leftBack:(UIButton *)sender {
-    
+    [SVProgressHUD dismiss];
+    if (!_isCollect) {
+        [_attentionVC.projectArray removeObject:_listModel];
+        [_tableView reloadData];
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark -分享

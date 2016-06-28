@@ -10,16 +10,23 @@
 
 #import "InvestViewController.h"
 
+#import "MineAttentionVC.h"
+#import "MineCollectionListModel.h"
 @interface InvestThinkTankDetailVC : RootViewController
 
 @property (nonatomic, assign) InvestViewController *viewController;
 
 @property (nonatomic, copy) NSString *investorId;
 @property (nonatomic, copy) NSString *attentionCount;
+
 @property (nonatomic, assign) BOOL collected;
 
 @property (nonatomic, copy) NSString *investorCollectPartner;
 
 @property (nonatomic, copy) NSString *type;
+
+@property (nonatomic, strong) MineAttentionVC *attentionVC;
+@property (nonatomic, strong) MineCollectionListModel *attentionModel;
+@property (nonatomic, strong) UITableView *tableView;
 
 @end

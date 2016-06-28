@@ -23,6 +23,12 @@
 #import "MineCollectionInvestorBaseModel.h"
 #import "MineCollectionListModel.h"
 
+#import "ProjectPrepareDetailVC.h"
+#import "ProjectDetailController.h"
+
+#import "InvestPersonDetailViewController.h"
+#import "InvestThinkTankDetailVC.h"
+
 #define LOGOATTENTION @"requestMineCollection"
 
 @interface MineAttentionVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
@@ -39,10 +45,9 @@
 @property (nonatomic, assign) NSInteger page;  //当前页
 @property (nonatomic, assign) NSInteger projectPage;
 @property (nonatomic, assign) NSInteger investPage;
-@property (nonatomic, strong) UITableView *tableView; //当前biao
 
-@property (nonatomic, strong) NSMutableArray *projectArray;
-@property (nonatomic, strong) NSMutableArray *investArray;
+
+
 
 @property (nonatomic, strong) NSMutableArray *identifyArray;
 @property (nonatomic, strong) NSMutableArray *statusArray;
@@ -133,6 +138,8 @@
                     listModel.address = baseModel.address;
                     listModel.fullName = baseModel.fullName;
                     listModel.status = baseModel.financestatus.name;
+                    listModel.projectId  = baseModel.projectId;
+                    
                     //少一个areas 数组
                     listModel.areas = [baseModel.industoryType componentsSeparatedByString:@"，"];
                     listModel.collectionCount = baseModel.collectionCount;
@@ -166,6 +173,7 @@
                     listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province,city];
                     listModel.areas = [authentics.industoryArea componentsSeparatedByString:@"，"];
                     listModel.introduce = authentics.introduce;
+//                    listModel.collected = 
                     //身份
                     [_identifyArray addObject:authentics.identiytype.name];
                     [_investArray addObject:listModel];
@@ -192,8 +200,8 @@
     
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     leftback.tag = 2;
-    [leftback setBackgroundImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = leftback.currentBackgroundImage.size;
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(32, 20);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     
@@ -241,7 +249,6 @@
     }];
     
     self.navigationItem.titleView = titleView;
-    
     
 }
 #pragma mark -titleView  button点击事件
@@ -371,30 +378,33 @@
 {
     if (_selectedTableView == 0) {
         
-        if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]) {
-            static NSString *cellId = @"ProjectNoRoadCell";
-            ProjectNoRoadCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (_statusArray.count && _projectArray.count) {
+            if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]) {
+                static NSString *cellId = @"ProjectNoRoadCell";
+                ProjectNoRoadCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                if (cell == nil) {
+                    cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+                }
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                if (_projectArray.count) {
+                    cell.model = _projectArray[indexPath.row];
+                }
+                return cell;
+            }
+            
+            static NSString * cellId = @"ProjectListCell";
+            ProjectListCell * cell =[tableView dequeueReusableCellWithIdentifier:cellId];
             if (cell == nil) {
-                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+                cell = [[[NSBundle mainBundle] loadNibNamed:@"ProjectListCell" owner:nil options:nil] lastObject];
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             if (_projectArray.count) {
                 cell.model = _projectArray[indexPath.row];
             }
+            
             return cell;
         }
         
-        static NSString * cellId = @"ProjectListCell";
-        ProjectListCell * cell =[tableView dequeueReusableCellWithIdentifier:cellId];
-        if (cell == nil) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"ProjectListCell" owner:nil options:nil] lastObject];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        if (_projectArray.count) {
-            cell.model = _projectArray[indexPath.row];
-        }
-        
-        return cell;
     }
     
     if (_identifyArray.count && _investArray.count) {
@@ -441,7 +451,57 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    if (_selectedTableView == 0) {
+        if (!_projectArray.count || !_statusArray.count) {
+            return;
+        }
+        ProjectListProModel *model = _projectArray[indexPath.row];
+        if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]) {
+            ProjectPrepareDetailVC *vc = [ProjectPrepareDetailVC new];
+            vc.attentionVC = self;
+            vc.projectId = model.projectId;
+            vc.model = model;
+            vc.tableView = _projectTableView;
+            //隐藏tabbar
+            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+            
+            [delegate.tabBar tabBarHidden:YES animated:NO];
+            
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+            ProjectDetailController *vc = [ProjectDetailController new];
+            vc.attentionVC = self;
+            vc.projectId = model.projectId;
+            vc.listModel = model;
+            vc.tableView = _projectTableView;
+            //隐藏tabbar
+            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+            
+            [delegate.tabBar tabBarHidden:YES animated:NO];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    }
+    
+    if (!_investArray.count || !_identifyArray.count) {
+        return;
+    }
+    MineCollectionListModel *model = _investArray[indexPath.row];
+    if ([_identifyArray[indexPath.row] isEqualToString:@"个人投资者"]) {
+//        InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
+//        vc.attentionVC =self;
+//        vc.titleText = @"个人 · 简介";
+//        vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)model.collectCount];
+    }
+    
+    if ([_identifyArray[indexPath.row] isEqualToString:@"机构投资者"]) {
+    
+    }
+    
+    if ([_identifyArray[indexPath.row] isEqualToString:@"智囊团"]) {
+    
+    }
 }
 #pragma mark- 创建tableView
 -(void)createTableView:(UITableView*)tableView index:(int)index
@@ -488,6 +548,15 @@
     
     [self startLoadData];
     //    NSLog(@"下拉刷新");
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:NO animated:NO];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

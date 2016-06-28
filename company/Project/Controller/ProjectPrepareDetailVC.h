@@ -8,8 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MineAttentionVC.h"
+#import "ProjectListProModel.h"
+
 @interface ProjectPrepareDetailVC : RootViewController
 
 @property (nonatomic, assign) NSInteger projectId;
+
+@property (nonatomic, strong) MineAttentionVC *attentionVC;
+
+@property (nonatomic, strong) ProjectListProModel *model;
+
+@property (nonatomic, strong) UITableView *tableView;
 
 @end

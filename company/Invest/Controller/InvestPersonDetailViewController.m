@@ -105,6 +105,9 @@
         if ([status integerValue] == 200) {
             
             InvestDetailModel *detailModel =[InvestDetailModel mj_objectWithKeyValues:jsonDic[@"data"]];
+//            self.collected = detailModel.collected;
+//            self.attentionCount = [NSString stringWithFormat:@"%ld",detailModel.collectCount];
+            
             _model = detailModel;
 //            NSLog(@"dayin模型----%@",_model);
             [self createUI];

@@ -71,6 +71,7 @@
         make.right.mas_equalTo(self.view.mas_right);
         make.bottom.mas_equalTo(self.view.mas_bottom);
     }];
+    
 }
 -(void)leftBack:(UIButton*)btn
 {

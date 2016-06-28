@@ -175,8 +175,8 @@
     }
     
     _titleLabel.text = model.rewardtradetype.name;
-    _numLabel.text = [NSString stringWithFormat:@"+ %ld",model.count];
-//    _contentLabel.text = model.contentStr;
+    _numLabel.text = [NSString stringWithFormat:@" %ld",model.count];
+    _contentLabel.text = model.desc;
     
     if (_model.isShow == YES) {
 //        NSLog(@"设置高度");

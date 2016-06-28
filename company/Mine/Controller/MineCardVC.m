@@ -10,7 +10,10 @@
 #define SIGNVERIFY @"signVerify"
 
 #import "YeePayViewController.h"
-@interface MineCardVC ()
+#import "MineAlertView.h"
+@interface MineCardVC ()<MineAlertViewDelegate>
+
+@property (nonatomic,strong)UIView * bottomView;
 
 @property (nonatomic, copy) NSString *signPartner;
 
@@ -157,8 +160,31 @@
 }
 
 #pragma mark----------绑定银行卡
+- (UIView*)topView {
+    UIViewController *recentView = self;
+    while (recentView.parentViewController != nil) {
+        recentView = recentView.parentViewController;
+    }
+    return recentView.view;
+}
+
+/**
+ *  点击空白区域shareView消失
+ */
+
+- (void)dismissBG
+{
+    if(self.bottomView != nil)
+    {
+        [self.bottomView removeFromSuperview];
+    }
+}
+
 -(void)bangCard
 {
+   
+    
+    
     NSString * str = [TDUtil generateUserPlatformNo];
     
     NSMutableDictionary * dic = [NSMutableDictionary new];
@@ -204,20 +230,38 @@
 #pragma mark----------解绑银行卡
 -(void)jieCard
 {
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    NSString *str = [data valueForKey:@"jiekaremind"];
+    if ([str isEqualToString:@"YES"]) {
+        [self unToBind];
+        return;
+    }
     
-    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"请先确认账户中无余额再解绑" delegate:self cancelButtonTitle:@"解绑" otherButtonTitles:@"返回", nil];
+    NSArray *titleArray = [NSArray array];
+    NSString *content = @"请先确认账户中无余额再解绑 \n是否继续";
+    MineAlertView *alertView = [MineAlertView new];
+    alertView.tag = 500;
+    [alertView createAlertViewWithBtnTitleArray:titleArray andContent:content];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
+    [alertView addGestureRecognizer:tap];
+    [[self topView] addSubview:alertView];
+    self.bottomView = alertView;
+    alertView.delegate = self;
+   
+}
 
-    [self.view addSubview:alertView];
-    
+
+-(void)unToBind
+{
     NSString * str = [TDUtil generateUserPlatformNo];
     
     NSMutableDictionary * dic = [NSMutableDictionary new];
     [dic setObject:str forKey:@"platformUserNo"];
-//    [dic setObject:@"PLATFORM" forKey:@"feeMode"];
+    //    [dic setObject:@"PLATFORM" forKey:@"feeMode"];
     
     [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
-//    [dic setObject:@"ios://bindCardConfirm" forKey:@"callbackUrl"];
-//    [dic setObject:notifyUrl forKey:@"notifyUrl"];
+    //    [dic setObject:@"ios://bindCardConfirm" forKey:@"callbackUrl"];
+    //    [dic setObject:notifyUrl forKey:@"notifyUrl"];
     
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
@@ -227,7 +271,7 @@
 -(void)requestjieCard:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-        NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -239,6 +283,7 @@
         }
     }
 }
+
 -(void)requestUnbindCard:(ASIHTTPRequest *)request{
     NSString *xmlString = [TDUtil convertGBKDataToUTF8String:request.responseData];
 //    NSLog(@"返回:%@",xmlString);
@@ -247,12 +292,21 @@
     NSLog(@"%@",xmlDic);
     
     if ([DICVFK(xmlDic, @"code") intValue]==101) {
+        NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+        [data setValue:@"YES" forKey:@"jiekaremind"];
         
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:DICVFK(xmlDic, @"description")];
+        [self dismissBG];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:DICVFK(xmlDic, @"description") delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:DICVFK(xmlDic, @"description")];
         
     }else if([DICVFK(xmlDic, @"code") intValue]==1)
     {
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:DICVFK(xmlDic, @"description")];
+        [self dismissBG];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:DICVFK(xmlDic, @"description") delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+        
+//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:DICVFK(xmlDic, @"description")];
     }
 }
 -(void)sign:(NSString*)signString sel:(SEL)sel type:(int)type
@@ -260,6 +314,23 @@
     [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.signPartner,@"partner",signString,@"req",@"sign",@"method",@"",@"sign",STRING(@"%d", type),@"type",nil] type:0 delegate:self sel:sel];
 }
 
+-(void)didClickBtnInView:(MineAlertView *)view andIndex:(NSInteger)index
+{
+    if (view.tag == 500) {
+        switch (index) {
+            case 0:{
+                [self unToBind];
+            }
+                break;
+            case 1:{
+                [self dismissBG];
+            }
+                break;
+            default:
+                break;
+        }
+    }
+}
 -(void)leftBack
 {
     [self.navigationController popViewControllerAnimated:YES];

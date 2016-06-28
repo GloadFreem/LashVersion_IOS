@@ -315,7 +315,21 @@
 //评论
 #define REQUEST_PROJECT_COMMENT @"requestProjectComment.action"
 
+#pragma mark-----------------------站内信-------------------------------
 
+//站内信
+#define REQUEST_INNER_MESSAGE_LIST @"requestInnerMessageList.action"
+//站内信详情
+#define REQUEST_INNER_MESSAGE_DETAIL @"requestInnermessageDetail.action"
+//删除站内信
+#define REQUEST_DELETE_INNER_MESSAGE @"requestDeleteInnerMessage.action"
+//标记站内信已读
+#define REQUEST_HAS_READ_MESSAGE @"requestHasReadMessage.action"
+//站内信提醒数据获取
+#define REQUEST_HAS_MESSAGE_INFO @"requestHasMessageInfo.action"
+
+//上传项目信息获取
+#define REQUEST_UPLOAD_PROJECT_INFO @"requestuploadProjectInfo.action"
 
 /*
 ***===================================================================================**
@@ -405,6 +419,10 @@
 
 //更换手机号
 #define CHANGEBINDTELEPHONE @"requestChangeBindTelephone.action"
+//注销登录
+#define SIGNUPUSER @"signupUser.action"
+
+
 
 
 //站内信

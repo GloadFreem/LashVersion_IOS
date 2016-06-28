@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AppSetVC : UIViewController
+@interface AppSetVC : RootViewController
 
 @end

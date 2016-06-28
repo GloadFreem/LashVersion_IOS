@@ -11,10 +11,15 @@
 #import "AppSetHeaderCell.h"
 #import "AppSetModifyPasswordVC.h"
 #import "AppSetChangePhoneVC.h"
+#import "LoginRegistViewController.h"
+
+#define SIGNUP @"signupUser"
 @interface AppSetVC ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *dataArray;
+
+@property (nonatomic, copy) NSString *signupPartner;
 
 @end
 
@@ -26,6 +31,9 @@
     
     _dataArray = [NSArray array];
     _dataArray  = @[@"安全设置",@"修改登录密码",@"更换绑定手机",@"管理通知",@"声音提醒",@"震动提醒",@"",@"清理缓存",@"版本更新"];
+    
+    //获得partner
+    self.signupPartner = [TDUtil encryKeyWithMD5:KEY action:SIGNUP];
     
     [self setupNav];
     
@@ -72,9 +80,29 @@
 #pragma mark -退出登录
 -(void)leaveBtnClick:(UIButton*)btn
 {
-    
+    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.signupPartner,@"partner", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:SIGNUPUSER postParam:dic type:0 delegate:self sel:@selector(requestSignup:)];
 }
-
+-(void)requestSignup:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic != nil) {
+        NSString *status =[jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            
+            LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+            
+            UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:login];
+            //进入登录界面
+            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
+            app.window.rootViewController = nav;
+            
+        }
+    }
+}
 #pragma mark -设置导航栏
 -(void)setupNav
 {

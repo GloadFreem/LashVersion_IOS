@@ -16,6 +16,10 @@
 
 @property (nonatomic, strong) NSArray<NSString *> *areas;
 
+@property (nonatomic, assign) NSInteger collectCount;
+@property (nonatomic, assign) BOOL collected;
+@property (nonatomic, assign) BOOL commited;
+
 @property (nonatomic, strong) DetailUser *user;
 
 
@@ -30,6 +34,11 @@
 
 @property (nonatomic, copy) NSString *headSculpture;
 
+@property (nonatomic, assign) NSInteger extUserId;
+
+@property (nonatomic, copy) NSString *regId;
+
+@property (nonatomic, copy) NSString *wechatId;
 @end
 
 @interface DetailAuthentics : NSObject

@@ -49,6 +49,8 @@
     self.goldGetPartner = [TDUtil encryKeyWithMD5:KEY action:GOLDGETRULE];
     self.goldUsepartner = [TDUtil encryKeyWithMD5:KEY action:GOLDUSERULE];
     [self startLoadData];
+    [self loadGetRule];
+    [self loadUseRule];
 }
 #pragma maker-------邀请码
 -(void)loadCode
@@ -100,7 +102,7 @@
 -(void)requestGetRule:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status =[jsonDic valueForKey:@"status"];

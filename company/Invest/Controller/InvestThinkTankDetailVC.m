@@ -119,6 +119,7 @@
             
             InvestDetailModel *detailModel =[InvestDetailModel mj_objectWithKeyValues:jsonDic[@"data"]];
             _model = detailModel;
+            
 //            NSLog(@"dayin模型----%@",_model);
             //2.设置导航栏内容
 //            [self setUpNavBar];

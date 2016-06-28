@@ -12,15 +12,16 @@
 
 typedef enum{
     
-    SegmentSelectLine = 0,//选中时为横线的样式
-    SegmentCaver = 1,//选中时view的状态
+    SegmentSelectLine1 = 0,//选中时为横线的样式
+    SegmentCaver1 = 1,//选中时view的状态
     
-}SelectType;
+}SelectType1;
+
 
 @interface InvestViewController : RootViewController
 
 @property (nonatomic,strong) UIColor *lineColor;
-@property (nonatomic,assign) SelectType type;
+@property (nonatomic,assign) SelectType1 type;
 
 @property (nonatomic, strong) InvestListModel *investModel;
 @property (nonatomic, strong) OrganizationSecondModel *organizationModel;

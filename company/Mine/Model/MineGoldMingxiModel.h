@@ -20,6 +20,7 @@
 
 @property (nonatomic, assign) BOOL isShow;
 
+@property (nonatomic, copy) NSString *desc;
 
 @end
 

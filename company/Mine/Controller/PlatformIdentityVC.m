@@ -54,7 +54,7 @@
 - (IBAction)addIdentify:(UIButton *)sender
 {
     PerfectViewController *perfect = [PerfectViewController new];
-    
+    [self.navigationController.navigationBar setHidden: YES];
     [self.navigationController pushViewController:perfect animated:YES];
     
 }

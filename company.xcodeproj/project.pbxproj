@@ -508,6 +508,11 @@
 		44BC07B61D13DEEA0075221E /* ProjectPrepareHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BC07B41D13DEEA0075221E /* ProjectPrepareHeaderCell.m */; };
 		44BC07B71D13DEEA0075221E /* ProjectPrepareHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44BC07B51D13DEEA0075221E /* ProjectPrepareHeaderCell.xib */; };
 		44BC07BA1D13EBB00075221E /* ProjectPrepareDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BC07B91D13EBB00075221E /* ProjectPrepareDetailVC.m */; };
+		44BF49721D221403003E5A2C /* MineAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BF49711D221403003E5A2C /* MineAlertView.m */; };
+		44BF49771D221B0A003E5A2C /* icon_alert_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BF49731D221B0A003E5A2C /* icon_alert_success@2x.png */; };
+		44BF49781D221B0A003E5A2C /* icon_alert_success@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BF49741D221B0A003E5A2C /* icon_alert_success@3x.png */; };
+		44BF49791D221B0A003E5A2C /* icon_warning@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BF49751D221B0A003E5A2C /* icon_warning@2x.png */; };
+		44BF497A1D221B0A003E5A2C /* icon_warning@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BF49761D221B0A003E5A2C /* icon_warning@3x.png */; };
 		44E1C7681D10F30A00ACF9BA /* ProjectListProBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E1C7671D10F30A00ACF9BA /* ProjectListProBaseModel.m */; };
 		44E1C76B1D10F67800ACF9BA /* ProjectListProModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E1C76A1D10F67800ACF9BA /* ProjectListProModel.m */; };
 		44E1C76E1D11052500ACF9BA /* MineCollectionInvestorBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E1C76D1D11052500ACF9BA /* MineCollectionInvestorBaseModel.m */; };
@@ -1750,6 +1755,12 @@
 		44BC07B51D13DEEA0075221E /* ProjectPrepareHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectPrepareHeaderCell.xib; sourceTree = "<group>"; };
 		44BC07B81D13EBB00075221E /* ProjectPrepareDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectPrepareDetailVC.h; sourceTree = "<group>"; };
 		44BC07B91D13EBB00075221E /* ProjectPrepareDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectPrepareDetailVC.m; sourceTree = "<group>"; };
+		44BF49701D221403003E5A2C /* MineAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineAlertView.h; sourceTree = "<group>"; };
+		44BF49711D221403003E5A2C /* MineAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineAlertView.m; sourceTree = "<group>"; };
+		44BF49731D221B0A003E5A2C /* icon_alert_success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_alert_success@2x.png"; sourceTree = "<group>"; };
+		44BF49741D221B0A003E5A2C /* icon_alert_success@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_alert_success@3x.png"; sourceTree = "<group>"; };
+		44BF49751D221B0A003E5A2C /* icon_warning@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_warning@2x.png"; sourceTree = "<group>"; };
+		44BF49761D221B0A003E5A2C /* icon_warning@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_warning@3x.png"; sourceTree = "<group>"; };
 		44E1C7661D10F30A00ACF9BA /* ProjectListProBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectListProBaseModel.h; sourceTree = "<group>"; };
 		44E1C7671D10F30A00ACF9BA /* ProjectListProBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectListProBaseModel.m; sourceTree = "<group>"; };
 		44E1C7691D10F67800ACF9BA /* ProjectListProModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectListProModel.h; sourceTree = "<group>"; };
@@ -2787,6 +2798,8 @@
 				448719F91D02B30800020DD9 /* MyDataNoArrowCell.h */,
 				448719FA1D02B30800020DD9 /* MyDataNoArrowCell.m */,
 				448719FB1D02B30800020DD9 /* MyDataNoArrowCell.xib */,
+				44BF49701D221403003E5A2C /* MineAlertView.h */,
+				44BF49711D221403003E5A2C /* MineAlertView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4266,6 +4279,10 @@
 		44FA73F41D07ECD70010B478 /* 资金账户_ios */ = {
 			isa = PBXGroup;
 			children = (
+				44BF49731D221B0A003E5A2C /* icon_alert_success@2x.png */,
+				44BF49741D221B0A003E5A2C /* icon_alert_success@3x.png */,
+				44BF49751D221B0A003E5A2C /* icon_warning@2x.png */,
+				44BF49761D221B0A003E5A2C /* icon_warning@3x.png */,
 				44B6284B1D20D63D00837F05 /* icon_bangCard@2x.png */,
 				44B6284C1D20D63D00837F05 /* icon_bangCard@3x.png */,
 				44B6284D1D20D63D00837F05 /* icon_jieCard@2x.png */,
@@ -4694,6 +4711,7 @@
 				44FA76231D07ECD70010B478 /* Open-book@3x.png in Resources */,
 				44FA759E1D07ECD70010B478 /* iconfont-dingwei@3x.png in Resources */,
 				44FA75C61D07ECD70010B478 /* letterIconPoint@3x.png in Resources */,
+				44BF49781D221B0A003E5A2C /* icon_alert_success@3x.png in Resources */,
 				448BD7BD1D1BC2E8000D7294 /* youjiantou@3x.png in Resources */,
 				44FA74BA1D07ECD70010B478 /* invest_organization@2x.png in Resources */,
 				44FA75831D07ECD70010B478 /* 圆角矩形-4-拷贝-2@2x.png in Resources */,
@@ -4795,6 +4813,7 @@
 				44FA76421D07ECD70010B478 /* 椭圆-4-拷贝-2@2x.png in Resources */,
 				44FA75AD1D07ECD70010B478 /* icon-logo@2x.png in Resources */,
 				44FA75A71D07ECD70010B478 /* 剩余时间@2x.png in Resources */,
+				44BF497A1D221B0A003E5A2C /* icon_warning@3x.png in Resources */,
 				44FA76571D07ECD70010B478 /* iconfont-guanzhu@3x.png in Resources */,
 				44FA76501D07ECD70010B478 /* 椭圆-10@2x.png in Resources */,
 				44FA74CF1D07ECD70010B478 /* right_arrow@3x.png in Resources */,
@@ -4807,6 +4826,7 @@
 				44FA76201D07ECD70010B478 /* navBJ@2x.png in Resources */,
 				44FA762F1D07ECD70010B478 /* iconfont-dianhua@3x.png in Resources */,
 				4442680A1D1D3FEB0021B1FA /* Success@3x.png in Resources */,
+				44BF49771D221B0A003E5A2C /* icon_alert_success@2x.png in Resources */,
 				44FA750E1D07ECD70010B478 /* 圆角矩形-3-拷贝@2x.png in Resources */,
 				44FA75291D07ECD70010B478 /* logo_wallet@3x.png in Resources */,
 				44FA75F41D07ECD70010B478 /* ...............................................................@3x.png in Resources */,
@@ -5079,6 +5099,7 @@
 				44FA75131D07ECD70010B478 /* logo-guanzhu@3x.png in Resources */,
 				44FA75441D07ECD70010B478 /* project@3x.png in Resources */,
 				44871A0D1D02B30800020DD9 /* MineViewController.xib in Resources */,
+				44BF49791D221B0A003E5A2C /* icon_warning@2x.png in Resources */,
 				44FA75AB1D07ECD70010B478 /* 更多@2x.png in Resources */,
 				44FA76151D07ECD70010B478 /* iconfont-rocket@2x.png in Resources */,
 				44FA74E61D07ECD70010B478 /* mine_gold_point3x.png in Resources */,
@@ -5334,6 +5355,7 @@
 				4484D1691D18D2AF001F4C3A /* ProjectPrepareFooterCommentView.m in Sources */,
 				4487195B1D02B28B00020DD9 /* WSetPassWordViewController.m in Sources */,
 				44871F701D14D1C000728B0C /* ActivityCommentCell.m in Sources */,
+				44BF49721D221403003E5A2C /* MineAlertView.m in Sources */,
 				44871B991D02B37800020DD9 /* SDWaitingView.m in Sources */,
 				44871BA71D02B37800020DD9 /* SDWebImagePrefetcher.m in Sources */,
 				44871BAE1D02B37800020DD9 /* UIView+WebCacheOperation.m in Sources */,
@@ -5749,7 +5771,7 @@
 					"$(PROJECT_DIR)/company/Library/TencentOpenAPI",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = /Users/eugene/Desktop/LashVersion_IOS/PrefixHeader.pch;
+				GCC_PREFIX_HEADER = ./PrefixHeader.pch;
 				INFOPLIST_FILE = company/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -5782,7 +5804,7 @@
 					"$(PROJECT_DIR)/company/Library/TencentOpenAPI",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = /Users/eugene/Desktop/LashVersion_IOS/PrefixHeader.pch;
+				GCC_PREFIX_HEADER = ./PrefixHeader.pch;
 				INFOPLIST_FILE = company/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

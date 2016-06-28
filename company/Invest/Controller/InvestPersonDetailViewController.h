@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "InvestViewController.h"
 #import "InvestListModel.h"
+
+#import "MineAttentionVC.h"
+#import "MineCollectionListModel.h"
 @interface InvestPersonDetailViewController : RootViewController
 
 @property (nonatomic, assign) InvestViewController *viewController;
@@ -24,5 +27,9 @@
 @property (nonatomic, strong) InvestListModel *listModel;
 
 @property (nonatomic, copy) NSString *type;  //分享类型
+
+@property (nonatomic, strong) MineAttentionVC *attentionVC;
+@property (nonatomic, strong) MineCollectionListModel *collectModel;
+@property (nonatomic, strong) UITableView *tableView;
 
 @end
