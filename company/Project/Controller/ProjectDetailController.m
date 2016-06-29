@@ -156,7 +156,7 @@
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             [data setValue:baseModel.headSculpture forKey:USER_STATIC_HEADER_PIC];
             [data setValue:baseModel.telephone forKey:USER_STATIC_TEL];
-            [data setValue:[NSString stringWithFormat:@"%ld",baseModel.userId] forKey:USER_STATIC_USER_ID];
+            [data setValue:[NSString stringWithFormat:@"%ld",(long)baseModel.userId] forKey:USER_STATIC_USER_ID];
             
             NSArray *authenticsArray = baseModel.authentics;
             ProjectAuthentics *authentics = authenticsArray[0];
@@ -180,7 +180,7 @@
 
 -(void)loadShareData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",[NSString stringWithFormat:@"%ld",self.projectId],@"projectId",@"1",@"type", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",@"1",@"type", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUESTPROJECTSHARE postParam:dic type:0 delegate:self sel:@selector(requestShare:)];
 }
@@ -281,7 +281,7 @@
 
 -(void)loadSceneData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",self.projectId],@"projectId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE postParam:dic type:0 delegate:self sel:@selector(requestProjectScene:)];
 }
@@ -499,7 +499,7 @@
 -(void)sendMessage:(UIButton*)btn
 {
     if (self.textView.text && ![self.textView.text isEqualToString:@""]) {
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textView.text],@"content", nil];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textView.text],@"content", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
         
@@ -578,7 +578,7 @@
             _subViewScrollView.height = _leftView.height;
             [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
             
-            NSLog(@"点击了第%ld个",sender.tag-10);
+//            NSLog(@"点击了第%ld个",sender.tag-10);
         }
             break;
         case 11:
@@ -587,7 +587,7 @@
             [_footer setHidden:YES];
             _subViewScrollView.height = member.height;
             [_subViewScrollView setupAutoContentSizeWithBottomView:member bottomMargin:0];
-            NSLog(@"点击了第%ld个",sender.tag-10);
+//            NSLog(@"点击了第%ld个",sender.tag-10);
             
             
         }
@@ -598,7 +598,7 @@
             [_footer setHidden:NO];
             _subViewScrollView.height = scene.height;
             [_subViewScrollView setupAutoContentSizeWithBottomView:scene bottomMargin:0];
-            NSLog(@"点击了第%ld个",sender.tag-10);
+//            NSLog(@"点击了第%ld个",sender.tag-10);
         }
             break;
         default:

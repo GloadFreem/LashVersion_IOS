@@ -38,7 +38,7 @@
     [self setupNav];
     
     [self createTableView];
-    
+
     
 }
 #pragma mark- 创建tableView
@@ -84,6 +84,7 @@
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:SIGNUPUSER postParam:dic type:0 delegate:self sel:@selector(requestSignup:)];
 }
+
 -(void)requestSignup:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
@@ -93,12 +94,23 @@
         NSString *status =[jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
-            LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+            LoginRegistViewController * login;
+            for (UIViewController *vc in self.navigationController.viewControllers) {
+                if ([vc isKindOfClass:LoginRegistViewController.class]) {
+                    login = (LoginRegistViewController*)vc;
+                }
+            }
             
-            UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:login];
-            //进入登录界面
-            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-            app.window.rootViewController = nav;
+            if(!login)
+            {
+                login = [[LoginRegistViewController alloc]init];
+            }
+            
+            
+    
+            [self.navigationController pushViewController:login animated:NO];
+            
+//            [self performSelector:@selector(coloseViewNotification) withObject:nil afterDelay:2];
             
         }
     }

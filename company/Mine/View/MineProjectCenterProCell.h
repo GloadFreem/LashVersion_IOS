@@ -1,16 +1,15 @@
 //
-//  MineProjectCenterPersonSecondCell.h
-//  JinZhiT
+//  MineProjectCenterProCell.h
+//  company
 //
-//  Created by Eugene on 16/5/24.
+//  Created by Eugene on 16/6/29.
 //  Copyright © 2016年 Eugene. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-
 #import "ProjectListProModel.h"
 
-@interface MineProjectCenterPersonSecondCell : UITableViewCell
+@interface MineProjectCenterProCell : UITableViewCell
 
 @property (nonatomic, strong) ProjectListProModel *model;
 

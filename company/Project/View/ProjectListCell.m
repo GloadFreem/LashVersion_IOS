@@ -89,8 +89,8 @@
     _projectLabel.text = model.abbrevName;
     _addressLabel.text = model.address;
     _companyLabel.text = model.fullName;
-    _personNumLabel.text = [NSString stringWithFormat:@"%ld",model.collectionCount];
-    _moneyLabel.text = [NSString stringWithFormat:@"%ld万",model.financeTotal];
+    _personNumLabel.text = [NSString stringWithFormat:@"%ld",(long)model.collectionCount];
+    _moneyLabel.text = [NSString stringWithFormat:@"%ld万",(long)model.financeTotal];
     
 }
 

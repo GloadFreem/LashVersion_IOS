@@ -235,7 +235,7 @@
 {
     if ([_authenticType isEqualToString:@"未认证"]) {
         RenzhengViewController  * renzheng = [RenzhengViewController new];
-        renzheng.identifyType = [NSString stringWithFormat:@"%ld",self.identiyTypeId];
+        renzheng.identifyType = [NSString stringWithFormat:@"%ld",(long)self.identiyTypeId];
         [self.navigationController.navigationBar setHidden:YES];
         [self.navigationController pushViewController:renzheng animated:YES];
     }
@@ -245,14 +245,14 @@
     }
     if ([_authenticType isEqualToString:@"认证失败"]) {
         RenzhengViewController  * renzheng = [RenzhengViewController new];
-        renzheng.identifyType = [NSString stringWithFormat:@"%ld",self.identiyTypeId];
+        renzheng.identifyType = [NSString stringWithFormat:@"%ld",(long)self.identiyTypeId];
         [self.navigationController.navigationBar setHidden:YES];
         [self.navigationController pushViewController:renzheng animated:YES];
     }
 }
 -(void)authenticQuick
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.quickPartner,@"partner",[NSString stringWithFormat:@"%ld",self.authId],@"authId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.quickPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.authId],@"authId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_AUTHENTIC_QUICK postParam:dic type:1 delegate:self sel:@selector(requestAuthQuick:)];
 }

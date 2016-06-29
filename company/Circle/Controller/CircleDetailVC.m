@@ -74,7 +74,7 @@
 -(void)loadData
 {
     [SVProgressHUD show];
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",_page],@"page",nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",_page],@"page",nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestCircleDetail:)];
 }
@@ -201,7 +201,7 @@
 -(void)loadMoreData
 {
 //    [self.tableView.mj_header beginRefreshing];
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%d",27],@"feelingId",[NSString stringWithFormat:@"%ld",_page],@"page",nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%d",27],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestCircleDetailMore:)];
 }
@@ -528,18 +528,18 @@
         
     }
     //请求更新数据数据
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.praisePartner,@"partner",[NSString stringWithFormat:@"%ld",model.publicContentId],@"contentId",_praiseFlag,@"flag", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.praisePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId",_praiseFlag,@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CYCLE_CELL_PRAISE postParam:dic type:0 delegate:self sel:@selector(requestPraiseStatus:)];
     if (_praiseSuccess) {
         if (model.flag) {
             [cell.praiseBtn setImage:[UIImage imageNamed:@"iconfont-dianzan"] forState:UIControlStateNormal];
             model.priseCount ++;
-            [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",model.priseCount] forState:UIControlStateNormal];
+            [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
         }else{
             [cell.praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
             model.priseCount --;
-            [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",model.priseCount] forState:UIControlStateNormal];
+            [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
         }
         
     }

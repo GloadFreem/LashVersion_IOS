@@ -208,7 +208,7 @@ static CGFloat textFieldH = 40;
 
 -(void)loadActionDetailData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestActionDetailList:)];
 }
@@ -255,7 +255,7 @@ static CGFloat textFieldH = 40;
 
 -(void)loadActionAttendData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",@"0",@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",@"0",@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_ATTEND postParam:dic type:0 delegate:self sel:@selector(requestActionAttendList:)];
 }
@@ -300,7 +300,7 @@ static CGFloat textFieldH = 40;
 
 -(void)loadActionCommentData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentListPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",@"0",@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentListPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",@"0",@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestActionCommentList:)];
 }
@@ -329,7 +329,7 @@ static CGFloat textFieldH = 40;
                 
                 ActivityDetailCellCommentItemModel *commentItemModel = [ActivityDetailCellCommentItemModel new];
                 commentItemModel.firstUserName = baseModel.userName;
-                commentItemModel.firstUserId = STRING(@"%ld", baseModel.usersByUserId.userId);
+                commentItemModel.firstUserId = STRING(@"%ld", (long)baseModel.usersByUserId.userId);
                 if([dic valueForKey:@"atUserName"])
                 {
                     commentItemModel.secondUserName = [dic valueForKey:@"atUserName"];
@@ -518,7 +518,7 @@ static CGFloat textFieldH = 40;
             ActivityDetailExerciseCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
             if (!cell) {
                 cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
-                cell.countLabel.text = STRING(@"(%ld)", self.dataAttendSource.count);
+                cell.countLabel.text = STRING(@"(%ld)", (unsigned long)self.dataAttendSource.count);
             }
             
             return cell;
@@ -663,7 +663,7 @@ static CGFloat textFieldH = 40;
  */
 -(void)actionPrise
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",STRING(@"%ld", self.headerModel.flag),@"flag", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", self.headerModel.flag),@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_PRISE postParam:dic type:0 delegate:self sel:@selector(requestPriseAction:)];
 }
@@ -731,7 +731,7 @@ static CGFloat textFieldH = 40;
     {
         _commentToUser = @"0";
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",STRING(@"%d", 2),@"flag",content,@"content",STRING(@"%@", _commentToUser),@"atUserId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%d", 2),@"flag",content,@"content",STRING(@"%@", _commentToUser),@"atUserId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestCommentAction:)];
 }
@@ -811,7 +811,7 @@ static CGFloat textFieldH = 40;
 {
     NSString * parthner = [TDUtil encryKeyWithMD5:KEY action:ATTEND_ACTION];
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",parthner,@"partner",content,@"content",STRING(@"%ld", self.activityModel.actionId),@"contentId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",parthner,@"partner",content,@"content",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ATTEND_ACTION postParam:dic type:0 delegate:self sel:@selector(requestAttendAction:)];
 }

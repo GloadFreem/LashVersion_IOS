@@ -1293,6 +1293,20 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0700;
+				TargetAttributes = {
+					214C276EA78FDA7D96E208BEF2772169 = {
+						DevelopmentTeam = PT9XT89LQL;
+					};
+					3C34098A7DACA89F52BF902062730F50 = {
+						DevelopmentTeam = PT9XT89LQL;
+					};
+					6847254D016329D4A531D34ED2B6DF81 = {
+						DevelopmentTeam = PT9XT89LQL;
+					};
+					7C0126D717EB28DC6DB2EEA2E20B5172 = {
+						DevelopmentTeam = PT9XT89LQL;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1588,6 +1602,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D878E3B8EE2B88BA388974EDCA80C6F9 /* GDataXML-HTML.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1605,6 +1620,7 @@
 				MODULEMAP_FILE = "Target Support Files/GDataXML-HTML/GDataXML-HTML.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = GDataXML_HTML;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1659,6 +1675,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AECD42655937B11DA5E814F42235A1AE /* MJRefresh.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1676,6 +1693,7 @@
 				MODULEMAP_FILE = "Target Support Files/MJRefresh/MJRefresh.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = MJRefresh;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1717,6 +1735,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7EC247D4EE00D0CEC583D64E990935E6 /* MJExtension.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1734,6 +1753,7 @@
 				MODULEMAP_FILE = "Target Support Files/MJExtension/MJExtension.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = MJExtension;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1779,6 +1799,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D878E3B8EE2B88BA388974EDCA80C6F9 /* GDataXML-HTML.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1796,6 +1817,7 @@
 				MODULEMAP_FILE = "Target Support Files/GDataXML-HTML/GDataXML-HTML.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = GDataXML_HTML;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1879,6 +1901,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AECD42655937B11DA5E814F42235A1AE /* MJRefresh.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1896,6 +1919,7 @@
 				MODULEMAP_FILE = "Target Support Files/MJRefresh/MJRefresh.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = MJRefresh;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1937,6 +1961,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 449A1402D9CDCF0502207533696A6164 /* Reachability.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1954,6 +1979,7 @@
 				MODULEMAP_FILE = "Target Support Files/Reachability/Reachability.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = Reachability;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2024,6 +2050,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 449A1402D9CDCF0502207533696A6164 /* Reachability.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2041,6 +2068,7 @@
 				MODULEMAP_FILE = "Target Support Files/Reachability/Reachability.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Reachability;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2053,6 +2081,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7EC247D4EE00D0CEC583D64E990935E6 /* MJExtension.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -2070,6 +2099,7 @@
 				MODULEMAP_FILE = "Target Support Files/MJExtension/MJExtension.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = MJExtension;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

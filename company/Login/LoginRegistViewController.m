@@ -11,6 +11,12 @@
 #import "FindPassWordViewController.h"
 #import "PerfectViewController.h"
 #import "RenzhengViewController.h"
+#import "ProjectViewController.h"
+#import "MyNavViewController.h"
+#import "InvestViewController.h"
+#import "ActivityViewController.h"
+#import "MineViewController.h"
+#import "CircleViewController.h"
 #define DENGLU @"loginUser"
 
 @interface LoginRegistViewController ()
@@ -143,8 +149,24 @@
             NSLog(@"登陆成功");
             
             //进入主界面
-            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-            app.window.rootViewController = app.tabBar;
+//            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
+//            app.window.rootViewController = app.tabBar;
+            
+            JTabBarController * tabBarController;
+            for (UIViewController *vc in self.navigationController.childViewControllers) {
+                if ([vc isKindOfClass:JTabBarController.class]) {
+                    tabBarController = (JTabBarController*)vc;
+                }
+            }
+            
+            if (!tabBarController) {
+                tabBarController = [self createViewControllers];
+            }
+            
+            [self.navigationController pushViewController:tabBarController animated:NO];
+        
+            
+//            [self.navigationController popToRootViewControllerAnimated:YES];
             
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             [data setValue:self.phoneField.text forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
@@ -152,7 +174,6 @@
             [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
             
             [data setValue:@"YES" forKey:@"isLogin"];
-            
 //            [self removeFromParentViewController];
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -162,6 +183,38 @@
     }
     [activity stopAnimating];
 }
+
+-(JTabBarController*)createViewControllers{
+    NSMutableArray * unSelectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project.png"],[UIImage imageNamed:@"invest.png"],[UIImage imageNamed:@"Circle.png"],[UIImage imageNamed:@"activity.png"],nil];
+    
+    NSMutableArray * selectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project_selected .png"],[UIImage imageNamed:@"invest_selected.png"],[UIImage imageNamed:@"Circle_selected.png"], [UIImage imageNamed:@"activity_selected.png"],nil];
+    
+    NSMutableArray * titles = [[NSMutableArray alloc]initWithObjects:@"项目",@"投资人",@"圈子",@"活动", nil];
+    
+    ProjectViewController * project = [[ProjectViewController alloc]init];
+    MyNavViewController * navProject = [[MyNavViewController alloc]initWithRootViewController:project];
+    
+    InvestViewController * invest = [[InvestViewController alloc]init];
+    MyNavViewController * navInvest = [[MyNavViewController alloc]initWithRootViewController:invest];
+    
+    CircleViewController * circle =[[CircleViewController alloc]init];
+    MyNavViewController * navCircle =[[MyNavViewController alloc]initWithRootViewController:circle];
+    
+    ActivityViewController * activityVC = [[ActivityViewController alloc]init];
+    MyNavViewController * navActivity = [[MyNavViewController alloc]initWithRootViewController:activityVC];
+    
+    JTabBarController *tabBar = [[JTabBarController alloc]initWithTabBarSelectedImages:selectedArray normalImages:unSelectedArray titles:titles];
+    tabBar.showCenterItem = YES;
+    tabBar.centerItemImage = [UIImage imageNamed:@"mine.png"];
+    tabBar.viewControllers = @[navProject,navInvest,navCircle,navActivity];
+    tabBar.textColor = orangeColor;
+    MyNavViewController *navMine = [[MyNavViewController alloc]initWithRootViewController:[[MineViewController alloc]init]];
+    tabBar.centerViewController = navMine;
+    
+    return tabBar;
+    
+}
+
 
 /**
  *  网络请求失败

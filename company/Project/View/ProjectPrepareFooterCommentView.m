@@ -238,7 +238,7 @@
 -(void)setProjectId:(NSInteger)projectId
 {
     _projectId = projectId;
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",commentPartner,@"partner",[NSString stringWithFormat:@"%ld",self.projectId],@"projectId",@"0",@"page",nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",@"0",@"page",nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestCommentList:)];
 }

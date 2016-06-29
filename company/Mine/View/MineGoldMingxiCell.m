@@ -175,7 +175,7 @@
     }
     
     _titleLabel.text = model.rewardtradetype.name;
-    _numLabel.text = [NSString stringWithFormat:@" %ld",model.count];
+    _numLabel.text = [NSString stringWithFormat:@" %ld",(long)model.count];
     _contentLabel.text = model.desc;
     
     if (_model.isShow == YES) {

@@ -177,7 +177,7 @@
 
 -(void)loadActionCommentData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentListPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",STRING(@"%ld", page),@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentListPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", page),@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestActionCommentList:)];
 }
@@ -226,7 +226,7 @@
                     
                     ActivityDetailCellCommentItemModel *commentItemModel = [ActivityDetailCellCommentItemModel new];
                     commentItemModel.firstUserName = baseModel.userName;
-                    commentItemModel.firstUserId = STRING(@"%ld", baseModel.usersByUserId.userId);
+                    commentItemModel.firstUserId = STRING(@"%ld", (long)baseModel.usersByUserId.userId);
                     if([dic valueForKey:@"atUserName"])
                     {
                         commentItemModel.secondUserName = [dic valueForKey:@"atUserName"];
@@ -265,7 +265,7 @@
                     
                     ActivityDetailCellCommentItemModel *commentItemModel = [ActivityDetailCellCommentItemModel new];
                     commentItemModel.firstUserName = baseModel.userName;
-                    commentItemModel.firstUserId = STRING(@"%ld", baseModel.usersByUserId.userId);
+                    commentItemModel.firstUserId = STRING(@"%ld", (long)baseModel.usersByUserId.userId);
                     if([dic valueForKey:@"atUserName"])
                     {
                         commentItemModel.secondUserName = [dic valueForKey:@"atUserName"];
@@ -509,7 +509,7 @@
  */
 -(void)actionPrise
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionPrisePartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",STRING(@"%ld", self.headerModel.flag),@"flag", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionPrisePartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", self.headerModel.flag),@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_PRISE postParam:dic type:0 delegate:self sel:@selector(requestPriseAction:)];
 }
@@ -587,7 +587,7 @@
         _commentToUser = @"0";
     }
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",STRING(@"%d", flag),@"flag",content,@"content",self.commentToUser,@"atUserId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%d", flag),@"flag",content,@"content",self.commentToUser,@"atUserId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestCommentAction:)];
 }

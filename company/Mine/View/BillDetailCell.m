@@ -285,7 +285,7 @@
     [_reasonLabel sizeToFit];
     _billLabel.text = model.record.tradeCode;
     [_billLabel sizeToFit];
-    _numberLabel.text = [NSString stringWithFormat:@"%ld",model.record.amount];
+    _numberLabel.text = [NSString stringWithFormat:@"%ld",(long)model.record.amount];
     [_numberLabel sizeToFit];
     _statusLabel.text = model.record.tradestatus.name;
     _statusLabel.textColor = color74;

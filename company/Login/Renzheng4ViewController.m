@@ -144,12 +144,12 @@
             
             status = @"1";
             [cell.leftButton setBackgroundImage:[UIImage imageNamed:@"icon_name_select"] forState:UIControlStateNormal];
-            [_dataSelected addObject:[NSString stringWithFormat:@"%ld",indexPath.row]];
+            [_dataSelected addObject:[NSString stringWithFormat:@"%ld",(long)indexPath.row]];
             
         }else{
             status = @"0";
             [cell.leftButton setBackgroundImage:[UIImage imageNamed:@"icon_name_unselect"] forState:UIControlStateNormal];
-            [_dataSelected removeObject:[NSString stringWithFormat:@"%ld",indexPath.row]];
+            [_dataSelected removeObject:[NSString stringWithFormat:@"%ld",(long)indexPath.row]];
         }
         [_statusArray replaceObjectAtIndex:indexPath.row withObject:status];
     }

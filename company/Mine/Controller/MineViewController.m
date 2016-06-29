@@ -21,7 +21,9 @@
 #define SIGNVERIFY @"signVerify"
 #define AUTHENINFO @"authenticInfoUser"
 
-
+#import "MineInvestViewController.h"
+#import "MineProjectViewController.h"
+#import "MineThinkTankViewController.h"
 @interface MineViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *iconBtn;
@@ -164,19 +166,39 @@
         case 4:
         {
             if (_identiyTypeId == 1) {//项目方
+                MineProjectViewController *vc = [MineProjectViewController new];
+                vc.type = _identiyTypeId - 1;
+                [self.navigationController pushViewController:vc animated:YES];
+                NSLog(@"项目方");
+                return;
                 
             }
             if (_identiyTypeId == 2) {//投资人
                 
+                MineInvestViewController *vc = [MineInvestViewController new];
+                vc.type = _identiyTypeId -1 ;
+                [self.navigationController  pushViewController:vc animated:YES];
+                
+                NSLog(@"投资人");
+                return;
             }
             if (_identiyTypeId == 3) {//投资机构
                 
+                MineInvestViewController *vc = [MineInvestViewController new];
+                vc.type = _identiyTypeId -1 ;
+                [self.navigationController pushViewController:vc animated:YES];
+                
+                NSLog(@"投机机构");
+                return;
             }
             if (_identiyTypeId == 4) {//智囊团
-                
+                MineThinkTankViewController *vc = [MineThinkTankViewController new];
+                vc.type = _identiyTypeId -1;
+                [self.navigationController pushViewController:vc animated:YES];
+                NSLog(@"智囊团");
+                return;
             }
-            MineProjectCenterVC *vc = [MineProjectCenterVC new];
-            [self.navigationController  pushViewController:vc animated:YES];
+            
         }
             break;
         case 5:

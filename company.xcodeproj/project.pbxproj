@@ -75,8 +75,6 @@
 		4487187C1D02AD9900020DD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4487187A1D02AD9900020DD9 /* Main.storyboard */; };
 		4487187E1D02AD9900020DD9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4487187D1D02AD9900020DD9 /* Assets.xcassets */; };
 		448718811D02AD9900020DD9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4487187F1D02AD9900020DD9 /* LaunchScreen.storyboard */; };
-		4487188C1D02AD9900020DD9 /* companyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4487188B1D02AD9900020DD9 /* companyTests.m */; };
-		448718971D02AD9900020DD9 /* companyUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 448718961D02AD9900020DD9 /* companyUITests.m */; };
 		448718A51D02AE1A00020DD9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 448718A41D02AE1A00020DD9 /* Images.xcassets */; };
 		448718AC1D02B1E800020DD9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 448718A91D02B1E800020DD9 /* AppDelegate.m */; };
 		448718AE1D02B1E800020DD9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 448718AB1D02B1E800020DD9 /* main.m */; };
@@ -336,8 +334,6 @@
 		44871F111D02B63B00020DD9 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871F051D02B63B00020DD9 /* UIImage+RoundedCorner.m */; };
 		44871F121D02B63B00020DD9 /* UIImage+SplitImageIntoTwoParts.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871F071D02B63B00020DD9 /* UIImage+SplitImageIntoTwoParts.m */; };
 		44871F991D14DD1400728B0C /* BillDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871F981D14DD1400728B0C /* BillDetailCell.m */; };
-		44871F9A1D14DD1400728B0C /* BillDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871F981D14DD1400728B0C /* BillDetailCell.m */; };
-		44871F9B1D14DD1400728B0C /* BillDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871F981D14DD1400728B0C /* BillDetailCell.m */; };
 		44871FDA1D02C62500020DD9 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871FD51D02C62500020DD9 /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		44871FDB1D02C62500020DD9 /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871FD81D02C62500020DD9 /* NSData+AES.m */; };
 		44871FE81D02C6A300020DD9 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871FDD1D02C6A300020DD9 /* NSString+MD5.m */; };
@@ -408,6 +404,16 @@
 		449835781D235A29000DD479 /* ActivityDetailListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4498353A1D235A29000DD479 /* ActivityDetailListCell.xib */; };
 		449835791D235A29000DD479 /* ActivityPriseViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4498353C1D235A29000DD479 /* ActivityPriseViewCell.m */; };
 		4498357A1D235A29000DD479 /* PictureContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4498353E1D235A29000DD479 /* PictureContainerView.m */; };
+		4498357D1D2368F7000DD479 /* MineProjectCenterProCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4498357C1D2368F7000DD479 /* MineProjectCenterProCell.m */; };
+		449835801D236AF1000DD479 /* MineProjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4498357F1D236AF1000DD479 /* MineProjectViewController.m */; };
+		449835831D237108000DD479 /* MineProjectCenterYuXuanCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 449835821D237108000DD479 /* MineProjectCenterYuXuanCell.m */; };
+		449835871D237356000DD479 /* MineProjectCenterAddProjectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 449835851D237356000DD479 /* MineProjectCenterAddProjectCell.m */; };
+		449835881D237356000DD479 /* MineProjectCenterAddProjectCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 449835861D237356000DD479 /* MineProjectCenterAddProjectCell.xib */; };
+		4498358E1D2374FF000DD479 /* icon_add_project@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4498358A1D2374FF000DD479 /* icon_add_project@2x.png */; };
+		4498358F1D2374FF000DD479 /* icon_add_project@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4498358B1D2374FF000DD479 /* icon_add_project@3x.png */; };
+		449835901D2374FF000DD479 /* icon_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4498358C1D2374FF000DD479 /* icon_right@2x.png */; };
+		449835911D2374FF000DD479 /* icon_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4498358D1D2374FF000DD479 /* icon_right@3x.png */; };
+		449835941D237D48000DD479 /* MineThinkTankViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 449835931D237D48000DD479 /* MineThinkTankViewController.m */; };
 		449AD2811D1E50FE00EBC276 /* PingTaiWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 449AD2801D1E50FE00EBC276 /* PingTaiWebViewController.m */; };
 		449AD2841D1E9EDB00EBC276 /* MIneAreaVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 449AD2831D1E9EDB00EBC276 /* MIneAreaVC.m */; };
 		449AD2871D1E9EF100EBC276 /* MineDeatilAreaVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 449AD2861D1E9EF100EBC276 /* MineDeatilAreaVC.m */; };
@@ -457,6 +463,9 @@
 		44BF49781D221B0A003E5A2C /* icon_alert_success@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BF49741D221B0A003E5A2C /* icon_alert_success@3x.png */; };
 		44BF49791D221B0A003E5A2C /* icon_warning@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BF49751D221B0A003E5A2C /* icon_warning@2x.png */; };
 		44BF497A1D221B0A003E5A2C /* icon_warning@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BF49761D221B0A003E5A2C /* icon_warning@3x.png */; };
+		44C076901D23A57F00D5F24C /* MineLogoProjectBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C0768F1D23A57F00D5F24C /* MineLogoProjectBaseModel.m */; };
+		44C076931D23ECCC00D5F24C /* MineInvestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C076921D23ECCC00D5F24C /* MineInvestViewController.m */; };
+		44C076961D23F43200D5F24C /* MIneProjectSecondYuXuanCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C076951D23F43100D5F24C /* MIneProjectSecondYuXuanCell.m */; };
 		44E1C7681D10F30A00ACF9BA /* ProjectListProBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E1C7671D10F30A00ACF9BA /* ProjectListProBaseModel.m */; };
 		44E1C76B1D10F67800ACF9BA /* ProjectListProModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E1C76A1D10F67800ACF9BA /* ProjectListProModel.m */; };
 		44E1C76E1D11052500ACF9BA /* MineCollectionInvestorBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E1C76D1D11052500ACF9BA /* MineCollectionInvestorBaseModel.m */; };
@@ -914,23 +923,6 @@
 		44FA76571D07ECD70010B478 /* iconfont-guanzhu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA74821D07ECD70010B478 /* iconfont-guanzhu@3x.png */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		448718881D02AD9900020DD9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 448718661D02AD9800020DD9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4487186D1D02AD9800020DD9;
-			remoteInfo = company;
-		};
-		448718931D02AD9900020DD9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 448718661D02AD9800020DD9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4487186D1D02AD9800020DD9;
-			remoteInfo = company;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		08DB24DD5F3D02EA9147373C /* Pods-company.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-company.debug.xcconfig"; path = "Pods/Target Support Files/Pods-company/Pods-company.debug.xcconfig"; sourceTree = "<group>"; };
 		440EDAA51D1FCF3800861ADD /* MineCollectionProjectModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineCollectionProjectModel.h; sourceTree = "<group>"; };
@@ -1033,10 +1025,8 @@
 		4487187B1D02AD9900020DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4487187D1D02AD9900020DD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		448718801D02AD9900020DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		448718871D02AD9900020DD9 /* companyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = companyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4487188B1D02AD9900020DD9 /* companyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = companyTests.m; sourceTree = "<group>"; };
 		4487188D1D02AD9900020DD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		448718921D02AD9900020DD9 /* companyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = companyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		448718961D02AD9900020DD9 /* companyUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = companyUITests.m; sourceTree = "<group>"; };
 		448718981D02AD9900020DD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		448718A41D02AE1A00020DD9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -1635,6 +1625,21 @@
 		4498353C1D235A29000DD479 /* ActivityPriseViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityPriseViewCell.m; sourceTree = "<group>"; };
 		4498353D1D235A29000DD479 /* PictureContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureContainerView.h; sourceTree = "<group>"; };
 		4498353E1D235A29000DD479 /* PictureContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureContainerView.m; sourceTree = "<group>"; };
+		4498357B1D2368F7000DD479 /* MineProjectCenterProCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineProjectCenterProCell.h; sourceTree = "<group>"; };
+		4498357C1D2368F7000DD479 /* MineProjectCenterProCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineProjectCenterProCell.m; sourceTree = "<group>"; };
+		4498357E1D236AF1000DD479 /* MineProjectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineProjectViewController.h; sourceTree = "<group>"; };
+		4498357F1D236AF1000DD479 /* MineProjectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineProjectViewController.m; sourceTree = "<group>"; };
+		449835811D237108000DD479 /* MineProjectCenterYuXuanCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineProjectCenterYuXuanCell.h; sourceTree = "<group>"; };
+		449835821D237108000DD479 /* MineProjectCenterYuXuanCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineProjectCenterYuXuanCell.m; sourceTree = "<group>"; };
+		449835841D237356000DD479 /* MineProjectCenterAddProjectCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineProjectCenterAddProjectCell.h; sourceTree = "<group>"; };
+		449835851D237356000DD479 /* MineProjectCenterAddProjectCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineProjectCenterAddProjectCell.m; sourceTree = "<group>"; };
+		449835861D237356000DD479 /* MineProjectCenterAddProjectCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MineProjectCenterAddProjectCell.xib; sourceTree = "<group>"; };
+		4498358A1D2374FF000DD479 /* icon_add_project@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_add_project@2x.png"; sourceTree = "<group>"; };
+		4498358B1D2374FF000DD479 /* icon_add_project@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_add_project@3x.png"; sourceTree = "<group>"; };
+		4498358C1D2374FF000DD479 /* icon_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_right@2x.png"; sourceTree = "<group>"; };
+		4498358D1D2374FF000DD479 /* icon_right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_right@3x.png"; sourceTree = "<group>"; };
+		449835921D237D48000DD479 /* MineThinkTankViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineThinkTankViewController.h; sourceTree = "<group>"; };
+		449835931D237D48000DD479 /* MineThinkTankViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineThinkTankViewController.m; sourceTree = "<group>"; };
 		449AD27F1D1E50FE00EBC276 /* PingTaiWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PingTaiWebViewController.h; sourceTree = "<group>"; };
 		449AD2801D1E50FE00EBC276 /* PingTaiWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PingTaiWebViewController.m; sourceTree = "<group>"; };
 		449AD2821D1E9EDB00EBC276 /* MIneAreaVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIneAreaVC.h; sourceTree = "<group>"; };
@@ -1705,6 +1710,12 @@
 		44BF49741D221B0A003E5A2C /* icon_alert_success@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_alert_success@3x.png"; sourceTree = "<group>"; };
 		44BF49751D221B0A003E5A2C /* icon_warning@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_warning@2x.png"; sourceTree = "<group>"; };
 		44BF49761D221B0A003E5A2C /* icon_warning@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_warning@3x.png"; sourceTree = "<group>"; };
+		44C0768E1D23A57F00D5F24C /* MineLogoProjectBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineLogoProjectBaseModel.h; sourceTree = "<group>"; };
+		44C0768F1D23A57F00D5F24C /* MineLogoProjectBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineLogoProjectBaseModel.m; sourceTree = "<group>"; };
+		44C076911D23ECCC00D5F24C /* MineInvestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineInvestViewController.h; sourceTree = "<group>"; };
+		44C076921D23ECCC00D5F24C /* MineInvestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineInvestViewController.m; sourceTree = "<group>"; };
+		44C076941D23F43100D5F24C /* MIneProjectSecondYuXuanCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIneProjectSecondYuXuanCell.h; sourceTree = "<group>"; };
+		44C076951D23F43100D5F24C /* MIneProjectSecondYuXuanCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MIneProjectSecondYuXuanCell.m; sourceTree = "<group>"; };
 		44E1C7661D10F30A00ACF9BA /* ProjectListProBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectListProBaseModel.h; sourceTree = "<group>"; };
 		44E1C7671D10F30A00ACF9BA /* ProjectListProBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectListProBaseModel.m; sourceTree = "<group>"; };
 		44E1C7691D10F67800ACF9BA /* ProjectListProModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectListProModel.h; sourceTree = "<group>"; };
@@ -2201,20 +2212,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		448718841D02AD9900020DD9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4487188F1D02AD9900020DD9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -2333,8 +2330,6 @@
 			isa = PBXGroup;
 			children = (
 				4487186E1D02AD9800020DD9 /* company.app */,
-				448718871D02AD9900020DD9 /* companyTests.xctest */,
-				448718921D02AD9900020DD9 /* companyUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2631,6 +2626,12 @@
 				448719B91D02B30800020DD9 /* MineGoldMingxiVC.m */,
 				448719BD1D02B30800020DD9 /* MineProjectCenterVC.h */,
 				448719BE1D02B30800020DD9 /* MineProjectCenterVC.m */,
+				4498357E1D236AF1000DD479 /* MineProjectViewController.h */,
+				4498357F1D236AF1000DD479 /* MineProjectViewController.m */,
+				449835921D237D48000DD479 /* MineThinkTankViewController.h */,
+				449835931D237D48000DD479 /* MineThinkTankViewController.m */,
+				44C076911D23ECCC00D5F24C /* MineInvestViewController.h */,
+				44C076921D23ECCC00D5F24C /* MineInvestViewController.m */,
 				448719BF1D02B30800020DD9 /* MineRingCodeVC.h */,
 				448719C01D02B30800020DD9 /* MineRingCodeVC.m */,
 				448719C11D02B30800020DD9 /* MineRingCodeVC.xib */,
@@ -2689,6 +2690,8 @@
 				44E1C77C1D1133B200ACF9BA /* MineActivityListModel.m */,
 				44B628531D210A4900837F05 /* BillDetailCellModel.h */,
 				44B628541D210A4900837F05 /* BillDetailCellModel.m */,
+				44C0768E1D23A57F00D5F24C /* MineLogoProjectBaseModel.h */,
+				44C0768F1D23A57F00D5F24C /* MineLogoProjectBaseModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2720,6 +2723,15 @@
 				448719ED1D02B30800020DD9 /* MineProjectCenterHeaderCell.xib */,
 				448719EE1D02B30800020DD9 /* MineProjectCenterPersonSecondCell.h */,
 				448719EF1D02B30800020DD9 /* MineProjectCenterPersonSecondCell.m */,
+				44C076941D23F43100D5F24C /* MIneProjectSecondYuXuanCell.h */,
+				44C076951D23F43100D5F24C /* MIneProjectSecondYuXuanCell.m */,
+				4498357B1D2368F7000DD479 /* MineProjectCenterProCell.h */,
+				4498357C1D2368F7000DD479 /* MineProjectCenterProCell.m */,
+				449835811D237108000DD479 /* MineProjectCenterYuXuanCell.h */,
+				449835821D237108000DD479 /* MineProjectCenterYuXuanCell.m */,
+				449835841D237356000DD479 /* MineProjectCenterAddProjectCell.h */,
+				449835851D237356000DD479 /* MineProjectCenterAddProjectCell.m */,
+				449835861D237356000DD479 /* MineProjectCenterAddProjectCell.xib */,
 				448719F01D02B30800020DD9 /* MyDataArrowCell.h */,
 				448719F11D02B30800020DD9 /* MyDataArrowCell.m */,
 				448719F21D02B30800020DD9 /* MyDataArrowCell.xib */,
@@ -3575,6 +3587,17 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		449835891D2374FF000DD479 /* 加号 */ = {
+			isa = PBXGroup;
+			children = (
+				4498358A1D2374FF000DD479 /* icon_add_project@2x.png */,
+				4498358B1D2374FF000DD479 /* icon_add_project@3x.png */,
+				4498358C1D2374FF000DD479 /* icon_right@2x.png */,
+				4498358D1D2374FF000DD479 /* icon_right@3x.png */,
+			);
+			path = "加号";
+			sourceTree = "<group>";
+		};
 		44AE87951D0EC0AB0067404F /* cameraSelect */ = {
 			isa = PBXGroup;
 			children = (
@@ -3820,6 +3843,7 @@
 		44FA72FC1D07ECD70010B478 /* IOS—项目中心 */ = {
 			isa = PBXGroup;
 			children = (
+				449835891D2374FF000DD479 /* 加号 */,
 				44FA72FD1D07ECD70010B478 /* 投资人 */,
 				44FA73081D07ECD70010B478 /* 项目方 */,
 			);
@@ -4453,42 +4477,6 @@
 			productReference = 4487186E1D02AD9800020DD9 /* company.app */;
 			productType = "com.apple.product-type.application";
 		};
-		448718861D02AD9900020DD9 /* companyTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4487189E1D02AD9900020DD9 /* Build configuration list for PBXNativeTarget "companyTests" */;
-			buildPhases = (
-				448718831D02AD9900020DD9 /* Sources */,
-				448718841D02AD9900020DD9 /* Frameworks */,
-				448718851D02AD9900020DD9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				448718891D02AD9900020DD9 /* PBXTargetDependency */,
-			);
-			name = companyTests;
-			productName = companyTests;
-			productReference = 448718871D02AD9900020DD9 /* companyTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		448718911D02AD9900020DD9 /* companyUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 448718A11D02AD9900020DD9 /* Build configuration list for PBXNativeTarget "companyUITests" */;
-			buildPhases = (
-				4487188E1D02AD9900020DD9 /* Sources */,
-				4487188F1D02AD9900020DD9 /* Frameworks */,
-				448718901D02AD9900020DD9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				448718941D02AD9900020DD9 /* PBXTargetDependency */,
-			);
-			name = companyUITests;
-			productName = companyUITests;
-			productReference = 448718921D02AD9900020DD9 /* companyUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -4501,16 +4489,6 @@
 					4487186D1D02AD9800020DD9 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = PT9XT89LQL;
-					};
-					448718861D02AD9900020DD9 = {
-						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = Z33G9QYVM8;
-						TestTargetID = 4487186D1D02AD9800020DD9;
-					};
-					448718911D02AD9900020DD9 = {
-						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = Z33G9QYVM8;
-						TestTargetID = 4487186D1D02AD9800020DD9;
 					};
 				};
 			};
@@ -4529,8 +4507,6 @@
 			projectRoot = "";
 			targets = (
 				4487186D1D02AD9800020DD9 /* company */,
-				448718861D02AD9900020DD9 /* companyTests */,
-				448718911D02AD9900020DD9 /* companyUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -4724,6 +4700,7 @@
 				44FA75671D07ECD70010B478 /* Avatar-sample-406@3x.png in Resources */,
 				44FA76451D07ECD70010B478 /* 椭圆-4-拷贝@3x.png in Resources */,
 				44BC07B71D13DEEA0075221E /* ProjectPrepareHeaderCell.xib in Resources */,
+				449835881D237356000DD479 /* MineProjectCenterAddProjectCell.xib in Resources */,
 				44FA76051D07ECD70010B478 /* friends@2x.png in Resources */,
 				44FA75051D07ECD70010B478 /* iconfont_pinglun@3x.png in Resources */,
 				44871B711D02B37800020DD9 /* IQKeyboardManager.bundle in Resources */,
@@ -4837,6 +4814,7 @@
 				44FA74BC1D07ECD70010B478 /* invest_point@2x.png in Resources */,
 				44871BB51D02B39A00020DD9 /* jinzhit@2x.png in Resources */,
 				44FA763D1D07ECD70010B478 /* iconfont-youjian@3x.png in Resources */,
+				449835911D2374FF000DD479 /* icon_right@3x.png in Resources */,
 				44FA76121D07ECD70010B478 /* iconfont-jine@3x.png in Resources */,
 				44FA748B1D07ECD70010B478 /* icon_imageArrow@2x.png in Resources */,
 				44FA75541D07ECD70010B478 /* sliderLine@2x.png in Resources */,
@@ -4931,6 +4909,7 @@
 				44FA75B51D07ECD70010B478 /* iconfont-denglu-(2)@2x.png in Resources */,
 				4484D1B71D193712001F4C3A /* UMSLoginViewController.xib in Resources */,
 				44FA74B01D07ECD70010B478 /* icon_releaseAdd@2x.png in Resources */,
+				449835901D2374FF000DD479 /* icon_right@2x.png in Resources */,
 				44FA74FF1D07ECD70010B478 /* icon_circle_add@3x.png in Resources */,
 				44FA753D1D07ECD70010B478 /* Contents.json in Resources */,
 				440EDAB11D1FDC3D00861ADD /* icon_noroad@3x.png in Resources */,
@@ -5046,6 +5025,7 @@
 				44BF49791D221B0A003E5A2C /* icon_warning@2x.png in Resources */,
 				44FA75AB1D07ECD70010B478 /* 更多@2x.png in Resources */,
 				44FA76151D07ECD70010B478 /* iconfont-rocket@2x.png in Resources */,
+				4498358E1D2374FF000DD479 /* icon_add_project@2x.png in Resources */,
 				44FA74E61D07ECD70010B478 /* mine_gold_point3x.png in Resources */,
 				44FA75DC1D07ECD70010B478 /* bill_whitebg1@2x.png in Resources */,
 				44FA74D21D07ECD70010B478 /* icon_ringbg@2x.png in Resources */,
@@ -5083,6 +5063,7 @@
 				44FA75F01D07ECD70010B478 /* 组-411@3x (2).png in Resources */,
 				44FA75501D07ECD70010B478 /* icon-guanzhubg@2x.png in Resources */,
 				44FA756F1D07ECD70010B478 /* 圆角矩形-3@3x.png in Resources */,
+				4498358F1D2374FF000DD479 /* icon_add_project@3x.png in Resources */,
 				44871A2B1D02B30800020DD9 /* MyDataHeaderCell.xib in Resources */,
 				44FA75741D07ECD70010B478 /* ...............................................................@3x.png in Resources */,
 				440EDAB41D1FDC3D00861ADD /* icon_raising@2x.png in Resources */,
@@ -5130,20 +5111,6 @@
 				44871A151D02B30800020DD9 /* PlatformIdentityVC.xib in Resources */,
 				44FA75F11D07ECD70010B478 /* 组-411@3x (3).png in Resources */,
 				44FA75FE1D07ECD70010B478 /* Bar-chart@3x.png in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		448718851D02AD9900020DD9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		448718901D02AD9900020DD9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5226,6 +5193,7 @@
 				4487200E1D02CEA900020DD9 /* NSData+CommonCrypto.m in Sources */,
 				44871EED1D02B5BA00020DD9 /* DACircularProgressView.m in Sources */,
 				449354E71D0D5CB200B22F7E /* CircleShareBottomView.m in Sources */,
+				44C076901D23A57F00D5F24C /* MineLogoProjectBaseModel.m in Sources */,
 				44871FEB1D02C6A300020DD9 /* SBJsonBase.m in Sources */,
 				44871A2E1D02B30800020DD9 /* MyDataNoArrowCell.m in Sources */,
 				44871AB31D02B35D00020DD9 /* UIView+Extension.m in Sources */,
@@ -5268,6 +5236,7 @@
 				4487193C1D02B28B00020DD9 /* LoginRegistViewController.m in Sources */,
 				44871EDE1D02B57C00020DD9 /* MWCaptionView.m in Sources */,
 				44871EE31D02B57C00020DD9 /* MWTapDetectingImageView.m in Sources */,
+				449835801D236AF1000DD479 /* MineProjectViewController.m in Sources */,
 				44871B911D02B37800020DD9 /* TAAnimatedDotView.m in Sources */,
 				448719501D02B28B00020DD9 /* SetPassWordViewController.m in Sources */,
 				449835731D235A29000DD479 /* ActivityDetailExiciseContentCell.m in Sources */,
@@ -5286,6 +5255,7 @@
 				44871BA31D02B37800020DD9 /* SDWebImageDecoder.m in Sources */,
 				4498357A1D235A29000DD479 /* PictureContainerView.m in Sources */,
 				44871F0A1D02B63B00020DD9 /* PECropRectView.m in Sources */,
+				449835831D237108000DD479 /* MineProjectCenterYuXuanCell.m in Sources */,
 				44871BA61D02B37800020DD9 /* SDWebImageManager.m in Sources */,
 				4484D1691D18D2AF001F4C3A /* ProjectPrepareFooterCommentView.m in Sources */,
 				4487195B1D02B28B00020DD9 /* WSetPassWordViewController.m in Sources */,
@@ -5313,6 +5283,7 @@
 				4484D1721D18F093001F4C3A /* ProjectSceneCommentVC.m in Sources */,
 				44871A951D02B34400020DD9 /* ProjectDetailLeftTeamModel.m in Sources */,
 				44871B681D02B37800020DD9 /* IQUIViewController+Additions.m in Sources */,
+				4498357D1D2368F7000DD479 /* MineProjectCenterProCell.m in Sources */,
 				44871F991D14DD1400728B0C /* BillDetailCell.m in Sources */,
 				44871A921D02B34400020DD9 /* ProjectBannerModel.m in Sources */,
 				44871B8B1D02B37800020DD9 /* MLLabel.m in Sources */,
@@ -5341,6 +5312,7 @@
 				44871B701D02B37800020DD9 /* IQUIView+IQKeyboardToolbar.m in Sources */,
 				44871B9E1D02B37800020DD9 /* UIView+SDExtension.m in Sources */,
 				44871EDF1D02B57C00020DD9 /* MWGridCell.m in Sources */,
+				44C076961D23F43200D5F24C /* MIneProjectSecondYuXuanCell.m in Sources */,
 				44871FED1D02C6A300020DD9 /* SBJsonWriter.m in Sources */,
 				44871A4D1D02B31800020DD9 /* CircleDetailHeaderView.m in Sources */,
 				4496197E1D1649A4009E9472 /* ProjectSceneCommentModel.m in Sources */,
@@ -5356,11 +5328,13 @@
 				44871FF91D02CC9A00020DD9 /* HttpUtils.m in Sources */,
 				44871AA61D02B34400020DD9 /* ProjectListCell.m in Sources */,
 				44871A221D02B30800020DD9 /* MineAttentionInvestThinkTankCell.m in Sources */,
+				449835871D237356000DD479 /* MineProjectCenterAddProjectCell.m in Sources */,
 				448719381D02B28B00020DD9 /* InvistTableViewCell.m in Sources */,
 				440EDAA71D1FCF3800861ADD /* MineCollectionProjectModel.m in Sources */,
 				44871FDA1D02C62500020DD9 /* GTMBase64.m in Sources */,
 				44871A0A1D02B30800020DD9 /* MineRingCodeVC.m in Sources */,
 				4487194C1D02B28B00020DD9 /* RenzhengViewController.m in Sources */,
+				44C076931D23ECCC00D5F24C /* MineInvestViewController.m in Sources */,
 				4498356C1D235A29000DD479 /* ActivityCell.m in Sources */,
 				44BC07AF1D138AEA0075221E /* ProjectBannerListModel.m in Sources */,
 				448719461D02B28B00020DD9 /* Renzheng2ViewController.m in Sources */,
@@ -5426,6 +5400,7 @@
 				44871F111D02B63B00020DD9 /* UIImage+RoundedCorner.m in Sources */,
 				44871B9C1D02B37800020DD9 /* SDRefreshHeaderView.m in Sources */,
 				448719A11D02B2FE00020DD9 /* InvestPersonWhiteImageView.m in Sources */,
+				449835941D237D48000DD479 /* MineThinkTankViewController.m in Sources */,
 				44871A2C1D02B30800020DD9 /* MyDataIconCell.m in Sources */,
 				44871B9B1D02B37800020DD9 /* SDRefreshFooterView.m in Sources */,
 				4487199B1D02B2FE00020DD9 /* InvestOrganizationCell.m in Sources */,
@@ -5496,38 +5471,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		448718831D02AD9900020DD9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				44871F9A1D14DD1400728B0C /* BillDetailCell.m in Sources */,
-				4487188C1D02AD9900020DD9 /* companyTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4487188E1D02AD9900020DD9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				44871F9B1D14DD1400728B0C /* BillDetailCell.m in Sources */,
-				448718971D02AD9900020DD9 /* companyUITests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		448718891D02AD9900020DD9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4487186D1D02AD9800020DD9 /* company */;
-			targetProxy = 448718881D02AD9900020DD9 /* PBXContainerItemProxy */;
-		};
-		448718941D02AD9900020DD9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4487186D1D02AD9800020DD9 /* company */;
-			targetProxy = 448718931D02AD9900020DD9 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4484D1961D193712001F4C3A /* UMSocialLocalizable.strings */ = {
@@ -5576,9 +5520,10 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: xuli@jinzht.com (WYLKZU827K)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -5599,6 +5544,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "b0d5e7d6-5f70-46b1-974b-b6162cfcb85b";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5622,9 +5568,10 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: xuli@jinzht.com (WYLKZU827K)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -5638,6 +5585,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "4d968a7d-7d21-4423-864d-7dc311070046";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -5710,52 +5658,6 @@
 			};
 			name = Release;
 		};
-		4487189F1D02AD9900020DD9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = companyTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Eugene.www.companyTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/company.app/company";
-			};
-			name = Debug;
-		};
-		448718A01D02AD9900020DD9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = companyTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Eugene.www.companyTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/company.app/company";
-			};
-			name = Release;
-		};
-		448718A21D02AD9900020DD9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = companyUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Eugene.www.companyUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = company;
-			};
-			name = Debug;
-		};
-		448718A31D02AD9900020DD9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = companyUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Eugene.www.companyUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = company;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -5773,24 +5675,6 @@
 			buildConfigurations = (
 				4487189C1D02AD9900020DD9 /* Debug */,
 				4487189D1D02AD9900020DD9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4487189E1D02AD9900020DD9 /* Build configuration list for PBXNativeTarget "companyTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4487189F1D02AD9900020DD9 /* Debug */,
-				448718A01D02AD9900020DD9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		448718A11D02AD9900020DD9 /* Build configuration list for PBXNativeTarget "companyUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				448718A21D02AD9900020DD9 /* Debug */,
-				448718A31D02AD9900020DD9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

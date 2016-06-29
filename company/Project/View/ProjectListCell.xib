@@ -260,7 +260,7 @@
                 <outletCollection property="labelArray" destination="m0Q-Op-iFl" id="txf-IO-8O9"/>
                 <outletCollection property="labelArray" destination="SIc-fv-CtM" id="eVb-br-KXN"/>
             </connections>
-            <point key="canvasLocation" x="-52.5" y="109"/>
+            <point key="canvasLocation" x="-392.5" y="85"/>
         </tableViewCell>
     </objects>
     <resources>

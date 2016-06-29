@@ -95,7 +95,7 @@
 
 -(void)startLoadData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",_page],@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:LOGO_ACTIVITY_LIST postParam:dic type:0 delegate:self sel:@selector(requestInvestList:)];
 }

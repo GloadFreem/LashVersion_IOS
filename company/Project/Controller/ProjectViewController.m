@@ -108,7 +108,7 @@
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             [data setValue:baseModel.headSculpture forKey:USER_STATIC_HEADER_PIC];
             [data setValue:baseModel.telephone forKey:USER_STATIC_TEL];
-            [data setValue:[NSString stringWithFormat:@"%ld",baseModel.userId] forKey:USER_STATIC_USER_ID];
+            [data setValue:[NSString stringWithFormat:@"%ld",(long)baseModel.userId] forKey:USER_STATIC_USER_ID];
             
             NSArray *authenticsArray = baseModel.authentics;
             ProjectAuthentics *authentics = authenticsArray[0];
@@ -140,7 +140,7 @@
         _type = @"1";
         _page = _roadPage;
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",_page],@"page",[NSString stringWithFormat:@"%@",_type],@"type", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page",[NSString stringWithFormat:@"%@",_type],@"type", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_LIST postParam:dic type:0 delegate:self sel:@selector(requestProjectList:)];
 }
@@ -318,12 +318,12 @@
     [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
     
-    UIButton *upLoadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    upLoadBtn.tag = 1;
-    [upLoadBtn setBackgroundImage:[UIImage imageNamed:@"upLoad"] forState:UIControlStateNormal];
-    upLoadBtn.size = upLoadBtn.currentBackgroundImage.size;
-    [upLoadBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:upLoadBtn];
+//    UIButton *upLoadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    upLoadBtn.tag = 1;
+//    [upLoadBtn setBackgroundImage:[UIImage imageNamed:@"upLoad"] forState:UIControlStateNormal];
+//    upLoadBtn.size = upLoadBtn.currentBackgroundImage.size;
+//    [upLoadBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:upLoadBtn];
     
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
@@ -376,9 +376,9 @@
         UpProjectViewController *up = [UpProjectViewController new];
         
         //隐藏tabbar
-        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-        
-        [delegate.tabBar tabBarHidden:YES animated:NO];
+//        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//        
+//        [delegate.tabBar tabBarHidden:YES animated:NO];
         
         [self.navigationController pushViewController:up animated:YES];
     }

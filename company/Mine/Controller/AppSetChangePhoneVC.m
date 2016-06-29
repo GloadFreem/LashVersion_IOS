@@ -18,11 +18,12 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *certainCodeText;
 
-@property (weak, nonatomic) IBOutlet UITextField *oldPhoneText;
 
 @property (weak, nonatomic) IBOutlet UITextField *identifyNumText;
 @property (weak, nonatomic) IBOutlet JKCountDownButton *certifyCodeBtn;
 @property (weak, nonatomic) IBOutlet UIButton *certainBtn;
+
+@property (weak, nonatomic) IBOutlet UITextField *passwordText;
 
 @property (nonatomic, copy) NSString *codePartner;
 @property (nonatomic, copy) NSString *phoneNumber;
@@ -94,17 +95,7 @@
 
 - (IBAction)getCertainCode:(UIButton *)sender {
 
-    //元手机号判断
-    if (self.oldPhoneText.text && ![self.oldPhoneText.text isEqualToString:@""]) {
-        if (![self.oldPhoneText.text isEqualToString:self.phoneNumber]) {
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"原手机号码不正确"];
-            return;
-        }
-        
-    }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入原手机号码"];
-        return;
-    }
+    
     //新手机号判断
     if (self.phoneTextField.text && ![self.phoneTextField.text isEqualToString:@""]) {
         if (![TDUtil validateMobile:self.phoneTextField.text]) {
@@ -146,17 +137,26 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入验证码"];
         return;
     }
-//    if (self.identifyNumText.text && ![self.identifyNumText.text isEqualToString:@""]) {
-//        if (self.identifyNumText.text.length != 18) {
-//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查身份证号码"];
-//        return;
-//        }
-//        
-//    }else{
-//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入身份证号码"];
-//        return;
-//    }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.phoneTextField.text,@"telephone",self.certainCodeText.text,@"code", nil];
+    if (self.identifyNumText.text && ![self.identifyNumText.text isEqualToString:@""]) {
+        if (![TDUtil isidentityCard:self.identifyNumText.text]) {
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查身份证号码"];
+        return;
+        }
+        
+    }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入身份证号码"];
+        return;
+    }
+    
+    if (!self.phoneTextField.text || [self.phoneTextField.text isEqualToString:@""]) {
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入密码"];
+        return ;
+    }
+    
+    NSString *password = [TDUtil encryptPhoneNumWithMD5:self.phoneTextField.text passString:self.passwordText.text];
+    
+    
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.phoneTextField.text,@"telephone",self.certainCodeText.text,@"code",self.identifyNumText.text,@"identityCardNo",password,@"password", nil];
     
     [self.httpUtil getDataFromAPIWithOps:CHANGEBINDTELEPHONE postParam:dic type:0 delegate:self sel:@selector(requestChangePhone:)];
 }
@@ -169,10 +169,15 @@
         NSString* code = [jsonDic valueForKey:@"status"];
         if ([code intValue] == 200) {
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self performSelector:@selector(back) withObject:nil afterDelay:1];
+            
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
+}
+-(void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 @end
