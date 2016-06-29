@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ActivityDetailExerciseCell : UITableViewCell
-
+@property (strong, nonatomic) IBOutlet UILabel *countLabel;
 @end

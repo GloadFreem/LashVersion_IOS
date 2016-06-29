@@ -13,6 +13,6 @@
 
 -(void)setupWithLikeItemsArray:(NSArray*)likeItemsArray commentItemsArray:(NSArray*)commentItemsArray;
 
-@property (nonatomic, copy) void (^didClickCommentLabelBlock)(NSString *commentId, CGRect rectInWindow);
+@property (nonatomic, copy) void (^didClickCommentLabelBlock)(NSString *commentId,NSString * repleyName,  CGRect rectInWindow);
 
 @end

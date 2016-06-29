@@ -59,6 +59,13 @@
             [self.expiredImage setHidden:YES];
         }
         
+        if(_model.attended)
+        {
+            [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
+            [_signUpBtn setBackgroundColor:GrayColor];
+            [_signUpBtn setEnabled:NO];
+        }
+        
         //收费情况
         NSString * status = @"免费";
         if(model.type==0){

@@ -329,11 +329,11 @@ static CGFloat textFieldH = 40;
                 
                 ActivityDetailCellCommentItemModel *commentItemModel = [ActivityDetailCellCommentItemModel new];
                 commentItemModel.firstUserName = baseModel.userName;
-                commentItemModel.firstUserId = STRING(@"%ld", baseModel.commentId);
+                commentItemModel.firstUserId = STRING(@"%ld", baseModel.usersByUserId.userId);
                 if([dic valueForKey:@"atUserName"])
                 {
                     commentItemModel.secondUserName = [dic valueForKey:@"atUserName"];
-                    commentItemModel.secondUserId = @"7";
+                    commentItemModel.secondUserId = @"";
                     
                 }
                 commentItemModel.commentString = baseModel.content;
@@ -400,8 +400,8 @@ static CGFloat textFieldH = 40;
         __weak typeof(self) weakSelf = self;
         
         footerView = [ActivityDetailFooterView new];
-        [footerView setDidClickCommentLabelBlock:^(NSString * commentId, CGRect rectInWindow) {
-            weakSelf.textField.placeholder =[NSString stringWithFormat:@"  回复：%@",commentId];
+        [footerView setDidClickCommentLabelBlock:^(NSString * commentId,NSString * repleyName, CGRect rectInWindow) {
+            weakSelf.textField.placeholder =[NSString stringWithFormat:@"  回复：%@",repleyName];
             [weakSelf.textField becomeFirstResponder];
             weakSelf.isReplayingComment = YES;
             weakSelf.commentToUser = commentId;
@@ -518,6 +518,7 @@ static CGFloat textFieldH = 40;
             ActivityDetailExerciseCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
             if (!cell) {
                 cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+                cell.countLabel.text = STRING(@"(%ld)", self.dataAttendSource.count);
             }
             
             return cell;
@@ -642,6 +643,10 @@ static CGFloat textFieldH = 40;
     {
         self.actionCommentPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_COMMENT];
     }
+    
+    _commentToUser = @"0";
+    [self.textField setText:@""];
+    [self.textField setPlaceholder:@""];
     [self.textField becomeFirstResponder];
 }
 
@@ -677,7 +682,7 @@ static CGFloat textFieldH = 40;
             
             //获取自身userId
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-            NSString * userId = [[data valueForKey:USER_STATIC_USER_ID] stringValue];
+            NSString * userId = [data valueForKey:USER_STATIC_USER_ID];
             
             //设置属性
             model.userId = userId;
@@ -721,7 +726,12 @@ static CGFloat textFieldH = 40;
          [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入评论内容"];
         return;
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",STRING(@"%d", 2),@"flag",content,@"content",@"7",@"atUserId", nil];
+    
+    if(!_commentToUser)
+    {
+        _commentToUser = @"0";
+    }
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",STRING(@"%d", 2),@"flag",content,@"content",STRING(@"%@", _commentToUser),@"atUserId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestCommentAction:)];
 }

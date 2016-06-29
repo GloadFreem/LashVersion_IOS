@@ -33,7 +33,7 @@
             ActivityAuthentics * authentic = [_model.users.authentics objectAtIndex:0];
             
             [self.nameLabel setText:authentic.name];
-            [self.positionLabel setText:authentic.position];
+            [self.positionLabel setText:[NSString stringWithFormat:@"%@%@",authentic.companyName,authentic.position]];
             [self.headerImgView sd_setImageWithURL:[NSURL URLWithString:model.users.headSculpture]];
             
             //时间

@@ -34,6 +34,9 @@ static CGFloat textFieldH = 40;
 @implementation ActivityAttendListViewController
 {
     CGFloat _totalKeybordHeight;
+    NSInteger page;
+    Boolean isRefresh;
+    Boolean isNoMoreData;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -73,11 +76,11 @@ static CGFloat textFieldH = 40;
     _tableView.bounces = YES;
     _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 0.01f)];
     //设置刷新控件
-    _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadActionAttendData)];
+    _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
     [self.tableView.mj_header beginRefreshing];
-    _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadActionAttendData)];
+    _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
     
     [self.view addSubview:_tableView];
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -88,13 +91,34 @@ static CGFloat textFieldH = 40;
     }];
 }
 
+-(void)refreshData
+{
+    page  = 0;
+    isRefresh = YES;
+    isNoMoreData = false;
+    
+    //加载数据
+    [self loadActionAttendData];
+}
+
+-(void)loadMoreData
+{
+    isRefresh = NO;
+    
+    if (!isNoMoreData) {
+        page ++;
+    }
+    
+    
+    [self loadActionAttendData];
+}
 /**
  *  获取报名人数
  */
 
 -(void)loadActionAttendData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionAttendPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",@"0",@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionAttendPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",STRING(@"%ld", page),@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_ATTEND postParam:dic type:0 delegate:self sel:@selector(requestActionAttendList:)];
 }
@@ -109,8 +133,11 @@ static CGFloat textFieldH = 40;
         if ([status integerValue] == 200) {
             
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
-            
             ActivityAttendModel * baseModel;
+            if (isRefresh) {
+                 self.dataAttendSource = [NSMutableArray new];
+            }
+            
             if(!self.dataAttendSource)
             {
                 self.dataAttendSource = [NSMutableArray new];
@@ -124,10 +151,18 @@ static CGFloat textFieldH = 40;
                 [self.dataAttendSource addObject:baseModel];
             }
             
+            [self.tableView reloadData];
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
-            [self.tableView reloadData];
+        }else if ([status integerValue] == 201)
+        {
+            isNoMoreData = true;
+            [self.tableView.mj_header endRefreshing];
+//            [self.tableView.mj_footer endRefreshing];
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
+        
+       
     }
 }
 

@@ -37,6 +37,8 @@
 @implementation ActivityCommentListViewController
 {
     CGFloat _totalKeybordHeight;
+    Boolean isRefresh;
+    Boolean isNoMoreData;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -154,12 +156,18 @@
 -(void)refreshData
 {
     page = 0;
+    isRefresh = true;
+    isNoMoreData = false;
+    
     [self loadActionCommentData];
 }
 
 -(void)loadMoreData
 {
-    page++;
+    isRefresh = false;
+    if (!isNoMoreData) {
+        page++;
+    }
     
     [self loadActionCommentData];
 }
@@ -183,64 +191,106 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
-            NSArray *dataPriseArray = [NSArray arrayWithArray:[jsonDic[@"data"] valueForKey:@"prises"]];
-            NSArray *dataCommentArray = [NSArray arrayWithArray:[jsonDic[@"data"] valueForKey:@"comments"]];
-            
-            if(!self.commentCellModel)
-            {
-                self.commentCellModel = [ActivityDetailCommentCellModel new];
-            }
-            
-            ActionComment * baseModel;
-            
-            NSMutableArray * tempArray = [NSMutableArray new];
-            for(NSDictionary * dic in dataCommentArray)
-            {
-                //解析
-                baseModel =[ActionComment mj_objectWithKeyValues:dic];
+            if (isRefresh) {
+                NSArray *dataPriseArray = [NSArray arrayWithArray:[jsonDic[@"data"] valueForKey:@"prises"]];
                 
-                ActivityDetailCellCommentItemModel *commentItemModel = [ActivityDetailCellCommentItemModel new];
-                commentItemModel.firstUserName = baseModel.userName;
-                commentItemModel.firstUserId = STRING(@"%ld", baseModel.usersByUserId.userId);
-                if([dic valueForKey:@"atUserName"])
-                {
-                    commentItemModel.secondUserName = [dic valueForKey:@"atUserName"];
-                    commentItemModel.secondUserId = @"7";
-                    
+                NSMutableArray *tempLikes = [NSMutableArray new];
+                for (int i = 0; i < dataPriseArray.count; i++) {
+                    ActivityDetailCellLikeItemModel *model = [ActivityDetailCellLikeItemModel new];
+                    model.userName = dataPriseArray[i];
+                    model.userId = @"1";
+                    [tempLikes addObject:model];
                 }
-                commentItemModel.commentString = baseModel.content;
+                self.commentCellModel.likeItemsArray = [tempLikes copy];
+                if(!self.likersModel)
+                {
+                    self.likersModel = [[ActionLikerModel alloc]init];
+                }
+                self.likersModel.likers = [NSMutableArray arrayWithArray:tempLikes];
                 
-                [tempArray addObject:commentItemModel];
-            }
-            
-            if(self.commentCellModel.commentItemsArray && page!=0)
-            {
+                
+                NSArray *dataCommentArray = [NSArray arrayWithArray:[jsonDic[@"data"] valueForKey:@"comments"]];
+                
+                if(!self.commentCellModel)
+                {
+                    self.commentCellModel = [ActivityDetailCommentCellModel new];
+                }
+                
+                ActionComment * baseModel;
+                
+                NSMutableArray * tempArray = [NSMutableArray new];
+                for(NSDictionary * dic in dataCommentArray)
+                {
+                    //解析
+                    baseModel =[ActionComment mj_objectWithKeyValues:dic];
+                    
+                    ActivityDetailCellCommentItemModel *commentItemModel = [ActivityDetailCellCommentItemModel new];
+                    commentItemModel.firstUserName = baseModel.userName;
+                    commentItemModel.firstUserId = STRING(@"%ld", baseModel.usersByUserId.userId);
+                    if([dic valueForKey:@"atUserName"])
+                    {
+                        commentItemModel.secondUserName = [dic valueForKey:@"atUserName"];
+                        commentItemModel.secondUserId = @"";
+                        
+                    }
+                    commentItemModel.commentString = baseModel.content;
+                    
+                    [tempArray addObject:commentItemModel];
+                }
+                
+                if(self.commentCellModel.commentItemsArray && page!=0)
+                {
+                    NSMutableArray * array = [NSMutableArray arrayWithArray:self.commentCellModel.commentItemsArray];
+                    [array addObjectsFromArray:tempArray];
+                    self.commentCellModel.commentItemsArray  = array;
+                }else{
+                    self.commentCellModel.commentItemsArray  = [tempArray copy];
+                }
+                
+            }else{
+                NSArray *dataCommentArray = [NSArray arrayWithArray:[jsonDic[@"data"] valueForKey:@"comments"]];
+                
+                if(!self.commentCellModel)
+                {
+                    self.commentCellModel = [ActivityDetailCommentCellModel new];
+                }
+                
+                ActionComment * baseModel;
+                
+                NSMutableArray * tempArray = [NSMutableArray new];
+                for(NSDictionary * dic in dataCommentArray)
+                {
+                    //解析
+                    baseModel =[ActionComment mj_objectWithKeyValues:dic];
+                    
+                    ActivityDetailCellCommentItemModel *commentItemModel = [ActivityDetailCellCommentItemModel new];
+                    commentItemModel.firstUserName = baseModel.userName;
+                    commentItemModel.firstUserId = STRING(@"%ld", baseModel.usersByUserId.userId);
+                    if([dic valueForKey:@"atUserName"])
+                    {
+                        commentItemModel.secondUserName = [dic valueForKey:@"atUserName"];
+                        commentItemModel.secondUserId = @"";
+                        
+                    }
+                    commentItemModel.commentString = baseModel.content;
+                    
+                    [tempArray addObject:commentItemModel];
+                }
+                
                 NSMutableArray * array = [NSMutableArray arrayWithArray:self.commentCellModel.commentItemsArray];
                 [array addObjectsFromArray:tempArray];
                 self.commentCellModel.commentItemsArray  = array;
-            }else{
-                self.commentCellModel.commentItemsArray  = [tempArray copy];
             }
             
-            
-            NSMutableArray *tempLikes = [NSMutableArray new];
-            for (int i = 0; i < dataPriseArray.count; i++) {
-                ActivityDetailCellLikeItemModel *model = [ActivityDetailCellLikeItemModel new];
-                model.userName = dataPriseArray[i];
-                model.userId = @"1";
-                [tempLikes addObject:model];
-            }
-            self.commentCellModel.likeItemsArray = [tempLikes copy];
-            if(!self.likersModel)
-            {
-                self.likersModel = [[ActionLikerModel alloc]init];
-            }
-            self.likersModel.likers = [NSMutableArray arrayWithArray:tempLikes];
             
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
             
             [self.tableView reloadData];
+        }else if ([status integerValue]==201)
+        {
+            isNoMoreData = YES;
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
     }
 }
@@ -280,8 +330,10 @@
         index --;
     }
     
-    
-    CGFloat h = [self.tableView cellHeightForIndexPath:indexPath model:[self.commentCellModel.commentItemsArray objectAtIndex:index] keyPath:@"model" cellClass:[ActivityCommentCell class] contentViewWidth:[self cellContentViewWith]];
+    CGFloat h = 0;
+    if (row-1<self.commentCellModel.commentItemsArray.count) {
+        h = [self.tableView cellHeightForIndexPath:indexPath model:[self.commentCellModel.commentItemsArray objectAtIndex:index] keyPath:@"model" cellClass:[ActivityCommentCell class] contentViewWidth:[self cellContentViewWith]];
+    }
     
     return h;
     
@@ -313,7 +365,11 @@
     if (!cell) {
         cell = [[ActivityCommentCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    [cell setModel:[self.commentCellModel.commentItemsArray objectAtIndex:row-1]];
+    
+    if (row-1<self.commentCellModel.commentItemsArray.count) {
+        [cell setModel:[self.commentCellModel.commentItemsArray objectAtIndex:row-1]];
+    }
+    
     
     
     __weak typeof(self) weakSelf = self;
@@ -438,7 +494,7 @@
     //设置初始化状态
     _textField.placeholder = @"";
     //恢复为评论状态
-    self.commentToUser = @"";
+    self.commentToUser = @"0";
 }
 
 -(void)didClickShowAllButton
@@ -524,6 +580,11 @@
     if(self.commentToUser && ![self.commentToUser isEqualToString:@""])
     {
         flag = 2;
+    }
+    
+    if(!_commentToUser)
+    {
+        _commentToUser = @"0";
     }
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",STRING(@"%d", flag),@"flag",content,@"content",self.commentToUser,@"atUserId", nil];

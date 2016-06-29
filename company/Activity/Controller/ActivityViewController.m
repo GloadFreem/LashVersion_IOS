@@ -65,7 +65,7 @@
             NSDictionary *dataDic;
             ActivityViewModel * baseModel;
             for (int i=0; i<dataArray.count; i++) {
-                dataDic = dataArray[0];
+                dataDic = dataArray[i];
                 baseModel = [ActivityViewModel mj_objectWithKeyValues:dataDic];
                 [array addObject:baseModel];
             }
