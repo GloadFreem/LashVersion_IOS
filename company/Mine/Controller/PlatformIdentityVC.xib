@@ -10,6 +10,8 @@
                 <outlet property="iconImage" destination="zqm-5O-9dx" id="eCY-uv-fbA"/>
                 <outlet property="identifyLabel" destination="6Tn-tm-voN" id="MkB-Nm-PjQ"/>
                 <outlet property="introduceLabel" destination="aZT-tA-erC" id="bDB-of-P3S"/>
+                <outlet property="moreLabel" destination="z3I-kC-6FW" id="Kb1-a3-8JO"/>
+                <outlet property="moreView" destination="XNv-3E-VVZ" id="NQu-bp-upn"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -21,10 +23,10 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DwK-tb-aZL">
                     <rect key="frame" x="0.0" y="10" width="375" height="225"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_project.png" translatesAutoresizingMaskIntoConstraints="NO" id="zqm-5O-9dx">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="icon_project.png" translatesAutoresizingMaskIntoConstraints="NO" id="zqm-5O-9dx">
                             <rect key="frame" x="176.5" y="20" width="21" height="19"/>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="项目方" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Tn-tm-voN">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="项目方" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Tn-tm-voN">
                             <rect key="frame" x="157" y="44" width="60" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="eiH-PO-gYy"/>
@@ -33,7 +35,7 @@
                             <color key="textColor" red="0.99215686270000003" green="0.52156862749999999" blue="0.21960784310000001" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rsn-xx-vLA">
+                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rsn-xx-vLA">
                             <rect key="frame" x="19" y="79" width="336" height="135"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aZT-tA-erC">

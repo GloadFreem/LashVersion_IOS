@@ -8,10 +8,11 @@
 
 #import "PingTaiVC.h"
 #import "PingTaiWebViewController.h"
+#import "FeedBackViewController.h"
 
 #define PLATFORMINTRODUCE @"requestPlatformIntroduce"
 #define USERINTRODUCE @"requestNewUseIntroduce"
-#define USERPROTOCOL @"requestUserProctol"
+#define USERPROTOCOL @"requestUserProtocol"
 #define LAWERINTRODUCE @"requestLawerIntroduce"
 
 @interface PingTaiVC ()
@@ -29,6 +30,16 @@
 @end
 
 @implementation PingTaiVC
+
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        
+    }
+    
+    return self;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -134,8 +145,8 @@
 -(void)setupNav
 {
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftback setBackgroundImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = leftback.currentBackgroundImage.size;
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(35, 30);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"关于平台";
@@ -161,6 +172,11 @@
         vc.url = _lawerurl;
     }
     if (vc.url) {
+        [self.navigationController  pushViewController:vc animated:YES];
+    }
+    
+    if (sender.tag == 4) {
+        FeedBackViewController *vc = [FeedBackViewController new];
         [self.navigationController  pushViewController:vc animated:YES];
     }
 }

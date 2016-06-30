@@ -10,7 +10,7 @@
 
 #import "AuthenticInfoBaseModel.h"
 
-#import "CircleShareBottomView.h"
+
 
 #import "CircleForwardVC.h"
 
@@ -349,7 +349,7 @@
 #pragma maerk -分享按钮
 -(void)didClickShareBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"2",@"type",[NSString stringWithFormat:@"%ld",model.publicContentId],@"contentId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"2",@"type",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId", nil];
     
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareStatus:)];

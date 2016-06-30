@@ -13,13 +13,20 @@
 #import "AppSetChangePhoneVC.h"
 #import "LoginRegistViewController.h"
 
+#define VERSIONINFO @"versionInfoSystem"
 #define SIGNUP @"signupUser"
-@interface AppSetVC ()<UITableViewDataSource,UITableViewDelegate>
+@interface AppSetVC ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *dataArray;
 
 @property (nonatomic, copy) NSString *signupPartner;
+@property (nonatomic, copy) NSString *versionPartner;
+
+@property (nonatomic, copy) NSString *versionStr;
+@property (nonatomic, copy) NSString *contentStr;
+@property (nonatomic, copy) NSString *url;
+@property (nonatomic, assign) BOOL isForce;
 
 @end
 
@@ -34,6 +41,7 @@
     
     //获得partner
     self.signupPartner = [TDUtil encryKeyWithMD5:KEY action:SIGNUP];
+    self.versionPartner = [TDUtil encryKeyWithMD5:KEY action:VERSIONINFO];
     
     [self setupNav];
     
@@ -93,6 +101,8 @@
     if (jsonDic != nil) {
         NSString *status =[jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            //退出前清除所有保存的信息
+            [TDUtil clearMemory];
             
             LoginRegistViewController * login;
             for (UIViewController *vc in self.navigationController.viewControllers) {
@@ -115,12 +125,13 @@
         }
     }
 }
+
 #pragma mark -设置导航栏
 -(void)setupNav
 {
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftback setBackgroundImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = leftback.currentBackgroundImage.size;
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(50, 30);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"软件设置";
@@ -208,6 +219,97 @@
     if (indexPath.row == 2) {
         AppSetChangePhoneVC *vc = [AppSetChangePhoneVC new];
         [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    if (indexPath.row == 7) {
+        [TDUtil clearMemory];
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"清除成功"];
+    }
+    
+    if (indexPath.row == 8) {
+        [self loadVersion];
+    }
+}
+
+-(void)loadVersion
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.versionPartner,@"partner",@"1",@"platform", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:VERSIONINFOSYSTEM postParam:dic type:0 delegate:self sel:@selector(requestVersion:)];
+}
+-(void)requestVersion:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *dataDic = jsonDic[@"data"];
+            _versionStr = dataDic[@"versionStr"];
+            _contentStr = dataDic[@"content"];
+            _url = dataDic[@"url"];
+            _isForce = [dataDic[@"isForce"] boolValue];
+            //利用key取到对应的版本（当前版本）
+            NSString * version =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            if (_isForce) {//强更
+           UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:_contentStr delegate:self cancelButtonTitle:@"更新" otherButtonTitles:nil];
+                alertView.delegate =self;
+                alertView.tag = 20;
+            [alertView show];
+            }else{
+                NSArray *currentArray = [version componentsSeparatedByString:@"."];
+                NSLog(@"本地----%@",currentArray);
+                NSArray *upArray = [_versionStr componentsSeparatedByString:@"."];
+                if ([currentArray[0] integerValue] < [upArray[0] integerValue]) {
+                    [self alertViewShow];
+                }else{
+                    if ([upArray[1] integerValue] > [currentArray[1] integerValue]) {
+                        [self alertViewShow];
+                    }else{
+                        if ([upArray[2] integerValue] > [currentArray[2] integerValue]) {
+                            [self alertViewShow];
+                            
+                        }else{
+                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:@"当前版本为最新版本，无需更新" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//                            alertView.delegate =self;
+//                            alertView.tag = 20;
+                            [alertView show];
+                        
+                        }
+                        
+                      
+                    }
+                }
+                
+            }
+        }
+    }
+}
+
+-(void)alertViewShow
+{
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:_contentStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"更新", nil];
+    alertView.tag = 21;
+    [alertView show];
+}
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    //强更
+    if (alertView.tag == 20) {
+        if (buttonIndex == 0) {
+            UIApplication *application = [UIApplication sharedApplication];
+            [application openURL:[NSURL URLWithString:_url]];
+        }
+    }
+    
+    if (alertView.tag == 21) {
+        if (buttonIndex == 0) {
+            
+        }else{
+            UIApplication *application = [UIApplication sharedApplication];
+            [application openURL:[NSURL URLWithString:_url]];
+        }
     }
 }
 @end

@@ -10,6 +10,8 @@
 #import "ProjectLetterCell.h"
 #import "ProjectLetterModel.h"
 
+#import "LetterBaseModel.h"
+#define INNERMESSAGE @"requestInnerMessageList"
 @interface ProjectLetterViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView; //列表
@@ -22,6 +24,9 @@
 @property (nonatomic, strong) UIButton *deleteBtn;      //删除按钮
 @property (nonatomic, strong) UIButton *operateBtn;    // 编辑按钮
 
+@property (nonatomic, assign) NSInteger page;
+@property (nonatomic, copy) NSString *messagePartner;
+
 @end
 
 @implementation ProjectLetterViewController
@@ -29,28 +34,68 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    _dataArray = [NSMutableArray array];
-    _deleteArray = [NSMutableArray array];
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    if (!_deleteArray) {
+        _deleteArray = [NSMutableArray array];
+    }
+    //获得partner
+    self.messagePartner = [TDUtil encryKeyWithMD5:KEY action:INNERMESSAGE];
     
-    [self loadData];
+    _page = 0;
     
-    [self createTableView];
+    [self startLoadData];
+    
+//    [self createTableView];
     
     [self setupNav];
     
     [self setupBottomView];
 }
 
-#pragma mark -loadData 
--(void)loadData
+-(void)startLoadData
 {
-    NSArray *array = @[@"金指投",@"银指投",@"铁指投",@"铜指头",@"大拇指",@"金指投",@"银指投",@"铁指投",@"铜指头",@"大拇指",@"金指投",@"银指投",@"铁指投",@"铜指头",@"大拇指",@"金指投",@"银指投",@"铁指投",@"铜指头",@"大拇指",@"金指投",@"银指投",@"铁指投",@"铜指头",@"大拇指"];
-    for (int i =0; i<20; i++) {
-        ProjectLetterModel *model= [ProjectLetterModel new];
-        model.titleLabel = array[i];
-        [_dataArray addObject:model];
+    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.messagePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_INNER_MESSAGE postParam:dic type:0 delegate:self sel:@selector(requestMessageList:)];
+}
+-(void)requestMessageList:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+            NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            
+            if (_page == 0) {
+                [_dataArray removeAllObjects];
+                [_deleteArray removeAllObjects];
+            }
+            NSArray *modelArray = [LetterBaseModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+            for (NSInteger i = 0; i < modelArray.count; i ++) {
+                LetterBaseModel *baseModel = modelArray[i];
+                ProjectLetterModel *model = [ProjectLetterModel new];
+                model.title = baseModel.title;
+                model.secondTitle = baseModel.messagetype.name;
+//                model.time = baseModel
+            }
+            
+            
+            [self.tableView reloadData];
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+        }else{
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+        }
     }
 }
+
 #pragma mark -创建tableView
 -(void)createTableView
 {
@@ -60,6 +105,15 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     [self.view addSubview:_tableView];
+    //设置刷新控件
+    _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
+    //自动改变透明度
+    _tableView.mj_header.automaticallyChangeAlpha = YES;
+    [_tableView.mj_header beginRefreshing];
+    _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
+    //    tableView.mj_footer.hidden = YES;
+    _tableView.mj_footer.automaticallyHidden = NO;
+    
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.view.mas_left);
         make.top.mas_equalTo(self.view.mas_top);
@@ -68,6 +122,23 @@
     }];
     
 }
+
+-(void)nextPage
+{
+    _page ++;
+    [self startLoadData];
+    //    NSLog(@"回到顶部");
+}
+
+-(void)refreshHttp
+{
+    _page = 0;
+    
+    [self startLoadData];
+    //    NSLog(@"下拉刷新");
+}
+
+
 #pragma mark -导航栏设置
 -(void)setupNav
 {
@@ -109,16 +180,16 @@
         make.centerY.mas_equalTo(titleView);
     }];
     
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.tag = 2;
-    [btn setBackgroundImage:[UIImage imageNamed:@"letterArrow"] forState:UIControlStateNormal];
-    [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [titleView addSubview:btn];
-    [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(titleView);
-        make.left.mas_equalTo(label.mas_right).offset(5);
-        
-    }];
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn.tag = 2;
+//    [btn setBackgroundImage:[UIImage imageNamed:@"letterArrow"] forState:UIControlStateNormal];
+//    [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [titleView addSubview:btn];
+//    [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.mas_equalTo(titleView);
+//        make.left.mas_equalTo(label.mas_right).offset(5);
+//        
+//    }];
     
     
     self.navigationItem.titleView = titleView;
@@ -202,7 +273,7 @@
         return cell;
     }else{   // 出于编辑状态下
         cell.selectImage.hidden = NO;
-        cell.iconLeftSpace.constant =41;
+        cell.titleLeftSpace.constant =41;
     }
     
     [cell relayoutCellWithModel:_dataArray[indexPath.row]];

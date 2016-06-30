@@ -10,9 +10,10 @@
 
 @interface ProjectLetterModel : NSObject
 
-@property (nonatomic, copy) NSString *iconImage;
-@property (nonatomic, copy) NSString *titleLabel ;
+
+@property (nonatomic, copy) NSString *title ;
 @property (nonatomic, copy) NSString *secondTitle;
+@property (nonatomic, copy) NSString *time;
 
 @property (nonatomic, assign) BOOL selectedStatus;
 

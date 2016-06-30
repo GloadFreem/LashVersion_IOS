@@ -1489,4 +1489,21 @@
     NSPredicate *identityCardPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex2];
     return [identityCardPredicate evaluateWithObject:str];
 }
+
++(void)clearMemory
+{
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    [data removeObjectForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+    [data removeObjectForKey:STATIC_USER_PASSWORD];
+    [data removeObjectForKey:USER_STATIC_USER_ID];
+    [data removeObjectForKey:USER_STATIC_HEADER_PIC];
+    [data removeObjectForKey:USER_STATIC_COMPANY_NAME];
+    [data removeObjectForKey:USER_STATIC_NAME];
+    [data removeObjectForKey:USER_STATIC_IDPIC];
+    [data removeObjectForKey:USER_STATIC_IDNUMBER];
+    [data removeObjectForKey:USER_STATIC_POSITION];
+    [data removeObjectForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    
+    [data synchronize];
+}
 @end

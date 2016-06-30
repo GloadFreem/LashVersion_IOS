@@ -152,6 +152,7 @@
 //            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
 //            app.window.rootViewController = app.tabBar;
             
+            
             JTabBarController * tabBarController;
             for (UIViewController *vc in self.navigationController.childViewControllers) {
                 if ([vc isKindOfClass:JTabBarController.class]) {
@@ -173,7 +174,7 @@
             [data setValue:_password forKey:STATIC_USER_PASSWORD];
             [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
             
-            [data setValue:@"YES" forKey:@"isLogin"];
+//            [data setValue:@"YES" forKey:@"isLogin"];
 //            [self removeFromParentViewController];
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];

@@ -76,7 +76,7 @@
                         <constraint firstAttribute="width" constant="19" id="spc-wL-lB4"/>
                     </constraints>
                 </imageView>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入密码" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="IY2-N2-446">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入密码" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="IY2-N2-446">
                     <rect key="frame" x="94" y="262" width="212" height="21"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="212" id="9t4-om-K7A"/>
@@ -94,7 +94,7 @@
                         <outlet property="delegate" destination="-1" id="k6u-VT-33o"/>
                     </connections>
                 </textField>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入手机号码" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="MsS-6p-zOl">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入手机号码" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="MsS-6p-zOl">
                     <rect key="frame" x="94" y="208" width="212" height="21"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="212" id="igP-l2-QWV"/>

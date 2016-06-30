@@ -158,6 +158,7 @@
     //提交记录
     _commitBtn = [UIButton new];
     [_commitBtn setTitle:@"提交记录" forState:UIControlStateNormal];
+    [_commitBtn addTarget:self action:@selector(recordBtn) forControlEvents:UIControlEventTouchUpInside];
     [_commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_commitBtn.titleLabel setFont:BGFont(16)];
     _commitBtn.backgroundColor = orangeColor;
@@ -169,6 +170,7 @@
     //查看btn
     _detailBtn = [UIButton new];
     [_detailBtn setTitle:@"项目详情" forState:UIControlStateNormal];
+    [_detailBtn addTarget:self action:@selector(detailBtn) forControlEvents:UIControlEventTouchUpInside];
     [_detailBtn setTitleColor:orangeColor forState:UIControlStateNormal];
     [_detailBtn.titleLabel setFont:BGFont(16)];
     _detailBtn.backgroundColor = [UIColor whiteColor];
@@ -378,6 +380,21 @@
     //年差额 = dateCom.year, 月差额 = dateCom.month, 日差额 = dateCom.day, 小时差额 = dateCom.hour, 分钟差额 = dateCom.minute, 秒差额 = dateCom.second
     
     return [NSString stringWithFormat:@"%ld",(long)dateCom.day];
+}
+
+
+-(void)recordBtn
+{
+    if ([self.delagate respondsToSelector:@selector(didClickRecordBtnInCenterCell:andIndexPath:)]) {
+        [self.delagate didClickRecordBtnInCenterCell:self andIndexPath:_indexPath];
+    }
+}
+
+-(void)detailBtn
+{
+    if ([self.delagate respondsToSelector:@selector(didClickDetailBtnInCenterCell:andIndexPath:)]) {
+        [self.delagate didClickDetailBtnInCenterCell:self andIndexPath:_indexPath];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

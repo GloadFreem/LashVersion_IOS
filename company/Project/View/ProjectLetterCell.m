@@ -19,7 +19,8 @@
 -(void)relayoutCellWithModel:(ProjectLetterModel*)model
 {
     _model = model;
-    _titleLabel.text = model.titleLabel;
+    _titleLabel.text = model.title;
+    _timeLabel.text = model.time;
     if (_model.selectedStatus) {
         [_selectImage setImage:[UIImage imageNamed:@"letterSelected"]];
     }else{

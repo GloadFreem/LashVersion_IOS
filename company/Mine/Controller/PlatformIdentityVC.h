@@ -18,5 +18,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *introduceLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *moreLabel;
 
+@property (weak, nonatomic) IBOutlet UIView *moreView;
 @end

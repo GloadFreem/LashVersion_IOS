@@ -173,6 +173,7 @@
                     listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province,city];
                     listModel.areas = [authentics.industoryArea componentsSeparatedByString:@"，"];
                     listModel.introduce = authentics.introduce;
+                    listModel.userId = baseModel.usersByUserCollectedId.userId;
 //                    listModel.collected = 
                     //身份
                     [_identifyArray addObject:authentics.identiytype.name];
@@ -489,18 +490,27 @@
     }
     MineCollectionListModel *model = _investArray[indexPath.row];
     if ([_identifyArray[indexPath.row] isEqualToString:@"个人投资者"]) {
-//        InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
-//        vc.attentionVC =self;
-//        vc.titleText = @"个人 · 简介";
-//        vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)model.collectCount];
+        InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
+        vc.attentionVC =self;
+        vc.titleText = @"个人 · 简介";
+        vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
+        [self.navigationController pushViewController:vc animated:YES];
     }
     
     if ([_identifyArray[indexPath.row] isEqualToString:@"机构投资者"]) {
-    
+        InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
+        vc.attentionVC =self;
+        vc.titleText = @"机构 · 简介";
+        vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
+        [self.navigationController pushViewController:vc animated:YES];
+        
     }
     
     if ([_identifyArray[indexPath.row] isEqualToString:@"智囊团"]) {
-    
+        InvestThinkTankDetailVC *vc = [InvestThinkTankDetailVC new];
+        vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
+        vc.attentionVC =self;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 #pragma mark- 创建tableView

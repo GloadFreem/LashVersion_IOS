@@ -107,7 +107,7 @@
             //            NSLog(@"打印个人信息：----%@",baseModel);
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             [data setValue:baseModel.headSculpture forKey:USER_STATIC_HEADER_PIC];
-            [data setValue:baseModel.telephone forKey:USER_STATIC_TEL];
+            [data setValue:baseModel.telephone forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
             [data setValue:[NSString stringWithFormat:@"%ld",(long)baseModel.userId] forKey:USER_STATIC_USER_ID];
             
             NSArray *authenticsArray = baseModel.authentics;
@@ -118,7 +118,7 @@
             [data setValue:authentics.identiyCarA forKey:USER_STATIC_IDPIC];
             [data setValue:authentics.identiyCarNo forKey:USER_STATIC_IDNUMBER];
             [data setValue:authentics.position forKey:USER_STATIC_POSITION];
-            [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
+//            [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
             [data setValue:authentics.authenticstatus.name forKey:USER_STATIC_USER_AUTHENTIC_STATUS];
             
             [data synchronize];

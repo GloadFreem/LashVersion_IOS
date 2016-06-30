@@ -9,7 +9,23 @@
 #import <UIKit/UIKit.h>
 #import "ProjectListProModel.h"
 
+@class MineProjectCenterProCell;
+
+@protocol MineProjectCenterProCellDelegate <NSObject>
+
+@optional
+
+-(void)didClickRecordBtnInCenterCell:(MineProjectCenterProCell*)cell andIndexPath:(NSIndexPath*)indexPath;
+
+-(void)didClickDetailBtnInCenterCell:(MineProjectCenterProCell*)cell andIndexPath:(NSIndexPath*)indexPath;
+
+@end
+
 @interface MineProjectCenterProCell : UITableViewCell
+
+@property (nonatomic, assign) id<MineProjectCenterProCellDelegate>delagate;
+
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 @property (nonatomic, strong) ProjectListProModel *model;
 

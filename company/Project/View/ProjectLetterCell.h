@@ -11,17 +11,17 @@
 @interface ProjectLetterCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *selectImage;
 
-@property (weak, nonatomic) IBOutlet UIImageView *iconImage;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *secondTitle;
 
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconLeftSpace;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLeftSpace;
 
 @property (nonatomic, strong) ProjectLetterModel *model;    //
 
 -(void)relayoutCellWithModel:(ProjectLetterModel*)model;
+
 
 @end

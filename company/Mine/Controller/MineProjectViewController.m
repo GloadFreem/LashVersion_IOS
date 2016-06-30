@@ -8,22 +8,28 @@
 
 #import "MineProjectViewController.h"
 #import "UpProjectViewController.h"
+#import "MIneProjectCommitRecordVC.h"
 
 #import "MineLogoProjectBaseModel.h"
 #import "ProjectListProModel.h"
 
+#import "ProjectDetailController.h"
+#import "ProjectPrepareDetailVC.h"
 
 #import "MineProjectCenterProCell.h"
 #import "MineProjectCenterAddProjectCell.h"
 #import "MineProjectCenterYuXuanCell.h"
 
+#define COMMITRECORD @"requestProjectCommitRecords"
 #define PROJECTCENTER @"requestProjectCenter"
-@interface MineProjectViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface MineProjectViewController ()<UITableViewDelegate,UITableViewDataSource,MineProjectCenterYuXuanCellDelegate,MineProjectCenterProCellDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *statusArray;
 
 @property (nonatomic, assign) NSInteger page;
+
+@property (nonatomic, copy) NSString *recordPartner;
 
 @end
 
@@ -42,7 +48,7 @@
     _page = 0;
     
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTCENTER];
-    
+    self.recordPartner = [TDUtil encryKeyWithMD5:KEY action:COMMITRECORD];
     [self startLoadData];
     
     [self setupNav];
@@ -54,7 +60,6 @@
 -(void)startLoadData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_type],@"type",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
-    
     
 //    开始请求
         [self.httpUtil getDataFromAPIWithOps:LOGO_PROJECT_CENTER postParam:dic type:0 delegate:self sel:@selector(requestList:)];
@@ -193,6 +198,8 @@
                 if (!cell) {
                     cell = [[MineProjectCenterYuXuanCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
                 }
+                cell.delegate = self;
+                cell.indexpath = indexPath;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 cell.model = _dataArray[indexPath.row];
                 return cell;
@@ -204,6 +211,8 @@
                 cell = [[MineProjectCenterProCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
                 
             }
+            cell.delagate =self;
+            cell.indexPath = indexPath;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.model = _dataArray[indexPath.row];
             return cell;
@@ -224,20 +233,70 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.row == _dataArray.count) {
+    if (indexPath.row == _dataArray.count) {//进入提交项目界面
         UpProjectViewController *up = [UpProjectViewController new];
         
-        //隐藏tabbar
-        //        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-        //
-        //        [delegate.tabBar tabBarHidden:YES animated:NO];
-        
         [self.navigationController pushViewController:up animated:YES];
+    }else{
+    ProjectListProModel *model = _dataArray[indexPath.row];
+    if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]){
+        ProjectPrepareDetailVC *vc = [ProjectPrepareDetailVC new];
+        vc.projectId = model.projectId;
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
-    
-    
+        ProjectDetailController *vc = [ProjectDetailController new];
+        vc.projectId = model.projectId;
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }
 }
 
+#pragma mark---------MineProjectCenterYuXuanCellDelegate-------------
+-(void)didClickRecordBtnInTheCell:(MineProjectCenterYuXuanCell *)cell andIndexPath:(NSIndexPath *)indexPath
+{
+    MIneProjectCommitRecordVC *vc = [MIneProjectCommitRecordVC new];
+    ProjectListProModel *model = _dataArray[indexPath.row];
+    vc.projectId = model.projectId;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)didClickDetailBtnInTheCell:(MineProjectCenterYuXuanCell *)cell andIndexPath:(NSIndexPath *)indexPath
+{
+    ProjectListProModel *model = _dataArray[indexPath.row];
+    if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]){
+        ProjectPrepareDetailVC *vc = [ProjectPrepareDetailVC new];
+        vc.projectId = model.projectId;
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    ProjectDetailController *vc = [ProjectDetailController new];
+    vc.projectId = model.projectId;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark--------MineProjectCenterProCellDelegate--------------
+-(void)didClickRecordBtnInCenterCell:(MineProjectCenterProCell *)cell andIndexPath:(NSIndexPath *)indexPath
+{
+    MIneProjectCommitRecordVC *vc = [MIneProjectCommitRecordVC new];
+    ProjectListProModel *model = _dataArray[indexPath.row];
+    vc.projectId = model.projectId;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)didClickDetailBtnInCenterCell:(MineProjectCenterProCell *)cell andIndexPath:(NSIndexPath *)indexPath
+{
+    ProjectListProModel *model = _dataArray[indexPath.row];
+    if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]){
+        ProjectPrepareDetailVC *vc = [ProjectPrepareDetailVC new];
+        vc.projectId = model.projectId;
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    ProjectDetailController *vc = [ProjectDetailController new];
+    vc.projectId = model.projectId;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProjectLetterViewController : UIViewController
+@interface ProjectLetterViewController : RootViewController
 
 @end

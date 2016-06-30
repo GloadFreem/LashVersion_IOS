@@ -10,8 +10,22 @@
 
 #import "ProjectListProModel.h"
 
+@class MIneProjectSecondYuXuanCell;
+
+@protocol MIneProjectSecondYuXuanCellDelegate <NSObject>
+
+@optional
+
+-(void)didClickIgnoreBtnInTheCell:(MIneProjectSecondYuXuanCell*)cell andindexPath:(NSIndexPath*)indexPath;
+-(void)didClickInspectBtnInTheCell:(MIneProjectSecondYuXuanCell*)cell andIndexPath:(NSIndexPath*)indexPath;
+
+
+@end
+
 @interface MIneProjectSecondYuXuanCell : UITableViewCell
 
+@property (nonatomic, assign) id<MIneProjectSecondYuXuanCellDelegate>delegate;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 @property (nonatomic, strong) ProjectListProModel *model;
 

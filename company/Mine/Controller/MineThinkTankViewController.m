@@ -10,6 +10,9 @@
 #import "MineLogoProjectBaseModel.h"
 #import "ProjectListProModel.h"
 
+#import "ProjectDetailController.h"
+#import "ProjectPrepareDetailVC.h"
+
 #import "ProjectListCell.h"
 #import "ProjectNoRoadCell.h"
 
@@ -248,7 +251,7 @@
         [title mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(10);
             make.bottom.mas_equalTo(commentView.mas_bottom);
-            make.height.mas_equalTo(18);
+            make.top.mas_equalTo(20);
         }];
         return commentView;
     }
@@ -265,7 +268,7 @@
     [title mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(10);
         make.bottom.mas_equalTo(investView.mas_bottom);
-        make.height.mas_equalTo(18);
+        make.top.mas_equalTo(20);
     }];
     return investView;
 }
@@ -345,7 +348,31 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 0) {
+        ProjectListProModel *model = _commentArray[indexPath.row];
+        if ([_commentStatusArray[indexPath.row] isEqualToString:@"预选项目"]) {
+            ProjectPrepareDetailVC *vc = [ProjectPrepareDetailVC new];
+            vc.projectId = model.projectId;
+            [self.navigationController pushViewController:vc animated:YES];
+            return;
+        }
+        ProjectDetailController *vc = [ProjectDetailController new];
+        vc.projectId = model.projectId;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
     
+    if (indexPath.section == 1) {
+        ProjectListProModel *model = _investArray[indexPath.row];
+        if ([_investStatusArray[indexPath.row] isEqualToString:@"预选项目"]){
+            ProjectPrepareDetailVC *vc = [ProjectPrepareDetailVC new];
+            vc.projectId = model.projectId;
+            [self.navigationController pushViewController:vc animated:YES];
+            return;
+        }
+        ProjectDetailController *vc = [ProjectDetailController new];
+        vc.projectId = model.projectId;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 

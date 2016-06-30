@@ -160,6 +160,7 @@
     [_ignoreBtn setTitle:@"忽略" forState:UIControlStateNormal];
     [_ignoreBtn setTitleColor:orangeColor forState:UIControlStateNormal];
     [_ignoreBtn.titleLabel setFont:BGFont(16)];
+    [_ignoreBtn addTarget:self action:@selector(ignoreBtn) forControlEvents:UIControlEventTouchUpInside];
     _ignoreBtn.backgroundColor = [UIColor whiteColor];
     _ignoreBtn.layer.cornerRadius = 3;
     _ignoreBtn.layer.masksToBounds = YES;
@@ -170,6 +171,8 @@
     _inspectBtn = [UIButton new];
     [_inspectBtn setTitle:@"查看项目" forState:UIControlStateNormal];
     [_inspectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_inspectBtn addTarget:self action:@selector(inspectBtn) forControlEvents:UIControlEventTouchUpInside];
+    
     [_inspectBtn.titleLabel setFont:BGFont(16)];
     _inspectBtn.backgroundColor = orangeColor;
     _inspectBtn.layer.cornerRadius = 3;
@@ -358,6 +361,19 @@
     [_moneyBtn setTitle:[NSString stringWithFormat:@"%ld万\n融资总额",(long)model.financeTotal] forState:UIControlStateNormal];
 }
 
+-(void)ignoreBtn
+{
+    if ([self.delegate respondsToSelector:@selector(didClickIgnoreBtnInSecondCell:andIndexPath:)]) {
+        [self.delegate didClickIgnoreBtnInSecondCell:self andIndexPath:_indexPath];
+    }
+}
+
+-(void)inspectBtn
+{
+    if ([self.delegate respondsToSelector:@selector(didClickInspectBtnInSecondCell:andIndexPath:)]) {
+        [self.delegate didClickInspectBtnInSecondCell:self andIndexPath:_indexPath];
+    }
+}
 #pragma mark ----计算时间差
 -(NSString*)getDateCha:(NSString*)endDate
 {

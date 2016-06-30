@@ -558,5 +558,6 @@
 +(NSString *)translation:(NSString *)arebic;
 //是否是身份证号
 +(BOOL) isidentityCard:(NSString*)str;
-
+//清除缓存
++(void)clearMemory;
 @end

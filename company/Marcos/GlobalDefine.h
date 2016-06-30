@@ -158,6 +158,7 @@
 #define REGIST_TYPE @"0"
 #define FORGET_TYPE @"1"
 #define CERTIFY_TYPE "2"
+#define CHANGE_PHONE_TYPE @"3"
 
 //身份证号
 #define USER_STATIC_IDNUMBER @"user_static_ido"
@@ -398,14 +399,19 @@
 
 //项目中心
 #define LOGO_PROJECT_CENTER @"requestProjectCenter.action"
-
+//上传项目
+#define REQUEST_UPLOAD_PROJECTINFO @"requestuploadProjectInfo.action"
+//提交记录
+#define REQUEST_PROJECT_COMMIT_RECORD @"requestProjectCommitRecords.action"
+//忽略项目
+#define REQUEST_IGNORE_PROJECT_COMMIT @"requestIgorneProjectCommit.action"
 
 //平台介绍
 #define REQUESTPLATFORMINTRODUCE @"requestPlatformIntroduce.action"
 //新手指南
 #define REQUESTUSERGUIDE @"requestNewUseIntroduce.action"
 //用户协议
-#define REQUESTUSERPROTOCOL @"requestUserProctol.action"
+#define REQUESTUSERPROTOCOL @"requestUserProtocol.action"
 //免责声明
 #define REQUESTLAWERINTRODUCE @"requestLawerIntroduce.action"
 //意见反馈
@@ -419,10 +425,15 @@
 
 //更换手机号
 #define CHANGEBINDTELEPHONE @"requestChangeBindTelephone.action"
+//版本更新
+#define VERSIONINFOSYSTEM @"versionInfoSystem.action"
+
 //注销登录
 #define SIGNUPUSER @"signupUser.action"
 
 
+//推荐好友
+#define REQUEST_INVITE_FRIEND @"requestInviteFriends.action"
 
 
 //站内信

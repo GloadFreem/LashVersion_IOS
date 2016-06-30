@@ -24,7 +24,12 @@
 		4442680A1D1D3FEB0021B1FA /* Success@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 444268081D1D3FEB0021B1FA /* Success@3x.png */; };
 		4442680D1D1D40250021B1FA /* paySuccessSure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4442680B1D1D40250021B1FA /* paySuccessSure@2x.png */; };
 		4442680E1D1D40250021B1FA /* paySuccessSure@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4442680C1D1D40250021B1FA /* paySuccessSure@3x.png */; };
+		444C0EFB1D24F98900A6746C /* MIneProjectCommitRecordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 444C0EFA1D24F98900A6746C /* MIneProjectCommitRecordVC.m */; };
+		444C0EFE1D24FC1A00A6746C /* MineProjectCommitRecordBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 444C0EFD1D24FC1A00A6746C /* MineProjectCommitRecordBaseModel.m */; };
+		444C0F021D24FEB300A6746C /* MineProjectCommitRecordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 444C0F001D24FEB300A6746C /* MineProjectCommitRecordCell.m */; };
+		444C0F031D24FEB300A6746C /* MineProjectCommitRecordCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 444C0F011D24FEB300A6746C /* MineProjectCommitRecordCell.xib */; };
 		445E38DD1D0D95FA003462A8 /* CircleDetailHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 445E38DC1D0D95FA003462A8 /* CircleDetailHeaderCell.m */; };
+		446578041D2517D2005CBACA /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 446578031D2517D2005CBACA /* FeedBackViewController.m */; };
 		446AF4141D0A9C5F0075B469 /* CircleBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 446AF4131D0A9C5F0075B469 /* CircleBaseModel.m */; };
 		4474C20A1D0FA3E900DC923D /* InvestListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C2091D0FA3E900DC923D /* InvestListModel.m */; };
 		4474C20D1D0FD1B600DC923D /* InvestOrganizationBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C20C1D0FD1B600DC923D /* InvestOrganizationBaseModel.m */; };
@@ -358,6 +363,7 @@
 		448720291D02F3E400020DD9 /* UploadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 448720211D02F3E400020DD9 /* UploadingView.m */; };
 		4487202C1D02F49700020DD9 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4487202B1D02F49700020DD9 /* RootViewController.m */; };
 		448720301D02FC5B00020DD9 /* JKCountDownButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4487202F1D02FC5B00020DD9 /* JKCountDownButton.m */; };
+		4489C4571D256E590047FF98 /* LetterBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4489C4561D256E590047FF98 /* LetterBaseModel.m */; };
 		448AF9671D21588700A30EA6 /* MineAccountRechargeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 448AF9661D21588700A30EA6 /* MineAccountRechargeVC.m */; };
 		448BD7BC1D1BC2E8000D7294 /* youjiantou@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 448BD7BA1D1BC2E8000D7294 /* youjiantou@2x.png */; };
 		448BD7BD1D1BC2E8000D7294 /* youjiantou@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 448BD7BB1D1BC2E8000D7294 /* youjiantou@3x.png */; };
@@ -943,8 +949,17 @@
 		444268081D1D3FEB0021B1FA /* Success@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Success@3x.png"; sourceTree = "<group>"; };
 		4442680B1D1D40250021B1FA /* paySuccessSure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paySuccessSure@2x.png"; sourceTree = "<group>"; };
 		4442680C1D1D40250021B1FA /* paySuccessSure@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paySuccessSure@3x.png"; sourceTree = "<group>"; };
+		444C0EF91D24F98900A6746C /* MIneProjectCommitRecordVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIneProjectCommitRecordVC.h; sourceTree = "<group>"; };
+		444C0EFA1D24F98900A6746C /* MIneProjectCommitRecordVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MIneProjectCommitRecordVC.m; sourceTree = "<group>"; };
+		444C0EFC1D24FC1A00A6746C /* MineProjectCommitRecordBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineProjectCommitRecordBaseModel.h; sourceTree = "<group>"; };
+		444C0EFD1D24FC1A00A6746C /* MineProjectCommitRecordBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineProjectCommitRecordBaseModel.m; sourceTree = "<group>"; };
+		444C0EFF1D24FEB300A6746C /* MineProjectCommitRecordCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineProjectCommitRecordCell.h; sourceTree = "<group>"; };
+		444C0F001D24FEB300A6746C /* MineProjectCommitRecordCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineProjectCommitRecordCell.m; sourceTree = "<group>"; };
+		444C0F011D24FEB300A6746C /* MineProjectCommitRecordCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MineProjectCommitRecordCell.xib; sourceTree = "<group>"; };
 		445E38DB1D0D95FA003462A8 /* CircleDetailHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailHeaderCell.h; sourceTree = "<group>"; };
 		445E38DC1D0D95FA003462A8 /* CircleDetailHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailHeaderCell.m; sourceTree = "<group>"; };
+		446578021D2517D2005CBACA /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackViewController.h; sourceTree = "<group>"; };
+		446578031D2517D2005CBACA /* FeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackViewController.m; sourceTree = "<group>"; };
 		446AF4121D0A9C5F0075B469 /* CircleBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleBaseModel.h; sourceTree = "<group>"; };
 		446AF4131D0A9C5F0075B469 /* CircleBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleBaseModel.m; sourceTree = "<group>"; };
 		4474C2081D0FA3E900DC923D /* InvestListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvestListModel.h; sourceTree = "<group>"; };
@@ -1550,6 +1565,8 @@
 		4487202B1D02F49700020DD9 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		4487202E1D02FC5B00020DD9 /* JKCountDownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKCountDownButton.h; sourceTree = "<group>"; };
 		4487202F1D02FC5B00020DD9 /* JKCountDownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKCountDownButton.m; sourceTree = "<group>"; };
+		4489C4551D256E590047FF98 /* LetterBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LetterBaseModel.h; sourceTree = "<group>"; };
+		4489C4561D256E590047FF98 /* LetterBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LetterBaseModel.m; sourceTree = "<group>"; };
 		448AF9651D21588700A30EA6 /* MineAccountRechargeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineAccountRechargeVC.h; sourceTree = "<group>"; };
 		448AF9661D21588700A30EA6 /* MineAccountRechargeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineAccountRechargeVC.m; sourceTree = "<group>"; };
 		448BD7BA1D1BC2E8000D7294 /* youjiantou@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youjiantou@2x.png"; sourceTree = "<group>"; };
@@ -2626,6 +2643,8 @@
 				448719B91D02B30800020DD9 /* MineGoldMingxiVC.m */,
 				448719BD1D02B30800020DD9 /* MineProjectCenterVC.h */,
 				448719BE1D02B30800020DD9 /* MineProjectCenterVC.m */,
+				444C0EF91D24F98900A6746C /* MIneProjectCommitRecordVC.h */,
+				444C0EFA1D24F98900A6746C /* MIneProjectCommitRecordVC.m */,
 				4498357E1D236AF1000DD479 /* MineProjectViewController.h */,
 				4498357F1D236AF1000DD479 /* MineProjectViewController.m */,
 				449835921D237D48000DD479 /* MineThinkTankViewController.h */,
@@ -2660,6 +2679,8 @@
 				448719CB1D02B30800020DD9 /* PingTaiVC.h */,
 				448719CC1D02B30800020DD9 /* PingTaiVC.m */,
 				448719CD1D02B30800020DD9 /* PingTaiVC.xib */,
+				446578021D2517D2005CBACA /* FeedBackViewController.h */,
+				446578031D2517D2005CBACA /* FeedBackViewController.m */,
 				449AD27F1D1E50FE00EBC276 /* PingTaiWebViewController.h */,
 				449AD2801D1E50FE00EBC276 /* PingTaiWebViewController.m */,
 				448719CE1D02B30800020DD9 /* PlatformIdentityVC.h */,
@@ -2692,6 +2713,8 @@
 				44B628541D210A4900837F05 /* BillDetailCellModel.m */,
 				44C0768E1D23A57F00D5F24C /* MineLogoProjectBaseModel.h */,
 				44C0768F1D23A57F00D5F24C /* MineLogoProjectBaseModel.m */,
+				444C0EFC1D24FC1A00A6746C /* MineProjectCommitRecordBaseModel.h */,
+				444C0EFD1D24FC1A00A6746C /* MineProjectCommitRecordBaseModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2746,6 +2769,9 @@
 				448719FB1D02B30800020DD9 /* MyDataNoArrowCell.xib */,
 				44BF49701D221403003E5A2C /* MineAlertView.h */,
 				44BF49711D221403003E5A2C /* MineAlertView.m */,
+				444C0EFF1D24FEB300A6746C /* MineProjectCommitRecordCell.h */,
+				444C0F001D24FEB300A6746C /* MineProjectCommitRecordCell.m */,
+				444C0F011D24FEB300A6746C /* MineProjectCommitRecordCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2864,6 +2890,8 @@
 				44871A641D02B34400020DD9 /* ProjectDetailLeftHeaderModel.m */,
 				44871A651D02B34400020DD9 /* ProjectDetailLeftTeamModel.h */,
 				44871A661D02B34400020DD9 /* ProjectDetailLeftTeamModel.m */,
+				4489C4551D256E590047FF98 /* LetterBaseModel.h */,
+				4489C4561D256E590047FF98 /* LetterBaseModel.m */,
 				44871A671D02B34400020DD9 /* ProjectLetterModel.h */,
 				44871A681D02B34400020DD9 /* ProjectLetterModel.m */,
 				44B776A81D141F7C00BCD49B /* ProjectDetailBaseMOdel.h */,
@@ -5032,6 +5060,7 @@
 				44FA75641D07ECD70010B478 /* ...............................................................@2x.png in Resources */,
 				448719411D02B28B00020DD9 /* PerfectViewController.xib in Resources */,
 				44FA75B91D07ECD70010B478 /* iconfont-kefu@2x.png in Resources */,
+				444C0F031D24FEB300A6746C /* MineProjectCommitRecordCell.xib in Resources */,
 				44FA76521D07ECD70010B478 /* comments@2x.png in Resources */,
 				448719A01D02B2FE00020DD9 /* InvestPersonCell.xib in Resources */,
 				44FA74891D07ECD70010B478 /* icon_go@2x.png in Resources */,
@@ -5190,6 +5219,7 @@
 				4487199D1D02B2FE00020DD9 /* InvestOrganizationSecondCell.m in Sources */,
 				448719971D02B2FE00020DD9 /* InvestCommitProjectPersonCell.m in Sources */,
 				44871B791D02B37800020DD9 /* NSArray+MASAdditions.m in Sources */,
+				446578041D2517D2005CBACA /* FeedBackViewController.m in Sources */,
 				4487200E1D02CEA900020DD9 /* NSData+CommonCrypto.m in Sources */,
 				44871EED1D02B5BA00020DD9 /* DACircularProgressView.m in Sources */,
 				449354E71D0D5CB200B22F7E /* CircleShareBottomView.m in Sources */,
@@ -5320,6 +5350,7 @@
 				44871B7D1D02B37800020DD9 /* UITableView+SDAutoTableViewCellHeight.m in Sources */,
 				449835711D235A29000DD479 /* ActivityDetailExerciseCell.m in Sources */,
 				44871A001D02B30800020DD9 /* AppSetVC.m in Sources */,
+				4489C4571D256E590047FF98 /* LetterBaseModel.m in Sources */,
 				448719341D02B28B00020DD9 /* DetailAreaViewController.m in Sources */,
 				44871EE41D02B57C00020DD9 /* MWTapDetectingView.m in Sources */,
 				44871FE81D02C6A300020DD9 /* NSString+MD5.m in Sources */,
@@ -5435,15 +5466,18 @@
 				44B628551D210A4900837F05 /* BillDetailCellModel.m in Sources */,
 				4474C2221D1032F400DC923D /* InvestWebViewController.m in Sources */,
 				44871B971D02B37800020DD9 /* SDBrowserImageView.m in Sources */,
+				444C0F021D24FEB300A6746C /* MineProjectCommitRecordCell.m in Sources */,
 				44A6F1B71D0F9F5700A1FF73 /* InvestBaseModel.m in Sources */,
 				448719991D02B2FE00020DD9 /* InvestCommitProjectReasonCell.m in Sources */,
 				449AD2811D1E50FE00EBC276 /* PingTaiWebViewController.m in Sources */,
 				44871B941D02B37800020DD9 /* SDCollectionViewCell.m in Sources */,
 				44871B871D02B37800020DD9 /* MLTextAttachment.m in Sources */,
+				444C0EFB1D24F98900A6746C /* MIneProjectCommitRecordVC.m in Sources */,
 				44871FE91D02C6A300020DD9 /* NSString+SBJSON.m in Sources */,
 				44871A9F1D02B34400020DD9 /* ProjectDetailSceneMessageCell.m in Sources */,
 				448719401D02B28B00020DD9 /* PerfectViewController.m in Sources */,
 				4487198D1D02B2FE00020DD9 /* InvestCommitProjectVC.m in Sources */,
+				444C0EFE1D24FC1A00A6746C /* MineProjectCommitRecordBaseModel.m in Sources */,
 				44871B751D02B37800020DD9 /* MASConstraintMaker.m in Sources */,
 				44871AB11D02B35D00020DD9 /* NSString+Addition.m in Sources */,
 				44871B651D02B37800020DD9 /* IQUIScrollView+Additions.m in Sources */,
@@ -5544,7 +5578,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "b0d5e7d6-5f70-46b1-974b-b6162cfcb85b";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5585,7 +5619,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "4d968a7d-7d21-4423-864d-7dc311070046";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -5619,7 +5653,7 @@
 					"$(PROJECT_DIR)/company/Library/WeChat",
 					"$(PROJECT_DIR)/company/Library/TencentOpenAPI",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Eugene.www.company;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinzht.pro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -5652,7 +5686,7 @@
 					"$(PROJECT_DIR)/company/Library/WeChat",
 					"$(PROJECT_DIR)/company/Library/TencentOpenAPI",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Eugene.www.company;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinzht.pro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};

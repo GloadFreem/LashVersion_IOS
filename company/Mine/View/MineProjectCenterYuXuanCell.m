@@ -157,6 +157,7 @@
     _commitBtn = [UIButton new];
     [_commitBtn setTitle:@"提交记录" forState:UIControlStateNormal];
     [_commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_commitBtn addTarget:self action:@selector(recordBtn) forControlEvents:UIControlEventTouchUpInside];
     [_commitBtn.titleLabel setFont:BGFont(16)];
     _commitBtn.backgroundColor = orangeColor;
     _commitBtn.layer.cornerRadius = 3;
@@ -168,6 +169,7 @@
     _detailBtn = [UIButton new];
     [_detailBtn setTitle:@"项目详情" forState:UIControlStateNormal];
     [_detailBtn setTitleColor:orangeColor forState:UIControlStateNormal];
+    [_detailBtn addTarget:self action:@selector(detailBtn) forControlEvents:UIControlEventTouchUpInside];
     [_detailBtn.titleLabel setFont:BGFont(16)];
     _detailBtn.backgroundColor = [UIColor whiteColor];
     _detailBtn.layer.cornerRadius = 3;
@@ -327,6 +329,20 @@
     [_personBtn setTitle:[NSString stringWithFormat:@"%ld\n人气指数",(long)model.collectionCount] forState:UIControlStateNormal];
     
     [_moneyBtn setTitle:[NSString stringWithFormat:@"%ld万\n融资总额",(long)model.financeTotal] forState:UIControlStateNormal];
+}
+
+-(void)recordBtn
+{
+    if ([self.delegate respondsToSelector:@selector(didClickRecordBtnInTheCell:andIndexPath:)]) {
+        [self.delegate didClickRecordBtnInTheCell:self andIndexPath:_indexpath];
+    }
+}
+
+-(void)detailBtn
+{
+    if ([self.delegate respondsToSelector:@selector(didClickDetailBtnInTheCell:andIndexPath:)]) {
+        [self.delegate didClickDetailBtnInTheCell:self andIndexPath:_indexpath];
+    }
 }
 
 - (void)awakeFromNib {

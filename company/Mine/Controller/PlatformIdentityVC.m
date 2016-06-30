@@ -19,6 +19,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    [_moreLabel setHidden:YES];
+    [_moreView setHidden:YES];
     [self setupNav];
     [self setModel];
 }
@@ -61,6 +64,12 @@
 
 
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController.navigationBar setHidden:NO];
+}
 
 #pragma mark- 返回按钮
 -(void)leftBack:(UIButton*)btn

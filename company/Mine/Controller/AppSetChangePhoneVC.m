@@ -156,7 +156,7 @@
     NSString *password = [TDUtil encryptPhoneNumWithMD5:self.phoneTextField.text passString:self.passwordText.text];
     
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.phoneTextField.text,@"telephone",self.certainCodeText.text,@"code",self.identifyNumText.text,@"identityCardNo",password,@"password", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.phoneTextField.text,@"telephone",self.certainCodeText.text,@"code",self.identifyNumText.text,@"identityCardNo",password,@"password",CHANGE_PHONE_TYPE,@"type",nil];
     
     [self.httpUtil getDataFromAPIWithOps:CHANGEBINDTELEPHONE postParam:dic type:0 delegate:self sel:@selector(requestChangePhone:)];
 }
