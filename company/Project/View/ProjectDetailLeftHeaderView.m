@@ -10,6 +10,7 @@
 #import "PictureContainerView.h"
 #import "ProjectDetailLeftTeamModel.h"
 
+#import "ZMProgressView.h"
 CGFloat __maxContentLabelHeight = 0; //根据具体font来定
 
 
@@ -42,6 +43,9 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     PictureContainerView *_picContainerView;   //照片容器
     UIButton *_moreBtn;
     BOOL _shouldOpen;
+    
+    ZMProgressView *_progress;
+    
 }
 -(instancetype)init
 {
@@ -67,6 +71,10 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _statusLabel.textAlignment = NSTextAlignmentCenter;
     _statusLabel.textColor = [UIColor whiteColor];
     _statusLabel.numberOfLines = 3;
+    
+    //进度条
+    _progress = [[ZMProgressView alloc]initWithLineColor:orangeColor loopColor:[UIColor lightGrayColor]];
+    _progress.backgroundColor = [UIColor clearColor];
     
     //项目图标
     UIImage *projectImage = [UIImage imageNamed:@"drafts"];
@@ -160,7 +168,7 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_more"] forState:UIControlStateNormal];
     [_moreBtn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
     
-    NSArray *views = @[_topView, _iconImage, _projectLabel, _partLine, _statusImage, _statusLabel, _goalImage, _goalLabel, _goalNumber, _achieveImage, _achieveLabel, _achieveNumber, _timeImage, _timeLabel, _timeNumber,  _addressImage, _addressLabel, _addressContent, _contentLabel, _picContainerView, _moreBtn];
+    NSArray *views = @[_topView, _iconImage, _progress,_projectLabel, _partLine, _statusImage, _statusLabel, _goalImage, _goalLabel, _goalNumber, _achieveImage, _achieveLabel, _achieveNumber, _timeImage, _timeLabel, _timeNumber,  _addressImage, _addressLabel, _addressContent, _contentLabel, _picContainerView, _moreBtn];
     [self sd_addSubviews:views];
     
     _topView.sd_layout
@@ -186,6 +194,12 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     .topSpaceToView(_iconImage, 13)
     .rightSpaceToView(self, 0)
     .heightIs(0.5);
+    
+    _progress.sd_layout
+    .topSpaceToView(_topView,55)
+    .rightSpaceToView(self,85)
+    .widthIs(65)
+    .heightIs(65);
     
     _statusImage.sd_layout
     .topSpaceToView(self, 5)
@@ -305,6 +319,16 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     [_addressContent sizeToFit];
     _statusLabel.text = model.statusStr;
     _contentLabel.text = model.content;
+    
+    _progress.animatable = YES;
+    CGFloat finalCount = model.financedMount;
+    CGFloat percent = finalCount / model.financeTotal * 100;
+    _progress.percent = percent;
+    _progress.title = @"已融资";
+    _progress.percentUnit = @"%";
+    _progress.lineColor = orangeColor;
+    _progress.loopColor = [UIColor lightGrayColor];
+    
     //默认显示一行数组
     NSMutableArray *picArray = [NSMutableArray array];
     

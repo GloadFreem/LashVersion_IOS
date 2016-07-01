@@ -1443,8 +1443,8 @@
 
 {   NSString *str = arebic;
     NSArray *arabic_numerals = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"0"];
-    NSArray *chinese_numerals = @[@"一",@"二",@"三",@"四",@"五",@"六",@"七",@"八",@"九",@"零"];
-    NSArray *digits = @[@"个",@"十",@"百",@"千",@"万",@"十",@"百",@"千",@"亿",@"十",@"百",@"千",@"兆"];
+    NSArray *chinese_numerals = @[@"壹",@"贰",@"叁",@"肆",@"伍",@"陆",@"柒",@"捌",@"玖",@"零"];
+    NSArray *digits = @[@"个",@"拾",@"佰",@"仟",@"万",@"拾",@"佰",@"仟",@"亿",@"拾",@"佰",@"仟",@"兆"];
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:chinese_numerals forKeys:arabic_numerals];
     
     NSMutableArray *sums = [NSMutableArray array];
@@ -1480,7 +1480,7 @@
     NSString *chinese = [sumStr substringToIndex:sumStr.length-1];
 //    NSLog(@"%@",str);
 //    NSLog(@"%@",chinese);
-    return chinese;
+    return [NSString stringWithFormat:@"%@元",chinese];
 }
 
 +(BOOL) isidentityCard:(NSString*)str

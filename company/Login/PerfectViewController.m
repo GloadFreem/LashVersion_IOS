@@ -181,7 +181,7 @@
         
     }
     
-    self.identifyType = [NSString stringWithFormat:@"%ld",sender.tag];
+    self.identifyType = [NSString stringWithFormat:@"%ld",(long)sender.tag];
 }
 #pragma mark ----选择头像
 - (IBAction)iconBtnClick:(UIButton *)sender {

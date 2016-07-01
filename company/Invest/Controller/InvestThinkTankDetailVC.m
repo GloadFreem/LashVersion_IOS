@@ -17,6 +17,7 @@
 @interface InvestThinkTankDetailVC ()<UIScrollViewDelegate,CircleShareBottomViewDelegate>
 
 @property (nonatomic, copy) NSString *sharePartner;
+@property (nonatomic, copy) NSString *shareContent;
 @property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic, copy) NSString *shareUrl;
 @property (nonatomic,strong)UIView * bottomView;
@@ -72,7 +73,7 @@
     [self startLoadShare];
     
 //    [self setKeyScrollView:_scrollView scrolOffsetY:300 options:nil];
-    
+    [self createUI];
 }
 -(void)startLoadShare
 {
@@ -91,6 +92,7 @@
             NSDictionary *data = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
             _shareUrl = data[@"url"];
             _shareImage = data[@"image"];
+            _shareContent = data[@"content"];
             
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -105,7 +107,7 @@
     [SVProgressHUD show];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.investorId,@"investorId", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:INVEST_LIST_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestInvestDetail:)];
+    [self.httpUtil getDataFromAPIWithOps:INVEST_LIST_DETAIL postParam:dic type:1 delegate:self sel:@selector(requestInvestDetail:)];
 }
 
 -(void)requestInvestDetail:(ASIHTTPRequest *)request
@@ -123,7 +125,7 @@
 //            NSLog(@"dayin模型----%@",_model);
             //2.设置导航栏内容
 //            [self setUpNavBar];
-            [self createUI];
+            
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -299,6 +301,8 @@
     [_attationBtn addTarget:self action:@selector(attentionClick:) forControlEvents:UIControlEventTouchUpInside];
     
     [_attationBtn setImage:[UIImage imageNamed:@"icon-guanzhu"] forState:UIControlStateNormal];
+    _attationBtn.layer.cornerRadius = 5;
+    _attationBtn.layer.masksToBounds = YES;
     _attationBtn.titleLabel.textColor = [UIColor whiteColor];
     _attationBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     [_scrollView addSubview:_attationBtn];
@@ -346,15 +350,15 @@
     [_whiteImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(_scrollView);
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(30);
-        make.left.mas_equalTo(_scrollView.mas_left).offset(30);
-        make.right.mas_equalTo(_scrollView.mas_right).offset(-30);
-        make.height.mas_equalTo(300);
+        make.left.mas_equalTo(_scrollView.mas_left).offset(50);
+        make.right.mas_equalTo(_scrollView.mas_right).offset(-50);
+        make.height.mas_equalTo(250);
     }];
     //头像
     [_iconImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(_whiteImage);
         make.width.height.mas_equalTo(94);
-        make.top.mas_equalTo(_whiteImage.mas_top).offset(25);
+        make.top.mas_equalTo(_whiteImage.mas_top).offset(35);
     }];
     //名字
     [_name mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -539,8 +543,8 @@
     //分享
     if (view.tag == 1) {
         //得到用户SID
-        //        UIImage * shareImage = [UIImage imageNamed:@"share_jixiangwu"];
-        NSString *shareContentString = [NSString stringWithFormat:@"快来一起玩\n%@",_shareUrl];
+        NSString * shareImage = _shareImage;
+        NSString *shareContentString = [NSString stringWithFormat:@"%@",_shareContent];
         NSArray *arr = nil;
         NSString *shareContent;
         
@@ -551,8 +555,8 @@
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投";
+                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
                 }
                 else
                 {
@@ -568,10 +572,10 @@
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
                 
-                NSLog(@"分享到微信");
+//                NSLog(@"分享到微信");
             }
                 break;
             case 2:{
@@ -579,10 +583,10 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
                 
-                NSLog(@"分享到朋友圈");
+//                NSLog(@"分享到朋友圈");
             }
                 break;
             case 3:{
@@ -590,7 +594,7 @@
                 arr = @[UMShareToSms];
                 shareContent = shareContentString;
                 
-                NSLog(@"分享短信");
+//                NSLog(@"分享短信");
             }
                 break;
             case 100:{
@@ -604,10 +608,13 @@
         {
             return;
         }
-        //        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-        //            shareImage = nil;
-        //        }
-        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:nil presentedController:self completion:^(UMSocialResponseEntity *response){
+                if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
+                    shareImage = nil;
+                }
+        UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
+                                            shareImage];
+        
+        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -634,7 +641,7 @@
         flag = @"2";
         
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",_model.user.userId],@"userId",flag,@"flag", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_model.user.userId],@"userId",flag,@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
 }
@@ -658,11 +665,11 @@
             }else{
                 count --;
                 
-                [_attationBtn  setTitle:[NSString stringWithFormat:@" 关注(%ld)",count] forState:UIControlStateNormal];
+                [_attationBtn  setTitle:[NSString stringWithFormat:@" 关注(%ld)",(long)count] forState:UIControlStateNormal];
                 [_attationBtn setBackgroundColor:btnGreen];
                 
             }
-            _attentionCount = [NSString stringWithFormat:@"%ld",count];
+            _attentionCount = [NSString stringWithFormat:@"%ld",(long)count];
             
             
             //                    InvestListModel * model = (InvestListModel*)klistModel;

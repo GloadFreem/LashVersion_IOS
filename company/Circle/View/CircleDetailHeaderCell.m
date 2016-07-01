@@ -178,8 +178,10 @@
     _bottomView.sd_layout
     .leftEqualToView(contentView)
     .rightEqualToView(contentView)
-    .topSpaceToView(_praiseLabel, 13*HEIGHTCONFIG)
+    .topSpaceToView(_praiseLabel, 20*HEIGHTCONFIG)
     .heightIs(10*HEIGHTCONFIG);
+    
+     [self setupAutoHeightWithBottomView:_bottomView bottomMargin:10];
 
 }
 #pragma mark -设置模型
@@ -227,7 +229,13 @@
         _praiseLabel.sd_layout.maxHeightIs(height);
     }
     
-    [self setupAutoHeightWithBottomView:_bottomView bottomMargin:0];
+    _bottomView.sd_layout
+    .leftEqualToView(self.contentView)
+    .rightEqualToView(self.contentView)
+    .topSpaceToView(_praiseLabel, 20*HEIGHTCONFIG)
+    .heightIs(10*HEIGHTCONFIG);
+    
+    [self setupAutoHeightWithBottomView:_bottomView bottomMargin:10];
 }
 
 -(void)setIndexPath:(NSIndexPath *)indexPath

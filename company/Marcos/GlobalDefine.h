@@ -435,7 +435,8 @@
 //推荐好友
 #define REQUEST_INVITE_FRIEND @"requestInviteFriends.action"
 
-
+//站内信数据获取
+#define REQUEST_HASMESSAGE_INFO @"requestHasMessageInfo.action"
 //站内信
 #define REQUEST_INNER_MESSAGE @"requestInnerMessageList.action"
 //站内信详情
@@ -448,7 +449,8 @@
 
 //广告栏Banner
 #define BANNER_SYSTEM @"bannerSystem.action"
-
+//启动页
+#define START_PAGE_SYSTEM @"startPageSystem.action"
 
 
 #pragma mark----------------------------------------------------------------------------

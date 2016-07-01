@@ -59,7 +59,7 @@
 #pragma mark -下载成员界面数据
 -(void)loadMemberData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_memberPartner,@"partner",[NSString stringWithFormat:@"%ld",self.projectId],@"projectId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_memberPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_MEMBER postParam:dic type:0 delegate:self sel:@selector(requestProjectMember:)];
 }

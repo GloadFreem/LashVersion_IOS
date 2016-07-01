@@ -18,6 +18,19 @@
 		440EDAB61D1FDC3D00861ADD /* icon_roading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 440EDAAE1D1FDC3D00861ADD /* icon_roading@2x.png */; };
 		440EDAB71D1FDC3D00861ADD /* icon_roading@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 440EDAAF1D1FDC3D00861ADD /* icon_roading@3x.png */; };
 		440EDABA1D1FDF4D00861ADD /* MineCollectionInvestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 440EDAB91D1FDF4D00861ADD /* MineCollectionInvestModel.m */; };
+		4428089C1D26AC2E0043177B /* CircleDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 442808831D26AC2E0043177B /* CircleDetailVC.m */; };
+		4428089D1D26AC2E0043177B /* CircleForwardVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 442808851D26AC2E0043177B /* CircleForwardVC.m */; };
+		4428089E1D26AC2E0043177B /* CircleReleaseVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 442808871D26AC2E0043177B /* CircleReleaseVC.m */; };
+		4428089F1D26AC2E0043177B /* CircleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442808891D26AC2E0043177B /* CircleViewController.m */; };
+		442808A01D26AC2E0043177B /* CircleBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4428088C1D26AC2E0043177B /* CircleBaseModel.m */; };
+		442808A11D26AC2E0043177B /* CircleDetailCommentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4428088E1D26AC2E0043177B /* CircleDetailCommentModel.m */; };
+		442808A21D26AC2E0043177B /* CircleListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 442808901D26AC2E0043177B /* CircleListModel.m */; };
+		442808A31D26AC2E0043177B /* CircleDetailCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 442808931D26AC2E0043177B /* CircleDetailCommentCell.m */; };
+		442808A41D26AC2E0043177B /* CircleDetailHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 442808951D26AC2E0043177B /* CircleDetailHeaderCell.m */; };
+		442808A51D26AC2E0043177B /* CircleDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 442808971D26AC2E0043177B /* CircleDetailHeaderView.m */; };
+		442808A61D26AC2E0043177B /* CircleListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 442808991D26AC2E0043177B /* CircleListCell.m */; };
+		442808A71D26AC2E0043177B /* CircleShareBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4428089B1D26AC2E0043177B /* CircleShareBottomView.m */; };
+		442808A91D26B1CA0043177B /* ProjectDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442808A81D26B1CA0043177B /* ProjectDetailController.m */; };
 		444268051D1D3FC90021B1FA /* paySuccessBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 444268031D1D3FC90021B1FA /* paySuccessBG@2x.png */; };
 		444268061D1D3FC90021B1FA /* paySuccessBG@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 444268041D1D3FC90021B1FA /* paySuccessBG@3x.png */; };
 		444268091D1D3FEB0021B1FA /* Success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 444268071D1D3FEB0021B1FA /* Success@2x.png */; };
@@ -28,9 +41,7 @@
 		444C0EFE1D24FC1A00A6746C /* MineProjectCommitRecordBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 444C0EFD1D24FC1A00A6746C /* MineProjectCommitRecordBaseModel.m */; };
 		444C0F021D24FEB300A6746C /* MineProjectCommitRecordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 444C0F001D24FEB300A6746C /* MineProjectCommitRecordCell.m */; };
 		444C0F031D24FEB300A6746C /* MineProjectCommitRecordCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 444C0F011D24FEB300A6746C /* MineProjectCommitRecordCell.xib */; };
-		445E38DD1D0D95FA003462A8 /* CircleDetailHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 445E38DC1D0D95FA003462A8 /* CircleDetailHeaderCell.m */; };
 		446578041D2517D2005CBACA /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 446578031D2517D2005CBACA /* FeedBackViewController.m */; };
-		446AF4141D0A9C5F0075B469 /* CircleBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 446AF4131D0A9C5F0075B469 /* CircleBaseModel.m */; };
 		4474C20A1D0FA3E900DC923D /* InvestListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C2091D0FA3E900DC923D /* InvestListModel.m */; };
 		4474C20D1D0FD1B600DC923D /* InvestOrganizationBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C20C1D0FD1B600DC923D /* InvestOrganizationBaseModel.m */; };
 		4474C2161D0FD71500DC923D /* InvestDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C2151D0FD71500DC923D /* InvestDetailModel.m */; };
@@ -38,6 +49,12 @@
 		4474C21C1D0FF94800DC923D /* OrganizationSecondModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C21B1D0FF94800DC923D /* OrganizationSecondModel.m */; };
 		4474C21F1D1011D800DC923D /* ThinkTankBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C21E1D1011D800DC923D /* ThinkTankBaseModel.m */; };
 		4474C2221D1032F400DC923D /* InvestWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C2211D1032F400DC923D /* InvestWebViewController.m */; };
+		447D7E871D268197005F4696 /* GuidePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 447D7E861D268197005F4696 /* GuidePageViewController.m */; };
+		447D7E8E1D269441005F4696 /* lead_guide_01.png in Resources */ = {isa = PBXBuildFile; fileRef = 447D7E891D269441005F4696 /* lead_guide_01.png */; };
+		447D7E8F1D269441005F4696 /* lead_guide_02.png in Resources */ = {isa = PBXBuildFile; fileRef = 447D7E8A1D269441005F4696 /* lead_guide_02.png */; };
+		447D7E901D269441005F4696 /* lead_guide_03.png in Resources */ = {isa = PBXBuildFile; fileRef = 447D7E8B1D269441005F4696 /* lead_guide_03.png */; };
+		447D7E911D269441005F4696 /* lead_guide_04.png in Resources */ = {isa = PBXBuildFile; fileRef = 447D7E8C1D269441005F4696 /* lead_guide_04.png */; };
+		447D7E921D269441005F4696 /* lead_guide_05.png in Resources */ = {isa = PBXBuildFile; fileRef = 447D7E8D1D269441005F4696 /* lead_guide_05.png */; };
 		4484D1691D18D2AF001F4C3A /* ProjectPrepareFooterCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4484D1681D18D2AF001F4C3A /* ProjectPrepareFooterCommentView.m */; };
 		4484D16C1D18E3E8001F4C3A /* ProjectPrepareCommentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4484D16B1D18E3E8001F4C3A /* ProjectPrepareCommentVC.m */; };
 		4484D16F1D18E4D3001F4C3A /* ProjectPrepareCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4484D16E1D18E4D3001F4C3A /* ProjectPrepareCommentCell.m */; };
@@ -198,16 +215,6 @@
 		44871A2D1D02B30800020DD9 /* MyDataIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 448719F81D02B30800020DD9 /* MyDataIconCell.xib */; };
 		44871A2E1D02B30800020DD9 /* MyDataNoArrowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 448719FA1D02B30800020DD9 /* MyDataNoArrowCell.m */; };
 		44871A2F1D02B30800020DD9 /* MyDataNoArrowCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 448719FB1D02B30800020DD9 /* MyDataNoArrowCell.xib */; };
-		44871A461D02B31800020DD9 /* CircleDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A331D02B31800020DD9 /* CircleDetailVC.m */; };
-		44871A471D02B31800020DD9 /* CircleForwardVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A351D02B31800020DD9 /* CircleForwardVC.m */; };
-		44871A481D02B31800020DD9 /* CircleReleaseVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A371D02B31800020DD9 /* CircleReleaseVC.m */; };
-		44871A491D02B31800020DD9 /* CircleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A391D02B31800020DD9 /* CircleViewController.m */; };
-		44871A4A1D02B31800020DD9 /* CircleDetailCommentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A3C1D02B31800020DD9 /* CircleDetailCommentModel.m */; };
-		44871A4B1D02B31800020DD9 /* CircleListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A3E1D02B31800020DD9 /* CircleListModel.m */; };
-		44871A4C1D02B31800020DD9 /* CircleDetailCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A411D02B31800020DD9 /* CircleDetailCommentCell.m */; };
-		44871A4D1D02B31800020DD9 /* CircleDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A431D02B31800020DD9 /* CircleDetailHeaderView.m */; };
-		44871A4E1D02B31800020DD9 /* CircleListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A451D02B31800020DD9 /* CircleListCell.m */; };
-		44871A8A1D02B34400020DD9 /* ProjectDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A521D02B34400020DD9 /* ProjectDetailController.m */; };
 		44871A8B1D02B34400020DD9 /* ProjectDetailController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44871A531D02B34400020DD9 /* ProjectDetailController.xib */; };
 		44871A8C1D02B34400020DD9 /* ProjectDetailInvestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A551D02B34400020DD9 /* ProjectDetailInvestVC.m */; };
 		44871A8D1D02B34400020DD9 /* ProjectLetterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871A571D02B34400020DD9 /* ProjectLetterViewController.m */; };
@@ -379,7 +386,6 @@
 		449354E21D0D560000B22F7E /* icon_share_friend@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 449354D71D0D560000B22F7E /* icon_share_friend@3x.png */; };
 		449354E31D0D560000B22F7E /* icon_share_msg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 449354D81D0D560000B22F7E /* icon_share_msg@2x.png */; };
 		449354E41D0D560000B22F7E /* icon_share-msg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 449354D91D0D560000B22F7E /* icon_share-msg@3x.png */; };
-		449354E71D0D5CB200B22F7E /* CircleShareBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 449354E61D0D5CB200B22F7E /* CircleShareBottomView.m */; };
 		4496197E1D1649A4009E9472 /* ProjectSceneCommentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4496197D1D1649A4009E9472 /* ProjectSceneCommentModel.m */; };
 		449619811D16721D009E9472 /* ProjectPPTModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 449619801D16721D009E9472 /* ProjectPPTModel.m */; };
 		4498353F1D235A29000DD479 /* ActivityAttendListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 449834D01D235A29000DD479 /* ActivityAttendListViewController.m */; };
@@ -445,6 +451,7 @@
 		44B030811D15412300A288FB /* MusicModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B030801D15412300A288FB /* MusicModel.m */; };
 		44B030841D1574FD00A288FB /* ProjectDetailMemberModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B030831D1574FD00A288FB /* ProjectDetailMemberModel.m */; };
 		44B030871D15921000A288FB /* ProjectSceneModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B030861D15921000A288FB /* ProjectSceneModel.m */; };
+		44B5EBFE1D2640C80035C6A2 /* LetterDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B5EBFD1D2640C80035C6A2 /* LetterDetailViewController.m */; };
 		44B6283E1D20C08600837F05 /* invest_yuxuan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44B6283C1D20C08600837F05 /* invest_yuxuan@2x.png */; };
 		44B6283F1D20C08600837F05 /* invest_yuxuan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44B6283D1D20C08600837F05 /* invest_yuxuan@3x.png */; };
 		44B628421D20C17500837F05 /* invest_failed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44B628401D20C17500837F05 /* invest_failed@2x.png */; };
@@ -786,8 +793,6 @@
 		44FA75BC1D07ECD70010B478 /* Left-arrow-button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA73DF1D07ECD70010B478 /* Left-arrow-button@3x.png */; };
 		44FA75BD1D07ECD70010B478 /* 矩形-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA73E01D07ECD70010B478 /* 矩形-2@2x.png */; };
 		44FA75BE1D07ECD70010B478 /* 矩形-2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA73E11D07ECD70010B478 /* 矩形-2@3x.png */; };
-		44FA75BF1D07ECD70010B478 /* Avatar-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA73E31D07ECD70010B478 /* Avatar-icon@2x.png */; };
-		44FA75C01D07ECD70010B478 /* Avatar-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA73E41D07ECD70010B478 /* Avatar-icon@3x.png */; };
 		44FA75C11D07ECD70010B478 /* letterAlertbg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA73E51D07ECD70010B478 /* letterAlertbg@2x.png */; };
 		44FA75C21D07ECD70010B478 /* letterAlertbg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA73E61D07ECD70010B478 /* letterAlertbg@3x.png */; };
 		44FA75C31D07ECD70010B478 /* letterArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA73E71D07ECD70010B478 /* letterArrow@2x.png */; };
@@ -943,6 +948,31 @@
 		440EDAAF1D1FDC3D00861ADD /* icon_roading@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_roading@3x.png"; sourceTree = "<group>"; };
 		440EDAB81D1FDF4D00861ADD /* MineCollectionInvestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineCollectionInvestModel.h; sourceTree = "<group>"; };
 		440EDAB91D1FDF4D00861ADD /* MineCollectionInvestModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineCollectionInvestModel.m; sourceTree = "<group>"; };
+		442808821D26AC2E0043177B /* CircleDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailVC.h; sourceTree = "<group>"; };
+		442808831D26AC2E0043177B /* CircleDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailVC.m; sourceTree = "<group>"; };
+		442808841D26AC2E0043177B /* CircleForwardVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleForwardVC.h; sourceTree = "<group>"; };
+		442808851D26AC2E0043177B /* CircleForwardVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleForwardVC.m; sourceTree = "<group>"; };
+		442808861D26AC2E0043177B /* CircleReleaseVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleReleaseVC.h; sourceTree = "<group>"; };
+		442808871D26AC2E0043177B /* CircleReleaseVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleReleaseVC.m; sourceTree = "<group>"; };
+		442808881D26AC2E0043177B /* CircleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleViewController.h; sourceTree = "<group>"; };
+		442808891D26AC2E0043177B /* CircleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleViewController.m; sourceTree = "<group>"; };
+		4428088B1D26AC2E0043177B /* CircleBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleBaseModel.h; sourceTree = "<group>"; };
+		4428088C1D26AC2E0043177B /* CircleBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleBaseModel.m; sourceTree = "<group>"; };
+		4428088D1D26AC2E0043177B /* CircleDetailCommentModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailCommentModel.h; sourceTree = "<group>"; };
+		4428088E1D26AC2E0043177B /* CircleDetailCommentModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailCommentModel.m; sourceTree = "<group>"; };
+		4428088F1D26AC2E0043177B /* CircleListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleListModel.h; sourceTree = "<group>"; };
+		442808901D26AC2E0043177B /* CircleListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleListModel.m; sourceTree = "<group>"; };
+		442808921D26AC2E0043177B /* CircleDetailCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailCommentCell.h; sourceTree = "<group>"; };
+		442808931D26AC2E0043177B /* CircleDetailCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailCommentCell.m; sourceTree = "<group>"; };
+		442808941D26AC2E0043177B /* CircleDetailHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailHeaderCell.h; sourceTree = "<group>"; };
+		442808951D26AC2E0043177B /* CircleDetailHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailHeaderCell.m; sourceTree = "<group>"; };
+		442808961D26AC2E0043177B /* CircleDetailHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailHeaderView.h; sourceTree = "<group>"; };
+		442808971D26AC2E0043177B /* CircleDetailHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailHeaderView.m; sourceTree = "<group>"; };
+		442808981D26AC2E0043177B /* CircleListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleListCell.h; sourceTree = "<group>"; };
+		442808991D26AC2E0043177B /* CircleListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleListCell.m; sourceTree = "<group>"; };
+		4428089A1D26AC2E0043177B /* CircleShareBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleShareBottomView.h; sourceTree = "<group>"; };
+		4428089B1D26AC2E0043177B /* CircleShareBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleShareBottomView.m; sourceTree = "<group>"; };
+		442808A81D26B1CA0043177B /* ProjectDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectDetailController.m; sourceTree = "<group>"; };
 		444268031D1D3FC90021B1FA /* paySuccessBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paySuccessBG@2x.png"; sourceTree = "<group>"; };
 		444268041D1D3FC90021B1FA /* paySuccessBG@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paySuccessBG@3x.png"; sourceTree = "<group>"; };
 		444268071D1D3FEB0021B1FA /* Success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Success@2x.png"; sourceTree = "<group>"; };
@@ -956,12 +986,8 @@
 		444C0EFF1D24FEB300A6746C /* MineProjectCommitRecordCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineProjectCommitRecordCell.h; sourceTree = "<group>"; };
 		444C0F001D24FEB300A6746C /* MineProjectCommitRecordCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineProjectCommitRecordCell.m; sourceTree = "<group>"; };
 		444C0F011D24FEB300A6746C /* MineProjectCommitRecordCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MineProjectCommitRecordCell.xib; sourceTree = "<group>"; };
-		445E38DB1D0D95FA003462A8 /* CircleDetailHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailHeaderCell.h; sourceTree = "<group>"; };
-		445E38DC1D0D95FA003462A8 /* CircleDetailHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailHeaderCell.m; sourceTree = "<group>"; };
 		446578021D2517D2005CBACA /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackViewController.h; sourceTree = "<group>"; };
 		446578031D2517D2005CBACA /* FeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackViewController.m; sourceTree = "<group>"; };
-		446AF4121D0A9C5F0075B469 /* CircleBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleBaseModel.h; sourceTree = "<group>"; };
-		446AF4131D0A9C5F0075B469 /* CircleBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleBaseModel.m; sourceTree = "<group>"; };
 		4474C2081D0FA3E900DC923D /* InvestListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvestListModel.h; sourceTree = "<group>"; };
 		4474C2091D0FA3E900DC923D /* InvestListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InvestListModel.m; sourceTree = "<group>"; };
 		4474C20B1D0FD1B600DC923D /* InvestOrganizationBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvestOrganizationBaseModel.h; sourceTree = "<group>"; };
@@ -976,6 +1002,13 @@
 		4474C21E1D1011D800DC923D /* ThinkTankBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThinkTankBaseModel.m; sourceTree = "<group>"; };
 		4474C2201D1032F400DC923D /* InvestWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvestWebViewController.h; sourceTree = "<group>"; };
 		4474C2211D1032F400DC923D /* InvestWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InvestWebViewController.m; sourceTree = "<group>"; };
+		447D7E851D268197005F4696 /* GuidePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuidePageViewController.h; sourceTree = "<group>"; };
+		447D7E861D268197005F4696 /* GuidePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuidePageViewController.m; sourceTree = "<group>"; };
+		447D7E891D269441005F4696 /* lead_guide_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lead_guide_01.png; sourceTree = "<group>"; };
+		447D7E8A1D269441005F4696 /* lead_guide_02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lead_guide_02.png; sourceTree = "<group>"; };
+		447D7E8B1D269441005F4696 /* lead_guide_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lead_guide_03.png; sourceTree = "<group>"; };
+		447D7E8C1D269441005F4696 /* lead_guide_04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lead_guide_04.png; sourceTree = "<group>"; };
+		447D7E8D1D269441005F4696 /* lead_guide_05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lead_guide_05.png; sourceTree = "<group>"; };
 		4484D1671D18D2AF001F4C3A /* ProjectPrepareFooterCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectPrepareFooterCommentView.h; sourceTree = "<group>"; };
 		4484D1681D18D2AF001F4C3A /* ProjectPrepareFooterCommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectPrepareFooterCommentView.m; sourceTree = "<group>"; };
 		4484D16A1D18E3E8001F4C3A /* ProjectPrepareCommentVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectPrepareCommentVC.h; sourceTree = "<group>"; };
@@ -1231,26 +1264,7 @@
 		448719F91D02B30800020DD9 /* MyDataNoArrowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDataNoArrowCell.h; sourceTree = "<group>"; };
 		448719FA1D02B30800020DD9 /* MyDataNoArrowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDataNoArrowCell.m; sourceTree = "<group>"; };
 		448719FB1D02B30800020DD9 /* MyDataNoArrowCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyDataNoArrowCell.xib; sourceTree = "<group>"; };
-		44871A321D02B31800020DD9 /* CircleDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailVC.h; sourceTree = "<group>"; };
-		44871A331D02B31800020DD9 /* CircleDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailVC.m; sourceTree = "<group>"; };
-		44871A341D02B31800020DD9 /* CircleForwardVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleForwardVC.h; sourceTree = "<group>"; };
-		44871A351D02B31800020DD9 /* CircleForwardVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleForwardVC.m; sourceTree = "<group>"; };
-		44871A361D02B31800020DD9 /* CircleReleaseVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleReleaseVC.h; sourceTree = "<group>"; };
-		44871A371D02B31800020DD9 /* CircleReleaseVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleReleaseVC.m; sourceTree = "<group>"; };
-		44871A381D02B31800020DD9 /* CircleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleViewController.h; sourceTree = "<group>"; };
-		44871A391D02B31800020DD9 /* CircleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleViewController.m; sourceTree = "<group>"; };
-		44871A3B1D02B31800020DD9 /* CircleDetailCommentModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailCommentModel.h; sourceTree = "<group>"; };
-		44871A3C1D02B31800020DD9 /* CircleDetailCommentModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailCommentModel.m; sourceTree = "<group>"; };
-		44871A3D1D02B31800020DD9 /* CircleListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleListModel.h; sourceTree = "<group>"; };
-		44871A3E1D02B31800020DD9 /* CircleListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleListModel.m; sourceTree = "<group>"; };
-		44871A401D02B31800020DD9 /* CircleDetailCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailCommentCell.h; sourceTree = "<group>"; };
-		44871A411D02B31800020DD9 /* CircleDetailCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailCommentCell.m; sourceTree = "<group>"; };
-		44871A421D02B31800020DD9 /* CircleDetailHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailHeaderView.h; sourceTree = "<group>"; };
-		44871A431D02B31800020DD9 /* CircleDetailHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailHeaderView.m; sourceTree = "<group>"; };
-		44871A441D02B31800020DD9 /* CircleListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleListCell.h; sourceTree = "<group>"; };
-		44871A451D02B31800020DD9 /* CircleListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleListCell.m; sourceTree = "<group>"; };
 		44871A511D02B34400020DD9 /* ProjectDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectDetailController.h; sourceTree = "<group>"; };
-		44871A521D02B34400020DD9 /* ProjectDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectDetailController.m; sourceTree = "<group>"; };
 		44871A531D02B34400020DD9 /* ProjectDetailController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectDetailController.xib; sourceTree = "<group>"; };
 		44871A541D02B34400020DD9 /* ProjectDetailInvestVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectDetailInvestVC.h; sourceTree = "<group>"; };
 		44871A551D02B34400020DD9 /* ProjectDetailInvestVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectDetailInvestVC.m; sourceTree = "<group>"; };
@@ -1585,8 +1599,6 @@
 		449354D71D0D560000B22F7E /* icon_share_friend@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_share_friend@3x.png"; sourceTree = "<group>"; };
 		449354D81D0D560000B22F7E /* icon_share_msg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_share_msg@2x.png"; sourceTree = "<group>"; };
 		449354D91D0D560000B22F7E /* icon_share-msg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_share-msg@3x.png"; sourceTree = "<group>"; };
-		449354E51D0D5CB200B22F7E /* CircleShareBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleShareBottomView.h; sourceTree = "<group>"; };
-		449354E61D0D5CB200B22F7E /* CircleShareBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleShareBottomView.m; sourceTree = "<group>"; };
 		4496197C1D1649A4009E9472 /* ProjectSceneCommentModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSceneCommentModel.h; sourceTree = "<group>"; };
 		4496197D1D1649A4009E9472 /* ProjectSceneCommentModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSceneCommentModel.m; sourceTree = "<group>"; };
 		4496197F1D16721D009E9472 /* ProjectPPTModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectPPTModel.h; sourceTree = "<group>"; };
@@ -1694,6 +1706,8 @@
 		44B030831D1574FD00A288FB /* ProjectDetailMemberModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectDetailMemberModel.m; sourceTree = "<group>"; };
 		44B030851D15921000A288FB /* ProjectSceneModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSceneModel.h; sourceTree = "<group>"; };
 		44B030861D15921000A288FB /* ProjectSceneModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSceneModel.m; sourceTree = "<group>"; };
+		44B5EBFC1D2640C80035C6A2 /* LetterDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LetterDetailViewController.h; sourceTree = "<group>"; };
+		44B5EBFD1D2640C80035C6A2 /* LetterDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LetterDetailViewController.m; sourceTree = "<group>"; };
 		44B6283C1D20C08600837F05 /* invest_yuxuan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_yuxuan@2x.png"; sourceTree = "<group>"; };
 		44B6283D1D20C08600837F05 /* invest_yuxuan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_yuxuan@3x.png"; sourceTree = "<group>"; };
 		44B628401D20C17500837F05 /* invest_failed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_failed@2x.png"; sourceTree = "<group>"; };
@@ -2056,8 +2070,6 @@
 		44FA73DF1D07ECD70010B478 /* Left-arrow-button@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Left-arrow-button@3x.png"; sourceTree = "<group>"; };
 		44FA73E01D07ECD70010B478 /* 矩形-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "矩形-2@2x.png"; sourceTree = "<group>"; };
 		44FA73E11D07ECD70010B478 /* 矩形-2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "矩形-2@3x.png"; sourceTree = "<group>"; };
-		44FA73E31D07ECD70010B478 /* Avatar-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Avatar-icon@2x.png"; sourceTree = "<group>"; };
-		44FA73E41D07ECD70010B478 /* Avatar-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Avatar-icon@3x.png"; sourceTree = "<group>"; };
 		44FA73E51D07ECD70010B478 /* letterAlertbg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "letterAlertbg@2x.png"; sourceTree = "<group>"; };
 		44FA73E61D07ECD70010B478 /* letterAlertbg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "letterAlertbg@3x.png"; sourceTree = "<group>"; };
 		44FA73E71D07ECD70010B478 /* letterArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "letterArrow@2x.png"; sourceTree = "<group>"; };
@@ -2253,6 +2265,82 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		442808801D26AC2E0043177B /* Circle */ = {
+			isa = PBXGroup;
+			children = (
+				442808811D26AC2E0043177B /* Controller */,
+				4428088A1D26AC2E0043177B /* Model */,
+				442808911D26AC2E0043177B /* View */,
+			);
+			path = Circle;
+			sourceTree = "<group>";
+		};
+		442808811D26AC2E0043177B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				442808821D26AC2E0043177B /* CircleDetailVC.h */,
+				442808831D26AC2E0043177B /* CircleDetailVC.m */,
+				442808841D26AC2E0043177B /* CircleForwardVC.h */,
+				442808851D26AC2E0043177B /* CircleForwardVC.m */,
+				442808861D26AC2E0043177B /* CircleReleaseVC.h */,
+				442808871D26AC2E0043177B /* CircleReleaseVC.m */,
+				442808881D26AC2E0043177B /* CircleViewController.h */,
+				442808891D26AC2E0043177B /* CircleViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		4428088A1D26AC2E0043177B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4428088B1D26AC2E0043177B /* CircleBaseModel.h */,
+				4428088C1D26AC2E0043177B /* CircleBaseModel.m */,
+				4428088D1D26AC2E0043177B /* CircleDetailCommentModel.h */,
+				4428088E1D26AC2E0043177B /* CircleDetailCommentModel.m */,
+				4428088F1D26AC2E0043177B /* CircleListModel.h */,
+				442808901D26AC2E0043177B /* CircleListModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		442808911D26AC2E0043177B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				442808921D26AC2E0043177B /* CircleDetailCommentCell.h */,
+				442808931D26AC2E0043177B /* CircleDetailCommentCell.m */,
+				442808941D26AC2E0043177B /* CircleDetailHeaderCell.h */,
+				442808951D26AC2E0043177B /* CircleDetailHeaderCell.m */,
+				442808961D26AC2E0043177B /* CircleDetailHeaderView.h */,
+				442808971D26AC2E0043177B /* CircleDetailHeaderView.m */,
+				442808981D26AC2E0043177B /* CircleListCell.h */,
+				442808991D26AC2E0043177B /* CircleListCell.m */,
+				4428089A1D26AC2E0043177B /* CircleShareBottomView.h */,
+				4428089B1D26AC2E0043177B /* CircleShareBottomView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		447D7E841D268174005F4696 /* GuidePage */ = {
+			isa = PBXGroup;
+			children = (
+				447D7E851D268197005F4696 /* GuidePageViewController.h */,
+				447D7E861D268197005F4696 /* GuidePageViewController.m */,
+			);
+			path = GuidePage;
+			sourceTree = "<group>";
+		};
+		447D7E881D269441005F4696 /* 引导页 */ = {
+			isa = PBXGroup;
+			children = (
+				447D7E891D269441005F4696 /* lead_guide_01.png */,
+				447D7E8A1D269441005F4696 /* lead_guide_02.png */,
+				447D7E8B1D269441005F4696 /* lead_guide_03.png */,
+				447D7E8C1D269441005F4696 /* lead_guide_04.png */,
+				447D7E8D1D269441005F4696 /* lead_guide_05.png */,
+			);
+			path = "引导页";
+			sourceTree = "<group>";
+		};
 		4484D17B1D19184F001F4C3A /* lib */ = {
 			isa = PBXGroup;
 			children = (
@@ -2354,12 +2442,13 @@
 		448718701D02AD9800020DD9 /* company */ = {
 			isa = PBXGroup;
 			children = (
+				447D7E841D268174005F4696 /* GuidePage */,
 				448718DF1D02B23D00020DD9 /* Main */,
 				448718EF1D02B28B00020DD9 /* Login */,
 				44871A4F1D02B34400020DD9 /* Project */,
 				4487195D1D02B2FE00020DD9 /* Invest */,
 				448719A51D02B30800020DD9 /* Mine */,
-				44871A301D02B31800020DD9 /* Circle */,
+				442808801D26AC2E0043177B /* Circle */,
 				449834CD1D235A29000DD479 /* Activity */,
 				44871AAA1D02B35D00020DD9 /* Category */,
 				44871AB41D02B37700020DD9 /* Library */,
@@ -2776,61 +2865,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		44871A301D02B31800020DD9 /* Circle */ = {
-			isa = PBXGroup;
-			children = (
-				44871A311D02B31800020DD9 /* Controller */,
-				44871A3A1D02B31800020DD9 /* Model */,
-				44871A3F1D02B31800020DD9 /* View */,
-			);
-			path = Circle;
-			sourceTree = "<group>";
-		};
-		44871A311D02B31800020DD9 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				44871A321D02B31800020DD9 /* CircleDetailVC.h */,
-				44871A331D02B31800020DD9 /* CircleDetailVC.m */,
-				44871A341D02B31800020DD9 /* CircleForwardVC.h */,
-				44871A351D02B31800020DD9 /* CircleForwardVC.m */,
-				44871A361D02B31800020DD9 /* CircleReleaseVC.h */,
-				44871A371D02B31800020DD9 /* CircleReleaseVC.m */,
-				44871A381D02B31800020DD9 /* CircleViewController.h */,
-				44871A391D02B31800020DD9 /* CircleViewController.m */,
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		44871A3A1D02B31800020DD9 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				44871A3B1D02B31800020DD9 /* CircleDetailCommentModel.h */,
-				44871A3C1D02B31800020DD9 /* CircleDetailCommentModel.m */,
-				44871A3D1D02B31800020DD9 /* CircleListModel.h */,
-				44871A3E1D02B31800020DD9 /* CircleListModel.m */,
-				446AF4121D0A9C5F0075B469 /* CircleBaseModel.h */,
-				446AF4131D0A9C5F0075B469 /* CircleBaseModel.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		44871A3F1D02B31800020DD9 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				445E38DB1D0D95FA003462A8 /* CircleDetailHeaderCell.h */,
-				445E38DC1D0D95FA003462A8 /* CircleDetailHeaderCell.m */,
-				44871A401D02B31800020DD9 /* CircleDetailCommentCell.h */,
-				44871A411D02B31800020DD9 /* CircleDetailCommentCell.m */,
-				44871A421D02B31800020DD9 /* CircleDetailHeaderView.h */,
-				44871A431D02B31800020DD9 /* CircleDetailHeaderView.m */,
-				44871A441D02B31800020DD9 /* CircleListCell.h */,
-				44871A451D02B31800020DD9 /* CircleListCell.m */,
-				449354E51D0D5CB200B22F7E /* CircleShareBottomView.h */,
-				449354E61D0D5CB200B22F7E /* CircleShareBottomView.m */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		44871A4F1D02B34400020DD9 /* Project */ = {
 			isa = PBXGroup;
 			children = (
@@ -2850,7 +2884,7 @@
 				44BC07B01D13A7920075221E /* ProjectBannerDetailVC.h */,
 				44BC07B11D13A7920075221E /* ProjectBannerDetailVC.m */,
 				44871A511D02B34400020DD9 /* ProjectDetailController.h */,
-				44871A521D02B34400020DD9 /* ProjectDetailController.m */,
+				442808A81D26B1CA0043177B /* ProjectDetailController.m */,
 				44871A531D02B34400020DD9 /* ProjectDetailController.xib */,
 				44BC07B81D13EBB00075221E /* ProjectPrepareDetailVC.h */,
 				44BC07B91D13EBB00075221E /* ProjectPrepareDetailVC.m */,
@@ -2862,6 +2896,8 @@
 				44A867F61D1D258E00C5BC8A /* PaySuccessViewController.m */,
 				44871A561D02B34400020DD9 /* ProjectLetterViewController.h */,
 				44871A571D02B34400020DD9 /* ProjectLetterViewController.m */,
+				44B5EBFC1D2640C80035C6A2 /* LetterDetailViewController.h */,
+				44B5EBFD1D2640C80035C6A2 /* LetterDetailViewController.m */,
 				44871A5B1D02B34400020DD9 /* UpProjectViewController.h */,
 				44871A5C1D02B34400020DD9 /* UpProjectViewController.m */,
 				44871A5D1D02B34400020DD9 /* UpProjectViewController.xib */,
@@ -3648,6 +3684,7 @@
 		44FA72831D07ECD70010B478 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				447D7E881D269441005F4696 /* 引导页 */,
 				44AE87951D0EC0AB0067404F /* cameraSelect */,
 				44FA72841D07ECD70010B478 /* assest */,
 				44FA72AC1D07ECD70010B478 /* Desktop */,
@@ -4245,8 +4282,6 @@
 		44FA73E21D07ECD70010B478 /* 站内信ios */ = {
 			isa = PBXGroup;
 			children = (
-				44FA73E31D07ECD70010B478 /* Avatar-icon@2x.png */,
-				44FA73E41D07ECD70010B478 /* Avatar-icon@3x.png */,
 				44FA73E51D07ECD70010B478 /* letterAlertbg@2x.png */,
 				44FA73E61D07ECD70010B478 /* letterAlertbg@3x.png */,
 				44FA73E71D07ECD70010B478 /* letterArrow@2x.png */,
@@ -4554,6 +4589,7 @@
 				44FA76491D07ECD70010B478 /* 椭圆-8@3x.png in Resources */,
 				44FA754D1D07ECD70010B478 /* icon-commit@3x.png in Resources */,
 				44FA752F1D07ECD70010B478 /* Contents.json in Resources */,
+				447D7E921D269441005F4696 /* lead_guide_05.png in Resources */,
 				44FA75CD1D07ECD70010B478 /* message_new@2x.png in Resources */,
 				44FA74C31D07ECD70010B478 /* invest_roading@2x.png in Resources */,
 				44871AA51D02B34400020DD9 /* ProjectLetterCell.xib in Resources */,
@@ -4713,6 +4749,7 @@
 				44FA75241D07ECD70010B478 /* logo_qian@2x.png in Resources */,
 				44FA75F81D07ECD70010B478 /* 2011年5月13日-Intersection,-Seoul@3x_11.png in Resources */,
 				44FA75DE1D07ECD70010B478 /* bill_whitebg2@2x.png in Resources */,
+				447D7E8E1D269441005F4696 /* lead_guide_01.png in Resources */,
 				44FA75F31D07ECD70010B478 /* ...............................................................@2x.png in Resources */,
 				44FA76241D07ECD70010B478 /* part_image@2x.png in Resources */,
 				44FA749B1D07ECD70010B478 /* jiahao@2x.jpg in Resources */,
@@ -4767,6 +4804,7 @@
 				44FA74CF1D07ECD70010B478 /* right_arrow@3x.png in Resources */,
 				4484D1761D1900B0001F4C3A /* iconfont-comment@3x.png in Resources */,
 				44FA74C81D07ECD70010B478 /* icon_add2x.png in Resources */,
+				447D7E911D269441005F4696 /* lead_guide_04.png in Resources */,
 				44871B7F1D02B37800020DD9 /* MLEmoji_Expression.bundle in Resources */,
 				44FA74D91D07ECD70010B478 /* icon_close@3x.png in Resources */,
 				44FA75C91D07ECD70010B478 /* letterUnselected@2x.png in Resources */,
@@ -4799,6 +4837,7 @@
 				44FA757F1D07ECD70010B478 /* 圆角矩形-3@2x.png in Resources */,
 				44FA755B1D07ECD70010B478 /* touziren-icon@3x.png in Resources */,
 				44FA76111D07ECD70010B478 /* iconfont-jine@2x.png in Resources */,
+				447D7E8F1D269441005F4696 /* lead_guide_02.png in Resources */,
 				44FA74ED1D07ECD70010B478 /* mine_goldline@3x.png in Resources */,
 				44FA758E1D07ECD70010B478 /* 2010年11月25日-Blue-Footed-Booby,-Galápagos-Islands@3x.png in Resources */,
 				44FA75881D07ECD70010B478 /* 矩形-10@3x.png in Resources */,
@@ -4883,7 +4922,6 @@
 				44FA74B21D07ECD70010B478 /* icon_releaseBtn@2x.png in Resources */,
 				44FA75FC1D07ECD70010B478 /* Avatar-sample-165@3x.png in Resources */,
 				44FA754F1D07ECD70010B478 /* icon-guanzhu@3x.png in Resources */,
-				44FA75C01D07ECD70010B478 /* Avatar-icon@3x.png in Resources */,
 				44FA75471D07ECD70010B478 /* project_selected @3x.png in Resources */,
 				44FA75FD1D07ECD70010B478 /* Bar-chart@2x.png in Resources */,
 				44FA76271D07ECD70010B478 /* Pie-chart@3x.png in Resources */,
@@ -5006,7 +5044,6 @@
 				44FA754E1D07ECD70010B478 /* icon-guanzhu@2x.png in Resources */,
 				44FA74FA1D07ECD70010B478 /* icon_commit@2x.png in Resources */,
 				44FA74D31D07ECD70010B478 /* icon_ringbg@3x.png in Resources */,
-				44FA75BF1D07ECD70010B478 /* Avatar-icon@2x.png in Resources */,
 				44FA75E11D07ECD70010B478 /* iconfont-bill@3x.png in Resources */,
 				44FA74DD1D07ECD70010B478 /* mine_gold@3x.png in Resources */,
 				44FA74DA1D07ECD70010B478 /* icon_open@2x.png in Resources */,
@@ -5093,6 +5130,7 @@
 				44FA75501D07ECD70010B478 /* icon-guanzhubg@2x.png in Resources */,
 				44FA756F1D07ECD70010B478 /* 圆角矩形-3@3x.png in Resources */,
 				4498358F1D2374FF000DD479 /* icon_add_project@3x.png in Resources */,
+				447D7E901D269441005F4696 /* lead_guide_03.png in Resources */,
 				44871A2B1D02B30800020DD9 /* MyDataHeaderCell.xib in Resources */,
 				44FA75741D07ECD70010B478 /* ...............................................................@3x.png in Resources */,
 				440EDAB41D1FDC3D00861ADD /* icon_raising@2x.png in Resources */,
@@ -5208,7 +5246,6 @@
 				44871B6D1D02B37800020DD9 /* IQBarButtonItem.m in Sources */,
 				448718EE1D02B23D00020DD9 /* JTabBarController.m in Sources */,
 				4487202C1D02F49700020DD9 /* RootViewController.m in Sources */,
-				445E38DD1D0D95FA003462A8 /* CircleDetailHeaderCell.m in Sources */,
 				44871A281D02B30800020DD9 /* MyDataArrowCell.m in Sources */,
 				44871BA01D02B37800020DD9 /* NSData+ImageContentType.m in Sources */,
 				448720221D02F3E400020DD9 /* DialogView.m in Sources */,
@@ -5222,7 +5259,6 @@
 				446578041D2517D2005CBACA /* FeedBackViewController.m in Sources */,
 				4487200E1D02CEA900020DD9 /* NSData+CommonCrypto.m in Sources */,
 				44871EED1D02B5BA00020DD9 /* DACircularProgressView.m in Sources */,
-				449354E71D0D5CB200B22F7E /* CircleShareBottomView.m in Sources */,
 				44C076901D23A57F00D5F24C /* MineLogoProjectBaseModel.m in Sources */,
 				44871FEB1D02C6A300020DD9 /* SBJsonBase.m in Sources */,
 				44871A2E1D02B30800020DD9 /* MyDataNoArrowCell.m in Sources */,
@@ -5244,11 +5280,12 @@
 				448719A31D02B2FE00020DD9 /* ThinkTankCell.m in Sources */,
 				44871A031D02B30800020DD9 /* MineActivityVC.m in Sources */,
 				44871B661D02B37800020DD9 /* IQUITextFieldView+Additions.m in Sources */,
+				4428089D1D26AC2E0043177B /* CircleForwardVC.m in Sources */,
 				449835441D235A29000DD479 /* ActionDetailModel.m in Sources */,
 				4487193A1D02B28B00020DD9 /* InvistViewController.m in Sources */,
 				44871A101D02B30800020DD9 /* MyDataCompanyVC.m in Sources */,
 				44871A271D02B30800020DD9 /* MineProjectCenterPersonSecondCell.m in Sources */,
-				44871A461D02B31800020DD9 /* CircleDetailVC.m in Sources */,
+				442808A71D26AC2E0043177B /* CircleShareBottomView.m in Sources */,
 				44871B8C1D02B37800020DD9 /* MLLinkLabel.m in Sources */,
 				44E1C77D1D1133B200ACF9BA /* MineActivityListModel.m in Sources */,
 				448719421D02B28B00020DD9 /* RegisterViewController.m in Sources */,
@@ -5256,16 +5293,18 @@
 				44E1C7681D10F30A00ACF9BA /* ProjectListProBaseModel.m in Sources */,
 				44871B7E1D02B37800020DD9 /* UIView+SDAutoLayout.m in Sources */,
 				44AE87B01D0EE8830067404F /* AuthenticInfoBaseModel.m in Sources */,
+				442808A31D26AC2E0043177B /* CircleDetailCommentCell.m in Sources */,
 				449619811D16721D009E9472 /* ProjectPPTModel.m in Sources */,
 				44871B741D02B37800020DD9 /* MASConstraint.m in Sources */,
 				44871A931D02B34400020DD9 /* ProjectDetailLeftFooterModel.m in Sources */,
+				442808A51D26AC2E0043177B /* CircleDetailHeaderView.m in Sources */,
 				4487194A1D02B28B00020DD9 /* Renzheng4ViewController.m in Sources */,
 				44871A0E1D02B30800020DD9 /* MoneyAccountVC.m in Sources */,
 				44871A8D1D02B34400020DD9 /* ProjectLetterViewController.m in Sources */,
-				44871A471D02B31800020DD9 /* CircleForwardVC.m in Sources */,
 				4487193C1D02B28B00020DD9 /* LoginRegistViewController.m in Sources */,
 				44871EDE1D02B57C00020DD9 /* MWCaptionView.m in Sources */,
 				44871EE31D02B57C00020DD9 /* MWTapDetectingImageView.m in Sources */,
+				4428089E1D26AC2E0043177B /* CircleReleaseVC.m in Sources */,
 				449835801D236AF1000DD479 /* MineProjectViewController.m in Sources */,
 				44871B911D02B37800020DD9 /* TAAnimatedDotView.m in Sources */,
 				448719501D02B28B00020DD9 /* SetPassWordViewController.m in Sources */,
@@ -5275,7 +5314,6 @@
 				4487200C1D02CEA900020DD9 /* AES.m in Sources */,
 				44871B6F1D02B37800020DD9 /* IQToolbar.m in Sources */,
 				44871B671D02B37800020DD9 /* IQUIView+Hierarchy.m in Sources */,
-				44871A4E1D02B31800020DD9 /* CircleListCell.m in Sources */,
 				449835411D235A29000DD479 /* ActivityDetailVC.m in Sources */,
 				44B776AD1D14209100BCD49B /* ProjectPrepareDetailHeaderModel.m in Sources */,
 				449835751D235A29000DD479 /* ActivityDetailFooterView.m in Sources */,
@@ -5284,6 +5322,7 @@
 				44871A241D02B30800020DD9 /* MineGoldMingxiCell.m in Sources */,
 				44871BA31D02B37800020DD9 /* SDWebImageDecoder.m in Sources */,
 				4498357A1D235A29000DD479 /* PictureContainerView.m in Sources */,
+				442808A91D26B1CA0043177B /* ProjectDetailController.m in Sources */,
 				44871F0A1D02B63B00020DD9 /* PECropRectView.m in Sources */,
 				449835831D237108000DD479 /* MineProjectCenterYuXuanCell.m in Sources */,
 				44871BA61D02B37800020DD9 /* SDWebImageManager.m in Sources */,
@@ -5304,6 +5343,7 @@
 				44871B961D02B37800020DD9 /* UIView+SDExtension.m in Sources */,
 				4474C20A1D0FA3E900DC923D /* InvestListModel.m in Sources */,
 				44B628461D20C36A00837F05 /* MineCardVC.m in Sources */,
+				442808A21D26AC2E0043177B /* CircleListModel.m in Sources */,
 				4474C2191D0FF93A00DC923D /* OrganizationFirstModel.m in Sources */,
 				44871BA41D02B37800020DD9 /* SDWebImageDownloader.m in Sources */,
 				4498356A1D235A29000DD479 /* ActivityBlackCoverView.m in Sources */,
@@ -5323,17 +5363,17 @@
 				44B030871D15921000A288FB /* ProjectSceneModel.m in Sources */,
 				448720291D02F3E400020DD9 /* UploadingView.m in Sources */,
 				449AD2871D1E9EF100EBC276 /* MineDeatilAreaVC.m in Sources */,
+				442808A11D26AC2E0043177B /* CircleDetailCommentModel.m in Sources */,
 				449AD2841D1E9EDB00EBC276 /* MIneAreaVC.m in Sources */,
-				44871A8A1D02B34400020DD9 /* ProjectDetailController.m in Sources */,
 				44871BAB1D02B37800020DD9 /* UIImage+WebP.m in Sources */,
 				4474C21C1D0FF94800DC923D /* OrganizationSecondModel.m in Sources */,
 				448719321D02B28B00020DD9 /* AreaViewController.m in Sources */,
 				448719481D02B28B00020DD9 /* Renzheng3ViewController.m in Sources */,
 				44871A901D02B34400020DD9 /* UpProjectViewController.m in Sources */,
 				44871A251D02B30800020DD9 /* MineProjectCenterHeaderCell.m in Sources */,
-				44871A481D02B31800020DD9 /* CircleReleaseVC.m in Sources */,
 				44871F0B1D02B63B00020DD9 /* PECropView.m in Sources */,
 				44BC07B21D13A7920075221E /* ProjectBannerDetailVC.m in Sources */,
+				447D7E871D268197005F4696 /* GuidePageViewController.m in Sources */,
 				4487200F1D02CEA900020DD9 /* NSString+Base64.m in Sources */,
 				44871A2A1D02B30800020DD9 /* MyDataHeaderCell.m in Sources */,
 				44871A201D02B30800020DD9 /* MineAttentionInvestOrganizationCell.m in Sources */,
@@ -5344,7 +5384,6 @@
 				44871EDF1D02B57C00020DD9 /* MWGridCell.m in Sources */,
 				44C076961D23F43200D5F24C /* MIneProjectSecondYuXuanCell.m in Sources */,
 				44871FED1D02C6A300020DD9 /* SBJsonWriter.m in Sources */,
-				44871A4D1D02B31800020DD9 /* CircleDetailHeaderView.m in Sources */,
 				4496197E1D1649A4009E9472 /* ProjectSceneCommentModel.m in Sources */,
 				44871A991D02B34400020DD9 /* ProjectDetailLeftFooterCell.m in Sources */,
 				44871B7D1D02B37800020DD9 /* UITableView+SDAutoTableViewCellHeight.m in Sources */,
@@ -5365,6 +5404,7 @@
 				44871FDA1D02C62500020DD9 /* GTMBase64.m in Sources */,
 				44871A0A1D02B30800020DD9 /* MineRingCodeVC.m in Sources */,
 				4487194C1D02B28B00020DD9 /* RenzhengViewController.m in Sources */,
+				442808A41D26AC2E0043177B /* CircleDetailHeaderCell.m in Sources */,
 				44C076931D23ECCC00D5F24C /* MineInvestViewController.m in Sources */,
 				4498356C1D235A29000DD479 /* ActivityCell.m in Sources */,
 				44BC07AF1D138AEA0075221E /* ProjectBannerListModel.m in Sources */,
@@ -5384,6 +5424,7 @@
 				44871B921D02B37800020DD9 /* TADotView.m in Sources */,
 				448720231D02F3E400020DD9 /* LoadingUtil.m in Sources */,
 				449205001D15258D00BD5DBC /* ProjectDetailSceneCellModel.m in Sources */,
+				4428089C1D26AC2E0043177B /* CircleDetailVC.m in Sources */,
 				448720271D02F3E400020DD9 /* LoadingViewDelegate.m in Sources */,
 				4487198F1D02B2FE00020DD9 /* InvestThinkTankDetailVC.m in Sources */,
 				44871A171D02B30800020DD9 /* MineProjectCenterPersonModel.m in Sources */,
@@ -5391,7 +5432,6 @@
 				44871A8E1D02B34400020DD9 /* ProjectViewController.m in Sources */,
 				449835451D235A29000DD479 /* ActionLikerModel.m in Sources */,
 				44871B6B1D02B37800020DD9 /* IQKeyboardReturnKeyHandler.m in Sources */,
-				44871A491D02B31800020DD9 /* CircleViewController.m in Sources */,
 				4498356E1D235A29000DD479 /* ActivityCommentCell.m in Sources */,
 				449835771D235A29000DD479 /* ActivityDetailListCell.m in Sources */,
 				449835461D235A29000DD479 /* ActivityAttendModel.m in Sources */,
@@ -5400,7 +5440,6 @@
 				44BC07BA1D13EBB00075221E /* ProjectPrepareDetailVC.m in Sources */,
 				44871B821D02B37800020DD9 /* MLEmojiLabel.m in Sources */,
 				44871B641D02B37800020DD9 /* IQNSArray+Sort.m in Sources */,
-				44871A4B1D02B31800020DD9 /* CircleListModel.m in Sources */,
 				44B030811D15412300A288FB /* MusicModel.m in Sources */,
 				448718EC1D02B23D00020DD9 /* MyNavViewController.m in Sources */,
 				44871A941D02B34400020DD9 /* ProjectDetailLeftHeaderModel.m in Sources */,
@@ -5408,14 +5447,16 @@
 				44871F101D02B63B00020DD9 /* UIImage+Resize.m in Sources */,
 				448720261D02F3E400020DD9 /* ProgressTraceView.m in Sources */,
 				4487200D1D02CEA900020DD9 /* NSData+Base64.m in Sources */,
+				442808A01D26AC2E0043177B /* CircleBaseModel.m in Sources */,
 				44F9E8BD1D1A21430096EF85 /* CSZProjectDetailLetfView.m in Sources */,
+				44B5EBFE1D2640C80035C6A2 /* LetterDetailViewController.m in Sources */,
 				44871B931D02B37800020DD9 /* TAPageControl.m in Sources */,
 				44871F121D02B63B00020DD9 /* UIImage+SplitImageIntoTwoParts.m in Sources */,
-				44871A4C1D02B31800020DD9 /* CircleDetailCommentCell.m in Sources */,
 				44871B9F1D02B37800020DD9 /* MKAnnotationView+WebCache.m in Sources */,
 				44871F0E1D02B63B00020DD9 /* UIImage+Alpha.m in Sources */,
 				4474C21F1D1011D800DC923D /* ThinkTankBaseModel.m in Sources */,
 				4498353F1D235A29000DD479 /* ActivityAttendListViewController.m in Sources */,
+				442808A61D26AC2E0043177B /* CircleListCell.m in Sources */,
 				44871EE21D02B57C00020DD9 /* MWPhotoBrowser.m in Sources */,
 				44871A041D02B30800020DD9 /* MineAttentionVC.m in Sources */,
 				448719521D02B28B00020DD9 /* EditTableViewCell.m in Sources */,
@@ -5425,9 +5466,9 @@
 				448719361D02B28B00020DD9 /* FindPassWordViewController.m in Sources */,
 				448719581D02B28B00020DD9 /* RegistNameTableViewCell.m in Sources */,
 				44871BA21D02B37800020DD9 /* SDWebImageCompat.m in Sources */,
-				44871A4A1D02B31800020DD9 /* CircleDetailCommentModel.m in Sources */,
 				448AF9671D21588700A30EA6 /* MineAccountRechargeVC.m in Sources */,
 				44871FFC1D02CCCF00020DD9 /* TDUtil.m in Sources */,
+				4428089F1D26AC2E0043177B /* CircleViewController.m in Sources */,
 				44871F111D02B63B00020DD9 /* UIImage+RoundedCorner.m in Sources */,
 				44871B9C1D02B37800020DD9 /* SDRefreshHeaderView.m in Sources */,
 				448719A11D02B2FE00020DD9 /* InvestPersonWhiteImageView.m in Sources */,
@@ -5436,7 +5477,6 @@
 				44871B9B1D02B37800020DD9 /* SDRefreshFooterView.m in Sources */,
 				4487199B1D02B2FE00020DD9 /* InvestOrganizationCell.m in Sources */,
 				44871B7B1D02B37800020DD9 /* View+MASAdditions.m in Sources */,
-				446AF4141D0A9C5F0075B469 /* CircleBaseModel.m in Sources */,
 				44871A1E1D02B30800020DD9 /* MineAttentionInvestCell.m in Sources */,
 				44871B881D02B37800020DD9 /* NSAttributedString+MLExpression.m in Sources */,
 				44871BAA1D02B37800020DD9 /* UIImage+MultiFormat.m in Sources */,
@@ -5578,7 +5618,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7ae6f1ff-c90d-44c6-a9fa-8efcb7524390";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

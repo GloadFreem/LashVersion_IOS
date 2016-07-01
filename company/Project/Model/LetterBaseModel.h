@@ -27,6 +27,7 @@
 
 @property (nonatomic, copy) NSString *url;
 
+@property (nonatomic, assign) BOOL selectedStatus;
 
 @end
 @interface Messagetype : NSObject

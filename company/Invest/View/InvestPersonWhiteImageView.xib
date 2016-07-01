@@ -88,22 +88,22 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZWC-7t-KBG">
-                    <rect key="frame" x="338" y="257" width="45" height="22.5"/>
+                    <rect key="frame" x="338" y="257" width="50" height="22.5"/>
                     <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="45" id="B9q-Ni-rJX"/>
+                        <constraint firstAttribute="width" constant="50" id="B9q-Ni-rJX"/>
                     </constraints>
-                    <state key="normal" title="电影">
+                    <state key="normal">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A0A-eo-Kin">
-                    <rect key="frame" x="217" y="257" width="45" height="22"/>
+                    <rect key="frame" x="212" y="257" width="50" height="22"/>
                     <color key="backgroundColor" red="0.3158626397" green="0.61973248110000001" blue="0.5481070616" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="45" id="MpS-eW-Rtx"/>
+                        <constraint firstAttribute="width" constant="50" id="MpS-eW-Rtx"/>
                     </constraints>
-                    <state key="normal" title="体育">
+                    <state key="normal">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
@@ -114,7 +114,7 @@
                         <constraint firstAttribute="height" constant="22" id="ciq-xh-T8M"/>
                         <constraint firstAttribute="width" constant="60" id="x2X-iK-uly"/>
                     </constraints>
-                    <state key="normal" title="房地产">
+                    <state key="normal">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
@@ -161,6 +161,8 @@
                 <outlet property="iconImage" destination="OdT-q4-tbk" id="OrA-Ha-BSl"/>
                 <outlet property="leftBtn" destination="A0A-eo-Kin" id="WRH-Be-rzh"/>
                 <outlet property="middleBtn" destination="la4-Bg-EcK" id="IDZ-a4-1jz"/>
+                <outlet property="middleBtnCenterX" destination="u4i-zZ-8xZ" id="1u0-e9-DEu"/>
+                <outlet property="middleBtnWidth" destination="x2X-iK-uly" id="TGC-U1-jVf"/>
                 <outlet property="nameLabel" destination="vAy-6a-oDW" id="IYu-Ad-qeF"/>
                 <outlet property="positionLabel" destination="vnH-VZ-G1L" id="2oh-BU-aZv"/>
                 <outlet property="rightBtn" destination="ZWC-7t-KBG" id="DMz-ct-E1Z"/>

@@ -51,6 +51,7 @@
 @property (nonatomic, assign) NSInteger imageCount;
 @property (nonatomic, strong) NSArray *modelArray;
 
+@property (nonatomic, assign) BOOL isFirst;
 
 -(void)relayoutWithModelArray:(NSArray*)array;                 // 加载数据
               

@@ -56,6 +56,8 @@
     NSString *_recorDataPartner;
     BOOL memberLoadData;
     
+    NSInteger currentPageIndex; //当前页索引
+    
     AuthenticInfoBaseModel *authenticModel;
     
 }
@@ -85,6 +87,7 @@
 @property (nonatomic, copy) NSString *collectPartner;
 
 @property (nonatomic, copy) NSString *sharePartner;
+@property (nonatomic, copy) NSString *shareContent;
 @property (nonatomic, copy) NSString *shareurl;
 @property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic,strong)UIView *bottomview;
@@ -196,6 +199,7 @@
                 NSDictionary *dic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
                 _shareurl  = dic[@"url"];
                 _shareImage = dic[@"image"];
+                _shareContent = dic[@"content"];
             }
         }
            
@@ -608,6 +612,9 @@
     [_scrollView setupAutoHeightWithBottomView:_subViewScrollView bottomMargin:0];
     [_subViewScrollView setContentOffset:CGPointMake(_subViewScrollView.contentOffset.x,0) animated:YES];
     
+    //更新布局
+    [_scrollView layoutSubviews];
+    
 }
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     
@@ -670,6 +677,9 @@
     [_scrollView setupAutoContentSizeWithBottomView:_subViewScrollView bottomMargin:0];
     [_scrollView setupAutoHeightWithBottomView:_subViewScrollView bottomMargin:0];
     [_subViewScrollView setContentOffset:CGPointMake(_subViewScrollView.contentOffset.x,0) animated:YES];
+    
+    //更新布局
+    [_scrollView layoutSubviews];
     
 }
 
@@ -749,7 +759,7 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
     [share addGestureRecognizer:tap];
     [[self topView] addSubview:share];
-    self.bottomview = share;
+    self.bottomView = share;
     share.delegate = self;
 }
 -(void)sendShareBtnWithView:(CircleShareBottomView *)view index:(int)index
@@ -757,8 +767,8 @@
     //分享
     if (view.tag == 1) {
         //得到用户SID
-        //        UIImage * shareImage = [UIImage imageNamed:@"share_jixiangwu"];
-        NSString *shareContentString = [NSString stringWithFormat:@"快来一起玩\n%@",_shareurl];
+        NSString * shareImage = _shareImage;
+        NSString *shareContentString = [NSString stringWithFormat:@"%@",_shareContent];
         NSArray *arr = nil;
         NSString *shareContent;
         
@@ -769,8 +779,8 @@
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareurl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投";
+                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
                 }
                 else
                 {
@@ -786,10 +796,10 @@
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
                 
-                NSLog(@"分享到微信");
+                //                NSLog(@"分享到微信");
             }
                 break;
             case 2:{
@@ -797,10 +807,10 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
                 
-                NSLog(@"分享到朋友圈");
+                //                NSLog(@"分享到朋友圈");
             }
                 break;
             case 3:{
@@ -808,7 +818,7 @@
                 arr = @[UMShareToSms];
                 shareContent = shareContentString;
                 
-                NSLog(@"分享短信");
+                //                NSLog(@"分享短信");
             }
                 break;
             case 100:{
@@ -822,10 +832,13 @@
         {
             return;
         }
-        //        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-        //            shareImage = nil;
-        //        }
-        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:nil presentedController:self completion:^(UMSocialResponseEntity *response){
+        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
+            shareImage = nil;
+        }
+        UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
+                                            shareImage];
+        
+        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -837,6 +850,19 @@
             }
         }];
     }
+}
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat offSetX = scrollView.contentOffset.x;
+    NSInteger index = offSetX/SCREENWIDTH;
+    
+    if(currentPageIndex!=index)
+    {
+        currentPageIndex = index;
+//        [_scrollView setContentOffset:CGPointZero animated:YES];
+//        NSLog(@"停止滚动:%ld",currentPageIndex);
+    }
+    
 }
 
 #pragma mark -收藏
@@ -850,7 +876,7 @@
         flag = @"2";
     }
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",self.projectId],@"projectId",flag,@"flag", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",flag,@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestProjectCollect:)];
 }
@@ -922,6 +948,8 @@
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
+    
+    [self performSelector:@selector(updateLayoutNotification) withObject:nil afterDelay:0.5];
 }
 
 -(void)viewWillDisappear:(BOOL)animated

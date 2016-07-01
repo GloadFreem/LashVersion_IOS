@@ -85,7 +85,7 @@
         [_collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
         [_collectBtn setBackgroundColor:btnCray];
     }else{
-    [_collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",model.collectCount] forState:UIControlStateNormal];
+    [_collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",(long)model.collectCount] forState:UIControlStateNormal];
         [_collectBtn setBackgroundColor:btnGreen];
     }
 }

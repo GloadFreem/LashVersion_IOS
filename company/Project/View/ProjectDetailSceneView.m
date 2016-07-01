@@ -70,7 +70,7 @@
 {
     _projectId = projectId;
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",self.projectId],@"projectId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE postParam:dic type:0 delegate:self sel:@selector(requestProjectScene:)];
 }
@@ -102,7 +102,7 @@
 }
 -(void)startLoadPPT
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_pptPartner,@"partner",[NSString stringWithFormat:@"%ld",_sceneId],@"sceneId",[NSString stringWithFormat:@"%ld",_page],@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_pptPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_sceneId],@"sceneId",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_RECORDATA postParam:dic type:0 delegate:self sel:@selector(requestScenePPT:)];
 }
@@ -123,10 +123,10 @@
             for (NSInteger i = 0; i < _pptArray.count; i ++) {
                 ProjectPPTModel *model = _pptArray[i];
                 [_imageUrlArray addObject:model.imageUrl];
-                [_nextPageArray addObject:[NSString stringWithFormat:@"%ld",model.playTime]];
+                [_nextPageArray addObject:[NSString stringWithFormat:@"%ld",(long)model.playTime]];
                 
             }
-            NSLog(@"打印数组个数---%ld",_nextPageArray.count);
+            NSLog(@"打印数组个数---%ld",(unsigned long)_nextPageArray.count);
             
             _isPPT  = YES;
             
@@ -138,7 +138,7 @@
 
 -(void)startLoadComment
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_commentPartner,@"partner",[NSString stringWithFormat:@"%ld",_sceneId],@"sceneId",@"0",@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_sceneId],@"sceneId",@"0",@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
 }
@@ -324,7 +324,7 @@
                 ProjectPPTModel *model = _pptArray[i];
                 if (current >= model.startTime && current <= model.endTime) {
                     
-                    NSLog(@"当前ppt页数----%ld",model.sortIndex);
+                    NSLog(@"当前ppt页数----%ld",(long)model.sortIndex);
                     NSInteger currentPage = _bannerView.scrollView.contentOffset.x/SCREENWIDTH;
                     if (currentPage == _pptArray.count -2) {
                         _page ++;
@@ -340,7 +340,7 @@
             if (current) {
                 
                 if (current <= 59) {
-                    _label.text = [NSString stringWithFormat:@"00:00:%ld",current];
+                    _label.text = [NSString stringWithFormat:@"00:00:%ld",(long)current];
                     
                 }else if (60 < current  && current <= 3599 ){
                     NSInteger minute = current / 60;

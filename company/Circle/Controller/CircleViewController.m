@@ -10,7 +10,7 @@
 
 #import "AuthenticInfoBaseModel.h"
 
-
+#import "CircleShareBottomView.h"
 
 #import "CircleForwardVC.h"
 
@@ -31,6 +31,8 @@
 {
     id kcell;
     id kmodel;
+    
+    AuthenticInfoBaseModel * authenticInfoModel;
 }
 @property (nonatomic,strong)UIView * bottomView;
 
@@ -38,15 +40,16 @@
 @property (nonatomic, copy) NSString *praisePartner;
 @property (nonatomic, copy) NSString *sharePartner;
 @property (nonatomic, copy) NSString *updateSharePartner;
-
-@property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSMutableArray *dataArray;  //数据数组
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, copy) NSString *flag;
 @property (nonatomic, strong) CircleListModel *listModel;
 @property (nonatomic, strong) CircleListCell *listCell;
 @property (nonatomic, assign) BOOL praiseSuccess;
+
+@property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic, copy) NSString *shareUrl; //分享地址
+@property (nonatomic, copy) NSString *contentText;
+
 @property (nonatomic, strong) CircleListModel *replaceListModel; //假model
 
 @property (nonatomic, assign) BOOL isFirst;
@@ -80,9 +83,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(publishContent:) name:@"publish" object:nil];
     //下载数据
     [self loadData];
-    
     //下载认证信息
-//    [self loadAuthenData];
+    [self loadAuthenData];
 }
 
 #pragma mark -下载认证信息
@@ -103,8 +105,8 @@
         if ([status integerValue] == 200) {
             NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
             
-            AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
-            NSLog(@"打印个人信息：----%@",baseModel);
+            authenticInfoModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
+            NSLog(@"打印个人信息：----%@",authenticInfoModel);
 //
         }
     }
@@ -115,11 +117,48 @@
 {
     NSMutableArray* uploadFiles =[[dic valueForKey:@"userInfo"] valueForKey:@"uploadFiles"];
     NSString* content = [[dic valueForKey:@"userInfo"] valueForKey:@"content"];
+    
+    //实例化圈子模型
+    CircleListModel *listModel = [CircleListModel new];
+    //拿到usrs认证数组
+    NSArray *authenticsArray = [NSArray arrayWithArray:authenticInfoModel.authentics];
+    //实例化认证人模型
+    CircleUsersAuthenticsModel *usersAuthenticsModel =authenticsArray[0];
+    //一级模型赋值
+    listModel.timeSTr = [TDUtil CurrentDate];              //发布时间
+    listModel.iconNameStr = authenticInfoModel.headSculpture; //发布者头像
+    listModel.nameStr = usersAuthenticsModel.name;              //发布者名字
+    listModel.msgContent = content;
+    listModel.publicContentId = 0; //帖子ID
+    listModel.shareCount = 0;           //分享数量
+    listModel.commentCount = 0;       //评论数量
+    listModel.priseCount = 0;           //点赞数量
+    listModel.flag = false;
+   
+    
+    listModel.addressStr = usersAuthenticsModel.companyAddress;
+    listModel.companyStr = usersAuthenticsModel.companyName;
+    listModel.positionStr = usersAuthenticsModel.position;
+    NSMutableArray *picArray = [NSMutableArray array];
+    for (NSInteger i = 0; i < uploadFiles.count; i ++) {
+        [picArray addObject:uploadFiles[i]];
+    }
+    listModel.picNamesArray = [NSArray arrayWithArray:picArray];
+    
+    [_dataArray insertObject:listModel atIndex:0];
+    
+    [self performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+
+  
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",content,@"content", nil];
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_PUBLIC_FEELING postParam:dict files:uploadFiles postName:@"images" type:0 delegate:self sel:@selector(requestPublishContent:)];
     
 }
 
+-(void)reloadData
+{
+    [self.tableView reloadData];
+}
 -(void)requestPublishContent:(ASIHTTPRequest*)request
 {
     NSString* jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
@@ -316,6 +355,8 @@
     CircleListModel *listModel = _dataArray[indexPath.row];
     
     CircleDetailVC *detail = [CircleDetailVC new];
+    detail.indexPath = indexPath;
+    detail.viewController = self;
     detail.publicContentId  =listModel.publicContentId;//帖子ID
     detail.page = 0;
     [self.navigationController pushViewController:detail animated:YES];
@@ -367,7 +408,10 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
+            
             _shareUrl = dataDic[@"url"];
+            _shareImage = dataDic[@"image"];
+            _contentText = dataDic[@"content"];
             
             //开始分享
             [self startShare];
@@ -402,6 +446,7 @@
     }
 }
 
+
 -(void)startShare
 {
     NSArray *titleList = @[@"QQ",@"微信",@"朋友圈",@"短信"];
@@ -420,8 +465,8 @@
     //分享
     if (view.tag == 1) {
         //得到用户SID
-//        UIImage * shareImage = [UIImage imageNamed:@"share_jixiangwu"];
-        NSString *shareContentString = [NSString stringWithFormat:@"快来一起玩\n%@",_shareUrl];
+        NSString * shareImage = _shareImage;
+        NSString *shareContentString = [NSString stringWithFormat:@"%@",_contentText];
         NSArray *arr = nil;
         NSString *shareContent;
         
@@ -432,8 +477,8 @@
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投";
+                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
                 }
                 else
                 {
@@ -441,7 +486,7 @@
                     [alert show];
                     return;
                 }
-
+                
             }
                 break;
             case 1:{
@@ -449,10 +494,10 @@
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
                 
-//                NSLog(@"分享到微信");
+                //                NSLog(@"分享到微信");
             }
                 break;
             case 2:{
@@ -460,10 +505,10 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
                 
-//                NSLog(@"分享到朋友圈");
+                //                NSLog(@"分享到朋友圈");
             }
                 break;
             case 3:{
@@ -471,7 +516,7 @@
                 arr = @[UMShareToSms];
                 shareContent = shareContentString;
                 
-//                NSLog(@"分享短信");
+                //                NSLog(@"分享短信");
             }
                 break;
             case 100:{
@@ -485,10 +530,13 @@
         {
             return;
         }
-//        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-//            shareImage = nil;
-//        }
-        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:nil presentedController:self completion:^(UMSocialResponseEntity *response){
+        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
+            shareImage = nil;
+        }
+        UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
+                                            shareImage];
+        
+        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -596,6 +644,11 @@
 {
     [super viewWillDisappear:animated];
     
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"publish" object:nil];
+}
+
+-(void)dealloc
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"publish" object:nil];
 }
 

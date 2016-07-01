@@ -26,6 +26,7 @@
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if ([super initWithFrame:frame]) {
+        _isFirst = YES;
         [self createUI];
     }
     return self;
@@ -74,6 +75,15 @@
         make.left.mas_equalTo(kLeftSpace);
         make.width.height.mas_equalTo(46);
         make.bottom.mas_equalTo(_scrollView.mas_bottom).offset(-10);
+    }];
+    //进度条
+    _progress = [[ZMProgressView alloc]initWithLineColor:orangeColor loopColor:[UIColor clearColor]];
+    _progress.backgroundColor = [UIColor clearColor];
+    [self addSubview:_progress];
+    [_progress mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(_firstBottomImage.mas_centerX);
+        make.centerY.mas_equalTo(_firstBottomImage.mas_centerY);
+        make.width.height.mas_equalTo(46);
     }];
     
 //    UIImage * second = [UIImage imageNamed:@"椭圆-4-拷贝"];
@@ -252,7 +262,7 @@
             btn.tag = i;
             btn.frame = CGRectMake(4*SCREENWIDTH, 0, SCREENWIDTH, SCROLLVIEWHEIGHT - 45);
             [btn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.image]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
-//            [btn setBackgroundImage:[UIImage imageNamed:@"c9d8be32534701.568974395e076"] forState:UIControlStateNormal];
+
             [_scrollView addSubview:btn];
             
         }
@@ -269,6 +279,15 @@
             
             _firstLabel.text = model.name;
             _secondLabel.text = model.desc;
+            _progress.hidden = NO;
+            _progress.title = @"W";
+            if (_isFirst) {
+               _progress.animatable = YES;
+            }
+            CGFloat finalCount = model.financedMount;
+            CGFloat percent = finalCount / model.financeTotal * 100;
+            _progress.percent = percent;
+            _isFirst = NO;
             
         }else{
             _coverView.hidden = YES;
@@ -276,6 +295,7 @@
 //            _pageControl.hidden = YES;
             _firstLabel.hidden = YES;
             _secondLabel.hidden = YES;
+            _progress.hidden = YES;
         }
     }
     [self layoutSubviews];
@@ -337,6 +357,15 @@
         
         _firstLabel.text = model.name;
         _secondLabel.text = model.desc;
+        _progress.hidden = NO;
+        _progress.title = @"W";
+        if (_isFirst) {
+            _progress.animatable = YES;
+        }
+        CGFloat finalCount = model.financedMount;
+        CGFloat percent = finalCount / model.financeTotal * 100;
+        _progress.percent = percent;
+        _isFirst = NO;
         
     }else{
         _coverView.hidden = YES;
@@ -344,6 +373,7 @@
 //        _pageControl.hidden = YES;
         _firstLabel.hidden = YES;
         _secondLabel.hidden = YES;
+        _progress.hidden = YES;
     }
     [self layoutSubviews];
     

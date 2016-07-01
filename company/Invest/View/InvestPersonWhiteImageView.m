@@ -35,6 +35,27 @@
     _rightBtn.layer.masksToBounds = YES;
     
 }
+
+-(void)setAreas:(NSArray *)areas
+{
+    _areas = areas;
+    
+    if (areas.count == 1) {
+        _leftBtn.hidden = YES;
+        _rightBtn.hidden = YES;
+        [_middleBtn setTitle:areas[0] forState:UIControlStateNormal];
+    }
+    if (areas.count == 2) {
+        _middleBtn.hidden = YES;
+        [_leftBtn setTitle:areas[0] forState:UIControlStateNormal];
+        [_rightBtn setTitle:areas[1] forState:UIControlStateNormal];
+    }
+    if (areas.count == 3) {
+        [_leftBtn setTitle:areas[0] forState:UIControlStateNormal];
+        [_middleBtn setTitle:areas[1] forState:UIControlStateNormal];
+        [_rightBtn setTitle:areas[2] forState:UIControlStateNormal];
+    }
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "CircleViewController.h"
 @interface CircleDetailVC : RootViewController
 
 @property (nonatomic, assign) NSInteger publicContentId;
 
 @property (nonatomic, assign) NSInteger page;
+
+@property (nonatomic, retain)NSIndexPath * indexPath;
+
+@property (nonatomic, assign)CircleViewController * viewController;
 
 @end

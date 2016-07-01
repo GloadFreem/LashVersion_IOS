@@ -32,15 +32,22 @@
     NSArray *roadshowsArray = model.project.roadshows;
     DetailRoadshows *roadShow = roadshowsArray[0];
     
-    _headerModel.goalStr = [NSString stringWithFormat:@"%ld",roadShow.roadshowplan.financeTotal];
-    _headerModel.achieveStr = [NSString stringWithFormat:@"%ld",roadShow.roadshowplan.financedMount];
+    _headerModel.financedMount = roadShow.roadshowplan.financedMount;
+    _headerModel.financeTotal = roadShow.roadshowplan.financeTotal;
+    
+    _headerModel.goalStr = [NSString stringWithFormat:@"%ld万",(long)roadShow.roadshowplan.financeTotal];
+    _headerModel.achieveStr = [NSString stringWithFormat:@"%ld万",(long)roadShow.roadshowplan.financedMount];
 //    _headerModel.timeStr =
     NSString *startTime = [roadShow.roadshowplan.beginDate componentsSeparatedByString:@" "][0];
     NSString *endTime = [roadShow.roadshowplan.endDate componentsSeparatedByString:@" "][0];
-    _headerModel.timeStr = [NSString stringWithFormat:@"%@——%@",startTime,endTime];
+    startTime = [startTime stringByReplacingOccurrencesOfString:@"-" withString:@"."];
+    endTime = [endTime stringByReplacingOccurrencesOfString:@"-" withString:@"."];
+    
+    _headerModel.timeStr = [NSString stringWithFormat:@"%@—%@",startTime,endTime];
     _headerModel.addressStr = model.project.address;
     _headerModel.statusStr = model.project.financestatus.name;
     _headerModel.content = model.project.desc;
+    
     NSMutableArray *photoArr = [NSMutableArray array];
     NSArray *picArray = [NSArray arrayWithArray:model.project.projectimageses];
     for (NSInteger i = 0; i < picArray.count; i ++) {

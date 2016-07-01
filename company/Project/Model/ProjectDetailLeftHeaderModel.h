@@ -23,6 +23,10 @@
 @property (nonatomic, copy) NSString *content;
 @property (nonatomic, strong) NSArray *pictureArray;
 
+@property (nonatomic, assign) NSInteger financeTotal;
+
+@property (nonatomic, assign) NSInteger financedMount;
+
 @property (nonatomic, assign) BOOL isOpen;
 @property (nonatomic, assign) BOOL shouldShowMoreButton;
 

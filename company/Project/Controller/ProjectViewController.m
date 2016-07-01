@@ -25,9 +25,12 @@
 #import "ProjectDetailController.h"
 #import "ProjectPrepareDetailVC.h"
 
+#define HASMESSAGE @"requestHasMessageInfo"
 #define AUTHENINFO @"authenticInfoUser"
 #define PROJECTLIST @"requestProjectList"
 #define BANNERSYSTEM @"bannerSystem"
+#define VERSIONINFO @"versionInfoSystem"
+
 #define BannerHeight  SCREENWIDTH * 0.5 + 45
 @interface ProjectViewController ()<UITableViewDataSource,UITableViewDelegate,ProjectBannerViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -44,6 +47,18 @@
 @property (nonatomic, assign) NSInteger projectPage;
 @property (nonatomic, assign) NSInteger roadPage;
 @property (nonatomic, copy) NSString *type;
+
+@property (nonatomic, copy) NSString *hasMessagePartner;
+@property (nonatomic, assign) BOOL hasMessage;
+@property (nonatomic, strong) UIButton *letterBtn;
+
+//版本更新
+@property (nonatomic, copy) NSString *versionStr;
+@property (nonatomic, copy) NSString *contentStr;
+@property (nonatomic, copy) NSString *url;
+@property (nonatomic, assign) BOOL isForce;
+@property (nonatomic, copy) NSString *versionPartner;
+
 @end
 
 @implementation ProjectViewController
@@ -73,6 +88,12 @@
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTLIST];
     //获得认证partner
     self.authenPartner = [TDUtil encryKeyWithMD5:KEY action:AUTHENINFO];
+    //站内信
+    self.hasMessagePartner = [TDUtil encryKeyWithMD5:KEY action:HASMESSAGE];
+    //版本更新
+    self.versionPartner = [TDUtil encryKeyWithMD5:KEY action:VERSIONINFO];
+    
+    [self loadMessage];
     
     [self startLoadBannerData];
     
@@ -82,7 +103,30 @@
 
     [self createUI];
     
+//    [self loadVersion];
+}
+-(void)loadMessage
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.hasMessagePartner,@"partner", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_HASMESSAGE_INFO postParam:dic type:1 delegate:self sel:@selector(requestMessageInfo:)];
     
+}
+-(void)requestMessageInfo:(ASIHTTPRequest*)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+//        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status =[jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *data = jsonDic[@"data"];
+            _hasMessage = [data[@"flag"] boolValue];
+            
+        }else{
+        
+        }
+    }
 }
 #pragma mark -下载认证信息
 -(void)loadAuthenData
@@ -148,7 +192,7 @@
 -(void)requestProjectList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (_page == 0) {
@@ -313,11 +357,16 @@
     letterBtn.tag = 0;
     //通过判断返回数据状态来决定背景图片
 //    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+    if (_hasMessage) {//message_new@2x
+        [letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
+    }else{
     [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+    }
+    
     letterBtn.size = letterBtn.currentBackgroundImage.size;
     [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
-    
+    _letterBtn = letterBtn;
 //    UIButton *upLoadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
 //    upLoadBtn.tag = 1;
 //    [upLoadBtn setBackgroundImage:[UIImage imageNamed:@"upLoad"] forState:UIControlStateNormal];
@@ -362,6 +411,8 @@
 -(void)buttonCilck:(UIButton*)button
 {
     if (button.tag == 0) {
+        //改变已读
+        [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
         
         ProjectLetterViewController *letter = [ProjectLetterViewController new];
         //隐藏tabbar
@@ -505,5 +556,87 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+#pragma mark--------版本更新----------
+-(void)loadVersion
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.versionPartner,@"partner",@"1",@"platform", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:VERSIONINFOSYSTEM postParam:dic type:0 delegate:self sel:@selector(requestVersion:)];
+}
+-(void)requestVersion:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+//    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *dataDic = jsonDic[@"data"];
+            _versionStr = dataDic[@"versionStr"];
+            _contentStr = dataDic[@"content"];
+            _url = dataDic[@"url"];
+            _isForce = [dataDic[@"isForce"] boolValue];
+            //利用key取到对应的版本（当前版本）
+            NSString * version =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            if (_isForce) {//强更
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:_contentStr delegate:self cancelButtonTitle:@"更新" otherButtonTitles:nil];
+                alertView.delegate =self;
+                alertView.tag = 20;
+                [alertView show];
+            }else{
+                NSArray *currentArray = [version componentsSeparatedByString:@"."];
+//                NSLog(@"本地----%@",currentArray);
+                NSArray *upArray = [_versionStr componentsSeparatedByString:@"."];
+                if ([currentArray[0] integerValue] < [upArray[0] integerValue]) {
+                    [self alertViewShow];
+                }else{
+                    if ([upArray[1] integerValue] > [currentArray[1] integerValue]) {
+                        [self alertViewShow];
+                    }else{
+                        if ([upArray[2] integerValue] > [currentArray[2] integerValue]) {
+                            [self alertViewShow];
+                            
+                        }else{
+//                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:@"当前版本为最新版本，无需更新" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//                            //                            alertView.delegate =self;
+//                            //                            alertView.tag = 20;
+//                            [alertView show];
+                            
+                        }
+                        
+                        
+                    }
+                }
+                
+            }
+        }
+    }
+}
+
+-(void)alertViewShow
+{
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:_contentStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"更新", nil];
+    alertView.tag = 21;
+    [alertView show];
+}
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    //强更
+    if (alertView.tag == 20) {
+        if (buttonIndex == 0) {
+            UIApplication *application = [UIApplication sharedApplication];
+            [application openURL:[NSURL URLWithString:_url]];
+        }
+    }
+    
+    if (alertView.tag == 21) {
+        if (buttonIndex == 0) {
+            
+        }else{
+            UIApplication *application = [UIApplication sharedApplication];
+            [application openURL:[NSURL URLWithString:_url]];
+        }
+    }
+}
 
 @end

@@ -62,7 +62,7 @@
 
 -(void)startLoadData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%ld",_page],@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestCommentList:)];
 }
@@ -174,7 +174,7 @@
 -(void)sendMessage:(UIButton*)btn
 {
     if (self.textView.text && ![self.textView.text isEqualToString:@""]) {
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentpartner,@"partner",[NSString stringWithFormat:@"%ld",self.projectId],@"projectId",[NSString stringWithFormat:@"%@",self.textView.text],@"content", nil];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentpartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%@",self.textView.text],@"content", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestComment:)];
         

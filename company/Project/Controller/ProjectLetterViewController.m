@@ -10,7 +10,12 @@
 #import "ProjectLetterCell.h"
 #import "ProjectLetterModel.h"
 
+#import "PingTaiWebViewController.h"
+#import "LetterDetailViewController.h"
+
 #import "LetterBaseModel.h"
+#define READMESSAGE @"requestHasReadMessage"
+#define DELETEMESSAGE @"requestDeleteInnerMessage"
 #define INNERMESSAGE @"requestInnerMessageList"
 @interface ProjectLetterViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -26,6 +31,10 @@
 
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, copy) NSString *messagePartner;
+@property (nonatomic, copy) NSString *deletePartner;
+@property (nonatomic, copy) NSString *readPartner;
+
+@property (nonatomic,strong) LetterBaseModel *readModel;
 
 @end
 
@@ -40,14 +49,17 @@
     if (!_deleteArray) {
         _deleteArray = [NSMutableArray array];
     }
+    self.view.backgroundColor = [UIColor whiteColor];
     //获得partner
     self.messagePartner = [TDUtil encryKeyWithMD5:KEY action:INNERMESSAGE];
+    self.deletePartner = [TDUtil encryKeyWithMD5:KEY action:DELETEMESSAGE];
+    self.readPartner = [TDUtil encryKeyWithMD5:KEY action:READMESSAGE];
     
     _page = 0;
-    
+    [self setAutomaticallyAdjustsScrollViewInsets:NO];
     [self startLoadData];
     
-//    [self createTableView];
+    [self createTableView];
     
     [self setupNav];
     
@@ -63,7 +75,7 @@
 -(void)requestMessageList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-            NSLog(@"返回:%@",jsonString);
+//            NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -76,14 +88,12 @@
             NSArray *modelArray = [LetterBaseModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
             for (NSInteger i = 0; i < modelArray.count; i ++) {
                 LetterBaseModel *baseModel = modelArray[i];
-                ProjectLetterModel *model = [ProjectLetterModel new];
-                model.title = baseModel.title;
-                model.secondTitle = baseModel.messagetype.name;
-//                model.time = baseModel
+                [_dataArray addObject:baseModel];
             }
             
             
             [self.tableView reloadData];
+            
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
@@ -100,25 +110,26 @@
 -(void)createTableView
 {
     _tableView = [[UITableView alloc]init];
+    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _tableView.delegate =self;
     _tableView.dataSource =self;
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    [self.view addSubview:_tableView];
+    
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
     [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
-    //    tableView.mj_footer.hidden = YES;
-    _tableView.mj_footer.automaticallyHidden = NO;
-    
+   
+    [self.view addSubview:_tableView];
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.view.mas_left);
         make.top.mas_equalTo(self.view.mas_top);
         make.right.mas_equalTo(self.view.mas_right);
-        make.bottom.mas_equalTo(self.view.bottom);
+        make.bottom.mas_equalTo(self.view.bottom).offset(0);
+//        make.height.mas_equalTo(SCREENHEIGHT-64);
     }];
     
 }
@@ -206,31 +217,26 @@
         make.left.mas_equalTo(self.view);
         make.right.mas_equalTo(self.view);
         make.bottom.mas_equalTo(self.view);
-        make.height.mas_equalTo(48*HEIGHTCONFIG);
+        make.height.mas_equalTo(48);
     }];
     //初始化全选按钮
     _allSelectedBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_allSelectedBtn setBackgroundImage:[UIImage imageNamed:@"letterUnselected"] forState:UIControlStateNormal];
+    [_allSelectedBtn setImage:[UIImage imageNamed:@"letterUnselected"] forState:UIControlStateNormal];
+    [_allSelectedBtn setTitle:@"全选" forState:UIControlStateNormal];
+    _allSelectedBtn.titleLabel.textColor = [UIColor whiteColor];
+    _allSelectedBtn.titleLabel.font = BGFont(17);
+    
     [_allSelectedBtn setTag:5];
     [_allSelectedBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_allSelectedBtn setBackgroundImage:[UIImage imageNamed:@"letterSelected"] forState:UIControlStateSelected];
+    [_allSelectedBtn setImage:[UIImage imageNamed:@"letterSelected"] forState:UIControlStateSelected];
     [_bottomView addSubview:_allSelectedBtn];
     [_allSelectedBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(_bottomView);
-        make.left.mas_equalTo(_bottomView.mas_left).offset(18*WIDTHCONFIG);
+        make.left.mas_equalTo(_bottomView.mas_left);
+        make.width.mas_equalTo(80);
+        make.height.mas_equalTo(35);
     }];
-    //全选label
-    UILabel * label = [UILabel new];
-    label.text = @"全选";
-    label.font = BGFont(17);
-    label.textColor = [UIColor whiteColor];
-    label.textAlignment = NSTextAlignmentCenter;
-    [_bottomView addSubview:label];
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(_bottomView);
-        make.left.mas_equalTo(_allSelectedBtn.mas_right).offset(9*WIDTHCONFIG);
-        make.height.mas_equalTo(17);
-    }];
+
     //删除按钮
     _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_deleteBtn setTag:6];
@@ -269,14 +275,16 @@
     //如果编辑按钮未点击
     if (!_operateBtn.selected) {
         cell.selectImage.hidden = YES;
-        [cell relayoutCellWithModel:_dataArray[indexPath.row]];
-        return cell;
+//        [cell relayoutCellWithModel:_dataArray[indexPath.row]];
+//        return cell;
     }else{   // 出于编辑状态下
         cell.selectImage.hidden = NO;
         cell.titleLeftSpace.constant =41;
+        
     }
-    
     [cell relayoutCellWithModel:_dataArray[indexPath.row]];
+//    self.tableView.contentSize = CGSizeMake(SCREENWIDTH, _dataArray.count * 100);
+//    cell.backgroundColor = colorGray;
     return cell;
 }
 
@@ -284,17 +292,40 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (!_operateBtn.selected) {
-        NSLog(@"进入详情页面");
+//        ProjectLetterCell *cell = (ProjectLetterCell*)[tableView cellForRowAtIndexPath:indexPath];
+        LetterBaseModel *model = _dataArray[indexPath.row];
+        model.isRead = YES;
+        _readModel = model;
+        //刷新当前行
+        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [_tableView endUpdates];
+        //标记已读请求数据
+        [self readMessage];
+        //根据type值显示不同的界面类型 messageTypeId
+        
+        if (model.messagetype.messageTypeId == 1) {//进入webView
+            PingTaiWebViewController *web =[PingTaiWebViewController new];
+            web.url = model.url;
+            [self.navigationController pushViewController:web animated:YES];
+        }else{//进入自定义界面
+            LetterDetailViewController *detail = [LetterDetailViewController new];
+            detail.model = model;
+            [self.navigationController pushViewController:detail animated:YES];
+        }
+//        NSLog(@"进入详情页面");
+        
+        
+        
     }else{   //在编辑状态下
-        ProjectLetterModel *model = _dataArray[indexPath.row];
+        LetterBaseModel *model = _dataArray[indexPath.row];
         model.selectedStatus = !model.selectedStatus;  //改变model的选中状态
         [_deleteArray addObject:model];          //将选中的model加入删除数组
         //刷新表格
-        [_tableView reloadData];
+        [_tableView beginUpdates];
         //刷新当前行
         [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [_tableView endUpdates];
     }
-
 }
 -(void)btnClick:(UIButton*)btn
 {
@@ -308,12 +339,16 @@
         //判断tableView的长度
         if (!_bottomView.hidden) {
             [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.height.mas_equalTo(SCREENHEIGHT-48*SCREENHEIGHT);
+//                make.height.mas_equalTo(SCREENHEIGHT-48-64);
+                make.bottom.mas_equalTo(self.view.mas_bottom).offset(-48);
             }];
         }else{
-            [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.height.mas_equalTo(SCREENHEIGHT);
-            }];
+//            [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.height.mas_equalTo(SCREENHEIGHT-64);
+////                make.bottom.mas_equalTo(self.view.mas_bottom).offset(0);
+//            }];
+            _tableView.height = SCREENHEIGHT-64;
+            
             
         }
         
@@ -328,7 +363,7 @@
         [_deleteArray removeAllObjects];
         //改变model的选中状态
         for (NSInteger i=0; i<_dataArray.count; i++) {
-            ProjectLetterModel *model =_dataArray[i];
+            LetterBaseModel *model =_dataArray[i];
             model.selectedStatus = btn.selected;
             //将model加入删除数组
             if (model.selectedStatus) {
@@ -340,6 +375,8 @@
     }
     //删除按钮 点击事件
     if (btn.tag == 6) {
+        
+        [self deleteMessage];
         //将删除数组从原数组移除
         for (NSInteger i=0; i < _deleteArray.count; i++) {
             [_dataArray removeObject:_deleteArray[i]];
@@ -354,13 +391,69 @@
     }
     
 }
+#pragma mark----已读
+-(void)readMessage
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.readPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_readModel.messageId],@"messageId", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_HAS_READ_MESSAGE postParam:dic type:0 delegate:self sel:@selector(requestReadMessage:)];
+}
+-(void)requestReadMessage:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //            NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSLog(@"标记已读");
+        }else{
+        
+        }
+    }
+}
+#pragma mark----删除信息
+-(void)deleteMessage
+{
+    NSMutableString *mesStr = [[NSMutableString alloc]init];
+    for (NSInteger i =0; i < _deleteArray.count; i ++) {
+        LetterBaseModel *model = _deleteArray[i];
+        if (i == _deleteArray.count - 1) {
+        [mesStr appendFormat:@"%ld",(long)model.messageId];
+        }else{
+        [mesStr appendFormat:@"%ld,",(long)model.messageId];
+        }
+    }
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.deletePartner,@"partner",mesStr,@"messageId", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_DELETE_INNER_MESSAGE postParam:dic type:0 delegate:self sel:@selector(requestDeleteMessage:)];
+}
+-(void)requestDeleteMessage:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //            NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic != nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+        }else{
+        
+        }
+    }
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //显示tabbar
+    AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate ;
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
+}
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear: animated];
-    
-    //显示tabbar
-    AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate ;
-    [delegate.tabBar tabBarHidden:NO animated:NO];
     
 }
 - (void)didReceiveMemoryWarning {

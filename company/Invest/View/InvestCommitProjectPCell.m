@@ -41,8 +41,8 @@
     _companyLabel.text = model.fullName;
     _titleLabel.text = model.desc;
     
-    _personNumLabel.text = [NSString stringWithFormat:@"%ld",model.collectionCount];
-    _moneyLabel.text = [NSString stringWithFormat:@"%ld",model.financeTotal];
+    _personNumLabel.text = [NSString stringWithFormat:@"%ld",(long)model.collectionCount];
+    _moneyLabel.text = [NSString stringWithFormat:@"%ld",(long)model.financeTotal];
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

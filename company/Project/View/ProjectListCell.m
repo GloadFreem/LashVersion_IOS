@@ -83,7 +83,7 @@
     _progressView.percentUnit = @"%";
     _progressView.lineColor = orangeColor;
     _progressView.loopColor = [UIColor lightGrayColor];
-    NSLog(@"剩余时间---%@",model.endDate);
+//    NSLog(@"剩余时间---%@",model.endDate);
     
     _timeLabel.text = [self getDateCha:model.endDate];
     _projectLabel.text = model.abbrevName;

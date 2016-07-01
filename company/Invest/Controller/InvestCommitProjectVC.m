@@ -161,7 +161,7 @@
     if (btn.tag == 2) {
         if (self.textViewStr && self.textViewStr.length >= 20) {
             ProjectListProModel *listModel = _dataArray[0];
-            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",listModel.projectId],@"projectId",self.textViewStr,@"content",[NSString stringWithFormat:@"%@",self.model.userId],@"userId", nil];
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)listModel.projectId],@"projectId",self.textViewStr,@"content",[NSString stringWithFormat:@"%@",self.model.userId],@"userId", nil];
             //开始请求
             [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COMMIT postParam:dic type:0 delegate:self sel:@selector(requestUpProject:)];
             

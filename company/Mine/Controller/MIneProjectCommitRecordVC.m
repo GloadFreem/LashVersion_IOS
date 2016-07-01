@@ -40,7 +40,7 @@
 }
 -(void)startLoadData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%ld",_page],@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     //    开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COMMIT_RECORD postParam:dic type:0 delegate:self sel:@selector(requestList:)];
 }

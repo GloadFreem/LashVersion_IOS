@@ -16,11 +16,20 @@
 }
 
 
--(void)relayoutCellWithModel:(ProjectLetterModel*)model
+-(void)relayoutCellWithModel:(LetterBaseModel*)model
 {
     _model = model;
     _titleLabel.text = model.title;
-    _timeLabel.text = model.time;
+    _timeLabel.text = model.messageDate;
+    _secondTitle.text = model.messagetype.name;
+    _contentLabel.text = model.content;
+    
+    if (model.isRead) {
+        [_redPointImage setHidden:YES];
+    }else{
+        [_redPointImage setHidden:NO];
+    }
+    
     if (_model.selectedStatus) {
         [_selectImage setImage:[UIImage imageNamed:@"letterSelected"]];
     }else{

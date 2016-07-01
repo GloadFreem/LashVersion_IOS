@@ -378,7 +378,7 @@
                 cell.rightLabel.textColor = color47;
             }
             
-            NSLog(@"cell row:%ld",indexPath.row);
+            NSLog(@"cell row:%ld",(long)indexPath.row);
         }
         
         

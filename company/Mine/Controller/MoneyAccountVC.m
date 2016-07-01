@@ -108,12 +108,16 @@
 -(void)setModel
 {
     _numLabel.text = _number;
-//    _textLabel.text = [TDUtil translation:_number];
+    NSArray *arr1 = [_number componentsSeparatedByString:@"."];
+    
+    _textLabel.text = [TDUtil translation:arr1[0]];
     
     _avalableAmount.text = _avalable;
-//    _leftText.text = [TDUtil translation:_avalable];
+    NSArray *arr2 = [_avalable componentsSeparatedByString:@"."];
+    _leftText.text = [TDUtil translation:arr2[0]];
     _freezonAmount.text = _freezon;
-//    _rightText.text = [TDUtil translation:_freezon];
+    NSArray *arr3 = [_freezon componentsSeparatedByString:@"."];
+    _rightText.text = [TDUtil translation:arr3[0]];
     
 }
 

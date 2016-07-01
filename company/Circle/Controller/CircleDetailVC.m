@@ -97,6 +97,7 @@
             [SVProgressHUD dismiss];
             //解析数据  将data字典转换为BaseModel
 //            NSLog(@"data字典---%@",jsonDic[@"data"]);
+            
             NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
             //实例化数据模型
             CircleListModel *listModel = [CircleListModel new];
@@ -201,7 +202,7 @@
 -(void)loadMoreData
 {
 //    [self.tableView.mj_header beginRefreshing];
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%d",27],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestCircleDetailMore:)];
 }
@@ -275,6 +276,20 @@
     [delegate.tabBar tabBarHidden:NO animated:NO];
     
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
+    
+    
+    //更新列表点赞状态
+    if (_viewController && _indexPath) {
+        
+        CircleListModel * model = [_viewController.dataArray objectAtIndex:_indexPath.row];
+        
+        model.flag = _listModel.flag;
+        model.priseCount = _listModel.priseCount;
+//        model.commentCount = _listModel.commentCount;
+        [_viewController.dataArray replaceObjectAtIndex:_indexPath.row withObject:model];
+        
+        [_viewController.tableView reloadData];
+    }
 }
 #pragma mark -设置导航栏
 -(void)setupNav
@@ -417,7 +432,7 @@
     
     id model = self.dataArray[indexPath.row];
     if (indexPath.row == 0) {
-        return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]];
+        return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+20;
     }
     return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleDetailCommentCell class] contentViewWidth:[self cellContentViewWith]];
 }
@@ -489,7 +504,7 @@
     }
     
     
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentPartner,@"partner",[NSString stringWithFormat:@"%d",27],@"contentId",[NSString stringWithFormat:@"%@",self.textField.text],@"content",[NSString stringWithFormat:@"%@",_userId],@"atUserId",_flag,@"flag",nil];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentPartner,@"partner",[NSString stringWithFormat:@"%ld",self.publicContentId],@"contentId",[NSString stringWithFormat:@"%@",self.textField.text],@"content",[NSString stringWithFormat:@"%@",_userId],@"atUserId",_flag,@"flag",nil];
    
     
     //开始请求
@@ -508,7 +523,6 @@
             [_textField resignFirstResponder];
             //发表成功 刷新tableView
             [self loadData];
-            
         }
     }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -530,18 +544,44 @@
     //请求更新数据数据
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.praisePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId",_praiseFlag,@"flag", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:CYCLE_CELL_PRAISE postParam:dic type:0 delegate:self sel:@selector(requestPraiseStatus:)];
+    [self.httpUtil getDataFromAPIWithOps:CYCLE_CELL_PRAISE postParam:dic type:1 delegate:self sel:@selector(requestPraiseStatus:)];
+    
+    NSUserDefaults * data = [NSUserDefaults standardUserDefaults];
+    NSString *  name =[data valueForKey:USER_STATIC_NAME];
     if (_praiseSuccess) {
         if (model.flag) {
+            
+           
+            if(model.priseLabel.length>0)
+            {
+                model.priseLabel = [STRING(@"%@，", name) stringByAppendingString:model.priseLabel];
+            }else{
+                model.priseLabel = [name stringByAppendingString:model.priseLabel];
+            }
+            
             [cell.praiseBtn setImage:[UIImage imageNamed:@"iconfont-dianzan"] forState:UIControlStateNormal];
             model.priseCount ++;
             [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
         }else{
             [cell.praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
-            model.priseCount --;
+            if (model.priseCount>0) {
+                model.priseCount --;
+            }
+            
             [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
+            if(model.priseLabel.length>name.length)
+            {
+                model.priseLabel = [model.priseLabel stringByReplacingOccurrencesOfString:STRING(@"%@，", name) withString:@""];
+            }else{
+                model.priseLabel = [model.priseLabel stringByReplacingOccurrencesOfString:name withString:@""];
+            }
+            
         }
         
+        cell.model = model;
+        
+        
+        _listModel = model;
     }
 }
 

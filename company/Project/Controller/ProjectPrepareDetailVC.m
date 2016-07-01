@@ -39,6 +39,7 @@
 @property (nonatomic, copy) NSString *collectPartner;
 
 @property (nonatomic, copy) NSString *sharePartner;
+@property (nonatomic, copy) NSString *shareContent;
 @property (nonatomic, copy) NSString *shareurl;
 @property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic,strong)UIView * bottomView;
@@ -71,7 +72,7 @@
 -(void)startLoadData
 {
     [SVProgressHUD show];
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",_projectId],@"projectId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_projectId],@"projectId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestProjectDetail:)];
 }
@@ -106,7 +107,7 @@
 
 -(void)loadShareData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",[NSString stringWithFormat:@"%ld",self.projectId],@"projectId",@"1",@"type", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",@"1",@"type", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUESTPROJECTSHARE postParam:dic type:0 delegate:self sel:@selector(requestShare:)];
 }
@@ -121,6 +122,7 @@
             NSDictionary *dic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
             _shareurl  = dic[@"url"];
             _shareImage = dic[@"image"];
+            _shareContent = dic[@"content"];
         }
     }
 }
@@ -239,7 +241,7 @@
     if (_collectCount == 0) {
     [_collectBtn setTitle:[NSString stringWithFormat:@" 关注"] forState:UIControlStateNormal];
     }else{
-    [_collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",_collectCount] forState:UIControlStateNormal];
+    [_collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",(long)_collectCount] forState:UIControlStateNormal];
     }
     [_collectBtn addTarget:self action:@selector(collectClick:) forControlEvents:UIControlEventTouchUpInside];
     [bottomView addSubview:_collectBtn];
@@ -262,7 +264,7 @@
         flag = @"2";
     }
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",self.projectId],@"projectId",flag,@"flag", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",flag,@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestProjectCollect:)];
 }
@@ -284,7 +286,7 @@
             if (_collectCount == 0) {
                 [_collectBtn setTitle:[NSString stringWithFormat:@" 关注"] forState:UIControlStateNormal];
             }else{
-                [_collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",_collectCount] forState:UIControlStateNormal];
+                [_collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",(long)_collectCount] forState:UIControlStateNormal];
             }
             
             
@@ -355,8 +357,8 @@
     //分享
     if (view.tag == 1) {
         //得到用户SID
-        //        UIImage * shareImage = [UIImage imageNamed:@"share_jixiangwu"];
-        NSString *shareContentString = [NSString stringWithFormat:@"快来一起玩\n%@",_shareurl];
+        NSString * shareImage = _shareImage;
+        NSString *shareContentString = [NSString stringWithFormat:@"%@",_shareContent];
         NSArray *arr = nil;
         NSString *shareContent;
         
@@ -367,8 +369,8 @@
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareurl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投";
+                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
                 }
                 else
                 {
@@ -384,10 +386,10 @@
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
                 
-                NSLog(@"分享到微信");
+//                NSLog(@"分享到微信");
             }
                 break;
             case 2:{
@@ -395,10 +397,10 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
                 
-                NSLog(@"分享到朋友圈");
+//                NSLog(@"分享到朋友圈");
             }
                 break;
             case 3:{
@@ -406,7 +408,7 @@
                 arr = @[UMShareToSms];
                 shareContent = shareContentString;
                 
-                NSLog(@"分享短信");
+//                NSLog(@"分享短信");
             }
                 break;
             case 100:{
@@ -420,10 +422,13 @@
         {
             return;
         }
-        //        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-        //            shareImage = nil;
-        //        }
-        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:nil presentedController:self completion:^(UMSocialResponseEntity *response){
+                if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
+                    shareImage = nil;
+                }
+        UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
+                                            shareImage];
+        
+        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{

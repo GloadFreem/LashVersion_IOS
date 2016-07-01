@@ -80,7 +80,7 @@
             UIImageView *imageView = [_imageViewArray objectAtIndex:index];
             imageView.hidden = NO;
             //设置图片
-            [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_pictureStringArray[index]]]];
+            [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_pictureStringArray[index]]]];// 
 
 //            imageView.image = [UIImage imageNamed:_pictureStringArray[index]];
             imageView.frame = CGRectMake((margin + imageW) * column, row * (margin + imageH), imageW, imageH);
@@ -100,7 +100,14 @@
         UIImageView *imageView = [_imageViewArray objectAtIndex:index];
         imageView.hidden = NO;
         //设置图片
-        [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_pictureStringArray[index]]]];//        imageView.image = [UIImage imageNamed:_pictureStringArray[index]];
+               imageView.image = [UIImage imageNamed:_pictureStringArray[index]];
+        NSString * name = _pictureStringArray[index];
+        if ([name containsString:@"http"]) {
+            [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_pictureStringArray[index]]]];//
+            
+        }else{
+            imageView.image = [TDUtil loadContent:_pictureStringArray[index]];
+        }
         imageView.frame = CGRectMake((margin + imageW) * column, row * (margin + imageH), imageW, imageH);
     }
     w = 3 * imageW + 2 * margin;

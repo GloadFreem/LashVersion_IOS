@@ -99,15 +99,6 @@
                             <constraint firstAttribute="width" constant="1" id="dfQ-xP-ABt"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="16" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y0O-0s-J4B">
-                        <rect key="frame" x="139.5" y="124" width="17.5" height="16"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="16" id="Bcq-QU-519"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bU5-RN-dS5" userLabel="secondShuView">
                         <rect key="frame" x="108.5" y="131" width="1" height="25"/>
                         <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -182,6 +173,15 @@
                             <constraint firstAttribute="width" constant="27" id="xQ3-LH-vct"/>
                         </constraints>
                     </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="16" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y0O-0s-J4B">
+                        <rect key="frame" x="139" y="124" width="17.5" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="16" id="Bcq-QU-519"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="Y0O-0s-J4B" firstAttribute="centerY" secondItem="Y18-Lg-bSZ" secondAttribute="centerY" id="28c-iQ-d0y"/>
@@ -264,7 +264,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Avatar-icon.png" width="40" height="40"/>
+        <image name="Avatar-icon.png" width="15" height="15"/>
         <image name="image-point.png" width="268" height="1"/>
         <image name="part_image.png" width="375" height="3"/>
     </resources>

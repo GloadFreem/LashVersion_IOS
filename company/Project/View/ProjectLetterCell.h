@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "ProjectLetterModel.h"
+
+#import "LetterBaseModel.h"
 @interface ProjectLetterCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *selectImage;
 
@@ -18,10 +20,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLeftSpace;
+@property (weak, nonatomic) IBOutlet UIImageView *redPointImage;
 
-@property (nonatomic, strong) ProjectLetterModel *model;    //
+//@property (nonatomic, strong) ProjectLetterModel *model;     //
 
--(void)relayoutCellWithModel:(ProjectLetterModel*)model;
+@property (nonatomic, strong) LetterBaseModel *model;
+
+-(void)relayoutCellWithModel:(LetterBaseModel*)model;
 
 
 @end

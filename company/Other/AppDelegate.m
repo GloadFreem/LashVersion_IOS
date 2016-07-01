@@ -17,6 +17,8 @@
 #import "SetPassWordViewController.h"
 #import "MyNavViewController.h"
 
+#import "GuidePageViewController.h"
+
 #import "JPUSHService.h"
 #import "IQKeyboardManager.h"
 
@@ -47,9 +49,11 @@
     [self createViewControllers];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     
+    [NSThread sleepForTimeInterval:2];
     
     //获取缓存数据
     NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
+    NSString* isStart= [data valueForKey:@"isStart"];
     NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
     NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
     //激光推送Id
@@ -58,39 +62,45 @@
     
     [self isLogin];
     
-    if (isLogin)
-    {
-        [_window setRootViewController:_tabBar];
-        
-    }else{
-        
-        if (phoneNumber && password)
+    if (isStart && [isStart isEqualToString:@"true"]) {
+        if (isLogin)
         {
-            NSString * string = [AES encrypt:DENGLU password:KEY];
-            self.partner = [TDUtil encryptMD5String:string];
-            NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
-            //开始请求
-            [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:1 delegate:self sel:@selector(requestLogin:)];
-            if (isSuccess)
+            [_window setRootViewController:_tabBar];
+            
+        }else{
+            
+            if (phoneNumber && password)
             {
-                
-                
-                [_window setRootViewController:_tabBar];
+                NSString * string = [AES encrypt:DENGLU password:KEY];
+                self.partner = [TDUtil encryptMD5String:string];
+                NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
+                //开始请求
+                [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:1 delegate:self sel:@selector(requestLogin:)];
+                if (isSuccess)
+                {
+                    
+                    
+                    [_window setRootViewController:_tabBar];
+                }else
+                {
+                    LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+                    
+                    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:login];
+                    [_window setRootViewController:nav];
+                }
             }else
             {
                 LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
                 
                 UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:login];
                 [_window setRootViewController:nav];
+                
             }
-        }else
-        {
-            LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
-            
-            UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:login];
-            [_window setRootViewController:nav];
-        
         }
+
+    }else{
+        GuidePageViewController *vc = [GuidePageViewController new];
+        [_window setRootViewController:vc];
     }
     
     

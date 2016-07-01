@@ -408,7 +408,7 @@
             [controller.dic setValue:self.abbrevName forKey:@"abbrevName"];
             [controller.dic setValue:self.fullName forKey:@"fullName"];
             [controller.dic setValue:self.borrowerUserNumber forKey:@"borrower_user_no"];
-            [controller.dic setValue:[NSString stringWithFormat:@"%ld",self.projectId] forKey:@"projectId"];
+            [controller.dic setValue:[NSString stringWithFormat:@"%ld",(long)self.projectId] forKey:@"projectId"];
             
             [controller.dic setValue:mount forKey:@"mount"];
             
@@ -465,7 +465,7 @@
             [controller.dic setValue:self.abbrevName forKey:@"abbrevName"];
             [controller.dic setValue:self.fullName forKey:@"fullName"];
             [controller.dic setValue:self.borrowerUserNumber forKey:@"borrower_user_no"];
-            [controller.dic setValue:[NSString stringWithFormat:@"%ld",self.projectId] forKey:@"projectId"];
+            [controller.dic setValue:[NSString stringWithFormat:@"%ld",(long)self.projectId] forKey:@"projectId"];
             
             [controller.dic setValue:mount forKey:@"mount"];
             

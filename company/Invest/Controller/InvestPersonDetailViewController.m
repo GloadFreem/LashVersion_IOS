@@ -23,6 +23,7 @@
 @property (nonatomic, copy) NSString *sharePartner;
 @property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic, copy) NSString *shareUrl;
+@property (nonatomic, copy) NSString *shareContent;
 @property (nonatomic,strong)UIView * bottomView;
 
 @property (nonatomic, strong) UIImageView *background;//背景
@@ -58,7 +59,7 @@
     
     [self startLoadData];
     [self startLoadShare];
-    
+    [self createUI];
 }
 -(void)startLoadShare
 {
@@ -77,6 +78,7 @@
             NSDictionary *data = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
             _shareUrl = data[@"url"];
             _shareImage = data[@"image"];
+            _shareContent = data[@"content"];
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -92,13 +94,13 @@
     [SVProgressHUD show];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.investorId,@"investorId", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:INVEST_LIST_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestInvestDetail:)];
+    [self.httpUtil getDataFromAPIWithOps:INVEST_LIST_DETAIL postParam:dic type:1 delegate:self sel:@selector(requestInvestDetail:)];
 }
 
 -(void)requestInvestDetail:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-        NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -106,11 +108,11 @@
             
             InvestDetailModel *detailModel =[InvestDetailModel mj_objectWithKeyValues:jsonDic[@"data"]];
             self.collected = detailModel.collected;
-            self.attentionCount = [NSString stringWithFormat:@"%ld",detailModel.collectCount];
+            self.attentionCount = [NSString stringWithFormat:@"%ld",(long)detailModel.collectCount];
             
             _model = detailModel;
 //            NSLog(@"dayin模型----%@",_model);
-            [self createUI];
+            
             
         }else{
           [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -185,7 +187,10 @@
     _whiteView.companyLabel.text = authentics.companyName;
     _whiteView.addressLabel.text = authentics.companyAddress;
     //拿到投资领域
-    NSArray *fieldArray = _model.areas;
+    NSString *areaStr = _model.areas[0];
+    _whiteView.areas = [areaStr componentsSeparatedByString:@"，"];
+    //领域赋值
+    
     
     [_scrollView addSubview:_whiteView];
     [_whiteView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -304,7 +309,7 @@
         
         if (_selectedNum == 1) {
             NSInteger index =  [_viewController.investPersonArray indexOfObject:_viewController.investModel];
-            if (index) {
+            
                 _viewController.investModel.collected  = _collected;
                 if (_collected) {
                     _viewController.investModel.collectCount++;
@@ -313,12 +318,12 @@
                 }
                 [_viewController.investPersonArray replaceObjectAtIndex:index withObject:_viewController.investModel];
                 [_viewController.tableView reloadData];
-            }
+            
             
         }
         if (_selectedNum == 2) {
             NSInteger index = [_viewController.investOrganizationSecondArray indexOfObject:_viewController.investModel];
-            if (index) {
+            
                 _viewController.investModel.collected = _collected;
                 if (_collected) {
                     _viewController.investModel.collectCount ++;
@@ -327,7 +332,7 @@
                 }
                 [_viewController.investOrganizationSecondArray replaceObjectAtIndex:index withObject:_viewController.investModel];
                 [_viewController.tableView reloadData];
-            }
+            
             
         }
         
@@ -381,8 +386,8 @@
     //分享
     if (view.tag == 1) {
         //得到用户SID
-        //        UIImage * shareImage = [UIImage imageNamed:@"share_jixiangwu"];
-        NSString *shareContentString = [NSString stringWithFormat:@"快来一起玩\n%@",_shareUrl];
+        NSString* shareImage = _shareImage;
+        NSString *shareContentString = [NSString stringWithFormat:@"%@",_shareContent];
         NSArray *arr = nil;
         NSString *shareContent;
         
@@ -393,8 +398,8 @@
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投";
+                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
                 }
                 else
                 {
@@ -410,10 +415,10 @@
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
                 
-                NSLog(@"分享到微信");
+//                NSLog(@"分享到微信");
             }
                 break;
             case 2:{
@@ -421,10 +426,10 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
                 
-                NSLog(@"分享到朋友圈");
+//                NSLog(@"分享到朋友圈");
             }
                 break;
             case 3:{
@@ -432,7 +437,7 @@
                 arr = @[UMShareToSms];
                 shareContent = shareContentString;
                 
-                NSLog(@"分享短信");
+//                NSLog(@"分享短信");
             }
                 break;
             case 100:{
@@ -446,10 +451,13 @@
         {
             return;
         }
-        //        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-        //            shareImage = nil;
-        //        }
-        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:nil presentedController:self completion:^(UMSocialResponseEntity *response){
+                if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
+                    shareImage = nil;
+                }
+        UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
+                                            shareImage];
+        
+        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -489,7 +497,7 @@
         flag = @"2";
         
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",_model.user.userId],@"userId",flag,@"flag", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_model.user.userId],@"userId",flag,@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
 }
@@ -513,10 +521,10 @@
                 
             }else{
                 
-                [_attentionBtn  setTitle:[NSString stringWithFormat:@" 关注(%ld)",--count] forState:UIControlStateNormal];
+                [_attentionBtn  setTitle:[NSString stringWithFormat:@" 关注(%ld)",(long)--count] forState:UIControlStateNormal];
                 [_attentionBtn setBackgroundColor:btnGreen];
             }
-            _attentionCount = [NSString stringWithFormat:@"%ld",count];
+            _attentionCount = [NSString stringWithFormat:@"%ld",(long)count];
             
 
             NSLog(@"关注成功");

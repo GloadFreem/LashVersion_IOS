@@ -7,7 +7,7 @@
 //
 
 #import "MineProjectCenterPersonSecondCell.h"
-
+#import "ZMProgressView.h"
 @implementation MineProjectCenterPersonSecondCell
 
 {
@@ -30,7 +30,7 @@
     UIView *_secondShuView;
     UIButton *_ignoreBtn;
     UIButton *_inspectBtn;
-    
+    ZMProgressView *_progress;
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -143,6 +143,14 @@
     _moneyBtn.titleLabel.numberOfLines = 2;
     _moneyBtn.titleLabel.textAlignment  = NSTextAlignmentCenter;
     [self.contentView addSubview:_moneyBtn];
+    
+    //进度条
+    _progress = [[ZMProgressView alloc]initWithLineColor:orangeColor loopColor:[UIColor lightGrayColor]];
+    _progress.title = @"已融资";
+    _progress.percentUnit = @"%";
+    _progress.backgroundColor = [UIColor clearColor];
+    [self.contentView addSubview:_progress];
+    
     //竖分隔线
     _firstShuView = [UIView new];
     _firstShuView.backgroundColor = [UIColor lightGrayColor];
@@ -250,10 +258,11 @@
         make.top.mas_equalTo(_firstLabel.mas_bottom).offset(12*HEIGHTCONFIG);
     }];
     
-    CGFloat width = (SCREENWIDTH -40)/4;
+    CGFloat width = 77.5;
     //人气指数btn
     [_personBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.contentView.mas_left).offset(20);
+        make.right.mas_equalTo(_firstShuView.mas_left);
+        //        make.left.mas_equalTo(self.contentView.mas_left).offset(20);
         make.top.mas_equalTo(_firstPartImage.mas_bottom).offset(1*HEIGHTCONFIG);
         make.height.mas_equalTo(73*HEIGHTCONFIG);
         make.width.mas_equalTo(width);
@@ -262,22 +271,25 @@
     [_firstShuView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(1);
         make.height.mas_equalTo(20*HEIGHTCONFIG);
-        make.left.mas_equalTo(_personBtn.mas_right);
+        //        make.left.mas_equalTo(_personBtn.mas_right);
         make.centerY.mas_equalTo(_personBtn.mas_centerY);
+        make.right.mas_equalTo(_timeBtn.mas_left);
     }];
     //时间btn
     [_timeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_firstShuView.mas_right);
+        //        make.left.mas_equalTo(_firstShuView.mas_right);
+        make.right.mas_equalTo(_secondShuView.mas_left);
         make.top.mas_equalTo(_personBtn.mas_top);
         make.width.mas_equalTo(width);
         make.height.mas_equalTo(_personBtn);
     }];
     //第二条竖线
     [_secondShuView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_timeBtn.mas_right);
+        //        make.left.mas_equalTo(_timeBtn.mas_right);
         make.width.mas_equalTo(1);
         make.height.mas_equalTo(_firstShuView);
         make.centerY.mas_equalTo(_personBtn.mas_centerY);
+        make.centerX.mas_equalTo(self.contentView.mas_centerX);
     }];
     //融资btn
     [_moneyBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -285,6 +297,12 @@
         make.top.mas_equalTo(_personBtn.mas_top);
         make.width.mas_equalTo(width);
         make.height.mas_equalTo(_personBtn);
+    }];
+    //进度条
+    [_progress mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(_moneyBtn.mas_left).offset(20*WIDTHCONFIG);
+        make.top.mas_equalTo(_firstPartImage.mas_bottom).offset(3*HEIGHTCONFIG);
+        make.width.height.mas_equalTo(53*WIDTHCONFIG);
     }];
     //第二条分隔线
     [_secondPartImage mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -359,6 +377,10 @@
     [_personBtn setTitle:[NSString stringWithFormat:@"%ld\n人气指数",(long)model.collectionCount] forState:UIControlStateNormal];
     [_timeBtn setTitle:[NSString stringWithFormat:@"%@天\n剩余时间",[self getDateCha:model.endDate]] forState:UIControlStateNormal];
     [_moneyBtn setTitle:[NSString stringWithFormat:@"%ld万\n融资总额",(long)model.financeTotal] forState:UIControlStateNormal];
+    
+    CGFloat finalCount = model.financedMount;
+    CGFloat percent = finalCount / model.financeTotal * 100;
+    _progress.percent = percent;
 }
 
 -(void)ignoreBtn
