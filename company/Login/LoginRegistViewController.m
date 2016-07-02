@@ -59,34 +59,10 @@
     //加载本地默认数据
     [self loadDefaultData];
     
-    //下载客服电话
-    [self loadServicePhone];
+    
 }
 
--(void)loadServicePhone
-{
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.servicePartner,@"partner",nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:CUSTOM_SERVICE_SYSTEM postParam:dic type:0 delegate:self sel:@selector(requestServicePhone:)];
-}
--(void)requestServicePhone:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic !=nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *dataDic = jsonDic[@"data"];
-            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-            [data setObject:dataDic[@"tel"] forKey:@"servicePhone"];
-            [data synchronize];
-            
-        }else{
-        
-        }
-    }
-}
+
 -(void)loadDefaultData
 {
     NSUserDefaults * data = [NSUserDefaults standardUserDefaults];
@@ -180,7 +156,7 @@
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
-            NSLog(@"登陆成功");
+//            NSLog(@"登陆成功");
             
             //进入主界面
 //            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
@@ -371,13 +347,16 @@
     
     if(jsonDic!=nil)
     {
-        NSString* code = [jsonDic valueForKey:@"code"];
-        if ([code intValue] == 0) {
+        NSString* status = [jsonDic valueForKey:@"status"];
+        if ([status intValue] == 200) {
             NSString* flag = [[jsonDic valueForKey:@"data"] valueForKey:@"flag"];
             if (![flag boolValue]) {
 //                WeChatBindController* controller =[[WeChatBindController alloc]init];
 //                controller.openId = openId;
 //                [self.navigationController pushViewController:controller animated:YES];
+                //进入身份完善信息界面
+                PerfectViewController *perfert = [PerfectViewController new];
+                [self.navigationController pushViewController:perfert animated:YES];
             }else{
                 UIButton *sender = [UIButton new];
                 [self loginClick:sender];
@@ -390,8 +369,32 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    // 禁用 iOS7 返回手势
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        if (!self.navigationController.interactivePopGestureRecognizer.enabled) {
+            self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        }
+    }
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getAccess_token:) name:@"perfectView" object:nil];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
 //让当前控制器对应的状态栏是白色
 -(UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;

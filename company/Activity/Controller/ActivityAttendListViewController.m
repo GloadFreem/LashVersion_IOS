@@ -118,7 +118,7 @@ static CGFloat textFieldH = 40;
 
 -(void)loadActionAttendData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionAttendPartner,@"partner",STRING(@"%ld", self.activityModel.actionId),@"contentId",STRING(@"%ld", page),@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionAttendPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", (long)page),@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_ATTEND postParam:dic type:0 delegate:self sel:@selector(requestActionAttendList:)];
 }

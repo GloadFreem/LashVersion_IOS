@@ -13,6 +13,8 @@
                 <outlet property="hiddenView" destination="uVx-cE-FhE" id="Bda-40-lOj"/>
                 <outlet property="iconBtn" destination="uK7-x4-T6s" id="o8M-ya-xNy"/>
                 <outlet property="identifyLabel" destination="fc3-ph-e8D" id="Gzq-Mv-Of1"/>
+                <outlet property="imageBG" destination="Sm0-Og-Tb6" id="qmY-zK-rPM"/>
+                <outlet property="textView" destination="hM7-Yy-5a7" id="ylC-yU-qiA"/>
                 <outlet property="topSpace" destination="0ee-g6-VD7" id="eqw-u9-Zez"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outletCollection property="btn_Array" destination="98b-TN-q5F" id="CwE-jj-jvZ"/>
@@ -53,6 +55,9 @@
                         <constraint firstAttribute="height" constant="22" id="gl0-hp-IaA"/>
                     </constraints>
                     <state key="normal" backgroundImage="iconfont_kefu.png"/>
+                    <connections>
+                        <action selector="callService:" destination="-1" eventType="touchUpInside" id="ljA-Ze-E42"/>
+                    </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请选择您的头像" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bwd-Ur-MVI">
                     <rect key="frame" x="15" y="107.5" width="119" height="20.5"/>

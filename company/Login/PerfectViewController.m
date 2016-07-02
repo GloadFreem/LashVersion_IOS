@@ -10,6 +10,8 @@
 #import "RegistSuccessViewController.h"
 #define IDENTIFYTYPE @"updateIdentiyTypeUser"
 
+#define CUSTOMSERVICE @"customServiceSystem"
+
 @interface PerfectViewController ()
 {
     UIActivityIndicatorView *activity;
@@ -30,9 +32,16 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *btnTopSpace;
 
 @property (weak, nonatomic) IBOutlet UIView *hiddenView;
+@property (weak, nonatomic) IBOutlet UIImageView *imageBG;
+
+@property (weak, nonatomic) IBOutlet UITextView *textView;
+
 
 @property (nonatomic, assign) BOOL isSelected;
 @property (nonatomic, assign) BOOL selecePic;
+
+@property (nonatomic, copy) NSString *servicePartner;
+
 @end
 
 @implementation PerfectViewController
@@ -44,6 +53,39 @@
     NSString * string = [AES encrypt:IDENTIFYTYPE password:KEY];
     self.partner = [TDUtil encryptMD5String:string];
     //    NSLog(@"%@",_partner);
+    //客服
+    self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
+    
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //下载客服电话
+    [self loadServicePhone];
+}
+-(void)loadServicePhone
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.servicePartner,@"partner",nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:CUSTOM_SERVICE_SYSTEM postParam:dic type:0 delegate:self sel:@selector(requestServicePhone:)];
+}
+-(void)requestServicePhone:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *dataDic = jsonDic[@"data"];
+            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+            [data setObject:dataDic[@"tel"] forKey:@"servicePhone"];
+            [data synchronize];
+            
+        }else{
+            
+        }
+    }
 }
 
 -(void)createUI{
@@ -66,6 +108,15 @@
         
     }
 }
+
+- (IBAction)callService:(UIButton *)sender {
+    
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    NSString *tel = [data objectForKey:@"servicePhone"];
+    //        NSLog(@"电话---%@",tel);
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",tel]]];
+}
+
 //返回
 - (IBAction)leftBackBtn:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
@@ -78,7 +129,7 @@
         return;
     }
     
-    NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.identifyType,@"ideniyType",@"0",@"isWebchatLogin", nil];
+    NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.identifyType,@"ideniyType",@"0",@"isWechatLogin", nil];
     UIImage *iconImage;
     if (_selecePic) {
         iconImage= self.iconBtn.currentBackgroundImage;
@@ -115,7 +166,7 @@
 -(void)requestSetIdentifyType:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -128,7 +179,7 @@
             regist.identify = _identifyType;
             NSDictionary *data = [jsonDic valueForKey:@"data"];
             regist.inviteCode = [data valueForKey:@"inviteCode"];
-            NSLog(@"获取指环码%@",regist.inviteCode);
+//            NSLog(@"获取指环码%@",regist.inviteCode);
             
             [self.navigationController pushViewController:regist animated:YES
              ];
@@ -149,6 +200,22 @@
 //选择身份
 - (IBAction)chooseIdentity:(UIButton *)sender {
     
+    if (sender.tag == 1) {
+        _imageBG.image = [UIImage imageNamed:@"icon_blackbg_first"];
+        _textView.text = @"项目方";
+    }
+    if (sender.tag == 2) {
+        _imageBG.image = [UIImage imageNamed:@"icon_blackbg_second"];
+        _textView.text = @"投资人";
+    }
+    if (sender.tag == 3) {
+        _imageBG.image = [UIImage imageNamed:@"icon_blackbg_three"];
+        _textView.text = @"投资机构";
+    }
+    if (sender.tag == 4) {
+        _imageBG.image = [UIImage imageNamed:@"icon_blackbg_four"];
+        _textView.text = @"智囊团";
+    }
     
     sender.selected = !sender.selected;
     
@@ -158,6 +225,7 @@
         _topSpace.constant = 122;
         _btnTopSpace.constant = 40;
         _isSelected  = YES;
+        
     }else{
         _hiddenView.hidden = YES;
         _identifyLabel.hidden = NO;

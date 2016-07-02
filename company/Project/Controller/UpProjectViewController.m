@@ -91,6 +91,11 @@
 - (IBAction)emailBtnClick:(UIButton *)sender {
 }
 - (IBAction)phoneBtnClick:(UIButton *)sender {
+    
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    NSString *tel = [data objectForKey:@"servicePhone"];
+    //        NSLog(@"电话---%@",tel);
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",tel]]];
 }
 
 

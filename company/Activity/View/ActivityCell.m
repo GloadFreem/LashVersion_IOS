@@ -39,7 +39,7 @@
         //地址
         [self.addressLabel setText:_model.address];
         //人数限制
-        [self.countlabel setText:STRING(@"%ld人", _model.memberLimit)];
+        [self.countlabel setText:STRING(@"%ld人", (long)_model.memberLimit)];
         //时间
         //获取时间
         NSDate *date = [TDUtil dateFromString:_model.startTime];

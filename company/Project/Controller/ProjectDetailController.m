@@ -139,6 +139,32 @@
     
     _scrollView.autoresizingMask = UIViewAutoresizingNone;
     //添加广告栏
+    //下载客服电话
+    [self loadServicePhone];
+}
+-(void)loadServicePhone
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.servicePartner,@"partner",nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:CUSTOM_SERVICE_SYSTEM postParam:dic type:0 delegate:self sel:@selector(requestServicePhone:)];
+}
+-(void)requestServicePhone:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *dataDic = jsonDic[@"data"];
+            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+            [data setObject:dataDic[@"tel"] forKey:@"servicePhone"];
+            [data synchronize];
+            
+        }else{
+            
+        }
+    }
 }
 
 
@@ -701,7 +727,12 @@
 -(void)btnClick:(UIButton*)btn
 {
     if (btn.tag == 0) {
-        NSLog(@"拨打电话");
+//        NSLog(@"拨打电话");
+        NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+        NSString *tel = [data objectForKey:@"servicePhone"];
+//        NSLog(@"电话---%@",tel);
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",tel]]];
+        
     }
 #pragma mark ---------------进入投资界面---------------------
     if (btn.tag == 1) {
@@ -950,10 +981,12 @@
     [super viewWillAppear:animated];
 //    self.navigationController.navigationBar.translucent=NO;
     self.navigationController.navigationBar.hidden = YES;
+    
      [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
+    
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
     
     [self performSelector:@selector(updateLayoutNotification) withObject:nil afterDelay:0.5];

@@ -151,24 +151,24 @@
     NSString *strMsg = [NSString stringWithFormat:@"errcode:%d", resp.errCode];
     NSString *strTitle;
     
-    if([resp isKindOfClass:[SendMessageToWXResp class]])
-    {
-        strTitle = [NSString stringWithFormat:@"金指投温馨提示"];
-        if(resp.errCode==-2){
-            strMsg=@"分享已取消";
-        }else if(resp.errCode==0){
-            strMsg=@"分享成功";
-        }
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alert show];
-    }else{
+//    if([resp isKindOfClass:[SendMessageToWXResp class]])
+//    {
+//        strTitle = [NSString stringWithFormat:@"金指投温馨提示"];
+//        if(resp.errCode==-2){
+//            strMsg=@"分享已取消";
+//        }else if(resp.errCode==0){
+//            strMsg=@"分享成功";
+//        }
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//        [alert show];
+//    }else{
         SendAuthResp *aresp = (SendAuthResp *)resp;
         if (aresp.errCode== 0) {
             NSString *code = aresp.code;
             NSDictionary *dic = @{@"code":code};
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"WeChatBind" object:nil userInfo:dic];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"perfectView" object:nil userInfo:dic];
         }
-    }
+//    }
 }
 
 

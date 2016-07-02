@@ -755,7 +755,7 @@
                     }else{
                         //刷新cell
                         
-                        [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                        [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%d)",--model.collectCount] forState:UIControlStateNormal];
                         [cell.collectBtn setBackgroundColor:btnGreen];
                     }
                 }
@@ -774,7 +774,7 @@
                         //关注数量减1
                         
                         //刷新cell
-                        [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                        [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%d)",--model.collectCount] forState:UIControlStateNormal];
                         [cell.attentionBtn setBackgroundColor:btnGreen];
                     }
                 }
@@ -792,7 +792,7 @@
                         
                         //刷新cell
                         
-                        [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                        [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%d)",--model.collectCount] forState:UIControlStateNormal];
                          [cell.attentionBtn setBackgroundColor:btnGreen];
                     }
                 }

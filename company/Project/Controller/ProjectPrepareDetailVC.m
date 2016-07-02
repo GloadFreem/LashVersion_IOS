@@ -20,6 +20,7 @@
 #import "ProjectDetailLeftHeaderModel.h"
 #import "ProjectDetailLeftFooterModel.h"
 
+#define CUSTOMSERVICE @"customServiceSystem"
 #define PROJECTCOLLECT @"requestProjectCollect"
 #define PROJECTDETAIL @"requestProjectDetail"
 #define PROJECTSHARE @"requestProjectShare"
@@ -44,6 +45,8 @@
 @property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic,strong)UIView * bottomView;
 
+@property (nonatomic, copy) NSString *servicePartner;
+
 @end
 
 @implementation ProjectPrepareDetailVC
@@ -60,15 +63,46 @@
     self.collectPartner = [TDUtil encryKeyWithMD5:KEY action:PROJECTCOLLECT];
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:PROJECTSHARE];
     
+    //客服
+    self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
+    
     [self startLoadData];
     
     [self setupNav];
     
     [self loadShareData];
     
-    
+    //下载客服电话
+    [self loadServicePhone];
 //    NSLog(@"projectId----%ld",self.projectId);
 }
+
+-(void)loadServicePhone
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.servicePartner,@"partner",nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:CUSTOM_SERVICE_SYSTEM postParam:dic type:0 delegate:self sel:@selector(requestServicePhone:)];
+}
+-(void)requestServicePhone:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *dataDic = jsonDic[@"data"];
+            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+            [data setObject:dataDic[@"tel"] forKey:@"servicePhone"];
+            [data synchronize];
+            
+        }else{
+            
+        }
+    }
+}
+
+
 -(void)startLoadData
 {
     [SVProgressHUD show];
@@ -271,7 +305,7 @@
 -(void)requestProjectCollect:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -313,7 +347,11 @@
         
     }
     if (btn.tag == 2) {
-        NSLog(@"联系客服");
+        
+        NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+        NSString *tel = [data objectForKey:@"servicePhone"];
+        //        NSLog(@"电话---%@",tel);
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",tel]]];
     }
 }
 

@@ -85,7 +85,7 @@
     _progressView.loopColor = [UIColor lightGrayColor];
 //    NSLog(@"剩余时间---%@",model.endDate);
     
-    _timeLabel.text = [self getDateCha:model.endDate];
+    _timeLabel.text = [NSString stringWithFormat:@"%@天",[self getDateCha:model.endDate]];
     _projectLabel.text = model.abbrevName;
     _addressLabel.text = model.address;
     _companyLabel.text = model.fullName;
