@@ -148,8 +148,8 @@
 
 -(void) onResp:(BaseResp*)resp
 {
-    NSString *strMsg = [NSString stringWithFormat:@"errcode:%d", resp.errCode];
-    NSString *strTitle;
+//    NSString *strMsg = [NSString stringWithFormat:@"errcode:%d", resp.errCode];
+//    NSString *strTitle;
     
 //    if([resp isKindOfClass:[SendMessageToWXResp class]])
 //    {
@@ -166,7 +166,7 @@
         if (aresp.errCode== 0) {
             NSString *code = aresp.code;
             NSDictionary *dic = @{@"code":code};
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"perfectView" object:nil userInfo:dic];
+            
         }
 //    }
 }

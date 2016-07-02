@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "ZMProgressView.h"
 #import "ProjectBannerListModel.h"
-
+#import "GENEProgressView.h"
 @class ProjectBannerView;
 @protocol ProjectBannerViewDelegate <NSObject>
 
@@ -28,7 +28,7 @@
 @interface ProjectBannerView : UIView<UIScrollViewDelegate>
 
 @property (nonatomic, strong) ProjectBannerListModel *model;
-@property (nonatomic, strong) ZMProgressView*progress;
+@property (nonatomic, strong) GENEProgressView*progress;
 
 @property (assign, nonatomic) id<ProjectBannerViewDelegate> delegate;
 

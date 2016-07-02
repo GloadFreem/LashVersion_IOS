@@ -138,6 +138,7 @@
 -(void)setModel
 {
     _iconBtn.layer.cornerRadius = 41.5;
+    _iconBtn.width = _iconBtn.height;
     _iconBtn.layer.masksToBounds = YES;
     
     
@@ -188,8 +189,6 @@
         {
             //先检查是否是易宝用户---非易宝账号则去实名认证---是易宝账号则进入资金页面
             [self isCheckUserConfirmed];
-            
-            
             
         }
             break;

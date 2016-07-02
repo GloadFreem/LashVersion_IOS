@@ -77,13 +77,13 @@
         make.bottom.mas_equalTo(_scrollView.mas_bottom).offset(-10);
     }];
     //进度条
-    _progress = [[ZMProgressView alloc]initWithLineColor:orangeColor loopColor:[UIColor clearColor]];
+    _progress = [[GENEProgressView alloc]initWithLineColor:orangeColor loopColor:[UIColor clearColor]];
     _progress.backgroundColor = [UIColor clearColor];
     [self addSubview:_progress];
     [_progress mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(_firstBottomImage.mas_centerX);
         make.centerY.mas_equalTo(_firstBottomImage.mas_centerY);
-        make.width.height.mas_equalTo(46);
+        make.width.height.mas_equalTo(45);
     }];
     
 //    UIImage * second = [UIImage imageNamed:@"椭圆-4-拷贝"];
@@ -287,6 +287,7 @@
             CGFloat finalCount = model.financedMount;
             CGFloat percent = finalCount / model.financeTotal * 100;
             _progress.percent = percent;
+            _progress.contentText = [NSString stringWithFormat:@"%ld",(long)model.financeTotal];
             _isFirst = NO;
             
         }else{
@@ -365,6 +366,7 @@
         CGFloat finalCount = model.financedMount;
         CGFloat percent = finalCount / model.financeTotal * 100;
         _progress.percent = percent;
+        _progress.contentText = [NSString stringWithFormat:@"%ld",(long)model.financeTotal];
         _isFirst = NO;
         
     }else{

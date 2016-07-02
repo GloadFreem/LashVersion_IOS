@@ -33,6 +33,11 @@
 
 #define BannerHeight  SCREENWIDTH * 0.5 + 45
 @interface ProjectViewController ()<UITableViewDataSource,UITableViewDelegate,ProjectBannerViewDelegate>
+
+{
+    CAEmitterLayer * _fireEmitter;//发射器对象
+}
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, copy) NSString *authenPartner;
@@ -104,7 +109,58 @@
     [self createUI];
     
 //    [self loadVersion];
+    
+//    [self createGoldView];
 }
+
+
+#pragma mark-------创建金条掉落动画视图-------
+-(void)createGoldView
+{
+    UIView *background = [UIView new];
+    [background setBackgroundColor:[UIColor blackColor]];
+    background.alpha = 0.5;
+    
+    [self.view addSubview:background];
+    [background mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.mas_equalTo(0);
+        make.top.mas_equalTo(-64);
+        make.bottom.mas_equalTo(-49);
+    }];
+    //初始化发射器
+    _fireEmitter = [[CAEmitterLayer alloc]init];
+    _fireEmitter.emitterPosition = CGPointMake(self.view.frame.size.width/2, -20);
+    _fireEmitter.emitterSize = CGSizeMake(self.view.frame.size.width/4, 20);
+    _fireEmitter.renderMode = kCAEmitterLayerLine;
+    _fireEmitter.emitterShape = kCAEmitterLayerLine;
+    //发射单元
+    CAEmitterCell *goldCell = [CAEmitterCell emitterCell];
+    goldCell.contents=(id)[[UIImage imageNamed:@"logo-shezhi@2x.png"]CGImage];
+    //产生数量美妙
+    goldCell.birthRate=5;
+    goldCell.lifetime=50.0;
+    
+//    goldCell.lifetimeRange=1.5;
+//    goldCell.color=[[UIColor colorWithRed:0.8 green:0.4 blue:0.2 alpha:0.1]CGColor];
+    [goldCell setName:@"fire"];
+    //秒速
+    goldCell.velocity=160;
+    goldCell.velocityRange=80;
+    goldCell.emissionLongitude=M_PI+M_PI_2;
+    // 掉落角度范围
+    goldCell.emissionRange=M_PI;
+    //缩放比例
+    goldCell.scale = 0.05;
+//    goldCell.scaleSpeed=0.3;
+    goldCell.scaleRange = 0.5;
+    //旋转速度
+    goldCell.spin=0.2;
+    
+    _fireEmitter.emitterCells=[NSArray arrayWithObjects:goldCell,nil];
+    [background.layer addSublayer:_fireEmitter];
+    
+}
+#pragma mark--------是否站内信未读--------
 -(void)loadMessage
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.hasMessagePartner,@"partner", nil];
@@ -173,7 +229,7 @@
         }
     }
 }
-
+#pragma mark------请求表格数据-------
 -(void)startLoadData
 {
     
@@ -265,6 +321,7 @@
         }
     }
 }
+#pragma mark-------请求banner数据---------
 -(void)startLoadBannerData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.bannerPartner,@"partner", nil];
@@ -313,6 +370,7 @@
         }
     }
 }
+#pragma mark-----创建banner-------
 -(void)createBanner
 {
     _selectedCellNum = 20;
@@ -346,10 +404,6 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
     
 }
 -(void)createUI

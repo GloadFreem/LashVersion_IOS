@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface LoginRegistViewController : RootViewController
+#import "WXApi.h"
+@interface LoginRegistViewController : RootViewController<WXApiDelegate>
 
 @end

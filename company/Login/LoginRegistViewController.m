@@ -235,7 +235,7 @@
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     self.startLoading =NO;
     [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网络请求错误"];
     [activity stopAnimating];
@@ -257,119 +257,32 @@
 }
 #pragma mark -微信登陆
 - (IBAction)weChatBtn:(UIButton *)sender {
-    [self sendAuthRequest];
-}
--(void)sendAuthRequest
-{
-    SendAuthReq* req =[[SendAuthReq alloc ] init];
-    req.scope = @"snsapi_userinfo,snsapi_base";
-    req.state = @"0744" ;
-    //    [WXApi sendReq:req];
-    //    [WXApi sendAuthReq:req viewController:self delegate:self];
-    [WXApi sendReq:req];
-}
--(void)getAccess_token:(NSDictionary*)dic
-{
-    NSString* code =[[dic valueForKey:@"userInfo"] valueForKey:@"code"];
-    NSString* url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx33aa0167f6a81dac&secret=bc5e2b89553589bf7d9e568545793842&code=%@&grant_type=authorization_code",code];
     
-    //    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%@&secret=%@&code=%@&grant_type=authorization_code",kWXAPP_ID,kWXAPP_SECRET,self.wxCode.text];
-    //
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURL *zoneUrl = [NSURL URLWithString:url];
-        NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
-        NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (data) {
-                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                openId =[dic objectForKey:@"openid"];
-                if (openId) {
-                    [self getUserInfo:[dic objectForKey:@"access_token"] openId:openId];
-                }
-                
-            }else{
-//                self.startLoading =NO;
-                [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"信息获取失败!"];
-            }
-        });
-    });
-}
--(void)getUserInfo:(NSString*)tokean openId:(NSString*)openID
-{
-    // https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID
+    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToWechatSession];
     
-    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/userinfo?access_token=%@&openid=%@",tokean,openId];
-    //
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURL *zoneUrl = [NSURL URLWithString:url];
-        NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
-        NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (data) {
-                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                /*
-                 {
-                 city = Haidian;
-                 country = CN;
-                 headimgurl = "http://wx.qlogo.cn/mmopen/FrdAUicrPIibcpGzxuD0kjfnvc2klwzQ62a1brlWq1sjNfWREia6W8Cf8kNCbErowsSUcGSIltXTqrhQgPEibYakpl5EokGMibMPU/0";
-                 language = "zh_CN";
-                 nickname = "xxx";
-                 openid = oyAaTjsDx7pl4xxxxxxx;
-                 privilege =     (
-                 );
-                 province = Beijing;
-                 sex = 1;
-                 unionid = oyAaTjsxxxxxxQ42O3xxxxxxs;
-                 }
-                 */
-                //                self.nickname.text = [dic objectForKey:@"nickname"];
-                //                self.wxHeadImg.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dic objectForKey:@"headimgurl"]]]];
-                NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
-                [data setValue:[dic objectForKey:@"nickname"] forKey:USER_STATIC_NICKNAME];
-                [data setValue:[dic objectForKey:@"headimgurl"] forKey:USER_STATIC_HEADER_PIC];
-                if (openID) {
-                    [self.httpUtil getDataFromAPIWithOps:@"openid/" postParam:[NSDictionary dictionaryWithObject:openID forKey:@"openid"] type:0 delegate:self sel:@selector(requestFinished:)];
-                }
-            }else{
-                self.startLoading =NO;
-                [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"信息获取失败!"];
-            }
-        });
+    snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
         
+        if (response.responseCode == UMSResponseCodeSuccess) {
+            
+            UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary]valueForKey:UMShareToWechatSession];
+            
+            //进入身份完善信息界面
+            PerfectViewController *perfert = [PerfectViewController new];
+            [self.navigationController pushViewController:perfert animated:YES];
+            
+            
+//            NSDictionary *dict = @{@"oauthType":@"2",@"nickName":snsAccount.userName,@"accountId":snsAccount.usid,@"pic":snsAccount.iconURL,@"parentId":@"0",@"deviceId":deviceId,@"pushToken":pushToken};
+            
+//            [self requsetOauthLoginWithDict:dict];
+        }
     });
 }
 
--(void)requestFinished:(ASIHTTPRequest*)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
-    if(jsonDic!=nil)
-    {
-        NSString* status = [jsonDic valueForKey:@"status"];
-        if ([status intValue] == 200) {
-            NSString* flag = [[jsonDic valueForKey:@"data"] valueForKey:@"flag"];
-            if (![flag boolValue]) {
-//                WeChatBindController* controller =[[WeChatBindController alloc]init];
-//                controller.openId = openId;
-//                [self.navigationController pushViewController:controller animated:YES];
-                //进入身份完善信息界面
-                PerfectViewController *perfert = [PerfectViewController new];
-                [self.navigationController pushViewController:perfert animated:YES];
-            }else{
-                UIButton *sender = [UIButton new];
-                [self loginClick:sender];
-            }
-        }
-        
-//        self.startLoading = NO;
-    }
-}
+
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -382,21 +295,21 @@
             self.navigationController.interactivePopGestureRecognizer.enabled = YES;
         }
     }
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getAccess_token:) name:@"perfectView" object:nil];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    
 }
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    
 }
 //让当前控制器对应的状态栏是白色
 -(UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
 }
+
+
 @end
