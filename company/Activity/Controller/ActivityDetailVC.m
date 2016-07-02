@@ -150,6 +150,9 @@ static CGFloat textFieldH = 40;
         make.top.equalTo(_tableView.mas_bottom);
     }];
     
+    view.tag = 10001;
+    [view setAlpha:0];
+    
     UIView *line = [UIView new];
     line.backgroundColor = colorGray;
     [view addSubview:line];
@@ -198,8 +201,6 @@ static CGFloat textFieldH = 40;
         make.centerY.mas_equalTo(field.mas_centerY);
         make.right.mas_equalTo(view.mas_right).offset(-12);
     }];
-    
-    
 }
 
 /**
@@ -663,7 +664,7 @@ static CGFloat textFieldH = 40;
  */
 -(void)actionPrise
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", (long)self.headerModel.flag),@"flag", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", self.headerModel.flag),@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_PRISE postParam:dic type:0 delegate:self sel:@selector(requestPriseAction:)];
 }
@@ -850,6 +851,10 @@ static CGFloat textFieldH = 40;
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
     NSLog(@"开始编辑");
+    
+    UIView * view  = [self.view viewWithTag:10001];
+    view.alpha = 1;
+    
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -861,5 +866,7 @@ static CGFloat textFieldH = 40;
         
     }
     NSLog(@"结束编辑");
+    UIView * view  = [self.view viewWithTag:10001];
+    view.alpha = 0;
 }
 @end

@@ -34,6 +34,7 @@
 
 #define REQUESTDETAIL @"requestProjectDetail"
 
+#define CUSTOMSERVICE @"customServiceSystem"
 #define REQUESTSCENECOMMENT @"requestSceneComment"
 #define REQUESTRECORDATA @"requestRecorData"
 #define REQUESTPROJECTCOMMENT @"requestProjectComment"
@@ -104,6 +105,9 @@
 @property (nonatomic, copy) NSString *authenPartner;
 @property (nonatomic, assign) BOOL isAuthentic;
 
+@property (nonatomic, copy) NSString *servicePartner;
+@property (nonatomic, copy) NSString *servicePhone;
+
 @end
 
 @implementation ProjectDetailController
@@ -118,6 +122,8 @@
     self.collectPartner = [TDUtil encryKeyWithMD5:KEY action:PROJECTCOLLECT];
     //获得认证partner
     self.authenPartner = [TDUtil encryKeyWithMD5:KEY action:AUTHENINFO];
+    //客服
+    self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     //下载详情数据
@@ -134,6 +140,7 @@
     _scrollView.autoresizingMask = UIViewAutoresizingNone;
     //添加广告栏
 }
+
 
 #pragma mark -下载认证信息
 -(void)loadAuthenData

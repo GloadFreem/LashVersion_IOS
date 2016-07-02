@@ -17,7 +17,9 @@
 #import "ActivityViewController.h"
 #import "MineViewController.h"
 #import "CircleViewController.h"
+
 #define DENGLU @"loginUser"
+#define CUSTOMSERVICE @"customServiceSystem"
 
 @interface LoginRegistViewController ()
 {
@@ -36,6 +38,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *phoneField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 
+@property (nonatomic, copy) NSString *servicePartner;
+@property (nonatomic, copy) NSString *servicePhone;
+
 @end
 
 @implementation LoginRegistViewController
@@ -48,11 +53,40 @@
     NSString * string = [AES encrypt:DENGLU password:KEY];
     self.partner = [TDUtil encryptMD5String:string];
     //    NSLog(@"%@",_partner);
+    //客服
+    self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
     
     //加载本地默认数据
     [self loadDefaultData];
+    
+    //下载客服电话
+    [self loadServicePhone];
 }
 
+-(void)loadServicePhone
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.servicePartner,@"partner",nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:CUSTOM_SERVICE_SYSTEM postParam:dic type:0 delegate:self sel:@selector(requestServicePhone:)];
+}
+-(void)requestServicePhone:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *dataDic = jsonDic[@"data"];
+            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+            [data setObject:dataDic[@"tel"] forKey:@"servicePhone"];
+            [data synchronize];
+            
+        }else{
+        
+        }
+    }
+}
 -(void)loadDefaultData
 {
     NSUserDefaults * data = [NSUserDefaults standardUserDefaults];
@@ -140,7 +174,7 @@
 -(void)requestLogin:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -225,7 +259,7 @@
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     self.startLoading =NO;
     [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网络请求错误"];
     [activity stopAnimating];
@@ -332,7 +366,7 @@
 -(void)requestFinished:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if(jsonDic!=nil)

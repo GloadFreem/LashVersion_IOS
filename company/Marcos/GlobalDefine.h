@@ -151,8 +151,8 @@
 
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
-//#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-#define SERVICE_URL @"http://192.168.5.139:8080/jinzht/"//本地
+#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
+//#define SERVICE_URL @"http://192.168.5.146:8080/jinzht/"//本地
 #define KEY @"jinzht_server_security"
 #define PLATFORM @"1"
 #define REGIST_TYPE @"0"
@@ -451,6 +451,10 @@
 #define BANNER_SYSTEM @"bannerSystem.action"
 //启动页
 #define START_PAGE_SYSTEM @"startPageSystem.action"
+//客服
+#define CUSTOM_SERVICE_SYSTEM @"customServiceSystem.action"
+
+
 
 
 #pragma mark----------------------------------------------------------------------------
