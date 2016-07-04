@@ -7,8 +7,15 @@
 //
 
 #import "PhoneCerityViewController.h"
+#import "WSetPassWordViewController.h"
 
-@interface PhoneCerityViewController ()
+#define YANZHENG @"verifyCode"
+
+@interface PhoneCerityViewController ()<UITextFieldDelegate>
+{
+    dispatch_source_t _timer;
+}
+@property(assign,nonatomic) BOOL isCountDown;
 
 @end
 
@@ -18,13 +25,117 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    
     _certifyBtn.layer.cornerRadius = 5;
     _certifyBtn.layer.masksToBounds = YES;
     
     _nextStepBtn.layer.cornerRadius = 22;
     _nextStepBtn.layer.masksToBounds = 5;
     
+    NSString * string = [AES encrypt:YANZHENG password:KEY];
+    self.partner = [TDUtil encryptMD5String:string];
+    //    NSLog(@"%@",_partner);
+    
+    __block PhoneCerityViewController * cSelf = self;
+    [_certifyBtn addToucheHandler:^(JKCountDownButton*sender, NSInteger tag) {
+        
+        NSString* phoneNumber = cSelf.phoneTextField.text;
+        if ([TDUtil isValidString:phoneNumber]) {
+            if ([TDUtil validateMobile:phoneNumber]) {
+                cSelf.isCountDown = YES;
+            }
+        }
+        if (cSelf.isCountDown) {
+            sender.enabled = NO;
+            [sender startWithSecond:60];
+            
+            [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
+                NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
+                return title;
+            }];
+            [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
+                countDownButton.enabled = YES;
+                return @"点击重新获取";
+                
+            }];
+        }
+    }];
+    
+}
+#pragma mark---返回上一页
+- (IBAction)leftBack:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+#pragma mark---下一步---
+- (IBAction)nextStup:(UIButton *)sender {
+    NSString *phoneNum =  self.phoneTextField.text;
+    NSString *certifyNum =  self.certifyCodeTextField.text;
+    NSString *ringNum = self.ringCodeTextField.text;
+    if (phoneNum && ![phoneNum isEqualToString:@""]) {
+        if (![TDUtil validateMobile:phoneNum]) {
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"手机号码格式不正确"];
+            return ;
+        }
+    }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入手机号码"];
+        return ;
+    }
+    
+    if (!certifyNum || [certifyNum isEqualToString:@""]) {
+        [[DialogUtil sharedInstance] showDlg:self.view textOnly:@"请输入验证码"];
+        return;
+    }
+    if (!_ringCodeTextField.text.length) {
+        ringNum = @"";
+    }
+
+    WSetPassWordViewController *passwordVC = [WSetPassWordViewController new];
+    passwordVC.telephone = phoneNum;
+    passwordVC.certifyNum = certifyNum;
+    passwordVC.ringCode = ringNum;
+    passwordVC.identifyType = self.identifyType;
+    [self.navigationController pushViewController:passwordVC animated:YES];
+}
+#pragma mark---发送验证码---
+- (IBAction)sendMessage:(JKCountDownButton *)sender {
+    
+    NSString *phoneNumber = _phoneTextField.text;
+    
+    if (phoneNumber) {
+        if ([TDUtil validateMobile:phoneNumber]) {
+            NSString *serverUrl = SEND_MESSAGE_CODE;
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner, @"partner",phoneNumber,@"telephone",PLATFORM,@"platform",REGIST_TYPE,@"type",nil];
+            
+            [self.httpUtil getDataFromAPIWithOps:serverUrl postParam:dic type:0 delegate:self sel:@selector(requestSendeCode:)];
+            //            [self startTime];
+            
+        }else{
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"手机号码格式不正确"];
+        }
+    }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"手机号码不能为空"];
+    }
+}
+
+//发送验证码
+-(void)requestSendeCode:(ASIHTTPRequest *)request{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    
+    if(jsonDic!=nil)
+    {
+        NSString* code = [jsonDic valueForKey:@"status"];
+        if ([code intValue] == 200) {
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+        }else{
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+        }
+    }
+}
+
+
+- (IBAction)selectedBtnClick:(UIButton *)sender {
+    sender.selected = !sender.selected;
 }
 
 - (void)didReceiveMemoryWarning {

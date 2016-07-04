@@ -54,6 +54,8 @@
 @property (nonatomic, copy) NSString *shareUrl; //分享地址
 @property (nonatomic, copy) NSString *shareImage;//分享图片
 @property (nonatomic, copy) NSString *sharePartner;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconWidth;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconHeight;
 
 
 @end
@@ -137,8 +139,9 @@
 
 -(void)setModel
 {
+    _iconWidth.constant = 83;
     _iconBtn.layer.cornerRadius = 41.5;
-    _iconBtn.width = _iconBtn.height;
+    _iconWidth.constant = _iconHeight.constant;
     _iconBtn.layer.masksToBounds = YES;
     
     

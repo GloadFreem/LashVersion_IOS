@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WSetPassWordViewController : UIViewController
+@interface WSetPassWordViewController : RootViewController
 
 @property (weak, nonatomic) IBOutlet UITextField *firstTextField;
 
@@ -18,5 +18,10 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *cerfityBtn;
 
+@property (nonatomic, copy) NSString *telephone;
+@property (nonatomic, copy) NSString *certifyNum;
+@property (nonatomic, copy) NSString *ringCode;
+
+@property (nonatomic, copy) NSString *identifyType;
 
 @end

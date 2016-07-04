@@ -57,7 +57,7 @@
 -(void)requestInvestField:(ASIHTTPRequest *)request
 {
     NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     
     NSMutableDictionary* dic = [jsonString JSONValue];
     if (dic != nil) {
@@ -104,7 +104,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSLog(@"id数组：%@",_idSelected);
+//    NSLog(@"id数组：%@",_idSelected);
     if (_statusArray != nil && _statusArray.count != indexPath.row) {
         NSString *status = [_statusArray objectAtIndex:indexPath.row];
         InvistTableViewCell *cell = (InvistTableViewCell*)[_tableView cellForRowAtIndexPath:indexPath];

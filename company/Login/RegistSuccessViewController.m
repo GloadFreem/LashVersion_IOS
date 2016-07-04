@@ -8,6 +8,8 @@
 
 #import "RegistSuccessViewController.h"
 #import "RenzhengViewController.h"
+
+#import "PhoneCerityViewController.h"
 @interface RegistSuccessViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *shiyongBtn;//完成注册，试用Btn
 @property (weak, nonatomic) IBOutlet UILabel *ringLabel;//指环码label
@@ -38,13 +40,19 @@
     _shiyongBtn.layer.borderWidth = 1;
     
     self.ringLabel.text = self.inviteCode;
-    NSLog(@"指环码%@",self.inviteCode);
+//    NSLog(@"指环码%@",self.inviteCode);
 }
 - (IBAction)clickBtn:(UIButton*)sender {
     if (sender.tag == 1) {
+        if ([self.wxIcon containsString:@"http"]) {
+            PhoneCerityViewController *cerity = [PhoneCerityViewController new];
+            cerity.identifyType = self.identify;
+            [self.navigationController pushViewController:cerity animated:YES];
+        }else{
         RenzhengViewController  * renzheng = [RenzhengViewController new];
         renzheng.identifyType = self.identify;
         [self.navigationController pushViewController:renzheng animated:YES];
+        }
     }
     
     if (sender.tag == 2) {

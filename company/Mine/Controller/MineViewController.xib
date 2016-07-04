@@ -9,6 +9,8 @@
             <connections>
                 <outlet property="company" destination="HqY-hc-2ld" id="mZ4-aI-VAg"/>
                 <outlet property="iconBtn" destination="Eaf-fU-gVn" id="VZs-2M-rUx"/>
+                <outlet property="iconHeight" destination="pRn-9H-ekg" id="Wc5-z8-KKg"/>
+                <outlet property="iconWidth" destination="dy7-bm-qcb" id="7oM-NV-mRB"/>
                 <outlet property="name" destination="nTz-Tf-E7w" id="dGT-YO-XYW"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="vipImage" destination="6bd-tw-Upq" id="sHk-El-ghc"/>

@@ -151,8 +151,8 @@
 
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
-#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-//#define SERVICE_URL @"http://192.168.5.146:8080/jinzht/"//本地
+//#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
+#define SERVICE_URL @"http://192.168.5.146:8080/jinzht/"//本地
 #define KEY @"jinzht_server_security"
 #define PLATFORM @"1"
 #define REGIST_TYPE @"0"
@@ -232,6 +232,9 @@
 #define AUTHENTICATE @"requestAuthentic.action"
 //认证协议
 #define AUTHENTICATE_PROTOCOL @"getProtocolAuthentic.action"
+
+//微信授权登录
+#define WECHATLOGINUSER @"wechatLoginUser.action"
 
 #pragma mark----------------------------------------------------------------------------
 #pragma mark --------------------------圈子接口------------------------------------------

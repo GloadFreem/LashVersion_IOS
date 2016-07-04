@@ -95,19 +95,22 @@
     _iconBtn.layer.borderWidth = 4;
     _iconBtn.layer.borderColor = color(190, 178, 176, 1).CGColor;
     
+    if ([_wxIcon containsString:@"http"]) {
+        [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_wxIcon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
+    }
+    
     //完成注册按钮属性
     _haveRegist.layer.cornerRadius = 20;
     _haveRegist.layer.masksToBounds = YES;
     _haveRegist.layer.borderWidth = 1;
     _haveRegist.layer.borderColor = [[UIColor whiteColor] CGColor];
     
-    
     //身份按钮属性
     for (UIButton * btn in _btn_Array) {
         btn.layer.cornerRadius = 5;
-        
     }
 }
+
 
 - (IBAction)callService:(UIButton *)sender {
     
@@ -128,13 +131,26 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请选择身份"];
         return;
     }
-    
-    NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.identifyType,@"ideniyType",@"0",@"isWechatLogin", nil];
+    NSString *isWe = @"0";
+    if ([_wxIcon containsString:@"http"]) {
+        isWe = @"1";
+    }
+    NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.identifyType,@"ideniyType",isWe,@"isWechatLogin", nil];
     UIImage *iconImage;
+//    if (_selecePic) {
+//        iconImage= self.iconBtn.currentBackgroundImage;
+//    }else{
+//        iconImage = [UIImage new];
+//    }
+    //默认上传
+    iconImage = [UIImage new];
+    //微信
+    if ([_wxIcon containsString:@"http"]) {
+        iconImage = self.iconBtn.currentBackgroundImage;
+    }
+    //选择头像
     if (_selecePic) {
-        iconImage= self.iconBtn.currentBackgroundImage;
-    }else{
-        iconImage = [UIImage new];
+        iconImage = self.iconBtn.currentBackgroundImage;
     }
     
     //压缩图片
@@ -166,7 +182,7 @@
 -(void)requestSetIdentifyType:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -177,6 +193,7 @@
             //进入注册成功界面
             RegistSuccessViewController * regist = [RegistSuccessViewController new];
             regist.identify = _identifyType;
+            regist.wxIcon = _wxIcon;
             NSDictionary *data = [jsonDic valueForKey:@"data"];
             regist.inviteCode = [data valueForKey:@"inviteCode"];
 //            NSLog(@"获取指环码%@",regist.inviteCode);

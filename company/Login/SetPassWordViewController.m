@@ -49,10 +49,6 @@
 }
 - (IBAction)haveRegist:(id)sender {
     
-    //测试
-    PerfectViewController * perfect =[PerfectViewController new];
-    [self.navigationController pushViewController:perfect animated:YES];
-    
     NSString *password = _password.text;
     NSString *passwordRepeat = _passwordRepeat.text;
     
@@ -102,7 +98,7 @@
 //注册
 -(void)requestRegiste:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if(jsonDic!=nil)
@@ -135,9 +131,6 @@
         [activity stopAnimating];
     }
     
-//    //测试
-//    PerfectViewController * perfect =[PerfectViewController new];
-//    [self.navigationController pushViewController:perfect animated:YES];
     
 }
 

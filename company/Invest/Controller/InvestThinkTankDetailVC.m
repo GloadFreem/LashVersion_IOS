@@ -698,6 +698,9 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:YES];
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
 }
 -(void)viewWillDisappear:(BOOL)animated
 {

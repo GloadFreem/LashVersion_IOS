@@ -30,12 +30,15 @@
 #define PROJECTLIST @"requestProjectList"
 #define BANNERSYSTEM @"bannerSystem"
 #define VERSIONINFO @"versionInfoSystem"
+#define GOLDCOUNT @"requestUserGoldGetInfo"
 
 #define BannerHeight  SCREENWIDTH * 0.5 + 45
 @interface ProjectViewController ()<UITableViewDataSource,UITableViewDelegate,ProjectBannerViewDelegate>
 
 {
     CAEmitterLayer * _fireEmitter;//发射器对象
+    UIImageView *imageView;
+    NSTimer *timer;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -64,6 +67,18 @@
 @property (nonatomic, assign) BOOL isForce;
 @property (nonatomic, copy) NSString *versionPartner;
 
+//金条
+@property (nonatomic, copy) NSString *goldPartner;
+@property (nonatomic, assign) NSInteger count;
+@property (nonatomic, assign) NSInteger tomorrowCount;
+@property (nonatomic, strong) UIView *background;
+@property (nonatomic, strong) UILabel *todayLabel;
+@property (nonatomic, strong) UILabel *tomorrowLabel;
+@property (nonatomic, strong) UIButton *certainBtn;
+@property (nonatomic, strong) UILabel *timeLabel;
+@property (nonatomic, assign) NSInteger second;
+@property (nonatomic, assign) NSInteger secondLeave;
+
 @end
 
 @implementation ProjectViewController
@@ -88,6 +103,9 @@
     _projectPage = 0;
     _roadPage = 0;
     _type = @"0";
+    
+    _second = 0;
+    _secondLeave = 3;
     //获得partner
     self.bannerPartner = [TDUtil encryKeyWithMD5:KEY action:BANNERSYSTEM];
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTLIST];
@@ -97,8 +115,10 @@
     self.hasMessagePartner = [TDUtil encryKeyWithMD5:KEY action:HASMESSAGE];
     //版本更新
     self.versionPartner = [TDUtil encryKeyWithMD5:KEY action:VERSIONINFO];
+    //金条
+    self.goldPartner = [TDUtil encryKeyWithMD5:KEY action:GOLDCOUNT];
     
-    [self loadMessage];
+    
     
     [self startLoadBannerData];
     
@@ -108,24 +128,224 @@
 
     [self createUI];
     
+    [self loadMessage];
+    
 //    [self loadVersion];
     
+    
 //    [self createGoldView];
+    //保存登录时间
+    
+    [self compareTime];
+}
+-(void)saveDate
+{
+    NSString *firstLogin = [TDUtil CurrentDay];
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    [data setValue:firstLogin forKey:@"firstLogin"];
+    [data synchronize];
+}
+-(void)compareTime
+{
+    NSString *currentTime = [TDUtil CurrentDay];
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    NSString *firstDate = [data objectForKey:@"firstLogin"];
+    if ([currentTime isEqualToString:firstDate]) {
+        
+    }else{
+        [self loadGoldCount];
+    }
+}
+-(void)loadGoldCount
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.goldPartner,@"partner", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_USER_GOLD_GETCOUNT postParam:dic type:1 delegate:self sel:@selector(requestGoldCount:)];
+}
+-(void)requestGoldCount:(ASIHTTPRequest*)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+//    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
+            _count = (NSInteger)dataDic[@"count"];
+            _tomorrowCount = (NSInteger)dataDic[@"countTomorrow"];
+            
+            [self saveDate];
+            [self createGoldImageView];
+        }else{
+        
+        }
+    }
+}
+-(void)createGoldImageView
+{
+    
+    
+    UIView *background = [UIView new];
+    [background setBackgroundColor:[UIColor blackColor]];
+    background.alpha = 0.5;
+    
+    [[UIApplication sharedApplication].windows[0] addSubview:background];
+    
+    [background mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.mas_equalTo(0);
+    }];
+    _background = background;
+    
+    _timeLabel = [UILabel new];
+    _timeLabel.font = BGFont(12);
+    _timeLabel.textColor = [UIColor whiteColor];
+    _timeLabel.textAlignment = NSTextAlignmentCenter;
+    _timeLabel.layer.cornerRadius = 15;
+    _timeLabel.layer.masksToBounds = YES;
+    _timeLabel.layer.borderColor = [UIColor whiteColor].CGColor;
+    _timeLabel.layer.borderWidth = 0.5;
+    NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%lds",(long)_secondLeave]];
+    [attributeString addAttribute:NSFontAttributeName value:BGFont(20) range:NSMakeRange(0, 1)];
+    
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(setTime) userInfo:nil repeats:YES];
+        [timer fire];
+//        timer.fireDate = [NSDate distantPast];
+        [[NSRunLoop currentRunLoop] run];
+        
+    });
+    
+    _timeLabel.attributedText = attributeString;
+    [[UIApplication sharedApplication].windows[0] addSubview:_timeLabel];
+    [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(30);
+        make.right.mas_equalTo(background.mas_right).offset(-30);
+        make.top.mas_equalTo(55);
+    }];
+    
+    imageView = [[UIImageView alloc]initWithFrame:self.view.bounds];
+    imageView.backgroundColor = [UIColor clearColor];
+    [[UIApplication sharedApplication].windows[0] addSubview:imageView];
+    
+    
+    NSMutableArray *imageArr = [[NSMutableArray alloc]initWithCapacity:0];
+    for (NSInteger i =0; i < 36; i ++) {
+        NSString * name = [NSString stringWithFormat:@"jintiao%.2ld",(long)i];
+        NSLog(@"filename:%@",name);
+        UIImage *image = [UIImage imageNamed:name];
+        [imageArr addObject:image];
+    }
+    
+    imageView.animationImages = imageArr;
+    imageView.animationRepeatCount = 1;
+    imageView.animationDuration = 1.5;
+    [imageView startAnimating];
+    [self performSelector:@selector(setImage) withObject:self afterDelay:1.51];
+    
+    UIButton *certainBtn = [UIButton new];
+    certainBtn.backgroundColor = [UIColor clearColor];
+    [certainBtn setTitle:@"确定" forState:UIControlStateNormal];
+    [certainBtn setTitleColor:[UIColor yellowColor] forState:UIControlStateNormal];
+    certainBtn.titleLabel.font = BGFont(16);
+    [certainBtn addTarget:self action:@selector(disBackground) forControlEvents:UIControlEventTouchUpInside];
+    certainBtn.layer.cornerRadius = 4;
+    certainBtn.layer.masksToBounds = YES;
+    certainBtn.layer.borderColor = [UIColor yellowColor].CGColor;
+    certainBtn.layer.borderWidth = 1;
+    [[UIApplication sharedApplication].windows[0] addSubview:certainBtn];
+    [certainBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(background.mas_centerX);
+        make.width.mas_equalTo(160);
+        make.height.mas_equalTo(44);
+        make.bottom.mas_equalTo(background.mas_bottom).offset(-70*HEIGHTCONFIG);
+    }];
+    
+    _certainBtn = certainBtn;
+    _tomorrowLabel = [UILabel new];
+    _tomorrowLabel.textColor = [UIColor whiteColor];
+    _tomorrowLabel.font = BGFont(16);
+    _tomorrowLabel.textAlignment = NSTextAlignmentCenter;
+    _tomorrowLabel.text = [NSString stringWithFormat:@"明天登录即可获得%ld根金条",(long)_tomorrowCount];
+    [[UIApplication sharedApplication].windows[0] addSubview:_tomorrowLabel];
+    [_tomorrowLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(background.mas_centerX);
+        make.height.mas_equalTo(16);
+        make.bottom.mas_equalTo(background.mas_bottom).offset(-175*HEIGHTCONFIG);
+    }];
+    
+    
+    _todayLabel = [UILabel new];
+    _todayLabel.textColor = [UIColor yellowColor];
+    _todayLabel.font = BGFont(24);
+    _todayLabel.textAlignment = NSTextAlignmentCenter;
+    
+    NSMutableAttributedString *attributeStr = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"恭喜获得 %ld根金条",(long)_count]];
+    NSRange range = NSMakeRange(5, 1);
+    if (_count > 9) {
+        range = NSMakeRange(5, 2);
+    }
+    [attributeStr addAttribute:NSFontAttributeName value:BGFont(32) range:range];
+    _todayLabel.attributedText = attributeStr;
+    [[UIApplication sharedApplication].windows[0] addSubview:_todayLabel];
+    [_todayLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(background.mas_centerX);
+        make.height.mas_equalTo(38);
+        make.bottom.mas_equalTo(_tomorrowLabel.mas_top).offset(-16);
+    }];
+    
+}
+-(void)disBackground
+{
+    if (_background !=nil) {
+        [_background removeFromSuperview];
+        [imageView removeFromSuperview];
+        [_todayLabel removeFromSuperview];
+        [_tomorrowLabel removeFromSuperview];
+        [_certainBtn removeFromSuperview];
+        [_timeLabel removeFromSuperview];
+    }
 }
 
+-(void)setTime
+{
+    _secondLeave--;
+    if (_second == 3) {
+        
+        [self disBackground];
+        [timer setFireDate:[NSDate distantFuture]];
+        [timer invalidate];
+    }else{//设置label数字
+        NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%lds",(long)_secondLeave]];
+      _timeLabel.attributedText = attributeString;
+    }
+    _second ++;
+}
 
-#pragma mark-------创建金条掉落动画视图-------
+-(void)setImage
+{
+    [imageView stopAnimating];
+    UIImage * image =[UIImage imageNamed:@"jintiao35"];
+    imageView.image = image;
+}
+
+#pragma mark-------创建金条掉落动画视图-------粒子动画
 -(void)createGoldView
 {
     UIView *background = [UIView new];
     [background setBackgroundColor:[UIColor blackColor]];
     background.alpha = 0.5;
     
-    [self.view addSubview:background];
+    background.tag=1000;
+//    [self.view addSubview:background];
+    [[UIApplication sharedApplication].windows[0] addSubview:background];
+    
+    //测试
+    [self.view bringSubviewToFront:background];
     [background mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(0);
-        make.top.mas_equalTo(-64);
-        make.bottom.mas_equalTo(-49);
+        make.top.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
     }];
     //初始化发射器
     _fireEmitter = [[CAEmitterLayer alloc]init];
@@ -326,7 +546,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.bannerPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:BANNER_SYSTEM postParam:dic type:0 delegate:self sel:@selector(requestBannerList:)];
+    [self.httpUtil getDataFromAPIWithOps:BANNER_SYSTEM postParam:dic type:1 delegate:self sel:@selector(requestBannerList:)];
     
 }
 
@@ -398,7 +618,11 @@
     
     [delegate.tabBar tabBarHidden:NO animated:NO];
     
-    
+//    UIView * view = [self.view viewWithTag:1000];
+//    if (view) {
+//        //测试
+//        [self.view bringSubviewToFront:view];
+//    }
 }
 #pragma mark -视图即将消失
 -(void)viewWillDisappear:(BOOL)animated
@@ -440,6 +664,7 @@
     [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     
+    
 }
 #pragma mark -刷新控件
 -(void)nextPage
@@ -466,7 +691,7 @@
     //    NSLog(@"下拉刷新");
 }
 
-#pragma mark- navigationBar  button的点击事件
+#pragma mark- navigationBar --------- button的点击事件
 -(void)buttonCilck:(UIButton*)button
 {
     if (button.tag == 0) {
@@ -588,15 +813,19 @@
         
         [self.navigationController pushViewController:detail animated:YES];
     }
-    
-    
 }
 #pragma mark- ProjectBannerCellDelegate 代理方法
 -(void)transportProjectBannerView:(ProjectBannerView *)view andTagValue:(NSInteger)tagValue
 {
     _selectedCellNum  = tagValue;//将传过来的tag赋值给_selectedCellNum来决定显示cell的类型
     
-    [self startLoadData];
+    if (_selectedCellNum == 20 && !_projectModelArray.count) {
+        [self startLoadData];
+    }
+    if (_selectedCellNum == 21 && !_roadModelArray.count) {
+        [self startLoadData];
+    }
+    [_tableView reloadData];
     //tableView开始更新
 //    [_tableView beginUpdates];
 //    [_tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];

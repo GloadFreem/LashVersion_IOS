@@ -8,18 +8,23 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PhoneCerityViewController : UIViewController
+#import "JKCountDownButton.h"
+
+@interface PhoneCerityViewController : RootViewController
 
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 
 @property (weak, nonatomic) IBOutlet UITextField *certifyCodeTextField;
 @property (weak, nonatomic) IBOutlet UITextField *ringCodeTextField;
 
-@property (weak, nonatomic) IBOutlet UIButton *certifyBtn;
+@property (weak, nonatomic) IBOutlet JKCountDownButton *certifyBtn;
 
 
 @property (weak, nonatomic) IBOutlet UIButton *nextStepBtn;
 
 @property (weak, nonatomic) IBOutlet UIButton *selectedBtn;
+
+
+@property (nonatomic, copy) NSString *identifyType;
 
 @end

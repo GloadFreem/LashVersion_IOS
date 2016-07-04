@@ -18,6 +18,7 @@
 #import "MineViewController.h"
 #import "CircleViewController.h"
 
+#define WELOGINUSER @"wechatLoginUser"
 #define DENGLU @"loginUser"
 #define CUSTOMSERVICE @"customServiceSystem"
 
@@ -41,6 +42,11 @@
 @property (nonatomic, copy) NSString *servicePartner;
 @property (nonatomic, copy) NSString *servicePhone;
 
+@property (nonatomic, copy) NSString *wePartner;
+
+@property (nonatomic, copy) NSString *wePic;
+@property (nonatomic, copy) NSString *weToken;
+
 @end
 
 @implementation LoginRegistViewController
@@ -55,6 +61,7 @@
     //    NSLog(@"%@",_partner);
     //客服
     self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
+    self.wePartner = [TDUtil encryKeyWithMD5:KEY action:WELOGINUSER];
     
     //加载本地默认数据
     [self loadDefaultData];
@@ -150,7 +157,7 @@
 -(void)requestLogin:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -177,7 +184,6 @@
             [self.navigationController pushViewController:tabBarController animated:NO];
         
             
-//            [self.navigationController popToRootViewControllerAnimated:YES];
             
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             [data setValue:self.phoneField.text forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
@@ -235,7 +241,7 @@
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     self.startLoading =NO;
     [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网络请求错误"];
     [activity stopAnimating];
@@ -265,11 +271,16 @@
         if (response.responseCode == UMSResponseCodeSuccess) {
             
             UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary]valueForKey:UMShareToWechatSession];
+//            snsAccount.openId
+            //微信授权登录
+            //激光推送Id
+            NSString *regId = [JPUSHService registrationID];
             
-            //进入身份完善信息界面
-            PerfectViewController *perfert = [PerfectViewController new];
-            [self.navigationController pushViewController:perfert animated:YES];
+            _wePic = snsAccount.iconURL;
+             NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.wePartner,@"partner",snsAccount.openId,@"wechatID",@"1",@"platform",regId,@"regid", nil];
             
+            //开始请求
+            [self.httpUtil getDataFromAPIWithOps:WECHATLOGINUSER postParam:dic type:0 delegate:self sel:@selector(requestWELogin:)];
             
 //            NSDictionary *dict = @{@"oauthType":@"2",@"nickName":snsAccount.userName,@"accountId":snsAccount.usid,@"pic":snsAccount.iconURL,@"parentId":@"0",@"deviceId":deviceId,@"pushToken":pushToken};
             
@@ -278,7 +289,48 @@
     });
 }
 
-
+-(void)requestWELogin:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic != nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *data= [jsonDic valueForKey:@"data"];
+            NSDictionary *idenTypeDic = [NSDictionary dictionaryWithDictionary:[data valueForKey:@"identityType"]];
+            NSString *name = idenTypeDic[@"name"];
+//            NSInteger identifyId =(NSInteger)idenTypeDic[@"identiyTypeId"];
+            
+            if (name && [name isEqualToString:@"无身份"]) {//去认证
+                //进入身份完善信息界面
+                PerfectViewController *perfert = [PerfectViewController new];
+                perfert.wxIcon = _wePic;
+                [self.navigationController pushViewController:perfert animated:YES];
+            }else{
+               //进入应用
+                JTabBarController * tabBarController;
+                for (UIViewController *vc in self.navigationController.childViewControllers) {
+                    if ([vc isKindOfClass:JTabBarController.class]) {
+                        tabBarController = (JTabBarController*)vc;
+                    }
+                }
+                
+                if (!tabBarController) {
+                    tabBarController = [self createViewControllers];
+                }
+                
+                [self.navigationController pushViewController:tabBarController animated:NO];
+                
+                NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+                [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
+            }
+            
+        }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+        }
+    }
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {

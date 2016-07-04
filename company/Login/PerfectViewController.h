@@ -12,4 +12,6 @@
 
 @property (nonatomic, copy) NSString *btnTitle;
 
+@property (nonatomic, copy) NSString *wxIcon;
+
 @end

@@ -13,4 +13,6 @@
 @property (nonatomic, copy) NSString *identify;
 @property (nonatomic, copy) NSString *inviteCode;
 
+@property (nonatomic, copy) NSString *wxIcon;
+
 @end
