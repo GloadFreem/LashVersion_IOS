@@ -138,7 +138,7 @@
         btn.frame = CGRectMake(0 + i*(width + spaceMargin), 23, width, width);
         btn.layer.cornerRadius = 25;
         btn.layer.masksToBounds = YES;
-        
+        btn.contentMode = UIViewContentModeScaleAspectFill;
 //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
         [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",team.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
         [_scrollView1 addSubview:btn];
@@ -188,7 +188,7 @@
         btn.frame = CGRectMake(0 + i*(width + spaceMargin), 23, width, width);
         btn.layer.cornerRadius = 25;
         btn.layer.masksToBounds = YES;
-        
+        btn.contentMode = UIViewContentModeScaleAspectFill;
 //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
         [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",extr.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
         [_scrollView2 addSubview:btn];
@@ -221,6 +221,13 @@
     CGFloat widOff = (width + spaceMargin) * i - spaceMargin;
     _scrollView2.contentSize = CGSizeMake(widOff, 120);
 }
+
+
+
+
+
+
+#pragma mark--------废弃方法---------------
 -(void)setModel:(ProjectDetailLeftTeamModel *)model
 {
     _model = model;

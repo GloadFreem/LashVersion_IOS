@@ -57,7 +57,7 @@
 -(void)requestProject:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-            NSLog(@"返回:%@",jsonString);
+//            NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic != nil) {
@@ -83,7 +83,7 @@
                 listModel.financedMount = roadshows.roadshowplan.financedMount;
                 listModel.endDate = roadshows.roadshowplan.endDate;
                 [_dataArray addObject:listModel];
-                NSLog(@"--打印数组--%@",listModel);
+//                NSLog(@"--打印数组--%@",listModel);
                 }
             [_tableView reloadData];
         }else{
@@ -100,14 +100,14 @@
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     leftback.tag = 0;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(32, 20);
+    leftback.size = CGSizeMake(35, 20);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
     
     UIButton * serviceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     serviceBtn.tag = 1;
-    [serviceBtn setBackgroundImage:[UIImage imageNamed:@"iconfont-kefu"] forState:UIControlStateNormal];
-    serviceBtn.size = serviceBtn.currentBackgroundImage.size;
+    [serviceBtn setImage:[UIImage imageNamed:@"iconfont_kefu.png"] forState:UIControlStateNormal];
+    serviceBtn.size = CGSizeMake(45, 30);
     [serviceBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:serviceBtn];
     
@@ -166,7 +166,7 @@
             [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COMMIT postParam:dic type:0 delegate:self sel:@selector(requestUpProject:)];
             
         }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入推荐理由"];
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请按提示输入推荐理由"];
         }
     }
 }

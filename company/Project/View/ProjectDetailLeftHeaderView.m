@@ -340,7 +340,7 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
             
             _contentLabel.sd_layout.maxHeightIs(MAXFLOAT);
             //            _pictureContainerView.sd_layout.maxHeightIs(MAXFLOAT);
-            [_moreBtn setBackgroundImage:[UIImage imageNamed:@"收起"] forState:UIControlStateNormal];
+            [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_more_close"] forState:UIControlStateNormal];
         }else{
             _contentLabel.sd_layout.maxHeightIs(__maxContentLabelHeight);
             //            _pictureContainerView.sd_layout.maxHeightIs(maxPictureViewHeight);

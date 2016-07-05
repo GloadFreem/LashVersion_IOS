@@ -33,6 +33,9 @@
 
 - (IBAction)btnClick:(UIButton*)sender{
     
+    [self.firstTextField resignFirstResponder];
+    [self.secondTextField resignFirstResponder];
+    
     NSString *password = _firstTextField.text;
     NSString *passwordRepeat = _secondTextField.text;
     

@@ -76,11 +76,11 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oAq-wU-B6U">
-                    <rect key="frame" x="12" y="30" width="32" height="20"/>
+                    <rect key="frame" x="12" y="30" width="45" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="GNZ-h3-32W"/>
                         <constraint firstAttribute="width" constant="20" id="Zeh-U3-suN"/>
-                        <constraint firstAttribute="width" constant="32" id="crg-Fj-Oe4"/>
+                        <constraint firstAttribute="width" constant="45" id="crg-Fj-Oe4"/>
                         <constraint firstAttribute="height" constant="20" id="mnb-3X-AyI"/>
                     </constraints>
                     <state key="normal" image="leftBack.png"/>
@@ -95,7 +95,7 @@
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="gbU-lS-vbZ" secondAttribute="bottom" constant="50" id="22A-WB-XYh"/>
                 <constraint firstItem="oAq-wU-B6U" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="12" id="2hI-pM-Bsj"/>

@@ -20,4 +20,6 @@
 @property (nonatomic, copy) NSString *abbrevName;
 @property (nonatomic, copy) NSString *startPageImage;
 
+@property (nonatomic, assign) BOOL isClick;
+
 @end

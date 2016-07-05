@@ -13,11 +13,19 @@
 
 @end
 
+
+
+
 @implementation Extr
 
 + (NSDictionary *)objectClassInArray{
     return @{@"roadshows" : [BannerRoadshows class]};
 }
+
+@end
+
+
+@implementation BannerFinancestatus
 
 @end
 
@@ -34,13 +42,11 @@
 
 @implementation Body
 
-
 +(NSDictionary*)mj_replacedKeyFromPropertyName
 {
-    return @{
-             @"desc" : @"description"
-             };
+    return @{@"desc" : @"description"};
 }
+
 @end
 
 

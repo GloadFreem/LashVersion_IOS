@@ -80,6 +80,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _timeLabel = [UILabel new];
     _timeLabel.font = BGFont(12);
     _timeLabel.textColor = color74;
+    _timeLabel.textAlignment = NSTextAlignmentRight;
     
     _contentLabel = [UILabel new];
     _contentLabel.textColor = color47;
@@ -162,7 +163,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .leftEqualToView(_nameLabel)
     .topSpaceToView(_nameLabel,8)
     .heightIs(12);
-    [_companyLabel setSingleLineAutoResizeWithMaxWidth:150];
+    [_companyLabel setSingleLineAutoResizeWithMaxWidth:120];
     
     _shuView.sd_layout
     .leftSpaceToView(_companyLabel,5)
@@ -174,7 +175,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .leftSpaceToView(_shuView,5)
     .bottomEqualToView(_companyLabel)
     .heightIs(12);
-    [_positionLabel setSingleLineAutoResizeWithMaxWidth:150];
+    [_positionLabel setSingleLineAutoResizeWithMaxWidth:80];
     
     _timeLabel.sd_layout
     .rightSpaceToView(contentView,margin)
@@ -260,7 +261,8 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _positionLabel.text = model.positionStr;
     [_positionLabel sizeToFit];
     
-    _timeLabel.text = model.timeSTr;
+    _timeLabel.text = [TDUtil getDateCha:model.timeSTr];
+    
     [_timeLabel sizeToFit];
     
     _contentLabel.text = model.msgContent;

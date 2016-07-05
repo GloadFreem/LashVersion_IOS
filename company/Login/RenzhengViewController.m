@@ -296,7 +296,7 @@
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:1];
     [_tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
     
-    NSLog(@"%@",_dataArray);
+//    NSLog(@"%@",_dataArray);
 }
 
 #pragma mark -textFiledDelegate

@@ -78,6 +78,10 @@
 //注册按钮点击事件
 - (IBAction)registClick:(id)sender {
     
+    [self.phoneField resignFirstResponder];
+    [self.certifyField resignFirstResponder];
+    [self.ringCodeField resignFirstResponder];
+    
     NSString *phoneNum =  self.phoneField.text;
     NSString *certifyNum =  self.certifyField.text;
     NSString *ringNum = self.ringCodeField.text;
@@ -107,7 +111,7 @@
 }
 - (IBAction)sendMessage:(UIButton *)sender {
     
-    
+    [_phoneField resignFirstResponder];
     NSString *phoneNumber = _phoneField.text;
     
     if (phoneNumber) {

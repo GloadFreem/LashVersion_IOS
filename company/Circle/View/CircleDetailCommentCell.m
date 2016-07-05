@@ -7,7 +7,7 @@
 //
 
 #import "CircleDetailCommentCell.h"
-
+#import "TDUtil.h"
 @implementation CircleDetailCommentCell
 {
     UIImageView *_iconImage;
@@ -106,7 +106,8 @@
     _namelabel.text = model.nameStr;
     [_namelabel sizeToFit];
     
-    _timelabel.text = model.publicDate;
+    NSString *str = [TDUtil getDateCha:model.publicDate];
+    _timelabel.text = str;
     [_timelabel sizeToFit];
     
     _contentLabel.text = model.contentStr;

@@ -63,7 +63,7 @@
     [_page setNumberOfPages:kImageCount];
     [_page setCurrentPage:0];
     [_page setCurrentPageIndicatorTintColor:orangeColor];
-//    [_page setPageIndicatorTintColor:orangeColor];
+    [_page setPageIndicatorTintColor:[UIColor lightGrayColor]];
     [_page addTarget:self action:@selector(pageClick:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:_page];
 }

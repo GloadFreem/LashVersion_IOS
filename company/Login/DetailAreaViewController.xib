@@ -23,9 +23,9 @@
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HoT-zF-IB2">
-                    <rect key="frame" x="12" y="30" width="32" height="22"/>
+                    <rect key="frame" x="12" y="30" width="45" height="22"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="32" id="OWZ-uF-Q28"/>
+                        <constraint firstAttribute="width" constant="45" id="OWZ-uF-Q28"/>
                         <constraint firstAttribute="width" constant="20" id="Tcr-fT-ur6"/>
                         <constraint firstAttribute="height" constant="22" id="Vnm-Ye-TaS"/>
                         <constraint firstAttribute="height" constant="20" id="ySk-Rm-H4i"/>

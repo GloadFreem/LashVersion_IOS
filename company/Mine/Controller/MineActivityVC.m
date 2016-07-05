@@ -9,7 +9,10 @@
 #import "MineActivityVC.h"
 #import "ActivityCell.h"
 
+#import "ActivityDetailVC.h"
+
 #import "ActivityViewModel.h"
+
 #import "MineActivityListModel.h"
 
 #define LOGOACTIVITY @"requestMineAction"
@@ -162,7 +165,21 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //反选
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    ActivityDetailVC * vc = [ActivityDetailVC new];
     
+    
+    ActivityViewModel * model = [_dataArray objectAtIndex:indexPath.row];
+    vc.activityModel = model;
+    
+    
+    //隐藏tabbar
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark -btnAction

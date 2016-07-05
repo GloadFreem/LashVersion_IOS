@@ -1483,6 +1483,35 @@
     return [NSString stringWithFormat:@"%@元",chinese];
 }
 
++(NSString*)translationSmallSum:(NSString*)smallSum
+{
+    NSString *str = smallSum;
+    NSArray *arabic_numerals = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"0"];
+    NSArray *chinese_numerals = @[@"壹",@"贰",@"叁",@"肆",@"伍",@"陆",@"柒",@"捌",@"玖",@"零"];
+    
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:chinese_numerals forKeys:arabic_numerals];
+    NSMutableArray *sums = [NSMutableArray array];
+    for (int i = 0; i < str.length; i ++) {
+        NSString *substr = [str substringWithRange:NSMakeRange(i, 1)];
+        NSString *a = [dictionary objectForKey:substr];
+        [sums addObject:a];
+    }
+    NSMutableString *nsmStr = [[NSMutableString alloc]init];
+    if ([sums[0] isEqualToString:@"零"]) {
+        [nsmStr appendFormat:@""];
+    }else{
+        [nsmStr appendFormat:@"%@角",sums[0]];
+    }
+    
+    if ([sums[1] isEqualToString:@"零"]) {
+        [nsmStr appendFormat:@""];
+    }else{
+        [nsmStr appendFormat:@"%@分",sums[1]];
+    }
+    
+    return nsmStr;
+}
+
 +(BOOL) isidentityCard:(NSString*)str
 {
     NSString *regex2 = @"^(\\d{14}|\\d{17})(\\d|[xX])$";
@@ -1505,5 +1534,50 @@
     [data removeObjectForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     
     [data synchronize];
+}
+
+#pragma mark----时间差
++(NSString*)getDateCha:(NSString*)endDate
+{
+    NSDate *nowDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss.0";
+    //当前时间字符串格式
+    NSString *nowDateStr = [dateFormatter stringFromDate:nowDate];
+    //截止时间date格式
+    NSDate *expireDate = [dateFormatter dateFromString:endDate];
+    //当前时间date格式
+    nowDate = [dateFormatter dateFromString:nowDateStr];
+    //当前日历
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    //需要对比的时间数据
+    NSCalendarUnit unit = NSCalendarUnitYear | NSCalendarUnitMonth
+    | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+    //对比时间差
+    NSDateComponents *dateCom = [calendar components:unit fromDate:expireDate toDate:nowDate options:0];
+    
+    //年差额 = dateCom.year, 月差额 = dateCom.month, 日差额 = dateCom.day, 小时差额 = dateCom.hour, 分钟差额 = dateCom.minute, 秒差额 = dateCom.second
+    NSString *str = @"";
+    if (dateCom.day > 3) {
+        str = [NSString stringWithFormat:@"%@",endDate];
+    }else{
+        if (dateCom.day >=1) {
+            str = [NSString stringWithFormat:@"%ld天前",dateCom.day];
+        }else{
+            if (dateCom.hour >= 1) {
+                str = [NSString stringWithFormat:@"%ld小时前",dateCom.hour];
+            }else{
+                if (dateCom.minute >= 1) {
+                    str = [NSString stringWithFormat:@"%ld分钟前",dateCom.minute];
+                }else{
+                    if (dateCom.second >= 1) {
+                        str = [NSString stringWithFormat:@"%ld秒前",dateCom.second];
+                    }
+                }
+            }
+        }
+    }
+    
+    return str;
 }
 @end

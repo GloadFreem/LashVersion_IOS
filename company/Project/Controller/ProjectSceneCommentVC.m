@@ -84,7 +84,7 @@
                 cellModel.name = model.users.name;
                 cellModel.content = model.content;
                 cellModel.time = model.commentDate;
-                [_dataArray addObject:cellModel];
+                [_dataArray insertObject:cellModel atIndex:0];
             }
             //刷新表
             [self.tableView reloadData];
@@ -118,7 +118,7 @@
     
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.right.mas_equalTo(0);
-        make.height.mas_equalTo(SCREENHEIGHT -50-64);
+        make.height.mas_equalTo(SCREENHEIGHT -50);
     }];
     
     [self createFooterView];
@@ -129,7 +129,7 @@
 {
     //加底部回复框
     _footer =[[UIView alloc]init];
-    
+    [_footer setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:_footer];
     [_footer mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.mas_equalTo(0);
@@ -142,7 +142,9 @@
     _textView.layer.borderColor = [UIColor darkGrayColor].CGColor;
     _textView.layer.borderWidth = 0.5;
     _textView.delegate = self;
+    _textView.returnKeyType = UIReturnKeyDone;
     _textView.font = BGFont(15);
+    
     [_footer addSubview:_textView];
     
     UIButton * btn =[[UIButton alloc]init];

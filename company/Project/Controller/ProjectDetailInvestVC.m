@@ -82,6 +82,7 @@
     _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     _textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     _textField.borderStyle = UITextBorderStyleBezel;
+    _textField.returnKeyType = UIReturnKeyDone;
     
     UILabel *rightLabel = [UILabel new];
     rightLabel.text = @"万";
@@ -215,8 +216,10 @@
 #pragma mark----------------------进入易宝流程-------------------------
 //                NSLog(@"立即支付-----%f",_limitAmount);
                 
-                
-                [self isCheckUserConfirmed];
+                if (!_isClick) {
+                    [self setBtnStatus];
+                    [self isCheckUserConfirmed];
+                }
                 
             }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入正确的投资金额"];
@@ -229,11 +232,16 @@
     
     btn.selected = !btn.selected;
     
-    NSLog(@"打印领投还是跟投标识---%@",_flagArray[0]);
+//    NSLog(@"打印领投还是跟投标识---%@",_flagArray[0]);
+}
+-(void)setBtnStatus
+{
+    _isClick = YES;
 }
 #pragma mark ----------认证是否是易宝用户-------------
 -(void)isCheckUserConfirmed
 {
+    [SVProgressHUD showWithStatus:@"正在加载..."];
     NSString * str = [TDUtil generateUserPlatformNo];
     
     NSMutableDictionary * dic = [NSMutableDictionary new];
@@ -258,6 +266,10 @@
             NSDictionary * data = [jsonDic valueForKey:@"data"];
             NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:_request,@"req",[data valueForKey:@"sign"],@"sign",ACCOUNT_INFO,@"service", nil];
             [self.httpUtil getDataFromYeePayAPIWithOps:@"" postParam:dic type:0 delegate:self sel:@selector(requestCheckUser:)];
+        }else{
+            _isClick = NO;
+            [SVProgressHUD dismiss];
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
         
     }
@@ -268,7 +280,7 @@
 //    NSLog(@"返回:%@",xmlString);
     NSDictionary * xmlDic = [TDUtil convertXMLStringElementToDictory:xmlString];
     
-    NSLog(@"%@",xmlDic);
+//    NSLog(@"%@",xmlDic);
     
     if ([DICVFK(xmlDic, @"code") intValue]==101) {
         [self goConfirm];
@@ -294,6 +306,7 @@
         }
         
     }else{
+        _isClick = NO;
         self.isNetRequestError = YES;
     }
 }
@@ -334,6 +347,7 @@
     {
         NSString* status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
+            [SVProgressHUD dismiss];
             NSDictionary * data = [jsonDic valueForKey:@"data"];
             NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:_request,@"req",[data valueForKey:@"sign"],@"sign", nil];
             YeePayViewController * controller = [[YeePayViewController alloc]init];
@@ -350,6 +364,9 @@
             [self.navigationController pushViewController:controller animated:YES];
             self.startLoading = NO;
             return;
+        }else{
+            _isClick = NO;
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
         self.isNetRequestError = YES;
     }
@@ -416,9 +433,12 @@
             if (payStatus == PayStatusPayfor) {
                 controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,YeePayMent,nil)];
             }
-            
+            [SVProgressHUD dismiss];
             [self.navigationController pushViewController:controller animated:YES];
             
+        }else{
+        _isClick = NO;
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
         
     }
@@ -474,8 +494,11 @@
             controller.state = PayStatusPayfor;
             
             controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,YeePayMent,nil)];
-            
+            [SVProgressHUD dismiss];
             [self.navigationController pushViewController:controller animated:YES];
+        }else{
+        _isClick = NO;
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
 }
@@ -509,9 +532,15 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    _isClick = NO;
     //隐藏tabbar
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [SVProgressHUD dismiss];
 }
 @end

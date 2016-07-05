@@ -300,7 +300,7 @@
     }];
     //进度条
     [_progress mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_moneyBtn.mas_left).offset(20*WIDTHCONFIG);
+        make.left.mas_equalTo(_moneyBtn.mas_right).offset(20*WIDTHCONFIG);
         make.top.mas_equalTo(_firstPartImage.mas_bottom).offset(3*HEIGHTCONFIG);
         make.width.height.mas_equalTo(53*WIDTHCONFIG);
     }];

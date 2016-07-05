@@ -7,7 +7,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UpProjectViewController">
             <connections>
+                <outlet property="emailBtn" destination="SAf-eJ-zqh" id="GXM-Gp-CF0"/>
                 <outlet property="emailLabel" destination="Xx2-Yj-3Vy" id="4bk-ZB-4Lv"/>
+                <outlet property="phoneBtn" destination="l7z-l2-fip" id="yuM-xn-yXs"/>
                 <outlet property="phoneLabel" destination="XGi-gY-ch0" id="4Xe-jb-NMR"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -24,6 +26,7 @@
                         <constraint firstAttribute="width" constant="100" id="NUm-TC-cE5"/>
                     </constraints>
                     <state key="normal" backgroundImage="iconfont-message.png"/>
+                    <state key="highlighted" backgroundImage="iconfont-message.png"/>
                     <connections>
                         <action selector="emailBtnClick:" destination="-1" eventType="touchUpInside" id="9g9-5n-nCR"/>
                     </connections>
@@ -65,6 +68,7 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7z-l2-fip">
                     <rect key="frame" x="137" y="276" width="102" height="102"/>
                     <state key="normal" backgroundImage="iconfont-dianhua.png"/>
+                    <state key="highlighted" backgroundImage="iconfont-dianhua.png"/>
                     <connections>
                         <action selector="phoneBtnClick:" destination="-1" eventType="touchUpInside" id="cH5-CG-70e"/>
                     </connections>
@@ -101,7 +105,7 @@
                 <constraint firstItem="ZY6-W7-N3Y" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="uDv-L3-hiA"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-            <point key="canvasLocation" x="246.5" y="207.5"/>
+            <point key="canvasLocation" x="60.5" y="125.5"/>
         </view>
     </objects>
     <resources>

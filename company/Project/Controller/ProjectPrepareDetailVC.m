@@ -179,9 +179,9 @@
     [navView addSubview:leftBtn];
     [leftBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(12);
-        make.top.mas_equalTo(37);
+        make.top.mas_equalTo(32);
         make.width.mas_equalTo(32);
-        make.height.mas_equalTo(20);
+        make.height.mas_equalTo(30);
     }];
     
     UIButton *shareBtn = [UIButton new];

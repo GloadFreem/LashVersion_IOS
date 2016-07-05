@@ -30,10 +30,10 @@
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PVs-Bl-VOb">
-                    <rect key="frame" x="12" y="30" width="32" height="20"/>
+                    <rect key="frame" x="12" y="30" width="45" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="Eie-na-uu6"/>
-                        <constraint firstAttribute="width" constant="32" id="i9n-Ei-1jg"/>
+                        <constraint firstAttribute="width" constant="45" id="i9n-Ei-1jg"/>
                         <constraint firstAttribute="height" constant="20" id="qLN-Tp-aH6"/>
                         <constraint firstAttribute="width" constant="20" id="w1n-Zr-qEd"/>
                     </constraints>

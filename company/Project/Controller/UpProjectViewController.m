@@ -16,6 +16,8 @@
 
 @property (nonatomic, copy) NSString *telephone;
 @property (nonatomic, copy) NSString *email;
+@property (weak, nonatomic) IBOutlet UIButton *emailBtn;
+@property (weak, nonatomic) IBOutlet UIButton *phoneBtn;
 
 @end
 
@@ -30,6 +32,8 @@
     [self setupNav];
     [self startLoadData];
     
+    [self.emailBtn setAdjustsImageWhenHighlighted:NO];
+    [self.phoneBtn setAdjustsImageWhenHighlighted:NO];
 }
 
 #pragma mark -设置导航栏
@@ -37,7 +41,7 @@
 {
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(50, 30);
+    leftback.size = CGSizeMake(45, 30);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"提交项目";
@@ -89,6 +93,10 @@
 - (IBAction)backBtnClick:(UIButton *)sender {
 }
 - (IBAction)emailBtnClick:(UIButton *)sender {
+    
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = _email;
+    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"邮箱已复制到剪切板"];
 }
 - (IBAction)phoneBtnClick:(UIButton *)sender {
     

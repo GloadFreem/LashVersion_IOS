@@ -129,6 +129,7 @@
             [imageBtn setTag:100+i];
             [imageBtn setHighlighted:NO];
             [imageBtn setAdjustsImageWhenHighlighted:NO];
+            [imageBtn setContentMode:UIViewContentModeScaleAspectFill];
 //            [imageBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
             //btn加载数据
             
@@ -147,7 +148,7 @@
                     [btn setTag:100+i];
                     [btn setAdjustsImageWhenHighlighted:NO];
                     btn.frame = CGRectMake(arr.count*SCREENWIDTH, 0, SCREENWIDTH, SCROLLVIEWHEIGHT);
-                    
+                    [imageBtn setContentMode:UIViewContentModeScaleAspectFill];
                     [imageBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",arr[i]]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
                     
                     [_scrollView addSubview:btn];

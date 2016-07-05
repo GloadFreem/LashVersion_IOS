@@ -572,6 +572,7 @@
                 listModel.name = baseModel.body.name;
                 if ([baseModel.type isEqualToString:@"Project"]) {
                     listModel.industoryType = baseModel.extr.industoryType;
+                    listModel.status = baseModel.extr.financestatus.name;
                     listModel.projectId = baseModel.extr.projectId;
                     BannerRoadshows *roadshows = baseModel.extr.roadshows[0];
                     BannerRoadshowplan *roadshowplan = roadshows.roadshowplan;
@@ -834,6 +835,29 @@
 
 -(void)clickBannerImage:(ProjectBannerListModel *)model
 {
+    if ([model.type isEqualToString:@"Project"]) {
+        if ([model.status isEqualToString:@"预选项目"]) {
+            ProjectPrepareDetailVC *detail = [ProjectPrepareDetailVC new];
+            
+            detail.projectId = model.projectId;
+            //隐藏tabbar
+            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+            
+            [delegate.tabBar tabBarHidden:YES animated:NO];
+            
+            [self.navigationController pushViewController:detail animated:YES];
+        }else{
+            ProjectDetailController * detail = [[ProjectDetailController alloc]init];
+            detail.projectId = model.projectId;
+            //隐藏tabbar
+            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+            
+            [delegate.tabBar tabBarHidden:YES animated:NO];
+            
+            [self.navigationController pushViewController:detail animated:YES];
+        }
+        
+    }else{
     ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
     vc.url = model.url;
     //隐藏tabbar
@@ -842,6 +866,7 @@
     [delegate.tabBar tabBarHidden:YES animated:NO];
     
     [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 #pragma mark--------版本更新----------

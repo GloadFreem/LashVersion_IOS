@@ -49,6 +49,9 @@
 }
 - (IBAction)haveRegist:(id)sender {
     
+    [_password resignFirstResponder];
+    [_passwordRepeat resignFirstResponder];
+    
     NSString *password = _password.text;
     NSString *passwordRepeat = _passwordRepeat.text;
     

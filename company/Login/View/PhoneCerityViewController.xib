@@ -28,10 +28,10 @@
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vNd-DG-fbh">
-                    <rect key="frame" x="12" y="20" width="32" height="20"/>
+                    <rect key="frame" x="12" y="20" width="45" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="12" id="ALR-Fz-PEX"/>
-                        <constraint firstAttribute="width" constant="32" id="Sqk-hV-ki6"/>
+                        <constraint firstAttribute="width" constant="45" id="Sqk-hV-ki6"/>
                         <constraint firstAttribute="height" constant="20" id="UNh-fT-5zk"/>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="lYa-4H-wUQ"/>
                     </constraints>
@@ -163,8 +163,12 @@
                         <constraint firstAttribute="height" constant="16" id="5c4-K8-7Ob"/>
                         <constraint firstAttribute="width" constant="16" id="67D-Y0-L6K"/>
                     </constraints>
-                    <state key="normal" backgroundImage="icon_unselectedBtn.png"/>
-                    <state key="selected" backgroundImage="icon_selectedBtn.png"/>
+                    <state key="normal" backgroundImage="icon_unselectedBtn.png">
+                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="selected" backgroundImage="icon_selectedBtn.png">
+                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </state>
                     <connections>
                         <action selector="selectedBtnClick:" destination="-1" eventType="touchUpInside" id="Gaa-IR-e5S"/>
                     </connections>

@@ -23,7 +23,7 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="公司所在地" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wNH-66-HTz">
-                    <rect key="frame" x="137" y="29" width="100" height="24"/>
+                    <rect key="frame" x="137" y="29.5" width="100" height="24"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
@@ -45,10 +45,10 @@
                     </connections>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rk4-ss-Cff">
-                    <rect key="frame" x="12" y="30" width="32" height="22"/>
+                    <rect key="frame" x="12" y="30" width="45" height="23"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="32" id="1Gd-hO-y4p"/>
-                        <constraint firstAttribute="height" constant="22" id="q1q-Jx-fcR"/>
+                        <constraint firstAttribute="width" constant="45" id="1Gd-hO-y4p"/>
+                        <constraint firstAttribute="height" constant="23" id="q1q-Jx-fcR"/>
                     </constraints>
                     <state key="normal" image="leftBack.png"/>
                     <state key="highlighted" backgroundImage="leftBack.png"/>

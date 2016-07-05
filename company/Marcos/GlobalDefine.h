@@ -151,8 +151,8 @@
 
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
-//#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-#define SERVICE_URL @"http://192.168.5.146:8080/jinzht/"//本地
+#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
+//#define SERVICE_URL @"http://192.168.5.153:8080/jinzht/"//本地
 #define KEY @"jinzht_server_security"
 #define PLATFORM @"1"
 #define REGIST_TYPE @"0"
@@ -354,7 +354,8 @@
 #define ACTION_COMMENT @"requestCommentAction.action"
 //参加活动
 #define ATTEND_ACTION @"requestAttendAction.action"
-
+//搜搜活动
+#define ACTION_SEARCH @"requestSearchAction.action"
 
 #pragma mark----------------------------------------------------------------------------
 #pragma mark --------------------------LOGO菜单接口------------------------------------------

@@ -36,6 +36,9 @@
 
 @property (nonatomic, assign) BOOL praiseSuccess;  //点赞成功
 
+@property (nonatomic, copy) NSString *beCommentName; //被回复人名字
+@property (nonatomic, strong) NSMutableArray *beCommentNameArray;
+@property (nonatomic, copy) NSString *selfId; //自己id
 @end
 
 @implementation CircleDetailVC
@@ -56,10 +59,18 @@
     if (!_atUserIdArray) {
         _atUserIdArray = [NSMutableArray array];
     }
+    if (!_beCommentNameArray) {
+        _beCommentNameArray = [NSMutableArray array];
+    }
     //初始化为0详情页面
     _page = 0;
     _flag = @"1";
     _userId = @"";
+    _beCommentName = @"";
+    
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    _selfId = [data objectForKey:USER_STATIC_USER_ID];
+    
     //请求数据
     [self loadData];
     
@@ -89,6 +100,7 @@
     if (_page == 0) {
         [_dataArray removeAllObjects];
         [_atUserIdArray removeAllObjects];
+        [_beCommentNameArray removeAllObjects];
     }
     
     if (jsonDic!=nil) {
@@ -108,6 +120,9 @@
             listModel.nameStr = baseModel.users.name;
             //回复atUserId
             [_atUserIdArray addObject:@""];
+            
+            //回复人名字数组
+            [_beCommentNameArray addObject:@""];
             
             listModel.iconNameStr = baseModel.users.headSculpture;
             listModel.publicContentId = baseModel.publicContentId; //帖子ID
@@ -169,6 +184,10 @@
                 detailCommentModel.publicDate = commentModel.publicDate;
                 //回复人ID
                 [_atUserIdArray addObject:commentModel.usersByUserId.userId];
+                
+                //回复人名字数组
+                [_beCommentNameArray addObject:[NSString stringWithFormat:@" 回复：%@",commentModel.usersByUserId.name]];
+                
                 //如果有回复
                 if (commentModel.usersByAtUserId.name) {
                     detailCommentModel.nameStr = [NSString stringWithFormat:@"%@ 回复：%@",commentModel.usersByUserId.name,commentModel.usersByAtUserId.name];
@@ -318,21 +337,23 @@
     _tableView.mj_header.automaticallyChangeAlpha = YES;
 //    [self.tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
+   
+    
+    // 回复框
+    UIView *view = [UIView new];
+    [view setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:view];
+    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+//        make.top.equalTo(_tableView.mas_bottom);
+        make.height.mas_equalTo(50);
+    }];
     
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.view.mas_left);
         make.top.mas_equalTo(self.view.mas_top);
         make.right.mas_equalTo(self.view.mas_right);
-        make.bottom.mas_equalTo(self.view.mas_bottom).offset(-50*HEIGHTCONFIG);
-    }];
-    // 回复框
-    UIView *view = [UIView new];
-    [view setFrame:CGRectMake(0, SCREENHEIGHT - 50*HEIGHTCONFIG - 64, SCREENWIDTH, 50 * HEIGHTCONFIG)];
-    [view setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:view];
-    [view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.view);
-        make.top.equalTo(_tableView.mas_bottom);
+        make.bottom.mas_equalTo(self.view.mas_bottom);
     }];
     
     UIView *line = [UIView new];
@@ -488,6 +509,9 @@
     _flag = @"2";
     
     _userId = [NSString stringWithFormat:@"%@",_atUserIdArray[indexPath.row]];
+    
+    _beCommentName = [NSString stringWithFormat:@"%@",_beCommentNameArray[indexPath.row]];
+    
 //    NSLog(@"回复人数组----%@",_atUserIdArray);
     
 }
@@ -495,13 +519,29 @@
 -(void)sendComment:(UIButton*)btn
 {
     if ([_textField.text isEqualToString:@""]) {
-//     [_textField resignFirstResponder];
-//     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"评论内容不能为空" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-//        [alertView show];
         [_textField resignFirstResponder];
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"回复内容不能为空"];
         return;
     }
+    
+    if ([_selfId isEqualToString:_userId]) {
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"不能回复自己"];
+        return;
+    }
+    
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    NSString *icon = [data objectForKey:USER_STATIC_HEADER_PIC];
+    NSString *name = [data objectForKey:USER_STATIC_NAME];
+    
+    //添加 本地数据
+    CircleDetailCommentModel *detailCommentModel = [CircleDetailCommentModel new];
+    detailCommentModel.iconImageStr = icon;
+    detailCommentModel.nameStr = [NSString stringWithFormat:@"%@%@",name,_beCommentName];
+    detailCommentModel.contentStr = [NSString stringWithFormat:@"%@",self.textField.text];
+    detailCommentModel.publicDate = [TDUtil CurrentDate];
+    
+    [_dataArray insertObject:detailCommentModel atIndex:1];
+    [self.tableView reloadData];
     
     
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"contentId",[NSString stringWithFormat:@"%@",self.textField.text],@"content",[NSString stringWithFormat:@"%@",_userId],@"atUserId",_flag,@"flag",nil];
@@ -522,7 +562,7 @@
             _textField.text = @"";
             [_textField resignFirstResponder];
             //发表成功 刷新tableView
-            [self loadData];
+//            [self loadData];
         }
     }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];

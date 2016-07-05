@@ -22,4 +22,6 @@
 @property (nonatomic, assign) NSInteger financedMount;
 @property (nonatomic, copy) NSString *type;
 
+@property (nonatomic, copy) NSString *status;
+
 @end

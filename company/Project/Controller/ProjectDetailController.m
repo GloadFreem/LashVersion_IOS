@@ -288,25 +288,30 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             [SVProgressHUD dismiss];
-            ProjectDetailBaseMOdel *baseModel = [ProjectDetailBaseMOdel mj_objectWithKeyValues:jsonDic[@"data"]];
-            _model = baseModel;
-            NSArray *bannerArr = [NSArray arrayWithObject:baseModel.project.startPageImage];
+            //容错
+            if (jsonDic[@"data"] !=nil) {
+                ProjectDetailBaseMOdel *baseModel = [ProjectDetailBaseMOdel mj_objectWithKeyValues:jsonDic[@"data"]];
+                
+                _model = baseModel;
+                NSArray *bannerArr = [NSArray arrayWithObject:baseModel.project.startPageImage];
+                
+                _isCollect = baseModel.project.collected;
+                NSArray *roadshowsArr = baseModel.project.roadshows;
+                DetailRoadshows *roadshows = roadshowsArr[0];
+                _limitAmount = roadshows.roadshowplan.limitAmount;
+                _borrowerUserNumber = baseModel.project.borrowerUserNumber;
+                _abbrevName = baseModel.project.abbrevName;
+                _fullName = baseModel.project.fullName;
+                _profit = roadshows.roadshowplan.profit;
+                _startPageImage = baseModel.project.startPageImage;
+                
+                [self createBannerView:bannerArr];
+                
+                scene.bannerView = bannerView;
+                
+                [self createUI];
+            }
             
-            _isCollect = baseModel.project.collected;
-            NSArray *roadshowsArr = baseModel.project.roadshows;
-            DetailRoadshows *roadshows = roadshowsArr[0];
-            _limitAmount = roadshows.roadshowplan.limitAmount;
-            _borrowerUserNumber = baseModel.project.borrowerUserNumber;
-            _abbrevName = baseModel.project.abbrevName;
-            _fullName = baseModel.project.fullName;
-            _profit = roadshows.roadshowplan.profit;
-            _startPageImage = baseModel.project.startPageImage;
-            
-            [self createBannerView:bannerArr];
-            
-            scene.bannerView = bannerView;
-            
-            [self createUI];
             
             
         }else{
@@ -488,6 +493,7 @@
          scene =[[ProjectDetailSceneView alloc]initWithFrame:CGRectMake(2*SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT-CGRectGetMaxY(_titleScrollView.frame))];
         scene.projectId = self.projectId;
         scene.delegate = self;
+        scene.bannerView = bannerView;
         [_subViewScrollView addSubview:scene];
         
         //加底部回复框
@@ -983,6 +989,7 @@
     self.navigationController.navigationBar.hidden = YES;
     
      [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
@@ -992,6 +999,14 @@
     [self performSelector:@selector(updateLayoutNotification) withObject:nil afterDelay:0.5];
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
+}
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -1005,9 +1020,15 @@
     MP3Player *player = [[MP3Player alloc]init];
     [player.player pause];
     
+    
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
 }
 
+-(void)dealloc
+{
+    MP3Player *player = [[MP3Player alloc]init];
+    player = nil;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

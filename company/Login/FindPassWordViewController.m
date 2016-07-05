@@ -75,6 +75,7 @@
 //获取验证码
 - (IBAction)getVerify:(UIButton *)sender {
     
+    [self.phoneTextField resignFirstResponder];
     NSString *phoneNumber = self.phoneTextField.text;
     
     if (phoneNumber) {
@@ -116,6 +117,9 @@
 }
 //下一步
 - (IBAction)nextStup:(id)sender {
+    
+    [self.phoneTextField resignFirstResponder];
+    [self.verifyTextField resignFirstResponder];
     
     NSString *phoneNum =  self.phoneTextField.text;
     NSString *certifyNum =  self.verifyTextField.text;

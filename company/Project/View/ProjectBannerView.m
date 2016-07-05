@@ -250,16 +250,17 @@
         UIButton * btn = [[UIButton alloc]init];
         [btn setAdjustsImageWhenHighlighted:NO];
         btn.tag = i;
-        [btn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         btn.frame = CGRectMake(0+i*SCREENWIDTH, 0, SCREENWIDTH, SCROLLVIEWHEIGHT - 45);
         [btn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.image]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
-//        [btn setBackgroundImage:[UIImage imageNamed:@"c9d8be32534701.568974395e076"] forState:UIControlStateNormal];
+
         [_scrollView addSubview:btn];
         
         if (i==0) {
             UIButton * btn =[[UIButton alloc]init];
             [btn setAdjustsImageWhenHighlighted:NO];
             btn.tag = i;
+            [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
             btn.frame = CGRectMake(4*SCREENWIDTH, 0, SCREENWIDTH, SCROLLVIEWHEIGHT - 45);
             [btn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.image]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
 

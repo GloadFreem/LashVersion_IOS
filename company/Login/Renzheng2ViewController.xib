@@ -20,18 +20,18 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="矩形-1-拷贝.png" translatesAutoresizingMaskIntoConstraints="NO" id="NmZ-0e-Wgn">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="navBJ.png" translatesAutoresizingMaskIntoConstraints="NO" id="NmZ-0e-Wgn">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="64" id="gU6-Dv-k9k"/>
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xb9-to-IeH">
-                    <rect key="frame" x="12" y="25" width="32" height="20"/>
+                    <rect key="frame" x="12" y="25" width="45" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="9ld-qS-M2Z"/>
                         <constraint firstAttribute="height" constant="20" id="YPZ-bJ-FJf"/>
-                        <constraint firstAttribute="width" constant="32" id="gHS-Gi-hLx"/>
+                        <constraint firstAttribute="width" constant="45" id="gHS-Gi-hLx"/>
                         <constraint firstAttribute="width" constant="20" id="rDn-30-hfZ"/>
                     </constraints>
                     <state key="normal" image="leftBack.png"/>
@@ -228,13 +228,13 @@
                     <exclude reference="oWK-dA-Hge"/>
                 </mask>
             </variation>
-            <point key="canvasLocation" x="29.5" y="-320.5"/>
+            <point key="canvasLocation" x="7.5" y="-323.5"/>
         </view>
     </objects>
     <resources>
         <image name="imagebj.png" width="300" height="180"/>
         <image name="jiahao" width="20" height="20"/>
         <image name="leftBack.png" width="12" height="20"/>
-        <image name="矩形-1-拷贝.png" width="375" height="44"/>
+        <image name="navBJ.png" width="375" height="64"/>
     </resources>
 </document>

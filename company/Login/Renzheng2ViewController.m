@@ -88,6 +88,9 @@
 }
 #pragma mark -进入下一页验证信息
 - (IBAction)nextStupClick:(UIButton *)sender {
+    
+    [self.textField resignFirstResponder];
+    
     //判断营业执照照片是否存在
     if (!_isSelectedImage) {
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请添加营业执照照片"];

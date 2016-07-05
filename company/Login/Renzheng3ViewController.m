@@ -67,6 +67,9 @@
 #pragma mark -下一步按钮点击事件
 - (IBAction)nextStupClick:(UIButton *)sender {
     
+    [self.companyTextView resignFirstResponder];
+    [self.personTextView resignFirstResponder];
+    
     //判断数据  往数据字典提那家数据
     [_dicData setObject:self.companyTextView.text forKey:@"companyIntroduce"];
     [_dicData setObject:self.personTextView.text forKey:@"introduce"];

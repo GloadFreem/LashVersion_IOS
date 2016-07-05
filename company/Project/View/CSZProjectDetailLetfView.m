@@ -90,6 +90,8 @@
             self.moreButtonClickedBlock(flag);
         }
     }];
+    
+    
     //4.设置布局
     headerView.sd_layout
     .topSpaceToView(self,20)

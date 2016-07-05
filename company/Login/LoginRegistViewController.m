@@ -92,6 +92,9 @@
 - (IBAction)loginClick:(UIButton *)sender {
     
     
+    [self.phoneField resignFirstResponder];
+    [self.passwordField resignFirstResponder];
+    
     if ([sender isKindOfClass:[UIButton class]]) {
         //初始化网络请求对象
         //获取数据

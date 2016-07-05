@@ -42,25 +42,34 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconfont_copy.png" translatesAutoresizingMaskIntoConstraints="NO" id="wad-BL-ZXF">
-                            <rect key="frame" x="192.5" y="102.5" width="21" height="21"/>
-                        </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_scancode.png" translatesAutoresizingMaskIntoConstraints="NO" id="AEB-Aj-XMN">
                             <rect key="frame" x="43" y="165" width="170" height="170"/>
                         </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zCL-Zn-2g2">
+                            <rect key="frame" x="192.5" y="95.5" width="35" height="35"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="35" id="449-m2-mBN"/>
+                                <constraint firstAttribute="width" constant="35" id="OrK-4E-20H"/>
+                            </constraints>
+                            <state key="normal" image="iconfont_copy.png"/>
+                            <state key="highlighted" image="iconfont_copy.png"/>
+                            <connections>
+                                <action selector="copyBtn:" destination="-1" eventType="touchUpInside" id="HzF-g0-1A6"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.23921568627450979" green="0.27058823529411763" blue="0.30980392156862746" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="34d-Lv-eUS" firstAttribute="centerY" secondItem="Aiq-y6-hiG" secondAttribute="centerY" id="B48-yw-73R"/>
                         <constraint firstItem="jHO-Li-3mp" firstAttribute="centerX" secondItem="Aiq-y6-hiG" secondAttribute="centerX" id="BDW-BR-gar"/>
+                        <constraint firstItem="zCL-Zn-2g2" firstAttribute="leading" secondItem="ASy-ZQ-rLB" secondAttribute="trailing" constant="8" id="D9r-2Y-Uz0"/>
                         <constraint firstItem="jHO-Li-3mp" firstAttribute="top" secondItem="Aiq-y6-hiG" secondAttribute="top" constant="17" id="DbD-RY-Ola"/>
                         <constraint firstAttribute="height" constant="358" id="Jiu-cX-jZe"/>
-                        <constraint firstItem="wad-BL-ZXF" firstAttribute="leading" secondItem="ASy-ZQ-rLB" secondAttribute="trailing" constant="8" id="QvM-8f-EYO"/>
+                        <constraint firstItem="zCL-Zn-2g2" firstAttribute="centerY" secondItem="ASy-ZQ-rLB" secondAttribute="centerY" id="SRZ-Nl-reP"/>
                         <constraint firstItem="ASy-ZQ-rLB" firstAttribute="top" secondItem="jHO-Li-3mp" secondAttribute="bottom" constant="16" id="cE9-kw-yPz"/>
                         <constraint firstItem="34d-Lv-eUS" firstAttribute="centerX" secondItem="Aiq-y6-hiG" secondAttribute="centerX" id="edM-5k-XgY"/>
                         <constraint firstItem="ASy-ZQ-rLB" firstAttribute="centerX" secondItem="Aiq-y6-hiG" secondAttribute="centerX" id="qLB-ds-2I8"/>
                         <constraint firstItem="AEB-Aj-XMN" firstAttribute="centerX" secondItem="Aiq-y6-hiG" secondAttribute="centerX" id="se3-Mg-2he"/>
-                        <constraint firstItem="wad-BL-ZXF" firstAttribute="centerY" secondItem="ASy-ZQ-rLB" secondAttribute="centerY" id="xuw-BR-DZO"/>
                         <constraint firstAttribute="width" constant="256" id="yk8-VF-bCz"/>
                         <constraint firstItem="AEB-Aj-XMN" firstAttribute="top" secondItem="ASy-ZQ-rLB" secondAttribute="bottom" constant="40" id="zU1-lG-QvG"/>
                     </constraints>

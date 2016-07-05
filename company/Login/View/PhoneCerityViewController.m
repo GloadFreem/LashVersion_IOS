@@ -67,6 +67,11 @@
 }
 #pragma mark---下一步---
 - (IBAction)nextStup:(UIButton *)sender {
+    
+    [self.phoneTextField resignFirstResponder];
+    [self.certifyCodeTextField resignFirstResponder];
+    [self.ringCodeTextField resignFirstResponder];
+    
     NSString *phoneNum =  self.phoneTextField.text;
     NSString *certifyNum =  self.certifyCodeTextField.text;
     NSString *ringNum = self.ringCodeTextField.text;

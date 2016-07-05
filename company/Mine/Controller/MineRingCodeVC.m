@@ -46,5 +46,10 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+- (IBAction)copyBtn:(UIButton *)sender {
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = _inviteCode;
+    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"指环码已复制到剪切板"];
+}
 
 @end

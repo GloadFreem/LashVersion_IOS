@@ -144,6 +144,7 @@
     _textView.layer.borderWidth = 0.5;
     _textView.delegate = self;
     _textView.font = BGFont(15);
+    _textView.returnKeyType = UIReturnKeyDone;
     [_footer addSubview:_textView];
     
     UIButton * btn =[[UIButton alloc]init];

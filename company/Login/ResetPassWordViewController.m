@@ -46,6 +46,9 @@
 }
 //确定按钮
 - (IBAction)certainBtn:(UIButton *)sender {
+    
+    [self.firstTextField resignFirstResponder];
+    [self.secondField resignFirstResponder];
     NSString *password = self.firstTextField.text;
     NSString *passwordRepeat = self.secondField.text;
     

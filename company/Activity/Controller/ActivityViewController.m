@@ -11,6 +11,9 @@
 #import "ActivityDetailVC.h"
 #import "ActivityViewModel.h"
 #import "ActivityBlackCoverView.h"
+
+#define ACTIONLIST @"requestActionList"
+#define ACTIONSEARCH @"requestSearchAction"
 @interface ActivityViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,ActivityViewDelegate,ActivityBlackCoverViewDelegate>
 
 @property (nonatomic,assign)id attendInstance; //回复
@@ -18,6 +21,13 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSString * actionListPartner;
 @property (nonatomic, strong) NSMutableArray *dataSourceArray;
+
+@property (nonatomic, strong) UITextField *textField;
+
+@property (nonatomic, copy) NSString *searchPartner;
+@property (nonatomic, assign) NSInteger searchPage;
+@property (nonatomic, assign) BOOL isSearch;
+
 @end
 
 @implementation ActivityViewController
@@ -31,21 +41,64 @@
     [self createSearchView];
     
     //生成请求partner
-    self.actionListPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_LIST];
+    self.actionListPartner = [TDUtil encryKeyWithMD5:KEY action:ACTIONLIST];
+    self.searchPartner = [TDUtil encryKeyWithMD5:KEY action:ACTIONSEARCH];
     
     self.page = 0;
+    self.searchPage = 0;
     //加载数据
     [self loadActionListData];
     
 }
 
+-(void)loadSearchList
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.searchPartner,@"partner",_textField.text,@"keyword",[NSString stringWithFormat:@"%ld",_searchPage],@"page", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:ACTION_SEARCH postParam:dic type:0 delegate:self sel:@selector(requestSearchList:)];
+}
+-(void)requestSearchList:(ASIHTTPRequest*)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic != nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            
+            NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
+            NSMutableArray * array = [[NSMutableArray alloc] init];
+            
+            //解析
+            NSDictionary *dataDic;
+            ActivityViewModel * baseModel;
+            for (int i=0; i<dataArray.count; i++) {
+                dataDic = dataArray[i];
+                baseModel = [ActivityViewModel mj_objectWithKeyValues:dataDic];
+                [array addObject:baseModel];
+            }
+            
+            //设置数据模型
+            self.dataSourceArray = array;
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+            
+            _isSearch = YES;
+            self.textField.text = @"";
+            
+        }else{
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+        }
+    }
+}
 /**
  *  获取活动列表
  */
 
 -(void)loadActionListData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionListPartner,@"partner",STRING(@"%ld", self.page),@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionListPartner,@"partner",STRING(@"%ld",(long)self.page),@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_LIST postParam:dic type:0 delegate:self sel:@selector(requestActionList:)];
 }
@@ -53,7 +106,7 @@
 -(void)requestActionList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -100,11 +153,11 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     //设置刷新控件
-    _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadActionListData)];
+    _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
     [self.tableView.mj_header beginRefreshing];
-    _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadActionListData)];
+    _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     
     
     [self.view addSubview:_tableView];
@@ -117,19 +170,36 @@
 
 }
 
+-(void)refreshHttp
+{
+    _isSearch = NO;
+    _page = 0;
+    [self loadActionListData];
+}
+-(void)nextPage
+{
+    if (_isSearch) {
+        _searchPage ++;
+        [self loadSearchList];
+    }else{
+    _page ++;
+    [self loadActionListData];
+    }
+}
+
 -(void)createSearchView
 {
-    UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH-20, 29)];
-    field.placeholder = @"互联网金融黑马预测。。。";
-    field.backgroundColor = [UIColor whiteColor];
-    field.textColor = [UIColor blackColor];
-    field.font = [UIFont systemFontOfSize:15];
-    field.clearButtonMode = UITextFieldViewModeWhileEditing;
-    field.borderStyle = UITextBorderStyleNone;
-    field.clearsOnBeginEditing = YES; //再次编辑清空
-    field.keyboardType = UIKeyboardTypeDefault;
-    field.returnKeyType = UIReturnKeyDone;
-    field.delegate =self;
+    _textField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH-20, 29)];
+    _textField.placeholder = @"互联网金融黑马预测。。。";
+    _textField.backgroundColor = [UIColor whiteColor];
+    _textField.textColor = [UIColor blackColor];
+    _textField.font = [UIFont systemFontOfSize:15];
+    _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _textField.borderStyle = UITextBorderStyleNone;
+    _textField.clearsOnBeginEditing = YES; //再次编辑清空
+    _textField.keyboardType = UIKeyboardTypeDefault;
+    _textField.returnKeyType = UIReturnKeyDone;
+    _textField.delegate =self;
     
     UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     searchBtn.backgroundColor = [UIColor colorWithRed:253/255.0 green:133/255.0 blue:0 alpha:1];
@@ -137,10 +207,10 @@
     [searchBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
     [searchBtn addTarget:self action:@selector(searchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [searchBtn setTag:0];
-    field.rightView = searchBtn;
-    field.rightViewMode = UITextFieldViewModeAlways;
+    _textField.rightView = searchBtn;
+    _textField.rightViewMode = UITextFieldViewModeAlways;
     
-    [self.navigationItem setTitleView:field];
+    [self.navigationItem setTitleView:_textField];
     
 }
 #pragma mark -tableViewDataSource
@@ -191,7 +261,13 @@
 -(void)searchBtnClick:(UIButton*)btn
 {
     if (btn.tag == 0) {
-        NSLog(@"开始搜索");
+        if (self.textField.text.length && ![self.textField.text isEqualToString:@""]) {
+            [self loadSearchList];
+            NSLog(@"开始搜索");
+        }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入正确的搜索关键字"];
+        }
+        
     }
 }
 
@@ -214,7 +290,9 @@
 //已经结束编辑
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
-    
+    if (![textField.text isEqualToString:@""]) {
+        self.textField.text = textField.text;
+    }
 }
 #pragma mark -视图即将显示
 -(void)viewWillAppear:(BOOL)animated

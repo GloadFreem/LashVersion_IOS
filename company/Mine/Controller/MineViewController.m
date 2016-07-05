@@ -141,7 +141,7 @@
 {
     _iconWidth.constant = 83;
     _iconBtn.layer.cornerRadius = 41.5;
-    _iconWidth.constant = _iconHeight.constant;
+    _iconHeight.constant = _iconWidth.constant;
     _iconBtn.layer.masksToBounds = YES;
     
     

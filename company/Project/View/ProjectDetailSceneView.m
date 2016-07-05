@@ -115,18 +115,23 @@
         if ([status integerValue] == 200) {
             NSArray *modelArray= [ProjectPPTModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
             
+//            if (_pptArray.count) {
+//                [_pptArray removeAllObjects];
+//            }
+            
             for (NSInteger i =0; i < modelArray.count; i ++) {
                 [_pptArray addObject:modelArray[i]];
-                
+                ProjectPPTModel *model = modelArray[i];
+                [_imageUrlArray addObject:model.imageUrl];
             }
             
-            for (NSInteger i = 0; i < _pptArray.count; i ++) {
-                ProjectPPTModel *model = _pptArray[i];
-                [_imageUrlArray addObject:model.imageUrl];
-                [_nextPageArray addObject:[NSString stringWithFormat:@"%ld",(long)model.playTime]];
-                
-            }
-            NSLog(@"打印数组个数---%ld",(unsigned long)_nextPageArray.count);
+            
+//            for (NSInteger i = 0; i < _pptArray.count; i ++) {
+//                ProjectPPTModel *model = _pptArray[i];
+//                [_imageUrlArray addObject:model.imageUrl];
+//            }
+            [_bannerView relayoutWithModelArr:_imageUrlArray];
+//            NSLog(@"打印数组个数---%ld",(unsigned long)_nextPageArray.count);
             
             _isPPT  = YES;
             
@@ -171,10 +176,13 @@
 -(void)createUI
 {
     _tableView = [[UITableView alloc]init];
+    _tableView.backgroundColor = [UIColor whiteColor];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.bounces = NO;
+    _tableView.showsVerticalScrollIndicator = NO;
+    _tableView.showsHorizontalScrollIndicator = NO;
     [self addSubview:_tableView];
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.mas_top);
@@ -217,13 +225,13 @@
     //播放图片
     [startBtn addTarget:self action:@selector(playClick:) forControlEvents:UIControlEventTouchUpInside];
     //暂停播放图片
-    [startBtn setImage:[UIImage imageNamed:@"iconfont-zengdayinliang"] forState:UIControlStateSelected];
+    [startBtn setImage:[UIImage imageNamed:@"icon_pause"] forState:UIControlStateSelected];
     startBtn.contentMode = UIViewContentModeScaleAspectFit;
     [headerView addSubview:startBtn];
     [startBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(27);
+        make.left.mas_equalTo(20);
         make.centerY.mas_equalTo(headerView.mas_centerY).offset(10);
-        make.width.height.mas_equalTo(20);
+        make.width.height.mas_equalTo(28);
     }];
     
     UILabel *label =[[UILabel alloc]init];
@@ -312,7 +320,7 @@
         
         //进度  帧数 帧率
         __weak AVPlayer *Wplayer = player.player;
-        __weak UISlider *Wslider = _slider;
+//        __weak UISlider *Wslider = _slider;
         
         [player.player addPeriodicTimeObserverForInterval:CMTimeMake(1, 1) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
             
@@ -324,18 +332,17 @@
                 ProjectPPTModel *model = _pptArray[i];
                 if (current >= model.startTime && current <= model.endTime) {
                     
-                    NSLog(@"当前ppt页数----%ld",(long)model.sortIndex);
+//                    NSLog(@"当前ppt页数----%ld",(long)model.sortIndex);
                     NSInteger currentPage = _bannerView.scrollView.contentOffset.x/SCREENWIDTH;
                     if (currentPage == _pptArray.count -2) {
                         _page ++;
                         [self startLoadPPT];
                     }
+                    
                     [_bannerView nextPage: model.sortIndex];
+                    NSLog(@"翻到-----%ld页",(long)model.sortIndex);
                 }
-
             }
-            
-            
             
             if (current) {
                 
@@ -361,7 +368,8 @@
             CMTime duration=Wplayer.currentItem.duration;
             //进度＝当前时间/总时间
             float pro=CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(duration);
-            [Wslider setValue:pro animated:YES];
+            [_slider setValue:pro animated:YES];
+            
         }];
     }
 }
@@ -437,6 +445,7 @@
     if (_dataArray.count) {
         cell.model = _dataArray[indexPath.row];
     }
+    
     return cell;
     
 }

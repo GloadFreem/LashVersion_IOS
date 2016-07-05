@@ -34,18 +34,38 @@
 {
     if ([super initWithCoder:aDecoder]) {
         
-        
-        
         //计算View的高度
         
         self.viewHeight = SCREENHEIGHT - SCREENWIDTH*0.75 - 50;
+        
         self.width = SCREENWIDTH;
-//        [self setupAutoHeightWithBottomView:_emailLabel bottomMargin:30];
-        NSLog(@"实例化成员界面");
+        
+//        self.emailIconCenter.constant = SCREENWIDTH/4;
+//        self.phoneIconCenter.constant = 3 * SCREENWIDTH/4;
+        
+        [self.emailIcon setUserInteractionEnabled:YES];
+        [self.phoneLabel setUserInteractionEnabled:YES];
+        [self.emailIcon addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickImage:)]];
+        [self.phoneIcon addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickImage:)]];
+        
     }
     return self;
 }
 
+-(void)clickImage:(UITapGestureRecognizer*)gestureRecognizer
+{
+    UIView *viewClick = [gestureRecognizer view];
+    if (viewClick == self.emailIcon) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = _emailLabel.text;
+        [[DialogUtil sharedInstance]showDlg:self textOnly:@"邮箱已复制到剪切板"];
+    }
+    
+    if (viewClick == self.phoneIcon) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",self.phoneLabel.text]]];
+    }
+    
+}
 -(void)setProjectId:(NSInteger)projectId
 {
     //初始化网络请求对象
