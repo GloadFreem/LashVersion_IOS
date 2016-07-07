@@ -297,6 +297,7 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <variation key="default">
                 <mask key="constraints">
+                    <exclude reference="Gdl-LI-41K"/>
                     <exclude reference="Zia-ca-6NM"/>
                 </mask>
             </variation>

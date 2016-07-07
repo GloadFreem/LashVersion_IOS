@@ -21,7 +21,6 @@
 @optional
 -(void)didClickMoreBtn;
 
-
 @end
 @interface ProjectDetailSceneView : UIView<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate>
 

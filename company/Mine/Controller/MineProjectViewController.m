@@ -68,7 +68,7 @@
 -(void)requestList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-        NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic != nil) {
@@ -89,6 +89,7 @@
                 listModel.fullName = baseModel.fullName;
                 listModel.status = baseModel.financestatus.name;
                 listModel.projectId  = baseModel.projectId;
+                listModel.timeLeft = baseModel.timeLeft;
                 
                 //少一个areas 数组
                 listModel.areas = [baseModel.industoryType componentsSeparatedByString:@"，"];

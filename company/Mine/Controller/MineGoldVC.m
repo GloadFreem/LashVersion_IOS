@@ -51,6 +51,7 @@
     [self startLoadData];
     [self loadGetRule];
     [self loadUseRule];
+    
 }
 #pragma maker-------邀请码
 -(void)loadCode

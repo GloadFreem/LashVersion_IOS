@@ -55,11 +55,21 @@
     _model = model;
     //如果不是自己  靠左布局
     
+    //头像
+    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconImage]] placeholderImage:[UIImage new]];
+    _nameLabel.text = model.name;
+    [_nameLabel sizeToFit];
+    _contentLabel.text = model.content;
     
+    //    NSLog(@"--------%@",model.time);
+    NSArray *arr1 = [model.time componentsSeparatedByString:@" "];
+    NSString *str1 = arr1[1];
+    NSString *str2 = [str1 substringToIndex:5];
+    _timeLabel.text = str2;
+    [_timeLabel sizeToFit];
     
+//    if (_model.flag) {
     
-    if (model.flag) {
-        
         _iconImage.sd_layout
         .rightSpaceToView(self.contentView,17)
         .topSpaceToView(self.contentView,20)
@@ -75,36 +85,39 @@
         _contentLabel.sd_layout
         .topSpaceToView(self.contentView,25)
         .rightSpaceToView(_iconImage,15)
-        .widthIs(240*WIDTHCONFIG)
-        .autoHeightRatio(0);
+        .autoHeightRatio(0)
+        .widthIs(240*WIDTHCONFIG);
+    
         _contentLabel.textAlignment = NSTextAlignmentLeft;
         
         _contentLabel.backgroundColor = colorBlue;
         _contentLabel.textColor = [UIColor whiteColor];
-
-    }else{
-        _iconImage.sd_layout
-        .leftSpaceToView(self.contentView,17)
-        .topSpaceToView(self.contentView,20)
-        .widthIs(33)
-        .heightIs(33);
-        
-        _nameLabel.sd_layout
-        .centerXEqualToView(_iconImage)
-        .heightIs(12)
-        .topSpaceToView(_iconImage,5);
-        [_nameLabel setSingleLineAutoResizeWithMaxWidth:100];
-        
-        
-        _contentLabel.sd_layout
-        .topSpaceToView(self.contentView,25)
-        .leftSpaceToView(_iconImage,15)
-        .widthIs(240*WIDTHCONFIG)
-        .autoHeightRatio(0);
-        _contentLabel.textAlignment = NSTextAlignmentLeft;
-        _contentLabel.textColor = [UIColor blackColor];
-        _contentLabel.backgroundColor = [UIColor whiteColor];
-    }
+//        NSLog(@"自己说的");
+    
+//    }else{
+//        _iconImage.sd_layout
+//        .leftSpaceToView(self.contentView,17)
+//        .topSpaceToView(self.contentView,20)
+//        .widthIs(33)
+//        .heightIs(33);
+//        
+//        _nameLabel.sd_layout
+//        .centerXEqualToView(_iconImage)
+//        .heightIs(12)
+//        .topSpaceToView(_iconImage,5);
+//        [_nameLabel setSingleLineAutoResizeWithMaxWidth:100];
+//        
+//        
+//        _contentLabel.sd_layout
+//        .topSpaceToView(self.contentView,25)
+//        .leftSpaceToView(_iconImage,15)
+//        .widthIs(240*WIDTHCONFIG)
+//        .autoHeightRatio(0);
+//        _contentLabel.textAlignment = NSTextAlignmentLeft;
+//        _contentLabel.textColor = [UIColor blackColor];
+//        _contentLabel.backgroundColor = [UIColor whiteColor];
+//        NSLog(@"别人说的");
+//    }
     
     _timeLabel.sd_layout
     .centerXEqualToView(self.contentView)
@@ -113,21 +126,12 @@
     .topSpaceToView(_contentLabel,25);
     [_timeLabel setSingleLineAutoResizeWithMaxWidth:150];
     
-    //头像
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconImage]] placeholderImage:[UIImage new]];
-    _nameLabel.text = model.name;
-    [_nameLabel sizeToFit];
-    _contentLabel.text = model.content;
-    
-    //    NSLog(@"--------%@",model.time);
-    NSArray *arr1 = [model.time componentsSeparatedByString:@" "];
-    NSString *str1 = arr1[1];
-    NSString *str2 = [str1 substringToIndex:5];
-    _timeLabel.text = str2;
-    [_timeLabel sizeToFit];
-    
     [_contentLabel sizeToFit];
+    
     [self setupAutoHeightWithBottomView:_timeLabel bottomMargin:10*HEIGHTCONFIG];
+    
+    [self layoutSubviews];
+    
     
 }
 

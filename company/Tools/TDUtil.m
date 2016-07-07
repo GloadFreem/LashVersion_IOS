@@ -1388,7 +1388,7 @@
     dataTime = [dataTime stringByReplacingOccurrencesOfString:@":" withString:@""];
     
     NSUserDefaults * data = [NSUserDefaults standardUserDefaults];
-    NSString * userId = [data valueForKey:USER_STATIC_USER_ID];
+    NSString * userId = [data valueForKey:USER_STATIC_EXT_USER_ID];
     
     
     return [NSString stringWithFormat:@"%@%@",dataTime,userId];
@@ -1398,7 +1398,7 @@
 + (NSString *)generateUserPlatformNo
 {
     NSUserDefaults * data = [NSUserDefaults standardUserDefaults];
-    NSString * userId = [data valueForKey:USER_STATIC_USER_ID];
+    NSString * userId = [data valueForKey:USER_STATIC_EXT_USER_ID];
     
     return [NSString stringWithFormat:UserPlatFormNo, userId];
 }
@@ -1480,7 +1480,7 @@
     NSString *chinese = [sumStr substringToIndex:sumStr.length-1];
 //    NSLog(@"%@",str);
 //    NSLog(@"%@",chinese);
-    return [NSString stringWithFormat:@"%@元",chinese];
+    return [NSString stringWithFormat:@"%@",chinese];
 }
 
 +(NSString*)translationSmallSum:(NSString*)smallSum
@@ -1532,7 +1532,7 @@
     [data removeObjectForKey:USER_STATIC_IDNUMBER];
     [data removeObjectForKey:USER_STATIC_POSITION];
     [data removeObjectForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
-    
+    [data removeObjectForKey:USER_STATIC_EXT_USER_ID];
     [data synchronize];
 }
 
@@ -1562,16 +1562,16 @@
         str = [NSString stringWithFormat:@"%@",endDate];
     }else{
         if (dateCom.day >=1) {
-            str = [NSString stringWithFormat:@"%ld天前",dateCom.day];
+            str = [NSString stringWithFormat:@"%ld天前",(long)dateCom.day];
         }else{
             if (dateCom.hour >= 1) {
-                str = [NSString stringWithFormat:@"%ld小时前",dateCom.hour];
+                str = [NSString stringWithFormat:@"%ld小时前",(long)dateCom.hour];
             }else{
                 if (dateCom.minute >= 1) {
-                    str = [NSString stringWithFormat:@"%ld分钟前",dateCom.minute];
+                    str = [NSString stringWithFormat:@"%ld分钟前",(long)dateCom.minute];
                 }else{
                     if (dateCom.second >= 1) {
-                        str = [NSString stringWithFormat:@"%ld秒前",dateCom.second];
+                        str = [NSString stringWithFormat:@"%ld秒前",(long)dateCom.second];
                     }
                 }
             }

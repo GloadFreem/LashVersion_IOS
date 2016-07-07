@@ -9,8 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "InvestListModel.h"
 
+#import "InvestViewController.h"
+
 @interface InvestCommitProjectVC : RootViewController
 
 @property (nonatomic, strong) InvestListModel *model;
+
+@property (nonatomic, strong) InvestViewController *viewController;
 
 @end

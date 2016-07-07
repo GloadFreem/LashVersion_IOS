@@ -14,11 +14,15 @@
 #import "ProjectPrepareDetailHeaderView.h"
 #import "CSZProjectDetailLetfView.h"
 #import "ProjectPrepareFooterCommentView.h"
+#import "ProjectPreparePhotoView.h"
+#import "ProjectDetailLeftTeamView.h"
+
 
 #import "ProjectDetailBaseMOdel.h"
 #import "ProjectPrepareDetailHeaderModel.h"
 #import "ProjectDetailLeftHeaderModel.h"
 #import "ProjectDetailLeftFooterModel.h"
+
 
 #define CUSTOMSERVICE @"customServiceSystem"
 #define PROJECTCOLLECT @"requestProjectCollect"
@@ -32,6 +36,9 @@
 @property (nonatomic, strong) ProjectPrepareDetailHeaderView *headerView;
 @property (nonatomic, strong) CSZProjectDetailLetfView *leftView;
 @property (nonatomic, strong) ProjectPrepareFooterCommentView *footerView;
+@property (nonatomic, strong) ProjectDetailLeftTeamView *teamView;
+@property (nonatomic, strong) ProjectPreparePhotoView *photoView;
+
 
 @property (nonatomic, strong) ProjectDetailBaseMOdel *baseModel;
 @property (nonatomic, strong) UIButton *collectBtn;
@@ -176,11 +183,13 @@
     [leftBtn setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     [leftBtn setTag:0];
     [leftBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [navView addSubview:leftBtn];
     [leftBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(12);
         make.top.mas_equalTo(32);
-        make.width.mas_equalTo(32);
+        make.width.mas_equalTo(80);
         make.height.mas_equalTo(30);
     }];
     
@@ -219,23 +228,68 @@
     .topEqualToView(_scrollView)
     .rightEqualToView(_scrollView);
     
-    _leftView = [CSZProjectDetailLetfView new];
-    _leftView.model = _baseModel;
-    [_scrollView addSubview:_leftView];
-    _leftView.sd_layout
+    //创建照片容器
+    _photoView = [ProjectPreparePhotoView new];
+    
+    
+    ProjectDetailLeftHeaderModel *headerModel = [ProjectDetailLeftHeaderModel new];
+    headerModel.projectStr = _baseModel.project.abbrevName;
+    headerModel.content = _baseModel.project.desc;
+    NSMutableArray *photoArr = [NSMutableArray array];
+    NSArray *picArray = [NSArray arrayWithArray:_baseModel.project.projectimageses];
+    for (NSInteger i = 0; i < picArray.count; i ++) {
+        DetailProjectimageses *image = picArray[i];
+        [photoArr addObject:image.imageUrl];
+    }
+    headerModel.pictureArray = [NSArray arrayWithArray:photoArr];
+    _photoView.model = headerModel;
+    
+    //3.设置属性
+//    if (_photoView.moreButtonClickedBlock) {
+//        [_photoView setMoreButtonClickedBlock:^(Boolean flag) {
+//            _photoView.model.isOpen = !_photoView.model.isOpen;
+//            
+//        }];
+//    }
+    
+    [_scrollView addSubview:_photoView];
+    
+    _photoView.sd_layout
     .leftEqualToView(_scrollView)
     .rightEqualToView(_scrollView)
     .topSpaceToView(_headerView,0);
     
+    _teamView = [ProjectDetailLeftTeamView new];
+//    _teamView.backgroundColor = [UIColor redColor];
+    _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];;
+    _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
+    [_scrollView addSubview:_teamView];
+    
+    _teamView.sd_layout
+    .leftEqualToView(_scrollView)
+    .rightEqualToView(_scrollView)
+    .topSpaceToView(_photoView,0)
+    .autoHeightRatio(1);
+//    _leftView = [CSZProjectDetailLetfView new];
+//    
+//    _leftView.model = _baseModel;
+//    [_scrollView addSubview:_leftView];
+//    _leftView.sd_layout
+//    .leftEqualToView(_scrollView)
+//    .rightEqualToView(_scrollView)
+//    .topSpaceToView(_headerView,0);
+    
+    
     _footerView = [ProjectPrepareFooterCommentView new];
+//    _footerView.backgroundColor = [UIColor greenColor];
     _footerView.projectId = _projectId;
     _footerView.delagate =self;
     [_scrollView addSubview:_footerView];
     _footerView.sd_layout
     .leftEqualToView(_scrollView)
     .rightEqualToView(_scrollView)
-    .topSpaceToView(_leftView,0);
-    
+    .topSpaceToView(_teamView,-10);
+//
     [_scrollView setupAutoContentSizeWithBottomView:_footerView bottomMargin:10];
 }
 

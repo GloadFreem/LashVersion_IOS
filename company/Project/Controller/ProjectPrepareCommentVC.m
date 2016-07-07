@@ -39,10 +39,10 @@
     }
     
     _page = 0;
-    
+    [self createUI];
     [self startLoadData];
     [self setNav];
-    [self createUI];
+    
 }
 
 -(void)setNav
@@ -51,7 +51,8 @@
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     [leftback addTarget:self action:@selector(leftback) forControlEvents:UIControlEventTouchUpInside];
-    leftback.size = CGSizeMake(32, 20);
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
 }
 
@@ -212,16 +213,14 @@
 #pragma mark -刷新控件
 -(void)nextPage
 {
-    _page ++;
-    
+    _page = 0;
     [self startLoadData];
     //    NSLog(@"回到顶部");
 }
 
 -(void)refreshHttp
 {
-    _page --;
-    
+    _page ++;
     [self startLoadData];
     //    NSLog(@"下拉刷新");
 }

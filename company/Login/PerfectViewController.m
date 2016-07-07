@@ -219,19 +219,19 @@
     
     if (sender.tag == 1) {
         _imageBG.image = [UIImage imageNamed:@"icon_blackbg_first"];
-        _textView.text = @"项目方";
+        _textView.text = @"具有优质项目标的，想通过释放股权进行融资，有梦想的创业者、企业家。";
     }
     if (sender.tag == 2) {
         _imageBG.image = [UIImage imageNamed:@"icon_blackbg_second"];
-        _textView.text = @"投资人";
+        _textView.text = @"具有投资意识、投资能力，正在寻找股权投资标的的高净值投资人及企业家。";
     }
     if (sender.tag == 3) {
         _imageBG.image = [UIImage imageNamed:@"icon_blackbg_three"];
-        _textView.text = @"投资机构";
+        _textView.text = @"国内外优秀VC/PE机构、创投机构、专业投资人、金指投领投机构及领投人。";
     }
     if (sender.tag == 4) {
         _imageBG.image = [UIImage imageNamed:@"icon_blackbg_four"];
-        _textView.text = @"智囊团";
+        _textView.text = @"具有优质项目标的，想通过释放股权进行融资，有梦想的创业者、企业家。";
     }
     
     sender.selected = !sender.selected;

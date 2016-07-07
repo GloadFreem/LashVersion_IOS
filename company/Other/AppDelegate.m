@@ -79,28 +79,26 @@
                 if (isSuccess)
                 {
                     
-                    
                     [_window setRootViewController:_tabBar];
-                }else
-                {
+                }else{
                     LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
                     
-                    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:login];
-                    [_window setRootViewController:nav];
+                    self.nav = [[UINavigationController alloc]initWithRootViewController:login];
+                    [_window setRootViewController:self.nav];
                 }
-            }else
-            {
+            }else{
                 LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
                 
-                UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:login];
-                [_window setRootViewController:nav];
+                self.nav = [[UINavigationController alloc]initWithRootViewController:login];
+                [_window setRootViewController:self.nav];
                 
             }
         }
 
     }else{
         GuidePageViewController *vc = [GuidePageViewController new];
-        [_window setRootViewController:vc];
+        self.nav = [[UINavigationController alloc]initWithRootViewController:vc];
+        [_window setRootViewController:self.nav];
     }
     
     
@@ -166,7 +164,7 @@
         if (aresp.errCode== 0) {
             NSString *code = aresp.code;
             NSDictionary *dic = @{@"code":code};
-            
+            NSLog(@"%@",dic);
         }
 //    }
 }
@@ -175,18 +173,19 @@
 -(void)requestLogin:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
-            NSLog(@"登陆成功");
+//            NSLog(@"登陆成功");
             isSuccess = YES;
             
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             
             [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
+            [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
             
         }else{
             

@@ -269,7 +269,9 @@
         }
     }
     _scrollView.contentSize = CGSizeMake(SCREENWIDTH * i, 0);
-    for (NSInteger i = 0; i < 1; i ++) {
+    
+    
+    for (NSInteger i = 0; i < array.count; i ++) {
         ProjectBannerListModel *model =(ProjectBannerListModel*)array[i];
         if ([model.type isEqualToString:@"Project"]) {
             _coverView.hidden = NO;
@@ -284,12 +286,13 @@
             _progress.title = @"W";
             if (_isFirst) {
                _progress.animatable = YES;
-            }
+           
             CGFloat finalCount = model.financedMount;
             CGFloat percent = finalCount / model.financeTotal * 100;
             _progress.percent = percent;
             _progress.contentText = [NSString stringWithFormat:@"%ld",(long)model.financeTotal];
             _isFirst = NO;
+            }
             
         }else{
             _coverView.hidden = YES;
@@ -319,6 +322,11 @@
 {
     int page = _scrollView.contentOffset.x/SCREENWIDTH;
     page++;
+//    if (page == _imageCount) {
+//        _pageControl.currentPage=0;
+//    }else{
+//     _pageControl.currentPage=page;
+//    }
     _pageControl.currentPage = page;
    
     [_scrollView setContentOffset:CGPointMake(page*SCREENWIDTH, 0) animated:YES];
@@ -330,13 +338,45 @@
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     int page = scrollView.contentOffset.x/SCREENWIDTH;
-    if (page==_imageCount) {
+    if (page==_imageCount ) {
         scrollView.contentOffset=CGPointZero;
         _pageControl.currentPage=0;
     }else{
         _pageControl.currentPage=page;
     }
     
+    ProjectBannerListModel *model =(ProjectBannerListModel*)_modelArray[_pageControl.currentPage];
+    if ([model.type isEqualToString:@"Project"]) {
+        _coverView.hidden = NO;
+        _firstBottomImage.hidden = NO;
+        //        _pageControl.hidden = NO;
+        _firstLabel.hidden = NO;
+        _secondLabel.hidden = NO;
+        
+        _firstLabel.text = model.name;
+        _secondLabel.text = model.desc;
+        _progress.hidden = NO;
+        _progress.title = @"W";
+        
+        if (_isFirst) {
+            _progress.animatable = YES;
+            
+            CGFloat finalCount = model.financedMount;
+            CGFloat percent = finalCount / model.financeTotal * 100;
+            _progress.percent = percent;
+            _progress.contentText = [NSString stringWithFormat:@"%ld",(long)model.financeTotal];
+            _isFirst = NO;
+        }
+        
+    }else{
+        _coverView.hidden = YES;
+        _firstBottomImage.hidden = YES;
+        //        _pageControl.hidden = YES;
+        _firstLabel.hidden = YES;
+        _secondLabel.hidden = YES;
+        _progress.hidden = YES;
+    }
+    [self layoutSubviews];
     
 }
 //结束滚动
@@ -344,7 +384,7 @@
 {
     int page=_scrollView.contentOffset.x/SCREENWIDTH;
     
-    if (page==_imageCount) {
+    if (page==_imageCount ) {
         _pageControl.currentPage=0;
         _scrollView.contentOffset=CGPointZero;
     }
@@ -361,14 +401,16 @@
         _secondLabel.text = model.desc;
         _progress.hidden = NO;
         _progress.title = @"W";
+        
         if (_isFirst) {
             _progress.animatable = YES;
+            
+            CGFloat finalCount = model.financedMount;
+            CGFloat percent = finalCount / model.financeTotal * 100;
+            _progress.percent = percent;
+            _progress.contentText = [NSString stringWithFormat:@"%ld",(long)model.financeTotal];
+            _isFirst = NO;
         }
-        CGFloat finalCount = model.financedMount;
-        CGFloat percent = finalCount / model.financeTotal * 100;
-        _progress.percent = percent;
-        _progress.contentText = [NSString stringWithFormat:@"%ld",(long)model.financeTotal];
-        _isFirst = NO;
         
     }else{
         _coverView.hidden = YES;

@@ -372,7 +372,7 @@
     _addressLabel.text = model.address;
     _companyLabel.text = model.fullName;
     [_personBtn setTitle:[NSString stringWithFormat:@"%ld\n人气指数",(long)model.collectionCount] forState:UIControlStateNormal];
-    [_timeBtn setTitle:[NSString stringWithFormat:@"%@天\n剩余时间",[self getDateCha:model.endDate]] forState:UIControlStateNormal];
+    [_timeBtn setTitle:[NSString stringWithFormat:@"%ld天\n剩余时间",(long)model.timeLeft] forState:UIControlStateNormal];
     [_moneyBtn setTitle:[NSString stringWithFormat:@"%ld万\n融资总额",(long)model.financeTotal] forState:UIControlStateNormal];
     
     CGFloat finalCount = model.financedMount;

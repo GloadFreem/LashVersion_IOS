@@ -58,7 +58,7 @@
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:SHAREINVESTOR];
     
     [self startLoadData];
-    [self startLoadShare];
+//    [self startLoadShare];
     [self createUI];
 }
 -(void)startLoadShare
@@ -159,23 +159,27 @@
     _leftBackBtn = [[UIButton alloc]init];
     [_leftBackBtn setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     _leftBackBtn.tag = 60;
-    _leftBackBtn.size = CGSizeMake(32, 20);
+    
+//    _leftBackBtn.size = CGSizeMake(80, 30);
+    _leftBackBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [_leftBackBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_scrollView addSubview:_leftBackBtn];
     [_leftBackBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_titleLabel);
         make.left.mas_equalTo(_scrollView.mas_left).offset(12);
+        make.width.mas_equalTo(80);
+        make.height.mas_equalTo(30);
     }];
-    //分享按钮
-    _shareBtn = [[UIButton alloc]init];
-    _shareBtn.tag = 61;
-    [_shareBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_shareBtn setBackgroundImage:[UIImage imageNamed:@"write-拷贝-2"] forState:UIControlStateNormal];
-    [_scrollView addSubview:_shareBtn];
-    [_shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_titleLabel);
-        make.right.mas_equalTo(_scrollView.mas_right).offset(-22);
-    }];
+//    //分享按钮
+//    _shareBtn = [[UIButton alloc]init];
+//    _shareBtn.tag = 61;
+//    [_shareBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [_shareBtn setBackgroundImage:[UIImage imageNamed:@"write-拷贝-2"] forState:UIControlStateNormal];
+//    [_scrollView addSubview:_shareBtn];
+//    [_shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(_titleLabel);
+//        make.right.mas_equalTo(_scrollView.mas_right).offset(-22);
+//    }];
     
     //白色地板
     _whiteView = [InvestPersonWhiteImageView instancetationInvestPersonWhiteImageView];
@@ -184,11 +188,13 @@
     
     DetailAuthentics *authentics = _model.user.authentics[0];
     _whiteView.positionLabel.text = authentics.position;
+//    _whiteView.companyLabel.text = authentics.companyName;
+    DetailCity *city = authentics.city;
+    DetailProvince *province = city.province;
     _whiteView.companyLabel.text = authentics.companyName;
-    _whiteView.addressLabel.text = authentics.companyAddress;
+    _whiteView.addressLabel.text = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
     //拿到投资领域
-    NSString *areaStr = _model.areas[0];
-    _whiteView.areas = [areaStr componentsSeparatedByString:@"，"];
+    _whiteView.areas = _model.areas;
     //领域赋值
     
     
@@ -462,7 +468,7 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
-                    [self performSelector:@selector(dismissBG) withObject:nil/*可传任意类型参数*/ afterDelay:1.0];
+                    [self performSelector:@selector(dismissBG) withObject:nil afterDelay:1.0];
                     
                     
                 });
@@ -504,7 +510,7 @@
 -(void)requestInvestorCollect:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];

@@ -19,7 +19,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon-registbg.png" translatesAutoresizingMaskIntoConstraints="NO" id="tEf-6X-ke4">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-registbg.png" translatesAutoresizingMaskIntoConstraints="NO" id="tEf-6X-ke4">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="恭喜！ ！您已完成注册" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HWW-6U-CyE">
@@ -71,7 +71,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="clickBtn:" destination="-1" eventType="touchUpInside" id="Kpw-F5-omd"/>
+                        <action selector="probationBtn:" destination="-1" eventType="touchUpInside" id="TZm-x4-v9w"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="温馨提示：1.只有完成实名认证才可以参与平台股权投融资" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uhX-xg-dTg">
@@ -84,7 +84,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2.指环码可以分享给好友， 好友注册时填写您" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ea6-Ua-ac9">
-                    <rect key="frame" x="72" y="456" width="283" height="13.5"/>
+                    <rect key="frame" x="72" y="456" width="283" height="14"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="270" id="yuo-bP-3jZ"/>
                     </constraints>
@@ -97,13 +97,13 @@
                         </mask>
                     </variation>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="的指环码，您将得到金指投平台“金条”10根。" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H8A-1G-keI">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="的指环码，您将得到金指投平台“金条”10根。" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H8A-1G-keI">
                     <rect key="frame" x="72" y="482" width="283" height="13.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="使用规则参见《金条使用协议》" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7cj-h3-pO4">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="使用规则参见《金条使用协议》" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7cj-h3-pO4">
                     <rect key="frame" x="72" y="509" width="283" height="13.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -121,13 +121,17 @@
                 <constraint firstItem="paJ-Eo-goI" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Flp-IF-fgP"/>
                 <constraint firstAttribute="trailing" secondItem="ea6-Ua-ac9" secondAttribute="trailing" constant="20" id="GsX-Wk-Xfi"/>
                 <constraint firstItem="dbU-dM-6Gq" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="LYQ-le-cgH"/>
+                <constraint firstAttribute="trailing" secondItem="tEf-6X-ke4" secondAttribute="trailing" id="OSS-Ce-19z"/>
                 <constraint firstItem="H8A-1G-keI" firstAttribute="leading" secondItem="ea6-Ua-ac9" secondAttribute="leading" id="QhS-Ht-6fs"/>
                 <constraint firstItem="HWW-6U-CyE" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="TL7-Wf-qKw"/>
                 <constraint firstAttribute="trailing" secondItem="uhX-xg-dTg" secondAttribute="trailing" constant="15" id="Wdq-7c-ad1"/>
                 <constraint firstItem="7cj-h3-pO4" firstAttribute="top" secondItem="H8A-1G-keI" secondAttribute="bottom" constant="13" id="Y7S-d5-mof"/>
+                <constraint firstItem="tEf-6X-ke4" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Zkf-85-WJE"/>
+                <constraint firstItem="tEf-6X-ke4" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="anA-mB-oOI"/>
                 <constraint firstAttribute="trailing" secondItem="7cj-h3-pO4" secondAttribute="trailing" constant="20" id="bQk-5M-62O"/>
                 <constraint firstAttribute="trailing" secondItem="Hrd-EK-07t" secondAttribute="trailing" id="dhU-Zc-kXs"/>
                 <constraint firstItem="kzq-9U-gZc" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="egv-Pp-WqF"/>
+                <constraint firstAttribute="bottom" secondItem="tEf-6X-ke4" secondAttribute="bottom" id="gNN-T0-0eh"/>
                 <constraint firstItem="uhX-xg-dTg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="hpa-z5-rR7"/>
                 <constraint firstItem="k5W-EF-W8a" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="jqJ-zM-ly0"/>
                 <constraint firstAttribute="trailing" secondItem="H8A-1G-keI" secondAttribute="trailing" constant="20" id="kZh-fu-mFg"/>

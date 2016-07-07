@@ -19,7 +19,7 @@
 #import "ActivityDetailCommentCellModel.h"
 #import "ActivityDetailExiciseContentCell.h"
 
-
+#define ACTIONATTEND @"requestAttendListAction"
 #define kActivityDetailHeaderCellId @"ActivityDetailHeaderCell"
 static CGFloat textFieldH = 40;
 
@@ -48,7 +48,7 @@ static CGFloat textFieldH = 40;
     [self createUI];
     
     //生成请求partner
-    self.actionAttendPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_ATTEND];
+    self.actionAttendPartner = [TDUtil encryKeyWithMD5:KEY action:ACTIONATTEND];
     
     //获取项目参加人数
 //    [self loadActionAttendData];
@@ -60,7 +60,8 @@ static CGFloat textFieldH = 40;
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     leftback.tag = 0;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(32, 20);
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
 }
@@ -126,7 +127,7 @@ static CGFloat textFieldH = 40;
 -(void)requestActionAttendList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];

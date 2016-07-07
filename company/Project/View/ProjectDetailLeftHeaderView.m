@@ -46,11 +46,14 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     
     ZMProgressView *_progress;
     
+    BOOL isFirst;
+    
 }
 -(instancetype)init
 {
     if (self = [super init]) {
         [self setup];
+        isFirst = YES;
     }
     return self;
 }
@@ -320,14 +323,18 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _statusLabel.text = model.statusStr;
     _contentLabel.text = model.content;
     
-    _progress.animatable = YES;
-    CGFloat finalCount = model.financedMount;
-    CGFloat percent = finalCount / model.financeTotal * 100;
-    _progress.percent = percent;
-    _progress.title = @"已融资";
-    _progress.percentUnit = @"%";
-    _progress.lineColor = orangeColor;
-    _progress.loopColor = [UIColor lightGrayColor];
+    if (isFirst) {
+        _progress.animatable = YES;
+        CGFloat finalCount = model.financedMount;
+        CGFloat percent = finalCount / model.financeTotal * 100;
+        _progress.percent = percent;
+        _progress.title = @"已融资";
+        _progress.percentUnit = @"%";
+        _progress.lineColor = orangeColor;
+        _progress.loopColor = [UIColor lightGrayColor];
+        isFirst = NO;
+    }
+    
     
     //默认显示一行数组
     NSMutableArray *picArray = [NSMutableArray array];

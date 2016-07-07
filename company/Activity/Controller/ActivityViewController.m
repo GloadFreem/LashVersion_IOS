@@ -233,7 +233,7 @@
         cell.delegate = self;
     }
     cell.model = [_dataSourceArray objectAtIndex:indexPath.row];
-//    [cell.expiredImage setHidden:NO];
+    [cell.expiredImage setHidden:YES];
     return cell;
 }
 

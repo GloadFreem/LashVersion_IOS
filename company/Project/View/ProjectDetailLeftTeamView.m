@@ -54,7 +54,7 @@
     .topSpaceToView(_topView,15);
     
     _teamLabel = [UILabel new];
-    _teamLabel.text = @"团队";
+    _teamLabel.text = @"公司状况";
     _teamLabel.textColor = [UIColor blackColor];
     _teamLabel .textAlignment = NSTextAlignmentLeft;
     _teamLabel.font = BGFont(18);
@@ -121,7 +121,7 @@
     .rightEqualToView(self.contentView)
     .heightIs(10);
     
-    [self setupAutoHeightWithBottomView:_bottomView2 bottomMargin:0];
+    [self setupAutoHeightWithBottomView:_bottomView2 bottomMargin:100];
 }
 
 -(void)setTeamModelArray:(NSMutableArray *)teamModelArray
@@ -138,6 +138,7 @@
         btn.frame = CGRectMake(0 + i*(width + spaceMargin), 23, width, width);
         btn.layer.cornerRadius = 25;
         btn.layer.masksToBounds = YES;
+        btn.tag = i;
         btn.contentMode = UIViewContentModeScaleAspectFill;
 //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
         [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",team.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
@@ -174,6 +175,7 @@
     
     CGFloat widOff = 30 + (width + spaceMargin) * i + 30;
     _scrollView1.contentSize = CGSizeMake(widOff, 120);
+    
 }
 
 -(void)setExtrModelArray:(NSMutableArray *)extrModelArray
@@ -189,6 +191,7 @@
         btn.layer.cornerRadius = 25;
         btn.layer.masksToBounds = YES;
         btn.contentMode = UIViewContentModeScaleAspectFill;
+        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
 //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
         [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",extr.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
         [_scrollView2 addSubview:btn];
@@ -220,13 +223,17 @@
     
     CGFloat widOff = (width + spaceMargin) * i - spaceMargin;
     _scrollView2.contentSize = CGSizeMake(widOff, 120);
+    
 }
 
 
+-(void)btnClick:(UIButton*)btn
+{
+    
+}
 
 
-
-
+/*
 #pragma mark--------废弃方法---------------
 -(void)setModel:(ProjectDetailLeftTeamModel *)model
 {
@@ -330,5 +337,5 @@
     
     [self setModel:model];
 }
-
+*/
 @end

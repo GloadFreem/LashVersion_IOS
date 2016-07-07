@@ -7,6 +7,8 @@
 //
 
 #import "UpProjectViewController.h"
+#import "ProjectViewController.h"
+#import "JTabBarController.h"
 
 #define UPPROJECTINFO @"requestuploadProjectInfo"
 @interface UpProjectViewController ()
@@ -41,7 +43,10 @@
 {
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(45, 30);
+    
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"提交项目";
@@ -50,7 +55,12 @@
 #pragma mark- 返回按钮
 -(void)leftBack:(UIButton*)btn
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_isFirstPage) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 -(void)startLoadData

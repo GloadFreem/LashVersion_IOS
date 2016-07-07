@@ -22,6 +22,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     UILabel *_nameLabel;
     UILabel *_addressLabel;
     UILabel *_companyLabel;
+    
     UIView *_shuView;
     UILabel *_positionLabel;
     UILabel *_timeLabel;
@@ -66,6 +67,8 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _addressLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:12];
     _addressLabel.textColor = color74;
     
+    
+    
     _companyLabel = [UILabel new];
     _companyLabel.font = BGFont(12);
     _addressLabel.textColor = color74;
@@ -76,6 +79,11 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _positionLabel = [UILabel new];
     _positionLabel.font = BGFont(12);
     _positionLabel.textColor = color74;
+    
+    _deleteBtn = [UIButton new];
+    [_deleteBtn setImage:[UIImage imageNamed:@"icon_dustbin"] forState:UIControlStateNormal];
+    _deleteBtn.contentMode = UIViewContentModeRight;
+    [_deleteBtn addTarget:self action:@selector(deleteBtnClick) forControlEvents:UIControlEventTouchUpInside];
     
     _timeLabel = [UILabel new];
     _timeLabel.font = BGFont(12);
@@ -128,7 +136,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     
     
-    NSArray *views = @[_topView,_iconView, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel, _timeLabel, _contentLabel, _moreBtn, _picContainerView, _partLine,_shareBtn,_firstShuView,_commentBtn,_secondShuView,_praiseBtn];
+    NSArray *views = @[_topView,_iconView, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel,_deleteBtn, _timeLabel, _contentLabel, _moreBtn, _picContainerView, _partLine,_shareBtn,_firstShuView,_commentBtn,_secondShuView,_praiseBtn];
     
     [self.contentView sd_addSubviews:views];
     
@@ -175,7 +183,13 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .leftSpaceToView(_shuView,5)
     .bottomEqualToView(_companyLabel)
     .heightIs(12);
-    [_positionLabel setSingleLineAutoResizeWithMaxWidth:80];
+    [_positionLabel setSingleLineAutoResizeWithMaxWidth:100];
+    
+    _deleteBtn.sd_layout
+    .rightEqualToView(contentView)
+    .centerYEqualToView(_nameLabel)
+    .widthIs(50)
+    .heightIs(40);
     
     _timeLabel.sd_layout
     .rightSpaceToView(contentView,margin)
@@ -327,5 +341,12 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
         [self.delegate didClickPraiseBtnInCell:self andModel:_model andIndexPath:_indexPath];
     }
     
+}
+
+-(void)deleteBtnClick
+{
+    if ([self.delegate respondsToSelector:@selector(didClickDeleteInCell:andModel:andIndexPath:)]) {
+        [self.delegate didClickDeleteInCell:self andModel:_model andIndexPath:_indexPath];
+    }
 }
 @end

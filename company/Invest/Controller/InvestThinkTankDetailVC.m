@@ -70,7 +70,7 @@
     
     
     [self startLoadData];
-    [self startLoadShare];
+//    [self startLoadShare];
     
 //    [self setKeyScrollView:_scrollView scrolOffsetY:300 options:nil];
     [self createUI];
@@ -140,16 +140,16 @@
     self.navigationItem.title = @"个人资料";
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     leftback.tag = 0;
-    [leftback setBackgroundImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = leftback.currentBackgroundImage.size;
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(45, 30);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
-    UIButton * shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    shareBtn.tag = 1;
-    [shareBtn setBackgroundImage:[UIImage imageNamed:@"write-拷贝-2"] forState:UIControlStateNormal];
-    shareBtn.size = shareBtn.currentBackgroundImage.size;
-    [shareBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
+//    UIButton * shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    shareBtn.tag = 1;
+//    [shareBtn setBackgroundImage:[UIImage imageNamed:@"write-拷贝-2"] forState:UIControlStateNormal];
+//    shareBtn.size = shareBtn.currentBackgroundImage.size;
+//    [shareBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
     
 }
 -(void)createUI
@@ -175,15 +175,18 @@
     _leftBack = [[UIButton alloc]init];
     [_leftBack setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     _leftBack.tag = 0;
-    _leftBack.size = CGSizeMake(32, 20);
+//    _leftBack.size = CGSizeMake(45, 30);
+//    _leftBack.size = CGSizeMake(80, 30);
+    _leftBack.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [_leftBack addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_scrollView addSubview:_leftBack];
-    //分享
-    _shareBtn = [[UIButton alloc]init];
-    [_shareBtn setBackgroundImage:[UIImage imageNamed:@"write-拷贝-2"] forState:UIControlStateNormal];
-    _shareBtn.tag = 1;
-    [_shareBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_scrollView addSubview:_shareBtn];
+    
+//    //分享
+//    _shareBtn = [[UIButton alloc]init];
+//    [_shareBtn setBackgroundImage:[UIImage imageNamed:@"write-拷贝-2"] forState:UIControlStateNormal];
+//    _shareBtn.tag = 1;
+//    [_shareBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [_scrollView addSubview:_shareBtn];
     
     //白色底板
     _whiteImage = [[UIImageView alloc]init];
@@ -194,6 +197,7 @@
     _iconImage.layer.cornerRadius = 47;
     _iconImage.layer.masksToBounds = YES;
     [_whiteImage addSubview:_iconImage];
+    _iconImage.contentMode = UIViewContentModeScaleAspectFill;
 //    [_iconImage setBackgroundColor:[UIColor redColor]];
     [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_model.user.headSculpture]] placeholderImage:[UIImage new]];
     //名字
@@ -229,7 +233,10 @@
     _address.font = [UIFont systemFontOfSize:10];
     _address.textAlignment = NSTextAlignmentCenter;
     [_whiteImage addSubview:_address];
-    _address.text = authentics.companyAddress;
+    DetailCity *city = authentics.city;
+    DetailProvince *province = city.province;
+    _address.text = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
+    
     //透明的View
     _firstView = [[UIView alloc]init];
     _firstView.backgroundColor = [UIColor whiteColor];
@@ -337,15 +344,15 @@
     [_leftBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_titleLabel);
         make.left.mas_equalTo(_scrollView.mas_left).offset(12);
+        make.width.mas_equalTo(80);
+        make.height.mas_equalTo(30);
     }];
     //分享按钮
-    [_shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_titleLabel);
-        make.right.mas_equalTo(_scrollView.mas_right).offset(-22);
-    }];
-    
-    
-    
+//    [_shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(_titleLabel);
+//        make.right.mas_equalTo(_scrollView.mas_right).offset(-22);
+//    }];
+
     //白色底板
     [_whiteImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(_scrollView);
@@ -492,6 +499,7 @@
         }else{
             _viewController.investModel.collectCount --;
         }
+        
         //替换模型  刷新表格
         [_viewController.thinkTankArray replaceObjectAtIndex:index withObject:_viewController.investModel];
         [_viewController.tableView reloadData];
@@ -620,7 +628,6 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
                     [self performSelector:@selector(dismissBG) withObject:nil/*可传任意类型参数*/ afterDelay:1.0];
-                    
                     
                 });
             }

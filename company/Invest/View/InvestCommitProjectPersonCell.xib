@@ -39,8 +39,8 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="逸景营地投资有限公司" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xD1-Uf-8sc">
-                        <rect key="frame" x="81" y="61" width="150" height="15"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="逸景营地投资有限公司" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xD1-Uf-8sc">
+                        <rect key="frame" x="81" y="61" width="217" height="15"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="15" id="hMd-Fg-M0f"/>
                         </constraints>
@@ -74,6 +74,7 @@
                     <constraint firstAttribute="trailing" secondItem="vBZ-hN-XNs" secondAttribute="trailing" constant="8" id="Wf0-35-z8U"/>
                     <constraint firstItem="xD1-Uf-8sc" firstAttribute="leading" secondItem="Y0O-kB-6B7" secondAttribute="leading" id="blE-RA-Pc3"/>
                     <constraint firstItem="pR1-s0-2ex" firstAttribute="leading" secondItem="Y0O-kB-6B7" secondAttribute="trailing" constant="13" id="dKz-bv-hLZ"/>
+                    <constraint firstItem="vBZ-hN-XNs" firstAttribute="leading" secondItem="xD1-Uf-8sc" secondAttribute="trailing" constant="10" id="fvZ-xl-hDM"/>
                     <constraint firstItem="1Oz-Sb-lTx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="gAF-33-RGG"/>
                     <constraint firstItem="xD1-Uf-8sc" firstAttribute="top" secondItem="Y0O-kB-6B7" secondAttribute="bottom" constant="16" id="iRy-9x-iuU"/>
                     <constraint firstItem="Y0O-kB-6B7" firstAttribute="leading" secondItem="1Oz-Sb-lTx" secondAttribute="trailing" constant="11" id="kTh-5A-cjd"/>

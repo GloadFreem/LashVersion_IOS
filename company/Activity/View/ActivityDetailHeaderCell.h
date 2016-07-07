@@ -10,7 +10,6 @@
 
 #import "ActivityDetailHeaderModel.h"
 
-@class ActivityDetailHeaderModel;
 
 @interface ActivityDetailHeaderCell : UITableViewCell
 

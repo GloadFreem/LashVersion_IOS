@@ -116,9 +116,9 @@
                 login = [[LoginRegistViewController alloc]init];
             }
             
-            
-    
             [self.navigationController pushViewController:login animated:NO];
+            
+            [self removeFromParentViewController];
             
 //            [self performSelector:@selector(coloseViewNotification) withObject:nil afterDelay:2];
             
@@ -222,6 +222,7 @@
     }
     
     if (indexPath.row == 7) {
+        
         [TDUtil clearMemory];
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"清除成功"];
     }
@@ -240,7 +241,7 @@
 -(void)requestVersion:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-        NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];

@@ -74,12 +74,12 @@
     
     if (model.commited) {
         [_cimmitBtn setTitle:[NSString stringWithFormat:@" 已提交"] forState:UIControlStateNormal];
-        [_cimmitBtn setBackgroundColor:color(255, 103, 0, 1)];//设置灰色背景
+        [_cimmitBtn setBackgroundColor:btnCray];//设置灰色背景
         [_cimmitBtn setUserInteractionEnabled:NO];
     }else{
         [_cimmitBtn setTitle:[NSString stringWithFormat:@" 提交项目"] forState:UIControlStateNormal];
         [_cimmitBtn setBackgroundColor:orangeColor];
-        
+        [_cimmitBtn setUserInteractionEnabled:YES];
     }
     if (model.collected) {
         [_collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];

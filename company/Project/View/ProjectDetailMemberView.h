@@ -34,11 +34,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 
-@property (weak, nonatomic) IBOutlet UIImageView *emailIcon;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *emailIconCenter;
 
-@property (weak, nonatomic) IBOutlet UIImageView *phoneIcon;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *phoneIconCenter;
 
 @property (assign, nonatomic) CGFloat viewHeight;
 

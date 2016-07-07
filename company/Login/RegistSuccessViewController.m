@@ -54,14 +54,15 @@
         [self.navigationController pushViewController:renzheng animated:YES];
         }
     }
-    
-    if (sender.tag == 2) {
-        //进入主界面
-        AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-        app.window.rootViewController = app.tabBar;
-    
-    }
+
     
 }
+- (IBAction)probationBtn:(UIButton *)sender {
+    
+    //进入主界面
+    AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
+    app.window.rootViewController = app.tabBar;
+}
+
 
 @end

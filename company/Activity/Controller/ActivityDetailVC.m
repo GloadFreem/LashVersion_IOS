@@ -22,11 +22,16 @@
 #import "ActivityAttendListViewController.h"
 #import "ActivityCommentListViewController.h"
 
+#import "CircleShareBottomView.h"
 
 #define kActivityDetailHeaderCellId @"ActivityDetailHeaderCell"
 static CGFloat textFieldH = 40;
 
-@interface ActivityDetailVC ()<UITableViewDelegate,UITableViewDataSource,ActivityDetailFooterViewDelegate,UITextFieldDelegate,ActivityViewDelegate,ActivityBlackCoverViewDelegate>
+#define SHAREACTION @"requestShareAction"
+#define COMMENTLIST @"requestPriseListAction"
+#define ATTENDACTION @"requestAttendListAction"
+#define ACTIONDETAIL @"requestDetailAction"
+@interface ActivityDetailVC ()<UITableViewDelegate,UITableViewDataSource,ActivityDetailFooterViewDelegate,UITextFieldDelegate,ActivityViewDelegate,ActivityBlackCoverViewDelegate,CircleShareBottomViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *signUpBtn;          //报名按钮
@@ -42,6 +47,12 @@ static CGFloat textFieldH = 40;
 @property (nonatomic, strong) NSMutableArray *dataAttendSource;
 @property (nonatomic, strong) ActivityDetailHeaderModel * headerModel;
 @property (nonatomic, strong) ActivityDetailCommentCellModel *commentCellModel;
+
+@property (nonatomic, copy) NSString *sharePartner;
+@property (nonatomic, copy) NSString *shareImage;
+@property (nonatomic, copy) NSString *shareUrl; //分享地址
+@property (nonatomic, copy) NSString *contentText;
+@property (nonatomic,strong)UIView * bottomView;
 
 @end
 
@@ -63,9 +74,10 @@ static CGFloat textFieldH = 40;
     //    [self setupTextField];
     
     //生成请求partner
-    self.actionDetailPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_DETAIL];
-    self.actionAttendPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_ATTEND];
-    self.actionCommentListPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_COMMENT_LIST];
+    self.actionDetailPartner = [TDUtil encryKeyWithMD5:KEY action:ACTIONDETAIL];
+    self.actionAttendPartner = [TDUtil encryKeyWithMD5:KEY action:ATTENDACTION];
+    self.actionCommentListPartner = [TDUtil encryKeyWithMD5:KEY action:COMMENTLIST];
+    self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:SHAREACTION];
     
     //点赞评论
     [self loadActionCommentData];
@@ -75,6 +87,8 @@ static CGFloat textFieldH = 40;
     //获取项目参加人数
     [self loadActionAttendData];
     
+    //获取分享数据
+    [self loadShareData];
 }
 -(void)setUpNavBar
 {
@@ -82,7 +96,8 @@ static CGFloat textFieldH = 40;
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     leftback.tag = 0;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(32, 20);
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
 }
@@ -122,6 +137,7 @@ static CGFloat textFieldH = 40;
     _shareBtn = [[UIButton alloc]init];
     _shareBtn.backgroundColor = color(67, 179, 204, 1);
     [_shareBtn setTitle:@"我要分享" forState:UIControlStateNormal];
+    [_shareBtn addTarget:self action:@selector(startShare) forControlEvents:UIControlEventTouchUpInside];
     [_shareBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_shareBtn.titleLabel setFont:BGFont(19)];
     [self.view addSubview:_shareBtn];
@@ -201,6 +217,30 @@ static CGFloat textFieldH = 40;
         make.centerY.mas_equalTo(field.mas_centerY);
         make.right.mas_equalTo(view.mas_right).offset(-12);
     }];
+}
+
+#pragma mark--------loadShareData分享数据-------------
+-(void)loadShareData
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"4",@"type",@"1",@"contentId", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:ACTION_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareData:)];
+}
+-(void)requestShareData:(ASIHTTPRequest*)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic != nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
+            
+            _shareUrl = dataDic[@"url"];
+            _shareImage = dataDic[@"image"];
+            _contentText = dataDic[@"content"];
+        }
+    }
 }
 
 /**
@@ -311,7 +351,7 @@ static CGFloat textFieldH = 40;
 -(void)requestActionCommentList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -587,6 +627,135 @@ static CGFloat textFieldH = 40;
 {
     if (btn.tag == 0) {
         [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+#pragma mark-------startShare分享-----------
+#pragma mark -开始分享
+
+#pragma mark  转发
+
+- (UIView*)topView {
+    UIViewController *recentView = self;
+    while (recentView.parentViewController != nil) {
+        recentView = recentView.parentViewController;
+    }
+    return recentView.view;
+}
+
+/**
+ *  点击空白区域shareView消失
+ */
+
+- (void)dismissBG
+{
+    if(self.bottomView != nil)
+    {
+        [self.bottomView removeFromSuperview];
+    }
+}
+
+-(void)startShare
+{
+    NSArray *titleList = @[@"QQ",@"微信",@"朋友圈",@"短信"];
+    NSArray *imageList = @[@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
+    CircleShareBottomView *share = [CircleShareBottomView new];
+    share.tag = 1;
+    [share createShareViewWithTitleArray:titleList imageArray:imageList];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
+    [share addGestureRecognizer:tap];
+    [[self topView] addSubview:share];
+    self.bottomView = share;
+    share.delegate = self;
+}
+
+-(void)sendShareBtnWithView:(CircleShareBottomView *)view index:(int)index
+{
+    //分享
+    if (view.tag == 1) {
+        //得到用户SID
+        NSString * shareImage = _shareImage;
+        NSString *shareContentString = [NSString stringWithFormat:@"%@",_contentText];
+        NSArray *arr = nil;
+        NSString *shareContent;
+        
+        switch (index) {
+            case 0:{
+                if ([QQApiInterface isQQInstalled])
+                {
+                    // QQ好友
+                    arr = @[UMShareToQQ];
+                    [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
+                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
+                }
+                else
+                {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的设备没有安装QQ" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                    [alert show];
+                    return;
+                }
+                
+            }
+                break;
+            case 1:{
+                // 微信好友
+                arr = @[UMShareToWechatSession];
+                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                
+                //                NSLog(@"分享到微信");
+            }
+                break;
+            case 2:{
+                // 微信朋友圈
+                arr = @[UMShareToWechatTimeline];
+                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                
+                //                NSLog(@"分享到朋友圈");
+            }
+                break;
+            case 3:{
+                // 短信
+                arr = @[UMShareToSms];
+                shareContent = shareContentString;
+                
+                //                NSLog(@"分享短信");
+            }
+                break;
+            case 100:{
+                [self dismissBG];
+            }
+                break;
+            default:
+                break;
+        }
+        if(arr == nil)
+        {
+            return;
+        }
+        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
+            shareImage = nil;
+        }
+        UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
+                                            shareImage];
+        
+        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
+            if (response.responseCode == UMSResponseCodeSuccess) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [self performSelector:@selector(dismissBG) withObject:nil afterDelay:1.0];
+                    
+                    
+                });
+            }
+        }];
     }
 }
 

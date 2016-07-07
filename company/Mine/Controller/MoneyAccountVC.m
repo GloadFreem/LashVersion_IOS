@@ -111,8 +111,21 @@
     
     NSArray *arr1 = [_number componentsSeparatedByString:@"."];
     NSString *str1 = [TDUtil translation:arr1[0]];
-    NSMutableString *nsmStr = [[NSMutableString alloc]initWithString:str1];
+    if ([str1 isEqualToString:@""]) {
+        str1 = @"零元";
+    }else{
+        str1 = [NSString stringWithFormat:@"%@元",str1];
+    }
+    
     NSString *str2 = [TDUtil translationSmallSum:arr1[1]];
+    if ([str2 isEqualToString:@""]) {
+        
+    }else{
+        if ([str1 isEqualToString:@"零元"]) {
+            str1 = @"";
+        }
+    }
+    NSMutableString *nsmStr = [[NSMutableString alloc]initWithString:str1];
     [nsmStr appendString:[NSString stringWithFormat:@"%@",str2]];
     _textLabel.text = nsmStr;
     
@@ -120,8 +133,21 @@
     
     NSArray *arr2 = [_avalable componentsSeparatedByString:@"."];
     str1 = [TDUtil translation:arr2[0]];
-    nsmStr = [[NSMutableString alloc]initWithString:str1];
+    if ([str1 isEqualToString:@""]) {
+        str1 = @"零元";
+    }else{
+        str1 = [NSString stringWithFormat:@"%@元",str1];
+    }
+    
     str2 = [TDUtil translationSmallSum:arr2[1]];
+    if ([str2 isEqualToString:@""]) {
+        
+    }else{
+        if ([str1 isEqualToString:@"零元"]) {
+            str1 = @"";
+        }
+    }
+    nsmStr = [[NSMutableString alloc]initWithString:str1];
     [nsmStr appendString:str2];
     _leftText.text = nsmStr;
     
@@ -129,8 +155,23 @@
     _freezonAmount.text = _freezon;
     NSArray *arr3 = [_freezon componentsSeparatedByString:@"."];
     str1 = [TDUtil translation:arr3[0]];
-    nsmStr = [[NSMutableString alloc]initWithString:str1];
+    if ([str1 isEqualToString:@""]) {
+        str1 = @"零元";
+    }else{
+        str1 = [NSString stringWithFormat:@"%@元",str1];
+    }
     str2 = [TDUtil translationSmallSum:arr3[1]];
+    
+    if ([str2 isEqualToString:@""]) {
+        
+    }else{
+        if ([str1 isEqualToString:@"零元"]) {
+            str1 = @"";
+        }
+    }
+    nsmStr = [[NSMutableString alloc]initWithString:str1];
+    
+    [nsmStr appendString:str2];
     _rightText.text = nsmStr;
 }
 

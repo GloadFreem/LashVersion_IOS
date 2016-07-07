@@ -55,7 +55,7 @@
 @property (nonatomic,strong) NSArray *imageArray;              //切换按钮图标
 @property (nonatomic,strong) UIView *lineView;                  // 下划线视图
 @property (nonatomic,strong) UIScrollView *subViewScrollView;   // 下边子滚动视图
-@property (nonatomic,strong) UITableView *investPersonTableView; //投资人视图
+
 
 
 @property (nonatomic, strong) UITableView *investOrganizationTableView; //投资机构视图
@@ -196,8 +196,9 @@
                     Authentics *authentics = baseModel.user.authentics[0];
                     listModel.position = authentics.position;
                     listModel.companyName = authentics.companyName;
-                    listModel.companyAddress = authentics.companyAddress;
-    
+                    City *city = authentics.city;
+                    Province *province = city.province;
+                    listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
                     [_investPersonArray addObject:listModel];
                     
                 }
@@ -231,7 +232,10 @@
                     OrganizationAuthentics *authentics =investor.user.authentics[0];
                     model.headSculpture = investor.user.headSculpture;
                     model.companyName = authentics.companyName;
-                    model.companyAddress = authentics.companyAddress;
+                    
+                    OrganizationCity *city = authentics.city;
+                    OrganizationProvince *province = city.province;
+                    model.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
                     model.userId = [NSString stringWithFormat:@"%ld",(long)investor.user.userId];
                     [_investOrganizationSecondArray addObject:model];
                     
@@ -704,6 +708,7 @@
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     [delegate.tabBar tabBarHidden:YES animated:NO];
     vc.model = model;
+    vc.viewController = self;
     
     [self.navigationController pushViewController:vc animated:YES];
     
@@ -726,6 +731,70 @@
         flag = @"2";
         
     }
+    
+    switch (_tableViewSelected) {
+        case 1:{
+            InvestListModel * model = (InvestListModel*)klistModel;
+            InvestPersonCell * cell = (InvestPersonCell*)klistCell;
+            if (model.collected) {
+                //刷新cell
+                model.collectCount ++;
+                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                [cell.collectBtn setBackgroundColor:btnCray];
+            }else{
+                //刷新cell
+                
+                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%d)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.collectBtn setBackgroundColor:btnGreen];
+            }
+        }
+            break;
+        case 2:{
+            OrganizationSecondModel * model = (OrganizationSecondModel*)klistModel;
+            InvestOrganizationSecondCell * cell = (InvestOrganizationSecondCell*)klistCell;
+            if (model.collected) {
+                
+                //刷新cell
+                model.collectCount++;
+                
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnCray];
+            }else{
+                //关注数量减1
+                
+                //刷新cell
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnGreen];
+            }
+        }
+            break;
+        case 3:{
+            InvestListModel * model = (InvestListModel*)klistModel;
+            ThinkTankCell * cell = (ThinkTankCell*)klistCell;
+            if (model.collected) {
+                //刷新cell
+                model.collectCount ++;
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnCray];
+            }else{
+                //关注数量减1
+                
+                //刷新cell
+                
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%d)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnGreen];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    
+    
+    
+    [self.tableView reloadData];
+    
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
@@ -743,67 +812,7 @@
 //            if (_collectSuccess) {
 //                
 //            }
-            switch (_tableViewSelected) {
-                case 1:{
-                    InvestListModel * model = (InvestListModel*)klistModel;
-                    InvestPersonCell * cell = (InvestPersonCell*)klistCell;
-                    if (model.collected) {
-                        //刷新cell
-                        model.collectCount ++;
-                        [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                        [cell.collectBtn setBackgroundColor:btnCray];
-                    }else{
-                        //刷新cell
-                        
-                        [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                        [cell.collectBtn setBackgroundColor:btnGreen];
-                    }
-                }
-                    break;
-                case 2:{
-                    OrganizationSecondModel * model = (OrganizationSecondModel*)klistModel;
-                    InvestOrganizationSecondCell * cell = (InvestOrganizationSecondCell*)klistCell;
-                    if (model.collected) {
-                
-                        //刷新cell
-                        model.collectCount++;
-                        
-                        [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                        [cell.attentionBtn setBackgroundColor:btnCray];
-                    }else{
-                        //关注数量减1
-                        
-                        //刷新cell
-                        [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                        [cell.attentionBtn setBackgroundColor:btnGreen];
-                    }
-                }
-                    break;
-                case 3:{
-                    InvestListModel * model = (InvestListModel*)klistModel;
-                    ThinkTankCell * cell = (ThinkTankCell*)klistCell;
-                    if (model.collected) {
-                        //刷新cell
-                        model.collectCount ++;
-                        [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                        [cell.attentionBtn setBackgroundColor:btnCray];
-                    }else{
-                        //关注数量减1
-                        
-                        //刷新cell
-                        
-                        [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                         [cell.attentionBtn setBackgroundColor:btnGreen];
-                    }
-                }
-                    break;
-                default:
-                    break;
-            }
             
-            
-//            [self startLoadData];
-            [self.tableView reloadData];
             
 //            NSLog(@"关注成功");
         }else{

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "CircleViewController.h"
+#import "CircleListModel.h"
+
 @interface CircleDetailVC : RootViewController
 
 @property (nonatomic, assign) NSInteger publicContentId;
@@ -17,5 +19,7 @@
 @property (nonatomic, retain)NSIndexPath * indexPath;
 
 @property (nonatomic, assign)CircleViewController * viewController;
+
+@property (nonatomic, strong) CircleListModel *circleModel;
 
 @end

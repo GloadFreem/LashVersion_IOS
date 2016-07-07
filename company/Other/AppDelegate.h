@@ -12,7 +12,7 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
+@property (strong, nonatomic) UINavigationController * nav;
 @property (nonatomic, strong) JTabBarController * tabBar;
 
 @property (nonatomic, copy) NSString *partner;

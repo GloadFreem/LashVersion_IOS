@@ -10,14 +10,14 @@
 #import "InvestCommitProjectReasonCell.h"
 #import "InvestCommitProjectPersonCell.h"
 #import "InvestCommitProjectPCell.h"
-
+#import "UpProjectViewController.h"
 
 #import "ProjectListProBaseModel.h"
 #import "ProjectListProModel.h"
 
 #define PROJECTCENTER @"requestProjectCenter"
 #define PROJECTCOMMIT @"requestProjectCommit"
-@interface InvestCommitProjectVC ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate>
+@interface InvestCommitProjectVC ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, copy) NSString *projectPartner;
 @property (nonatomic, strong) UITableView *tableView;
@@ -57,7 +57,7 @@
 -(void)requestProject:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//            NSLog(@"返回:%@",jsonString);
+//     NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic != nil) {
@@ -65,30 +65,49 @@
         if ([status integerValue] == 200) {
             
             NSArray *dataArray = [Project mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
-            for (NSInteger i = 0; i < dataArray.count; i ++) {
-                ProjectListProModel *listModel = [ProjectListProModel new];
-                Project *project = dataArray[i];
-                listModel.startPageImage = project.startPageImage;
-                listModel.abbrevName = project.abbrevName;
-                listModel.address = project.address;
-                listModel.fullName = project.fullName;
-                listModel.status = project.financestatus.name;
-                listModel.projectId = project.projectId;
-                listModel.desc = project.desc;
-                //少一个areas 数组
-                
-                listModel.collectionCount = project.collectionCount;
-                Roadshows *roadshows = project.roadshows[0];
-                listModel.financeTotal = roadshows.roadshowplan.financeTotal;
-                listModel.financedMount = roadshows.roadshowplan.financedMount;
-                listModel.endDate = roadshows.roadshowplan.endDate;
-                [_dataArray addObject:listModel];
-//                NSLog(@"--打印数组--%@",listModel);
+            if (dataArray.count) {
+                for (NSInteger i = 0; i < dataArray.count; i ++) {
+                    ProjectListProModel *listModel = [ProjectListProModel new];
+                    Project *project = dataArray[i];
+                    listModel.startPageImage = project.startPageImage;
+                    listModel.abbrevName = project.abbrevName;
+                    listModel.address = project.address;
+                    listModel.fullName = project.fullName;
+                    listModel.status = project.financestatus.name;
+                    listModel.projectId = project.projectId;
+                    listModel.desc = project.desc;
+                    listModel.timeLeft = project.timeLeft;
+                    //少一个areas 数组
+                    
+                    listModel.collectionCount = project.collectionCount;
+                    Roadshows *roadshows = project.roadshows[0];
+                    listModel.financeTotal = roadshows.roadshowplan.financeTotal;
+                    listModel.financedMount = roadshows.roadshowplan.financedMount;
+                    listModel.endDate = roadshows.roadshowplan.endDate;
+                    [_dataArray addObject:listModel];
+                    //                NSLog(@"--打印数组--%@",listModel);
                 }
+                
+            }else{
+            
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您还没有上传项目，请先上传项目！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                [alertView show];
+            }
+            
             [_tableView reloadData];
+            
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
+    }
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        UpProjectViewController *vc = [UpProjectViewController new];
+        vc.isFirstPage = YES;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 #pragma mark- 设置导航栏
@@ -96,11 +115,12 @@
 {
     
     self.view.backgroundColor = colorGray;
-    self.navigationItem.title = @"个人资料";
+//    self.navigationItem.title = @"个人资料";
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     leftback.tag = 0;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(35, 20);
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
     
@@ -157,6 +177,8 @@
     }
     if (btn.tag == 1) {
         NSLog(@"呼叫客服");
+        
+        
     }
     if (btn.tag == 2) {
         if (self.textViewStr && self.textViewStr.length >= 20) {
@@ -166,19 +188,24 @@
             [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COMMIT postParam:dic type:0 delegate:self sel:@selector(requestUpProject:)];
             
         }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请按提示输入推荐理由"];
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入20字以上推荐理由"];
         }
     }
 }
 -(void)requestUpProject:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            //改变提交的状态
+            NSInteger index = [_viewController.investPersonArray indexOfObject:_model];
+            _model.commited = YES;
+            [_viewController.investPersonArray replaceObjectAtIndex:index withObject:_model];
+            [_viewController.investPersonTableView reloadData];
             
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         //延迟2秒
@@ -197,13 +224,23 @@
 #pragma mark -tableViewDatasource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    if (_dataArray.count) {
+        return 3;
+    }
+    return 2;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
         return 105;
+    }
+    if (indexPath.row == 2) {
+        if (_dataArray.count) {
+            return 200;
+        }else{
+            return 0.000000001f;
+        }
     }
     return 200;
 }
@@ -259,7 +296,7 @@
 
 -(void)textViewDidBeginEditing:(UITextView *)textView
 {
-    NSLog(@"开始比按钮及");
+//    NSLog(@"开始比按钮及");
 }
 
 -(void)textViewDidChange:(UITextView *)textView
@@ -272,7 +309,7 @@
 {
     
     self.textViewStr = textView.text;
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
 }
 
 

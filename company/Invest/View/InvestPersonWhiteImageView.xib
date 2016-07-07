@@ -14,7 +14,7 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="touziren-mengban.png" translatesAutoresizingMaskIntoConstraints="NO" id="Lyr-AR-nSj">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar-sample-165.png" translatesAutoresizingMaskIntoConstraints="NO" id="OdT-q4-tbk">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar-sample-165.png" translatesAutoresizingMaskIntoConstraints="NO" id="OdT-q4-tbk">
                     <rect key="frame" x="253" y="26" width="94" height="94"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="94" id="WNw-4I-myM"/>

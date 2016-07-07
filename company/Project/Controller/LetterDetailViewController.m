@@ -26,7 +26,27 @@
     // Do any additional setup after loading the view.
     
     self.view.backgroundColor = [UIColor whiteColor];
+    [self setupNav];
     [self createUI];
+}
+
+#pragma mark -导航栏设置
+-(void)setupNav
+{
+    //返回按钮
+    self.navigationItem.title = @"详情";
+    UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
+    leftback.tag = 0;
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
+}
+
+-(void)btnClick:(UIButton*)btn
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)createUI

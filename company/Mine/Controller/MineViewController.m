@@ -54,6 +54,7 @@
 @property (nonatomic, copy) NSString *shareUrl; //分享地址
 @property (nonatomic, copy) NSString *shareImage;//分享图片
 @property (nonatomic, copy) NSString *sharePartner;
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconHeight;
 
@@ -64,6 +65,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _iconWidth.constant = 83 ;
+    _iconBtn.layer.cornerRadius = _iconWidth.constant/2;
+    _iconHeight.constant = 83 ;
+    _iconBtn.layer.masksToBounds = YES;
+    
     // Do any additional setup after loading the view from its nib.
     self.signPartner = [TDUtil encryKeyWithMD5:KEY action:SIGNVERIFY];
     //获得认证partner
@@ -72,8 +79,14 @@
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:INVITEFRIEND];
     
     [self loadShareData];
+    
 }
 
+-(void)awakeFromNib
+{
+    
+    
+}
 -(void)loadShareData
 {
     NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"3",@"type", nil];
@@ -139,11 +152,6 @@
 
 -(void)setModel
 {
-    _iconWidth.constant = 83;
-    _iconBtn.layer.cornerRadius = 41.5;
-    _iconHeight.constant = _iconWidth.constant;
-    _iconBtn.layer.masksToBounds = YES;
-    
     
 //    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
     

@@ -22,6 +22,7 @@
 #import "CircleDetailVC.h"
 #import "CircleShareBottomView.h"
 
+#define DELETELIST @"requestPublicContentDelete"
 #define AUTHENINFO @"authenticInfoUser"
 #define CIRCLE_CONTENT @"requestFeelingList"
 #define CIRCLE_PRAISE @"requestPriseFeeling"
@@ -34,6 +35,7 @@
     
     AuthenticInfoBaseModel * authenticInfoModel;
 }
+
 @property (nonatomic,strong)UIView * bottomView;
 
 @property (nonatomic, copy) NSString *authenPartner;
@@ -53,6 +55,10 @@
 @property (nonatomic, strong) CircleListModel *replaceListModel; //假model
 
 @property (nonatomic, assign) BOOL isFirst;
+
+@property (nonatomic, copy) NSString *deletePartner;
+@property (nonatomic, strong) CircleListModel *deleteModel;
+@property (nonatomic, copy) NSString *selfId;//本人ID
 
 @end
 
@@ -74,6 +80,11 @@
     self.updateSharePartner = [TDUtil encryKeyWithMD5:KEY action:CIRCLE_UPDATE_SHARE];
     //获得认证partner
     self.authenPartner = [TDUtil encryKeyWithMD5:KEY action:AUTHENINFO];
+    self.deletePartner = [TDUtil encryKeyWithMD5:KEY action:DELETELIST];
+    
+    
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    _selfId = [data objectForKey:USER_STATIC_USER_ID];
     
     _isFirst = YES;
     _page = 0;
@@ -134,7 +145,7 @@
     listModel.commentCount = 0;       //评论数量
     listModel.priseCount = 0;           //点赞数量
     listModel.flag = false;
-   
+    listModel.userId = [_selfId integerValue];
     
     listModel.addressStr = usersAuthenticsModel.companyAddress;
     listModel.companyStr = usersAuthenticsModel.companyName;
@@ -169,7 +180,7 @@
         NSString* status = [dic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
-            [self refreshHttp];
+//            [self refreshHttp];
         }else{
             //        self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网速不好，请手动刷新"];
@@ -265,12 +276,14 @@
                 listModel.timeSTr = baseModel.publicDate;              //发布时间
                 listModel.iconNameStr = baseModel.users.headSculpture; //发布者头像
                 listModel.nameStr = baseModel.users.name;              //发布者名字
+                listModel.userId = baseModel.users.userId;
                 listModel.msgContent = baseModel.content;
                 listModel.publicContentId = baseModel.publicContentId; //帖子ID
                 listModel.shareCount = baseModel.shareCount;           //分享数量
                 listModel.commentCount = baseModel.commentCount;       //评论数量
                 listModel.priseCount = baseModel.priseCount;           //点赞数量
                 listModel.flag = baseModel.flag;
+                
                 //拿到usrs认证数组
                 NSArray *authenticsArray = [NSArray arrayWithArray:baseModel.users.authentics];
                 //实例化认证人模型
@@ -343,6 +356,11 @@
     cell.delegate = self;
     if (self.dataArray.count) {
         cell.model = self.dataArray[indexPath.row];
+        if (cell.model.userId == [_selfId integerValue]) {
+            [cell.deleteBtn setHidden:NO];
+        }else{
+            [cell.deleteBtn setHidden:YES];
+        }
     }
     
     return cell;
@@ -359,6 +377,8 @@
     detail.viewController = self;
     detail.publicContentId  =listModel.publicContentId;//帖子ID
     detail.page = 0;
+    detail.circleModel = listModel;
+    
     [self.navigationController pushViewController:detail animated:YES];
     
 }
@@ -386,7 +406,50 @@
     return width;
 }
 
-#pragma mark- CircleListCellDelegate
+#pragma mark---------------- CircleListCellDelegate--------------
+#pragma mark------------------------删除按钮----------------------
+-(void)didClickDeleteInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
+{
+    _deleteModel = model;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
+    __block CircleViewController* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertain:(id)sender
+{
+    [_dataArray removeObject:_deleteModel];
+    [self.tableView reloadData];
+    
+    
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.deletePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_deleteModel.publicContentId],@"contentId", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:CIRCLE_LIST_DELETE postParam:dic type:0 delegate:self sel:@selector(requestDeleteList:)];
+}
+-(void)requestDeleteList:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"删除成功"];
+        }
+    }
+}
+
 #pragma maerk -分享按钮
 -(void)didClickShareBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model
 {
@@ -445,7 +508,6 @@
         [self.bottomView removeFromSuperview];
     }
 }
-
 
 -(void)startShare
 {
@@ -541,7 +603,7 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
-                    [self performSelector:@selector(dismissBG) withObject:nil/*可传任意类型参数*/ afterDelay:1.0];
+                    [self performSelector:@selector(dismissBG) withObject:nil afterDelay:1.0];
                     
                     
                 });

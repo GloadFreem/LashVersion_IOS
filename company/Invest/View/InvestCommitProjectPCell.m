@@ -42,9 +42,10 @@
     _titleLabel.text = model.desc;
     
     _personNumLabel.text = [NSString stringWithFormat:@"%ld",(long)model.collectionCount];
-    _timeLabel.text = [NSString stringWithFormat:@"%@天",[self getDateCha:model.endDate]];
+    _timeLabel.text = [NSString stringWithFormat:@"%ld天",(long)model.timeLeft];
     _moneyLabel.text = [NSString stringWithFormat:@"%ld万",(long)model.financeTotal];
 }
+
 #pragma mark ----计算时间差
 -(NSString*)getDateCha:(NSString*)endDate
 {

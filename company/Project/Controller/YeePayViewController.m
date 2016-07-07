@@ -44,7 +44,7 @@
 //    [self.navView.leftTouchView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(back:)]];
 //    
 //    [self.view addSubview:self.navView];
-//    
+    [self setNav];
     
     self.webView = [[UIWebView alloc]initWithFrame:self.view.frame];
     self.webView.backgroundColor = [UIColor whiteColor];
@@ -59,6 +59,21 @@
     
      [self loadUrl];
     
+}
+
+-(void)setNav
+{
+    UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    [leftback addTarget:self action:@selector(leftBack) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
+}
+
+-(void)leftBack
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)back:(id)sender

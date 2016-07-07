@@ -17,10 +17,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self setNav];
+    
     _webView  =[[UIWebView alloc]initWithFrame:self.view.frame];
     [self startLoadDetailData];
 }
 
+
+-(void)setNav
+{
+    UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(45, 30);
+    [leftback addTarget:self action:@selector(leftBack) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
+}
+
+-(void)leftBack
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 -(void)startLoadDetailData
 {

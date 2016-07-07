@@ -10,6 +10,7 @@
 
 @interface CircleDetailCommentModel : NSObject
 
+@property (nonatomic, assign) NSInteger commentId;
 @property (nonatomic, copy) NSString *iconImageStr;
 @property (nonatomic, copy) NSString *nameStr;
 

@@ -54,6 +54,7 @@
     _iconImage = [UIImageView new];
     _iconImage.layer.cornerRadius = 30*WIDTHCONFIG;
     _iconImage.layer.masksToBounds = YES;
+    _iconImage.contentMode = UIViewContentModeScaleAspectFill;
 //    _iconImage.backgroundColor = [UIColor redColor];
     [self.contentView addSubview:_iconImage];
     //状态

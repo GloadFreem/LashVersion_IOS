@@ -34,7 +34,6 @@ extern CGFloat maxContentLabelHeight;
     return _content;
 }
 
-
 -(void)setIsOpen:(BOOL)isOpen
 {
     if (!_shouldShowMoreButton) {

@@ -62,6 +62,7 @@
 //    for (NSInteger i =0; i < teamModelArray.count; i ++) {
 //        [teamView.teamModelArray addObject:teamModelArray[i]];
 //    }
+    
     teamView.teamModelArray = [NSMutableArray arrayWithArray:model.project.teams];
     teamView.extrModelArray = [NSMutableArray arrayWithArray:model.extr];
 //    NSArray *extrArray = [NSArray arrayWithArray:model.extr];
@@ -94,7 +95,7 @@
     
     //4.设置布局
     headerView.sd_layout
-    .topSpaceToView(self,20)
+    .topSpaceToView(self,0)
     .leftSpaceToView(self,0)
     .rightSpaceToView(self,0)
     .heightIs(300);

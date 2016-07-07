@@ -9,15 +9,19 @@
 #import "ProjectSceneCommentVC.h"
 #import "ProjectSceneCommentModel.h"
 #import "ProjectDetailSceneMessageCell.h"
+#import "ProjectSceneOtherCell.h"
 
 #define REQUESTSCENECOMMENT @"requestProjectSceneCommentList"
-@interface ProjectSceneCommentVC ()<UITableViewDelegate, UITableViewDataSource,UITextViewDelegate>
-
+@interface ProjectSceneCommentVC ()<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate>
+{
+    NSTimer *_timer;
+}
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, strong) UIView *footer;
-@property (nonatomic, strong) UITextView *textView;
+
+@property (nonatomic, strong) UITextField *textField;
 @end
 
 @implementation ProjectSceneCommentVC
@@ -40,13 +44,22 @@
     [self createUI];
     
 }
+
+-(void)loadDataRegular
+{
+    _page = 0;
+    [self startLoadData];
+}
+
 -(void)setNav
 {
     self.navigationItem.title = @"交流详情";
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     [leftback addTarget:self action:@selector(leftback) forControlEvents:UIControlEventTouchUpInside];
-    leftback.size = CGSizeMake(32, 20);
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
 }
 
@@ -136,16 +149,16 @@
         make.height.mas_equalTo(50);
     }];
     
-    _textView = [[UITextView alloc]init];
-    _textView.layer.cornerRadius = 2;
-    _textView.layer.masksToBounds = YES;
-    _textView.layer.borderColor = [UIColor darkGrayColor].CGColor;
-    _textView.layer.borderWidth = 0.5;
-    _textView.delegate = self;
-    _textView.returnKeyType = UIReturnKeyDone;
-    _textView.font = BGFont(15);
+    _textField = [[UITextField alloc]init];
+    _textField.layer.cornerRadius = 2;
+    _textField.layer.masksToBounds = YES;
+    _textField.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    _textField.layer.borderWidth = 0.5;
+    _textField.delegate = self;
+    _textField.returnKeyType = UIReturnKeyDone;
+    _textField.font = BGFont(15);
     
-    [_footer addSubview:_textView];
+    [_footer addSubview:_textField];
     
     UIButton * btn =[[UIButton alloc]init];
     [btn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
@@ -155,7 +168,7 @@
     btn.titleLabel.font = [UIFont systemFontOfSize:17];
     [_footer addSubview:btn];
     
-    [_textView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_textField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(5);
         make.bottom.mas_equalTo(-5);
         make.left.mas_equalTo(5);
@@ -174,15 +187,21 @@
 #pragma mark -发送信息
 -(void)sendMessage:(UIButton*)btn
 {
-    if (self.textView.text && ![self.textView.text isEqualToString:@""]) {
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textView.text],@"content", nil];
-        //开始请求
-        [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
-        
+    if (self.sceneId) {
+        if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
+            //开始请求
+            [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
+            
+        }else{
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"评论内容不能内空"];
+            return;
+        }
     }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"评论内容不能内空"];
-        return;
+        self.textField.text = @"";
+    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"路演现场暂未开放评论"];
     }
+    
 }
 
 -(void)requestSceneComment:(ASIHTTPRequest *)request
@@ -194,8 +213,8 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
-            self.textView.text = @"";
-            [self.textView resignFirstResponder];
+            self.textField.text = @"";
+            [self.textField resignFirstResponder];
 #pragma mark ---------刷新表格-----------
             _page = 0;
             [_dataArray removeAllObjects];
@@ -224,7 +243,9 @@
 -(void)refreshHttp
 {
     _page --;
-    
+    if (_page < 0) {
+        _page = 0;
+    }
     [self startLoadData];
     //    NSLog(@"下拉刷新");
 }
@@ -237,22 +258,41 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id model = self.dataArray[indexPath.row];
-    return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ProjectDetailSceneMessageCell class] contentViewWidth:[self cellContentViewWith]];
+    ProjectDetailSceneCellModel *model = self.dataArray[indexPath.row];
+    if (model.flag) {
+        return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ProjectDetailSceneMessageCell class] contentViewWidth:[self cellContentViewWith]];
+    }
+    
+    return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ProjectSceneOtherCell class] contentViewWidth:[self cellContentViewWith]];
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellId = @"ProjectDetailSceneMessageCell";
-    ProjectDetailSceneMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (cell == nil) {
-        cell = [[ProjectDetailSceneMessageCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-    }
     if (_dataArray.count) {
-        cell.model = _dataArray[indexPath.row];
+        ProjectDetailSceneCellModel *model = _dataArray[indexPath.row];
+        
+        if (model.flag) {
+            static NSString *cellId = @"ProjectDetailSceneMessageCell";
+            ProjectDetailSceneMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (cell == nil) {
+                cell = [[ProjectDetailSceneMessageCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+            }
+            cell.model = model;
+            return cell;
+        }
+        
+        static NSString *cellId = @"ProjectSceneOtherCell";
+        ProjectSceneOtherCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (!cell) {
+            cell = [[ProjectSceneOtherCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+        }
+        cell.model = model;
+        return cell;
     }
-    return cell;
+    
+    return nil;
 }
+
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -274,6 +314,29 @@
     return width;
 }
 
+#pragma mark -textFiledDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return NO;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    
+    
+    NSLog(@"开始编辑");
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    
+    if (![textField.text isEqualToString:@""]) {
+        
+        self.textField.text = textField.text;
+    }
+    NSLog(@"结束编辑");
+}
+
+
+/*
 #pragma mark- textView  delegate
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
@@ -292,11 +355,11 @@
 -(void)textViewDidChange:(UITextView *)textView
 {
     if (![textView.text isEqualToString:@""]) {
-        self.textView.text = textView.text;
+        self.textField.text = textView.text;
     }
     NSLog(@"正在编辑");
 }
-
+*/
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -304,6 +367,13 @@
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
+    
+    _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
+}
+
+-(void)dealloc{
+    [_timer invalidate];
 }
 /*
 #pragma mark - Navigation

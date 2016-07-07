@@ -8,6 +8,7 @@
 
 #import "PhoneCerityViewController.h"
 #import "WSetPassWordViewController.h"
+#import "LoginRegistViewController.h"
 
 #define YANZHENG @"verifyCode"
 
@@ -103,12 +104,13 @@
 #pragma mark---发送验证码---
 - (IBAction)sendMessage:(JKCountDownButton *)sender {
     
+    [_phoneTextField resignFirstResponder];
     NSString *phoneNumber = _phoneTextField.text;
     
     if (phoneNumber) {
         if ([TDUtil validateMobile:phoneNumber]) {
             NSString *serverUrl = SEND_MESSAGE_CODE;
-            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner, @"partner",phoneNumber,@"telephone",PLATFORM,@"platform",REGIST_TYPE,@"type",nil];
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner, @"partner",phoneNumber,@"telephone",PLATFORM,@"platform",CERTIFY_TYPE,@"type",nil];
             
             [self.httpUtil getDataFromAPIWithOps:serverUrl postParam:dic type:0 delegate:self sel:@selector(requestSendeCode:)];
             //            [self startTime];
@@ -124,20 +126,63 @@
 //发送验证码
 -(void)requestSendeCode:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if(jsonDic!=nil)
     {
         NSString* code = [jsonDic valueForKey:@"status"];
         if ([code intValue] == 200) {
+            
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }else{
+            
+            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
+            BOOL isRelogin =(BOOL)dataDic[@"isRelogin"];
+            if (isRelogin) {
+                
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"该手机号已注册，请直接登录！" preferredStyle:UIAlertControllerStyleAlert];
+                __block PhoneCerityViewController* blockSelf = self;
+                
+                UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    
+                }];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [blockSelf btnCertain:nil];
+                }];
+                
+                [alertController addAction:cancleAction];
+                [alertController addAction:okAction];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+
+                
+            }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+            }
         }
     }
 }
+-(void)btnCertain:(id)sender
+{
+    LoginRegistViewController * login;
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:LoginRegistViewController.class]) {
+            login = (LoginRegistViewController*)vc;
+        }else{
+            [vc removeFromParentViewController];
+        }
+    }
+    
+    if(!login)
+    {
+        login = [[LoginRegistViewController alloc]init];
+    }
+    
+    [self.navigationController pushViewController:login animated:NO];
+    
 
+}
 
 - (IBAction)selectedBtnClick:(UIButton *)sender {
     sender.selected = !sender.selected;

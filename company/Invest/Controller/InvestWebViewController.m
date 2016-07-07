@@ -18,10 +18,28 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     _webView  =[[UIWebView alloc]initWithFrame:self.view.frame];
+    [self setUpNavBar];
     [self startLoadDetailData];
 }
 
+#pragma mark- 设置导航栏
+-(void)setUpNavBar
+{
+    
+    self.view.backgroundColor = colorGray;
+    UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
+    leftback.tag = 0;
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
+}
 
+-(void)btnClick:(UIButton*)btn
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 -(void)startLoadDetailData
 {

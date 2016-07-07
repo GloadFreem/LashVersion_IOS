@@ -83,7 +83,7 @@
     
      
      _moreImage = [UIImageView new];
-     _moreImage.image = [UIImage imageNamed:@"youjiantou"];
+     _moreImage.image = [UIImage imageNamed:@"youjiantou@2x.png"];
      [view addSubview:_moreImage];
      _moreImage.sd_layout
      .centerYEqualToView(view)
@@ -277,22 +277,30 @@
 -(void)setData
 {
     if (_dataArray.count) {
-        ProjectDetailSceneCellModel *model1 = _dataArray[_dataArray.count-1];
-        ProjectDetailSceneCellModel *model2 = _dataArray[_dataArray.count-2];
+        if (_dataArray.count >=1) {
+            ProjectDetailSceneCellModel *model1 = _dataArray[_dataArray.count-1];
+            if (model1) {
+                [_firstIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model1.iconImage]] placeholderImage:[UIImage new]];
+                _firstName.text = model1.name;
+                _firstTime.text = model1.time;
+                _firstContent.text = model1.content;
+            }
+            
+        }
         
-        [_firstIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model1.iconImage]] placeholderImage:[UIImage new]];
-        _firstName.text = model1.name;
-        _firstTime.text = model1.time;
-        _firstContent.text = model1.content;
-        
-        [_secondIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model2.iconImage]] placeholderImage:[UIImage new]];
-        _secondName.text = model2.name;
-        _secondTime.text = model2.time;
-        //    NSLog(@"打印 事件啊啊氨基酸擦----%@",model2.time);
-        _secondContent.text = model2.content;
+        if (_dataArray.count >=2) {
+            ProjectDetailSceneCellModel *model2 = _dataArray[_dataArray.count-2];
+            if (model2) {
+                [_secondIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model2.iconImage]] placeholderImage:[UIImage new]];
+                _secondName.text = model2.name;
+                _secondTime.text = model2.time;
+                //    NSLog(@"打印 事件啊啊氨基酸擦----%@",model2.time);
+                _secondContent.text = model2.content;
+            }
+            
+        }
     }
-    
-    
+
 }
 #pragma markmoreBtn  点击事件
 -(void)btnClick:(UIButton*)btn

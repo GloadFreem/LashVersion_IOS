@@ -47,7 +47,7 @@
 #define titleFont [UIFont systemFontOfSize:16]
 
 
-@interface ProjectDetailController ()<ProjectDetailBannerViewDelegate,UIScrollViewDelegate,UITextViewDelegate,ProjectDetailSceneViewDelegate,CircleShareBottomViewDelegate>
+@interface ProjectDetailController ()<ProjectDetailBannerViewDelegate,UIScrollViewDelegate,UITextViewDelegate,ProjectDetailSceneViewDelegate,CircleShareBottomViewDelegate,UITextFieldDelegate>
 {
     ProjectDetailMemberView * member;
     ProjectDetailBannerView * bannerView;
@@ -83,7 +83,8 @@
 @property (nonatomic, copy) NSString *commentStr; //评论内容
 @property (nonatomic, assign) NSInteger sceneId;
 
-@property (nonatomic, strong) UITextView *textView;
+
+@property (nonatomic, strong) UITextField *textField;
 
 @property (nonatomic, copy) NSString *collectPartner;
 
@@ -91,6 +92,7 @@
 @property (nonatomic, copy) NSString *shareContent;
 @property (nonatomic, copy) NSString *shareurl;
 @property (nonatomic, copy) NSString *shareImage;
+
 @property (nonatomic,strong)UIView *bottomview;
 
 @property (nonatomic, assign) BOOL isCollect;
@@ -141,6 +143,8 @@
     //添加广告栏
     //下载客服电话
     [self loadServicePhone];
+    
+
 }
 -(void)loadServicePhone
 {
@@ -223,7 +227,7 @@
 -(void)requestShare:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -293,7 +297,10 @@
                 ProjectDetailBaseMOdel *baseModel = [ProjectDetailBaseMOdel mj_objectWithKeyValues:jsonDic[@"data"]];
                 
                 _model = baseModel;
-                NSArray *bannerArr = [NSArray arrayWithObject:baseModel.project.startPageImage];
+                NSMutableArray *bannerArr = [NSMutableArray array];
+                if (baseModel.project.startPageImage) {
+                    [bannerArr addObject:baseModel.project.startPageImage];
+                }
                 
                 _isCollect = baseModel.project.collected;
                 NSArray *roadshowsArr = baseModel.project.roadshows;
@@ -335,14 +342,13 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            NSArray *modelArray = [ProjectSceneModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
-            if (modelArray.count) {
-                ProjectSceneModel *model = modelArray[0];
-                
-                _sceneId = model.sceneId;
+            if (jsonDic[@"data"] && [jsonDic[@"data"] count]) {
+                NSArray *modelArray = [ProjectSceneModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+                if (modelArray.count) {
+                    ProjectSceneModel *model = modelArray[0];
+                    _sceneId = model.sceneId;
+                }
             }
-            
-            
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -376,7 +382,7 @@
         [button.titleLabel setFont:titleFont];
         button.tag = i+10;
         
-        i==0 ? [button setTitleColor:selectTitleColor forState:UIControlStateNormal] : [button setTitleColor: unselectTitleColor forState:UIControlStateNormal];
+        i==2 ? [button setTitleColor:selectTitleColor forState:UIControlStateNormal] : [button setTitleColor: unselectTitleColor forState:UIControlStateNormal];
         
         [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
         [_titleScrollView addSubview:button];
@@ -388,13 +394,13 @@
     
     if (self.type == 0) {
         
-        _lineView.frame = CGRectMake(0, CGRectGetHeight(_titleScrollView.frame)-2, SCREENWIDTH/3, 2);
+        _lineView.frame = CGRectMake(2*SCREENWIDTH/3, CGRectGetHeight(_titleScrollView.frame)-2, SCREENWIDTH/3, 2);
         [_titleScrollView addSubview:_lineView];
         
     }else{
         
-        _lineView.frame = CGRectMake(0, 0, 80, CGRectGetMaxX(_titleScrollView.frame));
-        [_titleScrollView insertSubview:_lineView atIndex:0];
+//        _lineView.frame = CGRectMake(0, 0, 80, CGRectGetMaxX(_titleScrollView.frame));
+//        [_titleScrollView insertSubview:_lineView atIndex:0];
     }
     
     
@@ -430,7 +436,7 @@
         __weak ProjectDetailController * wself = self;
         [_leftView setMoreButtonClickedBlock:^(Boolean flag) {
             if (!flag) {
-                NSLog(@"取消");
+//                NSLog(@"取消");
                 [wself.scrollView setContentOffset:CGPointMake(0, wself.scrollView.contentOffset.y-1) animated:YES];
             }
         }];
@@ -503,14 +509,15 @@
         _footer.hidden = YES;
         [self.view addSubview:_footer];
         
-        _textView = [[UITextView alloc]init];
-        _textView.layer.cornerRadius = 2;
-        _textView.layer.masksToBounds = YES;
-        _textView.layer.borderColor = [UIColor darkGrayColor].CGColor;
-        _textView.layer.borderWidth = 0.5;
-        _textView.delegate = self;
-        _textView.font = BGFont(15);
-        [_footer addSubview:_textView];
+        _textField = [[UITextField alloc]init];
+        _textField.layer.cornerRadius = 2;
+        _textField.layer.masksToBounds = YES;
+        _textField.layer.borderColor = [UIColor darkGrayColor].CGColor;
+        _textField.layer.borderWidth = 0.5;
+        _textField.delegate = self;
+        _textField.font = BGFont(15);
+        _textField.returnKeyType = UIReturnKeyDone;
+        [_footer addSubview:_textField];
         
         UIButton * btn =[[UIButton alloc]init];
         [btn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
@@ -520,7 +527,7 @@
         btn.titleLabel.font = [UIFont systemFontOfSize:17];
         [_footer addSubview:btn];
         
-        [_textView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [_textField mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(5);
             make.bottom.mas_equalTo(-5);
             make.left.mas_equalTo(5);
@@ -535,21 +542,32 @@
             make.width.mas_equalTo(75);
         }];
     }
+    
+    [_footer setHidden:NO];
+    [_bottomView setHidden:YES];
+    _subViewScrollView.contentOffset=CGPointMake(SCREENWIDTH*2, 0);
+    
     return _subViewScrollView;
 }
 
 #pragma mark -发送信息
 -(void)sendMessage:(UIButton*)btn
 {
-    if (self.textView.text && ![self.textView.text isEqualToString:@""]) {
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textView.text],@"content", nil];
-        //开始请求
-        [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
-        
+    if (self.sceneId) {
+        if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
+            //开始请求
+            [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
+            
+        }else{
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"评论内容不能内空"];
+            return;
+        }
     }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"评论内容不能内空"];
-        return;
+        self.textField.text = @"";
+    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"路演现场暂未开放评论"];
     }
+    
 }
 
 -(void)requestSceneComment:(ASIHTTPRequest *)request
@@ -561,8 +579,8 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
-        self.textView.text = @"";
-        [self.textView resignFirstResponder];
+        self.textField.text = @"";
+        [self.textField resignFirstResponder];
 #pragma mark ---------刷新表格-----------
         [scene.dataArray removeAllObjects];
         [scene startLoadComment];
@@ -726,6 +744,7 @@
 {
     _subViewScrollView.height = _leftView.height;
     [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
+    
 }
 
 
@@ -803,9 +822,10 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
     [share addGestureRecognizer:tap];
     [[self topView] addSubview:share];
-    self.bottomView = share;
+    self.bottomview = share;
     share.delegate = self;
 }
+
 -(void)sendShareBtnWithView:(CircleShareBottomView *)view index:(int)index
 {
     //分享
@@ -879,6 +899,7 @@
         if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
             shareImage = nil;
         }
+        
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
         
@@ -887,8 +908,7 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
-                    [self performSelector:@selector(dismissBG) withObject:nil/*可传任意类型参数*/ afterDelay:1.0];
-                    
+                    [self performSelector:@selector(dismissBG) withObject:nil afterDelay:1.0];
                     
                 });
             }
@@ -948,8 +968,30 @@
     }
 }
 
-#pragma mark- textView  delegate
+#pragma mark -textFiledDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return NO;
+}
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    
+    
+    NSLog(@"开始编辑");
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    
+    if (![textField.text isEqualToString:@""]) {
+        
+        self.textField.text = textField.text;
+    }
+    NSLog(@"结束编辑");
+}
+
+
+#pragma mark- textView  delegate
+/*
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     if ([text isEqualToString:@"\n"]) {
         [textView resignFirstResponder];
@@ -966,7 +1008,7 @@
 -(void)textViewDidChange:(UITextView *)textView
 {
     if (![textView.text isEqualToString:@""]) {
-        self.textView.text = textView.text;
+        self.textField.text = textView.text;
     }
     NSLog(@"正在编辑");
 }
@@ -975,12 +1017,12 @@
 -(void)textViewDidEndEditing:(UITextView *)textView
 {
     if (![textView.text isEqualToString:@""]) {
-        self.textView.text = textView.text;
+        self.textField.text = textView.text;
     }
     NSLog(@"结束编辑");
     
 }
-
+*/
 
 -(void)viewWillAppear:(BOOL)animated
 {

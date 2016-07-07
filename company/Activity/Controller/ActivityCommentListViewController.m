@@ -14,6 +14,8 @@
 #import "ActivityDetailCommentCellModel.h"
 #import "ActivityCommentListFooterView.h"
 #import "ActivityDetailCommentCellModel.h"
+
+#define COMMENTLIST @"requestPriseListAction"
 #define kActivityDetailHeaderCellId @"ActivityDetailHeaderCell"
 @interface ActivityCommentListViewController ()<UITableViewDelegate,UITableViewDataSource,ActivityDetailFooterViewDelegate,UITextFieldDelegate>
 {
@@ -50,7 +52,7 @@
     [self createUI];
     
     //生成请求partner
-    self.actionCommentListPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_COMMENT_LIST];
+    self.actionCommentListPartner = [TDUtil encryKeyWithMD5:KEY action:COMMENTLIST];
     
 }
 -(void)setUpNavBar
@@ -59,7 +61,8 @@
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     leftback.tag = 0;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(32, 20);
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
 }

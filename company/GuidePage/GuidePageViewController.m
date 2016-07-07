@@ -28,6 +28,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self.navigationController.navigationBar setHidden:YES];
+    
     [self createScrollView];
     [self createPageController];
 }
@@ -107,8 +109,9 @@
     LoginRegistViewController *login = [LoginRegistViewController new];
     
 //    进入主界面
-                AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-                app.window.rootViewController = login;
+//                AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
+//                app.window.rootViewController = login;
+    [self.navigationController pushViewController:login animated:YES];
 }
 
 

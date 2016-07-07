@@ -151,7 +151,7 @@
     NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
     NSString *firstDate = [data objectForKey:@"firstLogin"];
     if ([currentTime isEqualToString:firstDate]) {
-        
+        [SVProgressHUD dismiss];
     }else{
         [self loadGoldCount];
     }
@@ -175,6 +175,8 @@
             _tomorrowCount = (NSInteger)dataDic[@"countTomorrow"];
             
             [self saveDate];
+            
+            [SVProgressHUD dismiss];
             [self createGoldImageView];
         }else{
         
@@ -329,7 +331,8 @@
     imageView.image = image;
 }
 
-#pragma mark-------创建金条掉落动画视图-------粒子动画
+/*
+#pragma mark-------创建金条掉落动画视图-------粒子动画-------废弃-------
 -(void)createGoldView
 {
     UIView *background = [UIView new];
@@ -380,7 +383,8 @@
     [background.layer addSublayer:_fireEmitter];
     
 }
-#pragma mark--------是否站内信未读--------
+ */
+#pragma mark--------------------是否站内信未读--------------------
 -(void)loadMessage
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.hasMessagePartner,@"partner", nil];
@@ -449,7 +453,7 @@
         }
     }
 }
-#pragma mark------请求表格数据-------
+#pragma mark---------------------------请求表格数据---------------------------
 -(void)startLoadData
 {
     
@@ -495,6 +499,8 @@
                     listModel.fullName = project.fullName;
                     listModel.status = project.financestatus.name;
                     listModel.projectId = project.projectId;
+                    listModel.timeLeft = project.timeLeft;
+                    
                     //少一个areas数组
                     listModel.areas = [project.industoryType componentsSeparatedByString:@"，"];
                     listModel.collectionCount = project.collectionCount;
@@ -541,9 +547,11 @@
         }
     }
 }
-#pragma mark-------请求banner数据---------
+#pragma mark----------------------------请求banner数据----------------------
 -(void)startLoadBannerData
 {
+
+    [SVProgressHUD show];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.bannerPartner,@"partner", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:BANNER_SYSTEM postParam:dic type:1 delegate:self sel:@selector(requestBannerList:)];
@@ -591,7 +599,7 @@
         }
     }
 }
-#pragma mark-----创建banner-------
+#pragma mark------------------------------创建banner------------------------
 -(void)createBanner
 {
     _selectedCellNum = 20;
@@ -619,11 +627,7 @@
     
     [delegate.tabBar tabBarHidden:NO animated:NO];
     
-//    UIView * view = [self.view viewWithTag:1000];
-//    if (view) {
-//        //测试
-//        [self.view bringSubviewToFront:view];
-//    }
+
 }
 #pragma mark -视图即将消失
 -(void)viewWillDisappear:(BOOL)animated
@@ -692,7 +696,7 @@
     //    NSLog(@"下拉刷新");
 }
 
-#pragma mark- navigationBar --------- button的点击事件
+#pragma mark- navigationBar --------- button的点击事件--------------
 -(void)buttonCilck:(UIButton*)button
 {
     if (button.tag == 0) {

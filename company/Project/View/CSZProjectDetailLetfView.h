@@ -17,4 +17,6 @@
 @property (nonatomic, strong) ProjectDetailBaseMOdel *model;
 @property (nonatomic, copy) void (^moreButtonClickedBlock)(Boolean flag);
 
+@property (nonatomic, assign) BOOL isPrepare;
+
 @end

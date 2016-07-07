@@ -64,7 +64,8 @@
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     leftback.tag = 0;
-    leftback.size = CGSizeMake(32, 20);
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     
@@ -188,8 +189,8 @@
     
 //    [self publishPhotos:uploadFiles content:dic[@"content"]];
     
-    
 }
+
 #pragma mark -发布内容
 -(void)publishPhotos:(NSMutableArray*)filesArray content:(NSString*)content
 {

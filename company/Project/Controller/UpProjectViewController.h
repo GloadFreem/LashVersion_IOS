@@ -10,4 +10,6 @@
 
 @interface UpProjectViewController : RootViewController
 
+@property (nonatomic, assign) BOOL isFirstPage;
+
 @end

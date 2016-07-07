@@ -22,7 +22,9 @@
 @property (nonatomic, copy) NSString *endDate;
 @property (nonatomic, assign) NSInteger financeTotal; //融资总额
 @property (nonatomic, assign) NSInteger financedMount; //已融金额
-@property (nonatomic, assign) NSInteger projectId; 
+@property (nonatomic, assign) NSInteger projectId;
+
+@property (nonatomic, assign) NSInteger timeLeft;
 
 @property (nonatomic, strong) NSArray *areas;
 

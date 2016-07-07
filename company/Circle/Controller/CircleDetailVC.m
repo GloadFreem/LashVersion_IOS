@@ -16,6 +16,7 @@
 #define CIRCLE_PRAISE @"requestPriseFeeling"
 #define CIRCLEDETAIL @"requestFeelingDetail"
 #define CIRCLECOMMENT @"requestCommentFeeling"
+#define DELETECOMMENT @"requestContentCommentDelete"
 @interface CircleDetailVC ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,CircleDetailHeaderCellDelegate>
 
 {
@@ -39,6 +40,10 @@
 @property (nonatomic, copy) NSString *beCommentName; //被回复人名字
 @property (nonatomic, strong) NSMutableArray *beCommentNameArray;
 @property (nonatomic, copy) NSString *selfId; //自己id
+
+@property (nonatomic, strong) CircleDetailCommentModel *deleteModel; //删除的模型
+@property (nonatomic, copy) NSString *deletePartner;
+
 @end
 
 @implementation CircleDetailVC
@@ -52,6 +57,8 @@
     self.commentPartner = [TDUtil encryKeyWithMD5:KEY action:CIRCLECOMMENT];
     //获得点赞partner
     self.praisePartner = [TDUtil encryKeyWithMD5:KEY action:CIRCLE_PRAISE];
+    self.deletePartner = [TDUtil encryKeyWithMD5:KEY action:DELETECOMMENT];
+    
     
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -151,7 +158,6 @@
                 if (contentModel.users.name.length) {
                     [priseArray addObject:contentModel.users.name];
                 }
-                
             }
             //将人名转换成字符串
             NSMutableString *nsmStr = [[NSMutableString alloc]init];
@@ -182,6 +188,7 @@
                 detailCommentModel.iconImageStr = commentModel.usersByUserId.headSculpture;
                 detailCommentModel.nameStr = commentModel.usersByUserId.name;
                 detailCommentModel.publicDate = commentModel.publicDate;
+                detailCommentModel.commentId = commentModel.commentId;
                 //回复人ID
                 [_atUserIdArray addObject:commentModel.usersByUserId.userId];
                 
@@ -250,6 +257,7 @@
                 detailCommentModel.iconImageStr = commentModel.usersByUserId.headSculpture;
                 detailCommentModel.nameStr = commentModel.usersByUserId.name;
                 detailCommentModel.publicDate = commentModel.publicDate;
+                detailCommentModel.commentId = commentModel.commentId;
                 //回复人ID
                 [_atUserIdArray addObject:commentModel.usersByUserId.userId];
                 //如果有回复
@@ -316,7 +324,8 @@
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     leftback.tag = 0;
-    leftback.size = CGSizeMake(32, 20);
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     
@@ -505,15 +514,67 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [_textField becomeFirstResponder];
+    
     _flag = @"2";
     
     _userId = [NSString stringWithFormat:@"%@",_atUserIdArray[indexPath.row]];
     
     _beCommentName = [NSString stringWithFormat:@"%@",_beCommentNameArray[indexPath.row]];
     
+    if ([_selfId isEqualToString:_userId]) {
+        
+        _deleteModel = _dataArray[indexPath.row];
+        
+//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"不能回复自己"];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
+        __block CircleDetailVC* blockSelf = self;
+        
+        UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [blockSelf btnCertain:nil];
+        }];
+        
+        [alertController addAction:cancleAction];
+        [alertController addAction:okAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+        
+        return;
+    }
+    
+    [_textField becomeFirstResponder];
+    
 //    NSLog(@"回复人数组----%@",_atUserIdArray);
     
+}
+#pragma mark---删除评论---
+-(void)btnCertain:(id)sender
+{
+    [_dataArray removeObject:_deleteModel];
+    [self.tableView reloadData];
+    
+//    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"删除成功"];
+    
+    //更新数据
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.deletePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_deleteModel.commentId],@"commentId", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:CIRCLE_COMMENT_DELETE postParam:dic type:0 delegate:self sel:@selector(requestDeleteComment:)];
+}
+-(void)requestDeleteComment:(ASIHTTPRequest*)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status =[jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            
+            
+        }
+    }
 }
 //评论帖子
 -(void)sendComment:(UIButton*)btn
@@ -524,10 +585,7 @@
         return;
     }
     
-    if ([_selfId isEqualToString:_userId]) {
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"不能回复自己"];
-        return;
-    }
+    
     
     NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
     NSString *icon = [data objectForKey:USER_STATIC_HEADER_PIC];
@@ -581,6 +639,7 @@
         _praiseFlag = @"2";
         
     }
+    
     //请求更新数据数据
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.praisePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId",_praiseFlag,@"flag", nil];
     //开始请求
@@ -602,6 +661,14 @@
             [cell.praiseBtn setImage:[UIImage imageNamed:@"iconfont-dianzan"] forState:UIControlStateNormal];
             model.priseCount ++;
             [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
+            
+            
+            NSInteger index = [_viewController.dataArray indexOfObject:_circleModel];
+            _circleModel.flag = model.flag;
+            _circleModel.priseCount = model.priseCount;
+            [_viewController.dataArray replaceObjectAtIndex:index withObject:_circleModel];
+            [_viewController.tableView reloadData];
+            
         }else{
             [cell.praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
             if (model.priseCount>0) {
@@ -615,11 +682,20 @@
             }else{
                 model.priseLabel = [model.priseLabel stringByReplacingOccurrencesOfString:name withString:@""];
             }
-            
+            //处理上一页数据
+            NSInteger index = [_viewController.dataArray indexOfObject:_circleModel];
+            _circleModel.flag = model.flag;
+            _circleModel.priseCount = model.priseCount;
+            [_viewController.dataArray replaceObjectAtIndex:index withObject:_circleModel];
+            [_viewController.tableView reloadData];
         }
         
-        cell.model = model;
+        //处理上一页数据
         
+        
+        
+        
+        cell.model = model;
         
         _listModel = model;
     }

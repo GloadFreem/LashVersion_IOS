@@ -112,6 +112,9 @@
             [data setValue:phoneNumber forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
             [data setValue:password forKey:STATIC_USER_PASSWORD];
             
+            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
+            [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
+            
             //进入主界面
             AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
             app.window.rootViewController = app.tabBar;

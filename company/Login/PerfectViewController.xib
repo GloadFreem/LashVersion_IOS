@@ -28,7 +28,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="LoginBg.png" translatesAutoresizingMaskIntoConstraints="NO" id="gTt-Fi-eeR">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoginBg.png" translatesAutoresizingMaskIntoConstraints="NO" id="gTt-Fi-eeR">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nAy-Do-B1p">
@@ -201,6 +201,7 @@
                 <constraint firstItem="fc3-ph-e8D" firstAttribute="top" secondItem="uK7-x4-T6s" secondAttribute="bottom" constant="92" id="0ee-g6-VD7"/>
                 <constraint firstItem="9Zu-g3-duu" firstAttribute="leading" secondItem="bCW-0k-VYH" secondAttribute="trailing" constant="7" id="1MF-5R-5Me"/>
                 <constraint firstAttribute="trailing" secondItem="8AW-Oe-391" secondAttribute="trailing" id="1cJ-wi-lzb"/>
+                <constraint firstItem="gTt-Fi-eeR" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="4TO-aH-6MY"/>
                 <constraint firstAttribute="trailing" secondItem="uVx-cE-FhE" secondAttribute="trailing" constant="24" id="50z-dT-hey"/>
                 <constraint firstItem="8AW-Oe-391" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="558-hZ-r3W"/>
                 <constraint firstItem="uK7-x4-T6s" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="5ml-5j-vl6"/>
@@ -217,8 +218,10 @@
                 <constraint firstItem="8AW-Oe-391" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="MiJ-WK-hba"/>
                 <constraint firstItem="bwd-Ur-MVI" firstAttribute="top" secondItem="8AW-Oe-391" secondAttribute="bottom" constant="43" id="PTv-ep-oNd"/>
                 <constraint firstItem="hSr-ye-BoI" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="SJ6-Qj-ckt"/>
+                <constraint firstItem="gTt-Fi-eeR" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="V0q-0i-kYL"/>
                 <constraint firstItem="uVx-cE-FhE" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="W33-so-g6n"/>
                 <constraint firstItem="98b-TN-q5F" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="Wgj-sq-nuZ"/>
+                <constraint firstAttribute="trailing" secondItem="gTt-Fi-eeR" secondAttribute="trailing" id="agI-Co-6LI"/>
                 <constraint firstItem="Nhv-2F-tTE" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="c6D-rZ-FRx"/>
                 <constraint firstItem="uVx-cE-FhE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="24" id="cG7-AR-uiI"/>
                 <constraint firstAttribute="trailing" secondItem="9Zu-g3-duu" secondAttribute="trailing" constant="15" id="eRH-co-DeW"/>
@@ -233,6 +236,7 @@
                 <constraint firstItem="bwd-Ur-MVI" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="r0s-AX-iyg"/>
                 <constraint firstItem="bCW-0k-VYH" firstAttribute="leading" secondItem="ds0-S0-wDd" secondAttribute="trailing" constant="7" id="rcD-BE-aeI"/>
                 <constraint firstItem="98b-TN-q5F" firstAttribute="width" secondItem="9Zu-g3-duu" secondAttribute="width" id="wjf-nd-6Bw"/>
+                <constraint firstAttribute="bottom" secondItem="gTt-Fi-eeR" secondAttribute="bottom" id="xJy-Tw-DMr"/>
                 <constraint firstItem="98b-TN-q5F" firstAttribute="top" secondItem="ds0-S0-wDd" secondAttribute="top" id="yxc-vG-Jk7"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>

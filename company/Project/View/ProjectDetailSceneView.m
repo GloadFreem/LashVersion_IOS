@@ -8,6 +8,7 @@
 
 #import "ProjectDetailSceneView.h"
 #import "ProjectDetailSceneMessageCell.h"
+#import "ProjectSceneOtherCell.h"
 
 #import "MusicModel.h"
 #import "ProjectSceneModel.h"
@@ -35,6 +36,7 @@
     NSMutableArray *_imageUrlArray;
     NSMutableArray *_nextPageArray;
     UIButton *_moreBtn;
+    NSTimer *_timer;
 }
 -(instancetype)initWithFrame:(CGRect)frame
 {
@@ -93,13 +95,22 @@
                 [self startLoadPPT];
                 [self startPlay];
             }
-            
+            _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
+            [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
 }
+
+-(void)loadDataRegular
+{
+//    _page = 0;
+    [self startLoadComment];
+}
+
+
 -(void)startLoadPPT
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_pptPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_sceneId],@"sceneId",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
@@ -164,7 +175,7 @@
                 cellModel.name = model.users.name;
                 cellModel.content = model.content;
                 cellModel.time = model.commentDate;
-                [_dataArray addObject:cellModel];
+                [_dataArray insertObject:cellModel atIndex:0];
             }
             [_tableView reloadData];
             
@@ -190,6 +201,7 @@
         make.right.mas_equalTo(self.mas_right);
         make.bottom.mas_equalTo(self.mas_bottom).offset(-50);
     }];
+    
     
     _moreBtn = [UIButton new];
     [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_sceneMore"] forState:UIControlStateNormal];
@@ -340,7 +352,7 @@
                     }
                     
                     [_bannerView nextPage: model.sortIndex];
-                    NSLog(@"翻到-----%ld页",(long)model.sortIndex);
+//                    NSLog(@"翻到-----%ld页",(long)model.sortIndex);
                 }
             }
             
@@ -430,23 +442,39 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id model = self.dataArray[indexPath.row];
-    return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ProjectDetailSceneMessageCell class] contentViewWidth:[self cellContentViewWith]];
+    ProjectDetailSceneCellModel *model = self.dataArray[indexPath.row];
+    if (model.flag) {
+        return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ProjectDetailSceneMessageCell class] contentViewWidth:[self cellContentViewWith]];
+    }
+    
+    return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ProjectSceneOtherCell class] contentViewWidth:[self cellContentViewWith]];
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellId =@"ProjectDetailSceneMessageCell";
-    ProjectDetailSceneMessageCell * cell =[tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[ProjectDetailSceneMessageCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-        
-    }
     if (_dataArray.count) {
-        cell.model = _dataArray[indexPath.row];
+        ProjectDetailSceneCellModel *model = _dataArray[indexPath.row];
+        
+        if (model.flag) {
+            static NSString *cellId = @"ProjectDetailSceneMessageCell";
+            ProjectDetailSceneMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (cell == nil) {
+                cell = [[ProjectDetailSceneMessageCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+            }
+            cell.model = model;
+            return cell;
+        }
+        
+        static NSString *cellId = @"ProjectSceneOtherCell";
+        ProjectSceneOtherCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (!cell) {
+            cell = [[ProjectSceneOtherCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+        }
+        cell.model = model;
+        return cell;
     }
     
-    return cell;
+    return nil;
     
 }
 
@@ -461,5 +489,8 @@
     return width;
 }
 
+-(void)dealloc{
+    [_timer invalidate];
+}
 
 @end

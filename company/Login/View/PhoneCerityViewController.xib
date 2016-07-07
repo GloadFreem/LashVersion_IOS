@@ -60,7 +60,7 @@
                         <constraint firstAttribute="height" constant="45" id="koz-tq-d3g"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <textInputTraits key="textInputTraits"/>
+                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="fbR-ql-v3C"/>
                     </connections>
@@ -83,6 +83,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="KnR-6g-fXO"/>
                     </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <state key="normal" title="获取验证码">
                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </state>

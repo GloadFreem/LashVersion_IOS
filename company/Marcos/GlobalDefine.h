@@ -152,12 +152,12 @@
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
 #define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-//#define SERVICE_URL @"http://192.168.5.153:8080/jinzht/"//本地
+//#define SERVICE_URL @"http://192.168.5.159:8080/jinzht/"//本地
 #define KEY @"jinzht_server_security"
 #define PLATFORM @"1"
 #define REGIST_TYPE @"0"
 #define FORGET_TYPE @"1"
-#define CERTIFY_TYPE "2"
+#define CERTIFY_TYPE @"2"
 #define CHANGE_PHONE_TYPE @"3"
 
 //身份证号
@@ -188,6 +188,8 @@
 #define USER_STATIC_CYCLE_BG_URL @"user_static_cycle_bg_url"
 //用户id
 #define USER_STATIC_USER_ID @"user_static_user_id"
+
+#define USER_STATIC_EXT_USER_ID @"user_static_ext_user_id"
 //用户认证状态
 #define USER_STATIC_USER_AUTHENTIC_STATUS @"user_static_user_authentic_status"
 
@@ -253,6 +255,10 @@
 #define CIRCLE_COMMENT_FEELING @"requestCommentFeeling.action"
 //发表状态
 #define CIRCLE_PUBLIC_FEELING @"requestPublicFeeling.action"
+//删除圈子评论
+#define CIRCLE_COMMENT_DELETE @"requestContentCommentDelete.action"
+//删除圈子
+#define CIRCLE_LIST_DELETE @"requestPublicContentDelete.action"
 
 
 #pragma mark----------------------------------------------------------------------------
@@ -356,6 +362,8 @@
 #define ATTEND_ACTION @"requestAttendAction.action"
 //搜搜活动
 #define ACTION_SEARCH @"requestSearchAction.action"
+//活动分享
+#define ACTION_SHARE @"requestShareAction.action"
 
 #pragma mark----------------------------------------------------------------------------
 #pragma mark --------------------------LOGO菜单接口------------------------------------------

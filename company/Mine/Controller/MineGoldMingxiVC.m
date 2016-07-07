@@ -29,13 +29,14 @@
     // Do any additional setup after loading the view.
     _dataArray = [NSMutableArray array];
     [self setupNav];
-    [self createTableView];
     self.partner = [TDUtil encryKeyWithMD5:KEY action:GOLDDETAIL];
     _page = 0;
-    [self loadData];
-//    [self.dataArray addObjectsFromArray:[self createModelsWithCount:10]];
+    [self startLoadData];
+    
+    [self createTableView];
+
 }
--(void)loadData
+-(void)startLoadData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     
@@ -55,7 +56,7 @@
             if (_page == 0) {
                 [_dataArray removeAllObjects];
             }
-            if ([jsonDic[@"data"] count]) {
+            if (jsonDic[@"data"] && [jsonDic[@"data"] count]) {
                 NSArray *modelArray = [MineGoldMingxiModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
                 for (NSInteger i =0; i < modelArray.count; i ++) {
                     
@@ -99,8 +100,8 @@
 -(void)setupNav
 {
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftback setBackgroundImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = leftback.currentBackgroundImage.size;
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(45, 30);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"收支明细";
@@ -116,10 +117,10 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-    [_tableView.mj_header beginRefreshing];
+//    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     //    tableView.mj_footer.hidden = YES;
-    _tableView.mj_footer.automaticallyHidden = NO;
+    _tableView.mj_footer.automaticallyHidden = YES;
     _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [self.view addSubview:_tableView];
     
@@ -135,7 +136,7 @@
 -(void)nextPage
 {
     _page ++;
-    [self loadData];
+    [self startLoadData];
     //    NSLog(@"回到顶部");
 }
 
@@ -143,7 +144,7 @@
 {
     _page = 0;
     
-    [self loadData];
+    [self startLoadData];
     //    NSLog(@"下拉刷新");
 }
 
@@ -153,25 +154,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-//-(NSArray*)createModelsWithCount:(NSInteger)count
-//{
-//    NSMutableArray *mArr = [NSMutableArray new];
-//    for (int i=0; i<count; i++) {
-//        MineGoldMingxiModel *model =[MineGoldMingxiModel new];
-//        
-//        model.dayStr = @"15日";
-//        model.titleStr = @"金指投投资平台";
-//        model.numberStr = @"+ 15";
-//        model.contentStr = @"潜力无限";
-//        if (i == 0) {
-//            model.yearStr = @"2016年5月";
-//        }else{
-//            model.yearStr = @"";
-//        }
-//        [mArr addObject:model];
-//    }
-//    return [mArr copy];
-//}
 #pragma mark -tableViewDatasource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
