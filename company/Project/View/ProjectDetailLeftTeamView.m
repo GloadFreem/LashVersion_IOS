@@ -140,6 +140,7 @@
         btn.layer.masksToBounds = YES;
         btn.tag = i;
         btn.contentMode = UIViewContentModeScaleAspectFill;
+        [btn addTarget:self action:@selector(teamBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
         [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",team.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
         [_scrollView1 addSubview:btn];
@@ -191,7 +192,7 @@
         btn.layer.cornerRadius = 25;
         btn.layer.masksToBounds = YES;
         btn.contentMode = UIViewContentModeScaleAspectFill;
-        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [btn addTarget:self action:@selector(ExrBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
         [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",extr.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
         [_scrollView2 addSubview:btn];
@@ -226,12 +227,19 @@
     
 }
 
-
--(void)btnClick:(UIButton*)btn
+-(void)teamBtnClick:(UIButton*)btn
 {
-    
+    if ([self.delegate respondsToSelector:@selector(didClickBtnInTeamViewWithModel:)]) {
+        [self.delegate didClickBtnInTeamViewWithModel:_teamModelArray[btn.tag]];
+    }
 }
 
+-(void)ExrBtnClick:(UIButton*)btn
+{
+    if ([self.delegate respondsToSelector:@selector(didClickBtnInTeamExrViewWithModel:)]) {
+        [self.delegate didClickBtnInTeamExrViewWithModel:_extrModelArray[btn.tag]];
+    }
+}
 
 /*
 #pragma mark--------废弃方法---------------

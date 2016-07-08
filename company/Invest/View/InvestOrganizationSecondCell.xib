@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="154.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar-sample-165.png" translatesAutoresizingMaskIntoConstraints="NO" id="ktu-5B-QK8">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="ktu-5B-QK8">
                         <rect key="frame" x="21" y="23" width="65" height="65"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="65" id="Pld-MX-u9g"/>
@@ -148,9 +148,9 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Avatar-sample-165.png" width="50" height="50"/>
         <image name="icon-guanzhu.png" width="17" height="15"/>
         <image name="icon_commit1.png" width="15" height="15"/>
         <image name="image-point.png" width="268" height="1"/>
+        <image name="placeholderIcon.png" width="200" height="200"/>
     </resources>
 </document>

@@ -48,6 +48,7 @@ static CGFloat textFieldH = 40;
 @property (nonatomic, strong) ActivityDetailHeaderModel * headerModel;
 @property (nonatomic, strong) ActivityDetailCommentCellModel *commentCellModel;
 
+@property (nonatomic, copy) NSString *shareTitle;
 @property (nonatomic, copy) NSString *sharePartner;
 @property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic, copy) NSString *shareUrl; //分享地址
@@ -236,6 +237,7 @@ static CGFloat textFieldH = 40;
         if ([status integerValue] == 200) {
             NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
             
+            _shareTitle = dataDic[@"title"];
             _shareUrl = dataDic[@"url"];
             _shareImage = dataDic[@"image"];
             _contentText = dataDic[@"content"];
@@ -686,8 +688,8 @@ static CGFloat textFieldH = 40;
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qqData.title = _shareTitle;
+                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
                 }
                 else
                 {
@@ -703,8 +705,8 @@ static CGFloat textFieldH = 40;
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到微信");
             }
@@ -714,8 +716,8 @@ static CGFloat textFieldH = 40;
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到朋友圈");
             }

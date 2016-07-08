@@ -126,9 +126,12 @@
     _icon = _authenticModel.headSculpture;
     _name = authentics.name;
     _identifyType = authentics.identiytype.name;
-    NSString *qian = [authentics.identiyCarNo substringToIndex:3];
-    NSString *hou = [authentics.identiyCarNo substringFromIndex:14];
-    _identifyNum = [NSString stringWithFormat:@"%@***********%@",qian,hou];
+    
+    if (authentics.identiyCarNo.length) {
+        NSString *qian = [authentics.identiyCarNo substringToIndex:3];
+        NSString *hou = [authentics.identiyCarNo substringFromIndex:14];
+        _identifyNum = [NSString stringWithFormat:@"%@***********%@",qian,hou];
+    }
     _companyName = authentics.companyName;
     _position = authentics.position;
     
@@ -161,8 +164,9 @@
 -(void)setupNav
 {
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftback setBackgroundImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = leftback.currentBackgroundImage.size;
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"我的资料";

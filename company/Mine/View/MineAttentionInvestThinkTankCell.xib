@@ -21,7 +21,7 @@
                             <constraint firstAttribute="height" constant="10" id="5Y3-b6-NW8"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="invest_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="6rh-aN-ATY">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="6rh-aN-ATY">
                         <rect key="frame" x="12" y="25" width="51" height="51"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="51" id="NyG-MH-sVF"/>
@@ -49,7 +49,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="北京京都律师事务所" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zHR-UP-EBL">
-                        <rect key="frame" x="74" y="49" width="135" height="15"/>
+                        <rect key="frame" x="74" y="49" width="203" height="15"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="15" id="pms-S7-9wY"/>
                         </constraints>
@@ -61,8 +61,9 @@
                         <rect key="frame" x="74" y="69" width="281" height="1"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="北京 | 海淀" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XcD-wj-j0R">
-                        <rect key="frame" x="308" y="52" width="59" height="12"/>
+                        <rect key="frame" x="287" y="52" width="80" height="12"/>
                         <constraints>
+                            <constraint firstAttribute="width" constant="80" id="KD6-q1-n1j"/>
                             <constraint firstAttribute="height" constant="12" id="cM1-ct-TUI"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -94,6 +95,7 @@
                     <constraint firstItem="zLN-sw-YqO" firstAttribute="top" secondItem="Vch-O8-mVj" secondAttribute="bottom" constant="5" id="NR4-kh-vpY"/>
                     <constraint firstAttribute="trailing" secondItem="zLN-sw-YqO" secondAttribute="trailing" id="Tdo-Xm-Yug"/>
                     <constraint firstAttribute="trailing" secondItem="XcD-wj-j0R" secondAttribute="trailing" constant="8" id="WJR-zA-Wj6"/>
+                    <constraint firstItem="XcD-wj-j0R" firstAttribute="leading" secondItem="zHR-UP-EBL" secondAttribute="trailing" constant="10" id="WK6-73-6Mb"/>
                     <constraint firstAttribute="trailing" secondItem="B46-WI-5jf" secondAttribute="trailing" constant="20" id="WtP-HQ-ZUt"/>
                     <constraint firstItem="6rh-aN-ATY" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="bqZ-wj-Xfb"/>
                     <constraint firstItem="Vch-O8-mVj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="ieT-54-f8L"/>
@@ -115,8 +117,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="invest_icon.png" width="51" height="51"/>
         <image name="invest_point.png" width="228" height="1"/>
         <image name="invest_thinkTank.png" width="58" height="18"/>
+        <image name="placeholderIcon.png" width="200" height="200"/>
     </resources>
 </document>

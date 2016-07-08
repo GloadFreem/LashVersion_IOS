@@ -864,6 +864,7 @@
     }else{
     ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
     vc.url = model.url;
+    vc.model = model;
     //隐藏tabbar
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     

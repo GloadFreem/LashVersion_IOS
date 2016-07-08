@@ -53,7 +53,7 @@
 
 -(void)loadSearchList
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.searchPartner,@"partner",_textField.text,@"keyword",[NSString stringWithFormat:@"%ld",_searchPage],@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.searchPartner,@"partner",_textField.text,@"keyword",[NSString stringWithFormat:@"%ld",(long)_searchPage],@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_SEARCH postParam:dic type:0 delegate:self sel:@selector(requestSearchList:)];
 }
@@ -263,7 +263,7 @@
     if (btn.tag == 0) {
         if (self.textField.text.length && ![self.textField.text isEqualToString:@""]) {
             [self loadSearchList];
-            NSLog(@"开始搜索");
+//            NSLog(@"开始搜索");
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入正确的搜索关键字"];
         }
@@ -353,7 +353,7 @@
     ActivityViewModel * modle = (ActivityViewModel*)self.attendInstance;
     
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",parthner,@"partner",content,@"content",STRING(@"%ld", modle.actionId),@"contentId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",parthner,@"partner",content,@"content",STRING(@"%ld", (long)modle.actionId),@"contentId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ATTEND_ACTION postParam:dic type:0 delegate:self sel:@selector(requestAttendAction:)];
 }
@@ -361,7 +361,7 @@
 -(void)requestAttendAction:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];

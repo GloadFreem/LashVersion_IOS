@@ -171,7 +171,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .leftEqualToView(_nameLabel)
     .topSpaceToView(_nameLabel,8)
     .heightIs(12);
-    [_companyLabel setSingleLineAutoResizeWithMaxWidth:120];
+    [_companyLabel setSingleLineAutoResizeWithMaxWidth:180];
     
     _shuView.sd_layout
     .leftSpaceToView(_companyLabel,5)
@@ -183,7 +183,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .leftSpaceToView(_shuView,5)
     .bottomEqualToView(_companyLabel)
     .heightIs(12);
-    [_positionLabel setSingleLineAutoResizeWithMaxWidth:100];
+    [_positionLabel setSingleLineAutoResizeWithMaxWidth:80];
     
     _deleteBtn.sd_layout
     .rightEqualToView(contentView)
@@ -195,7 +195,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .rightSpaceToView(contentView,margin)
     .bottomEqualToView(_companyLabel)
     .heightIs(12);
-    [_timeLabel setSingleLineAutoResizeWithMaxWidth:150];
+    [_timeLabel setSingleLineAutoResizeWithMaxWidth:80];
     
     _contentLabel.sd_layout
     .leftEqualToView(_iconView)
@@ -261,7 +261,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
         [_praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
     }
 //    NSLog(@"图片地址---%@",model.iconNameStr);
-    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconNameStr]] placeholderImage:[UIImage new]];
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconNameStr]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _nameLabel.text = model.nameStr;
     //防止单行文本label在重用时宽度计算不准的问题
     [_nameLabel sizeToFit];

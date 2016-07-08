@@ -63,27 +63,33 @@
                     [_dataArray addObject:modelArray[i]];
                 }
                 
-                for (NSInteger i =0; i < _dataArray.count - 1; i++) {
-                    if (i == 0) {
-                        MineGoldMingxiModel *model = _dataArray[0];
-                        model.isShow = YES;
-                    }
-                    MineGoldMingxiModel *modelI = _dataArray[i];
-                    NSArray *arr1 = [modelI.tradeDate componentsSeparatedByString:@" "];
-                    NSArray *arr2 = [arr1[0] componentsSeparatedByString:@"-"];
-                    NSString *month1 = arr2[1];
-                    for (NSInteger j = i + 1; j < _dataArray.count; j ++) {
-                        MineGoldMingxiModel *modelJ = _dataArray[j];
-                        arr1 = [modelJ.tradeDate componentsSeparatedByString:@" "];
-                        arr2 = [arr1[0] componentsSeparatedByString:@"-"];
-                        NSString *month2 = arr2[1];
-                        if ([month1 isEqualToString:month2]) {
-                            modelJ.isShow = NO;
-                        }else{
-                            modelJ.isShow = YES;
+                if (_dataArray.count > 1) {
+                    for (NSInteger i =0; i < _dataArray.count - 1; i++) {
+                        if (i == 0) {
+                            MineGoldMingxiModel *model = _dataArray[0];
+                            model.isShow = YES;
+                        }
+                        MineGoldMingxiModel *modelI = _dataArray[i];
+                        NSArray *arr1 = [modelI.tradeDate componentsSeparatedByString:@" "];
+                        NSArray *arr2 = [arr1[0] componentsSeparatedByString:@"-"];
+                        NSString *month1 = arr2[1];
+                        for (NSInteger j = i + 1; j < _dataArray.count; j ++) {
+                            MineGoldMingxiModel *modelJ = _dataArray[j];
+                            arr1 = [modelJ.tradeDate componentsSeparatedByString:@" "];
+                            arr2 = [arr1[0] componentsSeparatedByString:@"-"];
+                            NSString *month2 = arr2[1];
+                            if ([month1 isEqualToString:month2]) {
+                                modelJ.isShow = NO;
+                            }else{
+                                modelJ.isShow = YES;
+                            }
                         }
                     }
+                }else{
+                    MineGoldMingxiModel *model = _dataArray[0];
+                    model.isShow = YES;
                 }
+                
                 
                 [self.tableView reloadData];
                 [_tableView.mj_header endRefreshing];
@@ -101,7 +107,8 @@
 {
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(45, 30);
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"收支明细";

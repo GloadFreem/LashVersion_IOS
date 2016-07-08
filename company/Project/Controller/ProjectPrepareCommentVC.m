@@ -12,7 +12,7 @@
 
 #define REQUESTCOMMENTLIST @"requestProjectCommentList"
 #define REQUESTCOMMENT @"requestProjectComment"
-@interface ProjectPrepareCommentVC ()<UITableViewDelegate, UITableViewDataSource,UITextViewDelegate>
+@interface ProjectPrepareCommentVC ()<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate>
 @property (nonatomic, copy) NSString *commentpartner;
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -20,7 +20,9 @@
 @property (nonatomic, assign) NSInteger page;
 
 @property (nonatomic, strong) UIView *footer;
-@property (nonatomic, strong) UITextView *textView;
+
+
+@property (nonatomic, strong) UITextField *textField;
 
 @end
 
@@ -138,15 +140,15 @@
         make.height.mas_equalTo(50);
     }];
     
-    _textView = [[UITextView alloc]init];
-    _textView.layer.cornerRadius = 2;
-    _textView.layer.masksToBounds = YES;
-    _textView.layer.borderColor = [UIColor darkGrayColor].CGColor;
-    _textView.layer.borderWidth = 0.5;
-    _textView.delegate = self;
-    _textView.font = BGFont(15);
-    _textView.returnKeyType = UIReturnKeyDone;
-    [_footer addSubview:_textView];
+    _textField = [[UITextField alloc]init];
+    _textField.layer.cornerRadius = 2;
+    _textField.layer.masksToBounds = YES;
+    _textField.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    _textField.layer.borderWidth = 0.5;
+    _textField.delegate = self;
+    _textField.font = BGFont(15);
+    _textField.returnKeyType = UIReturnKeyDone;
+    [_footer addSubview:_textField];
     
     UIButton * btn =[[UIButton alloc]init];
     [btn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
@@ -156,7 +158,7 @@
     btn.titleLabel.font = [UIFont systemFontOfSize:17];
     [_footer addSubview:btn];
     
-    [_textView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_textField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(5);
         make.bottom.mas_equalTo(-5);
         make.left.mas_equalTo(5);
@@ -172,11 +174,21 @@
     }];
 }
 
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+
+{
+    
+    [self.textField resignFirstResponder];
+    
+}
+
 #pragma mark -发送信息
 -(void)sendMessage:(UIButton*)btn
 {
-    if (self.textView.text && ![self.textView.text isEqualToString:@""]) {
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentpartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%@",self.textView.text],@"content", nil];
+    [self.textField resignFirstResponder];
+    if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentpartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestComment:)];
         
@@ -194,8 +206,8 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
-            self.textView.text = @"";
-            [self.textView resignFirstResponder];
+            self.textField.text = @"";
+            [self.textField resignFirstResponder];
 #pragma mark ---------刷新表格-----------
             _page = 0;
             [self startLoadData];
@@ -257,28 +269,50 @@
     
 }
 
-#pragma mark- textView  delegate
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
-    if ([text isEqualToString:@"\n"]) {
-        [textView resignFirstResponder];
-        return NO;
-    }
-    return YES;
+#pragma mark -textFiledDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return NO;
 }
 
--(void)textViewDidBeginEditing:(UITextView *)textView
-{
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    
+    
     NSLog(@"开始编辑");
 }
 
--(void)textViewDidChange:(UITextView *)textView
-{
-    if (![textView.text isEqualToString:@""]) {
-        self.textView.text = textView.text;
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    
+    if (![textField.text isEqualToString:@""]) {
+        
+        self.textField.text = textField.text;
     }
-    NSLog(@"正在编辑");
+    NSLog(@"结束编辑");
 }
+
+
+//#pragma mark- textView  delegate
+//
+//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+//    if ([text isEqualToString:@"\n"]) {
+//        [textView resignFirstResponder];
+//        return NO;
+//    }
+//    return YES;
+//}
+//
+//-(void)textViewDidBeginEditing:(UITextView *)textView
+//{
+//    NSLog(@"开始编辑");
+//}
+//
+//-(void)textViewDidChange:(UITextView *)textView
+//{
+//    if (![textView.text isEqualToString:@""]) {
+//        self.textView.text = textView.text;
+//    }
+//    NSLog(@"正在编辑");
+//}
 
 
 - (CGFloat)cellContentViewWith

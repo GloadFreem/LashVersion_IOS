@@ -47,7 +47,7 @@
                     <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Q9k-T0-EBq">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Q9k-T0-EBq">
                     <rect key="frame" x="146" y="35" width="82" height="82"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="82" id="17J-LI-NMk"/>
@@ -93,7 +93,7 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2yb-Q7-kdw">
-                    <rect key="frame" x="187.5" y="306" width="187.5" height="20"/>
+                    <rect key="frame" x="187" y="306" width="187.5" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="Hfn-Lh-d0W"/>
                     </constraints>
@@ -102,7 +102,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t3E-bw-lPV">
-                    <rect key="frame" x="251.5" y="233" width="60" height="60"/>
+                    <rect key="frame" x="251" y="233" width="60" height="60"/>
                     <state key="normal" backgroundImage="iconfont-dian.png"/>
                     <connections>
                         <action selector="phoneBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="cNG-8p-S7K"/>
@@ -155,5 +155,6 @@
     <resources>
         <image name="iconfont-dian.png" width="60" height="60"/>
         <image name="iconfont-youjian.png" width="60" height="60"/>
+        <image name="placeholderIcon.png" width="200" height="200"/>
     </resources>
 </document>

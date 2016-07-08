@@ -101,6 +101,12 @@
             }
             //刷新表
             [self.tableView reloadData];
+            
+            if (_dataArray.count > 1) {
+                [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+            }
+            
+            
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
@@ -184,9 +190,18 @@
     }];
 }
 
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+
+{
+    
+    [self.textField resignFirstResponder];
+    
+}
+
 #pragma mark -发送信息
 -(void)sendMessage:(UIButton*)btn
 {
+    [self.textField resignFirstResponder];
     if (self.sceneId) {
         if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
             NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];

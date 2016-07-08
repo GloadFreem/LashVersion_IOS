@@ -82,14 +82,15 @@
     }
     
     UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [cancelBtn setBackgroundImage:[UIImage imageNamed:@"icon_share_close"] forState:UIControlStateNormal];
-    cancelBtn.size = cancelBtn.currentBackgroundImage.size;
+    [cancelBtn setImage:[UIImage imageNamed:@"icon_share_close"] forState:UIControlStateNormal];
+//    cancelBtn.size = cancelBtn.currentBackgroundImage.size;
     cancelBtn.tag = 100;
     [cancelBtn addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [shareView addSubview:cancelBtn];
     [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(shareView.mas_centerX);
         make.bottom.mas_equalTo(shareView.mas_bottom).offset(-19*HEIGHTCONFIG);
+        make.width.height.mas_equalTo(35);
     }];
     
     

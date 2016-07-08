@@ -12,7 +12,23 @@
 
 #import "ProjectDetailBaseMOdel.h"
 
+@class ProjectDetailLeftTeamView;
+
+@protocol ProjectDetailLeftTeamViewDelegate <NSObject>
+
+@optional
+
+-(void)didClickBtnInTeamViewWithModel:(DetailTeams*)team;
+
+-(void)didClickBtnInTeamExrViewWithModel:(DetailExtr*)extr;
+
+
+@end
+
+
 @interface ProjectDetailLeftTeamView : UITableViewCell<UIScrollViewDelegate>
+
+@property (nonatomic, assign) id<ProjectDetailLeftTeamViewDelegate>delegate;
 
 @property (nonatomic, strong) NSMutableArray *extrModelArray;
 @property (nonatomic, strong) ProjectDetailLeftTeamModel *model;

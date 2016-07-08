@@ -14,7 +14,7 @@
 #import "PingTaiWebViewController.h"
 
 #define GOLDACCOUNT  @"requestUserGoldCount"
-#define INVITECODE  @"requestInviteCode"
+#define INVITEFRIEND  @"requestGoldInviteFriends"
 #define GOLDGETRULE  @"requestGoldGetRule"
 #define GOLDUSERULE  @"requestGoldUseRule"
 
@@ -32,6 +32,9 @@
 @property (nonatomic, copy) NSString *goldGetPartner;
 @property (nonatomic, copy) NSString *goldUsepartner;
 
+@property (nonatomic, copy) NSString *shareTitle;
+@property (nonatomic, copy) NSString *shareContent;
+@property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic, copy) NSString *shareUrl;
 @property (nonatomic, copy) NSString *useUrl;
 @property (nonatomic, copy) NSString *getUrl;
@@ -45,12 +48,13 @@
     // Do any additional setup after loading the view from its nib.
     
     self.partner = [TDUtil encryKeyWithMD5:KEY action:GOLDACCOUNT];
-    self.codePartner = [TDUtil encryKeyWithMD5:KEY action:INVITECODE];
+    self.codePartner = [TDUtil encryKeyWithMD5:KEY action:INVITEFRIEND];
     self.goldGetPartner = [TDUtil encryKeyWithMD5:KEY action:GOLDGETRULE];
     self.goldUsepartner = [TDUtil encryKeyWithMD5:KEY action:GOLDUSERULE];
     [self startLoadData];
     [self loadGetRule];
     [self loadUseRule];
+    [self loadCode];
     
 }
 #pragma maker-------邀请码
@@ -58,18 +62,21 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_INVITE_CODE postParam:dic type:0 delegate:self sel:@selector(requestInviteCode:)];
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_GOLD_INVITE_FRIEND postParam:dic type:0 delegate:self sel:@selector(requestInviteCode:)];
 }
 -(void)requestInviteCode:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status =[jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSDictionary *data = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
             _shareUrl = data[@"url"];
+            _shareImage = data[@"image"];
+            _shareTitle = data[@"title"];
+            _shareContent = data[@"content"];
         }
     }
 }
@@ -168,6 +175,7 @@
         {//积累
             PingTaiWebViewController *vc = [PingTaiWebViewController new];
             vc.url = _getUrl;
+            vc.title = @"金条积累规则";
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -175,6 +183,7 @@
         {//使用
             PingTaiWebViewController *vc = [PingTaiWebViewController new];
             vc.url = _useUrl;
+            vc.title = @"金条使用规则";
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -226,8 +235,8 @@
     //分享
     if (view.tag == 1) {
         //得到用户SID
-        //        UIImage * shareImage = [UIImage imageNamed:@"share_jixiangwu"];
-        NSString *shareContentString = [NSString stringWithFormat:@"快来一起玩\n%@",_shareUrl];
+        NSString *shareImage = _shareImage;
+        NSString *shareContentString = [NSString stringWithFormat:@"%@",_shareContent];
         NSArray *arr = nil;
         NSString *shareContent;
         
@@ -238,8 +247,8 @@
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投";
+                    [UMSocialData defaultData].extConfig.qqData.title = _shareTitle;
+                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
                 }
                 else
                 {
@@ -255,8 +264,8 @@
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到微信");
             }
@@ -266,8 +275,8 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到朋友圈");
             }
@@ -291,10 +300,12 @@
         {
             return;
         }
-        //        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-        //            shareImage = nil;
-        //        }
-        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:nil presentedController:self completion:^(UMSocialResponseEntity *response){
+                if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
+                    shareImage = nil;
+                }
+        UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
+                                            shareImage];
+        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{

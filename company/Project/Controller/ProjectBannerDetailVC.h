@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ProjectBannerListModel.h"
+
 @interface ProjectBannerDetailVC : UIViewController
+
+@property (nonatomic, strong) ProjectBannerListModel *model;
 
 @property (nonatomic, copy) NSString *url;
 

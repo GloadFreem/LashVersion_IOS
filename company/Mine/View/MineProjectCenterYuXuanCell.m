@@ -209,6 +209,7 @@
         make.bottom.mas_equalTo(_projectLabel.mas_bottom);
         make.left.mas_equalTo(_projectLabel.mas_right).offset(12*WIDTHCONFIG);
         make.height.mas_equalTo(12*HEIGHTCONFIG);
+        make.right.mas_equalTo(-10*WIDTHCONFIG);
     }];
     //公司
     [_companyLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -310,7 +311,7 @@
 {
     _model = model;
     
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.startPageImage]] placeholderImage:[UIImage new]];
+    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.startPageImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     
     
     //隐藏多余的 label

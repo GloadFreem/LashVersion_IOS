@@ -68,7 +68,7 @@
 -(void)requestList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
+        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic != nil) {
@@ -79,28 +79,30 @@
                 [_statusArray removeAllObjects];
             }
             
-            NSArray *dataArray =[MineLogoProjectBaseModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
-            for (NSInteger i =0; i < dataArray.count; i ++) {
-                MineLogoProjectBaseModel *baseModel = dataArray[i];
-                ProjectListProModel *listModel = [ProjectListProModel new];
-                listModel.startPageImage = baseModel.startPageImage;
-                listModel.abbrevName = baseModel.abbrevName;
-                listModel.address = baseModel.address;
-                listModel.fullName = baseModel.fullName;
-                listModel.status = baseModel.financestatus.name;
-                listModel.projectId  = baseModel.projectId;
-                listModel.timeLeft = baseModel.timeLeft;
-                
-                //少一个areas 数组
-                listModel.areas = [baseModel.industoryType componentsSeparatedByString:@"，"];
-                listModel.collectionCount = baseModel.collectionCount;
-                LogoRoadshows *roadshows = baseModel.roadshows[0];
-                listModel.financeTotal = roadshows.roadshowplan.financeTotal;
-                listModel.financedMount = roadshows.roadshowplan.financedMount;
-                listModel.endDate = roadshows.roadshowplan.endDate;
-                
-                [_statusArray addObject:baseModel.financestatus.name];
-                [_dataArray addObject:listModel];
+            if ([jsonDic[@"data"] count]) {
+                NSArray *dataArray =[MineLogoProjectBaseModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+                for (NSInteger i =0; i < dataArray.count; i ++) {
+                    MineLogoProjectBaseModel *baseModel = dataArray[i];
+                    ProjectListProModel *listModel = [ProjectListProModel new];
+                    listModel.startPageImage = baseModel.startPageImage;
+                    listModel.abbrevName = baseModel.abbrevName;
+                    listModel.address = baseModel.address;
+                    listModel.fullName = baseModel.fullName;
+                    listModel.status = baseModel.financestatus.name;
+                    listModel.projectId  = baseModel.projectId;
+                    listModel.timeLeft = baseModel.timeLeft;
+                    
+                    //少一个areas 数组
+                    listModel.areas = [baseModel.industoryType componentsSeparatedByString:@"，"];
+                    listModel.collectionCount = baseModel.collectionCount;
+                    LogoRoadshows *roadshows = baseModel.roadshows[0];
+                    listModel.financeTotal = roadshows.roadshowplan.financeTotal;
+                    listModel.financedMount = roadshows.roadshowplan.financedMount;
+                    listModel.endDate = roadshows.roadshowplan.endDate;
+                    
+                    [_statusArray addObject:baseModel.financestatus.name];
+                    [_dataArray addObject:listModel];
+                }
             }
             
             [self.tableView reloadData];
@@ -118,8 +120,10 @@
 -(void)setupNav
 {
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftback setBackgroundImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = leftback.currentBackgroundImage.size;
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.frame = CGRectMake(0, 0, 80, 30);
+//    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"项目中心";
@@ -177,50 +181,64 @@
 #pragma mark -tableViewDatasource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _dataArray.count + 1;
+    if (_dataArray.count) {
+        return _dataArray.count + 1;
+    }
+    return 1;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row != _dataArray.count) {
-        return 250;
+    if (_dataArray.count) {
+        if (indexPath.row != _dataArray.count) {
+            return 250;
+        }
+        return 50;
     }
     return 50;
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    if (indexPath.row !=_dataArray.count ) {//不是最后一个cell
-        if (_statusArray.count && _dataArray.count) {
-            if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]) {
-                static NSString *cellId = @"MineProjectCenterYuXuanCell";
-                MineProjectCenterYuXuanCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-                if (!cell) {
-                    cell = [[MineProjectCenterYuXuanCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+    if (_dataArray.count) {
+        if (indexPath.row !=_dataArray.count ) {//不是最后一个cell
+            if (_statusArray.count && _dataArray.count) {
+                if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]) {
+                    static NSString *cellId = @"MineProjectCenterYuXuanCell";
+                    MineProjectCenterYuXuanCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                    if (!cell) {
+                        cell = [[MineProjectCenterYuXuanCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+                    }
+                    cell.delegate = self;
+                    cell.indexpath = indexPath;
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    cell.model = _dataArray[indexPath.row];
+                    return cell;
+                    
                 }
-                cell.delegate = self;
-                cell.indexpath = indexPath;
+                static NSString *cellId = @"MineProjectCenterProCell";
+                MineProjectCenterProCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
+                if (!cell) {
+                    cell = [[MineProjectCenterProCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+                    
+                }
+                cell.delagate =self;
+                cell.indexPath = indexPath;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 cell.model = _dataArray[indexPath.row];
                 return cell;
-                
             }
-            static NSString *cellId = @"MineProjectCenterProCell";
-            MineProjectCenterProCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
-            if (!cell) {
-                cell = [[MineProjectCenterProCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-                
-            }
-            cell.delagate =self;
-            cell.indexPath = indexPath;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.model = _dataArray[indexPath.row];
-            return cell;
+            
         }
         
+        static NSString *cellId = @"MineProjectCenterAddProjectCell";
+        MineProjectCenterAddProjectCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (!cell) {
+            cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
     }
-    
     static NSString *cellId = @"MineProjectCenterAddProjectCell";
     MineProjectCenterAddProjectCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
@@ -234,23 +252,31 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.row == _dataArray.count) {//进入提交项目界面
+    if (_dataArray.count) {
+        if (indexPath.row == _dataArray.count) {//进入提交项目界面
+            UpProjectViewController *up = [UpProjectViewController new];
+            
+            [self.navigationController pushViewController:up animated:YES];
+        }else{
+            ProjectListProModel *model = _dataArray[indexPath.row];
+            if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]){
+                ProjectPrepareDetailVC *vc = [ProjectPrepareDetailVC new];
+                vc.projectId = model.projectId;
+                [self.navigationController pushViewController:vc animated:YES];
+                return;
+            }
+            ProjectDetailController *vc = [ProjectDetailController new];
+            vc.projectId = model.projectId;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }
+    }else{
         UpProjectViewController *up = [UpProjectViewController new];
         
         [self.navigationController pushViewController:up animated:YES];
-    }else{
-    ProjectListProModel *model = _dataArray[indexPath.row];
-    if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]){
-        ProjectPrepareDetailVC *vc = [ProjectPrepareDetailVC new];
-        vc.projectId = model.projectId;
-        [self.navigationController pushViewController:vc animated:YES];
-        return;
     }
-        ProjectDetailController *vc = [ProjectDetailController new];
-        vc.projectId = model.projectId;
-        [self.navigationController pushViewController:vc animated:YES];
-        
-    }
+    
+    
 }
 
 #pragma mark---------MineProjectCenterYuXuanCellDelegate-------------

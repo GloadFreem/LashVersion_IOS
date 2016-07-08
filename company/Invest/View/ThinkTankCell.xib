@@ -22,7 +22,7 @@
                             <constraint firstAttribute="height" constant="10" id="PuV-mg-M1o"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar-sample-165.png" translatesAutoresizingMaskIntoConstraints="NO" id="5yv-ER-AON">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="5yv-ER-AON">
                         <rect key="frame" x="20" y="25" width="60" height="60"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="60" id="eSW-fM-avh"/>
@@ -133,8 +133,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Avatar-sample-165.png" width="50" height="50"/>
         <image name="icon-guanzhu.png" width="17" height="15"/>
         <image name="image-point.png" width="268" height="1"/>
+        <image name="placeholderIcon.png" width="200" height="200"/>
     </resources>
 </document>

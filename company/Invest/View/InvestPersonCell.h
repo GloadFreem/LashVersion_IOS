@@ -47,6 +47,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *collectBtn;
 @property (weak, nonatomic) IBOutlet UIButton *cimmitBtn;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *companyNameWidth;
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 

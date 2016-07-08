@@ -8,10 +8,28 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ProjectDetailLeftTeamView.h"
+
 #import "ProjectDetailBaseMOdel.h"
 #import "ProjectDetailLeftHeaderModel.h"
 #import "ProjectDetailLeftTeamModel.h"
-@interface CSZProjectDetailLetfView : UIView
+
+@class CSZProjectDetailLetfView;
+
+@protocol CSZProjectDetailLetfViewDelegate <NSObject>
+
+@optional
+
+-(void)transportTeamModel:(DetailTeams*)team;
+
+-(void)transportExrModel:(DetailExtr*)extr;
+
+@end
+
+@interface CSZProjectDetailLetfView : UIView<ProjectDetailLeftTeamViewDelegate>
+
+@property (nonatomic,assign) id<CSZProjectDetailLetfViewDelegate>delegate;
+
 @property (nonatomic, strong) ProjectDetailLeftTeamModel *teamModel;
 @property (nonatomic, strong) ProjectDetailLeftHeaderModel *headerModel;
 @property (nonatomic, strong) ProjectDetailBaseMOdel *model;

@@ -183,7 +183,7 @@
     
     //白色地板
     _whiteView = [InvestPersonWhiteImageView instancetationInvestPersonWhiteImageView];
-    [_whiteView.iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_model.user.headSculpture]] placeholderImage:[UIImage new]];
+    [_whiteView.iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_model.user.headSculpture]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _whiteView.nameLabel.text = _model.user.name;
     
     DetailAuthentics *authentics = _model.user.authentics[0];
@@ -270,7 +270,7 @@
     
     //提交按钮
     _commitBtn = [[UIButton alloc]init];
-    [_commitBtn setBackgroundImage:[UIImage imageNamed:@"icon-commit"] forState:UIControlStateNormal];
+    [_commitBtn setBackgroundImage:[UIImage imageNamed:@"icon_commit"] forState:UIControlStateNormal];
     [_commitBtn addTarget:self action:@selector(commitClick:) forControlEvents:UIControlEventTouchUpInside];
     [_scrollView addSubview:_commitBtn];
     [_commitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -287,7 +287,7 @@
     [_attentionBtn addTarget:self action:@selector(attentionClick:) forControlEvents:UIControlEventTouchUpInside];
     
     [_attentionBtn setImage:[UIImage imageNamed:@"icon-guanzhu"] forState:UIControlStateNormal];
-    [_attentionBtn.titleLabel setFont:BGFont(14)];
+    [_attentionBtn.titleLabel setFont:BGFont(16)];
     
     if (_collected) {
         [_attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];

@@ -280,7 +280,7 @@
         if (_dataArray.count >=1) {
             ProjectDetailSceneCellModel *model1 = _dataArray[_dataArray.count-1];
             if (model1) {
-                [_firstIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model1.iconImage]] placeholderImage:[UIImage new]];
+                [_firstIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model1.iconImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
                 _firstName.text = model1.name;
                 _firstTime.text = model1.time;
                 _firstContent.text = model1.content;
@@ -291,7 +291,7 @@
         if (_dataArray.count >=2) {
             ProjectDetailSceneCellModel *model2 = _dataArray[_dataArray.count-2];
             if (model2) {
-                [_secondIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model2.iconImage]] placeholderImage:[UIImage new]];
+                [_secondIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model2.iconImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
                 _secondName.text = model2.name;
                 _secondTime.text = model2.time;
                 //    NSLog(@"打印 事件啊啊氨基酸擦----%@",model2.time);

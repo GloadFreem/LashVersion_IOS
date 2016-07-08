@@ -21,7 +21,7 @@
                             <constraint firstAttribute="height" constant="10" id="aMj-TI-diE"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="invest_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="e92-UV-KqR">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="e92-UV-KqR">
                         <rect key="frame" x="12" y="25" width="51" height="51"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="51" id="3Cc-ZU-gnv"/>
@@ -115,8 +115,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="invest_icon.png" width="51" height="51"/>
         <image name="invest_organization.png" width="58" height="18"/>
         <image name="invest_point.png" width="228" height="1"/>
+        <image name="placeholderIcon.png" width="200" height="200"/>
     </resources>
 </document>

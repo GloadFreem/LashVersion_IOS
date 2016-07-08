@@ -108,6 +108,12 @@
             for (UIViewController *vc in self.navigationController.viewControllers) {
                 if ([vc isKindOfClass:LoginRegistViewController.class]) {
                     login = (LoginRegistViewController*)vc;
+                }else{
+                    if ([vc isKindOfClass:AppSetVC.class]) {
+                        
+                    }else{
+                        [vc removeFromParentViewController];
+                    }
                 }
             }
             
@@ -131,7 +137,8 @@
 {
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(50, 30);
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"软件设置";
@@ -260,7 +267,7 @@
             [alertView show];
             }else{
                 NSArray *currentArray = [version componentsSeparatedByString:@"."];
-                NSLog(@"本地----%@",currentArray);
+//                NSLog(@"本地----%@",currentArray);
                 NSArray *upArray = [_versionStr componentsSeparatedByString:@"."];
                 if ([currentArray[0] integerValue] < [upArray[0] integerValue]) {
                     [self alertViewShow];

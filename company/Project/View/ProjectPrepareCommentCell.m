@@ -85,7 +85,7 @@
 {
     _model = model;
     
-    [_icon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.users.headSculpture]] placeholderImage:[UIImage new]];
+    [_icon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.users.headSculpture]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     
     _name.text = model.users.name;
     [_name sizeToFit];

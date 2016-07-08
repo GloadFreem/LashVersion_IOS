@@ -17,6 +17,7 @@
 #import "ProjectPreparePhotoView.h"
 #import "ProjectDetailLeftTeamView.h"
 
+#import "PingTaiWebViewController.h"
 
 #import "ProjectDetailBaseMOdel.h"
 #import "ProjectPrepareDetailHeaderModel.h"
@@ -28,7 +29,7 @@
 #define PROJECTCOLLECT @"requestProjectCollect"
 #define PROJECTDETAIL @"requestProjectDetail"
 #define PROJECTSHARE @"requestProjectShare"
-@interface ProjectPrepareDetailVC ()<UIScrollViewDelegate,ProjectPrepareFooterCommentViewDelagate,CircleShareBottomViewDelegate>
+@interface ProjectPrepareDetailVC ()<UIScrollViewDelegate,ProjectPrepareFooterCommentViewDelagate,CircleShareBottomViewDelegate,ProjectDetailLeftTeamViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -260,6 +261,7 @@
     .topSpaceToView(_headerView,0);
     
     _teamView = [ProjectDetailLeftTeamView new];
+    _teamView.delegate = self;
 //    _teamView.backgroundColor = [UIColor redColor];
     _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];;
     _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
@@ -541,6 +543,21 @@
     vc.projectId =self.projectId;
     vc.dataArray = dataArray;
     vc.footerCommentView = _footerView;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark-------ProjectDetailLeftTeamViewDelegate----------
+-(void)didClickBtnInTeamViewWithModel:(DetailTeams *)team
+{
+    PingTaiWebViewController *vc = [PingTaiWebViewController new];
+    vc.url = team.url;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)didClickBtnInTeamExrViewWithModel:(DetailExtr *)extr
+{
+    PingTaiWebViewController *vc = [PingTaiWebViewController new];
+    vc.url = extr.url;
     [self.navigationController pushViewController:vc animated:YES];
 }
 #pragma mark -moreBtn点击事件 处理

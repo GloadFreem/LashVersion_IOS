@@ -79,6 +79,7 @@
     headerView = [ProjectDetailLeftHeaderView new];
     
     teamView = [ProjectDetailLeftTeamView new];
+    teamView.delegate = self;
     
     //2.添加到View
     [self addSubview:headerView];
@@ -109,6 +110,19 @@
     [self setupAutoHeightWithBottomView:teamView bottomMargin:50];
     //立即布局
     [headerView updateLayout];
+}
+
+-(void)didClickBtnInTeamViewWithModel:(DetailTeams *)team
+{
+    if ([self.delegate respondsToSelector:@selector(transportTeamModel:)]) {
+        [self.delegate transportTeamModel:team];
+    }
+}
+-(void)didClickBtnInTeamExrViewWithModel:(DetailExtr *)extr
+{
+    if ([self.delegate respondsToSelector:@selector(transportExrModel:)]) {
+        [self.delegate transportExrModel:extr];
+    }
 }
 
 @end

@@ -21,7 +21,7 @@
                             <constraint firstAttribute="height" constant="10" id="6GY-MT-0bt"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="invest_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Cm7-BT-oWf">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Cm7-BT-oWf">
                         <rect key="frame" x="12" y="25" width="51" height="51"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="51" id="3we-hi-MtU"/>
@@ -47,7 +47,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="逸景营地投资有限公司" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yFX-9y-azQ">
-                        <rect key="frame" x="74" y="49" width="150" height="15"/>
+                        <rect key="frame" x="74" y="49" width="203" height="15"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="15" id="RUp-ob-gEQ"/>
                         </constraints>
@@ -56,8 +56,9 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="北京 | 海淀" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wsm-2d-GIl">
-                        <rect key="frame" x="308" y="52" width="59" height="12"/>
+                        <rect key="frame" x="287" y="52" width="80" height="12"/>
                         <constraints>
+                            <constraint firstAttribute="width" constant="80" id="DDi-A5-tS8"/>
                             <constraint firstAttribute="height" constant="12" id="yeq-jP-hYz"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -119,6 +120,7 @@
                     <constraint firstItem="Xl1-1C-qAf" firstAttribute="leading" secondItem="yFX-9y-azQ" secondAttribute="leading" id="cEj-UC-Wc5"/>
                     <constraint firstItem="m6V-HP-uBc" firstAttribute="centerY" secondItem="IqM-FF-YLU" secondAttribute="centerY" id="cmi-gV-xzH"/>
                     <constraint firstItem="ZES-j9-t8i" firstAttribute="leading" secondItem="Cm7-BT-oWf" secondAttribute="trailing" constant="11" id="ecW-Rj-4WO"/>
+                    <constraint firstItem="Wsm-2d-GIl" firstAttribute="leading" secondItem="yFX-9y-azQ" secondAttribute="trailing" constant="10" id="hQn-XX-IsN"/>
                     <constraint firstItem="yFX-9y-azQ" firstAttribute="top" secondItem="ZES-j9-t8i" secondAttribute="bottom" constant="9" id="jwy-eN-Kzn"/>
                     <constraint firstItem="Cm7-BT-oWf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="o2j-VW-xlg"/>
                     <constraint firstItem="Wsm-2d-GIl" firstAttribute="bottom" secondItem="yFX-9y-azQ" secondAttribute="bottom" id="pRB-Vv-iUf"/>
@@ -150,8 +152,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="invest_icon.png" width="51" height="51"/>
         <image name="invest_investperson" width="58" height="18"/>
         <image name="invest_point.png" width="228" height="1"/>
+        <image name="placeholderIcon.png" width="200" height="200"/>
     </resources>
 </document>

@@ -56,7 +56,7 @@
     //如果不是自己  靠左布局
     
     //头像
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconImage]] placeholderImage:[UIImage new]];
+    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _nameLabel.text = model.name;
     [_nameLabel sizeToFit];
     _contentLabel.text = model.content;

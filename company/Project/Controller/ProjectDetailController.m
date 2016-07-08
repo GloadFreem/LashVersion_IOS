@@ -25,6 +25,8 @@
 
 #import "AuthenticInfoBaseModel.h"
 
+#import "PingTaiWebViewController.h"
+
 #import "ProjectDetailInvestVC.h"
 #import "ProjectSceneCommentVC.h"
 
@@ -47,7 +49,7 @@
 #define titleFont [UIFont systemFontOfSize:16]
 
 
-@interface ProjectDetailController ()<ProjectDetailBannerViewDelegate,UIScrollViewDelegate,UITextViewDelegate,ProjectDetailSceneViewDelegate,CircleShareBottomViewDelegate,UITextFieldDelegate>
+@interface ProjectDetailController ()<CSZProjectDetailLetfViewDelegate,ProjectDetailBannerViewDelegate,UIScrollViewDelegate,UITextViewDelegate,ProjectDetailSceneViewDelegate,CircleShareBottomViewDelegate,UITextFieldDelegate>
 {
     ProjectDetailMemberView * member;
     ProjectDetailBannerView * bannerView;
@@ -285,7 +287,7 @@
 -(void)requestProjectDetail:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic != nil) {
@@ -429,6 +431,7 @@
         
         _leftView = [[CSZProjectDetailLetfView alloc]init];
         _leftView.model = _model;
+        _leftView.delegate = self;
         [_subViewScrollView addSubview:_leftView];
         
         _leftView.frame = CGRectMake(0, 0, SCREENWIDTH, _leftView.height);
@@ -553,6 +556,7 @@
 #pragma mark -发送信息
 -(void)sendMessage:(UIButton*)btn
 {
+    [self.textField resignFirstResponder];
     if (self.sceneId) {
         if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
             NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
@@ -567,6 +571,13 @@
         self.textField.text = @"";
     [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"路演现场暂未开放评论"];
     }
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+
+{
+    
+    [self.textField resignFirstResponder];
     
 }
 
@@ -585,6 +596,8 @@
         [scene.dataArray removeAllObjects];
         [scene startLoadComment];
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+         //将视图移到当前位置
+            
             
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -601,6 +614,21 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+
+#pragma mark------------------CSZProjectDetailLetfViewDelegate--------------
+-(void)transportTeamModel:(DetailTeams *)team
+{
+    PingTaiWebViewController *vc = [PingTaiWebViewController new];
+    vc.url = team.url;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)transportExrModel:(DetailExtr *)extr
+{
+    PingTaiWebViewController *vc = [PingTaiWebViewController new];
+    vc.url = extr.url;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 #pragma mark - 按钮数组
 - (NSMutableArray *)btArray{
@@ -1060,8 +1088,10 @@
     [delegate.tabBar tabBarHidden:NO animated:NO];
     
     MP3Player *player = [[MP3Player alloc]init];
-    [player.player pause];
+    player.player = nil;
     
+    //销毁计时器通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];
     
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
 }
@@ -1069,7 +1099,7 @@
 -(void)dealloc
 {
     MP3Player *player = [[MP3Player alloc]init];
-    player = nil;
+    player.player = nil;
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

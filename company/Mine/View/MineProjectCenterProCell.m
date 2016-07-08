@@ -225,6 +225,7 @@
         make.left.mas_equalTo(_projectLabel.mas_left);
         make.top.mas_equalTo(_projectLabel.mas_bottom).offset(10*HEIGHTCONFIG);
         make.height.mas_equalTo(15*HEIGHTCONFIG);
+        make.right.mas_equalTo(-10*WIDTHCONFIG);
     }];
     //点分隔线
     [_pointImage mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -331,7 +332,7 @@
 {
     _model = model;
     
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.startPageImage]] placeholderImage:[UIImage new]];
+    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.startPageImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     if ([model.status isEqualToString:@"待路演"]) {
         _statusImage.image = [UIImage imageNamed:@"icon_noroad"];
     }

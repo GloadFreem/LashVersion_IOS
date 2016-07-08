@@ -15,7 +15,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bHH-XJ-cBo">
-                        <rect key="frame" x="17" y="42.5" width="42" height="21"/>
+                        <rect key="frame" x="17" y="42" width="42" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="1Yh-z0-ile"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="cEh-zY-gIC"/>
@@ -39,7 +39,7 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="right_arrow.png" translatesAutoresizingMaskIntoConstraints="NO" id="QWu-7c-u4g">
                         <rect key="frame" x="359" y="47.5" width="6" height="11"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_certify.png" translatesAutoresizingMaskIntoConstraints="NO" id="bnm-qi-dhs">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="bnm-qi-dhs">
                         <rect key="frame" x="292" y="22" width="62" height="62"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="62" id="IdL-G6-G7q"/>
@@ -77,7 +77,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="icon_certify.png" width="60" height="60"/>
+        <image name="placeholderIcon.png" width="200" height="200"/>
         <image name="right_arrow.png" width="6" height="11"/>
     </resources>
 </document>

@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="109.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar-sample-406.png" translatesAutoresizingMaskIntoConstraints="NO" id="p4S-f0-0Mf">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="p4S-f0-0Mf">
                         <rect key="frame" x="14" y="22" width="75" height="75"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="75" id="5Na-Ht-68q"/>
@@ -66,6 +66,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Avatar-sample-406.png" width="75" height="75"/>
+        <image name="placeholderIcon.png" width="200" height="200"/>
     </resources>
 </document>

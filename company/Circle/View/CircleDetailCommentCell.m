@@ -101,7 +101,7 @@
     _model = model;
     
     //头像
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconImageStr]] placeholderImage:[UIImage new]];
+    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconImageStr]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     
     _namelabel.text = model.nameStr;
     [_namelabel sizeToFit];

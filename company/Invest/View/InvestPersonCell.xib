@@ -21,7 +21,7 @@
                             <constraint firstAttribute="height" constant="10" id="gtl-Tc-IfY"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar-sample-165.png" translatesAutoresizingMaskIntoConstraints="NO" id="cyB-AP-kel">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="cyB-AP-kel">
                         <rect key="frame" x="12" y="25" width="60" height="60"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="60" id="NpB-xF-rot"/>
@@ -47,8 +47,9 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="逸景营地投资有限公司" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6h-1z-I6j">
-                        <rect key="frame" x="84" y="51" width="150" height="15"/>
+                        <rect key="frame" x="84" y="51" width="210" height="15"/>
                         <constraints>
+                            <constraint firstAttribute="width" constant="210" id="hlg-F8-f41"/>
                             <constraint firstAttribute="height" constant="15" id="ukD-Me-PAT"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -112,7 +113,7 @@
                         </connections>
                     </button>
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nYv-sC-jeC">
-                        <rect key="frame" x="92" y="146" width="240" height="13.5"/>
+                        <rect key="frame" x="-36" y="-77" width="1" height="35"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </subviews>
@@ -153,6 +154,7 @@
                 <outlet property="collectBtn" destination="kJO-Wi-DUR" id="A9N-7M-zrn"/>
                 <outlet property="companyAddress" destination="MwA-ML-Bsn" id="o7L-pL-hxg"/>
                 <outlet property="companyName" destination="h6h-1z-I6j" id="Mnt-QV-uMH"/>
+                <outlet property="companyNameWidth" destination="hlg-F8-f41" id="SbA-iP-ueJ"/>
                 <outlet property="iconImage" destination="cyB-AP-kel" id="GAC-cp-ZvF"/>
                 <outlet property="leftBtn" destination="EWJ-ih-zuK" id="bPq-Ea-IEF"/>
                 <outlet property="middleBtn" destination="9VE-rz-hiO" id="FR3-uS-9kV"/>
@@ -167,9 +169,9 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Avatar-sample-165.png" width="50" height="50"/>
         <image name="icon-guanzhu.png" width="17" height="15"/>
         <image name="icon_commit1.png" width="15" height="15"/>
         <image name="image-point.png" width="268" height="1"/>
+        <image name="placeholderIcon.png" width="200" height="200"/>
     </resources>
 </document>

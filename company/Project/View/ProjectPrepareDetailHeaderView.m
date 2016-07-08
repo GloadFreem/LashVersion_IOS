@@ -81,7 +81,7 @@
 -(void)setModel:(ProjectDetailBaseMOdel *)model
 {
     _model = model;
-    [_icon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.project.startPageImage]] placeholderImage:[UIImage new]];
+    [_icon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.project.startPageImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _projectName.text = model.project.abbrevName;
     _companyName.text = model.project.fullName;
     _address.text = model.project.address;

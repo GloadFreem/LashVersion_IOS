@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MineViewController">
@@ -30,9 +31,17 @@
                 <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eaf-fU-gVn">
                     <rect key="frame" x="146" y="77" width="83" height="83"/>
                     <constraints>
+                        <constraint firstAttribute="width" secondItem="Eaf-fU-gVn" secondAttribute="height" multiplier="1:1" id="dFl-Ox-c9Y"/>
+                        <constraint firstAttribute="width" secondItem="Eaf-fU-gVn" secondAttribute="height" multiplier="1:1" id="dts-46-TSh"/>
                         <constraint firstAttribute="width" constant="83" id="dy7-bm-qcb"/>
                         <constraint firstAttribute="height" constant="83" id="pRn-9H-ekg"/>
                     </constraints>
+                    <state key="normal" backgroundImage="placeholderIcon.png"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="dFl-Ox-c9Y"/>
+                        </mask>
+                    </variation>
                     <connections>
                         <action selector="iconDetail:" destination="-1" eventType="touchUpInside" id="LF4-V1-dS4"/>
                     </connections>
@@ -100,10 +109,10 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CHj-yI-1Rg">
-                    <rect key="frame" x="172" y="599" width="30" height="30"/>
+                    <rect key="frame" x="164.5" y="584" width="45" height="45"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="7RM-zg-nkp"/>
-                        <constraint firstAttribute="width" constant="30" id="nMb-5m-8JB"/>
+                        <constraint firstAttribute="height" constant="45" id="7RM-zg-nkp"/>
+                        <constraint firstAttribute="width" constant="45" id="nMb-5m-8JB"/>
                     </constraints>
                     <state key="normal" image="logo_close.png"/>
                     <connections>
@@ -316,5 +325,6 @@
         <image name="logo_qian.png" width="29" height="33"/>
         <image name="logo_tuijian.png" width="35" height="26"/>
         <image name="logo_wallet.png" width="33" height="33"/>
+        <image name="placeholderIcon.png" width="200" height="200"/>
     </resources>
 </document>

@@ -25,6 +25,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    _companyNameWidth.constant = 210 * WIDTHCONFIG;
     
     _iconImage.layer.cornerRadius = 30;
     _iconImage.layer.masksToBounds = YES;

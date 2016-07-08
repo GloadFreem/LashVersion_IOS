@@ -133,10 +133,9 @@
 //            [imageBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
             //btn加载数据
             
-            
             imageBtn.frame = CGRectMake(0+i*SCREENWIDTH, 0, SCREENWIDTH, SCROLLVIEWHEIGHT);
 //            [imageBtn setBackgroundImage:[UIImage imageNamed:@"c9d8be32534701.568974395e076"] forState:UIControlStateNormal];
-            [imageBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",arr[i]]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
+            [imageBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",arr[i]]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderImageDetail"]];
             
             [_scrollView addSubview:imageBtn];
             if (arr.count > 1) {
@@ -149,7 +148,7 @@
                     [btn setAdjustsImageWhenHighlighted:NO];
                     btn.frame = CGRectMake(arr.count*SCREENWIDTH, 0, SCREENWIDTH, SCROLLVIEWHEIGHT);
                     [imageBtn setContentMode:UIViewContentModeScaleAspectFill];
-                    [imageBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",arr[i]]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
+                    [imageBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",arr[i]]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderImageDetail"]];
                     
                     [_scrollView addSubview:btn];
                 }

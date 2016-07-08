@@ -199,7 +199,7 @@
     [_whiteImage addSubview:_iconImage];
     _iconImage.contentMode = UIViewContentModeScaleAspectFill;
 //    [_iconImage setBackgroundColor:[UIColor redColor]];
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_model.user.headSculpture]] placeholderImage:[UIImage new]];
+    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_model.user.headSculpture]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     //名字
     _name = [[UILabel alloc]init];
     _name.textColor = [UIColor blackColor];

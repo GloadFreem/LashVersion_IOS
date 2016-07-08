@@ -1559,7 +1559,10 @@
     //年差额 = dateCom.year, 月差额 = dateCom.month, 日差额 = dateCom.day, 小时差额 = dateCom.hour, 分钟差额 = dateCom.minute, 秒差额 = dateCom.second
     NSString *str = @"";
     if (dateCom.day > 3) {
-        str = [NSString stringWithFormat:@"%@",endDate];
+        NSArray *timeArr = [endDate componentsSeparatedByString:@" "];
+        NSString *first = timeArr[0];
+        first = [first substringFromIndex:5];
+        str = [NSString stringWithFormat:@"%@",first];
     }else{
         if (dateCom.day >=1) {
             str = [NSString stringWithFormat:@"%ld天前",(long)dateCom.day];

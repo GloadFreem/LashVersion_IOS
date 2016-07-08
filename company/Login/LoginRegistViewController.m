@@ -284,6 +284,10 @@
             NSString *regId = [JPUSHService registrationID];
             
             _wePic = snsAccount.iconURL;
+            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+            [data setValue:snsAccount.userName forKey:@"nickName"];
+            [data synchronize];
+            
              NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.wePartner,@"partner",snsAccount.openId,@"wechatID",@"1",@"platform",regId,@"regid", nil];
             
             //开始请求

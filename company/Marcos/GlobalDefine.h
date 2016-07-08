@@ -151,8 +151,8 @@
 
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
-#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-//#define SERVICE_URL @"http://192.168.5.159:8080/jinzht/"//本地
+//#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
+#define SERVICE_URL @"http://192.168.5.160:8080/jinzht/"//本地
 #define KEY @"jinzht_server_security"
 #define PLATFORM @"1"
 #define REGIST_TYPE @"0"
@@ -406,7 +406,7 @@
 //金条使用规则
 #define REQUEST_GOLD_USE_RULE @"requestGoldUseRule.action"
 //邀请送金条
-#define REQUEST_INVITE_CODE @"requestInviteCode.action"
+#define REQUEST_GOLD_INVITE_FRIEND @"requestGoldInviteFriends.action"
 
 
 //项目中心

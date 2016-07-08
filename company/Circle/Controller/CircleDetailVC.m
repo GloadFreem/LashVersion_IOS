@@ -41,6 +41,8 @@
 @property (nonatomic, strong) NSMutableArray *beCommentNameArray;
 @property (nonatomic, copy) NSString *selfId; //自己id
 
+@property (nonatomic, assign) NSInteger nameIndex;
+@property (nonatomic, assign) NSInteger index;//删除回复人ID
 @property (nonatomic, strong) CircleDetailCommentModel *deleteModel; //删除的模型
 @property (nonatomic, copy) NSString *deletePartner;
 
@@ -205,7 +207,6 @@
                 //将模型加到数据数组中
                 [_dataArray addObject:detailCommentModel];
             }
-            
             
 //            NSLog(@"dataArray的个数：---%ld",_dataArray.count);
             [_tableView reloadData];
@@ -517,16 +518,26 @@
     
     _flag = @"2";
     
-    _userId = [NSString stringWithFormat:@"%@",_atUserIdArray[indexPath.row]];
+    if (_atUserIdArray[indexPath.row]) {
+        _userId = [NSString stringWithFormat:@"%@",_atUserIdArray[indexPath.row]];
+        _index = [_atUserIdArray indexOfObject:_userId];
+    }
     
-    _beCommentName = [NSString stringWithFormat:@"%@",_beCommentNameArray[indexPath.row]];
+    if (_beCommentNameArray[indexPath.row]) {
+        _beCommentName = [NSString stringWithFormat:@"%@",_beCommentNameArray[indexPath.row]];
+        _nameIndex = [_beCommentNameArray indexOfObject:_beCommentName];
+    }
+    
+    
+    
+    
     
     if ([_selfId isEqualToString:_userId]) {
         
         _deleteModel = _dataArray[indexPath.row];
         
 //        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"不能回复自己"];
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
         __block CircleDetailVC* blockSelf = self;
         
         UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
@@ -541,27 +552,31 @@
         
         [self presentViewController:alertController animated:YES completion:nil];
         
-        
         return;
-    }
+    }else{
     
     [_textField becomeFirstResponder];
-    
+    }
 //    NSLog(@"回复人数组----%@",_atUserIdArray);
     
 }
 #pragma mark---删除评论---
 -(void)btnCertain:(id)sender
 {
+    [_atUserIdArray removeObjectAtIndex:_index];
+    [_beCommentNameArray removeObjectAtIndex:_nameIndex];
     [_dataArray removeObject:_deleteModel];
     [self.tableView reloadData];
     
 //    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"删除成功"];
     
-    //更新数据
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.deletePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_deleteModel.commentId],@"commentId", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:CIRCLE_COMMENT_DELETE postParam:dic type:0 delegate:self sel:@selector(requestDeleteComment:)];
+    if (_deleteModel.commentId) {
+        //更新数据
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.deletePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_deleteModel.commentId],@"commentId", nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:CIRCLE_COMMENT_DELETE postParam:dic type:0 delegate:self sel:@selector(requestDeleteComment:)];
+    }
+    
 }
 -(void)requestDeleteComment:(ASIHTTPRequest*)request
 {
@@ -572,10 +587,11 @@
         NSString *status =[jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
-            
         }
     }
 }
+
+
 //评论帖子
 -(void)sendComment:(UIButton*)btn
 {
@@ -597,8 +613,10 @@
     detailCommentModel.nameStr = [NSString stringWithFormat:@"%@%@",name,_beCommentName];
     detailCommentModel.contentStr = [NSString stringWithFormat:@"%@",self.textField.text];
     detailCommentModel.publicDate = [TDUtil CurrentDate];
-    
+    [_atUserIdArray insertObject:_selfId atIndex:_index];
+    [_beCommentNameArray insertObject:name atIndex:_nameIndex];
     [_dataArray insertObject:detailCommentModel atIndex:1];
+    
     [self.tableView reloadData];
     
     
@@ -730,6 +748,13 @@
     return width;
 }
 
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+
+{
+    
+    [self.textField resignFirstResponder];
+    
+}
 
 #pragma mark -textFiledDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{

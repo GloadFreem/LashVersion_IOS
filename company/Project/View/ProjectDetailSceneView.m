@@ -37,10 +37,15 @@
     NSMutableArray *_nextPageArray;
     UIButton *_moreBtn;
     NSTimer *_timer;
+    BOOL _isFirst;
 }
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if ([super initWithFrame:frame]) {
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopTimer) name:@"stopTimer" object:nil];
+        
+        _isFirst = YES;
         
         _scenePartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTSCENE];
         _commentPartner = [TDUtil encryKeyWithMD5:KEY action: REQUESTSCENECOMMENT];
@@ -92,8 +97,12 @@
                 _url = model.audioPath;
                 _sceneId = model.sceneId;
                 [self startLoadComment];
-                [self startLoadPPT];
-                [self startPlay];
+                
+                if (_isFirst) {
+                    [self startLoadPPT];
+                    [self startPlay];
+                    _isFirst = NO;
+                }
             }
             _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
             [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
@@ -134,6 +143,7 @@
                 [_pptArray addObject:modelArray[i]];
                 ProjectPPTModel *model = modelArray[i];
                 [_imageUrlArray addObject:model.imageUrl];
+                NSLog(@"实时下载最新数据");
             }
             
             
@@ -178,6 +188,10 @@
                 [_dataArray insertObject:cellModel atIndex:0];
             }
             [_tableView reloadData];
+            if (_dataArray.count > 1) {
+                [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+            }
+            
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self textOnly:[jsonDic valueForKey:@"message"]];
@@ -233,17 +247,20 @@
     [headerView addSubview:lightView];
     
     UIButton * startBtn = [[UIButton alloc]init];
+    
     [startBtn setImage:[UIImage imageNamed:@"iconfont-bofang"] forState:UIControlStateNormal];
-    //播放图片
-    [startBtn addTarget:self action:@selector(playClick:) forControlEvents:UIControlEventTouchUpInside];
     //暂停播放图片
     [startBtn setImage:[UIImage imageNamed:@"icon_pause"] forState:UIControlStateSelected];
+    
+    //播放图片
+    [startBtn addTarget:self action:@selector(playClick:) forControlEvents:UIControlEventTouchUpInside];
+    
     startBtn.contentMode = UIViewContentModeScaleAspectFit;
     [headerView addSubview:startBtn];
     [startBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(20);
         make.centerY.mas_equalTo(headerView.mas_centerY).offset(10);
-        make.width.height.mas_equalTo(28);
+        make.width.height.mas_equalTo(30);
     }];
     
     UILabel *label =[[UILabel alloc]init];
@@ -339,23 +356,7 @@
 //            static int h = 0,m = 0, s = 0;
             NSInteger current = CMTimeGetSeconds(time);
             
-            //实时监听遍历是否换页
-            for (NSInteger i = 0; i < _pptArray.count; i ++) {
-                ProjectPPTModel *model = _pptArray[i];
-                if (current >= model.startTime && current <= model.endTime) {
-                    
-//                    NSLog(@"当前ppt页数----%ld",(long)model.sortIndex);
-                    NSInteger currentPage = _bannerView.scrollView.contentOffset.x/SCREENWIDTH;
-                    if (currentPage == _pptArray.count -2) {
-                        _page ++;
-                        [self startLoadPPT];
-                    }
-                    
-                    [_bannerView nextPage: model.sortIndex];
-//                    NSLog(@"翻到-----%ld页",(long)model.sortIndex);
-                }
-            }
-            
+           
             if (current) {
                 
                 if (current <= 59) {
@@ -374,6 +375,25 @@
                 }
                 
             }
+            
+            //实时监听遍历是否换页
+            for (NSInteger i = 0; i < _pptArray.count; i ++) {
+                ProjectPPTModel *model = _pptArray[i];
+                if (current >= model.startTime && current <= model.endTime) {
+                    
+                    //                    NSLog(@"当前ppt页数----%ld",(long)model.sortIndex);
+                    NSInteger currentPage = _bannerView.scrollView.contentOffset.x/SCREENWIDTH;
+                    if (currentPage == _pptArray.count -2) {
+                        _page ++;
+                        [self startLoadPPT];
+                    }
+                    
+                    [_bannerView nextPage: model.sortIndex];
+                    NSLog(@"翻到-----%ld页",(long)model.sortIndex);
+                }
+            }
+            
+            
             //当前时间
             CMTime currentTime=Wplayer.currentItem.currentTime;
             //总时间
@@ -381,6 +401,9 @@
             //进度＝当前时间/总时间
             float pro=CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(duration);
             [_slider setValue:pro animated:YES];
+            
+            
+            
             
         }];
     }
@@ -489,7 +512,7 @@
     return width;
 }
 
--(void)dealloc{
+-(void)stopTimer{
     [_timer invalidate];
 }
 

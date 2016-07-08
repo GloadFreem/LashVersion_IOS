@@ -66,10 +66,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _iconWidth.constant = 83 ;
-    _iconBtn.layer.cornerRadius = _iconWidth.constant/2;
-    _iconHeight.constant = 83 ;
+    _iconWidth.constant =_iconHeight.constant= 83 *WIDTHCONFIG ;
+    _iconBtn.layer.cornerRadius = 41.5 *WIDTHCONFIG;
     _iconBtn.layer.masksToBounds = YES;
+//    _iconBtn.translatesAutoresizingMaskIntoConstraints = YES;
     
     // Do any additional setup after loading the view from its nib.
     self.signPartner = [TDUtil encryKeyWithMD5:KEY action:SIGNVERIFY];
@@ -82,11 +82,7 @@
     
 }
 
--(void)awakeFromNib
-{
-    
-    
-}
+
 -(void)loadShareData
 {
     NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"3",@"type", nil];
@@ -139,7 +135,11 @@
             ProjectAuthentics *authentics = authenticsArray[0];
             
             _nameStr = authentics.name;
-            _companyStr = [NSString stringWithFormat:@"%@ | %@",authentics.companyName,authentics.position];
+            if (authentics.companyName && authentics.companyName.length && authentics.position && authentics.position.length) {
+                _companyStr = [NSString stringWithFormat:@"%@ | %@",authentics.companyName,authentics.position];
+            }else{
+                _companyStr = @"";
+            }
             
             _identiyTypeId = authentics.identiytype.identiyTypeId;
             _authId = authentics.authId;
@@ -155,13 +155,21 @@
     
 //    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
     
-    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage new] options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    
+    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"] options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [_iconBtn setBackgroundImage:image forState:UIControlStateNormal];
         }
     }];
     
-    _name.text = _nameStr;
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    NSString *nickName = [data objectForKey:@"nickName"];
+    if (_nameStr && _nameStr.length) {
+        _name.text = _nameStr;
+    }else{
+        _name.text = nickName;
+    }
+    
     _company.text = _companyStr;
     
 }
@@ -442,6 +450,7 @@
         }
     }
 }
+
 
 -(void)requestCheckUser:(ASIHTTPRequest *)request{
     NSString *xmlString = [TDUtil convertGBKDataToUTF8String:request.responseData];

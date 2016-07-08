@@ -140,13 +140,13 @@
     .leftSpaceToView(_shuView,5)
     .bottomEqualToView(_companyLabel)
     .heightIs(12);
-    [_positionLabel setSingleLineAutoResizeWithMaxWidth:150];
+    [_positionLabel setSingleLineAutoResizeWithMaxWidth:80];
     
     _timeLabel.sd_layout
     .rightSpaceToView(contentView,margin)
     .bottomEqualToView(_companyLabel)
     .heightIs(12);
-    [_timeLabel setSingleLineAutoResizeWithMaxWidth:150];
+    [_timeLabel setSingleLineAutoResizeWithMaxWidth:130];
     
     _contentLabel.sd_layout
     .leftEqualToView(_iconView)
@@ -195,7 +195,7 @@
         [_praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
     }
     //头像
-    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconNameStr]] placeholderImage:[UIImage new]];
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconNameStr]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     //防止单行文本label在重用时宽度计算不准的问题
     _nameLabel.text = model.nameStr;
     [_nameLabel sizeToFit];
