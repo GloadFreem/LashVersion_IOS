@@ -58,7 +58,7 @@
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     [leftback addTarget:self action:@selector(leftback) forControlEvents:UIControlEventTouchUpInside];
     leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
 }
@@ -536,9 +536,9 @@
     [super viewWillAppear:animated];
     _isClick = NO;
     //隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
 -(void)viewWillDisappear:(BOOL)animated
 {

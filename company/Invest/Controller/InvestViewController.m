@@ -572,9 +572,11 @@
         InvestListModel *listModel = _investPersonArray[indexPath.row];
         InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
         //隐藏tabbar
-        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//        
+//        [delegate.tabBar tabBarHidden:YES animated:NO];
         
-        [delegate.tabBar tabBarHidden:YES animated:NO];
+        
         vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
         vc.titleText = @"个人 · 简介";
         vc.investorId = listModel.userId;
@@ -594,9 +596,11 @@
             OrganizationFirstModel *model = _investOrganizationArray[indexPath.row];
             InvestWebViewController *webView = [InvestWebViewController new];
             //隐藏tabbar
-            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//            
+//            [delegate.tabBar tabBarHidden:YES animated:NO];
+//            
             
-            [delegate.tabBar tabBarHidden:YES animated:NO];
             webView.url = model.url;
             [self.navigationController pushViewController:webView animated:YES];
 
@@ -608,9 +612,10 @@
             
             InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
             //隐藏tabbar
-            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//            
+//            [delegate.tabBar tabBarHidden:YES animated:NO];
             
-            [delegate.tabBar tabBarHidden:YES animated:NO];
             vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
             vc.investorId = listModel.userId;
             vc.titleText = @"机构 · 简介";
@@ -631,7 +636,7 @@
 
         InvestThinkTankDetailVC * vc = [InvestThinkTankDetailVC new];
         //隐藏tabbar
-        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
         vc.investorId = listModel.userId;
         vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
         
@@ -640,7 +645,7 @@
         self.investModel = listModel;
         vc.viewController =self;
         vc.type = @"7";
-        [delegate.tabBar tabBarHidden:YES animated:NO];
+//        [delegate.tabBar tabBarHidden:YES animated:NO];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -705,8 +710,8 @@
 {
     InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
     vc.model = model;
     vc.viewController = self;
     
@@ -744,7 +749,7 @@
             }else{
                 //刷新cell
                 
-                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%d)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
                 [cell.collectBtn setBackgroundColor:btnGreen];
             }
         }
@@ -781,7 +786,7 @@
                 
                 //刷新cell
                 
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%d)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
                 [cell.attentionBtn setBackgroundColor:btnGreen];
             }
         }
@@ -799,6 +804,7 @@
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
 }
+
 -(void)requestInvestorCollect:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
@@ -826,8 +832,9 @@
 {
     InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
     vc.model = model;
     
     [self.navigationController pushViewController:vc animated:YES];
@@ -848,6 +855,70 @@
         flag = @"2";
         
     }
+    
+    switch (_tableViewSelected) {
+        case 1:{
+            InvestListModel * model = (InvestListModel*)klistModel;
+            InvestPersonCell * cell = (InvestPersonCell*)klistCell;
+            if (model.collected) {
+                //刷新cell
+                model.collectCount ++;
+                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                [cell.collectBtn setBackgroundColor:btnCray];
+            }else{
+                //刷新cell
+                
+                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.collectBtn setBackgroundColor:btnGreen];
+            }
+        }
+            break;
+        case 2:{
+            OrganizationSecondModel * model = (OrganizationSecondModel*)klistModel;
+            InvestOrganizationSecondCell * cell = (InvestOrganizationSecondCell*)klistCell;
+            if (model.collected) {
+                
+                //刷新cell
+                model.collectCount++;
+                
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnCray];
+            }else{
+                //关注数量减1
+                
+                //刷新cell
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnGreen];
+            }
+        }
+            break;
+        case 3:{
+            InvestListModel * model = (InvestListModel*)klistModel;
+            ThinkTankCell * cell = (ThinkTankCell*)klistCell;
+            if (model.collected) {
+                //刷新cell
+                model.collectCount ++;
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnCray];
+            }else{
+                //关注数量减1
+                
+                //刷新cell
+                
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnGreen];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    
+    
+    
+    [self.tableView reloadData];
+    
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
@@ -871,11 +942,78 @@
         flag = @"2";
         
     }
+    
+    switch (_tableViewSelected) {
+        case 1:{
+            InvestListModel * model = (InvestListModel*)klistModel;
+            InvestPersonCell * cell = (InvestPersonCell*)klistCell;
+            if (model.collected) {
+                //刷新cell
+                model.collectCount ++;
+                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                [cell.collectBtn setBackgroundColor:btnCray];
+            }else{
+                //刷新cell
+                
+                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.collectBtn setBackgroundColor:btnGreen];
+            }
+        }
+            break;
+        case 2:{
+            OrganizationSecondModel * model = (OrganizationSecondModel*)klistModel;
+            InvestOrganizationSecondCell * cell = (InvestOrganizationSecondCell*)klistCell;
+            if (model.collected) {
+                
+                //刷新cell
+                model.collectCount++;
+                
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnCray];
+            }else{
+                //关注数量减1
+                
+                //刷新cell
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnGreen];
+            }
+        }
+            break;
+        case 3:{
+            InvestListModel * model = (InvestListModel*)klistModel;
+            ThinkTankCell * cell = (ThinkTankCell*)klistCell;
+            if (model.collected) {
+                //刷新cell
+                model.collectCount ++;
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnCray];
+            }else{
+                //关注数量减1
+                
+                //刷新cell
+                
+                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                [cell.attentionBtn setBackgroundColor:btnGreen];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    
+    
+    
+    [self.tableView reloadData];
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
         
 }
+
+
+
+
 
 #pragma mark- 视图即将显示
 -(void)viewWillAppear:(BOOL)animated
@@ -898,6 +1036,12 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    //    隐藏tabbar
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    delegate.tabBar.hidesBottomBarWhenPushed = YES;
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
     
 }
 

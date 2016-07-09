@@ -12,7 +12,6 @@
 #import "ActionDetailModel.h"
 #import "ActivityAttendModel.h"
 #import "ActivityBlackCoverView.h"
-#import "ActivityDetailHeaderCell.h"
 #import "ActivityDetailHeaderModel.h"
 #import "ActivityDetailExerciseCell.h"
 #import "ActivityDetailListCell.h"
@@ -21,6 +20,8 @@
 #import "ActivityDetailExiciseContentCell.h"
 #import "ActivityAttendListViewController.h"
 #import "ActivityCommentListViewController.h"
+
+#import "ActivityDetailHeaderCell.h"
 
 #import "CircleShareBottomView.h"
 
@@ -55,6 +56,8 @@ static CGFloat textFieldH = 40;
 @property (nonatomic, copy) NSString *contentText;
 @property (nonatomic,strong)UIView * bottomView;
 
+@property (nonatomic, strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation ActivityDetailVC
@@ -62,15 +65,25 @@ static CGFloat textFieldH = 40;
     CGFloat _totalKeybordHeight;
     //底部点赞评论
     ActivityDetailFooterView *footerView;
+    
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
     // Do any additional setup after loading the view.
     self.automaticallyAdjustsScrollViewInsets  = NO;
     
     [self setUpNavBar];
-    //初始化 控件
-    [self createUI];
+    
     
     //    [self setupTextField];
     
@@ -79,14 +92,11 @@ static CGFloat textFieldH = 40;
     self.actionAttendPartner = [TDUtil encryKeyWithMD5:KEY action:ATTENDACTION];
     self.actionCommentListPartner = [TDUtil encryKeyWithMD5:KEY action:COMMENTLIST];
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:SHAREACTION];
-    
-    //点赞评论
-    [self loadActionCommentData];
+    //初始化 控件
+    [self createUI];
     
     //请求数据
     [self loadActionDetailData];
-    //获取项目参加人数
-    [self loadActionAttendData];
     
     //获取分享数据
     [self loadShareData];
@@ -98,7 +108,7 @@ static CGFloat textFieldH = 40;
     leftback.tag = 0;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
 }
@@ -107,12 +117,12 @@ static CGFloat textFieldH = 40;
 -(void)createUI
 {
     _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 0.0001f)];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.bounces = NO;
-    _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 0.01f)];
     [self.view addSubview:_tableView];
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.view.mas_top);
@@ -120,12 +130,18 @@ static CGFloat textFieldH = 40;
         make.right.mas_equalTo(self.view.mas_right);
         make.bottom.mas_equalTo(self.view.mas_bottom).offset(-50);
     }];
-    //    ActivityDetailFooterView *footerView = [ActivityDetailFooterView new];
-    //    footerView.frame = CGRectMake(0, 0, SCREENWIDTH, 180);
-    //    footerView.model = _dataSource[1];
-    //    footerView.backgroundColor = [UIColor redColor];
     
-    //    _tableView.tableFooterView = footerView;
+    
+//    if (!headerView) {
+//        headerView = [ActivityDetailHeaderView new];
+//        [headerView setMoreButtonClickedBlock:^(BOOL isOpen) {
+//            _headerModel.isOpen = !_headerModel.isOpen;
+//        }];
+//    }
+//    headerView.height = 360;
+//    headerView.model = _headerModel;
+//    _tableView.tableHeaderView = headerView;
+    
     //报名按钮
     _signUpBtn = [[UIButton alloc]init];
     _signUpBtn.backgroundColor = orangeColor;
@@ -133,6 +149,14 @@ static CGFloat textFieldH = 40;
     [_signUpBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_signUpBtn.titleLabel setFont:BGFont(19)];
     [_signUpBtn addTarget:self action:@selector(attendAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if(_activityModel.attended)
+    {
+        [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
+        [_signUpBtn setBackgroundColor:GrayColor];
+        [_signUpBtn setEnabled:NO];
+    }
+    
     [self.view addSubview:_signUpBtn];
     //分享按钮
     _shareBtn = [[UIButton alloc]init];
@@ -286,10 +310,19 @@ static CGFloat textFieldH = 40;
             //设置数据模型
             self.headerModel = model;
             
-            //            NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-            //            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [self.tableView reloadData];
-            [SVProgressHUD dismiss];
+            //如果该数据不为空
+            if (_dataArray.count) {
+                [_dataArray insertObject:model atIndex:0];
+            }else{
+                [_dataArray addObject:model];
+            }
+            
+            //获取项目参加人数
+            [self loadActionAttendData];
+            
+//            NSLog(@"打印header模型---%@",self.headerModel);
+
+//
         }
     }
 }
@@ -308,7 +341,7 @@ static CGFloat textFieldH = 40;
 -(void)requestActionAttendList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -317,22 +350,26 @@ static CGFloat textFieldH = 40;
             if([jsonDic[@"data"] isKindOfClass:NSArray.class])
             {
                 NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
-                
-                ActivityAttendModel * baseModel;
-                if(!self.dataAttendSource)
-                {
-                    self.dataAttendSource = [NSMutableArray new];
+                if (dataArray.count) {
+                    ActivityAttendModel * baseModel;
+                   
+                    [_dataArray addObject:self.activityModel];
+                    
+                    [_dataArray addObject:[NSString stringWithFormat:@"%ld",(unsigned long)dataArray.count]];
+                    
+                    for(NSDictionary * dic in dataArray)
+                    {
+                        //解析
+                        baseModel =[ActivityAttendModel mj_objectWithKeyValues:dic];
+                        
+                        [self.dataArray addObject:baseModel];
+                    }
+
+                    //点赞评论
+                    [self loadActionCommentData];
+                    
                 }
                 
-                for(NSDictionary * dic in dataArray)
-                {
-                    //解析
-                    baseModel =[ActivityAttendModel mj_objectWithKeyValues:dic];
-                    //替换模型
-                    [self.dataAttendSource addObject:baseModel];
-                }
-                
-                [self.tableView reloadData];
             }
             
         }
@@ -388,12 +425,6 @@ static CGFloat textFieldH = 40;
             
             self.commentCellModel.commentItemsArray  = [tempArray copy];
             
-            //模拟随机点赞数据
-            int likeRandom = arc4random_uniform(3);
-            
-            //测试
-            likeRandom = 30;
-            
             NSMutableArray *tempLikes = [NSMutableArray new];
             for (int i = 0; i < dataPriseArray.count; i++) {
                 ActivityDetailCellLikeItemModel *model = [ActivityDetailCellLikeItemModel new];
@@ -403,9 +434,7 @@ static CGFloat textFieldH = 40;
             }
             self.commentCellModel.likeItemsArray = [tempLikes copy];
             
-            //            footerView.model = self.commentCellModel;
             
-            //            [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(layout:) userInfo:nil repeats:NO];
             [self performSelector:@selector(layout:) withObject:nil afterDelay:0.1];
             
         }
@@ -438,7 +467,8 @@ static CGFloat textFieldH = 40;
     [_textField resignFirstResponder];
 }
 
-#pragma mark -tableViewDataSource
+#pragma mark --------------tableViewDataSource---------------------
+
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     if (!footerView) {
@@ -467,36 +497,32 @@ static CGFloat textFieldH = 40;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger count = 0;
-    if (self.headerModel) {
-        count=3;
+    if (self.dataArray.count) {
+        if (self.dataArray.count >=5) {
+            return 8;
+        }else{
+            return 3 + self.dataArray.count;
+        }
     }
-    return self.dataAttendSource.count+count;
+    return 0;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(self.headerModel)
-    {
+    if (_dataArray.count) {
         if (indexPath.row == 0) {
             return [self.tableView cellHeightForIndexPath:indexPath model:self.headerModel keyPath:@"model" cellClass:[ActivityDetailHeaderCell class] contentViewWidth:[self cellContentViewWith]];
-        }else if(indexPath.row == 1)
-        {
+        }
+        if (indexPath.row == 1) {
             return 140;
-        }else if(indexPath.row == 2)
-        {
+        }
+        if (indexPath.row == 2) {
             return 48;
         }
-    }else{
-        if (indexPath.row == 0) {
-            return 140;;
-        }else if(indexPath.row == 1)
-        {
-            return 48;
-        }
+        return 67;
     }
     
-    return 67;
+    return 0.00000000001f;
     
 }
 -(CGFloat)tableView:(UITableView *)tableView estimatedHeightForFooterInSection:(NSInteger)section{
@@ -527,88 +553,81 @@ static CGFloat textFieldH = 40;
     }
     
     [self.tableView reloadData];
+    [SVProgressHUD dismiss];
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(self.headerModel)
-    {
-        if (indexPath.row  == 0) {
-            static NSString *cellId =@"ActivityDetailHeaderCell";
-            ActivityDetailHeaderCell *cell =[tableView dequeueReusableCellWithIdentifier:kActivityDetailHeaderCellId];
-            if (!cell) {
-                cell = [[ActivityDetailHeaderCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-            }
-            cell.indexPath = indexPath;
-            __weak typeof (self) weakSelf = self;
-            if (!cell.moreButtonClickedBlock) {
-                [cell setMoreButtonClickedBlock:^(NSIndexPath *indexPath) {
-                    ActivityDetailHeaderModel *model =weakSelf.headerModel;
-                    model.isOpen = !model.isOpen;
-                    [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                }];
-            }
-            cell.model = self.headerModel;
-            return cell;
-        }else if (indexPath.row == 1){
-            static NSString *cellId = @"ActivityDetailExiciseContentCell";
-            ActivityDetailExiciseContentCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
-            if (!cell) {
-                cell = [[[NSBundle mainBundle]loadNibNamed:cellId owner:nil options:nil] lastObject];
-            }
-            cell.model = self.activityModel;
-            return cell;
-        }else if (indexPath.row == 2){
-            static NSString *cellId = @"ActivityDetailExerciseCell";
-            ActivityDetailExerciseCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
-            if (!cell) {
-                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
-                cell.countLabel.text = STRING(@"(%ld)", (unsigned long)self.dataAttendSource.count);
-            }
-            
-            return cell;
-        }else if(indexPath.row < 8)
-        {
-            static NSString *cellId = @"ActivityDetailListCell";
-            ActivityDetailListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-            if (!cell) {
-                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
-            }
-            
-            //设置模型
-            cell.model = [self.dataAttendSource objectAtIndex:indexPath.row-3];
-            return cell;
-        }
-    }else{
-        if (indexPath.row == 0){
-            static NSString *cellId = @"ActivityDetailExiciseContentCell";
-            ActivityDetailExiciseContentCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
-            if (!cell) {
-                cell = [[[NSBundle mainBundle]loadNibNamed:cellId owner:nil options:nil] lastObject];
-            }
-            cell.model = self.activityModel;
-            return cell;
-        }else if (indexPath.row == 1){
-            static NSString *cellId = @"ActivityDetailExerciseCell";
-            ActivityDetailExerciseCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
-            if (!cell) {
-                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
-            }
-            
-            return cell;
-        }else
-        {
-            static NSString *cellId = @"ActivityDetailListCell";
-            ActivityDetailListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-            if (!cell) {
-                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
-            }
-            cell.model = [self.dataAttendSource objectAtIndex:indexPath.row-2];
-            //设置模型
-            return cell;
-        }
-    }
     
+    if (_dataArray.count) {
+        
+        
+            if (indexPath.row  == 0) {
+                static NSString *cellId =@"ActivityDetailHeaderCell";
+                ActivityDetailHeaderCell *cell =[tableView dequeueReusableCellWithIdentifier:kActivityDetailHeaderCellId];
+                if (!cell) {
+                    cell = [[ActivityDetailHeaderCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+                }
+                cell.indexPath = indexPath;
+                __weak typeof (self) weakSelf = self;
+                if (!cell.moreButtonClickedBlock) {
+                    [cell setMoreButtonClickedBlock:^(NSIndexPath *indexPath) {
+                        ActivityDetailHeaderModel *model =weakSelf.headerModel;
+                        model.isOpen = !model.isOpen;
+                        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    }];
+                }
+                if (_dataArray[indexPath.row]) {
+                    cell.model = _dataArray[indexPath.row];
+                }
+                return cell;
+            }
+        
+       
+        
+            if (indexPath.row == 1) {
+                static NSString *cellId = @"ActivityDetailExiciseContentCell";
+                ActivityDetailExiciseContentCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
+                if (!cell) {
+                    cell = [[[NSBundle mainBundle]loadNibNamed:cellId owner:nil options:nil] lastObject];
+                }
+                if (_dataArray[indexPath.row]) {
+                    cell.model = _dataArray[indexPath.row];
+                    //               cell.model = self.activityModel;
+                    return cell;
+                }
+            }
+        
+        
+        
+            if (indexPath.row == 2) {
+                static NSString *cellId = @"ActivityDetailExerciseCell";
+                ActivityDetailExerciseCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
+                if (!cell) {
+                    cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+                    
+                }
+                if (_dataArray[indexPath.row]) {
+                    cell.countLabel.text =  [NSString stringWithFormat:@"(%@)",_dataArray[indexPath.row]];
+                    //                cell.countLabel.text = STRING(@"(%ld)", (unsigned long)self.dataAttendSource.count);
+                    return cell;
+                }
+                
+            }
+        
+            static NSString *cellId = @"ActivityDetailListCell";
+            ActivityDetailListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!cell) {
+                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+            }
+            //设置模型
+            if (_dataArray[indexPath.row]) {
+                cell.model = [self.dataArray objectAtIndex:indexPath.row];
+                return cell;
+            }
+       
+        
+    }
     return nil;
 }
 
@@ -725,7 +744,8 @@ static CGFloat textFieldH = 40;
             case 3:{
                 // 短信
                 arr = @[UMShareToSms];
-                shareContent = shareContentString;
+                
+                shareContent = [NSString stringWithFormat:@"%@\n%@",shareContentString,_shareUrl];;
                 
                 //                NSLog(@"分享短信");
             }
@@ -778,6 +798,9 @@ static CGFloat textFieldH = 40;
     [super viewWillAppear:animated];
     [[IQKeyboardManager sharedManager] setEnableAutoToolbar:NO];
     
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -786,9 +809,7 @@ static CGFloat textFieldH = 40;
     
     [[IQKeyboardManager sharedManager] setEnableAutoToolbar:YES]
     ;
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
-    [delegate.tabBar tabBarHidden:NO animated:NO];
     self.navigationController.navigationBar.hidden = NO;
     
 }
@@ -962,7 +983,9 @@ static CGFloat textFieldH = 40;
     attendView.delegate = self;
     attendView.tag = 1000;
     [self.view addSubview:attendView];
-    
+    [attendView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
 }
 
 #pragma ActivityBlackCoverViewDelegate
@@ -993,7 +1016,7 @@ static CGFloat textFieldH = 40;
 -(void)requestAttendAction:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -1006,6 +1029,17 @@ static CGFloat textFieldH = 40;
         {
             [view removeFromSuperview];
         }
+        
+        //更改本页报名按钮状态
+        [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
+        [_signUpBtn setBackgroundColor:GrayColor];
+        [_signUpBtn setEnabled:NO];
+        //更改上一页cell报名按钮状态
+        _activityModel.attended = YES;
+        NSInteger index = [_viewController.dataSourceArray indexOfObject:_activityModel];
+        [_viewController.dataSourceArray replaceObjectAtIndex:index withObject:_activityModel];
+        [_viewController.tableView reloadData];
+        
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
     }
 }

@@ -32,6 +32,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
     // Do any additional setup after loading the view.
     //获得partner
     self.projectPartner = [TDUtil encryKeyWithMD5:KEY action:PROJECTCENTER];
@@ -120,7 +125,7 @@
     leftback.tag = 0;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
     

@@ -126,7 +126,7 @@
     .leftSpaceToView(_nameLabel,10)
     .bottomEqualToView(_nameLabel)
     .heightIs(12);
-    [_addressLabel setSingleLineAutoResizeWithMaxWidth:150];
+    [_addressLabel setSingleLineAutoResizeWithMaxWidth:180];
     
     
     
@@ -146,7 +146,7 @@
     .rightSpaceToView(contentView,margin)
     .bottomEqualToView(_companyLabel)
     .heightIs(12);
-    [_timeLabel setSingleLineAutoResizeWithMaxWidth:130];
+    [_timeLabel setSingleLineAutoResizeWithMaxWidth:80];
     
     _contentLabel.sd_layout
     .leftEqualToView(_iconView)
@@ -209,7 +209,7 @@
     _positionLabel.text = model.positionStr;
     [_positionLabel sizeToFit];
     
-    _timeLabel.text = model.timeSTr;
+    _timeLabel.text = [TDUtil getDateCha:model.timeSTr];
     [_timeLabel sizeToFit];
     
     _contentLabel.text = model.msgContent;

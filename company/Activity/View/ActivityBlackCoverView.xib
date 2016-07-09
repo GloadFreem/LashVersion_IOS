@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,7 +15,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y25-O3-hIH">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
-                        <view alpha="0.69999999999999996" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q3u-Dz-07U">
+                        <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q3u-Dz-07U">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
@@ -38,13 +39,13 @@
                                     </constraints>
                                     <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                                     <connections>
                                         <outlet property="delegate" destination="-1" id="iLp-Ch-kXM"/>
                                     </connections>
                                 </textView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zom-vI-K5c">
-                                    <rect key="frame" x="18" y="125" width="141" height="42"/>
+                                    <rect key="frame" x="18" y="125" width="140.5" height="42"/>
                                     <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="145" id="Ps5-Wa-MP0"/>
@@ -63,7 +64,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kyb-Vg-LD8">
-                                    <rect key="frame" x="187" y="125" width="140" height="42"/>
+                                    <rect key="frame" x="186.5" y="125" width="140.5" height="42"/>
                                     <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="145" id="8ST-5y-QtR"/>
@@ -109,10 +110,26 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstItem="Q3u-Dz-07U" firstAttribute="leading" secondItem="y25-O3-hIH" secondAttribute="leading" id="1XX-Me-BjC"/>
+                        <constraint firstAttribute="trailing" secondItem="Q3u-Dz-07U" secondAttribute="trailing" id="4Ae-7j-625"/>
+                        <constraint firstItem="Q3u-Dz-07U" firstAttribute="top" secondItem="y25-O3-hIH" secondAttribute="top" id="GQi-IO-Rkh"/>
                         <constraint firstItem="vKO-n6-Fbx" firstAttribute="leading" secondItem="y25-O3-hIH" secondAttribute="leading" constant="15" id="K7W-Ka-JdO"/>
+                        <constraint firstItem="Q3u-Dz-07U" firstAttribute="top" secondItem="y25-O3-hIH" secondAttribute="topMargin" id="OwA-6D-Yzr"/>
                         <constraint firstItem="vKO-n6-Fbx" firstAttribute="centerY" secondItem="y25-O3-hIH" secondAttribute="centerY" constant="-150" id="YDp-Ws-qhW"/>
+                        <constraint firstItem="Q3u-Dz-07U" firstAttribute="leading" secondItem="y25-O3-hIH" secondAttribute="leadingMargin" id="cEk-Ba-7iy"/>
+                        <constraint firstAttribute="bottom" secondItem="Q3u-Dz-07U" secondAttribute="bottom" id="dgd-ky-fJX"/>
+                        <constraint firstAttribute="bottomMargin" secondItem="Q3u-Dz-07U" secondAttribute="bottom" id="trF-X6-cbB"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="Q3u-Dz-07U" secondAttribute="trailing" id="vBf-uz-Gr4"/>
                         <constraint firstAttribute="trailing" secondItem="vKO-n6-Fbx" secondAttribute="trailing" constant="15" id="xYv-Kv-vcB"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="OwA-6D-Yzr"/>
+                            <exclude reference="cEk-Ba-7iy"/>
+                            <exclude reference="trF-X6-cbB"/>
+                            <exclude reference="vBf-uz-Gr4"/>
+                        </mask>
+                    </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

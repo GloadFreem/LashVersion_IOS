@@ -634,7 +634,12 @@
 {
     [super viewWillDisappear:animated];
     
+//    隐藏tabbar
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    delegate.tabBar.hidesBottomBarWhenPushed = YES;
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
+
 -(void)createUI
 {
 
@@ -705,8 +710,8 @@
         
         ProjectLetterViewController *letter = [ProjectLetterViewController new];
         //隐藏tabbar
-        AppDelegate *delegate = (AppDelegate*)[[UIApplication  sharedApplication] delegate];
-        [delegate.tabBar tabBarHidden:YES animated:NO];
+//        AppDelegate *delegate = (AppDelegate*)[[UIApplication  sharedApplication] delegate];
+//        [delegate.tabBar tabBarHidden:YES animated:NO];
         
         [self.navigationController pushViewController:letter animated:YES];
         
@@ -747,15 +752,7 @@
 
 
 
-#pragma mark -设置区头
-//-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    ProjectBannerView * bannerView = [[ProjectBannerView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 237)];
-//    NSArray * arr = [NSArray array];
-//    [bannerView relayoutWithModelArray:arr];
-//    [bannerView setSelectedNum:20];
-//    return bannerView;
-//}
+
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -800,9 +797,9 @@
         model = _projectModelArray[indexPath.row];
         detail.projectId = model.projectId;
         //隐藏tabbar
-        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-        
-        [delegate.tabBar tabBarHidden:YES animated:NO];
+//        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//        
+//        [delegate.tabBar tabBarHidden:YES animated:NO];
         
         [self.navigationController pushViewController:detail animated:YES];
     }else{
@@ -812,9 +809,9 @@
         
         detail.projectId = model.projectId;
         //隐藏tabbar
-        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-        
-        [delegate.tabBar tabBarHidden:YES animated:NO];
+//        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//        
+//        [delegate.tabBar tabBarHidden:YES animated:NO];
         
         [self.navigationController pushViewController:detail animated:YES];
     }
@@ -845,18 +842,18 @@
             
             detail.projectId = model.projectId;
             //隐藏tabbar
-            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-            
-            [delegate.tabBar tabBarHidden:YES animated:NO];
+//            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//            
+//            [delegate.tabBar tabBarHidden:YES animated:NO];
             
             [self.navigationController pushViewController:detail animated:YES];
         }else{
             ProjectDetailController * detail = [[ProjectDetailController alloc]init];
             detail.projectId = model.projectId;
             //隐藏tabbar
-            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-            
-            [delegate.tabBar tabBarHidden:YES animated:NO];
+//            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//            
+//            [delegate.tabBar tabBarHidden:YES animated:NO];
             
             [self.navigationController pushViewController:detail animated:YES];
         }
@@ -866,9 +863,9 @@
     vc.url = model.url;
     vc.model = model;
     //隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     [self.navigationController pushViewController:vc animated:YES];
     }

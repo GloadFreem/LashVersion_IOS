@@ -60,7 +60,7 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
     
     //更多
     _moreBtn = [UIButton new];
-    [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_acticity_more"] forState:UIControlStateNormal];
+    [_moreBtn setImage:[UIImage imageNamed:@"icon_acticity_more"] forState:UIControlStateNormal];
 
 
     [_moreBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -101,7 +101,7 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
     _moreBtn.sd_layout
     .centerXEqualToView(_contentLabel)
     .topSpaceToView(_pictureContainerView,16*HEIGHTCONFIG)
-    .widthIs(21)
+    .widthIs(SCREENHEIGHT)
     .heightIs(23);
     
 }
@@ -125,11 +125,11 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
 
             _contentLabel.sd_layout.maxHeightIs(MAXFLOAT);
 //            _pictureContainerView.sd_layout.maxHeightIs(MAXFLOAT);
-            [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_acticity_close"] forState:UIControlStateNormal];
+            [_moreBtn setImage:[UIImage imageNamed:@"icon_acticity_close"] forState:UIControlStateNormal];
         }else{
             _contentLabel.sd_layout.maxHeightIs(maxContentLabelHeight);
 //            _pictureContainerView.sd_layout.maxHeightIs(maxPictureViewHeight);
-            [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_acticity_more"] forState:UIControlStateNormal];
+            [_moreBtn setImage:[UIImage imageNamed:@"icon_acticity_more"] forState:UIControlStateNormal];
             
         }
     }

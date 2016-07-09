@@ -38,6 +38,7 @@
     UIButton *_moreBtn;
     NSTimer *_timer;
     BOOL _isFirst;
+    MP3Player*_player;
 }
 -(instancetype)initWithFrame:(CGRect)frame
 {
@@ -514,6 +515,8 @@
 
 -(void)stopTimer{
     [_timer invalidate];
+    
+    
 }
 
 @end

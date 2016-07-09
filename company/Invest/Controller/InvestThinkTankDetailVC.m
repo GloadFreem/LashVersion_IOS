@@ -60,6 +60,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
     // Do any additional setup after loading the view from its nib.
     //1、设置当有导航栏自动添加64高度的属性为NO
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -177,7 +182,7 @@
     _leftBack.tag = 0;
 //    _leftBack.size = CGSizeMake(45, 30);
 //    _leftBack.size = CGSizeMake(80, 30);
-    _leftBack.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    _leftBack.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [_leftBack addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_scrollView addSubview:_leftBack];
     
@@ -204,14 +209,14 @@
     _name = [[UILabel alloc]init];
     _name.textColor = [UIColor blackColor];
     _name.textAlignment = NSTextAlignmentCenter;
-    _name.font = [UIFont systemFontOfSize:15];
+    _name.font = [UIFont systemFontOfSize:17];
     [_whiteImage addSubview:_name];
     _name.text = _model.user.name;
     //职位
     _posiotion = [[UILabel alloc]init];
     _posiotion.textAlignment = NSTextAlignmentLeft;
     _posiotion.textColor = [UIColor darkTextColor];
-    _posiotion.font = [UIFont systemFontOfSize:10];
+    _posiotion.font = [UIFont systemFontOfSize:12];
     [_whiteImage addSubview:_posiotion];
     DetailAuthentics *authentics = _model.user.authentics[0];
     
@@ -230,7 +235,7 @@
     //地址
     _address  = [[UILabel alloc]init];
     _address.textColor = [UIColor darkTextColor];
-    _address.font = [UIFont systemFontOfSize:10];
+    _address.font = [UIFont systemFontOfSize:12];
     _address.textAlignment = NSTextAlignmentCenter;
     [_whiteImage addSubview:_address];
     DetailCity *city = authentics.city;
@@ -264,7 +269,7 @@
     _fieldContent = [[UILabel alloc]init];
     _fieldContent.textColor = [UIColor whiteColor];
     _fieldContent.textAlignment = NSTextAlignmentLeft;
-    _fieldContent.font = [UIFont systemFontOfSize:12];
+    _fieldContent.font = [UIFont systemFontOfSize:13];
 //    _fieldContent.preferredMaxLayoutWidth = maxWidth;
     _fieldContent.numberOfLines =0;
     
@@ -296,7 +301,7 @@
     _personContent = [[UILabel alloc]init];
     _personContent.textAlignment = NSTextAlignmentLeft;
     _personContent.textColor = [UIColor whiteColor];
-    _personContent.font = [UIFont systemFontOfSize:12];
+    _personContent.font = [UIFont systemFontOfSize:13];
 //    _personContent.preferredMaxLayoutWidth = maxWidth;
     _personContent.numberOfLines = 0;
     
@@ -311,7 +316,7 @@
     _attationBtn.layer.cornerRadius = 5;
     _attationBtn.layer.masksToBounds = YES;
     _attationBtn.titleLabel.textColor = [UIColor whiteColor];
-    _attationBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+    _attationBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [_scrollView addSubview:_attationBtn];
     
     if (_collected) {
@@ -359,7 +364,7 @@
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(30);
         make.left.mas_equalTo(_scrollView.mas_left).offset(50);
         make.right.mas_equalTo(_scrollView.mas_right).offset(-50);
-        make.height.mas_equalTo(250);
+        make.height.mas_equalTo(250*HEIGHTCONFIG);
     }];
     //头像
     [_iconImage mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -371,13 +376,13 @@
     [_name mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(_whiteImage);
         make.top.mas_equalTo(_iconImage.mas_bottom).offset(17);
-        make.height.mas_equalTo(15);
+        make.height.mas_equalTo(17);
     }];
     //职位
     [_posiotion mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_name.mas_right).offset(8);
         make.bottom.mas_equalTo(_name.mas_bottom);
-        make.height.mas_equalTo(11);
+        make.height.mas_equalTo(12);
     }];
     //公司
     [_company mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -396,7 +401,7 @@
     [_address mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(_whiteImage);
         make.top.mas_equalTo(_bottonLine.mas_bottom).offset(10);
-        make.height.mas_equalTo(11);
+        make.height.mas_equalTo(12);
     }];
    
     //服务领域
@@ -457,13 +462,13 @@
     }];
     //个人内容
     _personContent.text = authentics.introduce;
-    
-    CGFloat height2 = [_personContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:12] ;
+    NSLog(@"%@",authentics.introduce);
+    CGFloat height2 = [_personContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:13];
     [_personContent mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_personLabel.mas_bottom).offset(19);
         make.left.mas_equalTo(_secondView.mas_left).offset(18);
         make.right.mas_equalTo(_secondView.mas_right).offset(-18);
-        make.height.mas_equalTo(height2);
+        make.height.mas_equalTo(height2 + 10);
     }];
     //第二个透明的View
     [_secondView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -713,9 +718,9 @@
 {
     [super viewWillDisappear:animated];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     [self.navigationController.navigationBar setHidden:NO];
-    [delegate.tabBar tabBarHidden:NO animated:NO];
+//    [delegate.tabBar tabBarHidden:NO animated:NO];
     
 }
 //-(void)dealloc

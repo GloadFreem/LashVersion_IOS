@@ -388,9 +388,9 @@
     CircleReleaseVC *vc = [CircleReleaseVC new];
     
     //隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -707,6 +707,10 @@
     [super viewWillDisappear:animated];
     
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"publish" object:nil];
+    //    隐藏tabbar
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    delegate.tabBar.hidesBottomBarWhenPushed = YES;
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
 
 -(void)dealloc

@@ -78,7 +78,7 @@
                             <constraint firstAttribute="width" constant="120" id="FLi-Cw-4MG"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <state key="normal" title="  关注(269)" image="icon-guanzhu.png">
+                        <state key="normal" title="  关注(269)" image="icon-guanzhu">
                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                         <connections>
@@ -133,7 +133,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="icon-guanzhu.png" width="17" height="15"/>
+        <image name="icon-guanzhu" width="17" height="15"/>
         <image name="image-point.png" width="268" height="1"/>
         <image name="placeholderIcon.png" width="200" height="200"/>
     </resources>

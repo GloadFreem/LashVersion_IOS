@@ -207,7 +207,7 @@
 #pragma mark - 设置默认颜色
 -(UIColor *)titleColor{
     if (_titleColor == nil) {
-        _titleColor = [UIColor darkTextColor];
+        _titleColor = orangeColor;
     }
     return _titleColor;
 }

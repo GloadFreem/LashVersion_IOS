@@ -37,11 +37,29 @@
         _idArray  = [NSMutableArray array];
     }
     
+    [self setupNav];
+    
     NSString * string = [AES encrypt:CITY password:KEY];
     self.partner = [TDUtil encryptMD5String:string];
     self.addressPartner = [TDUtil encryKeyWithMD5:KEY action:MODIFYADDRESS];
     [self createTableView];
     [self loadData];
+}
+
+#pragma mark -设置导航栏
+-(void)setupNav
+{
+    UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
+    [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
+    self.navigationItem.title = @"";
+}
+-(void)leftBack:(UIButton*)btn
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)createTableView

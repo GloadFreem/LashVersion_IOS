@@ -10,7 +10,7 @@
 #import "MineGoldMingxiCell.h"
 #import "MineGoldMingxiModel.h"
 
-
+#import "MineGoldMingXiEndCell.h"
 
 #define GOLDDETAIL @"requestUserGoldTradeList"
 @interface MineGoldMingxiVC ()<UITableViewDelegate,UITableViewDataSource>
@@ -56,6 +56,7 @@
             if (_page == 0) {
                 [_dataArray removeAllObjects];
             }
+            
             if (jsonDic[@"data"] && [jsonDic[@"data"] count]) {
                 NSArray *modelArray = [MineGoldMingxiModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
                 for (NSInteger i =0; i < modelArray.count; i ++) {
@@ -101,6 +102,7 @@
             [_tableView.mj_footer endRefreshing];
         }
     }
+    [_tableView.mj_footer endRefreshing];
 }
 #pragma mark -设置导航栏
 -(void)setupNav
@@ -108,7 +110,7 @@
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"收支明细";
@@ -164,14 +166,24 @@
 #pragma mark -tableViewDatasource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _dataArray.count;
+    if (_dataArray.count) {
+        return _dataArray.count + 1;
+    }
+    return 0;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
       //   ---------------------cell自适应-------------
-    id  model = _dataArray[indexPath.row];
-    return [self.tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[MineGoldMingxiCell class] contentViewWidth:[self cellContentViewWith]];
+    if (_dataArray.count) {
+        if (indexPath.row == _dataArray.count) {
+            return 20;
+        }else{
+            id  model = _dataArray[indexPath.row];
+            return [self.tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[MineGoldMingxiCell class] contentViewWidth:[self cellContentViewWith]];
+        }
+    }
+    return 0.000000001f;
 }
 
 - (CGFloat)cellContentViewWith
@@ -186,18 +198,32 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellId = @"MineGoldMingxiCell";
-    MineGoldMingxiCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[MineGoldMingxiCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-    }
     if (_dataArray.count) {
-        cell.model = _dataArray[indexPath.row];
+        if (indexPath.row == _dataArray.count) {
+            static NSString *cellId = @"MineGoldMingXiEndCell";
+            MineGoldMingXiEndCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!cell) {
+                cell = [[MineGoldMingXiEndCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+            }
+            cell.backgroundColor = [UIColor redColor];
+            return cell;
+            
+        }else{
+        static NSString *cellId = @"MineGoldMingxiCell";
+        MineGoldMingxiCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (!cell) {
+            cell = [[MineGoldMingxiCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+        }
+        if (_dataArray.count) {
+            cell.model = _dataArray[indexPath.row];
+        }
+        if (indexPath.row == 0) {
+            [cell.topLine setHidden:YES];
+        }
+        return cell;
+        }
     }
-    if (indexPath.row == 0) {
-        [cell.topLine setHidden:YES];
-    }
-    return cell;
+    return nil;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

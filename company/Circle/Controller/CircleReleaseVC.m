@@ -47,6 +47,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
     // Do any additional setup after loading the view.
     //取得partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PUBLICFEEL];
@@ -65,7 +70,7 @@
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     leftback.tag = 0;
     leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     
@@ -103,6 +108,7 @@
     _textView.keyboardType = UIKeyboardTypeDefault;
     _textView.text = textViewContent;
     _textView.scrollEnabled = YES;
+    
     [backView addSubview:_textView];
     
     _imgContentView = [[UIView alloc]initWithFrame:CGRectMake(_textView.frame.origin.x, 230 + 10 , _textView.frame.size.width, 80)];
@@ -202,7 +208,7 @@
 {
     NSString* jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
     
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary * dic =[jsonString JSONValue];
     if (dic!=nil) {
         NSString* status = [dic valueForKey:@"status"];
@@ -640,9 +646,9 @@
     
     [self presentViewController:self.customPicker animated:YES completion:nil];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
 
 - (void)cameraPhoto:(UIImage *)imageCamera  //选择完图片
@@ -706,7 +712,9 @@
 -(void)textViewDidBeginEditing:(UITextView *)textView
 {
     _textView.font= BGFont(18);
-    textView.text = @"";
+    if ([textView.text isEqualToString:textViewContent]) {
+        textView.text = @"";
+    }
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView

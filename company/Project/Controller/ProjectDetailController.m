@@ -118,6 +118,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
+    
     // Do any additional setup after loading the view from its nib.
     //获得内容partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:REQUESTDETAIL];
@@ -428,13 +434,12 @@
         
         //实例化详情分页面
         
-        
         _leftView = [[CSZProjectDetailLetfView alloc]init];
         _leftView.model = _model;
         _leftView.delegate = self;
         [_subViewScrollView addSubview:_leftView];
         
-        _leftView.frame = CGRectMake(0, 0, SCREENWIDTH, _leftView.height);
+        _leftView.frame = CGRectMake(0, 0, SCREENWIDTH, _leftView.height + 44);
         
         __weak ProjectDetailController * wself = self;
         [_leftView setMoreButtonClickedBlock:^(Boolean flag) {
@@ -445,7 +450,7 @@
         }];
         
         _subViewScrollView.y = POS_Y(_titleScrollView);
-        _subViewScrollView.height = _leftView.height;
+        _subViewScrollView.height = _leftView.height + 44;
         _subViewScrollView.width = SCREENWIDTH;
         
         
@@ -493,13 +498,13 @@
         //实例化成员分页面
         member = [ProjectDetailMemberView instancetationProjectDetailMemberView];
         member.projectId = self.projectId;
-        member.frame = CGRectMake(SCREENWIDTH, 0, SCREENWIDTH, member.viewHeight);
+        member.frame = CGRectMake(SCREENWIDTH, 0, SCREENWIDTH, member.viewHeight +64);
         [_heightArray addObject:[NSNumber numberWithFloat:member.viewHeight]];
         [_subViewScrollView addSubview:member];
         
         
         //实例化现场界面
-         scene =[[ProjectDetailSceneView alloc]initWithFrame:CGRectMake(2*SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT-CGRectGetMaxY(_titleScrollView.frame))];
+         scene =[[ProjectDetailSceneView alloc]initWithFrame:CGRectMake(2*SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT-CGRectGetMaxY(_titleScrollView.frame) - 64)];
         scene.projectId = self.projectId;
         scene.delegate = self;
         scene.bannerView = bannerView;
@@ -528,6 +533,8 @@
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [btn setBackgroundColor:colorBlue];
         btn.titleLabel.font = [UIFont systemFontOfSize:17];
+        btn.layer.cornerRadius = 3;
+        btn.layer.masksToBounds = YES;
         [_footer addSubview:btn];
         
         [_textField mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -539,10 +546,10 @@
         
         
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(_footer.mas_top);
-            make.right.mas_equalTo(_footer.mas_right);
-            make.bottom.mas_equalTo(_footer.mas_bottom);
-            make.width.mas_equalTo(75);
+            make.top.mas_equalTo(_textField.mas_top);
+            make.bottom.mas_equalTo(_textField.mas_bottom);
+            make.right.mas_equalTo(_footer.mas_right).offset(-5);
+            make.width.mas_equalTo(70);
         }];
     }
     
@@ -664,7 +671,7 @@
             
             [_bottomView setHidden:NO];
             [_footer setHidden:YES];
-            _subViewScrollView.height = _leftView.height;
+            _subViewScrollView.height = _leftView.height + 44;
             [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
             
 //            NSLog(@"点击了第%ld个",sender.tag-10);
@@ -727,7 +734,7 @@
                 
                 [_bottomView setHidden:NO];
                 [_footer setHidden:YES];
-                _subViewScrollView.height = _leftView.height;
+                _subViewScrollView.height = _leftView.height + 44;
                 [_subViewScrollView setupAutoHeightWithBottomView:_leftView bottomMargin:10];
                 [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
                 
@@ -770,7 +777,7 @@
 
 -(void)updateLayoutNotification
 {
-    _subViewScrollView.height = _leftView.height;
+    _subViewScrollView.height = _leftView.height + 44;
     [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
     
 }
@@ -1058,11 +1065,13 @@
 //    self.navigationController.navigationBar.translucent=NO;
     self.navigationController.navigationBar.hidden = YES;
     
-     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
+    
+    
+     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
     
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
     
@@ -1072,6 +1081,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
@@ -1083,9 +1093,9 @@
     
     self.navigationController.navigationBar.hidden = NO;
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:NO animated:NO];
     
     MP3Player *player = [[MP3Player alloc]init];
     player.player = nil;
@@ -1096,8 +1106,11 @@
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
 }
 
+
 -(void)dealloc
 {
+    
+    
     MP3Player *player = [[MP3Player alloc]init];
     player.player = nil;
 }

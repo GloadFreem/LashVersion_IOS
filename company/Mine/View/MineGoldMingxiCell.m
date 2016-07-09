@@ -20,6 +20,8 @@
     UILabel *_contentLabel;
     UIImageView *_secondLine;
     UIImageView *_point;
+    UIView * _endView;
+    UILabel *_endLabel;
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -126,6 +128,7 @@
     .leftSpaceToView(_point,5)
     .heightIs(64)
     .rightSpaceToView(self.contentView,20);
+    
     
     _titleLabel = [UILabel new];
 //    _titleLabel.backgroundColor = [UIColor redColor];

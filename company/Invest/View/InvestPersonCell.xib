@@ -107,7 +107,7 @@
                         </constraints>
                         <fontDescription key="fontDescription" name="PingFangSC-Regular" family="PingFang SC" pointSize="14"/>
                         <size key="titleShadowOffset" width="2.2250738585072014e-308" height="0.0"/>
-                        <state key="normal" title="关注(269)" image="icon-guanzhu.png"/>
+                        <state key="normal" title="关注(269)" image="icon-guanzhu"/>
                         <connections>
                             <action selector="attentionClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Ecm-pA-CUm"/>
                         </connections>
@@ -169,7 +169,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="icon-guanzhu.png" width="17" height="15"/>
+        <image name="icon-guanzhu" width="17" height="15"/>
         <image name="icon_commit1.png" width="15" height="15"/>
         <image name="image-point.png" width="268" height="1"/>
         <image name="placeholderIcon.png" width="200" height="200"/>

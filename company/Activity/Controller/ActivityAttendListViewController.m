@@ -11,7 +11,6 @@
 #import "ActivityDetailVC.h"
 #import "ActionDetailModel.h"
 #import "ActivityAttendModel.h"
-#import "ActivityDetailHeaderCell.h"
 #import "ActivityDetailHeaderModel.h"
 #import "ActivityDetailExerciseCell.h"
 #import "ActivityDetailListCell.h"
@@ -21,7 +20,7 @@
 
 #define ACTIONATTEND @"requestAttendListAction"
 #define kActivityDetailHeaderCellId @"ActivityDetailHeaderCell"
-static CGFloat textFieldH = 40;
+
 
 @interface ActivityAttendListViewController ()<UITableViewDelegate,UITableViewDataSource,ActivityDetailFooterViewDelegate,UITextFieldDelegate>
 @property (nonatomic, copy) NSString * actionAttendPartner;
@@ -61,7 +60,7 @@ static CGFloat textFieldH = 40;
     leftback.tag = 0;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
 }
@@ -69,13 +68,13 @@ static CGFloat textFieldH = 40;
 #pragma mark -初始化控件
 -(void)createUI
 {
-    _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.bounces = YES;
-    _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 0.01f)];
+//    _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 0.01f)];
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
     //自动改变透明度
@@ -88,7 +87,7 @@ static CGFloat textFieldH = 40;
         make.top.mas_equalTo(self.view.mas_top);
         make.left.mas_equalTo(self.view.mas_left);
         make.right.mas_equalTo(self.view.mas_right);
-        make.bottom.mas_equalTo(self.view.mas_bottom).offset(-50);
+        make.bottom.mas_equalTo(self.view.mas_bottom);
     }];
 }
 
@@ -238,9 +237,9 @@ static CGFloat textFieldH = 40;
     
     [[IQKeyboardManager sharedManager] setEnable:YES]
     ;
-    AppDelegate * delegate =[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
+//    AppDelegate * delegate =[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:NO animated:NO];
     self.navigationController.navigationBar.hidden = NO;
     
 }

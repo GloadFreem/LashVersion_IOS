@@ -18,9 +18,10 @@
 
 @property (nonatomic,assign)id attendInstance; //回复
 @property (nonatomic, assign) NSInteger page; 
-@property (nonatomic, strong) UITableView *tableView;
+
 @property (nonatomic, copy) NSString * actionListPartner;
-@property (nonatomic, strong) NSMutableArray *dataSourceArray;
+
+@property (nonatomic, strong) ActivityBlackCoverView *blackCoverView;
 
 @property (nonatomic, strong) UITextField *textField;
 
@@ -246,12 +247,12 @@
     
     ActivityViewModel * model = [_dataSourceArray objectAtIndex:indexPath.row];
     vc.activityModel = model;
-    
+    vc.viewController = self;
     
     //隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     [self.navigationController pushViewController:vc animated:YES];
     
@@ -312,6 +313,10 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    //    隐藏tabbar
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    delegate.tabBar.hidesBottomBarWhenPushed = YES;
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -327,8 +332,11 @@
     ActivityBlackCoverView * attendView = [ActivityBlackCoverView instancetationActivityBlackCoverView];
     attendView.delegate = self;
     attendView.tag = 1000;
-    [self.view addSubview:attendView];
-    
+    [[UIApplication sharedApplication].windows[0] addSubview:attendView];
+    [attendView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    _blackCoverView = attendView;
 }
 
 #pragma ActivityBlackCoverViewDelegate
@@ -351,7 +359,6 @@
     NSString * parthner = [TDUtil encryKeyWithMD5:KEY action:ATTEND_ACTION];
     
     ActivityViewModel * modle = (ActivityViewModel*)self.attendInstance;
-    
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",parthner,@"partner",content,@"content",STRING(@"%ld", (long)modle.actionId),@"contentId", nil];
     //开始请求
@@ -381,14 +388,24 @@
 //            //设置数据模型
 //            self.dataSourceArray = array;
             
+            ActivityViewModel * modle = (ActivityViewModel*)self.attendInstance;
+            modle.attended = YES;
+            NSInteger index = [_dataSourceArray indexOfObject:modle];
+            [_dataSourceArray replaceObjectAtIndex:index withObject:modle];
+            [_tableView reloadData];
+            
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
         }
-        UIView * view  = [self.view viewWithTag:1000];
-        if(view)
-        {
-            [view removeFromSuperview];
-        }
+        
+//        UIView * view  = [self.view viewWithTag:1000];
+//        if(view)
+//        {
+//            [view removeFromSuperview];
+//        }
+        
+        [_blackCoverView removeFromSuperview];
+        
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
     }
 }

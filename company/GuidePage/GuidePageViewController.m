@@ -36,7 +36,7 @@
 
 -(void)createScrollView
 {
-    _scrollView = [[UIScrollView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
     _scrollView.delegate =self;
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];

@@ -158,7 +158,7 @@
     leftback.tag = 0;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     //编辑按钮
@@ -268,25 +268,28 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellId = @"ProjectLetterCell";
-    ProjectLetterCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+    if (_dataArray.count) {
+        static NSString *cellId = @"ProjectLetterCell";
+        ProjectLetterCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
+        if (!cell) {
+            cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
         }
-    //如果编辑按钮未点击
-    if (!_operateBtn.selected) {
-        cell.selectImage.hidden = YES;
-//        [cell relayoutCellWithModel:_dataArray[indexPath.row]];
-//        return cell;
-    }else{   // 出于编辑状态下
-        cell.selectImage.hidden = NO;
-        cell.titleLeftSpace.constant =41;
-        
+        //如果编辑按钮未点击
+        if (!_operateBtn.selected) {
+            cell.selectImage.hidden = YES;
+            //        [cell relayoutCellWithModel:_dataArray[indexPath.row]];
+            //        return cell;
+        }else{   // 出于编辑状态下
+            cell.selectImage.hidden = NO;
+            cell.titleLeftSpace.constant =41;
+            
+        }
+        [cell relayoutCellWithModel:_dataArray[indexPath.row]];
+        //    self.tableView.contentSize = CGSizeMake(SCREENWIDTH, _dataArray.count * 100);
+        //    cell.backgroundColor = colorGray;
+        return cell;
     }
-    [cell relayoutCellWithModel:_dataArray[indexPath.row]];
-//    self.tableView.contentSize = CGSizeMake(SCREENWIDTH, _dataArray.count * 100);
-//    cell.backgroundColor = colorGray;
-    return cell;
+    return nil;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

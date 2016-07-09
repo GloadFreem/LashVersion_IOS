@@ -58,7 +58,7 @@
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     [leftback addTarget:self action:@selector(leftback) forControlEvents:UIControlEventTouchUpInside];
     leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
 }
@@ -172,6 +172,8 @@
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn setBackgroundColor:colorBlue];
     btn.titleLabel.font = [UIFont systemFontOfSize:17];
+    btn.layer.cornerRadius = 3;
+    btn.layer.masksToBounds = YES;
     [_footer addSubview:btn];
     
     [_textField mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -183,10 +185,10 @@
     
     
     [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_footer.mas_top);
-        make.right.mas_equalTo(_footer.mas_right);
-        make.bottom.mas_equalTo(_footer.mas_bottom);
-        make.width.mas_equalTo(75);
+        make.top.mas_equalTo(_textField.mas_top);
+        make.right.mas_equalTo(_footer.mas_right).offset(-5);
+        make.bottom.mas_equalTo(_textField.mas_bottom);
+        make.width.mas_equalTo(70);
     }];
 }
 
@@ -379,9 +381,9 @@
 {
     [super viewWillAppear:animated];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];

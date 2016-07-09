@@ -45,7 +45,7 @@
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     
     leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
@@ -92,7 +92,7 @@
 -(void)setModel
 {
     _emailLabel.text = _email;
-    _phoneLabel.text = _telephone;
+    _phoneLabel.text = @"点击图标呼叫客服";
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -121,9 +121,9 @@
 {
     [super viewWillDisappear:animated];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:NO animated:NO];
     
 }
 

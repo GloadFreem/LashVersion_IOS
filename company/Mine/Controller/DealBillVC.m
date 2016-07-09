@@ -8,6 +8,7 @@
 
 #import "DealBillVC.h"
 #import "BillDetailCell.h"
+#import "BillEndCell.h"
 
 #define TRADELIST @"requestTradeList"
 #import "BillDetailCellModel.h"
@@ -42,7 +43,7 @@
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [leftback addTarget:self action:@selector(leftBack) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     self.navigationItem.title = @"交易账单";
@@ -140,13 +141,23 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _dataArray.count;
+    if (_dataArray.count) {
+        return _dataArray.count + 1;
+    }
+    return 0;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id  model = _dataArray[indexPath.row];
-    return [self.tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[BillDetailCell class] contentViewWidth:[self cellContentViewWith]];
+    if (_dataArray.count) {
+        if (indexPath.row == _dataArray.count) {
+            return 20;
+        }else{
+            id  model = _dataArray[indexPath.row];
+            return [self.tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[BillDetailCell class] contentViewWidth:[self cellContentViewWith]];
+        }
+    }
+    return 0.000000001f;
 }
 
 - (CGFloat)cellContentViewWith
@@ -161,18 +172,31 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellId = @"BillDetailCell";
-    BillDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[BillDetailCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-    }
     if (_dataArray.count) {
-        cell.model = _dataArray[indexPath.row];
+        if (indexPath.row == _dataArray.count) {
+            static NSString *cellId = @"BillEndCell";
+            BillEndCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!cell) {
+                cell = [[BillEndCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+            }
+            cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
+            return cell;
+        }else{
+            static NSString *cellId = @"BillDetailCell";
+            BillDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!cell) {
+                cell = [[BillDetailCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+            }
+            if (_dataArray.count) {
+                cell.model = _dataArray[indexPath.row];
+            }
+            if (indexPath.row == 0) {
+                [cell.topLine setHidden:YES];
+            }
+            return cell;
+        }
     }
-    if (indexPath.row == 0) {
-        [cell.topLine setHidden:YES];
-    }
-    return cell;
+    return nil;
 }
 #pragma mark -cell的点击事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

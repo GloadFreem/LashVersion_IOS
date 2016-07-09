@@ -51,6 +51,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
     // Do any additional setup after loading the view from its nib.
     
     //获得partner
@@ -161,7 +166,7 @@
     _leftBackBtn.tag = 60;
     
 //    _leftBackBtn.size = CGSizeMake(80, 30);
-    _leftBackBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    _leftBackBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [_leftBackBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_scrollView addSubview:_leftBackBtn];
     [_leftBackBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -270,7 +275,7 @@
     
     //提交按钮
     _commitBtn = [[UIButton alloc]init];
-    [_commitBtn setBackgroundImage:[UIImage imageNamed:@"icon_commit"] forState:UIControlStateNormal];
+    [_commitBtn setBackgroundImage:[UIImage imageNamed:@"icon_commit_pro"] forState:UIControlStateNormal];
     [_commitBtn addTarget:self action:@selector(commitClick:) forControlEvents:UIControlEventTouchUpInside];
     [_scrollView addSubview:_commitBtn];
     [_commitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -483,8 +488,8 @@
 {
     InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
     vc.model = _listModel;
     
     [self.navigationController pushViewController:vc animated:YES];
@@ -556,9 +561,9 @@
     
     self.navigationController.navigationBar.hidden = NO;
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:NO animated:NO];
     
 }
 

@@ -61,6 +61,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
     // Do any additional setup after loading the view.
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -185,7 +190,7 @@
     [leftBtn setTag:0];
     [leftBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+    leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [navView addSubview:leftBtn];
     [leftBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(12);
@@ -584,8 +589,8 @@
     
     [SVProgressHUD dismiss];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:NO animated:NO];
 }
 @end
