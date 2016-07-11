@@ -7,6 +7,14 @@
 //
 
 #import "ResetPassWordViewController.h"
+#import "JTabBarController.h"
+#import "ProjectViewController.h"
+#import "MyNavViewController.h"
+#import "InvestViewController.h"
+#import "ActivityViewController.h"
+#import "MineViewController.h"
+#import "CircleViewController.h"
+#import "PerfectViewController.h"
 
 #define RESET @"resetPassWordUser"
 
@@ -102,23 +110,57 @@
         if ([status integerValue] == 200) {
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
 
-            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-            [data setValue:@"YES" forKey:@"isLogin"];
-            [data setValue:@"NO" forKey:@"isAnimous"];
-            NSString* phoneNumber = self.telephone;
-            NSString* password =self.firstTextField.text;
-            password = [TDUtil encryptPhoneNumWithMD5:phoneNumber passString:password];
+//            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+//            [data setValue:@"YES" forKey:@"isLogin"];
+//            [data setValue:@"NO" forKey:@"isAnimous"];
+//            NSString* phoneNumber = self.telephone;
+//            NSString* password =self.firstTextField.text;
+//            password = [TDUtil encryptPhoneNumWithMD5:phoneNumber passString:password];
+//            
+//            [data setValue:phoneNumber forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+//            [data setValue:password forKey:STATIC_USER_PASSWORD];
+//            
+//            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
+//            [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
+//            
+//            //进入主界面
+//            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
+//            app.window.rootViewController = app.tabBar;
+            NSDictionary *data= [jsonDic valueForKey:@"data"];
+            NSDictionary *idenTypeDic = [NSDictionary dictionaryWithDictionary:[data valueForKey:@"identityType"]];
+            NSString *name = idenTypeDic[@"name"];
+            //            NSInteger identifyId =(NSInteger)idenTypeDic[@"identiyTypeId"];
             
-            [data setValue:phoneNumber forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
-            [data setValue:password forKey:STATIC_USER_PASSWORD];
-            
-            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
-            [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
-            
-            //进入主界面
-            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-            app.window.rootViewController = app.tabBar;
-            
+            if (name && [name isEqualToString:@"无身份"]) {//去认证
+                //进入身份完善信息界面
+                PerfectViewController *perfert = [PerfectViewController new];
+//                perfert.wxIcon = _wePic;
+                [self.navigationController pushViewController:perfert animated:YES];
+            }else{
+                //进入应用
+                JTabBarController * tabBarController;
+                for (UIViewController *vc in self.navigationController.childViewControllers) {
+                    if ([vc isKindOfClass:JTabBarController.class]) {
+                        tabBarController = (JTabBarController*)vc;
+                    }
+                }
+                
+                if (!tabBarController) {
+                    tabBarController = [self createViewControllers];
+                }
+                
+                [self.navigationController pushViewController:tabBarController animated:NO];
+                
+                NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+                NSString* phoneNumber = self.telephone;
+                NSString* password =self.firstTextField.text;
+                password = [TDUtil encryptPhoneNumWithMD5:phoneNumber passString:password];
+                
+                [data setValue:phoneNumber forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+                [data setValue:password forKey:STATIC_USER_PASSWORD];
+                [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
+                [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
+            }
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -128,6 +170,38 @@
     }
     [activity stopAnimating];
 }
+
+-(JTabBarController*)createViewControllers{
+    NSMutableArray * unSelectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project.png"],[UIImage imageNamed:@"invest.png"],[UIImage imageNamed:@"Circle.png"],[UIImage imageNamed:@"activity.png"],nil];
+    
+    NSMutableArray * selectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project_selected .png"],[UIImage imageNamed:@"invest_selected.png"],[UIImage imageNamed:@"Circle_selected.png"], [UIImage imageNamed:@"activity_selected.png"],nil];
+    
+    NSMutableArray * titles = [[NSMutableArray alloc]initWithObjects:@"项目",@"投资人",@"圈子",@"活动", nil];
+    
+    ProjectViewController * project = [[ProjectViewController alloc]init];
+    MyNavViewController * navProject = [[MyNavViewController alloc]initWithRootViewController:project];
+    
+    InvestViewController * invest = [[InvestViewController alloc]init];
+    MyNavViewController * navInvest = [[MyNavViewController alloc]initWithRootViewController:invest];
+    
+    CircleViewController * circle =[[CircleViewController alloc]init];
+    MyNavViewController * navCircle =[[MyNavViewController alloc]initWithRootViewController:circle];
+    
+    ActivityViewController * activityVC = [[ActivityViewController alloc]init];
+    MyNavViewController * navActivity = [[MyNavViewController alloc]initWithRootViewController:activityVC];
+    
+    JTabBarController *tabBar = [[JTabBarController alloc]initWithTabBarSelectedImages:selectedArray normalImages:unSelectedArray titles:titles];
+    tabBar.showCenterItem = YES;
+    tabBar.centerItemImage = [UIImage imageNamed:@"mine.png"];
+    tabBar.viewControllers = @[navProject,navInvest,navCircle,navActivity];
+    tabBar.textColor = orangeColor;
+    MyNavViewController *navMine = [[MyNavViewController alloc]initWithRootViewController:[[MineViewController alloc]init]];
+    tabBar.centerViewController = navMine;
+    
+    return tabBar;
+    
+}
+
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {

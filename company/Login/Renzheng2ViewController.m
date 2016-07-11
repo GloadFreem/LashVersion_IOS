@@ -74,6 +74,10 @@
     //    }
     if (![textField.text isEqualToString:@""]) {
         
+        textField.text = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        
         self.textField.text = textField.text;
     }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入营业执照号"];

@@ -85,7 +85,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     if (!_bannerModelArray) {
         _bannerModelArray = [NSMutableArray array];
     }
@@ -118,7 +118,7 @@
     //金条
     self.goldPartner = [TDUtil encryKeyWithMD5:KEY action:GOLDCOUNT];
     
-    
+    self.navigationItem.title = @"项目";
     
     [self startLoadBannerData];
     
@@ -137,6 +137,10 @@
     //保存登录时间
     
     [self compareTime];
+    
+    //添加监听
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setLetterStatus:) name:@"setLetterStatus" object:nil];
+    
 }
 -(void)saveDate
 {
@@ -185,8 +189,6 @@
 }
 -(void)createGoldImageView
 {
-    
-    
     UIView *background = [UIView new];
     [background setBackgroundColor:[UIColor blackColor]];
     background.alpha = 0.5;
@@ -209,14 +211,7 @@
     NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%lds",(long)_secondLeave]];
     [attributeString addAttribute:NSFontAttributeName value:BGFont(20) range:NSMakeRange(0, 1)];
     
-    
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(setTime) userInfo:nil repeats:YES];
-        [timer fire];
-//        timer.fireDate = [NSDate distantPast];
-        [[NSRunLoop currentRunLoop] run];
-        
-    });
+    [self performSelector:@selector(startTimer) withObject:nil afterDelay:1];
     
     _timeLabel.attributedText = attributeString;
     [[UIApplication sharedApplication].windows[0] addSubview:_timeLabel];
@@ -297,6 +292,18 @@
     }];
     
 }
+
+-(void)startTimer
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(setTime) userInfo:nil repeats:YES];
+        [timer fire];
+        //        timer.fireDate = [NSDate distantPast];
+        [[NSRunLoop currentRunLoop] run];
+        
+    });
+}
+
 -(void)disBackground
 {
     if (_background !=nil) {
@@ -419,7 +426,7 @@
 -(void)requestAuthenInfo:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -435,15 +442,19 @@
             [data setValue:[NSString stringWithFormat:@"%ld",(long)baseModel.userId] forKey:USER_STATIC_USER_ID];
             
             NSArray *authenticsArray = baseModel.authentics;
-            ProjectAuthentics *authentics = authenticsArray[0];
-            
-            [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
-            [data setValue:authentics.name forKey:USER_STATIC_NAME];
-            [data setValue:authentics.identiyCarA forKey:USER_STATIC_IDPIC];
-            [data setValue:authentics.identiyCarNo forKey:USER_STATIC_IDNUMBER];
-            [data setValue:authentics.position forKey:USER_STATIC_POSITION];
-//            [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
-            [data setValue:authentics.authenticstatus.name forKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+            if (authenticsArray.count) {
+                ProjectAuthentics *authentics = authenticsArray[0];
+                
+                [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
+                [data setValue:authentics.name forKey:USER_STATIC_NAME];
+                [data setValue:authentics.identiyCarA forKey:USER_STATIC_IDPIC];
+                [data setValue:authentics.identiyCarNo forKey:USER_STATIC_IDNUMBER];
+                [data setValue:authentics.position forKey:USER_STATIC_POSITION];
+                //            [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
+                [data setValue:authentics.authenticstatus.name forKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+                
+                [data setValue:[NSString stringWithFormat:@"%ld",(long)authentics.identiytype.identiyTypeId] forKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+            }
             
             [data synchronize];
             
@@ -640,40 +651,58 @@
 //    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
 
--(void)createUI
+#pragma mark-------------------站内信通知信息----------------------
+-(void)setLetterStatus:(NSNotification*)notification
 {
-
-    self.navigationItem.title = @"项目";
-
-   
     UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     letterBtn.tag = 0;
+    if (notification) {
+        _hasMessage = YES;
+    }
+    
+    
     //通过判断返回数据状态来决定背景图片
-//    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+    //    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
     if (_hasMessage) {//message_new@2x
         [letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
     }else{
-    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+        [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
     }
     
     letterBtn.size = letterBtn.currentBackgroundImage.size;
     [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
     _letterBtn = letterBtn;
-//    UIButton *upLoadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    upLoadBtn.tag = 1;
-//    [upLoadBtn setBackgroundImage:[UIImage imageNamed:@"upLoad"] forState:UIControlStateNormal];
-//    upLoadBtn.size = upLoadBtn.currentBackgroundImage.size;
-//    [upLoadBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:upLoadBtn];
+}
+
+
+-(void)createUI
+{
+    self.navigationItem.title = @"项目";
+
+    //设置站内信状态
+    [self setLetterStatus:nil];
     
+//    UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    letterBtn.tag = 0;
+//    //通过判断返回数据状态来决定背景图片
+////    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+//    if (_hasMessage) {//message_new@2x
+//        [letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
+//    }else{
+//    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+//    }
+//    letterBtn.size = letterBtn.currentBackgroundImage.size;
+//    [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
+//    _letterBtn = letterBtn;
+
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
     [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
-    
     
 }
 #pragma mark -刷新控件

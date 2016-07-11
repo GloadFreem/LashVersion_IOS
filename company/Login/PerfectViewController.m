@@ -8,6 +8,10 @@
 
 #import "PerfectViewController.h"
 #import "RegistSuccessViewController.h"
+
+#import "RegisterViewController.h"
+#import "SetPassWordViewController.h"
+
 #define IDENTIFYTYPE @"updateIdentiyTypeUser"
 
 #define CUSTOMSERVICE @"customServiceSystem"
@@ -60,6 +64,12 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    //移除注册页面
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:RegisterViewController.class] || [vc isKindOfClass:SetPassWordViewController.class]) {
+            [vc removeFromParentViewController];
+        }
+    }
     //下载客服电话
     [self loadServicePhone];
 }

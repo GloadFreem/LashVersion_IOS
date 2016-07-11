@@ -322,9 +322,13 @@
 //    }
     if (textField.tag == 0 && [TDUtil isidentityCard:textField.text]) {
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入正确的身份证号"];
-//                    return;
+                    return;
     }
     if (![textField.text isEqualToString:@""]) {
+        
+        textField.text = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
         
         self.dataArray[textField.tag] = textField.text;
     }

@@ -36,6 +36,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *noBtn;
 @property (weak, nonatomic) IBOutlet UIButton *forgetBtn;
 @property (weak, nonatomic) IBOutlet UIButton *wxBtn;
+
 @property (weak, nonatomic) IBOutlet UITextField *phoneField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 
@@ -95,6 +96,7 @@
     [self.phoneField resignFirstResponder];
     [self.passwordField resignFirstResponder];
     
+    
     if ([sender isKindOfClass:[UIButton class]]) {
         //初始化网络请求对象
         //获取数据
@@ -145,7 +147,7 @@
         [activity startAnimating];
         
         //开始请求
-        [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:1 delegate:self sel:@selector(requestLogin:)];
+        [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:0 delegate:self sel:@selector(requestLogin:)];
     }
 }
 
@@ -159,6 +161,8 @@
  */
 -(void)requestLogin:(ASIHTTPRequest *)request
 {
+    
+    
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
 //    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
@@ -168,36 +172,40 @@
         if ([status intValue] == 200) {
 //            NSLog(@"登陆成功");
             
+            NSDictionary *data= [jsonDic valueForKey:@"data"];
+            NSDictionary *idenTypeDic = [NSDictionary dictionaryWithDictionary:[data valueForKey:@"identityType"]];
+            NSString *name = idenTypeDic[@"name"];
+            //            NSInteger identifyId =(NSInteger)idenTypeDic[@"identiyTypeId"];
             
-            //进入主界面
-//            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-//            app.window.rootViewController = app.tabBar;
-            
-            
-            JTabBarController * tabBarController;
-            for (UIViewController *vc in self.navigationController.childViewControllers) {
-                if ([vc isKindOfClass:JTabBarController.class]) {
-                    tabBarController = (JTabBarController*)vc;
-                }
-            }
-            
-            if (!tabBarController) {
-                tabBarController = [self createViewControllers];
-//                [self.navigationController pushViewController:tabBarController animated:NO];
+            if (name && [name isEqualToString:@"无身份"]) {//去认证
+                //进入身份完善信息界面
+                PerfectViewController *perfert = [PerfectViewController new];
+//                perfert.wxIcon = _wePic;
+                [self.navigationController pushViewController:perfert animated:YES];
             }else{
-            
+                //进入应用
+                JTabBarController * tabBarController;
+                for (UIViewController *vc in self.navigationController.childViewControllers) {
+                    if ([vc isKindOfClass:JTabBarController.class]) {
+                        tabBarController = (JTabBarController*)vc;
+                    }
+                }
+                
+                if (!tabBarController) {
+                    tabBarController = [self createViewControllers];
+                }
+                
+                [self.navigationController pushViewController:tabBarController animated:NO];
+                
+                NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+                
+                [data setValue:self.phoneField.text forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+                [data setValue:_password forKey:STATIC_USER_PASSWORD];
+                
+                [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
+                [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
             }
             
-            [self.navigationController pushViewController:tabBarController animated:NO];
-        
-
-            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-            [data setValue:self.phoneField.text forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
-            [data setValue:_password forKey:STATIC_USER_PASSWORD];
-            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
-            [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
-//            [data setValue:@"YES" forKey:@"isLogin"];
-//            [self removeFromParentViewController];
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
          
@@ -334,6 +342,7 @@
                 [self.navigationController pushViewController:tabBarController animated:NO];
                 
                 NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+                
                 [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
                 [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
             }

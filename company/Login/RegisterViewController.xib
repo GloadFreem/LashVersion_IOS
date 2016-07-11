@@ -10,8 +10,9 @@
                 <outlet property="certifyBtn" destination="voJ-8g-7P0" id="HUE-3x-MhH"/>
                 <outlet property="certifyField" destination="DTc-4Z-8f5" id="hZ5-LJ-YwD"/>
                 <outlet property="phoneField" destination="TID-qv-MkS" id="WNk-CO-8iw"/>
+                <outlet property="procotolBtn" destination="ReW-Ch-ECW" id="1eZ-WU-YIC"/>
                 <outlet property="ringCodeField" destination="ea5-Ia-vOh" id="L3j-Fd-E31"/>
-                <outlet property="selectedBtn" destination="vOs-nT-ceR" id="9XY-NP-0Be"/>
+                <outlet property="selectedBtn" destination="vOs-nT-ceR" id="RbQ-aL-dBw"/>
                 <outlet property="sendMsgBtn" destination="voJ-8g-7P0" id="070-hl-neK"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -149,7 +150,7 @@
                         <constraint firstAttribute="width" constant="259" id="pB3-ia-VCj"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                    <state key="normal" title="注册" backgroundImage="icon_loginbg.png">
+                    <state key="normal" title="下一步" backgroundImage="icon_loginbg.png">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <state key="highlighted" backgroundImage="icon_loginbg.png"/>
@@ -167,14 +168,14 @@
                                 <constraint firstAttribute="width" constant="13" id="mYw-tT-NFU"/>
                             </constraints>
                             <state key="normal" title="Button" image="icon_unselectedBtn.png"/>
-                            <state key="selected" backgroundImage="icon_selectedBtn.png"/>
+                            <state key="selected" image="icon_selectedBtn.png"/>
                             <variation key="default">
                                 <mask key="constraints">
                                     <exclude reference="2fe-Cf-eXw"/>
                                 </mask>
                             </variation>
                             <connections>
-                                <action selector="selectedBtnClick:" destination="-1" eventType="touchUpInside" id="6gI-qZ-xIs"/>
+                                <action selector="selectedBtnClick:" destination="-1" eventType="touchUpInside" id="7fz-rf-zfO"/>
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="已阅读并同意" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rI7-fF-aTy">
@@ -189,6 +190,9 @@
                             <state key="normal" title="《金指投用户协议》">
                                 <color key="titleColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
+                            <connections>
+                                <action selector="protocolBtnClick:" destination="-1" eventType="touchUpInside" id="lCu-ug-XxJ"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

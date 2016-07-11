@@ -587,6 +587,7 @@
         vc.selectedNum = 1;
         vc.listModel = listModel;
         vc.type = @"5";
+        vc.titleStr = @"投资人详情";
         [self.navigationController pushViewController:vc animated:YES];
     }
     
@@ -626,6 +627,7 @@
             vc.selectedNum = 2;
             vc.listModel = listModel;
             vc.type = @"6";
+            vc.titleStr = @"投资机构详情";
             [self.navigationController pushViewController:vc animated:YES];
             
         }

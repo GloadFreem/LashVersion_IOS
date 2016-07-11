@@ -142,7 +142,7 @@
 #pragma mark- 设置导航栏
 -(void)setUpNavBar
 {
-    self.navigationItem.title = @"个人资料";
+    self.navigationItem.title = @"智囊团详情";
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     leftback.tag = 0;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];

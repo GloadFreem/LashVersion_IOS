@@ -194,7 +194,7 @@
     [navView addSubview:leftBtn];
     [leftBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(12);
-        make.top.mas_equalTo(32);
+        make.centerY.mas_equalTo(navView);
         make.width.mas_equalTo(80);
         make.height.mas_equalTo(30);
     }];
@@ -237,10 +237,11 @@
     //创建照片容器
     _photoView = [ProjectPreparePhotoView new];
     
-    
     ProjectDetailLeftHeaderModel *headerModel = [ProjectDetailLeftHeaderModel new];
     headerModel.projectStr = _baseModel.project.abbrevName;
     headerModel.content = _baseModel.project.desc;
+    headerModel.projectIcon = _baseModel.project.startPageImage;
+    
     NSMutableArray *photoArr = [NSMutableArray array];
     NSArray *picArray = [NSArray arrayWithArray:_baseModel.project.projectimageses];
     for (NSInteger i = 0; i < picArray.count; i ++) {
@@ -310,6 +311,14 @@
         make.height.mas_equalTo(50);
     }];
     
+    UIView *line = [UIView new];;
+    line.backgroundColor = GrayColor;
+    [bottomView addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.mas_equalTo(0);
+        make.height.mas_equalTo(0.5);
+    }];
+    
     UIButton *kefuBtn = [UIButton new];
     [kefuBtn setBackgroundImage:[UIImage imageNamed:@"icon_kefu"] forState:UIControlStateNormal];
     [kefuBtn setTag:2];
@@ -317,7 +326,7 @@
     kefuBtn.size = kefuBtn.currentBackgroundImage.size;
     [bottomView addSubview:kefuBtn];
     [kefuBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(3);
+        make.left.mas_equalTo(8);
         make.top.mas_equalTo(5);
         make.bottom.mas_equalTo(-5);
     }];
@@ -344,7 +353,7 @@
         make.top.mas_equalTo(5);
         make.left.mas_equalTo(kefuBtn.mas_right).offset(45);
         make.bottom.mas_equalTo(-5);
-        make.right.mas_equalTo(-3);
+        make.right.mas_equalTo(-8);
     }];
     
 }

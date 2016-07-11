@@ -10,6 +10,7 @@
 
 @interface ProjectDetailLeftHeaderModel : NSObject
 
+@property (nonatomic, copy) NSString *projectIcon;
 
 @property (nonatomic, copy) NSString *projectStr;
 

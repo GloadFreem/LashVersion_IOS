@@ -30,6 +30,7 @@
     _icon.layer.masksToBounds = YES;
     _icon.layer.borderColor = [UIColor whiteColor].CGColor;
     _icon.layer.borderWidth = 3;
+    _icon.contentMode = UIViewContentModeScaleAspectFill;
     
     _projectName = [UILabel new];
     _projectName.font = BGFont(18);
@@ -82,6 +83,7 @@
 {
     _model = model;
     [_icon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.project.startPageImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
+    
     _projectName.text = model.project.abbrevName;
     _companyName.text = model.project.fullName;
     _address.text = model.project.address;

@@ -132,17 +132,19 @@
             
             
             NSArray *authenticsArray = baseModel.authentics;
-            ProjectAuthentics *authentics = authenticsArray[0];
-            
-            _nameStr = authentics.name;
-            if (authentics.companyName && authentics.companyName.length && authentics.position && authentics.position.length) {
-                _companyStr = [NSString stringWithFormat:@"%@ | %@",authentics.companyName,authentics.position];
-            }else{
-                _companyStr = @"";
+            if (authenticsArray.count) {
+                ProjectAuthentics *authentics = authenticsArray[0];
+                
+                _nameStr = authentics.name;
+                if (authentics.companyName && authentics.companyName.length && authentics.position && authentics.position.length) {
+                    _companyStr = [NSString stringWithFormat:@"%@ | %@",authentics.companyName,authentics.position];
+                }else{
+                    _companyStr = @"";
+                }
+                
+                _identiyTypeId = authentics.identiytype.identiyTypeId;
+                _authId = authentics.authId;
             }
-            
-            _identiyTypeId = authentics.identiytype.identiyTypeId;
-            _authId = authentics.authId;
             
             [self setModel];
             

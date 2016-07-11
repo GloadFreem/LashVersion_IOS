@@ -79,7 +79,18 @@
     [super viewDidLoad];
 //    [self createViewControllers];
     [self.tabBar removeFromSuperview];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushController:) name:@"pushController" object:nil];
 }
+
+-(void)pushController:(NSNotification*)notification
+{
+    NSDictionary * dic = notification.userInfo;
+    UIViewController * controller = [dic valueForKey:@"controller"];
+    controller.title = [dic valueForKey:@"title"];
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
 
 //-(void)createViewControllers
 //{

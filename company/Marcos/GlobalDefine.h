@@ -192,6 +192,8 @@
 #define USER_STATIC_EXT_USER_ID @"user_static_ext_user_id"
 //用户认证状态
 #define USER_STATIC_USER_AUTHENTIC_STATUS @"user_static_user_authentic_status"
+//用户身份
+#define USER_STATIC_USER_AUTHENTIC_TYPE @"user_static_user_authentic_type"
 
 
 //#define SERVICE_URL @"http://www.jinzht.com:8000/phone/"//服务器域名地址

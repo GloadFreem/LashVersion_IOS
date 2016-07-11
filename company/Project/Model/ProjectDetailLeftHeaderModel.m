@@ -24,12 +24,14 @@ extern CGFloat __maxContentLabelHeight;
 {
     CGFloat contentW = SCREENWIDTH - 50*WIDTHCONFIG;
     CGFloat height = [_content commonStringHeighforLabelWidth:contentW withFontSize:14];
-    if (height > __maxContentLabelHeight) {
+    
+    if (height > 51) {
         _shouldShowMoreButton = YES;
     }
     else{
         _shouldShowMoreButton = NO;
     }
+    
     return _content;
 }
 

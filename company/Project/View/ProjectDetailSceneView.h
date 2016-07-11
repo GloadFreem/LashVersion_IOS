@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MP3Player.h"
-
+#import "MyAVAudioPlayer.h"
 #import "HttpUtils.h"
 #import "DialogUtil.h"
 
@@ -22,6 +22,7 @@
 -(void)didClickMoreBtn;
 
 @end
+
 @interface ProjectDetailSceneView : UIView<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate>
 
 @property (nonatomic, weak) id<ProjectDetailSceneViewDelegate>delegate;
@@ -35,6 +36,46 @@
 @property (strong, nonatomic) UITableView * tableView;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (nonatomic ,copy) NSString *url;
+
+@property (nonatomic, copy) NSString *scenePartner;
+@property (nonatomic, copy) NSString *commentPartner;
+@property (nonatomic, copy) NSString *pptPartner;
+@property (nonatomic, strong) UISlider *slider;
+@property (nonatomic, assign) BOOL isRun;
+@property (nonatomic, assign) BOOL isPPT;
+@property (nonatomic, strong) UILabel *label;
+@property (nonatomic, assign) NSInteger sceneId;
+@property (nonatomic, assign) NSInteger page;
+@property (nonatomic, strong) NSMutableArray *pptArray;
+@property (nonatomic, strong) NSMutableArray *imageUrlArray;
+@property (nonatomic, strong) NSMutableArray *nextPageArray;
+@property (nonatomic, strong) UIButton *moreBtn;
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, assign) BOOL isFirst;
+@property (nonatomic, strong) MP3Player *player;
+
+
+/*
+ NSString *_scenePartner;
+ NSString *_commentPartner;
+ NSString *_pptPartner;
+ UISlider *_slider;
+ BOOL _isRun;
+ BOOL _isPPT;
+ MusicModel *_musicModel;
+ UILabel *_label;
+ NSInteger _sceneId;
+ NSInteger _page;
+ NSMutableArray *_pptArray;
+ NSMutableArray *_imageUrlArray;
+ NSMutableArray *_nextPageArray;
+ UIButton *_moreBtn;
+ NSTimer *_timer;
+ BOOL _isFirst;
+ MP3Player*_player;
+ 
+ */
 -(void)startLoadComment;
+- (void)removeObserverAndNotification;
 
 @end

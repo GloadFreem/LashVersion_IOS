@@ -17,6 +17,8 @@
 #import "SetPassWordViewController.h"
 #import "MyNavViewController.h"
 
+#import "ActivityViewModel.h"
+
 #import "GuidePageViewController.h"
 
 #import "JPUSHService.h"
@@ -26,6 +28,12 @@
 
 #import "UMSocialWechatHandler.h"
 #import "UMSocialQQHandler.h"
+
+#import "PingTaiWebViewController.h"
+#import "ProjectDetailController.h"
+#import "ProjectLetterViewController.h"
+#import "ActivityDetailVC.h"
+
 
 #define DENGLU @"loginUser"
 #define LOGINUSER @"isLoginUser"
@@ -65,7 +73,9 @@
     if (isStart && [isStart isEqualToString:@"true"]) {
         if (isLogin)
         {
-            [_window setRootViewController:_tabBar];
+            self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
+            [self.nav setNavigationBarHidden:YES];
+            [_window setRootViewController:self.nav];
             
         }else{
             
@@ -78,8 +88,10 @@
                 [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:1 delegate:self sel:@selector(requestLogin:)];
                 if (isSuccess)
                 {
+                    self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
+                    [self.nav setNavigationBarHidden:YES];
+                    [_window setRootViewController:self.nav];
                     
-                    [_window setRootViewController:_tabBar];
                 }else{
                     LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
                     
@@ -294,6 +306,38 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:
 (NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // IOS 7 Support Required
+    
+    NSString * type = [userInfo valueForKey:@"type"];
+    UIViewController * controller;
+    NSDictionary * notificationDic;
+    if ([type isEqualToString:@"web"]) {
+        controller = [[PingTaiWebViewController alloc]init];
+        ((PingTaiWebViewController*)controller).url = [userInfo valueForKey:@"content"];
+        
+        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
+        
+    }else if ([type isEqualToString:@"project"]) {
+        
+        controller = [[ProjectDetailController alloc]init];
+        ((ProjectDetailController*)controller).projectId = [[userInfo valueForKey:@"content"] integerValue];
+        
+        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+        
+    }else if ([type isEqualToString:@"action"]) {
+        ActivityViewModel * model = [[ActivityViewModel alloc]init];
+        model.actionId = [[userInfo valueForKey:@"content"] integerValue];
+        controller = [[ActivityDetailVC alloc]init];
+        ((ActivityDetailVC*)controller).activityModel = model;
+        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+    }else{
+        controller = [[ProjectLetterViewController alloc]init];
+        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"setLetterStatus" object:nil];
+        
+    }
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
+    
     [JPUSHService handleRemoteNotification:userInfo];
     completionHandler(UIBackgroundFetchResultNewData);
 }

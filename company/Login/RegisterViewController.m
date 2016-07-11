@@ -8,9 +8,10 @@
 
 #import "RegisterViewController.h"
 #import "SetPassWordViewController.h"
+#import "PingTaiWebViewController.h"
 
 #define YANZHENG @"verifyCode"
-
+#define USERPROTOCOL @"requestUserProtocol"
 #import "JKCountDownButton.h"
 @interface RegisterViewController ()<UITextFieldDelegate>
 {
@@ -29,6 +30,11 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *ringCodeField;
 
+@property (weak, nonatomic) IBOutlet UIButton *procotolBtn;
+
+@property (nonatomic, copy) NSString *protocolPartner;
+@property (nonatomic, copy) NSString *protocolUrl;
+
 @end
 
 @implementation RegisterViewController
@@ -38,10 +44,15 @@
     // Do any additional setup after loading the view from its nib.
     _certifyBtn.layer.cornerRadius = 5;
     _certifyBtn.layer.masksToBounds = YES;
+    _selectedBtn.selected = YES;
     
     NSString * string = [AES encrypt:YANZHENG password:KEY];
     self.partner = [TDUtil encryptMD5String:string];
 //    NSLog(@"%@",_partner);
+    self.protocolPartner = [TDUtil encryKeyWithMD5:KEY action:USERPROTOCOL];
+    
+    [self loadProtocol];
+    
     
     __block RegisterViewController * cSelf = self;
     [_sendMsgBtn addToucheHandler:^(JKCountDownButton*sender, NSInteger tag) {
@@ -62,12 +73,32 @@
             }];
             [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
                 countDownButton.enabled = YES;
-                return @"点击重新获取";
+                return @"重新获取";
                 
             }];
         }
     }];
 
+}
+
+-(void)loadProtocol
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.protocolPartner,@"partner", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:REQUESTUSERPROTOCOL postParam:dic type:0 delegate:self sel:@selector(requestProtocol:)];
+}
+-(void)requestProtocol:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+//        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic != nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *dic = [jsonDic valueForKey:@"data"];
+            _protocolUrl = dic[@"url"];
+        }
+    }
 }
 
 #pragma mark --- leftBackBtn  Action
@@ -103,6 +134,11 @@
         ringNum = @"";
     }
     
+    if (!_selectedBtn.selected) {
+        [[DialogUtil sharedInstance] showDlg:self.view textOnly:@"请先阅读用户协议"];
+        return;
+    }
+    
     SetPassWordViewController * set = [SetPassWordViewController new];
     set.telephone = phoneNum;
     set.certifyNum = certifyNum;
@@ -129,6 +165,15 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"手机号码不能为空"];
     }
 }
+
+- (IBAction)protocolBtnClick:(UIButton *)sender {
+    
+    PingTaiWebViewController *vc = [PingTaiWebViewController new];
+    vc.url = _protocolUrl;
+    
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 
 //-(void)startTime
 //{
@@ -180,12 +225,19 @@
     if(jsonDic!=nil)
     {
         NSString* code = [jsonDic valueForKey:@"status"];
-        if ([code intValue] == 200) {
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-        }else{
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+        if ([code intValue] != 200) {
+            [self.sendMsgBtn stop];
+            [self.sendMsgBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
         }
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+        
     }
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

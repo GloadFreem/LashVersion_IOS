@@ -25,7 +25,7 @@
 #pragma mark- 设置导航栏
 -(void)setUpNavBar
 {
-    
+    self.navigationItem.title = @"基金详情";
     self.view.backgroundColor = colorGray;
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     leftback.tag = 0;

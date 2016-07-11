@@ -39,7 +39,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eOA-a3-y9t">
-                    <rect key="frame" x="0.0" y="306" width="187.5" height="20"/>
+                    <rect key="frame" x="0.0" y="270" width="187.5" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="bbL-ou-cNH"/>
                     </constraints>
@@ -86,14 +86,14 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y40-V9-lkc">
-                    <rect key="frame" x="64" y="233" width="60" height="60"/>
+                    <rect key="frame" x="64" y="197" width="60" height="60"/>
                     <state key="normal" backgroundImage="iconfont-youjian.png"/>
                     <connections>
                         <action selector="emailBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="FJv-JG-wvc"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2yb-Q7-kdw">
-                    <rect key="frame" x="187" y="306" width="187.5" height="20"/>
+                    <rect key="frame" x="187" y="270" width="187.5" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="Hfn-Lh-d0W"/>
                     </constraints>
@@ -102,7 +102,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t3E-bw-lPV">
-                    <rect key="frame" x="251" y="233" width="60" height="60"/>
+                    <rect key="frame" x="251" y="197" width="60" height="60"/>
                     <state key="normal" backgroundImage="iconfont-dian.png"/>
                     <connections>
                         <action selector="phoneBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="cNG-8p-S7K"/>
@@ -118,7 +118,7 @@
                 <constraint firstItem="79F-26-TBN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Ajh-ck-VZK"/>
                 <constraint firstItem="2yb-Q7-kdw" firstAttribute="width" secondItem="eOA-a3-y9t" secondAttribute="width" id="BqT-gk-LNk"/>
                 <constraint firstItem="hQP-X4-6XR" firstAttribute="top" secondItem="XY8-9D-549" secondAttribute="bottom" constant="10" id="D19-v0-mYg"/>
-                <constraint firstAttribute="bottom" secondItem="eOA-a3-y9t" secondAttribute="bottom" constant="24" id="DuD-DW-wCz"/>
+                <constraint firstAttribute="bottom" secondItem="eOA-a3-y9t" secondAttribute="bottom" constant="60" id="DuD-DW-wCz"/>
                 <constraint firstAttribute="trailing" secondItem="79F-26-TBN" secondAttribute="trailing" id="ERj-9d-R3O"/>
                 <constraint firstItem="2yb-Q7-kdw" firstAttribute="leading" secondItem="eOA-a3-y9t" secondAttribute="trailing" id="ICD-eJ-8MA"/>
                 <constraint firstItem="eKI-cC-cZE" firstAttribute="top" secondItem="Q9k-T0-EBq" secondAttribute="bottom" id="JT3-7T-xit"/>

@@ -32,4 +32,6 @@
 @property (nonatomic, strong) MineCollectionListModel *collectModel;
 @property (nonatomic, strong) UITableView *tableView;
 
+@property (nonatomic, copy) NSString *titleStr;
+
 @end

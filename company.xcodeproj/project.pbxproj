@@ -963,6 +963,10 @@
 		44FA76531D07ECD70010B478 /* comments@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA747E1D07ECD70010B478 /* comments@3x.png */; };
 		44FA76561D07ECD70010B478 /* iconfont-guanzhu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA74811D07ECD70010B478 /* iconfont-guanzhu@2x.png */; };
 		44FA76571D07ECD70010B478 /* iconfont-guanzhu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA74821D07ECD70010B478 /* iconfont-guanzhu@3x.png */; };
+		44FAD9121D335F7900BA15E1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FAD9111D335F7900BA15E1 /* AVFoundation.framework */; };
+		44FAD9181D33602E00BA15E1 /* MyAVAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FAD9171D33602E00BA15E1 /* MyAVAudioPlayer.m */; };
+		44FAD91B1D33864500BA15E1 /* icon_slider_point@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FAD9191D33864500BA15E1 /* icon_slider_point@2x.png */; };
+		44FAD91C1D33864500BA15E1 /* icon_slider_point@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FAD91A1D33864500BA15E1 /* icon_slider_point@3x.png */; };
 		44FAFA711D2DF76C00CA007C /* ProjectSceneOtherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FAFA701D2DF76C00CA007C /* ProjectSceneOtherCell.m */; };
 /* End PBXBuildFile section */
 
@@ -2276,6 +2280,11 @@
 		44FA747E1D07ECD70010B478 /* comments@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "comments@3x.png"; sourceTree = "<group>"; };
 		44FA74811D07ECD70010B478 /* iconfont-guanzhu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont-guanzhu@2x.png"; sourceTree = "<group>"; };
 		44FA74821D07ECD70010B478 /* iconfont-guanzhu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont-guanzhu@3x.png"; sourceTree = "<group>"; };
+		44FAD9111D335F7900BA15E1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		44FAD9161D33602E00BA15E1 /* MyAVAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAVAudioPlayer.h; sourceTree = "<group>"; };
+		44FAD9171D33602E00BA15E1 /* MyAVAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAVAudioPlayer.m; sourceTree = "<group>"; };
+		44FAD9191D33864500BA15E1 /* icon_slider_point@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_slider_point@2x.png"; sourceTree = "<group>"; };
+		44FAD91A1D33864500BA15E1 /* icon_slider_point@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_slider_point@3x.png"; sourceTree = "<group>"; };
 		44FAFA6F1D2DF76C00CA007C /* ProjectSceneOtherCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSceneOtherCell.h; sourceTree = "<group>"; };
 		44FAFA701D2DF76C00CA007C /* ProjectSceneOtherCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSceneOtherCell.m; sourceTree = "<group>"; };
 		88AB72B1372C8348B3F810BE /* Pods_company.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_company.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2287,6 +2296,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44FAD9121D335F7900BA15E1 /* AVFoundation.framework in Frameworks */,
 				4484D1C01D19381D001F4C3A /* libstdc++.tbd in Frameworks */,
 				4484D1BE1D19380A001F4C3A /* libsqlite3.tbd in Frameworks */,
 				4484D1BC1D1937F5001F4C3A /* libiconv.tbd in Frameworks */,
@@ -2316,6 +2326,7 @@
 		27E2DC7EC04EA90E74328CC5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				44FAD9111D335F7900BA15E1 /* AVFoundation.framework */,
 				4484D1BF1D19381D001F4C3A /* libstdc++.tbd */,
 				4484D1BD1D19380A001F4C3A /* libsqlite3.tbd */,
 				4484D1BB1D1937F5001F4C3A /* libiconv.tbd */,
@@ -3011,6 +3022,8 @@
 				449204FF1D15258D00BD5DBC /* ProjectDetailSceneCellModel.m */,
 				44B0307C1D153E8100A288FB /* MP3Player.h */,
 				44B0307D1D153E8100A288FB /* MP3Player.m */,
+				44FAD9161D33602E00BA15E1 /* MyAVAudioPlayer.h */,
+				44FAD9171D33602E00BA15E1 /* MyAVAudioPlayer.m */,
 				44B0307F1D15412300A288FB /* MusicModel.h */,
 				44B030801D15412300A288FB /* MusicModel.m */,
 				44B030821D1574FD00A288FB /* ProjectDetailMemberModel.h */,
@@ -4603,6 +4616,8 @@
 		44FA74731D07ECD70010B478 /* 现场 */ = {
 			isa = PBXGroup;
 			children = (
+				44FAD9191D33864500BA15E1 /* icon_slider_point@2x.png */,
+				44FAD91A1D33864500BA15E1 /* icon_slider_point@3x.png */,
 				44AC029E1D2B4B78000508C9 /* icon_pause@2x.png */,
 				44AC029F1D2B4B78000508C9 /* icon_pause@3x.png */,
 				44F9E8C41D1A72BA0096EF85 /* icon_sceneMore@2x.png */,
@@ -4868,6 +4883,7 @@
 				44FA75C51D07ECD70010B478 /* letterIconPoint2x.png in Resources */,
 				44FA75B11D07ECD70010B478 /* icon_loginbg@2x.png in Resources */,
 				44FA752D1D07ECD70010B478 /* activity_selected@2x.png in Resources */,
+				44FAD91C1D33864500BA15E1 /* icon_slider_point@3x.png in Resources */,
 				44871A0F1D02B30800020DD9 /* MoneyAccountVC.xib in Resources */,
 				44FA75801D07ECD70010B478 /* 圆角矩形-3@2x_16.png in Resources */,
 				44FA757E1D07ECD70010B478 /* write-拷贝-2@3x.png in Resources */,
@@ -5160,6 +5176,7 @@
 				44FA75CF1D07ECD70010B478 /* Bar-code@2x.png in Resources */,
 				44FA75071D07ECD70010B478 /* iconfont_share@3x.png in Resources */,
 				44FA74E41D07ECD70010B478 /* mine_gold_mingxi@2x.png in Resources */,
+				44FAD91B1D33864500BA15E1 /* icon_slider_point@2x.png in Resources */,
 				44FA749D1D07ECD70010B478 /* jiatupian@2x.jpg in Resources */,
 				44FA75D21D07ECD70010B478 /* bill-chongzhi@2x.png in Resources */,
 				44FA76351D07ECD70010B478 /* 多边形-1@3x.png in Resources */,
@@ -5438,6 +5455,7 @@
 				4487193A1D02B28B00020DD9 /* InvistViewController.m in Sources */,
 				44871A101D02B30800020DD9 /* MyDataCompanyVC.m in Sources */,
 				44871A271D02B30800020DD9 /* MineProjectCenterPersonSecondCell.m in Sources */,
+				44FAD9181D33602E00BA15E1 /* MyAVAudioPlayer.m in Sources */,
 				442808A71D26AC2E0043177B /* CircleShareBottomView.m in Sources */,
 				44871B8C1D02B37800020DD9 /* MLLinkLabel.m in Sources */,
 				44E1C77D1D1133B200ACF9BA /* MineActivityListModel.m in Sources */,

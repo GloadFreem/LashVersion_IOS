@@ -150,7 +150,7 @@
     }];
     //标题
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.text = @"个人资料";
+    _titleLabel.text = self.titleStr;
     _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.font = [UIFont systemFontOfSize:18];

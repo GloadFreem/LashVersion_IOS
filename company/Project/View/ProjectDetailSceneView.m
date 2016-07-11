@@ -20,26 +20,13 @@
 #define REQUESTSCENECOMMENT @"requestProjectSceneCommentList"
 #define REQUESTPPT @"requestRecorData"
 @implementation ProjectDetailSceneView
-
 {
-    NSString *_scenePartner;
-    NSString *_commentPartner;
-    NSString *_pptPartner;
-    UISlider *_slider;
-    BOOL _isRun;
-    BOOL _isPPT;
-    MusicModel *_musicModel;
-    UILabel *_label;
-    NSInteger _sceneId;
-    NSInteger _page;
-    NSMutableArray *_pptArray;
-    NSMutableArray *_imageUrlArray;
-    NSMutableArray *_nextPageArray;
-    UIButton *_moreBtn;
-    NSTimer *_timer;
-    BOOL _isFirst;
-    MP3Player*_player;
+    id _playTimeObserver; // 播放进度观察者
+    BOOL isRemoveNot; // 是否移除通知
+    AVPlayerItem *playerItem;
+    UIButton * startBtn;
 }
+
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if ([super initWithFrame:frame]) {
@@ -69,7 +56,9 @@
         }
         [self createUI];
         
-        
+        if (!_player) {
+            _player=[[MP3Player alloc]init];
+        }
     }
     return self;
 }
@@ -105,11 +94,12 @@
                     _isFirst = NO;
                 }
             }
+            
             _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
-            [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
+           [_timer setFireDate:[NSDate distantPast]];
             
         }else{
-            [[DialogUtil sharedInstance]showDlg:self textOnly:[jsonDic valueForKey:@"message"]];
+            [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
 }
@@ -153,12 +143,13 @@
 //                [_imageUrlArray addObject:model.imageUrl];
 //            }
             [_bannerView relayoutWithModelArr:_imageUrlArray];
+            
 //            NSLog(@"打印数组个数---%ld",(unsigned long)_nextPageArray.count);
             
             _isPPT  = YES;
             
         }else{
-        [[DialogUtil sharedInstance]showDlg:self textOnly:[jsonDic valueForKey:@"message"]];
+        [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
 }
@@ -195,7 +186,7 @@
             
             
         }else{
-            [[DialogUtil sharedInstance]showDlg:self textOnly:[jsonDic valueForKey:@"message"]];
+            [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
 }
@@ -211,7 +202,7 @@
     _tableView.showsHorizontalScrollIndicator = NO;
     [self addSubview:_tableView];
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.mas_top);
+        make.top.mas_equalTo(self.mas_top).offset(60);
         make.left.mas_equalTo(self.mas_left);
         make.right.mas_equalTo(self.mas_right);
         make.bottom.mas_equalTo(self.mas_bottom).offset(-50);
@@ -230,6 +221,7 @@
     
 //    [_tableView setTableHeaderView:[self createHeaderView]];
 //    [self createFooterView];
+    [self createHeaderView];
 }
 
 -(void)moreClick:(UIButton*)btn
@@ -238,7 +230,7 @@
         [self.delegate didClickMoreBtn];
     }
 }
--(UIView*)createHeaderView
+-(void)createHeaderView
 {
     UIView * headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 60)];
     headerView.backgroundColor = [UIColor whiteColor];
@@ -246,12 +238,13 @@
     lightView.backgroundColor = [UIColor lightGrayColor];
     lightView.alpha = 0.3;
     [headerView addSubview:lightView];
+    [self addSubview:headerView];
     
-    UIButton * startBtn = [[UIButton alloc]init];
+    startBtn = [[UIButton alloc]init];
     
     [startBtn setImage:[UIImage imageNamed:@"iconfont-bofang"] forState:UIControlStateNormal];
-    //暂停播放图片
-    [startBtn setImage:[UIImage imageNamed:@"icon_pause"] forState:UIControlStateSelected];
+//    //暂停播放图片
+//    [startBtn setImage:[UIImage imageNamed:@"icon_pause"] forState:UIControlStateSelected];
     
     //播放图片
     [startBtn addTarget:self action:@selector(playClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -277,122 +270,58 @@
     _label = label;
     
     _slider =[[UISlider alloc]init];
-    [_slider addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged];
+    [_slider setUserInteractionEnabled:YES];
+    [_slider addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged | UIControlEventTouchUpInside];
+    [_slider setThumbImage:[UIImage imageNamed:@"icon_slider_point"] forState:UIControlStateNormal];
     [headerView addSubview:_slider];
     [_slider mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(startBtn.mas_right).offset(20);
         make.centerY.mas_equalTo(headerView.mas_centerY).offset(10);
         make.right.mas_equalTo(label.mas_left).offset(-10);
-        make.height.mas_equalTo(5);
+        make.height.mas_equalTo(30);
     }];
     
-    return headerView;
+    
 }
 
--(void)createFooterView
-{
-    UIView * footer =[[UIView alloc]init];
-    footer.backgroundColor = [UIColor whiteColor];
-    [self addSubview:footer];
-    [footer mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.mas_bottom);
-        make.left.right.mas_equalTo(0);
-        make.height.mas_equalTo(50);
-    }];
-    UITextField * text = [[UITextField alloc]init];
-    text.layer.cornerRadius = 2;
-    text.layer.masksToBounds = YES;
-    text.layer.borderColor = [UIColor darkGrayColor].CGColor;
-    text.layer.borderWidth = 0.5;
-    
-    
-    [footer addSubview:text];
-    
-    UIButton * btn =[[UIButton alloc]init];
-    [btn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
-    [btn setTitle:@"发送" forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [btn setBackgroundColor:colorBlue];
-    btn.titleLabel.font = [UIFont systemFontOfSize:17];
-    [footer addSubview:btn];
-    
-    [text mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(5);
-        make.bottom.mas_equalTo(-5);
-        make.left.mas_equalTo(5);
-        make.right.mas_equalTo(btn.mas_left).offset(-5);
-    }];
-    
-    
-    [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(footer.mas_top);
-        make.right.mas_equalTo(footer.mas_right);
-        make.bottom.mas_equalTo(footer.mas_bottom);
-        make.width.mas_equalTo(75);
-    }];
-    
-}
-#pragma mark -发送信息
--(void)sendMessage:(UIButton*)btn
-{
-    NSLog(@"发送信息");
-}
+
 #pragma mark----初始化 播放
 -(void)startPlay
 {
-    MP3Player*player=[[MP3Player alloc]init];
-    if (!player.isPlayMusic) {
+    if (isRemoveNot) {
+        //如果已经存在 移除通知。kvo 初始化控件属性
+        [self removeObserverAndNotification];
+        [self initialControls];
+        isRemoveNot = NO;
+    }
+    
+    if (!_player.isPlayMusic) {
         NSString *path = [NSString stringWithFormat:@"%@",_url];
         NSURL *url =[NSURL URLWithString:path];
         
-        AVPlayerItem *playerItem = [[AVPlayerItem alloc]initWithURL:url];
-        player.player = [[AVPlayer alloc]initWithPlayerItem:playerItem];
+        playerItem = [[AVPlayerItem alloc]initWithURL:url];
         
+        _player.player = [[AVPlayer alloc]initWithPlayerItem:playerItem];
+//        [_player.player replaceCurrentItemWithPlayerItem:playerItem];
+        //增加观察者 监听status属性
+       [playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
         //进度  帧数 帧率
-        __weak AVPlayer *Wplayer = player.player;
-//        __weak UISlider *Wslider = _slider;
+        __weak AVPlayer *Wplayer = _player.player;
+
+        __weak ProjectDetailSceneView *weakSelf = self;
         
-        [player.player addPeriodicTimeObserverForInterval:CMTimeMake(1, 1) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
+        _playTimeObserver = [_player.player addPeriodicTimeObserverForInterval:CMTimeMake(1, 1) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
             
-//            static int h = 0,m = 0, s = 0;
             NSInteger current = CMTimeGetSeconds(time);
             
-           
             if (current) {
-                
-                if (current <= 59) {
-                    _label.text = [NSString stringWithFormat:@"00:00:%ld",(long)current];
-                    
-                }else if (60 < current  && current <= 3599 ){
-                    NSInteger minute = current / 60;
-                    NSInteger second = current % 60;
-                    _label.text = [NSString stringWithFormat:@"00:%.2ld:%.2ld",(long)minute,(long)second];
-                }else{
-                    NSInteger hour = current / 3600;
-                    NSInteger minute = (current % 3600) / 60;
-                    NSInteger second = current % 3600 % 60;
-                    _label.text = [NSString stringWithFormat:@"%.2ld:%.2ld:%.2ld",(long)hour,(long)minute,(long)second];
-                
-                }
+            
+                [weakSelf updateTimeLabel:current];
                 
             }
             
             //实时监听遍历是否换页
-            for (NSInteger i = 0; i < _pptArray.count; i ++) {
-                ProjectPPTModel *model = _pptArray[i];
-                if (current >= model.startTime && current <= model.endTime) {
-                    
-                    //                    NSLog(@"当前ppt页数----%ld",(long)model.sortIndex);
-                    NSInteger currentPage = _bannerView.scrollView.contentOffset.x/SCREENWIDTH;
-                    if (currentPage == _pptArray.count -2) {
-                        _page ++;
-                        [self startLoadPPT];
-                    }
-                    
-                    [_bannerView nextPage: model.sortIndex];
-                    NSLog(@"翻到-----%ld页",(long)model.sortIndex);
-                }
-            }
+            [weakSelf updatePPT:current];
             
             
             //当前时间
@@ -401,64 +330,159 @@
             CMTime duration=Wplayer.currentItem.duration;
             //进度＝当前时间/总时间
             float pro=CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(duration);
-            [_slider setValue:pro animated:YES];
-            
-            
-            
+            [weakSelf updateVideoSlider:pro];
             
         }];
     }
+    
+    [self addEndTimeNotification];
+//
+    isRemoveNot = YES;
 }
 
-#pragma mark -是否播放
+// 各控件设初始值
+- (void)initialControls{
+    [self stop];
+    _label.text = @"00:00:00";
+    self.slider.value = 0.0f;
+}
+#pragma mark ------------是否播放-------------------
 -(void)playClick:(UIButton*)btn
 {
-    if (_isPPT) {
-        if (_imageUrlArray.count) {
-            [_bannerView relayoutWithModelArr:_imageUrlArray];
-        }
-        _isPPT  = NO;
-    }
-    
-    MP3Player*player=[[MP3Player alloc]init];
-    if (!btn.selected) {
-        [player.player play];
-        _isRun = YES;
-        player.isPlayMusic = YES;
-        _bannerView.scrollView.scrollEnabled = NO;
-
+    if (_player.isPlayMusic) {
+        [self stop];
     }else{
-        [player.player pause];
-        _isRun=NO;
-        player.isPlayMusic=NO;
-        _bannerView.scrollView.scrollEnabled = YES;
+        [self play];
     }
     
-    btn.selected = !btn.selected;
 }
+
+-(void)play
+{
+    _player.isPlayMusic = YES;
+    [self.player.player play];
+    _bannerView.scrollView.scrollEnabled = NO;
+    [startBtn setImage:[UIImage imageNamed:@"icon_pause"] forState:UIControlStateNormal];
+}
+- (void)stop{
+    _player.isPlayMusic = NO;
+    [self.player.player pause];
+    _bannerView.scrollView.scrollEnabled = YES;
+    [startBtn setImage:[UIImage imageNamed:@"iconfont-bofang"] forState:UIControlStateNormal];
+}
+
+#pragma mark - KVO - status
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    AVPlayerItem *item = (AVPlayerItem *)object;
+    if ([keyPath isEqualToString:@"status"]) {
+        if ([playerItem status] == AVPlayerStatusReadyToPlay) {
+            NSLog(@"AVPlayerStatusReadyToPlay");
+            CMTime duration = item.duration;// 获取音频总长度
+            [self setMaxDuratuin:CMTimeGetSeconds(duration)];
+//            [self play];
+        }else if([playerItem status] == AVPlayerStatusFailed) {
+            NSLog(@"AVPlayerStatusFailed");
+            [self stop];
+        }
+    }
+}
+
+-(void)setMaxDuratuin:(float)duration
+{
+    self.slider.maximumValue = duration;
+}
+
+-(void)updatePPT:(NSInteger)current
+{
+    for (NSInteger i = 0; i < _pptArray.count; i ++) {
+        ProjectPPTModel *model = _pptArray[i];
+        if (current >= model.startTime && current <= model.endTime) {
+            
+            //                    NSLog(@"当前ppt页数----%ld",(long)model.sortIndex);
+            NSInteger currentPage = _bannerView.scrollView.contentOffset.x/SCREENWIDTH;
+            if (currentPage == _pptArray.count -2) {
+                [self startLoadMore];
+            }
+            
+            [_bannerView nextPage: model.sortIndex];
+            NSLog(@"翻到-----%ld页",(long)model.sortIndex);
+        }
+    }
+}
+#pragma mark----更新进度条----
+-(void)updateVideoSlider:(CGFloat)currentTime
+{
+    [_slider setValue:currentTime animated:YES];
+    NSLog(@"更新进度条------%lf",currentTime);
+}
+#pragma mark----更新时间----
+-(void)updateTimeLabel:(NSInteger)currentTime
+{
+    if (currentTime <= 59) {
+        _label.text = [NSString stringWithFormat:@"00:00:%ld",(long)currentTime];
+    }else if (60 < currentTime  && currentTime <= 3599 ){
+        NSInteger minute = currentTime / 60;
+        NSInteger second = currentTime % 60;
+        _label.text = [NSString stringWithFormat:@"00:%.2ld:%.2ld",(long)minute,(long)second];
+    }else{
+        NSInteger hour = currentTime / 3600;
+        NSInteger minute = (currentTime % 3600) / 60;
+        NSInteger second = currentTime % 3600 % 60;
+        _label.text = [NSString stringWithFormat:@"%.2ld:%.2ld:%.2ld",(long)hour,(long)minute,(long)second];
+        
+    }
+}
+
+-(void)startLoadMore
+{
+    _page ++;
+    [self startLoadPPT];
+}
+
 #pragma mark- slider的进度事件
 -(void)valueChanged
 {
     MP3Player*player=[[MP3Player alloc]init];
     CMTime currentTime=CMTimeMultiplyByFloat64(player.player.currentItem.duration, _slider.value);
     [player.player seekToTime:currentTime];
-    
 }
 
+
+-(void)addEndTimeNotification{
+    //给AVPlayerItem添加播放完成通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackFinished:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+}
+
+-(void)playbackFinished:(NSNotification *)notification{
+    NSLog(@"音频播放完成.");
+    
+}
+#pragma mark - 移除通知&KVO
+- (void)removeObserverAndNotification{
+    [self.player.player replaceCurrentItemWithPlayerItem:nil];
+    [playerItem removeObserver:self forKeyPath:@"status"];
+    
+    [self.player.player removeTimeObserver:_playTimeObserver];
+    _playTimeObserver = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+    
+    _player.player = nil;
+}
 
 #pragma mark -UITableViewDataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section  
-{
-    return [self createHeaderView];
-}
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 60;
-}
+//-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section  
+//{
+//    return [self createHeaderView];
+//}
+//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    return 60;
+//}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _dataArray.count;
@@ -514,9 +538,9 @@
 }
 
 -(void)stopTimer{
-    [_timer invalidate];
     
-    
+    [_timer setFireDate:[NSDate distantFuture]];
+    _timer = nil;
 }
 
 @end

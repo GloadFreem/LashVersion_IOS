@@ -18,6 +18,7 @@
 
 #import "ProjectDetailSceneView.h"
 
+#import "RenzhengViewController.h"
 
 #import "ProjectDetailBaseMOdel.h"
 #import "ProjectDetailMemberModel.h"
@@ -108,6 +109,8 @@
 
 @property (nonatomic, copy) NSString *authenPartner;
 @property (nonatomic, assign) BOOL isAuthentic;
+@property (nonatomic, copy) NSString *authenticName;
+@property (nonatomic, copy) NSString *identiyTypeId;
 
 @property (nonatomic, copy) NSString *servicePartner;
 @property (nonatomic, copy) NSString *servicePhone;
@@ -122,7 +125,6 @@
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
-    
     
     // Do any additional setup after loading the view from its nib.
     //获得内容partner
@@ -191,7 +193,7 @@
 -(void)requestAuthenInfo:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -200,28 +202,14 @@
             
             AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
             authenticModel = baseModel;
-//            NSLog(@"打印个人信息：----%@",baseModel);
-            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-            [data setValue:baseModel.headSculpture forKey:USER_STATIC_HEADER_PIC];
-            [data setValue:baseModel.telephone forKey:USER_STATIC_TEL];
-            [data setValue:[NSString stringWithFormat:@"%ld",(long)baseModel.userId] forKey:USER_STATIC_USER_ID];
             
             NSArray *authenticsArray = baseModel.authentics;
-            ProjectAuthentics *authentics = authenticsArray[0];
-            
-            [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
-            [data setValue:authentics.name forKey:USER_STATIC_NAME];
-            [data setValue:authentics.identiyCarA forKey:USER_STATIC_IDPIC];
-            [data setValue:authentics.identiyCarNo forKey:USER_STATIC_IDNUMBER];
-            [data setValue:authentics.position forKey:USER_STATIC_POSITION];
-            [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
-            [data setValue:authentics.authenticstatus.name forKey:USER_STATIC_USER_AUTHENTIC_STATUS];
-            
-            [data synchronize];
-            
-            if ([authentics.authenticstatus.name isEqualToString:@"已认证"]) {
-                _isAuthentic = YES;
+            if (authenticsArray.count) {
+                ProjectAuthentics *authentics = authenticsArray[0];
+                _authenticName = authentics.authenticstatus.name;
+                _identiyTypeId = [NSString stringWithFormat:@"%ld",(long)authentics.identiytype.identiyTypeId];
             }
+            
         }
     }
 }
@@ -466,6 +454,15 @@
             make.height.mas_equalTo(50);
             make.top.mas_equalTo(SCREENHEIGHT - 50);
         }];
+        
+        UIView *line = [UIView new];;
+        line.backgroundColor = GrayColor;
+        [_bottomView addSubview:line];
+        [line mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.top.right.mas_equalTo(0);
+            make.height.mas_equalTo(0.5);
+        }];
+        
         _kefuBtn = [UIButton new];
         [_kefuBtn setBackgroundImage:[UIImage imageNamed:@"icon_kefu"] forState:UIControlStateNormal];
         [_kefuBtn setBackgroundImage:[UIImage imageNamed:@"icon_kefu"] forState:UIControlStateHighlighted];
@@ -796,7 +793,7 @@
     }
 #pragma mark ---------------进入投资界面---------------------
     if (btn.tag == 1) {
-        if (_isAuthentic) {
+        if ([_authenticName isEqualToString:@"已认证"]) {
             ProjectDetailInvestVC *vc = [ProjectDetailInvestVC new];
             vc.limitAmount = _limitAmount;
             vc.projectId = self.projectId;
@@ -807,10 +804,41 @@
             vc.profit = _profit;
             vc.startPageImage = _startPageImage;
             [self.navigationController pushViewController:vc animated:YES];
-        }else{
+        }
+        if ([_authenticName isEqualToString:@"认证中"]) {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alertView show];
+        }
+        
+        if ([_authenticName isEqualToString:@"未认证"])
+        {
+            
+            //没有认证 提醒去认证
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还未认证，是否前去认证？" preferredStyle:UIAlertControllerStyleAlert];
+            __block ProjectDetailController* blockSelf = self;
+            
+            UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                
+            }];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [blockSelf btnCertain:nil];
+            }];
+            
+            [alertController addAction:cancleAction];
+            [alertController addAction:okAction];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
             
         }
     }
+}
+
+-(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
+    
 }
 - (IBAction)leftBack:(UIButton *)sender {
     [SVProgressHUD dismiss];
@@ -818,6 +846,7 @@
         [_attentionVC.projectArray removeObject:_listModel];
         [_tableView reloadData];
     }
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark -分享
@@ -1109,10 +1138,9 @@
 
 -(void)dealloc
 {
+
+    [scene removeObserverAndNotification];
     
-    
-    MP3Player *player = [[MP3Player alloc]init];
-    player.player = nil;
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

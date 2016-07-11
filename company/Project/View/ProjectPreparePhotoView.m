@@ -9,7 +9,7 @@
 #import "ProjectPreparePhotoView.h"
 #import "PictureContainerView.h"
 
-CGFloat ____maxContentLabelHeight = 0; //根据具体font来定
+CGFloat ___maxContentLabelHeight = 0; //根据具体font来定
 
 @implementation ProjectPreparePhotoView
 
@@ -41,6 +41,7 @@ CGFloat ____maxContentLabelHeight = 0; //根据具体font来定
     UIImage *projectImage = [UIImage imageNamed:@"drafts"];
     _imageView = [[UIImageView alloc]initWithImage:projectImage];
     
+    
     //项目名字
     _projectLabel  = [UILabel new];
     _projectLabel.textColor = [UIColor blackColor];
@@ -56,14 +57,15 @@ CGFloat ____maxContentLabelHeight = 0; //根据具体font来定
     _contentLabel.textColor = color74;
     _contentLabel.textAlignment = NSTextAlignmentLeft;
     _contentLabel.font = BGFont(14);
-    if (____maxContentLabelHeight == 0) {
-        ____maxContentLabelHeight = _contentLabel.font.lineHeight * 3;
+    if (___maxContentLabelHeight == 0) {
+        ___maxContentLabelHeight = _contentLabel.font.lineHeight * 3;
     }
+//    NSLog(@"-----------------行高-----%lf",___maxContentLabelHeight);
     //图片
     _picContainerView = [PictureContainerView new];
     //morebtn
     _moreBtn = [UIButton new];
-    [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_more"] forState:UIControlStateNormal];
+    [_moreBtn setImage:[UIImage imageNamed:@"icon_more"] forState:UIControlStateNormal];
     [_moreBtn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
     
     NSArray *views = @[_imageView, _projectLabel, _partLine, _contentLabel, _picContainerView, _moreBtn];
@@ -98,9 +100,9 @@ CGFloat ____maxContentLabelHeight = 0; //根据具体font来定
     
     
     _moreBtn.sd_layout
-    .centerXEqualToView(_contentLabel)
-    .topSpaceToView(_picContainerView,16*HEIGHTCONFIG)
-    .widthIs(21)
+    .leftEqualToView(self)
+    .topSpaceToView(_picContainerView,10*HEIGHTCONFIG)
+    .rightEqualToView(self)
     .heightIs(28);
 
 }
@@ -109,6 +111,7 @@ CGFloat ____maxContentLabelHeight = 0; //根据具体font来定
 {
     _model = model;
     _shouldOpen = NO;
+    
     _projectLabel.text = model.projectStr;
     _contentLabel.text = model.content;
     
@@ -117,22 +120,24 @@ CGFloat ____maxContentLabelHeight = 0; //根据具体font来定
     
     
     if (model.shouldShowMoreButton) { //如果文字高度超过三行
-        
+        _moreBtn.sd_layout.heightIs(28);
         if (model.isOpen) {  //如果展开
             _picContainerView.pictureStringArray = model.pictureArray;
             
             _contentLabel.sd_layout.maxHeightIs(MAXFLOAT);
             //            _pictureContainerView.sd_layout.maxHeightIs(MAXFLOAT);
-            [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_more_close"] forState:UIControlStateNormal];
+            [_moreBtn setImage:[UIImage imageNamed:@"icon_more_close"] forState:UIControlStateNormal];
         }else{
-            _contentLabel.sd_layout.maxHeightIs(____maxContentLabelHeight);
+            _contentLabel.sd_layout.maxHeightIs(___maxContentLabelHeight);
             //            _pictureContainerView.sd_layout.maxHeightIs(maxPictureViewHeight);
-            [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_more"] forState:UIControlStateNormal];
+            [_moreBtn setImage:[UIImage imageNamed:@"icon_more"] forState:UIControlStateNormal];
             
         }
+    }else{
+        _moreBtn.sd_layout.heightIs(0);
     }
     
-    
+
     if(!model.isOpen)
     {
         if(model.pictureArray && model.pictureArray.count>0)
@@ -161,7 +166,7 @@ CGFloat ____maxContentLabelHeight = 0; //根据具体font来定
         pictureContainerTopMargin = 10;
     }
     
-    [self setupAutoHeightWithBottomView:_moreBtn bottomMargin:15];
+    [self setupAutoHeightWithBottomView:_moreBtn bottomMargin:10];
 }
 
 -(void)btnClick

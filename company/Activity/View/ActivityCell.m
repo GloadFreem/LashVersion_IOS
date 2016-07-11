@@ -34,6 +34,8 @@
 {
     _model = model;
     
+    [_distanceLabel setHidden:YES];
+    
     if(_model)
     {
         //标题

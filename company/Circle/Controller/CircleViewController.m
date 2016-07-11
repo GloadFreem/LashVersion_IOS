@@ -117,7 +117,7 @@
             NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
             
             authenticInfoModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
-            NSLog(@"打印个人信息：----%@",authenticInfoModel);
+//            NSLog(@"打印个人信息：----%@",authenticInfoModel);
 //
         }
     }
