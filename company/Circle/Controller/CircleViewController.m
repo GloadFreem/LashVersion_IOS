@@ -11,6 +11,7 @@
 #import "AuthenticInfoBaseModel.h"
 
 #import "CircleShareBottomView.h"
+#import "RenzhengViewController.h"
 
 #import "CircleForwardVC.h"
 
@@ -60,6 +61,9 @@
 @property (nonatomic, strong) CircleListModel *deleteModel;
 @property (nonatomic, copy) NSString *selfId;//本人ID
 
+@property (nonatomic, copy) NSString *authenticName;  //认证信息
+@property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
 @end
 
 @implementation CircleViewController
@@ -67,6 +71,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
+    _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+    
+    
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
@@ -351,8 +361,8 @@
             model.isOpening  = !model.isOpening;
             [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         }];
-        
     }
+    
     cell.delegate = self;
     if (self.dataArray.count) {
         cell.model = self.dataArray[indexPath.row];
@@ -385,33 +395,28 @@
 #pragma mark -发布动态
 -(void)releaseBtnClick:(UIButton*)btn
 {
-    CircleReleaseVC *vc = [CircleReleaseVC new];
-    
-    //隐藏tabbar
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
-    
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (CGFloat)cellContentViewWith
-{
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    
-    // 适配ios7
-    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait && [[UIDevice currentDevice].systemVersion floatValue] < 8) {
-        width = [UIScreen mainScreen].bounds.size.height;
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        CircleReleaseVC *vc = [CircleReleaseVC new];
+        
+        [self.navigationController pushViewController:vc animated:YES];
     }
-    return width;
+    
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
 
-#pragma mark---------------- CircleListCellDelegate--------------
-#pragma mark------------------------删除按钮----------------------
--(void)didClickDeleteInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
+-(void)presentAlertView
 {
-    _deleteModel = model;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
+    //没有认证 提醒去认证
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
     __block CircleViewController* blockSelf = self;
     
     UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
@@ -428,6 +433,46 @@
 }
 
 -(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
+    
+}
+- (CGFloat)cellContentViewWith
+{
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    
+    // 适配ios7
+    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait && [[UIDevice currentDevice].systemVersion floatValue] < 8) {
+        width = [UIScreen mainScreen].bounds.size.height;
+    }
+    return width;
+}
+
+#pragma mark---------------- CircleListCellDelegate--------------
+#pragma mark------------------------删除按钮----------------------
+-(void)didClickDeleteInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
+{
+    _deleteModel = model;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
+    __block CircleViewController* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertainClick:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertainClick:(id)sender
 {
     [_dataArray removeObject:_deleteModel];
     [self.tableView reloadData];
@@ -453,10 +498,22 @@
 #pragma maerk -分享按钮
 -(void)didClickShareBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"2",@"type",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId", nil];
+    if ([_authenticName isEqualToString:@"已认证"]){
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"2",@"type",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId", nil];
+        
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareStatus:)];
+    }
     
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareStatus:)];
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
     
     
 }
@@ -625,36 +682,50 @@
 #pragma mark -点赞按钮
 -(void)didClickPraiseBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
-    kcell = cell;
-    kmodel = model;
-    
-    model.flag = !model.flag;
-    
-    if (model.flag) {
-//        [cell.praiseBtn setImage:[UIImage imageNamed:@"iconfont-dianzan"] forState:UIControlStateNormal];
-        _flag = @"1";
-
-    }else{
-//        [cell.praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
-        _flag = @"2";
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        kcell = cell;
+        kmodel = model;
+        
+        model.flag = !model.flag;
+        
+        if (model.flag) {
+            //        [cell.praiseBtn setImage:[UIImage imageNamed:@"iconfont-dianzan"] forState:UIControlStateNormal];
+            _flag = @"1";
+            
+        }else{
+            //        [cell.praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
+            _flag = @"2";
+        }
+        //请求更新数据数据
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.praisePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId",_flag,@"flag", nil];
+        
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:CYCLE_CELL_PRAISE postParam:dic type:0 delegate:self sel:@selector(requestPraiseStatus:)];
+        //    if (_praiseSuccess) {
+        //        if (model.flag) {
+        //            [cell.praiseBtn setImage:[UIImage imageNamed:@"iconfont_dianzan"] forState:UIControlStateNormal];
+        //            model.priseCount ++;
+        //            [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
+        //        }else{
+        //            [cell.praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
+        //            model.priseCount --;
+        //            [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
+        //        }
+        //
+        //    }
     }
-    //请求更新数据数据
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.praisePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId",_flag,@"flag", nil];
     
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:CYCLE_CELL_PRAISE postParam:dic type:0 delegate:self sel:@selector(requestPraiseStatus:)];
-//    if (_praiseSuccess) {
-//        if (model.flag) {
-//            [cell.praiseBtn setImage:[UIImage imageNamed:@"iconfont_dianzan"] forState:UIControlStateNormal];
-//            model.priseCount ++;
-//            [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
-//        }else{
-//            [cell.praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
-//            model.priseCount --;
-//            [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
-//        }
-//
-//    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
+    
 }
 
 -(void)requestPraiseStatus:(ASIHTTPRequest*)request

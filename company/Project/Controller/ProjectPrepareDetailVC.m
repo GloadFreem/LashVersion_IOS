@@ -8,6 +8,7 @@
 
 #import "ProjectPrepareDetailVC.h"
 #import "ProjectPrepareCommentVC.h"
+#import "RenzhengViewController.h"
 
 #import "CircleShareBottomView.h"
 
@@ -55,12 +56,21 @@
 
 @property (nonatomic, copy) NSString *servicePartner;
 
+@property (nonatomic, copy) NSString *authenticName;  //认证信息
+@property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
 @end
 
 @implementation ProjectPrepareDetailVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
+    _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+    
     
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
@@ -360,17 +370,30 @@
 #pragma mark------ 关注-------
 -(void)collectClick:(UIButton*)btn
 {
-    _isCollect = !_isCollect;
-    NSString *flag;
-    if (_isCollect) {
-        flag = @"1";
-    }else{
-        flag = @"2";
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        _isCollect = !_isCollect;
+        NSString *flag;
+        if (_isCollect) {
+            flag = @"1";
+        }else{
+            flag = @"2";
+        }
+        
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",flag,@"flag", nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestProjectCollect:)];
     }
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",flag,@"flag", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestProjectCollect:)];
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
 -(void)requestProjectCollect:(ASIHTTPRequest*)request
 {
@@ -413,8 +436,20 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (btn.tag == 1) {
-       [self startShare];
+        if ([_authenticName isEqualToString:@"已认证"])
+        {
+            [self startShare];
+        }
+       
+        if ([_authenticName isEqualToString:@"认证中"]) {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alertView show];
+        }
         
+        if ([_authenticName isEqualToString:@"未认证"])
+        {
+            [self presentAlertView];
+        }
     }
     if (btn.tag == 2) {
         
@@ -553,26 +588,97 @@
 #pragma mark-------ProjectPrepareFooterCommentViewDelagate--------
 -(void)didClickBtn:(NSMutableArray *)dataArray
 {
-    ProjectPrepareCommentVC *vc = [ProjectPrepareCommentVC new];
-    vc.projectId =self.projectId;
-    vc.dataArray = dataArray;
-    vc.footerCommentView = _footerView;
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        ProjectPrepareCommentVC *vc = [ProjectPrepareCommentVC new];
+        vc.projectId =self.projectId;
+        vc.dataArray = dataArray;
+        vc.footerCommentView = _footerView;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
+
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
+    __block ProjectPrepareDetailVC* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
+    
+}
+
 
 #pragma mark-------ProjectDetailLeftTeamViewDelegate----------
 -(void)didClickBtnInTeamViewWithModel:(DetailTeams *)team
 {
-    PingTaiWebViewController *vc = [PingTaiWebViewController new];
-    vc.url = team.url;
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        PingTaiWebViewController *vc = [PingTaiWebViewController new];
+        vc.url = team.url;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
 
 -(void)didClickBtnInTeamExrViewWithModel:(DetailExtr *)extr
 {
-    PingTaiWebViewController *vc = [PingTaiWebViewController new];
-    vc.url = extr.url;
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        if (![_identiyTypeId isEqualToString:@"1"]) {
+            PingTaiWebViewController *vc = [PingTaiWebViewController new];
+            vc.url = extr.url;
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+        
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的身份为项目方，不能查看其他项目方的资料" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alertView show];
+        }
+        
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
 #pragma mark -moreBtn点击事件 处理
 -(void)moreBtnClick:(UIButton*)btn

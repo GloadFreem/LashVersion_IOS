@@ -121,109 +121,116 @@
     .rightEqualToView(self.contentView)
     .heightIs(10);
     
-    [self setupAutoHeightWithBottomView:_bottomView2 bottomMargin:100];
+    [self setupAutoHeightWithBottomView:_bottomView2 bottomMargin:10];
 }
 
 -(void)setTeamModelArray:(NSMutableArray *)teamModelArray
 {
     _teamModelArray = teamModelArray;
-    
-    NSInteger i = 0;
-    CGFloat width = 50;
-    CGFloat spaceMargin = 26;
-    UILabel *positionLabel;
-    for (; i < teamModelArray.count; i++) {
-        DetailTeams *team  = teamModelArray[i];
-        UIButton *btn = [UIButton new];
-        btn.frame = CGRectMake(0 + i*(width + spaceMargin), 23, width, width);
-        btn.layer.cornerRadius = 25;
-        btn.layer.masksToBounds = YES;
-        btn.tag = i;
-        btn.contentMode = UIViewContentModeScaleAspectFill;
-        [btn addTarget:self action:@selector(teamBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-//        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
-        [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",team.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
-        [_scrollView1 addSubview:btn];
+    if (teamModelArray.count) {
         
-        UILabel *nameLabel = [UILabel new];
-        nameLabel.textAlignment = NSTextAlignmentCenter;
-        nameLabel.textColor = color47;
-        nameLabel.font = BGFont(13);
+        NSInteger i = 0;
+        CGFloat width = 50;
+        CGFloat spaceMargin = 26;
+        UILabel *positionLabel;
+        for (; i < teamModelArray.count; i++) {
+            DetailTeams *team  = teamModelArray[i];
+            UIButton *btn = [UIButton new];
+            btn.frame = CGRectMake(0 + i*(width + spaceMargin), 23, width, width);
+            btn.layer.cornerRadius = 25;
+            btn.layer.masksToBounds = YES;
+            btn.tag = i;
+            btn.contentMode = UIViewContentModeScaleAspectFill;
+            [btn addTarget:self action:@selector(teamBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
+            [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",team.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
+            [_scrollView1 addSubview:btn];
+            
+            UILabel *nameLabel = [UILabel new];
+            nameLabel.textAlignment = NSTextAlignmentCenter;
+            nameLabel.textColor = color47;
+            nameLabel.font = BGFont(13);
+            
+            nameLabel.text = [NSString stringWithFormat:@"%@",team.name];
+            
+            [_scrollView1 addSubview:nameLabel];
+            [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(btn.mas_bottom).offset(12);
+                make.centerX.mas_equalTo(btn);
+                make.height.mas_equalTo(13);
+            }];
+            
+            positionLabel = [UILabel new];
+            positionLabel.textAlignment = NSTextAlignmentCenter;
+            positionLabel.textColor = color74;
+            positionLabel.font = BGFont(11);
+            
+            positionLabel.text = [NSString stringWithFormat:@"%@",team.position];
+            
+            [_scrollView1 addSubview:positionLabel];
+            [positionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(nameLabel.mas_bottom).offset(5);
+                make.centerX.mas_equalTo(btn);
+                make.height.mas_equalTo(11);
+            }];
+        }
         
-        nameLabel.text = [NSString stringWithFormat:@"%@",team.name];
-        
-        [_scrollView1 addSubview:nameLabel];
-        [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(btn.mas_bottom).offset(12);
-            make.centerX.mas_equalTo(btn);
-            make.height.mas_equalTo(13);
-        }];
-        
-        positionLabel = [UILabel new];
-        positionLabel.textAlignment = NSTextAlignmentCenter;
-        positionLabel.textColor = color74;
-        positionLabel.font = BGFont(11);
-        
-        positionLabel.text = [NSString stringWithFormat:@"%@",team.position];
-        
-        [_scrollView1 addSubview:positionLabel];
-        [positionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(nameLabel.mas_bottom).offset(5);
-            make.centerX.mas_equalTo(btn);
-            make.height.mas_equalTo(11);
-        }];
+        CGFloat widOff = 30 + (width + spaceMargin) * i + 30;
+        _scrollView1.contentSize = CGSizeMake(widOff, 120);
     }
     
-    CGFloat widOff = 30 + (width + spaceMargin) * i + 30;
-    _scrollView1.contentSize = CGSizeMake(widOff, 120);
+    
     
 }
 
 -(void)setExtrModelArray:(NSMutableArray *)extrModelArray
 {
     _extrModelArray = extrModelArray;
-    NSInteger i = 0;
-    CGFloat width = 50;
-    CGFloat spaceMargin = 26;
-    for (; i < extrModelArray.count; i++) {
-        DetailExtr *extr = extrModelArray[i];
-        UIButton *btn = [UIButton new];
-        btn.frame = CGRectMake(0 + i*(width + spaceMargin), 23, width, width);
-        btn.layer.cornerRadius = 25;
-        btn.layer.masksToBounds = YES;
-        btn.contentMode = UIViewContentModeScaleAspectFill;
-        [btn addTarget:self action:@selector(ExrBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-//        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
-        [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",extr.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
-        [_scrollView2 addSubview:btn];
+    if (extrModelArray.count) {
+        NSInteger i = 0;
+        CGFloat width = 50;
+        CGFloat spaceMargin = 26;
+        for (; i < extrModelArray.count; i++) {
+            DetailExtr *extr = extrModelArray[i];
+            UIButton *btn = [UIButton new];
+            btn.frame = CGRectMake(0 + i*(width + spaceMargin), 23, width, width);
+            btn.layer.cornerRadius = 25;
+            btn.layer.masksToBounds = YES;
+            btn.contentMode = UIViewContentModeScaleAspectFill;
+            [btn addTarget:self action:@selector(ExrBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
+            [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",extr.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
+            [_scrollView2 addSubview:btn];
+            
+            UILabel *nameLabel = [UILabel new];
+            nameLabel.textAlignment = NSTextAlignmentCenter;
+            nameLabel.textColor = color47;
+            nameLabel.font = BGFont(13);
+            nameLabel.numberOfLines = 2;
+            NSString *start = [extr.content substringToIndex:2];
+            NSString *end = [extr.content substringFromIndex:2];
+            
+            nameLabel.text = [NSString stringWithFormat:@"%@\n%@",start,end];
+            
+            [_scrollView2 addSubview:nameLabel];
+            //        [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            //            make.top.mas_equalTo(btn.mas_bottom).offset(12);
+            //            make.centerX.mas_equalTo(btn);
+            //            make.height.mas_equalTo(26);
+            //            make.width.mas_equalTo(width);
+            //        }];
+            nameLabel.sd_layout
+            .topSpaceToView(btn,12)
+            .centerXEqualToView(btn)
+            .widthIs(width)
+            .autoHeightRatio(0);
+            
+        }
         
-        UILabel *nameLabel = [UILabel new];
-        nameLabel.textAlignment = NSTextAlignmentCenter;
-        nameLabel.textColor = color47;
-        nameLabel.font = BGFont(13);
-        nameLabel.numberOfLines = 2;
-        NSString *start = [extr.content substringToIndex:2];
-        NSString *end = [extr.content substringFromIndex:2];
-        
-        nameLabel.text = [NSString stringWithFormat:@"%@\n%@",start,end];
-        
-        [_scrollView2 addSubview:nameLabel];
-//        [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.mas_equalTo(btn.mas_bottom).offset(12);
-//            make.centerX.mas_equalTo(btn);
-//            make.height.mas_equalTo(26);
-//            make.width.mas_equalTo(width);
-//        }];
-        nameLabel.sd_layout
-        .topSpaceToView(btn,12)
-        .centerXEqualToView(btn)
-        .widthIs(width)
-        .autoHeightRatio(0);
-        
+        CGFloat widOff = (width + spaceMargin) * i - spaceMargin;
+        _scrollView2.contentSize = CGSizeMake(widOff, 120);
+
     }
-    
-    CGFloat widOff = (width + spaceMargin) * i - spaceMargin;
-    _scrollView2.contentSize = CGSizeMake(widOff, 120);
     
 }
 

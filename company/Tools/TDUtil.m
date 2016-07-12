@@ -1533,6 +1533,7 @@
     [data removeObjectForKey:USER_STATIC_POSITION];
     [data removeObjectForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     [data removeObjectForKey:USER_STATIC_EXT_USER_ID];
+    [data removeObjectForKey:@"nickName"];
     [data synchronize];
 }
 
@@ -1583,4 +1584,24 @@
     
     return str;
 }
+
++(int)getDateSinceFromDate:(NSString *)fromDate toDate:(NSString *)toDate
+{
+    fromDate = [fromDate substringFromIndex:11];
+    toDate = [toDate substringFromIndex:11];
+    // hh:ss
+    int _hfIntValue = [[fromDate substringToIndex:2] intValue];
+    int _htIntValue = [[toDate substringToIndex:2] intValue];
+    
+    int _sfIntValue = [[fromDate  substringFromIndex:3] intValue];
+    int _stIntValue = [[toDate substringFromIndex:3] intValue];
+    
+    
+    if (_hfIntValue == _htIntValue) {
+        return _sfIntValue - _stIntValue;
+    }else{
+        return (_hfIntValue-_htIntValue)*60;
+    }
+}
+
 @end

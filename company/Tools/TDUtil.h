@@ -564,4 +564,8 @@
 +(void)clearMemory;
 //时间差
 +(NSString*)getDateCha:(NSString*)endDate;
+
+
++(int)getDateSinceFromDate:(NSString *)fromDate toDate:(NSString *)toDate;
+
 @end

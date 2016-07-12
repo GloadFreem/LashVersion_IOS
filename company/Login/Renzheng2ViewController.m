@@ -75,8 +75,8 @@
     if (![textField.text isEqualToString:@""]) {
         
         textField.text = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+//        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+//        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
         
         self.textField.text = textField.text;
     }else{

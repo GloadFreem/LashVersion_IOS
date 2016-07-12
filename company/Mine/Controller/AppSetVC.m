@@ -231,7 +231,8 @@
     if (indexPath.row == 7) {
         
         [TDUtil clearMemory];
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"清除成功"];
+        
+        [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:@"缓存已清除"];
     }
     
     if (indexPath.row == 8) {

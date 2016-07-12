@@ -21,5 +21,7 @@
 
 @property (strong, nonatomic)  UILabel *timeLabel;
 
+@property (strong, nonatomic) UIView * contentBGView;
+@property (strong, nonatomic) UIView * timeBGView;
 
 @end

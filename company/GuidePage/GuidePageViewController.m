@@ -41,18 +41,24 @@
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     [_scrollView setBounces:NO];
+    [_scrollView setClipsToBounds:NO];
     [_scrollView setContentSize:CGSizeMake(SCREENWIDTH*kImageCount, SCREENHEIGHT)];
     [_scrollView setPagingEnabled:YES];
-    
+    UIImageView *imageView;
     for (NSInteger i =0; i < kImageCount; i ++) {
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i *SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT)];
+        imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i *SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT)];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
         [imageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"lead_guide_0%ld",(long)i+1]]];
         if (i == kImageCount - 1) {
             [self createIntoButton:imageView];
         }
         [_scrollView addSubview:imageView];
+        
+       
     }
     [self.view addSubview:_scrollView];
+    
+     [_scrollView setupAutoContentSizeWithBottomView:imageView bottomMargin:-20];
     
 }
 #pragma mark- 创建页面控制器

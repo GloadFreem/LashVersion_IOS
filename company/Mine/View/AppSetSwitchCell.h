@@ -9,7 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @interface AppSetSwitchCell : UITableViewCell
+
+@property (nonatomic, strong) NSIndexPath *indexPath;
+
 @property (weak, nonatomic) IBOutlet UILabel *titlelabel;
 
-@property (weak, nonatomic) IBOutlet UIButton *switchBtn;
+
+@property (weak, nonatomic) IBOutlet UISwitch *switchBtn;
+
 @end

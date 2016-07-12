@@ -15,7 +15,7 @@
 }
 -(instancetype)initWithFrame:(CGRect)frame
 {
-    if ([super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
         
     }
     return self;
@@ -103,9 +103,14 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
-            NSArray *modelArray = [ProjectDetailMemberModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
-            ProjectDetailMemberModel *model = modelArray[0];
-            self.model = model;
+            if (jsonDic[@"data"]) {
+                NSArray *modelArray = [ProjectDetailMemberModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+                if (modelArray.count) {
+                    ProjectDetailMemberModel *model = modelArray[0];
+                    self.model = model;
+                }
+                
+            }
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self textOnly:[jsonDic valueForKey:@"message"]];

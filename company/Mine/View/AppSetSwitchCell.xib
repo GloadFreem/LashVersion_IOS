@@ -14,13 +14,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yth-Rq-ipY">
-                        <rect key="frame" x="315" y="8" width="43" height="28"/>
-                        <state key="normal" backgroundImage="icon_open.png"/>
-                        <connections>
-                            <action selector="switchBtnClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="jcU-Ka-9i0"/>
-                        </connections>
-                    </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HJt-jX-oyM">
                         <rect key="frame" x="17" y="11" width="42" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -34,25 +27,32 @@
                             <constraint firstAttribute="height" constant="1" id="aJS-jb-m0j"/>
                         </constraints>
                     </view>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KEt-ZS-0j0">
+                        <rect key="frame" x="310" y="7" width="47" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="45" id="LrK-SX-r3c"/>
+                            <constraint firstAttribute="height" constant="30" id="YWu-oS-v4A"/>
+                        </constraints>
+                        <connections>
+                            <action selector="changeValue:" destination="KGk-i7-Jjw" eventType="valueChanged" id="ejs-5e-Z9L"/>
+                        </connections>
+                    </switch>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Yth-Rq-ipY" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="7em-6y-WhW"/>
-                    <constraint firstAttribute="trailing" secondItem="Yth-Rq-ipY" secondAttribute="trailing" constant="17" id="B7G-HT-hNR"/>
                     <constraint firstItem="HJt-jX-oyM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="17" id="T6q-3G-Drg"/>
                     <constraint firstItem="M0M-HA-BpH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="17" id="W7H-Hv-aJv"/>
                     <constraint firstItem="HJt-jX-oyM" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="iS5-Nx-2Xa"/>
+                    <constraint firstItem="KEt-ZS-0j0" firstAttribute="centerY" secondItem="HJt-jX-oyM" secondAttribute="centerY" id="ie4-1V-k4A"/>
                     <constraint firstAttribute="trailing" secondItem="M0M-HA-BpH" secondAttribute="trailing" id="jhm-tp-G1K"/>
                     <constraint firstAttribute="bottom" secondItem="M0M-HA-BpH" secondAttribute="bottom" id="mjW-kw-A1P"/>
+                    <constraint firstAttribute="trailing" secondItem="KEt-ZS-0j0" secondAttribute="trailing" constant="20" id="nyi-V9-sIK"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="switchBtn" destination="Yth-Rq-ipY" id="5f0-NF-hs2"/>
+                <outlet property="switchBtn" destination="KEt-ZS-0j0" id="EUy-FE-nIz"/>
                 <outlet property="titlelabel" destination="HJt-jX-oyM" id="Tqf-xY-Tjl"/>
             </connections>
             <point key="canvasLocation" x="251.5" y="248"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="icon_open.png" width="43" height="28"/>
-    </resources>
 </document>

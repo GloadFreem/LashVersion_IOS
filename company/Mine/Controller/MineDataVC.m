@@ -77,7 +77,7 @@
     _textArray = [NSArray array];
     [self createLeftArray];
     
-    [self setupNav];
+    
     
     [self createTableView];
     
@@ -105,40 +105,43 @@
 -(void)createLeftArray
 {
     NSArray *authenticsArray = _authenticModel.authentics;
-    ProjectAuthentics *authentics = authenticsArray[0];
-    if ([authentics.authenticstatus.name isEqualToString:@"已认证"]) {
-        _textArray = @[@"头像",@"指环码",@"实名认证信息(已认证)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
-        _authenticType = @"已认证";
+    if (authenticsArray.count) {
+        ProjectAuthentics *authentics = authenticsArray[0];
+        if ([authentics.authenticstatus.name isEqualToString:@"已认证"]) {
+            _textArray = @[@"头像",@"指环码",@"实名认证信息(已认证)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
+            _authenticType = @"已认证";
+        }
+        if ([authentics.authenticstatus.name isEqualToString:@"认证中"]) {
+            _textArray = @[@"头像",@"指环码",@"实名认证信息(认证中)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
+            _authenticType = @"认证中";
+        }
+        if ([authentics.authenticstatus.name isEqualToString:@"未认证"]) {
+            _textArray = @[@"头像",@"指环码",@"实名认证信息(未认证)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
+            _authenticType = @"未认证";
+        }
+        if ([authentics.authenticstatus.name isEqualToString:@"认证失败"]) {
+            _textArray = @[@"头像",@"指环码",@"实名认证信息(认证失败)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
+            _authenticType = @"认证失败";
+        }
+        
+        _icon = _authenticModel.headSculpture;
+        _name = authentics.name;
+        _identifyType = authentics.identiytype.name;
+        
+        if (authentics.identiyCarNo.length) {
+            NSString *qian = [authentics.identiyCarNo substringToIndex:3];
+            NSString *hou = [authentics.identiyCarNo substringFromIndex:14];
+            _identifyNum = [NSString stringWithFormat:@"%@***********%@",qian,hou];
+        }
+        _companyName = authentics.companyName;
+        _position = authentics.position;
+        
+        NSString *province = authentics.city.province.name;
+        NSString *city = authentics.city.name;
+        _address = [NSString stringWithFormat:@"%@ | %@",province,city];
+        
+
     }
-    if ([authentics.authenticstatus.name isEqualToString:@"认证中"]) {
-        _textArray = @[@"头像",@"指环码",@"实名认证信息(认证中)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
-        _authenticType = @"认证中";
-    }
-    if ([authentics.authenticstatus.name isEqualToString:@"未认证"]) {
-        _textArray = @[@"头像",@"指环码",@"实名认证信息(未认证)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
-        _authenticType = @"未认证";
-    }
-    if ([authentics.authenticstatus.name isEqualToString:@"认证失败"]) {
-        _textArray = @[@"头像",@"指环码",@"实名认证信息(认证失败)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
-        _authenticType = @"认证失败";
-    }
-    
-    _icon = _authenticModel.headSculpture;
-    _name = authentics.name;
-    _identifyType = authentics.identiytype.name;
-    
-    if (authentics.identiyCarNo.length) {
-        NSString *qian = [authentics.identiyCarNo substringToIndex:3];
-        NSString *hou = [authentics.identiyCarNo substringFromIndex:14];
-        _identifyNum = [NSString stringWithFormat:@"%@***********%@",qian,hou];
-    }
-    _companyName = authentics.companyName;
-    _position = authentics.position;
-    
-    NSString *province = authentics.city.province.name;
-    NSString *city = authentics.city.name;
-    _address = [NSString stringWithFormat:@"%@ | %@",province,city];
-    
 }
 #pragma mark- 创建tableView
 -(void)createTableView
@@ -450,43 +453,54 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.row == 0) {
-        [self chooseicon];
+    
+    if ([_authenticType isEqualToString:@"已认证"]) {
+        if (indexPath.row == 0) {
+            [self chooseicon];
+            
+        }
         
+        if (indexPath.row == 1) {
+            MineRingCodeVC *vc = [MineRingCodeVC new];
+            vc.inviteCode = _inviteCode;
+            vc.icon = _icon;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        if (indexPath.row == 4) {
+            PlatformIdentityVC *vc = [PlatformIdentityVC new];
+            vc.identifyType = _identifyType;
+            
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        if (indexPath.row == 8) {
+            MyDataCompanyVC *vc = [MyDataCompanyVC new];
+            vc.titleName = @"职位";
+            vc.datavc = self;
+            vc.placorText = _position;
+            [self.navigationController  pushViewController:vc animated:YES];
+        }
+        if (indexPath.row == 7) {
+            MyDataCompanyVC *vc = [MyDataCompanyVC new];
+            vc.titleName = @"公司";
+            vc.placorText = _companyName;
+            vc.datavc = self;
+            [self.navigationController  pushViewController:vc animated:YES];
+        }
+        if (indexPath.row == 9) {
+            MIneAreaVC *vc = [MIneAreaVC new];
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }
     }
     
-    if (indexPath.row == 1) {
-        MineRingCodeVC *vc = [MineRingCodeVC new];
-        vc.inviteCode = _inviteCode;
-        vc.icon = _icon;
-        [self.navigationController pushViewController:vc animated:YES];
+    if ([_authenticType isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
     }
-    if (indexPath.row == 4) {
-        PlatformIdentityVC *vc = [PlatformIdentityVC new];
-        vc.identifyType = _identifyType;
-        
-        [self.navigationController pushViewController:vc animated:YES];
+    if ([_authenticType isEqualToString:@"未认证"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
     }
-    if (indexPath.row == 8) {
-        MyDataCompanyVC *vc = [MyDataCompanyVC new];
-        vc.titleName = @"职位";
-        vc.datavc = self;
-        vc.placorText = _position;
-        [self.navigationController  pushViewController:vc animated:YES];
-    }
-    if (indexPath.row == 7) {
-        MyDataCompanyVC *vc = [MyDataCompanyVC new];
-        vc.titleName = @"公司";
-        vc.placorText = _companyName;
-        vc.datavc = self;
-        [self.navigationController  pushViewController:vc animated:YES];
-    }
-    if (indexPath.row == 9) {
-        MIneAreaVC *vc = [MIneAreaVC new];
-        [self.navigationController pushViewController:vc animated:YES];
-        
-    }
-    
 }
 
 #pragma mark ------选择头像
@@ -594,7 +608,6 @@
                 if ([VC isKindOfClass:[MineViewController class]]) {
                     MineViewController *vc = (MineViewController*)VC;
                     
-                    
                     [vc loadAuthenData];
                     
                 }
@@ -610,6 +623,8 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setupNav];
     [self.navigationController.navigationBar setHidden:NO];
+    
 }
 @end

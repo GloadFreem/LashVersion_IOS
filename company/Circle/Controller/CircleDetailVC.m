@@ -13,6 +13,8 @@
 #import "CircleListModel.h"
 #import "CircleBaseModel.h"
 #import "CircleDetailHeaderCell.h"
+#import "RenzhengViewController.h"
+
 #define CIRCLE_PRAISE @"requestPriseFeeling"
 #define CIRCLEDETAIL @"requestFeelingDetail"
 #define CIRCLECOMMENT @"requestCommentFeeling"
@@ -46,12 +48,19 @@
 @property (nonatomic, strong) CircleDetailCommentModel *deleteModel; //删除的模型
 @property (nonatomic, copy) NSString *deletePartner;
 
+@property (nonatomic, copy) NSString *authenticName;  //认证信息
+@property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
 @end
 
 @implementation CircleDetailVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
+    _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
@@ -389,7 +398,7 @@
     field.textAlignment = NSTextAlignmentLeft;
     field.textColor = [UIColor blackColor];
     field.font = BGFont(14);
-    field.returnKeyType = UIReturnKeyDone;
+    field.returnKeyType = UIReturnKeySend;
     _textField = field;
     CGRect frame = [field frame];
     frame.size.width = 15.0f;
@@ -534,30 +543,41 @@
     }
     
     
-    
-    
-    
     if ([_selfId isEqualToString:_userId]) {
         
-        _deleteModel = _dataArray[indexPath.row];
         
-//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"不能回复自己"];
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
-        __block CircleDetailVC* blockSelf = self;
+        if ([_authenticName isEqualToString:@"认证中"]) {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alertView show];
+        }
         
-        UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        if ([_authenticName isEqualToString:@"未认证"])
+        {
+            [self presentAlertView];
+        }
+        if ([_authenticName isEqualToString:@"已认证"])
+        {
+            _deleteModel = _dataArray[indexPath.row];
             
-        }];
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [blockSelf btnCertain:nil];
-        }];
+            //        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"不能回复自己"];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
+            __block CircleDetailVC* blockSelf = self;
+            
+            UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                
+            }];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [blockSelf btnCertain:nil];
+            }];
+            
+            [alertController addAction:cancleAction];
+            [alertController addAction:okAction];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+            
+            return;
+        }
         
-        [alertController addAction:cancleAction];
-        [alertController addAction:okAction];
-        
-        [self presentViewController:alertController animated:YES completion:nil];
-        
-        return;
     }else{
     
     [_textField becomeFirstResponder];
@@ -568,21 +588,48 @@
 #pragma mark---删除评论---
 -(void)btnCertain:(id)sender
 {
-    [_atUserIdArray removeObjectAtIndex:_index];
-    [_beCommentNameArray removeObjectAtIndex:_nameIndex];
-    [_dataArray removeObject:_deleteModel];
-    [self.tableView reloadData];
+        [_atUserIdArray removeObjectAtIndex:_index];
+        [_beCommentNameArray removeObjectAtIndex:_nameIndex];
+        [_dataArray removeObject:_deleteModel];
+        [self.tableView reloadData];
+        
+        //    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"删除成功"];
+        
+        if (_deleteModel.commentId) {
+            //更新数据
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.deletePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_deleteModel.commentId],@"commentId", nil];
+            //开始请求
+            [self.httpUtil getDataFromAPIWithOps:CIRCLE_COMMENT_DELETE postParam:dic type:0 delegate:self sel:@selector(requestDeleteComment:)];
+        }
+}
+
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
+    __block CircleDetailVC* blockSelf = self;
     
-//    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"删除成功"];
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertainClick:nil];
+    }];
     
-    if (_deleteModel.commentId) {
-        //更新数据
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.deletePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_deleteModel.commentId],@"commentId", nil];
-        //开始请求
-        [self.httpUtil getDataFromAPIWithOps:CIRCLE_COMMENT_DELETE postParam:dic type:0 delegate:self sel:@selector(requestDeleteComment:)];
-    }
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertainClick:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
     
 }
+
 -(void)requestDeleteComment:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
@@ -600,36 +647,50 @@
 //评论帖子
 -(void)sendComment:(UIButton*)btn
 {
-    if ([_textField.text isEqualToString:@""]) {
-        [_textField resignFirstResponder];
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"回复内容不能为空"];
-        return;
+    [_textField resignFirstResponder];
+    
+     if ([_authenticName isEqualToString:@"已认证"])
+     {
+         if ([_textField.text isEqualToString:@""]) {
+             [_textField resignFirstResponder];
+             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"回复内容不能为空"];
+             return;
+         }
+         
+         NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+         NSString *icon = [data objectForKey:USER_STATIC_HEADER_PIC];
+         NSString *name = [data objectForKey:USER_STATIC_NAME];
+         
+         //添加 本地数据
+         CircleDetailCommentModel *detailCommentModel = [CircleDetailCommentModel new];
+         detailCommentModel.iconImageStr = icon;
+         detailCommentModel.nameStr = [NSString stringWithFormat:@"%@%@",name,_beCommentName];
+         detailCommentModel.contentStr = [NSString stringWithFormat:@"%@",self.textField.text];
+         detailCommentModel.publicDate = [TDUtil CurrentDate];
+         [_atUserIdArray insertObject:_selfId atIndex:_index];
+         [_beCommentNameArray insertObject:name atIndex:_nameIndex];
+         [_dataArray insertObject:detailCommentModel atIndex:1];
+         
+         [self.tableView reloadData];
+         
+         
+         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"contentId",[NSString stringWithFormat:@"%@",self.textField.text],@"content",[NSString stringWithFormat:@"%@",_userId],@"atUserId",_flag,@"flag",nil];
+         
+         
+         //开始请求
+         [self.httpUtil getDataFromAPIWithOps:CIRCLE_COMMENT_FEELING postParam:dic type:0 delegate:self sel:@selector(requestCircleComment:)];
+     }
+    
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
     }
     
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
     
-    
-    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-    NSString *icon = [data objectForKey:USER_STATIC_HEADER_PIC];
-    NSString *name = [data objectForKey:USER_STATIC_NAME];
-    
-    //添加 本地数据
-    CircleDetailCommentModel *detailCommentModel = [CircleDetailCommentModel new];
-    detailCommentModel.iconImageStr = icon;
-    detailCommentModel.nameStr = [NSString stringWithFormat:@"%@%@",name,_beCommentName];
-    detailCommentModel.contentStr = [NSString stringWithFormat:@"%@",self.textField.text];
-    detailCommentModel.publicDate = [TDUtil CurrentDate];
-    [_atUserIdArray insertObject:_selfId atIndex:_index];
-    [_beCommentNameArray insertObject:name atIndex:_nameIndex];
-    [_dataArray insertObject:detailCommentModel atIndex:1];
-    
-    [self.tableView reloadData];
-    
-    
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"contentId",[NSString stringWithFormat:@"%@",self.textField.text],@"content",[NSString stringWithFormat:@"%@",_userId],@"atUserId",_flag,@"flag",nil];
-   
-    
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:CIRCLE_COMMENT_FEELING postParam:dic type:0 delegate:self sel:@selector(requestCircleComment:)];
 }
 
 -(void)requestCircleComment:(ASIHTTPRequest*)request
@@ -714,9 +775,6 @@
         }
         
         //处理上一页数据
-        
-        
-        
         
         cell.model = model;
         

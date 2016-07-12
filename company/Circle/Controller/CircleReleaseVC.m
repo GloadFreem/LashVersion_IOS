@@ -15,7 +15,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "CustomImagePickerController.h"
 
-#define textViewContent @"发布最新、最热、最前沿的投融资话题"
+#define textViewContent @"发布投融资相关内容"
 #define PUBLICFEEL @"requestPublicFeeling"
 #define NUMBERFORTY 40
 #define NUMBERTHIRTY 30
@@ -81,7 +81,7 @@
     [releaseBtn addTarget:self action:@selector(publishClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:releaseBtn];
     
-    self.navigationItem.title = @"发布话题";
+    self.navigationItem.title = @"发布圈子";
 }
 
 #pragma mark -初始化内容

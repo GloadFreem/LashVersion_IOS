@@ -20,7 +20,11 @@
 
     // Configure the view for the selected state
 }
-- (IBAction)switchBtnClick:(UIButton *)sender {
+
+
+
+- (IBAction)changeValue:(UISwitch *)sender {
+    
 }
 
 @end

@@ -16,4 +16,7 @@
 
 @property (nonatomic, strong) ProjectDetailSceneView *scene;
 
+@property (nonatomic, copy) NSString *authenticName;
+@property (nonatomic, copy) NSString *identiyTypeId;
+
 @end

@@ -21,6 +21,8 @@
 #import "ActivityAttendListViewController.h"
 #import "ActivityCommentListViewController.h"
 
+#import "RenzhengViewController.h"
+
 #import "ActivityDetailHeaderCell.h"
 
 #import "CircleShareBottomView.h"
@@ -58,6 +60,9 @@ static CGFloat textFieldH = 40;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
+@property (nonatomic, copy) NSString *authenticName;  //认证信息
+@property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
 @end
 
 @implementation ActivityDetailVC
@@ -70,6 +75,10 @@ static CGFloat textFieldH = 40;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
+    _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -485,7 +494,7 @@ static CGFloat textFieldH = 40;
         footerView.delegate = self;
     }
     
-    NSLog(@"高度:%f",footerView.height);
+//    NSLog(@"高度:%f",footerView.height);
     return footerView;
 }
 
@@ -678,16 +687,29 @@ static CGFloat textFieldH = 40;
 
 -(void)startShare
 {
-    NSArray *titleList = @[@"QQ",@"微信",@"朋友圈",@"短信"];
-    NSArray *imageList = @[@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
-    CircleShareBottomView *share = [CircleShareBottomView new];
-    share.tag = 1;
-    [share createShareViewWithTitleArray:titleList imageArray:imageList];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
-    [share addGestureRecognizer:tap];
-    [[self topView] addSubview:share];
-    self.bottomView = share;
-    share.delegate = self;
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        NSArray *titleList = @[@"QQ",@"微信",@"朋友圈",@"短信"];
+        NSArray *imageList = @[@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
+        CircleShareBottomView *share = [CircleShareBottomView new];
+        share.tag = 1;
+        [share createShareViewWithTitleArray:titleList imageArray:imageList];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
+        [share addGestureRecognizer:tap];
+        [[self topView] addSubview:share];
+        self.bottomView = share;
+        share.delegate = self;
+    }
+    
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
 
 -(void)sendShareBtnWithView:(CircleShareBottomView *)view index:(int)index
@@ -805,7 +827,9 @@ static CGFloat textFieldH = 40;
 
 -(void)viewWillDisappear:(BOOL)animated
 {
+    
     [super viewWillDisappear:animated];
+    [SVProgressHUD dismiss];
     
     [[IQKeyboardManager sharedManager] setEnableAutoToolbar:YES]
     ;
@@ -821,28 +845,53 @@ static CGFloat textFieldH = 40;
 #pragma footerDelegate
 -(void)didClickLikeButton
 {
-    
-    if(!self.actionPrisePartner)
+    if ([_authenticName isEqualToString:@"已认证"])
     {
-        self.actionPrisePartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_PRISE];
+        if(!self.actionPrisePartner)
+        {
+            self.actionPrisePartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_PRISE];
+        }
+        
+        //开始请求
+        [self actionPrise];
     }
     
-    //开始请求
-    [self actionPrise];
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
+    
 }
 
 
 -(void)didClickCommentButton
 {
-    if(!self.actionCommentPartner)
+    if ([_authenticName isEqualToString:@"已认证"])
     {
-        self.actionCommentPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_COMMENT];
+        if(!self.actionCommentPartner)
+        {
+            self.actionCommentPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_COMMENT];
+        }
+        
+        _commentToUser = @"0";
+        [self.textField setText:@""];
+        [self.textField setPlaceholder:@""];
+        [self.textField becomeFirstResponder];
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
     }
     
-    _commentToUser = @"0";
-    [self.textField setText:@""];
-    [self.textField setPlaceholder:@""];
-    [self.textField becomeFirstResponder];
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
 
 -(void)didClickShowAllButton
@@ -866,7 +915,7 @@ static CGFloat textFieldH = 40;
 -(void)requestPriseAction:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -934,7 +983,7 @@ static CGFloat textFieldH = 40;
 -(void)requestCommentAction:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -979,15 +1028,53 @@ static CGFloat textFieldH = 40;
 #pragma ActivityDelegate
 -(void)attendAction:(id)model
 {
-    ActivityBlackCoverView * attendView = [ActivityBlackCoverView instancetationActivityBlackCoverView];
-    attendView.delegate = self;
-    attendView.tag = 1000;
-    [self.view addSubview:attendView];
-    [attendView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(0);
-    }];
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        ActivityBlackCoverView * attendView = [ActivityBlackCoverView instancetationActivityBlackCoverView];
+        attendView.delegate = self;
+        attendView.tag = 1000;
+        [self.view addSubview:attendView];
+        [attendView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(0);
+        }];
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
 
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
+    __block ActivityDetailVC* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
+    
+}
 #pragma ActivityBlackCoverViewDelegate
 -(void)clickBtnInView:(ActivityBlackCoverView *)view andIndex:(NSInteger)index content:(NSString *)content
 {

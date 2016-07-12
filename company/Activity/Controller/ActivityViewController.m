@@ -12,6 +12,8 @@
 #import "ActivityViewModel.h"
 #import "ActivityBlackCoverView.h"
 
+#import "RenzhengViewController.h"
+
 #define ACTIONLIST @"requestActionList"
 #define ACTIONSEARCH @"requestSearchAction"
 @interface ActivityViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,ActivityViewDelegate,ActivityBlackCoverViewDelegate>
@@ -29,6 +31,9 @@
 @property (nonatomic, assign) NSInteger searchPage;
 @property (nonatomic, assign) BOOL isSearch;
 
+@property (nonatomic, copy) NSString *authenticName;  //认证信息
+@property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
 @end
 
 @implementation ActivityViewController
@@ -36,6 +41,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
+    _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+    
     //初始化tableView
     [self createTableView];
     //初始化搜索框
@@ -54,6 +63,7 @@
 
 -(void)loadSearchList
 {
+    [SVProgressHUD show];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.searchPartner,@"partner",_textField.text,@"keyword",[NSString stringWithFormat:@"%ld",(long)_searchPage],@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_SEARCH postParam:dic type:0 delegate:self sel:@selector(requestSearchList:)];
@@ -61,7 +71,7 @@
 -(void)requestSearchList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -81,17 +91,19 @@
             
             //设置数据模型
             self.dataSourceArray = array;
+            
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
             
             _isSearch = YES;
             self.textField.text = @"";
-            
+            [SVProgressHUD dismiss];
         }else{
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
         }
     }
+    [SVProgressHUD dismiss];
 }
 /**
  *  获取活动列表
@@ -191,7 +203,7 @@
 -(void)createSearchView
 {
     _textField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH-20, 29)];
-    _textField.placeholder = @"互联网金融黑马预测。。。";
+    _textField.placeholder = @"请输入关键词：活动名、地点…";
     _textField.backgroundColor = [UIColor whiteColor];
     _textField.textColor = [UIColor blackColor];
     _textField.font = [UIFont systemFontOfSize:15];
@@ -199,7 +211,7 @@
     _textField.borderStyle = UITextBorderStyleNone;
     _textField.clearsOnBeginEditing = YES; //再次编辑清空
     _textField.keyboardType = UIKeyboardTypeDefault;
-    _textField.returnKeyType = UIReturnKeyDone;
+    _textField.returnKeyType = UIReturnKeySearch;
     _textField.delegate =self;
     
     UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -261,6 +273,8 @@
 #pragma mark -btnAction
 -(void)searchBtnClick:(UIButton*)btn
 {
+    [self.textField resignFirstResponder];
+    
     if (btn.tag == 0) {
         if (self.textField.text.length && ![self.textField.text isEqualToString:@""]) {
             [self loadSearchList];
@@ -276,6 +290,7 @@
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
+    [self loadSearchList];
     return YES;
 }
 
@@ -313,6 +328,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [SVProgressHUD dismiss];
     //    隐藏tabbar
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     delegate.tabBar.hidesBottomBarWhenPushed = YES;
@@ -327,18 +343,57 @@
 #pragma ActivityDelegate
 -(void)attendAction:(id)model
 {
-    self.attendInstance = model;
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        self.attendInstance = model;
+        
+        ActivityBlackCoverView * attendView = [ActivityBlackCoverView instancetationActivityBlackCoverView];
+        attendView.delegate = self;
+        attendView.tag = 1000;
+        [[UIApplication sharedApplication].windows[0] addSubview:attendView];
+        [attendView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(0);
+        }];
+        _blackCoverView = attendView;
+    }
     
-    ActivityBlackCoverView * attendView = [ActivityBlackCoverView instancetationActivityBlackCoverView];
-    attendView.delegate = self;
-    attendView.tag = 1000;
-    [[UIApplication sharedApplication].windows[0] addSubview:attendView];
-    [attendView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(0);
-    }];
-    _blackCoverView = attendView;
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
 
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
+    __block ActivityViewController* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
+    
+}
 #pragma ActivityBlackCoverViewDelegate
 -(void)clickBtnInView:(ActivityBlackCoverView *)view andIndex:(NSInteger)index content:(NSString *)content
 {

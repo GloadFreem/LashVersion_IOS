@@ -10,6 +10,7 @@
 #import "ProjectSceneCommentModel.h"
 #import "ProjectDetailSceneMessageCell.h"
 #import "ProjectSceneOtherCell.h"
+#import "RenzhengViewController.h"
 
 #define REQUESTSCENECOMMENT @"requestProjectSceneCommentList"
 @interface ProjectSceneCommentVC ()<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate>
@@ -97,8 +98,25 @@
                 cellModel.name = model.users.name;
                 cellModel.content = model.content;
                 cellModel.time = model.commentDate;
+                
+                //计算时间差
+                if (i!=0) {
+                    ProjectSceneCommentModel *model1 = modelArray[i-1];
+                    int timerInterval = [TDUtil getDateSinceFromDate:cellModel.time toDate:model1.commentDate];
+                    if (timerInterval>5) {
+                        cellModel.isShowTime  = YES;
+                    }else{
+                        cellModel.isShowTime  = NO;
+                    }
+                }else{
+                    cellModel.isShowTime  = YES;
+                }
+            
                 [_dataArray insertObject:cellModel atIndex:0];
             }
+            
+            
+            
             //刷新表
             [self.tableView reloadData];
             
@@ -125,8 +143,7 @@
     _tableView = [[UITableView alloc]init];
     _tableView.dataSource =self;
     _tableView.delegate =self;
-//    _tableView.bounces = NO;
-//    _tableView.backgroundColor = [UIColor greenColor];
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
@@ -204,20 +221,59 @@
 -(void)sendMessage:(UIButton*)btn
 {
     [self.textField resignFirstResponder];
-    if (self.sceneId) {
-        if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
-            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
-            //开始请求
-            [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
-            
+    if ([_authenticName isEqualToString:@"已认证"]) {
+        if (self.sceneId) {
+            if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
+                NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
+                //开始请求
+                [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
+                
+            }else{
+                [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"评论内容不能内空"];
+                return;
+            }
         }else{
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"评论内容不能内空"];
-            return;
+            self.textField.text = @"";
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"路演现场暂未开放评论"];
         }
-    }else{
-        self.textField.text = @"";
-    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"路演现场暂未开放评论"];
     }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        self.textField.text = @"";
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        self.textField.text = @"";
+        [self presentAlertView];
+    }
+}
+
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
+    __block ProjectSceneCommentVC* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
     
 }
 

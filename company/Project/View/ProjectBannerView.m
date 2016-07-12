@@ -25,7 +25,7 @@
 
 -(instancetype)initWithFrame:(CGRect)frame
 {
-    if ([super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
         _isFirst = YES;
         [self createUI];
     }
@@ -63,7 +63,7 @@
     }];
     
     //圆圈
-    UIImage * bottom = [UIImage imageNamed:@"椭圆-4-拷贝-2"];
+    UIImage * bottom = [UIImage imageNamed:@"icon-bottom-circle"];
     _firstBottomImage = [[UIImageView alloc]initWithImage:bottom];
     //设置圆角
     _firstBottomImage.layer.cornerRadius = bottom.size.width/2;
@@ -83,7 +83,7 @@
     [_progress mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(_firstBottomImage.mas_centerX);
         make.centerY.mas_equalTo(_firstBottomImage.mas_centerY);
-        make.width.height.mas_equalTo(45);
+        make.width.height.mas_equalTo(48);
     }];
     
 //    UIImage * second = [UIImage imageNamed:@"椭圆-4-拷贝"];

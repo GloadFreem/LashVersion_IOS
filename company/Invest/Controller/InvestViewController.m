@@ -18,6 +18,7 @@
 #import "InvestThinkTankDetailVC.h"
 #import "InvestWebViewController.h"
 #import "InvestCommitProjectVC.h"
+#import "RenzhengViewController.h"
 
 #import "InvestBaseModel.h"
 #import "InvestListModel.h"
@@ -76,6 +77,9 @@
 
 @property (nonatomic, assign) BOOL collectSuccess;
 
+@property (nonatomic, copy) NSString *authenticName;
+@property (nonatomic, copy) NSString *identiyTypeId;
+
 @end
 
 @implementation InvestViewController
@@ -83,6 +87,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
+    _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+    
     [self createUI];
     
     //获得partner
@@ -532,6 +540,11 @@
             cell.model = _investPersonArray[indexPath.row];
             cell.indexPath = indexPath;
         }
+        if ([self.identiyTypeId isEqualToString:@"1"]) {
+            cell.cimmitBtn.hidden = NO;
+        }else{
+            cell.cimmitBtn.hidden = YES;
+        }
         cell.delegate = self;
         return cell;
     }
@@ -551,6 +564,11 @@
             cell.model = _investOrganizationSecondArray[indexPath.row];
         }
         cell.delegate = self;
+        if ([self.identiyTypeId isEqualToString:@"1"]) {
+            cell.commitBtn.hidden = NO;
+        }else{
+            cell.commitBtn.hidden = YES;
+        }
         return cell;
     };
     //智囊团
@@ -575,7 +593,6 @@
 //        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
 //        
 //        [delegate.tabBar tabBarHidden:YES animated:NO];
-        
         
         vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
         vc.titleText = @"个人 · 简介";
@@ -710,101 +727,153 @@
 
 -(void)didClickCommitBtn:(InvestPersonCell *)cell andModel:(InvestListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
-    InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
+        
+        //    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+        //    [delegate.tabBar tabBarHidden:YES animated:NO];
+        vc.model = model;
+        vc.viewController = self;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    }
     
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
-    vc.model = model;
-    vc.viewController = self;
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
     
-    [self.navigationController pushViewController:vc animated:YES];
-    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
+
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
+    __block InvestViewController* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
+}
+
 
 -(void)didClickAttentionBtn:(InvestPersonCell *)cell andModel:(InvestListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
+   if ([_authenticName isEqualToString:@"已认证"])
+   {
+       klistModel = model;
+       klistCell = cell;
+       
+       model.collected = !model.collected;
+       NSString *flag;
+       if (model.collected) {
+           //关注
+           flag = @"1";
+           
+       }else{
+           //quxiao关注
+           flag = @"2";
+           
+       }
+       
+       switch (_tableViewSelected) {
+           case 1:{
+               InvestListModel * model = (InvestListModel*)klistModel;
+               InvestPersonCell * cell = (InvestPersonCell*)klistCell;
+               if (model.collected) {
+                   //刷新cell
+                   model.collectCount ++;
+                   [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                   [cell.collectBtn setBackgroundColor:btnCray];
+               }else{
+                   //刷新cell
+                   
+                   [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                   [cell.collectBtn setBackgroundColor:btnGreen];
+               }
+           }
+               break;
+           case 2:{
+               OrganizationSecondModel * model = (OrganizationSecondModel*)klistModel;
+               InvestOrganizationSecondCell * cell = (InvestOrganizationSecondCell*)klistCell;
+               if (model.collected) {
+                   
+                   //刷新cell
+                   model.collectCount++;
+                   
+                   [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                   [cell.attentionBtn setBackgroundColor:btnCray];
+               }else{
+                   //关注数量减1
+                   
+                   //刷新cell
+                   [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                   [cell.attentionBtn setBackgroundColor:btnGreen];
+               }
+           }
+               break;
+           case 3:{
+               InvestListModel * model = (InvestListModel*)klistModel;
+               ThinkTankCell * cell = (ThinkTankCell*)klistCell;
+               if (model.collected) {
+                   //刷新cell
+                   model.collectCount ++;
+                   [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                   [cell.attentionBtn setBackgroundColor:btnCray];
+               }else{
+                   //关注数量减1
+                   
+                   //刷新cell
+                   
+                   [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                   [cell.attentionBtn setBackgroundColor:btnGreen];
+               }
+           }
+               break;
+           default:
+               break;
+       }
+       
+       
+       
+       [self.tableView reloadData];
+       
+       
+       NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
+       //开始请求
+       [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
+   }
     
-    klistModel = model;
-    klistCell = cell;
-    
-    model.collected = !model.collected;
-    NSString *flag;
-    if (model.collected) {
-        //关注
-         flag = @"1";
-        
-    }else{
-        //quxiao关注
-        flag = @"2";
-        
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
     }
     
-    switch (_tableViewSelected) {
-        case 1:{
-            InvestListModel * model = (InvestListModel*)klistModel;
-            InvestPersonCell * cell = (InvestPersonCell*)klistCell;
-            if (model.collected) {
-                //刷新cell
-                model.collectCount ++;
-                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                [cell.collectBtn setBackgroundColor:btnCray];
-            }else{
-                //刷新cell
-                
-                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                [cell.collectBtn setBackgroundColor:btnGreen];
-            }
-        }
-            break;
-        case 2:{
-            OrganizationSecondModel * model = (OrganizationSecondModel*)klistModel;
-            InvestOrganizationSecondCell * cell = (InvestOrganizationSecondCell*)klistCell;
-            if (model.collected) {
-                
-                //刷新cell
-                model.collectCount++;
-                
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnCray];
-            }else{
-                //关注数量减1
-                
-                //刷新cell
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnGreen];
-            }
-        }
-            break;
-        case 3:{
-            InvestListModel * model = (InvestListModel*)klistModel;
-            ThinkTankCell * cell = (ThinkTankCell*)klistCell;
-            if (model.collected) {
-                //刷新cell
-                model.collectCount ++;
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnCray];
-            }else{
-                //关注数量减1
-                
-                //刷新cell
-                
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnGreen];
-            }
-        }
-            break;
-        default:
-            break;
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
     }
     
-    
-    
-    [self.tableView reloadData];
-    
-    
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
 }
 
 -(void)requestInvestorCollect:(ASIHTTPRequest*)request
@@ -832,184 +901,222 @@
 #pragma mark -----投资机构InvestOrganizationSecondCellDelegate-------------------
 -(void)didClickCommitBtn:(InvestOrganizationSecondCell *)cell andModel:(InvestListModel *)model
 {
-    InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
+        
+        //    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+        //    [delegate.tabBar tabBarHidden:YES animated:NO];
+        
+        vc.model = model;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    }
     
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
     
-    vc.model = model;
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
     
-    [self.navigationController pushViewController:vc animated:YES];
 }
 -(void)didClickAttentionBtn:(InvestOrganizationSecondCell *)cell andModel:(InvestListModel *)model
 {
-    klistModel = model;
-    klistCell = cell;
-    
-    model.collected = !model.collected;
-    NSString *flag;
-    if (model.collected) {
-        //关注
-        flag = @"1";
-        
-    }else{
-        //quxiao关注
-        flag = @"2";
-        
+     if ([_authenticName isEqualToString:@"已认证"])
+     {
+         klistModel = model;
+         klistCell = cell;
+         
+         model.collected = !model.collected;
+         NSString *flag;
+         if (model.collected) {
+             //关注
+             flag = @"1";
+             
+         }else{
+             //quxiao关注
+             flag = @"2";
+             
+         }
+         
+         switch (_tableViewSelected) {
+             case 1:{
+                 InvestListModel * model = (InvestListModel*)klistModel;
+                 InvestPersonCell * cell = (InvestPersonCell*)klistCell;
+                 if (model.collected) {
+                     //刷新cell
+                     model.collectCount ++;
+                     [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                     [cell.collectBtn setBackgroundColor:btnCray];
+                 }else{
+                     //刷新cell
+                     
+                     [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                     [cell.collectBtn setBackgroundColor:btnGreen];
+                 }
+             }
+                 break;
+             case 2:{
+                 OrganizationSecondModel * model = (OrganizationSecondModel*)klistModel;
+                 InvestOrganizationSecondCell * cell = (InvestOrganizationSecondCell*)klistCell;
+                 if (model.collected) {
+                     
+                     //刷新cell
+                     model.collectCount++;
+                     
+                     [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                     [cell.attentionBtn setBackgroundColor:btnCray];
+                 }else{
+                     //关注数量减1
+                     
+                     //刷新cell
+                     [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                     [cell.attentionBtn setBackgroundColor:btnGreen];
+                 }
+             }
+                 break;
+             case 3:{
+                 InvestListModel * model = (InvestListModel*)klistModel;
+                 ThinkTankCell * cell = (ThinkTankCell*)klistCell;
+                 if (model.collected) {
+                     //刷新cell
+                     model.collectCount ++;
+                     [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                     [cell.attentionBtn setBackgroundColor:btnCray];
+                 }else{
+                     //关注数量减1
+                     
+                     //刷新cell
+                     
+                     [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                     [cell.attentionBtn setBackgroundColor:btnGreen];
+                 }
+             }
+                 break;
+             default:
+                 break;
+         }
+         
+         
+         
+         [self.tableView reloadData];
+         
+         
+         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
+         //开始请求
+         [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
+
+     }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
     }
     
-    switch (_tableViewSelected) {
-        case 1:{
-            InvestListModel * model = (InvestListModel*)klistModel;
-            InvestPersonCell * cell = (InvestPersonCell*)klistCell;
-            if (model.collected) {
-                //刷新cell
-                model.collectCount ++;
-                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                [cell.collectBtn setBackgroundColor:btnCray];
-            }else{
-                //刷新cell
-                
-                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                [cell.collectBtn setBackgroundColor:btnGreen];
-            }
-        }
-            break;
-        case 2:{
-            OrganizationSecondModel * model = (OrganizationSecondModel*)klistModel;
-            InvestOrganizationSecondCell * cell = (InvestOrganizationSecondCell*)klistCell;
-            if (model.collected) {
-                
-                //刷新cell
-                model.collectCount++;
-                
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnCray];
-            }else{
-                //关注数量减1
-                
-                //刷新cell
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnGreen];
-            }
-        }
-            break;
-        case 3:{
-            InvestListModel * model = (InvestListModel*)klistModel;
-            ThinkTankCell * cell = (ThinkTankCell*)klistCell;
-            if (model.collected) {
-                //刷新cell
-                model.collectCount ++;
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnCray];
-            }else{
-                //关注数量减1
-                
-                //刷新cell
-                
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnGreen];
-            }
-        }
-            break;
-        default:
-            break;
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
     }
-    
-    
-    
-    [self.tableView reloadData];
-    
-    
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
-   
 }
 
 #pragma mark -智囊团  ThinkTankCellDelegate -------------------------
 -(void)didClickAttentionBtnInCell:(ThinkTankCell*)cell andModel:(InvestListModel*)model
 {
-    klistModel = model;
-    klistCell = cell;
-    
-    model.collected = !model.collected;
-    NSString *flag;
-    if (model.collected) {
-        //关注
-        flag = @"1";
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        klistModel = model;
+        klistCell = cell;
         
-    }else{
-        //quxiao关注
-        flag = @"2";
+        model.collected = !model.collected;
+        NSString *flag;
+        if (model.collected) {
+            //关注
+            flag = @"1";
+            
+        }else{
+            //quxiao关注
+            flag = @"2";
+            
+        }
         
+        switch (_tableViewSelected) {
+            case 1:{
+                InvestListModel * model = (InvestListModel*)klistModel;
+                InvestPersonCell * cell = (InvestPersonCell*)klistCell;
+                if (model.collected) {
+                    //刷新cell
+                    model.collectCount ++;
+                    [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                    [cell.collectBtn setBackgroundColor:btnCray];
+                }else{
+                    //刷新cell
+                    
+                    [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                    [cell.collectBtn setBackgroundColor:btnGreen];
+                }
+            }
+                break;
+            case 2:{
+                OrganizationSecondModel * model = (OrganizationSecondModel*)klistModel;
+                InvestOrganizationSecondCell * cell = (InvestOrganizationSecondCell*)klistCell;
+                if (model.collected) {
+                    
+                    //刷新cell
+                    model.collectCount++;
+                    
+                    [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                    [cell.attentionBtn setBackgroundColor:btnCray];
+                }else{
+                    //关注数量减1
+                    
+                    //刷新cell
+                    [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                    [cell.attentionBtn setBackgroundColor:btnGreen];
+                }
+            }
+                break;
+            case 3:{
+                InvestListModel * model = (InvestListModel*)klistModel;
+                ThinkTankCell * cell = (ThinkTankCell*)klistCell;
+                if (model.collected) {
+                    //刷新cell
+                    model.collectCount ++;
+                    [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
+                    [cell.attentionBtn setBackgroundColor:btnCray];
+                }else{
+                    //关注数量减1
+                    
+                    //刷新cell
+                    
+                    [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
+                    [cell.attentionBtn setBackgroundColor:btnGreen];
+                }
+            }
+                break;
+            default:
+                break;
+        }
+        
+        
+        
+        [self.tableView reloadData];
+        
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
     }
     
-    switch (_tableViewSelected) {
-        case 1:{
-            InvestListModel * model = (InvestListModel*)klistModel;
-            InvestPersonCell * cell = (InvestPersonCell*)klistCell;
-            if (model.collected) {
-                //刷新cell
-                model.collectCount ++;
-                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                [cell.collectBtn setBackgroundColor:btnCray];
-            }else{
-                //刷新cell
-                
-                [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                [cell.collectBtn setBackgroundColor:btnGreen];
-            }
-        }
-            break;
-        case 2:{
-            OrganizationSecondModel * model = (OrganizationSecondModel*)klistModel;
-            InvestOrganizationSecondCell * cell = (InvestOrganizationSecondCell*)klistCell;
-            if (model.collected) {
-                
-                //刷新cell
-                model.collectCount++;
-                
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnCray];
-            }else{
-                //关注数量减1
-                
-                //刷新cell
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnGreen];
-            }
-        }
-            break;
-        case 3:{
-            InvestListModel * model = (InvestListModel*)klistModel;
-            ThinkTankCell * cell = (ThinkTankCell*)klistCell;
-            if (model.collected) {
-                //刷新cell
-                model.collectCount ++;
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnCray];
-            }else{
-                //关注数量减1
-                
-                //刷新cell
-                
-                [cell.attentionBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",--model.collectCount] forState:UIControlStateNormal];
-                [cell.attentionBtn setBackgroundColor:btnGreen];
-            }
-        }
-            break;
-        default:
-            break;
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
     }
-    
-    
-    
-    [self.tableView reloadData];
-    
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
         
 }
 

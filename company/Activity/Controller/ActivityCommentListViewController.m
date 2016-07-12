@@ -15,6 +15,8 @@
 #import "ActivityCommentListFooterView.h"
 #import "ActivityDetailCommentCellModel.h"
 
+#import "RenzhengViewController.h"
+
 #define COMMENTLIST @"requestPriseListAction"
 #define kActivityDetailHeaderCellId @"ActivityDetailHeaderCell"
 @interface ActivityCommentListViewController ()<UITableViewDelegate,UITableViewDataSource,ActivityDetailFooterViewDelegate,UITextFieldDelegate>
@@ -34,6 +36,12 @@
 @property (nonatomic, copy) NSString * actionCommentPartner;
 @property (nonatomic, copy) NSString * actionCommentListPartner;
 @property (nonatomic, strong) ActivityDetailCommentCellModel *commentCellModel;
+
+@property (nonatomic, copy) NSString *authenticName;  //认证信息
+@property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
+@property (nonatomic, strong) UIView *bottomView;
+
 @end
 
 @implementation ActivityCommentListViewController
@@ -45,6 +53,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
+    _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+    
     self.automaticallyAdjustsScrollViewInsets  = NO;
     
     [self setUpNavBar];
@@ -72,13 +84,13 @@
 {
     self.view.backgroundColor = WriteColor;
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
-    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    _tableView.backgroundColor = [UIColor whiteColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.bounces = YES;
-    _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 0.01f)];
+//    _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 0.01f)];
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
     //自动改变透明度
@@ -89,28 +101,47 @@
 //    [self.tableView.mj_footer setHidden:YES];
     
     [self.view addSubview:_tableView];
-    [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.view.mas_top);
-        make.left.mas_equalTo(self.view.mas_left);
-        make.right.mas_equalTo(self.view.mas_right);
-        make.bottom.mas_equalTo(self.view.mas_bottom).offset(-50);
-    }];
+   
+    
+    
+    if(!footerView)
+    {
+        footerView  = [[ActivityCommentListFooterView alloc]init];
+    }
+    footerView.backgroundColor = [UIColor whiteColor];
+    footerView.delegate = self;
+    [self.view addSubview:footerView];
+    
+    
     
     // 回复框
-    UIView *view = [UIView new];
-    [view setFrame:CGRectMake(0, SCREENHEIGHT - 50*HEIGHTCONFIG - 64, SCREENWIDTH, 50 * HEIGHTCONFIG)];
-    [view setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:view];
-    [view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.view);
-        make.top.equalTo(_tableView.mas_bottom);
-    }];
+    _bottomView = [UIView new];
+    [_bottomView setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:_bottomView];
+    _bottomView.sd_layout
+    .leftEqualToView(self.view)
+    .rightEqualToView(self.view)
+    .bottomEqualToView(self.view)
+    .heightIs(50);
+    _bottomView.hidden = YES;
+    
+    footerView.sd_layout
+    .leftEqualToView(self.view)
+    .rightEqualToView(self.view)
+    .bottomSpaceToView(_bottomView,0)
+    .heightIs(100);
+    
+    _tableView.sd_layout
+    .leftEqualToView(self.view)
+    .rightEqualToView(self.view)
+    .bottomSpaceToView(footerView,0)
+    .topEqualToView(self.view);
     
     UIView *line = [UIView new];
     line.backgroundColor = colorGray;
-    [view addSubview:line];
+    [_bottomView addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.mas_equalTo(view);
+        make.left.right.top.mas_equalTo(_bottomView);
         make.height.mas_equalTo(0.5);
     }];
     //输入框
@@ -124,18 +155,18 @@
     field.textAlignment = NSTextAlignmentLeft;
     field.textColor = [UIColor blackColor];
     field.font = BGFont(14);
-    field.returnKeyType = UIReturnKeyDone;
+    field.returnKeyType = UIReturnKeySend;
     _textField = field;
     CGRect frame = [field frame];
     frame.size.width = 15.0f;
     UIView *leftView = [[UIView alloc]initWithFrame:frame];
     field.leftView = leftView;
     field.leftViewMode = UITextFieldViewModeAlways;
-    [view addSubview:field];
+    [_bottomView addSubview:field];
     [field mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(view.mas_left).offset(12);
-        make.right.mas_equalTo(view.mas_right).offset(-76);
-        make.centerY.mas_equalTo(view.mas_centerY);
+        make.left.mas_equalTo(_bottomView.mas_left).offset(12);
+        make.right.mas_equalTo(_bottomView.mas_right).offset(-76);
+        make.centerY.mas_equalTo(_bottomView.mas_centerY);
         make.height.mas_equalTo(36);
     }];
     
@@ -147,12 +178,12 @@
     answerBtn.layer.masksToBounds = YES;
     answerBtn.titleLabel.font = BGFont(16);
     [answerBtn addTarget:self action:@selector(actionComment) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:answerBtn];
+    [_bottomView addSubview:answerBtn];
     [answerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(field.mas_right).offset(5);
         make.height.mas_equalTo(field.mas_height);
         make.centerY.mas_equalTo(field.mas_centerY);
-        make.right.mas_equalTo(view.mas_right).offset(-12);
+        make.right.mas_equalTo(_bottomView.mas_right).offset(-12);
     }];
 }
 
@@ -188,7 +219,7 @@
 -(void)requestActionCommentList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -389,20 +420,20 @@
 
 
 
--(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if(!footerView)
-    {
-        footerView  = [[ActivityCommentListFooterView alloc]init];
-        footerView.delegate = self;
-    }
-    
-    return footerView;
-}
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{   
-    return footerView.height;
-}
+//-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    if(!footerView)
+//    {
+//        footerView  = [[ActivityCommentListFooterView alloc]init];
+//        footerView.delegate = self;
+//    }
+//    
+//    return footerView;
+//}
+//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{   
+//    return footerView.height;
+//}
 
 
 - (CGFloat)cellContentViewWith
@@ -493,11 +524,29 @@
 
 -(void)didClickCommentButton
 {
-    [self.textField becomeFirstResponder];
-    //设置初始化状态
-    _textField.placeholder = @"";
-    //恢复为评论状态
-    self.commentToUser = @"0";
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        //更新约束
+//        [self updateFrame];
+        [_bottomView setHidden:NO];
+        
+        [self.textField becomeFirstResponder];
+        //设置初始化状态
+        _textField.placeholder = @"";
+        //恢复为评论状态
+        self.commentToUser = @"0";
+    }
+    
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
+    
 }
 
 -(void)didClickShowAllButton
@@ -512,9 +561,48 @@
  */
 -(void)actionPrise
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionPrisePartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", (long)self.headerModel.flag),@"flag", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:ACTION_PRISE postParam:dic type:0 delegate:self sel:@selector(requestPriseAction:)];
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionPrisePartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", (long)self.headerModel.flag),@"flag", nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:ACTION_PRISE postParam:dic type:0 delegate:self sel:@selector(requestPriseAction:)];
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
+}
+
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
+    __block ActivityCommentListViewController* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
+    
 }
 
 -(void)requestPriseAction:(ASIHTTPRequest*)request
@@ -532,7 +620,7 @@
             
             //获取自身userId
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-            NSString * userId = [[data valueForKey:USER_STATIC_USER_ID] stringValue];
+            NSString * userId = [data valueForKey:USER_STATIC_USER_ID];
             
             //设置属性
             model.userId = userId;
@@ -540,7 +628,7 @@
             
             
             NSMutableArray * array = [NSMutableArray arrayWithArray:self.commentCellModel.likeItemsArray];
-            if(self.headerModel.flag!=1)
+            if(self.headerModel.flag==1)
             {
                 if(array && array.count>0)
                 {
@@ -567,38 +655,51 @@
  */
 -(void)actionComment
 {
-    NSString * content = self.textField.text;
-    if([content isEqualToString:@""] ||[content isEqualToString:@"请输入评论内容"])
+    if ([_authenticName isEqualToString:@"已认证"])
     {
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入评论内容"];
-        return;
+        NSString * content = self.textField.text;
+        if([content isEqualToString:@""] ||[content isEqualToString:@"请输入评论内容"])
+        {
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入评论内容"];
+            return;
+        }
+        
+        if(!self.actionCommentPartner)
+        {
+            self.actionCommentPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_COMMENT];
+        }
+        
+        int flag = 1;
+        if(self.commentToUser && ![self.commentToUser isEqualToString:@""])
+        {
+            flag = 2;
+        }
+        
+        if(!_commentToUser)
+        {
+            _commentToUser = @"0";
+        }
+        
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%d", flag),@"flag",content,@"content",self.commentToUser,@"atUserId", nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestCommentAction:)];
     }
     
-    if(!self.actionCommentPartner)
-    {
-        self.actionCommentPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_COMMENT];
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
     }
     
-    int flag = 1;
-    if(self.commentToUser && ![self.commentToUser isEqualToString:@""])
+    if ([_authenticName isEqualToString:@"未认证"])
     {
-        flag = 2;
+        [self presentAlertView];
     }
-    
-    if(!_commentToUser)
-    {
-        _commentToUser = @"0";
-    }
-    
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%d", flag),@"flag",content,@"content",self.commentToUser,@"atUserId", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestCommentAction:)];
 }
 
 -(void)requestCommentAction:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -632,6 +733,8 @@
             [self.tableView reloadData];
             
             //注销键盘
+//            [self resumeFrame];
+            [_bottomView setHidden:YES];
             [self.textField resignFirstResponder];
             [self.textField setText:@""];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -639,4 +742,22 @@
     }
 }
 
+-(void)updateFrame
+{
+    _bottomView.sd_layout
+    .leftEqualToView(self.view)
+    .rightEqualToView(self.view)
+    .bottomEqualToView(self.view)
+    .heightIs(50);
+    [_bottomView updateLayout];
+}
+-(void)resumeFrame
+{
+    _bottomView.sd_layout
+    .leftEqualToView(self.view)
+    .rightEqualToView(self.view)
+    .bottomEqualToView(self.view)
+    .heightIs(0.00000001);
+    [_bottomView updateLayout];
+}
 @end

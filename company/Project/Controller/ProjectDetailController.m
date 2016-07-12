@@ -193,7 +193,7 @@
 -(void)requestAuthenInfo:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -437,9 +437,6 @@
             }
         }];
         
-        _subViewScrollView.y = POS_Y(_titleScrollView);
-        _subViewScrollView.height = _leftView.height + 44;
-        _subViewScrollView.width = SCREENWIDTH;
         
         
         [_heightArray addObject:[NSNumber numberWithFloat:_leftView.height]];
@@ -507,6 +504,10 @@
         scene.bannerView = bannerView;
         [_subViewScrollView addSubview:scene];
         
+        _subViewScrollView.y = POS_Y(_titleScrollView);
+        _subViewScrollView.height = scene.height;
+        _subViewScrollView.width = SCREENWIDTH;
+        
         //加底部回复框
         _footer =[[UIView alloc]init];
 //        _footer.backgroundColor = [UIColor redColor];
@@ -561,19 +562,30 @@
 -(void)sendMessage:(UIButton*)btn
 {
     [self.textField resignFirstResponder];
-    if (self.sceneId) {
-        if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
-            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
-            //开始请求
-            [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
-            
+    if ([_authenticName isEqualToString:@"已认证"]) {
+        if (self.sceneId) {
+            if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
+                NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
+                //开始请求
+                [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
+                
+            }else{
+                [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"评论内容不能内空"];
+                return;
+            }
         }else{
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"评论内容不能内空"];
-            return;
+            self.textField.text = @"";
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"路演现场暂未开放评论"];
         }
-    }else{
-        self.textField.text = @"";
-    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"路演现场暂未开放评论"];
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
     }
 }
 
@@ -615,6 +627,8 @@
     vc.sceneId = self.sceneId;
     vc.scenePartner = _scenePartner;
     vc.scene = scene;
+    vc.authenticName = _authenticName;
+    vc.identiyTypeId = self.identiyTypeId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -622,16 +636,45 @@
 #pragma mark------------------CSZProjectDetailLetfViewDelegate--------------
 -(void)transportTeamModel:(DetailTeams *)team
 {
-    PingTaiWebViewController *vc = [PingTaiWebViewController new];
-    vc.url = team.url;
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([_authenticName isEqualToString:@"已认证"]){
+        PingTaiWebViewController *vc = [PingTaiWebViewController new];
+        vc.url = team.url;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
 
 -(void)transportExrModel:(DetailExtr *)extr
 {
-    PingTaiWebViewController *vc = [PingTaiWebViewController new];
-    vc.url = extr.url;
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        if (![_identiyTypeId isEqualToString:@"1"]) {
+            PingTaiWebViewController *vc = [PingTaiWebViewController new];
+            vc.url = extr.url;
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+            
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的身份为项目方，不能查看其他项目方的资料" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
 
 #pragma mark - 按钮数组
@@ -774,9 +817,8 @@
 
 -(void)updateLayoutNotification
 {
-    _subViewScrollView.height = _leftView.height + 44;
+    _subViewScrollView.height = _leftView.height;
     [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
-    
 }
 
 
@@ -812,25 +854,28 @@
         
         if ([_authenticName isEqualToString:@"未认证"])
         {
-            
-            //没有认证 提醒去认证
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还未认证，是否前去认证？" preferredStyle:UIAlertControllerStyleAlert];
-            __block ProjectDetailController* blockSelf = self;
-            
-            UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                
-            }];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [blockSelf btnCertain:nil];
-            }];
-            
-            [alertController addAction:cancleAction];
-            [alertController addAction:okAction];
-            
-            [self presentViewController:alertController animated:YES completion:nil];
-            
+            [self presentAlertView];
         }
     }
+}
+
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
+    __block ProjectDetailController* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 -(void)btnCertain:(id)sender
@@ -852,7 +897,19 @@
 #pragma mark -分享
 - (IBAction)shareBtn:(UIButton *)sender {
     
+    if ([_authenticName isEqualToString:@"已认证"]){
     [self startShare];
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
+    
 }
 #pragma mark ---------------开始分享------------------------
 
@@ -996,17 +1053,31 @@
 #pragma mark -收藏
 - (IBAction)collectBtn:(UIButton *)sender {
     
-    _isCollect = !_isCollect;
-    NSString *flag;
-    if (_isCollect) {
-        flag = @"1";
-    }else{
-        flag = @"2";
+    if ([_authenticName isEqualToString:@"已认证"]){
+        _isCollect = !_isCollect;
+        NSString *flag;
+        if (_isCollect) {
+            flag = @"1";
+        }else{
+            flag = @"2";
+        }
+        
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",flag,@"flag", nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestProjectCollect:)];
+    }
+   
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
     }
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",flag,@"flag", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestProjectCollect:)];
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
+    
+    
 }
 
 -(void)requestProjectCollect:(ASIHTTPRequest*)request
@@ -1126,8 +1197,8 @@
 //    
 //    [delegate.tabBar tabBarHidden:NO animated:NO];
     
-    MP3Player *player = [[MP3Player alloc]init];
-    player.player = nil;
+//    MP3Player *player = [[MP3Player alloc]init];
+//    player.player = nil;
     
     //销毁计时器通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];

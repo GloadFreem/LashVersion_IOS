@@ -9,7 +9,7 @@
 #import "FeedBackViewController.h"
 
 #define FEEDBACK @"requestFeedBack"
-#define CONTENT @"欢迎吐槽"
+#define CONTENT @"您遇到了什么问题  来吐槽吧"
 @interface FeedBackViewController ()<UITextViewDelegate>
 
 @property (nonatomic, strong) UITextView *textView;

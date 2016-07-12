@@ -222,14 +222,15 @@
     }];
     //初始化全选按钮
     _allSelectedBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_allSelectedBtn setImage:[UIImage imageNamed:@"letterUnselected"] forState:UIControlStateNormal];
+    _allSelectedBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -10, 0, 0);
+    [_allSelectedBtn setImage:[UIImage imageNamed:@"LetterUnselected"] forState:UIControlStateNormal];
     [_allSelectedBtn setTitle:@"全选" forState:UIControlStateNormal];
     _allSelectedBtn.titleLabel.textColor = [UIColor whiteColor];
     _allSelectedBtn.titleLabel.font = BGFont(17);
     
     [_allSelectedBtn setTag:5];
     [_allSelectedBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_allSelectedBtn setImage:[UIImage imageNamed:@"letterSelected"] forState:UIControlStateSelected];
+    [_allSelectedBtn setImage:[UIImage imageNamed:@"LetterSelected"] forState:UIControlStateSelected];
     [_bottomView addSubview:_allSelectedBtn];
     [_allSelectedBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(_bottomView);

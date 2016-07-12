@@ -118,7 +118,7 @@
 //发送验证码
 -(void)requestSendeCode:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if(jsonDic!=nil)
@@ -139,7 +139,7 @@
         return;
     }
     if (self.identifyNumText.text && ![self.identifyNumText.text isEqualToString:@""]) {
-        if (![TDUtil isidentityCard:self.identifyNumText.text]) {
+        if (![TDUtil validateIdentityCard:self.identifyNumText.text]) {
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查身份证号码"];
         return;
         }
@@ -163,7 +163,7 @@
 }
 -(void)requestChangePhone:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if(jsonDic!=nil)
     {

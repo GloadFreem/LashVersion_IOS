@@ -9,7 +9,7 @@
 #import "InvestPersonDetailViewController.h"
 #import "InvestPersonWhiteImageView.h"
 #import "InvestDetailModel.h"
-
+#import "RenzhengViewController.h"
 #import "CircleShareBottomView.h"
 
 #import "InvestCommitProjectVC.h"
@@ -45,12 +45,19 @@
 
 @property (nonatomic, strong) InvestDetailModel *model;
 
+@property (nonatomic, copy) NSString *authenticName;  //认证信息
+@property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
 @end
 
 @implementation InvestPersonDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
+    _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
@@ -273,17 +280,13 @@
         make.bottom.mas_equalTo(_personContent.mas_bottom).offset(10);
     }];
     
+    
     //提交按钮
     _commitBtn = [[UIButton alloc]init];
     [_commitBtn setBackgroundImage:[UIImage imageNamed:@"icon_commit_pro"] forState:UIControlStateNormal];
     [_commitBtn addTarget:self action:@selector(commitClick:) forControlEvents:UIControlEventTouchUpInside];
     [_scrollView addSubview:_commitBtn];
-    [_commitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_mengBanView.mas_bottom).offset(27);
-        make.right.mas_equalTo(_scrollView.mas_centerX).offset(-23);
-//        make.width.mas_equalTo(90);
-//        make.height.mas_equalTo(30);
-    }];
+    
     //关注按钮
     _attentionBtn = [[UIButton alloc]init];
     _attentionBtn.layer.cornerRadius =3;
@@ -302,11 +305,28 @@
         [_attentionBtn setBackgroundColor:btnGreen];
     }
     [_scrollView addSubview:_attentionBtn];
-    [_attentionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_scrollView.mas_centerX).offset(23);
-        make.width.height.mas_equalTo(_commitBtn);
-        make.top.mas_equalTo(_commitBtn.mas_top);
-    }];
+    
+    if ([self.identiyTypeId isEqualToString:@"1"]) {
+        [_commitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(_mengBanView.mas_bottom).offset(27);
+            make.right.mas_equalTo(_scrollView.mas_centerX).offset(-23);
+            //        make.width.mas_equalTo(90);
+            //        make.height.mas_equalTo(30);
+        }];
+        [_attentionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(_scrollView.mas_centerX).offset(23);
+            make.width.height.mas_equalTo(_commitBtn);
+            make.top.mas_equalTo(_commitBtn.mas_top);
+        }];
+    }else{
+        [_attentionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(_mengBanView.mas_bottom).offset(27);
+            make.centerX.mas_equalTo(_scrollView.mas_centerX);
+            make.left.mas_equalTo(20);
+            make.right.mas_equalTo(-20);
+            make.height.mas_equalTo(40);
+        }];
+    }
     
     [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(_attentionBtn.mas_bottom).offset(69);
@@ -353,6 +373,8 @@
     
 #pragma mark -----分享
     if (btn.tag == 61) {
+        
+        
         [self startShare];
     }
 }
@@ -486,31 +508,85 @@
 #pragma mark -----  提交按钮
 -(void)commitClick:(UIButton*)btn
 {
-    InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
+        
+        //    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+        //    [delegate.tabBar tabBarHidden:YES animated:NO];
+        vc.model = _listModel;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    }
     
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
-    vc.model = _listModel;
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
     
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
 }
+
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
+    __block InvestPersonDetailViewController* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
+    
+}
+
 #pragma mark ----- 关注按钮
 -(void)attentionClick:(UIButton*)btn
 {
-    _collected = !_collected;
-    NSString *flag;
-    if (_collected) {
-        //关注
-        flag = @"1";
-        
-    }else{
-        //quxiao关注
-        flag = @"2";
-        
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        _collected = !_collected;
+        NSString *flag;
+        if (_collected) {
+            //关注
+            flag = @"1";
+            
+        }else{
+            //quxiao关注
+            flag = @"2";
+            
+        }
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_model.user.userId],@"userId",flag,@"flag", nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_model.user.userId],@"userId",flag,@"flag", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        [self presentAlertView];
+    }
+   
 }
 -(void)requestInvestorCollect:(ASIHTTPRequest*)request
 {

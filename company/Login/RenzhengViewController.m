@@ -202,7 +202,7 @@
             //投资人
             
             if (indexPath.row == 0) {
-                cell.inputTextField.keyboardType = UIKeyboardTypePhonePad;
+                cell.inputTextField.keyboardType = UIKeyboardTypeDefault;
             }
             //第三、四个cell的特殊属性
             if ( indexPath.row == 2 || indexPath.row == 3) {
@@ -214,7 +214,7 @@
         }else{
             
             if (indexPath.row == 0) {
-                cell.inputTextField.keyboardType = UIKeyboardTypePhonePad;
+                cell.inputTextField.keyboardType = UIKeyboardTypeDefault;
             }
             //第四、六个cell的特殊属性
             if ( indexPath.row == 3 || indexPath.row == 5) {
@@ -320,15 +320,15 @@
 //            return;
 //        }
 //    }
-    if (textField.tag == 0 && [TDUtil isidentityCard:textField.text]) {
+    if (textField.tag == 0 && ![TDUtil validateIdentityCard:textField.text]) {
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入正确的身份证号"];
                     return;
     }
     if (![textField.text isEqualToString:@""]) {
         
         textField.text = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+//        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+//        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
         
         self.dataArray[textField.tag] = textField.text;
     }
@@ -353,7 +353,7 @@
     }
     //检验身份证号码
     NSString *identifyStr = _dataArray[0];
-    if ([identifyStr isEqualToString:@""] || ![TDUtil isidentityCard:identifyStr]) {
+    if ([identifyStr isEqualToString:@""] || ![TDUtil validateIdentityCard:identifyStr]) {
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入正确的身份证号"];
         return;
     }
@@ -462,20 +462,20 @@
 #pragma mark ---------智囊团身份界面--------------------
     if ([self.identifyType integerValue] ==4){
         //检验公司名称
-        if([_dataArray[2] isEqualToString:@""]){
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入公司名称"];
-            return;
-        }
+//        if([_dataArray[2] isEqualToString:@""]){
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入公司名称"];
+//            return;
+//        }
         //检验公司所在地
         if([_dataArray[3] isEqualToString:@""]){
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请选择公司所在地"];
             return;
         }
         //检验担任职位
-        if([_dataArray[4] isEqualToString:@""]){
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入担任职位"];
-            return;
-        }
+//        if([_dataArray[4] isEqualToString:@""]){
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入担任职位"];
+//            return;
+//        }
         //检验服务领域
         if ([_dataArray[5] isEqualToString:@""]) {
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请选择服务领域"];

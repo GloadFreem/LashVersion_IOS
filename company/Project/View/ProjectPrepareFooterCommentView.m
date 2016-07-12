@@ -17,7 +17,7 @@
 
 -(instancetype)initWithFrame:(CGRect)frame
 {
-    if ([super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
         
         //初始化网络请求对象
         self.httpUtil  =[[HttpUtils alloc]init];

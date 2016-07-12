@@ -29,19 +29,24 @@
 
 -(instancetype)initWithFrame:(CGRect)frame
 {
-    if ([super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopTimer) name:@"stopTimer" object:nil];
+        //初始化网络请求对象
+        self.httpUtil  =[[HttpUtils alloc]init];
+        
+        [self createUI];
         
         _isFirst = YES;
+        _page = 0;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopTimer) name:@"stopTimer" object:nil];
         
         _scenePartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTSCENE];
         _commentPartner = [TDUtil encryKeyWithMD5:KEY action: REQUESTSCENECOMMENT];
         _pptPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTPPT];
         
-        _page = 0;
-        //初始化网络请求对象
-        self.httpUtil  =[[HttpUtils alloc]init];
+        
+        
         if (!_dataArray) {
             _dataArray = [NSMutableArray array];
         }
@@ -54,23 +59,34 @@
         if (!_nextPageArray) {
             _nextPageArray = [NSMutableArray array];
         }
-        [self createUI];
+        
         
         if (!_player) {
             _player=[[MP3Player alloc]init];
+            _player.isPlayMusic = NO;
         }
+        
     }
     return self;
 }
+
 
 -(void)setProjectId:(NSInteger)projectId
 {
     _projectId = projectId;
     
+    //加载数据
+    [self loadData];
+}
+
+
+-(void)loadData
+{
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE postParam:dic type:0 delegate:self sel:@selector(requestProjectScene:)];
 }
+
 
 -(void)requestProjectScene:(ASIHTTPRequest *)request
 {
@@ -133,8 +149,10 @@
             for (NSInteger i =0; i < modelArray.count; i ++) {
                 [_pptArray addObject:modelArray[i]];
                 ProjectPPTModel *model = modelArray[i];
-                [_imageUrlArray addObject:model.imageUrl];
-                NSLog(@"实时下载最新数据");
+                if (model.imageUrl) {
+                   [_imageUrlArray addObject:model.imageUrl];
+                }
+//                NSLog(@"实时下载最新数据");
             }
             
             
@@ -169,6 +187,7 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSArray *modelArray = [ProjectSceneCommentModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+            NSMutableArray * array = [NSMutableArray new];
             for (NSInteger i = 0; i < modelArray.count; i ++) {
                 ProjectSceneCommentModel *model = modelArray[i];
                 ProjectDetailSceneCellModel *cellModel = [ProjectDetailSceneCellModel new];
@@ -177,12 +196,28 @@
                 cellModel.name = model.users.name;
                 cellModel.content = model.content;
                 cellModel.time = model.commentDate;
-                [_dataArray insertObject:cellModel atIndex:0];
+                
+                //计算时间差
+                if (i!=0) {
+                    ProjectSceneCommentModel *model1 = modelArray[i-1];
+                    int timerInterval = [TDUtil getDateSinceFromDate:cellModel.time toDate:model1.commentDate];
+                    if (timerInterval>5) {
+                        cellModel.isShowTime  = YES;
+                    }else{
+                        cellModel.isShowTime  = NO;
+                    }
+                }else{
+                    cellModel.isShowTime  = YES;
+                }
+                
+                [array insertObject:cellModel atIndex:0];
+
             }
-            [_tableView reloadData];
-            if (_dataArray.count > 1) {
-                [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-            }
+             self.dataArray = array;
+            
+//            if (_dataArray.count > 1) {
+//                [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+//            }
             
             
         }else{
@@ -192,10 +227,13 @@
 }
 -(void)createUI
 {
+    [self createHeaderView];
+    
     _tableView = [[UITableView alloc]init];
     _tableView.backgroundColor = [UIColor whiteColor];
     _tableView.delegate =self;
     _tableView.dataSource =self;
+    _tableView.backgroundColor  = color(237, 238, 239, 1);
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.bounces = NO;
     _tableView.showsVerticalScrollIndicator = NO;
@@ -219,9 +257,6 @@
         make.bottom.mas_equalTo(-self.frame.size.height/4);
     }];
     
-//    [_tableView setTableHeaderView:[self createHeaderView]];
-//    [self createFooterView];
-    [self createHeaderView];
 }
 
 -(void)moreClick:(UIButton*)btn
@@ -270,8 +305,9 @@
     _label = label;
     
     _slider =[[UISlider alloc]init];
+    _slider.continuous = YES;
     [_slider setUserInteractionEnabled:YES];
-    [_slider addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged | UIControlEventTouchUpInside];
+    [_slider addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged];
     [_slider setThumbImage:[UIImage imageNamed:@"icon_slider_point"] forState:UIControlStateNormal];
     [headerView addSubview:_slider];
     [_slider mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -329,13 +365,14 @@
             //总时间
             CMTime duration=Wplayer.currentItem.duration;
             //进度＝当前时间/总时间
-            float pro=CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(duration);
+            float pro = CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(duration);
+            
             [weakSelf updateVideoSlider:pro];
             
         }];
     }
     
-    [self addEndTimeNotification];
+//    [self addEndTimeNotification];
 //
     isRemoveNot = YES;
 }
@@ -344,7 +381,6 @@
 - (void)initialControls{
     [self stop];
     _label.text = @"00:00:00";
-    self.slider.value = 0.0f;
 }
 #pragma mark ------------是否播放-------------------
 -(void)playClick:(UIButton*)btn
@@ -373,12 +409,12 @@
 
 #pragma mark - KVO - status
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    AVPlayerItem *item = (AVPlayerItem *)object;
+//    AVPlayerItem *item = (AVPlayerItem *)object;
     if ([keyPath isEqualToString:@"status"]) {
         if ([playerItem status] == AVPlayerStatusReadyToPlay) {
             NSLog(@"AVPlayerStatusReadyToPlay");
-            CMTime duration = item.duration;// 获取音频总长度
-            [self setMaxDuratuin:CMTimeGetSeconds(duration)];
+//            CMTime duration = item.duration;// 获取音频总长度
+//            [self setMaxDuratuin:CMTimeGetSeconds(duration)];
 //            [self play];
         }else if([playerItem status] == AVPlayerStatusFailed) {
             NSLog(@"AVPlayerStatusFailed");
@@ -387,10 +423,10 @@
     }
 }
 
--(void)setMaxDuratuin:(float)duration
-{
-    self.slider.maximumValue = duration;
-}
+//-(void)setMaxDuratuin:(float)duration
+//{
+//    self.slider.maximumValue = duration;
+//}
 
 -(void)updatePPT:(NSInteger)current
 {
@@ -405,7 +441,7 @@
             }
             
             [_bannerView nextPage: model.sortIndex];
-            NSLog(@"翻到-----%ld页",(long)model.sortIndex);
+//            NSLog(@"翻到-----%ld页",(long)model.sortIndex);
         }
     }
 }
@@ -413,7 +449,8 @@
 -(void)updateVideoSlider:(CGFloat)currentTime
 {
     [_slider setValue:currentTime animated:YES];
-    NSLog(@"更新进度条------%lf",currentTime);
+    
+//    NSLog(@"更新进度条------%lf",currentTime);
 }
 #pragma mark----更新时间----
 -(void)updateTimeLabel:(NSInteger)currentTime
@@ -439,12 +476,19 @@
     [self startLoadPPT];
 }
 
+-(void)setDataArray:(NSMutableArray *)dataArray
+{
+    _dataArray = dataArray;
+    if (dataArray!=nil && dataArray.count) {
+        [self.tableView reloadData];
+    }
+}
+
 #pragma mark- slider的进度事件
 -(void)valueChanged
 {
-    MP3Player*player=[[MP3Player alloc]init];
-    CMTime currentTime=CMTimeMultiplyByFloat64(player.player.currentItem.duration, _slider.value);
-    [player.player seekToTime:currentTime];
+    CMTime currentTime=CMTimeMultiplyByFloat64(_player.player.currentItem.duration, _slider.value);
+    [_player.player seekToTime:currentTime];
 }
 
 
@@ -460,14 +504,15 @@
 #pragma mark - 移除通知&KVO
 - (void)removeObserverAndNotification{
     [self.player.player replaceCurrentItemWithPlayerItem:nil];
+    
     [playerItem removeObserver:self forKeyPath:@"status"];
     
     [self.player.player removeTimeObserver:_playTimeObserver];
     _playTimeObserver = nil;
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     
-    _player.player = nil;
+//    _player.player = nil;
 }
 
 #pragma mark -UITableViewDataSource

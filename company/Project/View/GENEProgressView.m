@@ -78,7 +78,7 @@
     
     //画内圆
     UIBezierPath* arc2 = [UIBezierPath bezierPathWithArcCenter:_circleCenter
-                                                        radius:radius*0.9
+                                                        radius:radius*0.8
                                                     startAngle:0
                                                       endAngle:2*M_PI
                                                      clockwise:YES];
@@ -90,7 +90,7 @@
     //画弧线
     UIBezierPath* path = [UIBezierPath
                           bezierPathWithArcCenter:_circleCenter
-                          radius:radius*0.9
+                          radius:radius*0.8
                           startAngle:M_PI_2
                           endAngle:angle2Arc(self.angle)+M_PI_2
                           clockwise:YES];
@@ -99,8 +99,8 @@
     path.lineWidth = radius* 0.27;
     [path stroke];
     
-    CGPoint StartCircleCenter  = CGPointMake(_circleCenter.x + radius*0.9 * cosf(M_PI_2),
-                                             _circleCenter.y + radius*0.9 * sinf(M_PI_2));
+    CGPoint StartCircleCenter  = CGPointMake(_circleCenter.x + radius*0.8 * cosf(M_PI_2),
+                                             _circleCenter.y + radius*0.8 * sinf(M_PI_2));
     UIBezierPath* startCircle = [UIBezierPath
                                  bezierPathWithArcCenter:StartCircleCenter
                                  radius:radius*0.09
@@ -144,7 +144,7 @@
     NSRange precentRange = NSMakeRange(0, precentStr.string.length);
     
     [precentStr addAttribute:NSFontAttributeName
-                       value:[UIFont systemFontOfSize:15]
+                       value:[UIFont systemFontOfSize:13]
                        range:precentRange];
     
     [precentStr addAttribute:NSForegroundColorAttributeName

@@ -46,8 +46,8 @@
                         <action selector="iconDetail:" destination="-1" eventType="touchUpInside" id="LF4-V1-dS4"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="王大锤" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nTz-Tf-E7w">
-                    <rect key="frame" x="160" y="175" width="54" height="18"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nTz-Tf-E7w">
+                    <rect key="frame" x="187" y="175" width="0.0" height="18"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="18" id="zQJ-vb-swI"/>
                     </constraints>
@@ -55,8 +55,8 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="绿地集团 | CEO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HqY-hc-2ld">
-                    <rect key="frame" x="139" y="202" width="97" height="17"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HqY-hc-2ld">
+                    <rect key="frame" x="187.5" y="202" width="0.0" height="0.0"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
@@ -109,7 +109,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CHj-yI-1Rg">
-                    <rect key="frame" x="164.5" y="584" width="45" height="45"/>
+                    <rect key="frame" x="165" y="584" width="45" height="45"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="7RM-zg-nkp"/>
                         <constraint firstAttribute="width" constant="45" id="nMb-5m-8JB"/>
