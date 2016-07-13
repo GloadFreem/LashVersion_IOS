@@ -21,13 +21,13 @@
                             <constraint firstAttribute="height" constant="10" id="u50-bk-Dsq"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_add_project.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ugt-f4-mfN">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="icon_add_project.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ugt-f4-mfN">
                         <rect key="frame" x="20" y="25" width="15" height="15"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_right.png" translatesAutoresizingMaskIntoConstraints="NO" id="oTQ-LH-F1y">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="icon_right.png" translatesAutoresizingMaskIntoConstraints="NO" id="oTQ-LH-F1y">
                         <rect key="frame" x="346" y="25" width="9" height="15"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="上传项目" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5by-rH-kaT">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="上传项目" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5by-rH-kaT">
                         <rect key="frame" x="45" y="23" width="60" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -35,7 +35,7 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Ugt-f4-mfN" firstAttribute="top" secondItem="Z56-WM-4pQ" secondAttribute="bottom" constant="15" id="Ihh-nc-fKv"/>
+                    <constraint firstItem="Ugt-f4-mfN" firstAttribute="top" secondItem="Z56-WM-4pQ" secondAttribute="bottom" constant="13" id="Ihh-nc-fKv"/>
                     <constraint firstAttribute="trailing" secondItem="Z56-WM-4pQ" secondAttribute="trailing" id="Kk7-5o-Wi6"/>
                     <constraint firstItem="Ugt-f4-mfN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="TmJ-c5-uJW"/>
                     <constraint firstItem="5by-rH-kaT" firstAttribute="centerY" secondItem="Ugt-f4-mfN" secondAttribute="centerY" id="j6o-yD-nwH"/>
@@ -46,7 +46,7 @@
                     <constraint firstItem="5by-rH-kaT" firstAttribute="leading" secondItem="Ugt-f4-mfN" secondAttribute="trailing" constant="10" id="xqH-u3-BzB"/>
                 </constraints>
             </tableViewCellContentView>
-            <point key="canvasLocation" x="190.5" y="320"/>
+            <point key="canvasLocation" x="83.5" y="309"/>
         </tableViewCell>
     </objects>
     <resources>

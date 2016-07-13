@@ -20,6 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     [self setNav];
     _webView  =[[UIWebView alloc]initWithFrame:self.view.frame];
     [self startLoadDetailData];
@@ -105,8 +106,8 @@
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _url;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qqData.title = _model.name;
+                    [UMSocialData defaultData].extConfig.qzoneData.title = _model.name;
                 }
                 else
                 {
@@ -122,8 +123,8 @@
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _url;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _url;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _model.name;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _model.name;
                 
                 //                NSLog(@"分享到微信");
             }
@@ -133,8 +134,8 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _url;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _url;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _model.name;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _model.name;
                 
                 //                NSLog(@"分享到朋友圈");
             }
@@ -198,9 +199,25 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setHidden:NO];
     
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
     
-    //隐藏tabbar
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];

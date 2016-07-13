@@ -66,14 +66,20 @@
 
 - (IBAction)emailBtnClick:(UIButton *)sender {
     
-    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    pasteboard.string = _emailLabel.text;
+    if (_emailLabel.text) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = _emailLabel.text;
+        
+        [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:@"邮箱已复制到剪切板"];
+    }
     
-    [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:@"邮箱已复制到剪切板"];
 }
 - (IBAction)phoneBtnClick:(UIButton *)sender {
     
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",self.phoneLabel.text]]];
+    if (self.phoneLabel.text) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",self.phoneLabel.text]]];
+    }
+    
 }
 
 -(void)setProjectId:(NSInteger)projectId

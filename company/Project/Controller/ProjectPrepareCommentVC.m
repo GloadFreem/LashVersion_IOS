@@ -92,6 +92,12 @@
             
             //刷新表
             [_tableView reloadData];
+            
+            if (_dataArray.count > 1) {
+                [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+            }
+            
+            
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
@@ -213,6 +219,7 @@
             _page = 0;
             [self startLoadData];
             //刷新前一页评论数据
+            
             [_footerCommentView setProjectId:self.projectId];
 //            [_scene.dataArray removeAllObjects];
 //            [_scene startLoadComment];
@@ -331,9 +338,8 @@
 {
     [super viewWillAppear:animated];
     
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
+    [self.navigationController.navigationBar setHidden:NO];
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

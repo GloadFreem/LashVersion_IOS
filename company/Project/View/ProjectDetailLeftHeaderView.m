@@ -48,6 +48,9 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     
     BOOL isFirst;
     
+    BOOL _first;
+    BOOL _second;
+    
 }
 -(instancetype)init
 {
@@ -119,9 +122,9 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _achieveLabel.font = BGFont(14);
     
     _achieveNumber = [UILabel new];
-    _achieveLabel.textAlignment = NSTextAlignmentLeft;
-    _achieveLabel.textColor = color47;
-    _achieveLabel.font = BGFont(14);
+    _achieveNumber.textAlignment = NSTextAlignmentLeft;
+    _achieveNumber.textColor = color47;
+    _achieveNumber.font = BGFont(14);
     
     //起止时间
     UIImage *timeImage = [UIImage imageNamed:@"iconfont-shengyushijian"];
@@ -301,8 +304,7 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _moreBtn.sd_layout
     .centerXEqualToView(_contentLabel)
     .topSpaceToView(_picContainerView,16*HEIGHTCONFIG)
-    .widthIs(21)
-    .heightIs(28);
+    .widthIs(21);
 }
 
 -(void)setModel:(ProjectDetailLeftHeaderModel *)model
@@ -341,7 +343,7 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     
     
     if (model.shouldShowMoreButton) { //如果文字高度超过三行
-        
+        _first = YES;
         if (model.isOpen) {  //如果展开
             _picContainerView.pictureStringArray = model.pictureArray;
             
@@ -354,6 +356,8 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
             [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_more"] forState:UIControlStateNormal];
             
         }
+    }else{
+        _first = NO;
     }
     
     
@@ -371,6 +375,18 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
         _picContainerView.pictureStringArray = model.pictureArray;
     }
     
+    if (_picContainerView.pictureStringArray.count > 3) {
+        _second = YES;
+    }else{
+        _second = NO;
+    }
+    
+    if (_first || _second) {
+        _moreBtn.sd_layout.heightIs(28);
+    }else{
+        _moreBtn.sd_layout.heightIs(0);
+    }
+    [_moreBtn updateLayout];
     
     CGFloat picContainerTopMargin = 0;
     if (model.pictureArray.count) {

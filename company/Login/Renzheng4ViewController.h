@@ -17,4 +17,7 @@
 @property (nonatomic, copy) NSString *identifyType;
 
 @property (weak, nonatomic) IBOutlet UIButton *nextBtn;
+
+@property (nonatomic, assign) BOOL isCerity;
+
 @end

@@ -11,6 +11,7 @@
                 <outlet property="certifyCodeTextField" destination="pJr-pk-inE" id="XVw-U1-ZnO"/>
                 <outlet property="nextStepBtn" destination="L2M-UH-AtI" id="kuo-zD-qUk"/>
                 <outlet property="phoneTextField" destination="X3e-R6-kkm" id="Fo8-Xv-O2X"/>
+                <outlet property="protocolBtn" destination="MWq-iA-Odp" id="T9e-PU-5lK"/>
                 <outlet property="ringCodeTextField" destination="Uvr-nP-tHd" id="XfY-5b-xxL"/>
                 <outlet property="selectedBtn" destination="24K-IJ-0XW" id="9vZ-S0-E3e"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -141,6 +142,9 @@
                             <exclude reference="pFO-V1-jMM"/>
                         </mask>
                     </variation>
+                    <connections>
+                        <action selector="protocolBtnClick:" destination="-1" eventType="touchUpInside" id="lUh-zm-3uo"/>
+                    </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="已阅读并同意" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jhB-yd-hh2">
                     <rect key="frame" x="88" y="329" width="83" height="30"/>

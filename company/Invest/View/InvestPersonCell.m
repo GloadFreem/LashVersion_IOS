@@ -32,17 +32,17 @@
     
     _leftBtn.layer.cornerRadius = 3;
     _leftBtn.layer.masksToBounds = YES;
-    _leftBtn.layer.borderColor = colorBlue.CGColor;
+    _leftBtn.layer.borderColor = color(0, 160, 233, 1).CGColor;
     _leftBtn.layer.borderWidth = 0.5;
     
     _middleBtn.layer.cornerRadius = 3;
     _middleBtn.layer.masksToBounds = YES;
-    _middleBtn.layer.borderColor = colorBlue.CGColor;
+    _middleBtn.layer.borderColor = color(0, 160, 233, 1).CGColor;
     _middleBtn.layer.borderWidth = 0.5;
     
     _rightBtn.layer.cornerRadius = 3;
     _rightBtn.layer.masksToBounds = YES;
-    _rightBtn.layer.borderColor = colorBlue.CGColor;
+    _rightBtn.layer.borderColor = color(0, 160, 233, 1).CGColor;
     _rightBtn.layer.borderWidth = 0.5;
     
     _cimmitBtn.layer.cornerRadius = 3;
@@ -70,7 +70,7 @@
     //标题赋值
     for (NSInteger i = 0; i < model.areas.count; i ++) {
         UIButton *btn = (UIButton*)_btnArray[i];
-        [btn setTitle:[NSString stringWithFormat:@"%@",model.areas[i]] forState:UIControlStateNormal];
+        [btn setTitle:[NSString stringWithFormat:@" %@ ",model.areas[i]] forState:UIControlStateNormal];
     }
     
     if (model.commited) {

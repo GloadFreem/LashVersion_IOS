@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "MeasureTool.h"
 
+#import "JTabBarController.h"
+
 #import "ProjectDetailBannerView.h"
 
 #import "ProjectDetailMemberView.h"
@@ -95,6 +97,7 @@
 @property (nonatomic, copy) NSString *shareContent;
 @property (nonatomic, copy) NSString *shareurl;
 @property (nonatomic, copy) NSString *shareImage;
+@property (nonatomic, copy) NSString *shareTitle;
 
 @property (nonatomic,strong)UIView *bottomview;
 
@@ -121,10 +124,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     // Do any additional setup after loading the view from its nib.
     //获得内容partner
@@ -233,6 +232,7 @@
                 _shareurl  = dic[@"url"];
                 _shareImage = dic[@"image"];
                 _shareContent = dic[@"content"];
+                _shareTitle = dic[@"title"];
             }
         }
            
@@ -390,7 +390,7 @@
     
     if (self.type == 0) {
         
-        _lineView.frame = CGRectMake(2*SCREENWIDTH/3, CGRectGetHeight(_titleScrollView.frame)-2, SCREENWIDTH/3, 2);
+        _lineView.frame = CGRectMake(2*SCREENWIDTH/3, CGRectGetHeight(_titleScrollView.frame)-2, SCREENWIDTH/3, 2.1);
         [_titleScrollView addSubview:_lineView];
         
     }else{
@@ -880,6 +880,9 @@
 
 -(void)btnCertain:(id)sender
 {
+    //销毁播放器
+    [scene removeObserverAndNotification];
+    
     RenzhengViewController  * renzheng = [RenzhengViewController new];
     renzheng.identifyType = self.identiyTypeId;
     [self.navigationController pushViewController:renzheng animated:YES];
@@ -964,8 +967,8 @@
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareurl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qqData.title = _shareTitle;
+                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
                 }
                 else
                 {
@@ -981,8 +984,8 @@
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到微信");
             }
@@ -992,8 +995,8 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到朋友圈");
             }
@@ -1165,6 +1168,23 @@
 //    self.navigationController.navigationBar.translucent=NO;
     self.navigationController.navigationBar.hidden = YES;
     
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
@@ -1182,9 +1202,9 @@
 {
     [super viewDidAppear:animated];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    
+//    [delegate.tabBar tabBarHidden:YES animated:NO];
     
 }
 -(void)viewWillDisappear:(BOOL)animated
@@ -1192,13 +1212,6 @@
     [super viewWillDisappear:animated];
     
     self.navigationController.navigationBar.hidden = NO;
-    
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:NO animated:NO];
-    
-//    MP3Player *player = [[MP3Player alloc]init];
-//    player.player = nil;
     
     //销毁计时器通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];

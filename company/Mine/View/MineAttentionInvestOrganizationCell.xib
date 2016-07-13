@@ -53,27 +53,27 @@
                         <rect key="frame" x="74" y="67" width="281" height="1"/>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gci-20-dPE">
-                        <rect key="frame" x="74" y="77" width="30" height="15"/>
+                        <rect key="frame" x="74" y="77" width="30" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="15" id="qes-nF-QXC"/>
+                            <constraint firstAttribute="height" constant="20" id="qes-nF-QXC"/>
                         </constraints>
                         <state key="normal" title="体育">
                             <color key="titleColor" red="0.23137254900000001" green="0.67843137249999996" blue="0.94509803920000002" alpha="1" colorSpace="calibratedRGB"/>
                         </state>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q1p-jD-w83">
-                        <rect key="frame" x="109" y="77" width="45" height="15"/>
+                        <rect key="frame" x="109" y="77" width="45" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="15" id="vgl-Ra-Z1e"/>
+                            <constraint firstAttribute="height" constant="20" id="vgl-Ra-Z1e"/>
                         </constraints>
                         <state key="normal" title="房地产">
                             <color key="titleColor" red="0.23137254900000001" green="0.67843137249999996" blue="0.94509803920000002" alpha="1" colorSpace="calibratedRGB"/>
                         </state>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TpC-HQ-QGa">
-                        <rect key="frame" x="159" y="77" width="30" height="15"/>
+                        <rect key="frame" x="159" y="77" width="30" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="15" id="4cw-d4-5Gq"/>
+                            <constraint firstAttribute="height" constant="20" id="4cw-d4-5Gq"/>
                         </constraints>
                         <state key="normal" title="电影">
                             <color key="titleColor" red="0.23137254900000001" green="0.67843137249999996" blue="0.94509803920000002" alpha="1" colorSpace="calibratedRGB"/>

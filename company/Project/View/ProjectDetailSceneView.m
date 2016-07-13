@@ -115,7 +115,7 @@
            [_timer setFireDate:[NSDate distantPast]];
             
         }else{
-            [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
+//            [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
 }
@@ -167,7 +167,7 @@
             _isPPT  = YES;
             
         }else{
-        [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
+//        [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
 }
@@ -215,13 +215,13 @@
             }
              self.dataArray = array;
             
-//            if (_dataArray.count > 1) {
-//                [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-//            }
+            if (_dataArray.count > 1) {
+                [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+            }
             
             
         }else{
-            [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
+//            [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
 }
@@ -434,7 +434,7 @@
         ProjectPPTModel *model = _pptArray[i];
         if (current >= model.startTime && current <= model.endTime) {
             
-            //                    NSLog(@"当前ppt页数----%ld",(long)model.sortIndex);
+          //NSLog(@"当前ppt页数----%ld",(long)model.sortIndex);
             NSInteger currentPage = _bannerView.scrollView.contentOffset.x/SCREENWIDTH;
             if (currentPage == _pptArray.count -2) {
                 [self startLoadMore];
@@ -585,6 +585,7 @@
 -(void)stopTimer{
     
     [_timer setFireDate:[NSDate distantFuture]];
+    [_timer invalidate];
     _timer = nil;
 }
 

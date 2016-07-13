@@ -104,26 +104,28 @@
 }
 - (IBAction)emailBtnClick:(UIButton *)sender {
     
-    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    pasteboard.string = _email;
-    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"邮箱已复制到剪切板"];
+    if (_email) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = _email;
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"邮箱已复制到剪切板"];
+    }
+    
 }
 - (IBAction)phoneBtnClick:(UIButton *)sender {
     
-    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-    NSString *tel = [data objectForKey:@"servicePhone"];
-    //        NSLog(@"电话---%@",tel);
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",tel]]];
+//    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+//    NSString *tel = [data objectForKey:@"servicePhone"];
+//    //        NSLog(@"电话---%@",tel);
+    if (_telephone) {
+       [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",_telephone]]];
+    }
+    
 }
 
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:NO animated:NO];
     
 }
 

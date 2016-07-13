@@ -237,19 +237,19 @@
     [_firstLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_projectLabel.mas_left);
         make.top.mas_equalTo(_pointImage.mas_bottom).offset(5*HEIGHTCONFIG);
-        make.height.mas_equalTo(18*HEIGHTCONFIG);
+        make.height.mas_equalTo(20*HEIGHTCONFIG);
     }];
     
     [_secondLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_firstLabel.mas_right).offset(5*WIDTHCONFIG);
         make.centerY.mas_equalTo(_firstLabel.mas_centerY);
-        make.height.mas_equalTo(18*HEIGHTCONFIG);
+        make.height.mas_equalTo(20*HEIGHTCONFIG);
     }];
     
     [_thirdLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_secondLabel.mas_right).offset(5*WIDTHCONFIG);
         make.centerY.mas_equalTo(_firstLabel.mas_centerY);
-        make.height.mas_equalTo(18*HEIGHTCONFIG);
+        make.height.mas_equalTo(20*HEIGHTCONFIG);
     }];
     
     //分隔线
@@ -366,7 +366,7 @@
     //赋值
     for (NSInteger i =0; i < model.areas.count; i ++) {
         UILabel *label = (UILabel *)_labelArray[i];
-        label.text = model.areas[i];
+        label.text = [NSString stringWithFormat:@" %@ ",model.areas[i]];
     }
     
     _projectLabel.text = model.abbrevName;

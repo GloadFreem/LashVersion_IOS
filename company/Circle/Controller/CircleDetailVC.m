@@ -62,10 +62,6 @@
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
-    
     // Do any additional setup after loading the view.
     //获得详情partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:CIRCLEDETAIL];
@@ -154,11 +150,14 @@
             
             //拿到usrs认证数组
             NSArray *authenticsArray = [NSArray arrayWithArray:baseModel.users.authentics];
-            //实例化认证人模型
-            CircleUsersAuthenticsModel *usersAuthenticsModel =authenticsArray[0];
-            listModel.addressStr = usersAuthenticsModel.companyAddress;
-            listModel.companyStr = usersAuthenticsModel.companyName;
-            listModel.positionStr = usersAuthenticsModel.position;
+            if (authenticsArray.count) {
+                //实例化认证人模型
+                CircleUsersAuthenticsModel *usersAuthenticsModel =authenticsArray[0];
+                listModel.addressStr = usersAuthenticsModel.companyAddress;
+                listModel.companyStr = usersAuthenticsModel.companyName;
+                listModel.positionStr = usersAuthenticsModel.position;
+            }
+            
             //微博照片
             NSMutableArray *picArray = [NSMutableArray array];
             for (NSInteger i = 0; i < baseModel.contentimageses.count; i ++) {
@@ -300,7 +299,25 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    //隐藏tabbar
+    [self.navigationController.navigationBar setHidden:NO];
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
@@ -312,11 +329,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    //隐藏tabbar
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:NO animated:NO];
-    
+ 
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
     
     
@@ -351,6 +364,7 @@
 -(void)createTableView
 {
     _tableView  = [UITableView new];
+    _tableView.backgroundColor = colorGray;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;

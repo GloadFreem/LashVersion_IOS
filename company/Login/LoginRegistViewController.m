@@ -48,6 +48,7 @@
 @property (nonatomic, copy) NSString *wePic;
 @property (nonatomic, copy) NSString *weToken;
 
+@property (strong, nonatomic) UINavigationController * nav;
 @end
 
 @implementation LoginRegistViewController
@@ -164,7 +165,7 @@
     
     
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -194,6 +195,8 @@
                     tabBarController = [self createViewControllers];
                 }
                 
+//                AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
+//                app.window.rootViewController = tabBarController;
                 [self.navigationController pushViewController:tabBarController animated:NO];
                 
                 NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
@@ -263,6 +266,9 @@
 #pragma mark -没有账号
 //没有账号
 - (IBAction)noBtn:(id)sender {
+    
+    self.phoneField.text = @"";
+    self.passwordField.text = @"";
     
     RegisterViewController * registerVC = [[RegisterViewController alloc]init];
     
@@ -337,6 +343,9 @@
                 if (!tabBarController) {
                     tabBarController = [self createViewControllers];
                 }
+               
+//                AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
+//                app.window.rootViewController = tabBarController;
                 
                 [self.navigationController pushViewController:tabBarController animated:NO];
                 

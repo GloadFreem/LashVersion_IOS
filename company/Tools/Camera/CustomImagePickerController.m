@@ -60,7 +60,7 @@
         UIButton *deviceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [deviceBtn setBackgroundImage:deviceImage forState:UIControlStateNormal];
         [deviceBtn addTarget:self action:@selector(swapFrontAndBackCameras:) forControlEvents:UIControlEventTouchUpInside];
-        [deviceBtn setFrame:CGRectMake(250, 20, deviceImage.size.width, deviceImage.size.height)];
+//        [deviceBtn setFrame:CGRectMake(250, 20, deviceImage.size.width, deviceImage.size.height)];
         
         UIView *PLCameraView=[self findView:viewController.view withName:@"PLCameraView"];
         if (PLCameraView) {
@@ -70,30 +70,58 @@
         
         [self setShowsCameraControls:NO];
         
-        UIView *overlyView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320,ScreenHeight)];
+        UIView *overlyView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH,SCREENHEIGHT)];
         [overlyView setBackgroundColor:[UIColor clearColor]];
         
         [overlyView addSubview:deviceBtn];
+        [deviceBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.mas_equalTo(overlyView.mas_right).offset(-50);
+            make.top.mas_equalTo(30);
+            make.width.mas_equalTo(deviceImage.size.width);
+            make.height.mas_equalTo(deviceImage.size.height);
+        }];
         
         UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         UIImage *backImage = [UIImage imageNamed:@"camera_cancel.png"];
         [backBtn setImage: backImage forState:UIControlStateNormal];
         [backBtn addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
-        [backBtn setFrame:CGRectMake(8,  ScreenHeight - 39, backImage.size.width, backImage.size.height)];
+//        [backBtn setFrame:CGRectMake(30,  SCREENHEIGHT - 39, backImage.size.width, backImage.size.height)];
         [overlyView addSubview:backBtn];
+        [backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(30);
+            make.width.mas_equalTo(backImage.size.width);
+            make.height.mas_equalTo(backImage.size.height);
+            make.bottom.mas_equalTo(overlyView.mas_bottom).offset(-50*HEIGHTCONFIG);
+        }];
         
         UIImage *camerImage = [UIImage imageNamed:@"camera_shoot.png"];
-        UIButton *cameraBtn = [[UIButton alloc] initWithFrame:
-                               CGRectMake(110,  ScreenHeight - 39, camerImage.size.width, camerImage.size.height)];
+//        UIButton *cameraBtn = [[UIButton alloc] initWithFrame:
+//                               CGRectMake(110,  SCREENHEIGHT - 39, camerImage.size.width, camerImage.size.height)];
+        UIButton *cameraBtn = [[UIButton alloc]init];
+        
         [cameraBtn setImage:camerImage forState:UIControlStateNormal];
         [cameraBtn addTarget:self action:@selector(takePicture) forControlEvents:UIControlEventTouchUpInside];
         [overlyView addSubview:cameraBtn];
+        [cameraBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            
+            make.centerY.mas_equalTo(backBtn.mas_centerY);
+            make.width.mas_equalTo(camerImage.size.width);
+            make.height.mas_equalTo(camerImage.size.height);
+            make.centerX.mas_equalTo(overlyView.mas_centerX);
+        }];
         
         UIImage *photoImage = [UIImage imageNamed:@"camera_album.png"];
-        UIButton *photoBtn = [[UIButton alloc] initWithFrame:CGRectMake(260, ScreenHeight - 39, 70, 40)];
+//        UIButton *photoBtn = [[UIButton alloc] initWithFrame:CGRectMake(260, SCREENHEIGHT - 39, 70, 40)];
+        UIButton *photoBtn = [[UIButton alloc]init];
         [photoBtn setImage:photoImage forState:UIControlStateNormal];
         [photoBtn addTarget:self action:@selector(showPhoto) forControlEvents:UIControlEventTouchUpInside];
         [overlyView addSubview:photoBtn];
+        [photoBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.mas_equalTo(overlyView.mas_right).offset(-30);
+            make.centerY.mas_equalTo(backBtn.mas_centerY);
+            make.width.mas_equalTo(photoImage.size.width);
+            make.height.mas_equalTo(photoImage.size.height);
+        }];
         
         self.cameraOverlayView = overlyView;
 

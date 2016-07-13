@@ -20,7 +20,7 @@
     for (UIButton *btn in _buttonArray) {
         btn.layer.cornerRadius = 3;
         btn.layer.masksToBounds = YES;
-        btn.layer.borderColor = colorBlue.CGColor;
+        btn.layer.borderColor = color(0, 160, 230, 1).CGColor;
         btn.layer.borderWidth = 0.5;
     }
     
@@ -55,7 +55,7 @@
     //标题赋值
     for (NSInteger i = 0; i < model.areas.count; i ++) {
         UIButton *btn = (UIButton*)_buttonArray[i];
-        [btn setTitle:[NSString stringWithFormat:@"%@",model.areas[i]] forState:UIControlStateNormal];
+        [btn setTitle:[NSString stringWithFormat:@" %@ ",model.areas[i]] forState:UIControlStateNormal];
     }
     
     

@@ -62,7 +62,7 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     if ([navBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)])
     {
         //if iOS 5.0 and later
-        [navBar setBackgroundImage:[UIImage imageNamed:@"titlebar"] forBarMetrics:UIBarMetricsDefault];
+        [navBar setBackgroundImage:[UIImage imageNamed:@"navBJ"] forBarMetrics:UIBarMetricsDefault];
     }
     else
     {
@@ -70,7 +70,7 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
         if (imageView == nil)
         {
             imageView = [[UIImageView alloc] initWithImage:
-                         [UIImage imageNamed:@"titlebar"]];
+                         [UIImage imageNamed:@"navBJ"]];
             [imageView setTag:kSCNavBarImageTag];
             [navBar insertSubview:imageView atIndex:0];
         }

@@ -31,5 +31,6 @@
 @property (nonatomic, copy) NSString *industoryId; //行业类型ID
 @property (nonatomic, copy) NSString *cityId;  //城市 ID
 
+@property (nonatomic, assign) BOOL isCerity;
 
 @end

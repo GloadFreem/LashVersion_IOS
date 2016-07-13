@@ -21,6 +21,8 @@ CGFloat ___maxContentLabelHeight = 0; //根据具体font来定
     PictureContainerView *_picContainerView;
     UIButton *_moreBtn;
     BOOL _shouldOpen;
+    BOOL _first;
+    BOOL _second;
 }
 
 -(instancetype)init
@@ -120,7 +122,8 @@ CGFloat ___maxContentLabelHeight = 0; //根据具体font来定
     
     
     if (model.shouldShowMoreButton) { //如果文字高度超过三行
-        _moreBtn.sd_layout.heightIs(28);
+        _first = YES;
+        
         if (model.isOpen) {  //如果展开
             _picContainerView.pictureStringArray = model.pictureArray;
             
@@ -133,8 +136,8 @@ CGFloat ___maxContentLabelHeight = 0; //根据具体font来定
             [_moreBtn setImage:[UIImage imageNamed:@"icon_more"] forState:UIControlStateNormal];
             
         }
-    }else{
-        _moreBtn.sd_layout.heightIs(0);
+    }else{//文字未超过三行
+        _first = NO;
     }
     
 
@@ -152,6 +155,18 @@ CGFloat ___maxContentLabelHeight = 0; //根据具体font来定
         _picContainerView.pictureStringArray = model.pictureArray;
     }
     
+    if (_picContainerView.pictureStringArray.count > 3) {
+        _second = YES;
+    }else{
+        _second = NO;
+    }
+    
+    if (_first || _second) {
+        _moreBtn.sd_layout.heightIs(28);
+    }else{
+        _moreBtn.sd_layout.heightIs(0);
+    }
+    [_moreBtn updateLayout];
     
     CGFloat picContainerTopMargin = 0;
     if (model.pictureArray.count) {

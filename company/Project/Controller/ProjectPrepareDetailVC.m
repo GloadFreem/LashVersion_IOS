@@ -48,6 +48,7 @@
 @property (nonatomic, assign) NSInteger collectCount;
 @property (nonatomic, copy) NSString *collectPartner;
 
+@property (nonatomic, copy) NSString *shareTitle;
 @property (nonatomic, copy) NSString *sharePartner;
 @property (nonatomic, copy) NSString *shareContent;
 @property (nonatomic, copy) NSString *shareurl;
@@ -66,15 +67,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     // Do any additional setup after loading the view.
     if (!_dataArray) {
@@ -180,6 +176,7 @@
             _shareurl  = dic[@"url"];
             _shareImage = dic[@"image"];
             _shareContent = dic[@"content"];
+            _shareTitle = dic[@"title"];
         }
     }
 }
@@ -512,8 +509,8 @@
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareurl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qqData.title = _shareTitle;
+                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
                 }
                 else
                 {
@@ -529,8 +526,8 @@
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
 //                NSLog(@"分享到微信");
             }
@@ -540,8 +537,8 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
 //                NSLog(@"分享到朋友圈");
             }
@@ -691,6 +688,23 @@
     
     self.navigationController.navigationBar.hidden = YES;
     
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
@@ -704,8 +718,5 @@
     
     [SVProgressHUD dismiss];
     
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:NO animated:NO];
 }
 @end

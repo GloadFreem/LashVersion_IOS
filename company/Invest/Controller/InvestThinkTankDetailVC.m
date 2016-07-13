@@ -69,10 +69,6 @@
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
-    
     // Do any additional setup after loading the view from its nib.
     //1、设置当有导航栏自动添加64高度的属性为NO
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -760,7 +756,26 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:YES];
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
     [delegate.tabBar tabBarHidden:YES animated:NO];
     
 }
@@ -768,9 +783,8 @@
 {
     [super viewWillDisappear:animated];
     
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     [self.navigationController.navigationBar setHidden:NO];
-//    [delegate.tabBar tabBarHidden:NO animated:NO];
+
     
 }
 //-(void)dealloc

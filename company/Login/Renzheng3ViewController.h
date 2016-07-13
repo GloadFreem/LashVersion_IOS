@@ -17,4 +17,6 @@
 
 @property (nonatomic, copy) NSString *identifyType;
 
+@property (nonatomic, assign) BOOL isCerity;
+
 @end

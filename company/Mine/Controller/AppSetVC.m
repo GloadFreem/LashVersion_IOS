@@ -104,6 +104,7 @@
             //退出前清除所有保存的信息
             [TDUtil clearMemory];
             
+            JTabBarController * tabBarController;
             LoginRegistViewController * login;
             for (UIViewController *vc in self.navigationController.viewControllers) {
                 if ([vc isKindOfClass:LoginRegistViewController.class]) {
@@ -112,7 +113,12 @@
                     if ([vc isKindOfClass:AppSetVC.class]) {
                         
                     }else{
+                       
+                        if ([vc isKindOfClass:JTabBarController.class]) {
+                            tabBarController = (JTabBarController*)vc;
+                        }else{
                         [vc removeFromParentViewController];
+                        }
                     }
                 }
             }
@@ -122,8 +128,15 @@
                 login = [[LoginRegistViewController alloc]init];
             }
             
-            [self.navigationController pushViewController:login animated:NO];
+            UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
             
+            AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            delegate.nav = [[UINavigationController alloc]initWithRootViewController:login];
+            
+            [keyWindow setRootViewController:delegate.nav];
+            
+//            [self.navigationController pushViewController:login animated:NO];
+            _dataArray = nil;
             [self removeFromParentViewController];
             
 //            [self performSelector:@selector(coloseViewNotification) withObject:nil afterDelay:2];

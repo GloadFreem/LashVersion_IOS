@@ -51,6 +51,8 @@
 		4474C21C1D0FF94800DC923D /* OrganizationSecondModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C21B1D0FF94800DC923D /* OrganizationSecondModel.m */; };
 		4474C21F1D1011D800DC923D /* ThinkTankBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C21E1D1011D800DC923D /* ThinkTankBaseModel.m */; };
 		4474C2221D1032F400DC923D /* InvestWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474C2211D1032F400DC923D /* InvestWebViewController.m */; };
+		447B19921D3612F3009158FB /* btn_back_nor.png in Resources */ = {isa = PBXBuildFile; fileRef = 447B19911D3612F3009158FB /* btn_back_nor.png */; };
+		447B19941D36131D009158FB /* regist_btn_ok_nor.png in Resources */ = {isa = PBXBuildFile; fileRef = 447B19931D36131D009158FB /* regist_btn_ok_nor.png */; };
 		447D7E871D268197005F4696 /* GuidePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 447D7E861D268197005F4696 /* GuidePageViewController.m */; };
 		447D7E8E1D269441005F4696 /* lead_guide_01.png in Resources */ = {isa = PBXBuildFile; fileRef = 447D7E891D269441005F4696 /* lead_guide_01.png */; };
 		447D7E8F1D269441005F4696 /* lead_guide_02.png in Resources */ = {isa = PBXBuildFile; fileRef = 447D7E8A1D269441005F4696 /* lead_guide_02.png */; };
@@ -1044,6 +1046,8 @@
 		4474C21E1D1011D800DC923D /* ThinkTankBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThinkTankBaseModel.m; sourceTree = "<group>"; };
 		4474C2201D1032F400DC923D /* InvestWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvestWebViewController.h; sourceTree = "<group>"; };
 		4474C2211D1032F400DC923D /* InvestWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InvestWebViewController.m; sourceTree = "<group>"; };
+		447B19911D3612F3009158FB /* btn_back_nor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_back_nor.png; sourceTree = "<group>"; };
+		447B19931D36131D009158FB /* regist_btn_ok_nor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = regist_btn_ok_nor.png; sourceTree = "<group>"; };
 		447D7E851D268197005F4696 /* GuidePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuidePageViewController.h; sourceTree = "<group>"; };
 		447D7E861D268197005F4696 /* GuidePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuidePageViewController.m; sourceTree = "<group>"; };
 		447D7E891D269441005F4696 /* lead_guide_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lead_guide_01.png; sourceTree = "<group>"; };
@@ -3679,6 +3683,8 @@
 		44AE87951D0EC0AB0067404F /* cameraSelect */ = {
 			isa = PBXGroup;
 			children = (
+				447B19931D36131D009158FB /* regist_btn_ok_nor.png */,
+				447B19911D3612F3009158FB /* btn_back_nor.png */,
 				44AE87961D0EC0AB0067404F /* ImageSelectedOff.png */,
 				44AE87971D0EC0AB0067404F /* ImageSelectedOff@2x.png */,
 				44AE87981D0EC0AB0067404F /* ImageSelectedOff@3x.png */,
@@ -4855,6 +4861,7 @@
 				448BD7BD1D1BC2E8000D7294 /* youjiantou@3x.png in Resources */,
 				44FA74BA1D07ECD70010B478 /* invest_organization@2x.png in Resources */,
 				44FA75831D07ECD70010B478 /* 圆角矩形-4-拷贝-2@2x.png in Resources */,
+				447B19941D36131D009158FB /* regist_btn_ok_nor.png in Resources */,
 				448718811D02AD9900020DD9 /* LaunchScreen.storyboard in Resources */,
 				44FA76281D07ECD70010B478 /* upLoad@2x.png in Resources */,
 				44FA75CC1D07ECD70010B478 /* message@3x.png in Resources */,
@@ -4885,6 +4892,7 @@
 				44FA75A91D07ECD70010B478 /* icon_acticity_close@2x.png in Resources */,
 				448719591D02B28B00020DD9 /* RegistNameTableViewCell.xib in Resources */,
 				449354E11D0D560000B22F7E /* icon_share_friend@2x.png in Resources */,
+				447B19921D3612F3009158FB /* btn_back_nor.png in Resources */,
 				44FA75331D07ECD70010B478 /* Circle_selected@2x.png in Resources */,
 				44FA74E21D07ECD70010B478 /* mine_gold_jilei@2x.png in Resources */,
 				44FA75391D07ECD70010B478 /* dock_bg@3x.png in Resources */,

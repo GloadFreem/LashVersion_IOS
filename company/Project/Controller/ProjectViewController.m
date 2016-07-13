@@ -86,6 +86,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:NO animated:NO];
+    
     if (!_bannerModelArray) {
         _bannerModelArray = [NSMutableArray array];
     }
@@ -175,8 +179,8 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            _count = (NSInteger)dataDic[@"count"];
-            _tomorrowCount = (NSInteger)dataDic[@"countTomorrow"];
+            _count = [dataDic[@"count"] integerValue];
+            _tomorrowCount = [dataDic[@"countTomorrow"] integerValue];
             
             [self saveDate];
             
@@ -191,7 +195,7 @@
 {
     UIView *background = [UIView new];
     [background setBackgroundColor:[UIColor blackColor]];
-    background.alpha = 0.5;
+    background.alpha = 0.7;
     
     [[UIApplication sharedApplication].windows[0] addSubview:background];
     
@@ -229,7 +233,7 @@
     NSMutableArray *imageArr = [[NSMutableArray alloc]initWithCapacity:0];
     for (NSInteger i =0; i < 36; i ++) {
         NSString * name = [NSString stringWithFormat:@"jintiao%.2ld",(long)i];
-        NSLog(@"filename:%@",name);
+//        NSLog(@"filename:%@",name);
         UIImage *image = [UIImage imageNamed:name];
         [imageArr addObject:image];
     }
@@ -243,12 +247,12 @@
     UIButton *certainBtn = [UIButton new];
     certainBtn.backgroundColor = [UIColor clearColor];
     [certainBtn setTitle:@"确定" forState:UIControlStateNormal];
-    [certainBtn setTitleColor:[UIColor yellowColor] forState:UIControlStateNormal];
+    [certainBtn setTitleColor:color(255, 204, 0, 1) forState:UIControlStateNormal];
     certainBtn.titleLabel.font = BGFont(16);
     [certainBtn addTarget:self action:@selector(disBackground) forControlEvents:UIControlEventTouchUpInside];
     certainBtn.layer.cornerRadius = 4;
     certainBtn.layer.masksToBounds = YES;
-    certainBtn.layer.borderColor = [UIColor yellowColor].CGColor;
+    certainBtn.layer.borderColor = color(255, 204, 0, 1).CGColor;
     certainBtn.layer.borderWidth = 1;
     [[UIApplication sharedApplication].windows[0] addSubview:certainBtn];
     [certainBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -273,7 +277,7 @@
     
     
     _todayLabel = [UILabel new];
-    _todayLabel.textColor = [UIColor yellowColor];
+    _todayLabel.textColor = color(255, 204, 0, 1);
     _todayLabel.font = BGFont(24);
     _todayLabel.textAlignment = NSTextAlignmentCenter;
     
@@ -515,10 +519,12 @@
                     //少一个areas数组
                     listModel.areas = [project.industoryType componentsSeparatedByString:@"，"];
                     listModel.collectionCount = project.collectionCount;
-                    Roadshows *roadshows = project.roadshows[0];
-                    listModel.financedMount = roadshows.roadshowplan.financedMount;
-                    listModel.financeTotal = roadshows.roadshowplan.financeTotal;
-                    listModel.endDate = roadshows.roadshowplan.endDate;
+                    if (project.roadshows.count) {
+                        Roadshows *roadshows = project.roadshows[0];
+                        listModel.financedMount = roadshows.roadshowplan.financedMount;
+                        listModel.financeTotal = roadshows.roadshowplan.financeTotal;
+                        listModel.endDate = roadshows.roadshowplan.endDate;
+                    }
                     
                     [_projectModelArray addObject:listModel];
                 }
@@ -536,7 +542,7 @@
                     listModel.projectId = project.projectId;
                     //少一个areas数组
                     listModel.areas = [project.industoryType componentsSeparatedByString:@"，"];
-                    NSLog(@"领域 ----%@",project.industoryType);
+//                    NSLog(@"领域 ----%@",project.industoryType);
                     listModel.collectionCount = project.collectionCount;
                     Roadshows *roadshows = project.roadshows[0];
                     listModel.financedMount = roadshows.roadshowplan.financedMount;
@@ -593,10 +599,12 @@
                     listModel.industoryType = baseModel.extr.industoryType;
                     listModel.status = baseModel.extr.financestatus.name;
                     listModel.projectId = baseModel.extr.projectId;
-                    BannerRoadshows *roadshows = baseModel.extr.roadshows[0];
-                    BannerRoadshowplan *roadshowplan = roadshows.roadshowplan;
-                    listModel.financedMount = roadshowplan.financedMount;
-                    listModel.financeTotal = roadshowplan.financeTotal;
+                    if (baseModel.extr.roadshows.count) {
+                        BannerRoadshows *roadshows = baseModel.extr.roadshows[0];
+                        BannerRoadshowplan *roadshowplan = roadshows.roadshowplan;
+                        listModel.financedMount = roadshowplan.financedMount;
+                        listModel.financeTotal = roadshowplan.financeTotal;
+                    }
                     
                 }
                 [_bannerModelArray addObject:listModel];
@@ -629,10 +637,29 @@
 {
     [super viewWillAppear:animated];
     
+    [self.navigationController.navigationBar setHidden:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;
     [self.navigationController.navigationBar setHidden:NO];
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:NO animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:NO animated:NO];
+        }
+    }
+    
     //不隐藏tabbar
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
@@ -645,10 +672,6 @@
 {
     [super viewWillDisappear:animated];
     
-//    隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    delegate.tabBar.hidesBottomBarWhenPushed = YES;
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
 
 #pragma mark-------------------站内信通知信息----------------------

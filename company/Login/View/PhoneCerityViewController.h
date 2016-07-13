@@ -25,6 +25,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *selectedBtn;
 
 
+@property (weak, nonatomic) IBOutlet UIButton *protocolBtn;
+
 @property (nonatomic, copy) NSString *identifyType;
 
 @end

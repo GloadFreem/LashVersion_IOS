@@ -69,28 +69,34 @@
                         <rect key="frame" x="84" y="71" width="268" height="1"/>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EWJ-ih-zuK">
-                        <rect key="frame" x="84" y="82" width="30" height="15"/>
+                        <rect key="frame" x="84" y="82" width="30" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="15" id="LIl-Gy-4VR"/>
+                            <constraint firstAttribute="height" constant="20" id="LIl-Gy-4VR"/>
                         </constraints>
-                        <state key="normal" title="体育"/>
+                        <state key="normal" title="体育">
+                            <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.91372549020000005" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9VE-rz-hiO">
-                        <rect key="frame" x="118" y="82" width="45" height="15"/>
+                        <rect key="frame" x="118" y="82" width="45" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="15" id="8N6-zi-rEn"/>
+                            <constraint firstAttribute="height" constant="20" id="8N6-zi-rEn"/>
                         </constraints>
-                        <state key="normal" title="房地产"/>
+                        <state key="normal" title="房地产">
+                            <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.91372549020000005" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kg-LA-2Wp">
-                        <rect key="frame" x="167" y="82" width="30" height="15"/>
+                        <rect key="frame" x="167" y="82" width="30" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="15" id="8ty-Rb-6SH"/>
+                            <constraint firstAttribute="height" constant="20" id="8ty-Rb-6SH"/>
                         </constraints>
-                        <state key="normal" title="电影"/>
+                        <state key="normal" title="电影">
+                            <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.91372549020000005" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
                     </button>
                     <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1h-jM-cak">
-                        <rect key="frame" x="129" y="114" width="110" height="29"/>
+                        <rect key="frame" x="129" y="119" width="110" height="29"/>
                         <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="提交项目" image="icon_commit1.png"/>
@@ -99,7 +105,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kJO-Wi-DUR">
-                        <rect key="frame" x="252" y="114" width="110" height="29"/>
+                        <rect key="frame" x="252" y="119" width="110" height="29"/>
                         <color key="backgroundColor" red="0.32941176470588235" green="0.68627450980392157" blue="0.52941176470588236" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="29" id="0co-Wa-deG"/>

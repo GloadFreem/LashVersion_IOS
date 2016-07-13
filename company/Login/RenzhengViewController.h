@@ -21,6 +21,7 @@
 @property (nonatomic, copy) NSString *cityId;
 @property (nonatomic, copy) NSString *areaId;
 
+@property (nonatomic, assign) BOOL isCerity;
 
 @property (nonatomic, strong) NSMutableDictionary *dataDic; //数据字典
 

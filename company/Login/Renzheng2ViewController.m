@@ -175,6 +175,7 @@
             AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
             app.window.rootViewController = app.tabBar;
             
+            
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             

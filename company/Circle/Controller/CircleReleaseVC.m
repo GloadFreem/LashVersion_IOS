@@ -12,6 +12,8 @@
 #import "UIImage+Crop.h"
 #import "PECropViewController.h"
 
+#import "UIImage+Cut.h"
+
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "CustomImagePickerController.h"
 
@@ -19,10 +21,11 @@
 #define PUBLICFEEL @"requestPublicFeeling"
 #define NUMBERFORTY 40
 #define NUMBERTHIRTY 30
-@interface CircleReleaseVC ()<UITextViewDelegate,MWPhotoBrowserDelegate,CustomImagePickerControllerDelegate>
+@interface CircleReleaseVC ()<UITextViewDelegate,MWPhotoBrowserDelegate>
 {
     NSMutableArray *_selections;
     UIScrollView *_scrollView;
+    UIImagePickerController *imagePicker;
 }
 
 @property (nonatomic, strong) UITextView *textView;
@@ -40,17 +43,12 @@
 @property (nonatomic, strong) ALAssetsLibrary *ALAssetsLibrary;
 @property (nonatomic, strong) CircleViewController *controller;
 
-@property (nonatomic, strong) CustomImagePickerController *customPicker;
 @end
 
 @implementation CircleReleaseVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     // Do any additional setup after loading the view.
     //取得partner
@@ -614,8 +612,35 @@
 //照相功能
 -(void)takePhoto:(NSDictionary*)dic
 {
-    [self showPicker];
+//    [self showPicker];
+    
+    imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.delegate = self;
+    imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    imagePicker.allowsEditing = YES;
+    [self presentViewController:imagePicker animated:YES completion:^{
+        
+    }];
 }
+
+#pragma mark - UIImagePickerControllerDelegate
+//得到照片后，调用该方法
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    UIImage * image=[info objectForKey:UIImagePickerControllerEditedImage];
+    image = [image clipImageWithScaleWithsize:CGSizeMake(320, 480)];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self cameraPhoto:image];
+}
+
+//点击cancle
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
+
+/*
 
 -(void)showPicker
 {
@@ -641,15 +666,18 @@
         [picker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
     }
     picker.modalPresentationStyle = UIModalPresentationCurrentContext;
-    [picker setCustomDelegate:self];
-    self.customPicker=picker;
-    
-    [self presentViewController:self.customPicker animated:YES completion:nil];
+//    [picker setCustomDelegate:self];
+//    self.customPicker=picker;
+//    
+//    [self presentViewController:self.customPicker animated:YES completion:nil];
     
 //    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
 //    
 //    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
+ 
+*/
+
 
 - (void)cameraPhoto:(UIImage *)imageCamera  //选择完图片
 {
@@ -744,15 +772,36 @@
     NSLog(@"%@",request.responseString);
 }
 
--(void)viewWillDisappear:(BOOL)animated
+-(void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setHidden:NO];
     
-    self.navigationController.navigationBar.hidden = NO;
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
     
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
+    
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
     
 }
 

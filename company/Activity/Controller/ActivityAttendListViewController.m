@@ -228,7 +228,7 @@
 {
     [super viewWillAppear:animated];
     [[IQKeyboardManager sharedManager] setEnable:NO];
-    
+    [self.navigationController.navigationBar setHidden:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated

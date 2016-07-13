@@ -112,9 +112,8 @@
             NSString* password  =self.password.text;
             password = [TDUtil encryptPhoneNumWithMD5:self.telephone passString:password];
             [data setValue:password forKey:STATIC_USER_PASSWORD];
-            
-            
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+    
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             
             //进度查看
             double delayInSeconds = 1.0;

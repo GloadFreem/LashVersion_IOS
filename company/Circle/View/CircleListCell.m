@@ -198,7 +198,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     [_timeLabel setSingleLineAutoResizeWithMaxWidth:80];
     
     _contentLabel.sd_layout
-    .leftEqualToView(_iconView)
+    .leftSpaceToView(contentView,17)
     .topSpaceToView(_iconView,12)
     .rightSpaceToView(contentView,margin)
     .autoHeightRatio(0);

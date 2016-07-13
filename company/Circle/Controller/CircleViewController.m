@@ -49,6 +49,7 @@
 @property (nonatomic, strong) CircleListCell *listCell;
 @property (nonatomic, assign) BOOL praiseSuccess;
 
+@property (nonatomic, copy) NSString *shareTitle;
 @property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic, copy) NSString *shareUrl; //分享地址
 @property (nonatomic, copy) NSString *contentText;
@@ -297,10 +298,13 @@
                 //拿到usrs认证数组
                 NSArray *authenticsArray = [NSArray arrayWithArray:baseModel.users.authentics];
                 //实例化认证人模型
-                CircleUsersAuthenticsModel *usersAuthenticsModel =authenticsArray[0];
-                listModel.addressStr = usersAuthenticsModel.companyAddress;
-                listModel.companyStr = usersAuthenticsModel.companyName;
-                listModel.positionStr = usersAuthenticsModel.position;
+                if (authenticsArray.count) {
+                    CircleUsersAuthenticsModel *usersAuthenticsModel =authenticsArray[0];
+                    listModel.addressStr = usersAuthenticsModel.companyAddress;
+                    listModel.companyStr = usersAuthenticsModel.companyName;
+                    listModel.positionStr = usersAuthenticsModel.position;
+                }
+                
                 NSMutableArray *picArray = [NSMutableArray array];
                 for (NSInteger i = 0; i < baseModel.contentimageses.count; i ++) {
                     CircleContentimagesesModel *imageModel = baseModel.contentimageses[i];
@@ -382,14 +386,18 @@
     //进入详情页
     CircleListModel *listModel = _dataArray[indexPath.row];
     
-    CircleDetailVC *detail = [CircleDetailVC new];
-    detail.indexPath = indexPath;
-    detail.viewController = self;
-    detail.publicContentId  =listModel.publicContentId;//帖子ID
-    detail.page = 0;
-    detail.circleModel = listModel;
     
-    [self.navigationController pushViewController:detail animated:YES];
+    if (listModel.publicContentId) {
+        CircleDetailVC *detail = [CircleDetailVC new];
+        detail.indexPath = indexPath;
+        detail.viewController = self;
+        detail.publicContentId  =listModel.publicContentId;//帖子ID
+        detail.page = 0;
+        detail.circleModel = listModel;
+        
+        [self.navigationController pushViewController:detail animated:YES];
+    }
+    
     
 }
 #pragma mark -发布动态
@@ -499,10 +507,12 @@
 -(void)didClickShareBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model
 {
     if ([_authenticName isEqualToString:@"已认证"]){
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"2",@"type",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId", nil];
-        
-        //开始请求
-        [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareStatus:)];
+        if (model.publicContentId) {
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"2",@"type",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId", nil];
+            
+            //开始请求
+            [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareStatus:)];
+        }
     }
     
     if ([_authenticName isEqualToString:@"认证中"]) {
@@ -532,7 +542,7 @@
             _shareUrl = dataDic[@"url"];
             _shareImage = dataDic[@"image"];
             _contentText = dataDic[@"content"];
-            
+            _shareTitle = dataDic[@"title"];
             //开始分享
             [self startShare];
         }
@@ -596,8 +606,8 @@
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
+                    [UMSocialData defaultData].extConfig.qqData.title = _shareTitle;
+                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
                 }
                 else
                 {
@@ -613,8 +623,8 @@
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到微信");
             }
@@ -624,8 +634,8 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到朋友圈");
             }
@@ -674,46 +684,40 @@
     //进入详情页
     CircleListModel *listModel = _dataArray[indexPath.row];
     
-    CircleDetailVC *detail = [CircleDetailVC new];
-    detail.publicContentId  =listModel.publicContentId;//帖子ID
-    detail.page = 0;
-    [self.navigationController pushViewController:detail animated:YES];
+    if (listModel.publicContentId) {
+        CircleDetailVC *detail = [CircleDetailVC new];
+        detail.publicContentId  =listModel.publicContentId;//帖子ID
+        detail.page = 0;
+        [self.navigationController pushViewController:detail animated:YES];
+    }
+    
 }
 #pragma mark -点赞按钮
 -(void)didClickPraiseBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
     if ([_authenticName isEqualToString:@"已认证"])
     {
-        kcell = cell;
-        kmodel = model;
-        
-        model.flag = !model.flag;
-        
-        if (model.flag) {
-            //        [cell.praiseBtn setImage:[UIImage imageNamed:@"iconfont-dianzan"] forState:UIControlStateNormal];
-            _flag = @"1";
+        if (model.publicContentId) {
+            kcell = cell;
+            kmodel = model;
             
-        }else{
-            //        [cell.praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
-            _flag = @"2";
+            model.flag = !model.flag;
+            
+            if (model.flag) {
+                //        [cell.praiseBtn setImage:[UIImage imageNamed:@"iconfont-dianzan"] forState:UIControlStateNormal];
+                _flag = @"1";
+                
+            }else{
+                //        [cell.praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
+                _flag = @"2";
+            }
+            //请求更新数据数据
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.praisePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId",_flag,@"flag", nil];
+            
+            //开始请求
+            [self.httpUtil getDataFromAPIWithOps:CYCLE_CELL_PRAISE postParam:dic type:0 delegate:self sel:@selector(requestPraiseStatus:)];
         }
-        //请求更新数据数据
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.praisePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId",_flag,@"flag", nil];
         
-        //开始请求
-        [self.httpUtil getDataFromAPIWithOps:CYCLE_CELL_PRAISE postParam:dic type:0 delegate:self sel:@selector(requestPraiseStatus:)];
-        //    if (_praiseSuccess) {
-        //        if (model.flag) {
-        //            [cell.praiseBtn setImage:[UIImage imageNamed:@"iconfont_dianzan"] forState:UIControlStateNormal];
-        //            model.priseCount ++;
-        //            [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
-        //        }else{
-        //            [cell.praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
-        //            model.priseCount --;
-        //            [cell.praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
-        //        }
-        //
-        //    }
     }
     
     if ([_authenticName isEqualToString:@"认证中"]) {
@@ -763,12 +767,31 @@
 {
     [super viewWillAppear:animated];
     
-    //隐藏tabbar
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:NO animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:NO animated:NO];
+        }
+    }
+    
+    //不隐藏tabbar
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:NO animated:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
+    [self.navigationController.navigationBar setHidden:NO];
+    
     self.navigationController.navigationBar.translucent=NO;
     
 }
@@ -777,10 +800,12 @@
 {
     [super viewWillDisappear:animated];
     
+    [SVProgressHUD dismiss];
+    
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"publish" object:nil];
     //    隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    delegate.tabBar.hidesBottomBarWhenPushed = YES;
+//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+   
 //    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
 

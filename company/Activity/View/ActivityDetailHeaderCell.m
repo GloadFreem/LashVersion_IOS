@@ -21,6 +21,8 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
     PictureContainerView *_pictureContainerView;
     UIButton *_moreBtn;
     BOOL _shouldOpen;
+    BOOL _first;
+    BOOL _second;
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -78,7 +80,7 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
     
     _titleLabel.sd_layout
     .leftSpaceToView(contentView,23*WIDTHCONFIG)
-    .topSpaceToView(contentView, 19*HEIGHTCONFIG)
+    .centerYEqualToView(_orangeView)
     .rightSpaceToView(contentView,23*WIDTHCONFIG)
     .autoHeightRatio(0);
     
@@ -87,13 +89,6 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
     .rightEqualToView(_titleLabel)
     .topSpaceToView(_orangeView,17*HEIGHTCONFIG)
     .autoHeightRatio(0);
-    
-//   //测试
-//    testView.sd_layout
-//    .leftEqualToView(_titleLabel)
-//    .topSpaceToView(_contentLabel,10)
-//    .rightEqualToView(_titleLabel)
-//    .heightIs(50);
     
     _pictureContainerView.sd_layout
     .leftEqualToView(_contentLabel);//内部实现高度自适应，top值是具体有无图片在setModel里边设置的
@@ -119,7 +114,7 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
     NSMutableArray *picArray = [NSMutableArray array];
     
     if (model.shouldShowMoreButton) { //如果文字高度超过三行
-        
+        _first = YES;
         if (model.isOpen) {  //如果展开
             _pictureContainerView.pictureStringArray = model.pictureArray;
 
@@ -132,6 +127,8 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
             [_moreBtn setImage:[UIImage imageNamed:@"icon_acticity_more"] forState:UIControlStateNormal];
             
         }
+    }else{
+        _first = NO;
     }
     
     
@@ -149,6 +146,18 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
         _pictureContainerView.pictureStringArray = model.pictureArray;
     }
     
+    if (_pictureContainerView.pictureStringArray.count > 3) {
+        _second = YES;
+    }else{
+        _second = NO;
+    }
+    
+    if (_first || _second) {
+        _moreBtn.sd_layout.heightIs(28);
+    }else{
+        _moreBtn.sd_layout.heightIs(0);
+    }
+    [_moreBtn updateLayout];
     
     CGFloat pictureContainerTopMargin = 0;
     if (model.pictureArray.count) {
@@ -166,7 +175,7 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
         bottomView = _pictureContainerView;
     }
     
-    [self setupAutoHeightWithBottomView:_moreBtn bottomMargin:15];
+    [self setupAutoHeightWithBottomView:_moreBtn bottomMargin:10];
     
 }
 -(void)btnClick:(UIButton*)btn

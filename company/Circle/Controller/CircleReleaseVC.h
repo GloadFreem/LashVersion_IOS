@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 
-@interface CircleReleaseVC : RootViewController
+@interface CircleReleaseVC : RootViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @end

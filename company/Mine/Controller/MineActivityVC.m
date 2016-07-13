@@ -174,11 +174,10 @@
     ActivityViewModel * model = [_dataArray objectAtIndex:indexPath.row];
     vc.activityModel = model;
     
-    
-    //隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+    if([TDUtil isArrivedTime:model.endTime])
+    {
+        vc.isExpired = YES;
+    }
     
     [self.navigationController pushViewController:vc animated:YES];
 }

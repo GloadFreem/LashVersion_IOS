@@ -14,4 +14,6 @@
 @property(nonatomic, retain)ActivityViewModel * activityModel;
 
 @property (nonatomic, strong) ActivityViewController *viewController;
+
+@property (nonatomic, assign) BOOL isExpired;
 @end

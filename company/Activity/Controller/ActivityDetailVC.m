@@ -84,10 +84,6 @@ static CGFloat textFieldH = 40;
         _dataArray = [NSMutableArray array];
     }
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
-    
     // Do any additional setup after loading the view.
     self.automaticallyAdjustsScrollViewInsets  = NO;
     
@@ -162,6 +158,12 @@ static CGFloat textFieldH = 40;
     if(_activityModel.attended)
     {
         [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
+        [_signUpBtn setBackgroundColor:GrayColor];
+        [_signUpBtn setEnabled:NO];
+    }
+    
+    if (_isExpired) {
+        [_signUpBtn setTitle:@"已结束" forState:UIControlStateNormal];
         [_signUpBtn setBackgroundColor:GrayColor];
         [_signUpBtn setEnabled:NO];
     }
@@ -602,6 +604,7 @@ static CGFloat textFieldH = 40;
                 }
                 if (_dataArray[indexPath.row]) {
                     cell.model = _dataArray[indexPath.row];
+                    [cell.dinstanceLabel setHidden:YES];
                     //               cell.model = self.activityModel;
                     return cell;
                 }
@@ -818,7 +821,26 @@ static CGFloat textFieldH = 40;
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setHidden:NO];
+    
     [[IQKeyboardManager sharedManager] setEnableAutoToolbar:NO];
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
     
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     

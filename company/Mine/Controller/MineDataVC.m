@@ -104,6 +104,7 @@
 }
 -(void)createLeftArray
 {
+    
     NSArray *authenticsArray = _authenticModel.authentics;
     if (authenticsArray.count) {
         ProjectAuthentics *authentics = authenticsArray[0];

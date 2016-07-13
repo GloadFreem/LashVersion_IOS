@@ -53,7 +53,7 @@
                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7z-l2-fip">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7z-l2-fip">
                     <rect key="frame" x="137" y="296" width="102" height="102"/>
                     <state key="normal" backgroundImage="iconfont-dianhua.png"/>
                     <state key="highlighted" backgroundImage="iconfont-dianhua.png"/>
@@ -61,7 +61,7 @@
                         <action selector="phoneBtnClick:" destination="-1" eventType="touchUpInside" id="cH5-CG-70e"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="点击图标呼叫客服" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XGi-gY-ch0">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="点击图标呼叫客服" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XGi-gY-ch0">
                     <rect key="frame" x="119" y="421" width="136" height="36"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="36" id="Cyy-JG-pSX"/>

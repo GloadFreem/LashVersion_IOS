@@ -464,13 +464,10 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[IQKeyboardManager sharedManager] setEnableAutoToolbar:NO]
-    ;
+    [self.navigationController.navigationBar setHidden:NO];
     
-    //设置导航样式
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
+    [[IQKeyboardManager sharedManager] setEnableAutoToolbar:NO];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -608,7 +605,7 @@
 -(void)requestPriseAction:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];

@@ -85,25 +85,8 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wkS-8C-nMY">
-                        <rect key="frame" x="84" y="72" width="30" height="17"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="34" id="3Kc-Qt-jRV"/>
-                            <constraint firstAttribute="height" constant="17" id="A6P-Xh-hPk"/>
-                            <constraint firstAttribute="height" constant="18" id="mU0-aL-94H"/>
-                        </constraints>
-                        <state key="normal" title="体育">
-                            <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.91372549020000005" alpha="1" colorSpace="calibratedRGB"/>
-                        </state>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="3Kc-Qt-jRV"/>
-                                <exclude reference="mU0-aL-94H"/>
-                            </mask>
-                        </variation>
-                    </button>
                     <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NSB-Bg-5LG">
-                        <rect key="frame" x="119" y="72" width="30" height="17"/>
+                        <rect key="frame" x="119" y="72" width="30" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="irw-dh-ny2"/>
                         </constraints>
@@ -117,7 +100,7 @@
                         </variation>
                     </button>
                     <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycW-ul-TIj">
-                        <rect key="frame" x="154" y="72" width="30" height="17"/>
+                        <rect key="frame" x="154" y="72" width="30" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="Xu3-5x-bWu"/>
                         </constraints>
@@ -138,7 +121,7 @@
                         </constraints>
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="part_image.png" translatesAutoresizingMaskIntoConstraints="NO" id="7fe-Hr-hY8">
-                        <rect key="frame" x="0.0" y="101" width="375" height="3"/>
+                        <rect key="frame" x="0.0" y="104" width="375" height="3"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="invest_yuxuan.png" translatesAutoresizingMaskIntoConstraints="NO" id="kmW-3V-lzK">
                         <rect key="frame" x="333" y="10" width="27" height="55"/>
@@ -147,6 +130,23 @@
                             <constraint firstAttribute="height" constant="55" id="wet-WI-JNY"/>
                         </constraints>
                     </imageView>
+                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wkS-8C-nMY">
+                        <rect key="frame" x="84" y="72" width="30" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="34" id="3Kc-Qt-jRV"/>
+                            <constraint firstAttribute="height" constant="20" id="A6P-Xh-hPk"/>
+                            <constraint firstAttribute="height" constant="18" id="mU0-aL-94H"/>
+                        </constraints>
+                        <state key="normal" title="体育">
+                            <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.91372549020000005" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="3Kc-Qt-jRV"/>
+                                <exclude reference="mU0-aL-94H"/>
+                            </mask>
+                        </variation>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="UtG-rY-uK5" firstAttribute="leading" secondItem="kpO-9B-4Kv" secondAttribute="trailing" constant="12" id="0j2-Nk-fpL"/>

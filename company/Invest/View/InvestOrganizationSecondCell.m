@@ -29,17 +29,17 @@
     
     _firstLabel.layer.cornerRadius = 3;
     _firstLabel.layer.masksToBounds = YES;
-    _firstLabel.layer.borderColor = colorBlue.CGColor;
+    _firstLabel.layer.borderColor = color(0, 160, 233, 1).CGColor;
     _firstLabel.layer.borderWidth = 0.5;
     
     _secondLabel.layer.cornerRadius = 3;
     _secondLabel.layer.masksToBounds = YES;
-    _secondLabel.layer.borderColor = colorBlue.CGColor;
+    _secondLabel.layer.borderColor = color(0, 160, 233, 1).CGColor;
     _secondLabel.layer.borderWidth = 0.5;
     
     _thirdLabel.layer.cornerRadius = 3;
     _thirdLabel.layer.masksToBounds = YES;
-    _thirdLabel.layer.borderColor = colorBlue.CGColor;
+    _thirdLabel.layer.borderColor = color(0, 160, 233, 1).CGColor;
     _thirdLabel.layer.borderWidth = 0.5;
     
     _commitBtn.layer.cornerRadius =3;
@@ -65,7 +65,7 @@
     //标题赋值
     for (NSInteger i = 0; i < model.areas.count; i ++) {
         UILabel *label = (UILabel*)_labelArray[i];
-        label.text = model.areas[i];
+        label.text = [NSString stringWithFormat:@" %@ ",model.areas[i]];
     }
     
     if (model.commited) {

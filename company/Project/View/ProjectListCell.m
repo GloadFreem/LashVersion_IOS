@@ -74,7 +74,7 @@
     //赋值
     for (NSInteger i =0; i < model.areas.count; i ++) {
         UILabel *label = (UILabel *)_labelArray[i];
-        label.text = model.areas[i];
+        label.text = [NSString stringWithFormat:@"%@  ",model.areas[i]];
     }
     CGFloat finalCount = model.financedMount;
     CGFloat percent = finalCount / model.financeTotal * 100;

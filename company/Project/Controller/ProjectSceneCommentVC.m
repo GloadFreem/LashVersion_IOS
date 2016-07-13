@@ -437,9 +437,7 @@
 {
     [super viewWillAppear:animated];
     
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
+    [self.navigationController.navigationBar setHidden:NO];
     
     _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
@@ -447,6 +445,7 @@
 
 -(void)dealloc{
     [_timer invalidate];
+    _timer = nil;
 }
 /*
 #pragma mark - Navigation
