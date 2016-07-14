@@ -28,7 +28,7 @@
     _icon = [UIImageView new];
     _icon.layer.cornerRadius = 43;
     _icon.layer.masksToBounds = YES;
-    _icon.layer.borderColor = [UIColor whiteColor].CGColor;
+    _icon.layer.borderColor = color(204, 204, 204, 1).CGColor;
     _icon.layer.borderWidth = 3;
     _icon.contentMode = UIViewContentModeScaleAspectFill;
     

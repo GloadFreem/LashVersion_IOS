@@ -137,12 +137,14 @@
     self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    //下载认证信息
+    [self loadAuthenData];
+    
     //下载详情数据
     [self startLoadData];
     [self loadShareData];
     [self loadSceneData];
-    //下载认证信息
-    [self loadAuthenData];
+    
     
     _heightArray = [NSMutableArray array];                  //子视图高度数组
     
@@ -186,7 +188,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
+    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:1 delegate:self sel:@selector(requestAuthenInfo:)];
 }
 
 -(void)requestAuthenInfo:(ASIHTTPRequest*)request
@@ -272,7 +274,7 @@
 }
 -(void)startLoadData
 {
-    [SVProgressHUD show];
+    [SVProgressHUD showWithStatus:@"加载中..."];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestProjectDetail:)];
@@ -453,7 +455,7 @@
         }];
         
         UIView *line = [UIView new];;
-        line.backgroundColor = GrayColor;
+        line.backgroundColor = btnCray;
         [_bottomView addSubview:line];
         [line mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.top.right.mas_equalTo(0);
@@ -501,6 +503,7 @@
          scene =[[ProjectDetailSceneView alloc]initWithFrame:CGRectMake(2*SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT-CGRectGetMaxY(_titleScrollView.frame) - 64)];
         scene.projectId = self.projectId;
         scene.delegate = self;
+        scene.authenticName = self.authenticName;
         scene.bannerView = bannerView;
         [_subViewScrollView addSubview:scene];
         
@@ -1022,6 +1025,7 @@
         }
         if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
             shareImage = nil;
+            shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_shareTitle,_shareContent,_shareurl];
         }
         
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:

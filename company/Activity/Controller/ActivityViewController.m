@@ -205,6 +205,8 @@
 -(void)createSearchView
 {
     _textField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH-20, 29)];
+    _textField.borderStyle = UITextBorderStyleBezel;
+    
     _textField.placeholder = @"请输入关键词：活动名、地点…";
     _textField.backgroundColor = [UIColor whiteColor];
     _textField.textColor = [UIColor blackColor];

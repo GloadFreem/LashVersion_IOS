@@ -300,9 +300,10 @@
         {
             return;
         }
-                if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-                    shareImage = nil;
-                }
+        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
+            shareImage = nil;
+            shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_shareTitle,_shareContent,_shareUrl];
+        }
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
         [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){

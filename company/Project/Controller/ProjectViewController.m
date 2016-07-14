@@ -134,7 +134,7 @@
     
     [self loadMessage];
     
-//    [self loadVersion];
+    [self loadVersion];
     
     
 //    [self createGoldView];
@@ -328,6 +328,7 @@
         [self disBackground];
         [timer setFireDate:[NSDate distantFuture]];
         [timer invalidate];
+        timer = nil;
     }else{//设置label数字
         NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%lds",(long)_secondLeave]];
       _timeLabel.attributedText = attributeString;
@@ -568,7 +569,8 @@
 -(void)startLoadBannerData
 {
 
-    [SVProgressHUD show];
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.bannerPartner,@"partner", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:BANNER_SYSTEM postParam:dic type:1 delegate:self sel:@selector(requestBannerList:)];
@@ -636,7 +638,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     [self.navigationController.navigationBar setHidden:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
@@ -671,7 +673,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+    [SVProgressHUD dismiss];
 }
 
 #pragma mark-------------------站内信通知信息----------------------

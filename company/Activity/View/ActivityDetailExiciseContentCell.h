@@ -16,4 +16,5 @@
 @property (strong, nonatomic) IBOutlet UILabel *dinstanceLabel;
 @property (strong, nonatomic) IBOutlet UIButton *statusButton;
 
+
 @end

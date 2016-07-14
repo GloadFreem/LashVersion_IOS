@@ -145,7 +145,7 @@
     [self.contentView addSubview:_moneyBtn];
     
     //进度条
-    _progress = [[ZMProgressView alloc]initWithLineColor:orangeColor loopColor:[UIColor lightGrayColor]];
+    _progress = [[ZMProgressView alloc]initWithLineColor:orangeColor loopColor:btnCray];
     _progress.title = @"已融资";
     _progress.percentUnit = @"%";
     _progress.backgroundColor = [UIColor clearColor];

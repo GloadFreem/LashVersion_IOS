@@ -7,6 +7,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MineRingCodeVC">
             <connections>
+                <outlet property="backgroundView" destination="34d-Lv-eUS" id="oBy-IB-qVq"/>
+                <outlet property="bgHeight" destination="frY-yD-Sd1" id="ckF-tq-K4A"/>
+                <outlet property="bgWidth" destination="x7B-gd-Flz" id="CdR-f0-Z7I"/>
                 <outlet property="iconImage" destination="jHO-Li-3mp" id="WA0-8z-UXm"/>
                 <outlet property="ringCodeLabel" destination="ASy-ZQ-rLB" id="1o0-cB-puf"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -25,6 +28,10 @@
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_ringbg.png" translatesAutoresizingMaskIntoConstraints="NO" id="34d-Lv-eUS">
                             <rect key="frame" x="0.0" y="0.0" width="256" height="358"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="358" id="frY-yD-Sd1"/>
+                                <constraint firstAttribute="width" constant="256" id="x7B-gd-Flz"/>
+                            </constraints>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="jHO-Li-3mp">
                             <rect key="frame" x="93.5" y="17" width="68" height="68"/>

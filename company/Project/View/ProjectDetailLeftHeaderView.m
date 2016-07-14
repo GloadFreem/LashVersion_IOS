@@ -333,7 +333,7 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
         _progress.title = @"已融资";
         _progress.percentUnit = @"%";
         _progress.lineColor = orangeColor;
-        _progress.loopColor = [UIColor lightGrayColor];
+        _progress.loopColor = btnCray;
         isFirst = NO;
     }
     

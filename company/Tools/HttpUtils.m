@@ -104,7 +104,7 @@
 {
     
     NSURL* url = [NSURL URLWithString:[SERVICE_URL stringByAppendingString:urlStr]];
-    NSLog(@"上传文件:%@",url);
+//    NSLog(@"上传文件:%@",url);
     
     self.requestInstance=[ASIFormDataRequest requestWithURL:url];
     

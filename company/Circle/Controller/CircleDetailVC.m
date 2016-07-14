@@ -103,7 +103,7 @@
 
 -(void)loadData
 {
-    [SVProgressHUD show];
+    [SVProgressHUD showWithStatus:@"加载中..."];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestCircleDetail:)];
@@ -491,7 +491,7 @@
     
     id model = self.dataArray[indexPath.row];
     if (indexPath.row == 0) {
-        return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+20;
+        return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+10;
     }
     return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleDetailCommentCell class] contentViewWidth:[self cellContentViewWith]];
 }
@@ -835,7 +835,10 @@
 
 #pragma mark -textFiledDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    
     [textField resignFirstResponder];
+    [self sendComment:nil];
+    
     return NO;
 }
 

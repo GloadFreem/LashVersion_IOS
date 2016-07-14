@@ -33,6 +33,7 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self setup];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+//        self.backgroundColor = [UIColor redColor];
     }
     return self;
 }
@@ -171,18 +172,17 @@
     
     _praiseLabel.sd_layout
     .leftSpaceToView(_praiseBtn, 6*WIDTHCONFIG)
-    .topSpaceToView(_middleView, 13*HEIGHTCONFIG)
+    .topSpaceToView(_middleView, 15*HEIGHTCONFIG)
     .rightSpaceToView(contentView,20)
     .autoHeightRatio(0);
     
     _bottomView.sd_layout
     .leftEqualToView(contentView)
     .rightEqualToView(contentView)
-    .topSpaceToView(_praiseLabel, 20*HEIGHTCONFIG)
+    .topSpaceToView(_praiseBtn, 12*HEIGHTCONFIG)
     .heightIs(10*HEIGHTCONFIG);
-    
-     [self setupAutoHeightWithBottomView:_bottomView bottomMargin:10];
 
+    [self setupAutoHeightWithBottomView:_bottomView bottomMargin:0];
 }
 #pragma mark -设置模型
 -(void)setModel:(CircleListModel *)model
@@ -228,14 +228,25 @@
     }else{
         _praiseLabel.sd_layout.maxHeightIs(height);
     }
+    if (model.priseLabel.length) {
+        [_bottomView sd_clearAutoLayoutSettings];
+        
+        _bottomView.sd_layout
+        .leftEqualToView(self.contentView)
+        .rightEqualToView(self.contentView)
+        .topSpaceToView(_praiseLabel, 15*HEIGHTCONFIG)
+        .heightIs(10*HEIGHTCONFIG);
+        
+    }else{
+        [_bottomView sd_clearAutoLayoutSettings];
+        _bottomView.sd_layout
+        .leftEqualToView(self.contentView)
+        .rightEqualToView(self.contentView)
+        .topSpaceToView(_praiseBtn, 12*HEIGHTCONFIG)
+        .heightIs(10*HEIGHTCONFIG);
+    }
     
-    _bottomView.sd_layout
-    .leftEqualToView(self.contentView)
-    .rightEqualToView(self.contentView)
-    .topSpaceToView(_praiseLabel, 20*HEIGHTCONFIG)
-    .heightIs(10*HEIGHTCONFIG);
-    
-    [self setupAutoHeightWithBottomView:_bottomView bottomMargin:10];
+    [self setupAutoHeightWithBottomView:_bottomView bottomMargin:0];
 }
 
 -(void)setIndexPath:(NSIndexPath *)indexPath

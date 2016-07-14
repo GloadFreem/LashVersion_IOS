@@ -24,6 +24,8 @@
     [super awakeFromNib];
     _iconImage.layer.cornerRadius = 47;
     _iconImage.layer.masksToBounds =YES;
+    _iconImage.layer.borderWidth = 0.5;
+    _iconImage.layer.borderColor = color(224, 224, 224, 1).CGColor;
     
     _leftBtn.layer.cornerRadius = 3;
     _leftBtn.layer.masksToBounds = YES;
@@ -34,6 +36,7 @@
     _rightBtn.layer.cornerRadius = 3;
     _rightBtn.layer.masksToBounds = YES;
     
+    [_bottomLine setHidden:YES];
 }
 
 -(void)setAreas:(NSArray *)areas

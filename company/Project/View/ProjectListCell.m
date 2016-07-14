@@ -14,6 +14,8 @@
     // Initialization codeor
     _iconImage.layer.cornerRadius = 30;
     _iconImage.layer.masksToBounds = YES;
+    _iconImage.layer.borderWidth = 0.5;
+    _iconImage.layer.borderColor = color(224, 224, 224, 1).CGColor;
     
     _leftLabel.layer.cornerRadius = 3;
     _leftLabel.layer.masksToBounds = YES;
@@ -82,7 +84,7 @@
     _progressView.title = @"已融资";
     _progressView.percentUnit = @"%";
     _progressView.lineColor = orangeColor;
-    _progressView.loopColor = [UIColor lightGrayColor];
+    _progressView.loopColor = btnCray;
 //    NSLog(@"剩余时间---%@",model.endDate);
     
 //    _timeLabel.text = [NSString stringWithFormat:@"%@天",[self getDateCha:model.endDate]];

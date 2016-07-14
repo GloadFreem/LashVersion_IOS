@@ -311,6 +311,8 @@
         _isClick = NO;
         self.isNetRequestError = YES;
     }
+    
+    [SVProgressHUD dismiss];
 }
 
 

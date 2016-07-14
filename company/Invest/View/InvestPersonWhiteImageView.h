@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *companyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 
+@property (weak, nonatomic) IBOutlet UIView *bottomLine;
 
 @property (weak, nonatomic) IBOutlet UIButton *leftBtn;
 

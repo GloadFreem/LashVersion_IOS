@@ -54,6 +54,7 @@
 @property (nonatomic, assign) BOOL isFirst;
 @property (nonatomic, strong) MP3Player *player;
 
+@property (nonatomic, copy) NSString *authenticName;
 
 /*
  NSString *_scenePartner;

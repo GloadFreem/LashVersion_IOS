@@ -69,7 +69,7 @@
 
 -(void)defaultColor{
     _lineColor = orangeColor;
-    _loopColor = [UIColor greenColor];
+    _loopColor = btnCray;
 }
 
 
@@ -99,7 +99,7 @@
                           clockwise:YES];
     [self.lineColor set];
     [path setLineCapStyle:kCGLineCapRound];
-    path.lineWidth = radius* 0.1;
+    path.lineWidth = radius* 0.11;
     [path stroke];
     
     CGPoint StartCircleCenter  = CGPointMake(_circleCenter.x + radius*0.9 * cosf(M_PI_2),

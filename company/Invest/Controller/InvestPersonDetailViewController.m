@@ -212,7 +212,7 @@
         make.centerX.equalTo(_scrollView);
         make.left.mas_equalTo(_scrollView.mas_left).offset(30);
         make.right.mas_equalTo(_scrollView.mas_right).offset(-30);
-        make.height.mas_equalTo(300);
+        make.height.mas_equalTo(300*HEIGHTCONFIG);
     }];
     //蒙版
     _mengBanView = [[UIView alloc]init];

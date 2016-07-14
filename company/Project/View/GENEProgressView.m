@@ -67,7 +67,7 @@
 
 -(void)defaultColor{
     _lineColor = orangeColor;
-    _loopColor = [UIColor greenColor];
+    _loopColor = btnCray;
 }
 
 - (void)drawRect:(CGRect)rect {

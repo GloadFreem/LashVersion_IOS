@@ -14,6 +14,8 @@
     // Initialization code
     _iconImage.layer.cornerRadius = 30;
     _iconImage.layer.masksToBounds = YES;
+    _iconImage.layer.borderWidth = 0.5;
+    _iconImage.layer.borderColor = color(224, 224, 224, 1).CGColor;
     
     _leftBtn.layer.cornerRadius = 3;
     _leftBtn.layer.masksToBounds = YES;

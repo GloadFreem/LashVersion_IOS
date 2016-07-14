@@ -12,7 +12,11 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *ringCodeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *iconImage;
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundView;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bgWidth;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bgHeight;
 
 @end
 
@@ -23,6 +27,9 @@
     // Do any additional setup after loading the view from its nib.
     [self setupNav];
     _ringCodeLabel.text = _inviteCode;
+    
+    _bgWidth.constant = 256*WIDTHCONFIG;
+    _bgHeight.constant = 358*HEIGHTCONFIG;
     
     _iconImage.layer.cornerRadius = 34;
     _iconImage.layer.masksToBounds = YES;

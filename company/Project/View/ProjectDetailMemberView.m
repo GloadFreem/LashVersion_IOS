@@ -133,6 +133,8 @@
     //加载数据
     _iconImage.layer.cornerRadius = 41;
     _iconImage.layer.masksToBounds = YES;
+    _iconImage.layer.borderWidth = 0.5;
+    _iconImage.layer.borderColor = color(224, 224, 224, 1).CGColor;
     
     _nameLabel.text = model.name;
     _positionLabel.text = [NSString stringWithFormat:@"%@%@",model.company,model.position];

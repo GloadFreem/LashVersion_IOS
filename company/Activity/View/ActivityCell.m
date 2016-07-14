@@ -13,6 +13,9 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    self.statusLabel.layer.cornerRadius = 1.5;
+    self.statusLabel.layer.masksToBounds = YES;
     self.signUpBtn.layer.cornerRadius = 3;
     self.signUpBtn.layer.masksToBounds = YES;
 }
@@ -66,7 +69,7 @@
         if(_model.attended)
         {
             [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
-            [_signUpBtn setBackgroundColor:GrayColor];
+            [_signUpBtn setBackgroundColor:btnCray];
             [_signUpBtn setEnabled:NO];
         }
         

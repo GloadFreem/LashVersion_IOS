@@ -311,10 +311,39 @@
 
 -(void)alertViewShow
 {
+    
+    
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:_contentStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"更新", nil];
+    
     alertView.tag = 21;
     [alertView show];
 }
+
+- (void)willPresentAlertView:(UIAlertView *)alertView
+
+{
+    
+    if (alertView.tag == 21) {
+        for( UIView * view in alertView.subviews )
+            
+        {
+            
+            if( [view isKindOfClass:[UILabel class]] )
+                
+            {
+                
+                UILabel* label = (UILabel*) view;
+                
+                label.textAlignment = NSTextAlignmentLeft;
+                
+            }
+            
+        }
+    }
+    
+    
+}
+
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //强更

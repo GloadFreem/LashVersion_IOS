@@ -15,10 +15,14 @@
 #import "ProjectListProBaseModel.h"
 #import "ProjectListProModel.h"
 
+#define UPPROJECTINFO @"requestuploadProjectInfo"
+
 #define PROJECTCENTER @"requestProjectCenter"
 #define PROJECTCOMMIT @"requestProjectCommit"
 @interface InvestCommitProjectVC ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate>
 
+@property (nonatomic, copy) NSString *telephone;
+@property (nonatomic, copy) NSString *servicePartner;
 @property (nonatomic, copy) NSString *projectPartner;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -37,6 +41,7 @@
     //获得partner
     self.projectPartner = [TDUtil encryKeyWithMD5:KEY action:PROJECTCENTER];
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTCOMMIT];
+    self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:UPPROJECTINFO];
     
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -45,10 +50,36 @@
     
     [self setUpNavBar];
     
+    [self startLoadPhone];
+    
     [self createTableView];
     
 }
 
+-(void)startLoadPhone
+{
+    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_UPLOAD_PROJECTINFO postParam:dic type:0 delegate:self sel:@selector(requestUpInfo:)];
+}
+
+-(void)requestUpInfo:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    
+    if (jsonDic != nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            NSDictionary *data = jsonDic[@"data"];
+            _telephone  =data[@"tel"];
+            
+        }else{
+            
+        }
+    }
+}
 -(void)startLoadData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.projectPartner,@"partner",@"0",@"type",@"0",@"page",nil];
@@ -177,9 +208,7 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (btn.tag == 1) {
-        NSLog(@"呼叫客服");
-        
-        
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",_telephone]]];
     }
     if (btn.tag == 2) {
         if (self.textViewStr && self.textViewStr.length >= 20) {

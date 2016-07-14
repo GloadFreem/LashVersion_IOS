@@ -124,7 +124,7 @@
 
 -(void)startLoadData
 {
-    [SVProgressHUD show];
+    [SVProgressHUD showWithStatus:@"加载中..."];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_projectId],@"projectId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestProjectDetail:)];
@@ -160,6 +160,7 @@
 
 -(void)loadShareData
 {
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",@"1",@"type", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUESTPROJECTSHARE postParam:dic type:0 delegate:self sel:@selector(requestShare:)];
@@ -207,7 +208,7 @@
     }];
     
     UIButton *shareBtn = [UIButton new];
-    [shareBtn setImage:[UIImage imageNamed:@"write-拷贝-2"] forState:UIControlStateNormal];
+    [shareBtn setImage:[UIImage imageNamed:@"icon_share_btn"] forState:UIControlStateNormal];
     [shareBtn setTag:1];
     [shareBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     shareBtn.size = shareBtn.currentBackgroundImage.size;
@@ -562,9 +563,10 @@
         {
             return;
         }
-                if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-                    shareImage = nil;
-                }
+        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
+            shareImage = nil;
+            shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_shareTitle,_shareContent,_shareurl];
+        }
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
         

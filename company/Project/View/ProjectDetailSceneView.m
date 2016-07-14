@@ -385,13 +385,27 @@
 #pragma mark ------------是否播放-------------------
 -(void)playClick:(UIButton*)btn
 {
-    if (_player.isPlayMusic) {
-        [self stop];
-    }else{
-        [self play];
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
+        if (_player.isPlayMusic) {
+            [self stop];
+        }else{
+            [self play];
+        }
     }
     
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"])
+    {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
 }
+
 
 -(void)play
 {

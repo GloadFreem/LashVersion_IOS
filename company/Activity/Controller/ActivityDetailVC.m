@@ -158,13 +158,13 @@ static CGFloat textFieldH = 40;
     if(_activityModel.attended)
     {
         [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
-        [_signUpBtn setBackgroundColor:GrayColor];
+        [_signUpBtn setBackgroundColor:btnCray];
         [_signUpBtn setEnabled:NO];
     }
     
     if (_isExpired) {
         [_signUpBtn setTitle:@"已结束" forState:UIControlStateNormal];
-        [_signUpBtn setBackgroundColor:GrayColor];
+        [_signUpBtn setBackgroundColor:btnCray];
         [_signUpBtn setEnabled:NO];
     }
     
@@ -286,7 +286,7 @@ static CGFloat textFieldH = 40;
 
 -(void)loadActionDetailData
 {
-    [SVProgressHUD show];
+    [SVProgressHUD showWithStatus:@"加载中..."];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestActionDetailList:)];
@@ -788,6 +788,7 @@ static CGFloat textFieldH = 40;
         }
         if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
             shareImage = nil;
+            shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_shareTitle,_contentText,_shareUrl];
         }
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
@@ -1141,7 +1142,7 @@ static CGFloat textFieldH = 40;
         
         //更改本页报名按钮状态
         [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
-        [_signUpBtn setBackgroundColor:GrayColor];
+        [_signUpBtn setBackgroundColor:btnCray];
         [_signUpBtn setEnabled:NO];
         //更改上一页cell报名按钮状态
         _activityModel.attended = YES;

@@ -210,7 +210,7 @@
         hud.mode = MBProgressHUDModeText;
         hud.labelText = label;
         hud.margin = 10.f;
-        hud.yOffset = 150.f;
+        hud.yOffset = 100.f;
         hud.color  =AppColorTheme;
         hud.removeFromSuperViewOnHide = YES;
         

@@ -124,7 +124,7 @@
         }];
     }
     
-    CGFloat margin = 5;
+    CGFloat margin = 8;
     
     UIView *lastTopView = nil;
     

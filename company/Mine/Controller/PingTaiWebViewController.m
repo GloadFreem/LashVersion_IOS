@@ -22,6 +22,7 @@
     [self setNav];
     
     _webView  =[[UIWebView alloc]initWithFrame:self.view.frame];
+    _webView.delegate =self;
     [self startLoadDetailData];
 }
 
@@ -52,6 +53,29 @@
     [self.view addSubview:_webView];
 }
 
+
+-(void)webViewDidStartLoad:(UIWebView *)webView
+{
+    if (webView == self.webView) {
+        [SVProgressHUD showWithStatus:@"加载中..."];
+    }
+}
+
+-(void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    if (webView == self.webView) {
+        [SVProgressHUD dismiss];
+    }
+    
+}
+
+-(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    if (webView == self.webView) {
+        [SVProgressHUD dismiss];
+    }
+    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"加载失败"];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -26,6 +26,8 @@
     
     _iconImage.layer.cornerRadius = 32.5;
     _iconImage.layer.masksToBounds = YES;
+    _iconImage.layer.borderWidth = 0.5;
+    _iconImage.layer.borderColor = color(224, 224, 224, 1).CGColor;
     
     _firstLabel.layer.cornerRadius = 3;
     _firstLabel.layer.masksToBounds = YES;

@@ -157,6 +157,7 @@
             </constraints>
             <connections>
                 <outlet property="addressLabel" destination="4Tl-VW-Urr" id="S45-QO-fBX"/>
+                <outlet property="bottomLine" destination="JPN-no-hxk" id="SEL-f3-9WU"/>
                 <outlet property="companyLabel" destination="ajV-r9-DaS" id="bri-ac-MKC"/>
                 <outlet property="iconImage" destination="OdT-q4-tbk" id="OrA-Ha-BSl"/>
                 <outlet property="leftBtn" destination="A0A-eo-Kin" id="WRH-Be-rzh"/>

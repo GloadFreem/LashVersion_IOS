@@ -462,22 +462,24 @@
 #pragma mark------------------------删除按钮----------------------
 -(void)didClickDeleteInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
-    _deleteModel = model;
-    
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
-    __block CircleViewController* blockSelf = self;
-    
-    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    if (model.publicContentId) {
+        _deleteModel = model;
         
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [blockSelf btnCertainClick:nil];
-    }];
-    
-    [alertController addAction:cancleAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
+        __block CircleViewController* blockSelf = self;
+        
+        UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [blockSelf btnCertainClick:nil];
+        }];
+        
+        [alertController addAction:cancleAction];
+        [alertController addAction:okAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 -(void)btnCertainClick:(id)sender
@@ -661,6 +663,7 @@
         }
         if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
             shareImage = nil;
+            shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_shareTitle,_contentText,_shareUrl];
         }
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];

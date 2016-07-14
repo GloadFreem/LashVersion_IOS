@@ -55,7 +55,7 @@
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7z-l2-fip">
                     <rect key="frame" x="137" y="296" width="102" height="102"/>
-                    <state key="normal" backgroundImage="iconfont-dianhua.png"/>
+                    <state key="normal" backgroundImage="iconfont-dianhua"/>
                     <state key="highlighted" backgroundImage="iconfont-dianhua.png"/>
                     <connections>
                         <action selector="phoneBtnClick:" destination="-1" eventType="touchUpInside" id="cH5-CG-70e"/>
@@ -109,6 +109,7 @@
         </view>
     </objects>
     <resources>
+        <image name="iconfont-dianhua" width="102" height="102"/>
         <image name="iconfont-dianhua.png" width="102" height="102"/>
         <image name="iconfont-message.png" width="99" height="75"/>
     </resources>

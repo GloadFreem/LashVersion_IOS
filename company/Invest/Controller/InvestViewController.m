@@ -329,6 +329,10 @@
         [_btArray addObject:button];
     }
     
+    UIView *bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetHeight(_titleScrollView.frame)-0.5, SCREENWIDTH, 0.5)];
+    bottomView.backgroundColor = color(224, 224, 224, 1);
+    [_titleScrollView addSubview:bottomView];
+    
     _lineView = [[UIView alloc] initWithFrame:CGRectZero];
     [_lineView setBackgroundColor:self.lineColor ? _lineColor : defaultLineColor];
     

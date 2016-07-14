@@ -19,8 +19,8 @@
     
     _introduce.layer.cornerRadius = 8;
     _introduce.layer.masksToBounds = YES;
-    _introduce.layer.borderWidth = 0.5;
-    _introduce.layer.borderColor = [UIColor greenColor].CGColor;
+//    _introduce.layer.borderWidth = 0.5;
+//    _introduce.layer.borderColor = [UIColor greenColor].CGColor;
 
 }
 

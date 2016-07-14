@@ -23,6 +23,7 @@
     
     [self setNav];
     _webView  =[[UIWebView alloc]initWithFrame:self.view.frame];
+    _webView.delegate = self;
     [self startLoadDetailData];
     
 }
@@ -36,7 +37,7 @@
     [leftback addTarget:self action:@selector(leftBack) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
     UIButton *shareBtn = [UIButton new];
-    [shareBtn setImage:[UIImage imageNamed:@"write-拷贝-2"] forState:UIControlStateNormal];
+    [shareBtn setImage:[UIImage imageNamed:@"icon_share_btn"] forState:UIControlStateNormal];
     [shareBtn addTarget:self action:@selector(shareBtnClick) forControlEvents:UIControlEventTouchUpInside];
     shareBtn.size = CGSizeMake(35, 35);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
@@ -161,6 +162,7 @@
         }
         if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
             shareImage = nil;
+            shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_model.name,_model.desc,_url];
         }
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
@@ -181,6 +183,8 @@
 
 -(void)startLoadDetailData
 {
+    
+    
     if (![_url hasPrefix:@"http://"]) {
         NSString * url =[NSString stringWithFormat:@"http://%@",_url];
         [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
@@ -188,9 +192,31 @@
         [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_url]]];
     }
     [self.view addSubview:_webView];
+    
 }
 
+-(void)webViewDidStartLoad:(UIWebView *)webView
+{
+    if (webView == self.webView) {
+        [SVProgressHUD showWithStatus:@"加载中..."];
+    }
+}
 
+-(void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    if (webView == self.webView) {
+        [SVProgressHUD dismiss];
+    }
+    
+}
+
+-(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    if (webView == self.webView) {
+        [SVProgressHUD dismiss];
+    }
+    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"加载失败"];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -230,10 +256,8 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    //隐藏tabbar
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:NO animated:NO];
+    
+    [SVProgressHUD dismiss];
 }
 
 @end

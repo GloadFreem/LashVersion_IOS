@@ -69,6 +69,9 @@
     _iconWidth.constant =_iconHeight.constant= 83 *WIDTHCONFIG ;
     _iconBtn.layer.cornerRadius = 41.5 *WIDTHCONFIG;
     _iconBtn.layer.masksToBounds = YES;
+    _iconBtn.layer.borderWidth = 2;
+    _iconBtn.layer.borderColor = [UIColor whiteColor].CGColor;
+    
 //    _iconBtn.translatesAutoresizingMaskIntoConstraints = YES;
     
     // Do any additional setup after loading the view from its nib.
@@ -167,8 +170,10 @@
     NSString *nickName = [data objectForKey:@"nickName"];
     if (_nameStr && _nameStr.length) {
         _name.text = _nameStr;
+        [_vipImage setHidden:NO];
     }else{
         _name.text = nickName;
+        [_vipImage setHidden:YES];
     }
     
     _company.text = _companyStr;
@@ -400,9 +405,10 @@
         {
             return;
         }
-                if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-                    shareImage = nil;
-                }
+        if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
+            shareImage = nil;
+            shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_shareTitle,_contentText,_shareUrl];
+        }
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
         

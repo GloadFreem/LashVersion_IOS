@@ -174,9 +174,11 @@
                     listModel.areas = [authentics.industoryArea componentsSeparatedByString:@"，"];
                     listModel.introduce = authentics.introduce;
                     listModel.userId = baseModel.usersByUserCollectedId.userId;
-//                    listModel.collected = 
+//
                     //身份
-                    [_identifyArray addObject:authentics.identiytype.name];
+                    if (authentics.identiytype.name) {
+                        [_identifyArray addObject:authentics.identiytype.name];
+                    }
                     [_investArray addObject:listModel];
                 }
             }
@@ -511,6 +513,7 @@
         InvestThinkTankDetailVC *vc = [InvestThinkTankDetailVC new];
         vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
         vc.attentionVC =self;
+        vc.collected = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

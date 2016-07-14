@@ -174,7 +174,7 @@
     
     //标题
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.text = @"个人资料";
+    _titleLabel.text = @"智囊团详情";
     _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.font = [UIFont systemFontOfSize:20];
@@ -199,12 +199,15 @@
     
     //白色底板
     _whiteImage = [[UIImageView alloc]init];
-    _whiteImage.image = [UIImage imageNamed:@"圆角矩形-4-拷贝-2"];
+    _whiteImage.image = [UIImage imageNamed:@"thinkTank_whitebg"];
     [_scrollView addSubview:_whiteImage];
     //头像
     _iconImage = [[UIImageView alloc]init];
     _iconImage.layer.cornerRadius = 47;
     _iconImage.layer.masksToBounds = YES;
+    _iconImage.layer.borderWidth = 0.5;
+    _iconImage.layer.borderColor = color(224, 224, 224, 1).CGColor;
+    
     [_whiteImage addSubview:_iconImage];
     _iconImage.contentMode = UIViewContentModeScaleAspectFill;
 //    [_iconImage setBackgroundColor:[UIColor redColor]];
@@ -234,6 +237,7 @@
     _company.text = authentics.companyName;
     //下划线
     _bottonLine = [[UIView alloc]init];
+    [_bottonLine setHidden:YES];
     _bottonLine.backgroundColor = [UIColor darkGrayColor];
     [_whiteImage addSubview:_bottonLine];
     //地址
@@ -466,7 +470,7 @@
     }];
     //个人内容
     _personContent.text = authentics.introduce;
-    NSLog(@"%@",authentics.introduce);
+//    NSLog(@"%@",authentics.introduce);
     CGFloat height2 = [_personContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:13];
     [_personContent mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_personLabel.mas_bottom).offset(19);

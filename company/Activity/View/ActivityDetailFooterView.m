@@ -33,12 +33,21 @@
 
 -(void)setupViews
 {
+    UIView *topView = [UIView new];
+    topView.backgroundColor = colorGray;
+    [self addSubview:topView];
+    topView.sd_layout
+    .leftEqualToView(self)
+    .rightEqualToView(self)
+    .heightIs(10)
+    .topEqualToView(self);
+    
     _topView = [UIView new];
     _topView.backgroundColor = [UIColor whiteColor];
     [self addSubview:_topView];
     _topView.sd_layout
     .leftEqualToView(self)
-    .topEqualToView(self)
+    .topSpaceToView(topView,0)
     .rightEqualToView(self)
     .heightIs(35);
     
