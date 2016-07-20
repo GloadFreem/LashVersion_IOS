@@ -149,6 +149,7 @@
         
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:0 delegate:self sel:@selector(requestLogin:)];
+        
     }
 }
 

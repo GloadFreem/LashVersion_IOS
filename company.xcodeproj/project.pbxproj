@@ -381,6 +381,7 @@
 		448BD7BC1D1BC2E8000D7294 /* youjiantou@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 448BD7BA1D1BC2E8000D7294 /* youjiantou@2x.png */; };
 		448BD7BD1D1BC2E8000D7294 /* youjiantou@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 448BD7BB1D1BC2E8000D7294 /* youjiantou@3x.png */; };
 		448BD7C31D1C06D9000D7294 /* ZMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 448BD7C21D1C06D9000D7294 /* ZMProgressView.m */; };
+		44917F321D3F59CD004B9CF4 /* ASIHTTPRequest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FD067C1D3DB983004D7140 /* ASIHTTPRequest.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		449205001D15258D00BD5DBC /* ProjectDetailSceneCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 449204FF1D15258D00BD5DBC /* ProjectDetailSceneCellModel.m */; };
 		449354DB1D0D560000B22F7E /* icon_share_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 449354D01D0D560000B22F7E /* icon_share_close@2x.png */; };
 		449354DC1D0D560000B22F7E /* icon_share_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 449354D11D0D560000B22F7E /* icon_share_close@3x.png */; };
@@ -948,7 +949,6 @@
 		44FAD91B1D33864500BA15E1 /* icon_slider_point@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FAD9191D33864500BA15E1 /* icon_slider_point@2x.png */; };
 		44FAD91C1D33864500BA15E1 /* icon_slider_point@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FAD91A1D33864500BA15E1 /* icon_slider_point@3x.png */; };
 		44FAFA711D2DF76C00CA007C /* ProjectSceneOtherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FAFA701D2DF76C00CA007C /* ProjectSceneOtherCell.m */; };
-		44FD067D1D3DB983004D7140 /* ASIHTTPRequest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FD067C1D3DB983004D7140 /* ASIHTTPRequest.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		44FD067F1D3DBA55004D7140 /* GDataXML_HTML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FD067E1D3DBA55004D7140 /* GDataXML_HTML.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		44FD06811D3DBA5B004D7140 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FD06801D3DBA5B004D7140 /* MJExtension.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		44FD06831D3DBA5F004D7140 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FD06821D3DBA5F004D7140 /* MJRefresh.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -2270,13 +2270,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44917F321D3F59CD004B9CF4 /* ASIHTTPRequest.framework in Frameworks */,
 				44FD06891D3DBA6C004D7140 /* SVProgressHUD.framework in Frameworks */,
 				44FD06871D3DBA68004D7140 /* SDWebImage.framework in Frameworks */,
 				44FD06851D3DBA64004D7140 /* Reachability.framework in Frameworks */,
 				44FD06831D3DBA5F004D7140 /* MJRefresh.framework in Frameworks */,
 				44FD06811D3DBA5B004D7140 /* MJExtension.framework in Frameworks */,
 				44FD067F1D3DBA55004D7140 /* GDataXML_HTML.framework in Frameworks */,
-				44FD067D1D3DB983004D7140 /* ASIHTTPRequest.framework in Frameworks */,
 				44FAD9121D335F7900BA15E1 /* AVFoundation.framework in Frameworks */,
 				4484D1C01D19381D001F4C3A /* libstdc++.tbd in Frameworks */,
 				4484D1BE1D19380A001F4C3A /* libsqlite3.tbd in Frameworks */,

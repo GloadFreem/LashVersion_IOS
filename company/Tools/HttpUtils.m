@@ -160,6 +160,7 @@
             NSString* value=[postDic valueForKey:key];
             [self.requestInstance setPostValue:value forKey:key];
         }
+        
     }
     
     //设置请求模式
