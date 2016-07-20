@@ -93,7 +93,6 @@
     self.authenPartner = [TDUtil encryKeyWithMD5:KEY action:AUTHENINFO];
     self.deletePartner = [TDUtil encryKeyWithMD5:KEY action:DELETELIST];
     
-    
     NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
     _selfId = [data objectForKey:USER_STATIC_USER_ID];
     
@@ -202,7 +201,6 @@
 #pragma mark -设置导航栏
 -(void)setupNav
 {
-    
     UIButton * releaseBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [releaseBtn setBackgroundImage:[UIImage imageNamed:@"icon_circle_add"] forState:UIControlStateNormal];
     releaseBtn.size = releaseBtn.currentBackgroundImage.size;
@@ -385,8 +383,6 @@
     [_tableView deselectRowAtIndexPath:indexPath animated:YES];
     //进入详情页
     CircleListModel *listModel = _dataArray[indexPath.row];
-    
-    
     if (listModel.publicContentId) {
         CircleDetailVC *detail = [CircleDetailVC new];
         detail.indexPath = indexPath;
@@ -397,8 +393,6 @@
         
         [self.navigationController pushViewController:detail animated:YES];
     }
-    
-    
 }
 #pragma mark -发布动态
 -(void)releaseBtnClick:(UIButton*)btn
@@ -487,7 +481,6 @@
     [_dataArray removeObject:_deleteModel];
     [self.tableView reloadData];
     
-    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.deletePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_deleteModel.publicContentId],@"contentId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_LIST_DELETE postParam:dic type:0 delegate:self sel:@selector(requestDeleteList:)];
@@ -551,7 +544,6 @@
         
     }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-        
     }
 }
 #pragma mark -开始分享
@@ -686,14 +678,12 @@
 {
     //进入详情页
     CircleListModel *listModel = _dataArray[indexPath.row];
-    
     if (listModel.publicContentId) {
         CircleDetailVC *detail = [CircleDetailVC new];
         detail.publicContentId  =listModel.publicContentId;//帖子ID
         detail.page = 0;
         [self.navigationController pushViewController:detail animated:YES];
     }
-    
 }
 #pragma mark -点赞按钮
 -(void)didClickPraiseBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
@@ -769,7 +759,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     UINavigationController *nav = (UINavigationController*)window.rootViewController;
     JTabBarController * tabBarController;
@@ -806,10 +795,7 @@
     [SVProgressHUD dismiss];
     
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"publish" object:nil];
-    //    隐藏tabbar
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-   
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
+
 }
 
 -(void)dealloc

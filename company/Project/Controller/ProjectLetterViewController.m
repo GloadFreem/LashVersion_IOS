@@ -91,10 +91,7 @@
                 LetterBaseModel *baseModel = modelArray[i];
                 [_dataArray addObject:baseModel];
             }
-            
-            
             [self.tableView reloadData];
-            
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
@@ -115,8 +112,6 @@
     _tableView.delegate =self;
     _tableView.dataSource =self;
 //    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
@@ -145,7 +140,6 @@
 -(void)refreshHttp
 {
     _page = 0;
-    
     [self startLoadData];
     //    NSLog(@"下拉刷新");
 }
@@ -192,18 +186,6 @@
         make.left.mas_equalTo(titleView);
         make.centerY.mas_equalTo(titleView);
     }];
-    
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    btn.tag = 2;
-//    [btn setBackgroundImage:[UIImage imageNamed:@"letterArrow"] forState:UIControlStateNormal];
-//    [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [titleView addSubview:btn];
-//    [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerY.mas_equalTo(titleView);
-//        make.left.mas_equalTo(label.mas_right).offset(5);
-//        
-//    }];
-    
     
     self.navigationItem.titleView = titleView;
 }
@@ -287,8 +269,6 @@
             
         }
         [cell relayoutCellWithModel:_dataArray[indexPath.row]];
-        //    self.tableView.contentSize = CGSizeMake(SCREENWIDTH, _dataArray.count * 100);
-        //    cell.backgroundColor = colorGray;
         return cell;
     }
     return nil;
@@ -298,7 +278,6 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (!_operateBtn.selected) {
-//        ProjectLetterCell *cell = (ProjectLetterCell*)[tableView cellForRowAtIndexPath:indexPath];
         LetterBaseModel *model = _dataArray[indexPath.row];
         model.isRead = YES;
         _readModel = model;
@@ -308,7 +287,6 @@
         //标记已读请求数据
         [self readMessage];
         //根据type值显示不同的界面类型 messageTypeId
-        
         if (model.messagetype.messageTypeId == 1) {//进入webView
             PingTaiWebViewController *web =[PingTaiWebViewController new];
             web.url = model.url;
@@ -318,9 +296,6 @@
             detail.model = model;
             [self.navigationController pushViewController:detail animated:YES];
         }
-//        NSLog(@"进入详情页面");
-        
-        
         
     }else{   //在编辑状态下
         LetterBaseModel *model = _dataArray[indexPath.row];
@@ -349,19 +324,10 @@
                 make.bottom.mas_equalTo(self.view.mas_bottom).offset(-48);
             }];
         }else{
-//            [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-//                make.height.mas_equalTo(SCREENHEIGHT-64);
-////                make.bottom.mas_equalTo(self.view.mas_bottom).offset(0);
-//            }];
             _tableView.height = SCREENHEIGHT-64;
-            
-            
         }
-        
         //刷新tableView
         [_tableView reloadData];
-        
-        NSLog(@"点击编辑");
     }
     if (btn.tag == 5) {
         _allSelectedBtn.selected = !_allSelectedBtn.selected;
@@ -393,9 +359,7 @@
         }
         //刷新表格
         [_tableView reloadData];
-        
     }
-    
 }
 #pragma mark----已读
 -(void)readMessage

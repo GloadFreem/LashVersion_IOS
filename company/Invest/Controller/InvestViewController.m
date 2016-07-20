@@ -120,11 +120,8 @@
     _imageArray = @[@"touziren-icon",@"iconfont-jigouT",@"iconfont-danaoT"];
     _lineColor = orangeColor;
     _type = 0;
-    
     [self.view addSubview:self.titleScrollView];          //添加点击按钮
     [self.view addSubview:self.subViewScrollView];
-    
-           
 }
 
 -(void)createUI
@@ -279,8 +276,6 @@
                 
             }
             
-            
-            
             [self.tableView reloadData];
             //结束刷新
             [self.tableView.mj_header endRefreshing];
@@ -346,8 +341,6 @@
         _lineView.frame = CGRectMake(0, 0, 80, CGRectGetMaxX(_titleScrollView.frame));
         [_titleScrollView insertSubview:_lineView atIndex:0];
     }
-    
-    
     return _titleScrollView;
 }
 
@@ -355,7 +348,6 @@
 - (UIScrollView *)subViewScrollView{
     
     if (!_subViewScrollView) {
-        
         _subViewScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 40, SCREENWIDTH, SCREENHEIGHT-64-49-40)];
         _subViewScrollView.backgroundColor = [UIColor greenColor];
         _subViewScrollView.showsHorizontalScrollIndicator = NO;
@@ -368,7 +360,6 @@
         //方向锁
         _subViewScrollView.directionalLockEnabled = YES;
         
-
         //添加tableView
         _investPersonTableView = [[UITableView alloc]init];
         [self createTableView:_investPersonTableView index:0];
@@ -379,9 +370,7 @@
         
         _thinkTankTableView = [[UITableView alloc]init];
         [self createTableView:_thinkTankTableView index:2];
-        
     }
-    
     return _subViewScrollView;
 }
 
@@ -412,13 +401,12 @@
     //设置当前选中的tableView
     _tableViewSelected = sender.tag - 10 +1;
     
-    
     //子scrollView的偏移量
     _subViewScrollView.contentOffset=CGPointMake(SCREENWIDTH*(sender.tag-10), 0);
-    //下载数据
-    [self startLoadData];
-
-    
+    //当没有数据才下载数据
+    if (!_investPersonArray.count || !_investOrganizationArray.count || !_thinkTankArray.count) {
+        [self startLoadData];
+    }
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
@@ -430,7 +418,6 @@
         //当前选中tableView
         _tableViewSelected = index +1;
         
-        
         UIButton *bt = (UIButton *)[self.view viewWithTag:(index+10)];
         _lineView.frame = CGRectMake(bt.frame.origin.x, _lineView.frame.origin.y, _lineView.frame.size.width, _lineView.frame.size.height);
         [bt setTitleColor:selectTitleColor forState:UIControlStateNormal];
@@ -440,15 +427,11 @@
         for (int i = 0; i<_titleArray.count; i++) {
             UIButton *bt = (UIButton *)[_titleScrollView viewWithTag:10+i];
             10+index == (10+i) ? [bt setTitleColor:selectTitleColor forState:UIControlStateNormal] : [bt setTitleColor:unselectTitleColor forState:UIControlStateNormal];
-            
         }
         //当没有数据才下载数据
         if (!_investPersonArray.count || !_investOrganizationArray.count || !_thinkTankArray.count) {
             [self startLoadData];
         }
-        
-        
-        
         switch (index) {
             case 0:
             {
@@ -596,10 +579,6 @@
     if (_tableViewSelected == 1) {
         InvestListModel *listModel = _investPersonArray[indexPath.row];
         InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
-        //隐藏tabbar
-//        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//        
-//        [delegate.tabBar tabBarHidden:YES animated:NO];
         
         vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
         vc.titleText = @"个人 · 简介";
@@ -620,11 +599,6 @@
             
             OrganizationFirstModel *model = _investOrganizationArray[indexPath.row];
             InvestWebViewController *webView = [InvestWebViewController new];
-            //隐藏tabbar
-//            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//            
-//            [delegate.tabBar tabBarHidden:YES animated:NO];
-//            
             
             webView.url = model.url;
             [self.navigationController pushViewController:webView animated:YES];
@@ -636,10 +610,6 @@
             InvestListModel *listModel = _investOrganizationSecondArray[indexPath.row];
             
             InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
-            //隐藏tabbar
-//            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//            
-//            [delegate.tabBar tabBarHidden:YES animated:NO];
             
             vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
             vc.investorId = listModel.userId;
@@ -661,8 +631,7 @@
         InvestListModel *listModel = _thinkTankArray[indexPath.row];
 
         InvestThinkTankDetailVC * vc = [InvestThinkTankDetailVC new];
-        //隐藏tabbar
-//        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+
         vc.investorId = listModel.userId;
         vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
         
@@ -671,7 +640,7 @@
         self.investModel = listModel;
         vc.viewController =self;
         vc.type = @"7";
-//        [delegate.tabBar tabBarHidden:YES animated:NO];
+
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -737,9 +706,7 @@
     if ([_authenticName isEqualToString:@"已认证"])
     {
         InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
-        
-        //    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-        //    [delegate.tabBar tabBarHidden:YES animated:NO];
+
         vc.model = model;
         vc.viewController = self;
         
@@ -897,7 +864,6 @@
 //                
 //            }
             
-            
 //            NSLog(@"关注成功");
         }else{
 //            NSLog(@"关注失败");
@@ -911,10 +877,6 @@
     if ([_authenticName isEqualToString:@"已认证"])
     {
         InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
-        
-        //    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-        //    [delegate.tabBar tabBarHidden:YES animated:NO];
-        
         vc.model = model;
         
         [self.navigationController pushViewController:vc animated:YES];
@@ -1163,15 +1125,12 @@
     
     [delegate.tabBar tabBarHidden:NO animated:NO];
     
-    
-    
 }
 
 #pragma mark -视图即将消失
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
 }
 
 

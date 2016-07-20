@@ -30,10 +30,8 @@
     // Do any additional setup after loading the view from its nib.
     //获得内容partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:UPPROJECTINFO];
-    
     [self setupNav];
     [self startLoadData];
-    
     [self.emailBtn setAdjustsImageWhenHighlighted:NO];
     [self.phoneBtn setAdjustsImageWhenHighlighted:NO];
 }
@@ -112,14 +110,9 @@
     
 }
 - (IBAction)phoneBtnClick:(UIButton *)sender {
-    
-//    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-//    NSString *tel = [data objectForKey:@"servicePhone"];
-//    //        NSLog(@"电话---%@",tel);
     if (_telephone) {
        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",_telephone]]];
     }
-    
 }
 
 

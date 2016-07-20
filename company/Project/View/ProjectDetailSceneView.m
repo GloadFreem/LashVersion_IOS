@@ -33,9 +33,7 @@
         
         //初始化网络请求对象
         self.httpUtil  =[[HttpUtils alloc]init];
-        
         [self createUI];
-        
         _isFirst = YES;
         _page = 0;
         
@@ -44,8 +42,6 @@
         _scenePartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTSCENE];
         _commentPartner = [TDUtil encryKeyWithMD5:KEY action: REQUESTSCENECOMMENT];
         _pptPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTPPT];
-        
-        
         
         if (!_dataArray) {
             _dataArray = [NSMutableArray array];
@@ -60,12 +56,10 @@
             _nextPageArray = [NSMutableArray array];
         }
         
-        
         if (!_player) {
             _player=[[MP3Player alloc]init];
             _player.isPlayMusic = NO;
         }
-        
     }
     return self;
 }
@@ -74,7 +68,6 @@
 -(void)setProjectId:(NSInteger)projectId
 {
     _projectId = projectId;
-    
     //加载数据
     [self loadData];
 }
@@ -110,7 +103,6 @@
                     _isFirst = NO;
                 }
             }
-            
             _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
            [_timer setFireDate:[NSDate distantPast]];
             
@@ -154,7 +146,6 @@
                 }
 //                NSLog(@"实时下载最新数据");
             }
-            
             
 //            for (NSInteger i = 0; i < _pptArray.count; i ++) {
 //                ProjectPPTModel *model = _pptArray[i];
@@ -219,7 +210,6 @@
                 [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
             }
             
-            
         }else{
 //            [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
         }
@@ -245,7 +235,6 @@
         make.right.mas_equalTo(self.mas_right);
         make.bottom.mas_equalTo(self.mas_bottom).offset(-50);
     }];
-    
     
     _moreBtn = [UIButton new];
     [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_sceneMore"] forState:UIControlStateNormal];
@@ -316,8 +305,6 @@
         make.right.mas_equalTo(label.mas_left).offset(-10);
         make.height.mas_equalTo(30);
     }];
-    
-    
 }
 
 
@@ -355,18 +342,14 @@
                 [weakSelf updateTimeLabel:current];
                 
             }
-            
             //实时监听遍历是否换页
             [weakSelf updatePPT:current];
-            
-            
             //当前时间
             CMTime currentTime=Wplayer.currentItem.currentTime;
             //总时间
             CMTime duration=Wplayer.currentItem.duration;
             //进度＝当前时间/总时间
             float pro = CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(duration);
-            
             [weakSelf updateVideoSlider:pro];
             
         }];
@@ -393,14 +376,11 @@
             [self play];
         }
     }
-    
     if ([_authenticName isEqualToString:@"认证中"]) {
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
+    if ([_authenticName isEqualToString:@"未认证"]){
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
@@ -453,7 +433,6 @@
             if (currentPage == _pptArray.count -2) {
                 [self startLoadMore];
             }
-            
             [_bannerView nextPage: model.sortIndex];
 //            NSLog(@"翻到-----%ld页",(long)model.sortIndex);
         }
@@ -580,9 +559,7 @@
         cell.model = model;
         return cell;
     }
-    
     return nil;
-    
 }
 
 - (CGFloat)cellContentViewWith

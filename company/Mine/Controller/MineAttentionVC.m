@@ -84,8 +84,6 @@
     //创建基本布局
     [self setupNav];
     [self createUI];
-    
-    
 }
 #pragma mark--下载数据
 -(void)startLoadData
@@ -111,7 +109,7 @@
 -(void)requestInvestList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-            NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     //如果刷新到顶部  移除原来数组数据
     if (_page == 0) {
@@ -139,8 +137,7 @@
                     listModel.fullName = baseModel.fullName;
                     listModel.status = baseModel.financestatus.name;
                     listModel.projectId  = baseModel.projectId;
-                    
-                    //少一个areas 数组
+                  
                     listModel.areas = [baseModel.industoryType componentsSeparatedByString:@"，"];
                     listModel.collectionCount = baseModel.collectionCount;
                     MineRoadshows *roadshows = baseModel.roadshows[0];
@@ -200,7 +197,6 @@
 #pragma mark -导航栏设置
 -(void)setupNav
 {
-    
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     leftback.tag = 2;
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
@@ -253,7 +249,6 @@
     }];
     
     self.navigationItem.titleView = titleView;
-    
 }
 #pragma mark -titleView  button点击事件
 -(void)btnClick:(UIButton*)btn
@@ -305,8 +300,6 @@
             [_projectBtn setBackgroundColor:color(61, 69, 78, 1)];
             [_projectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }
-        
-       
         //当没有数据才下载数据
         if (!_projectArray.count || !_investArray.count) {
             [self startLoadData];
@@ -468,10 +461,6 @@
             vc.projectId = model.projectId;
             vc.model = model;
             vc.tableView = _projectTableView;
-            //隐藏tabbar
-            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-            
-            [delegate.tabBar tabBarHidden:YES animated:NO];
             
             [self.navigationController pushViewController:vc animated:YES];
         }else{
@@ -480,41 +469,41 @@
             vc.projectId = model.projectId;
             vc.listModel = model;
             vc.tableView = _projectTableView;
-            //隐藏tabbar
-            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-            
-            [delegate.tabBar tabBarHidden:YES animated:NO];
+
             [self.navigationController pushViewController:vc animated:YES];
         }
     }
     
-    if (!_investArray.count || !_identifyArray.count) {
-        return;
-    }
-    MineCollectionListModel *model = _investArray[indexPath.row];
-    if ([_identifyArray[indexPath.row] isEqualToString:@"个人投资者"]) {
-        InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
-        vc.attentionVC =self;
-        vc.titleText = @"个人 · 简介";
-        vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-    
-    if ([_identifyArray[indexPath.row] isEqualToString:@"机构投资者"]) {
-        InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
-        vc.attentionVC =self;
-        vc.titleText = @"机构 · 简介";
-        vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
-        [self.navigationController pushViewController:vc animated:YES];
+    if (_selectedTableView == 1) {
+        if (!_investArray.count || !_identifyArray.count) {
+            return;
+        }
+        MineCollectionListModel *model = _investArray[indexPath.row];
+        if ([_identifyArray[indexPath.row] isEqualToString:@"个人投资者"]) {
+            InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
+            vc.attentionVC =self;
+            vc.titleText = @"个人 · 简介";
+            vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
         
-    }
-    
-    if ([_identifyArray[indexPath.row] isEqualToString:@"智囊团"]) {
-        InvestThinkTankDetailVC *vc = [InvestThinkTankDetailVC new];
-        vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
-        vc.attentionVC =self;
-        vc.collected = YES;
-        [self.navigationController pushViewController:vc animated:YES];
+        if ([_identifyArray[indexPath.row] isEqualToString:@"机构投资者"]) {
+            InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
+            vc.attentionVC =self;
+            vc.titleText = @"机构 · 简介";
+            vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }
+        
+        if ([_identifyArray[indexPath.row] isEqualToString:@"智囊团"]) {
+            InvestThinkTankDetailVC *vc = [InvestThinkTankDetailVC new];
+            vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
+            vc.attentionVC =self;
+            vc.collected = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+
     }
 }
 #pragma mark- 创建tableView
@@ -567,10 +556,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

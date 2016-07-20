@@ -84,17 +84,13 @@
 -(void)setModel:(ProjectSceneCommentModel *)model
 {
     _model = model;
-    
     [_icon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.users.headSculpture]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
-    
     _name.text = model.users.name;
     [_name sizeToFit];
     _time.text = model.commentDate;
     [_time sizeToFit];
     _content.text = model.content;
-    
 }
-
 
 - (void)awakeFromNib {
     [super awakeFromNib];

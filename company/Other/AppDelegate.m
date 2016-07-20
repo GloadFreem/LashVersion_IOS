@@ -124,6 +124,7 @@
     manager.enableAutoToolbar = YES;
     
 #pragma mark --------- 激光推送
+    [UIApplication sharedApplication].applicationIconBadgeNumber =0;
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
         //       categories
         [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |
@@ -133,8 +134,8 @@
     }else {
         //categories    nil
         [JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
-                                                UIRemoteNotificationTypeSound |
-                                                UIRemoteNotificationTypeAlert)
+                                                          UIRemoteNotificationTypeSound |
+                                                          UIRemoteNotificationTypeAlert)
                                               categories:nil];
     }
     

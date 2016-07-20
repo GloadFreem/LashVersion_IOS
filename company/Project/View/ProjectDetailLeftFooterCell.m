@@ -20,8 +20,6 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
                 [self setup];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        
     }
     return self;
 }
@@ -32,14 +30,11 @@
     _scrollView = [UIScrollView new];
     _scrollView.delegate = self;
     _scrollView.backgroundColor  = [UIColor magentaColor];
-    
     _scrollView.sd_layout
     .leftEqualToView(self.contentView)
     .rightEqualToView(self.contentView)
     .topSpaceToView(self.contentView,0)
     .heightIs(120);
-    
-    
     
     _bottomView = [UIView new];
     _bottomView.backgroundColor = colorGray;
@@ -97,7 +92,7 @@
             make.width.mas_equalTo(26);
         }];
         
-        NSLog(@"打印footercell的文字---%@",model.content);
+//        NSLog(@"打印footercell的文字---%@",model.content);
         NSString *pre = [model.content substringToIndex:2];
         NSString *last = [model.content substringFromIndex:2];
         label.text = [NSString stringWithFormat:@"%@\n%@",pre,last];

@@ -81,7 +81,6 @@
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTDETAIL];
     self.collectPartner = [TDUtil encryKeyWithMD5:KEY action:PROJECTCOLLECT];
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:PROJECTSHARE];
-    
     //客服
     self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
     
@@ -90,10 +89,8 @@
     [self setupNav];
     
     [self loadShareData];
-    
     //下载客服电话
     [self loadServicePhone];
-//    NSLog(@"projectId----%ld",self.projectId);
 }
 
 -(void)loadServicePhone
@@ -120,7 +117,6 @@
         }
     }
 }
-
 
 -(void)startLoadData
 {
@@ -160,7 +156,6 @@
 
 -(void)loadShareData
 {
-    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",@"1",@"type", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUESTPROJECTSHARE postParam:dic type:0 delegate:self sel:@selector(requestShare:)];
@@ -276,7 +271,6 @@
     
     _teamView = [ProjectDetailLeftTeamView new];
     _teamView.delegate = self;
-//    _teamView.backgroundColor = [UIColor redColor];
     _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];;
     _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
     [_scrollView addSubview:_teamView];
@@ -286,18 +280,8 @@
     .rightEqualToView(_scrollView)
     .topSpaceToView(_photoView,0)
     .autoHeightRatio(1);
-//    _leftView = [CSZProjectDetailLetfView new];
-//    
-//    _leftView.model = _baseModel;
-//    [_scrollView addSubview:_leftView];
-//    _leftView.sd_layout
-//    .leftEqualToView(_scrollView)
-//    .rightEqualToView(_scrollView)
-//    .topSpaceToView(_headerView,0);
-    
-    
+
     _footerView = [ProjectPrepareFooterCommentView new];
-//    _footerView.backgroundColor = [UIColor greenColor];
     _footerView.projectId = _projectId;
     _footerView.delagate =self;
     [_scrollView addSubview:_footerView];
@@ -305,7 +289,7 @@
     .leftEqualToView(_scrollView)
     .rightEqualToView(_scrollView)
     .topSpaceToView(_teamView,-10);
-//
+    
     [_scrollView setupAutoContentSizeWithBottomView:_footerView bottomMargin:10];
 }
 
@@ -414,8 +398,6 @@
                 [_collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",(long)_collectCount] forState:UIControlStateNormal];
             }
             
-            
-            
         }else{
             
         }
@@ -430,7 +412,6 @@
             [_attentionVC.projectArray removeObject:_model];
             [_tableView reloadData];
         }
-        
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (btn.tag == 1) {
@@ -438,12 +419,10 @@
         {
             [self startShare];
         }
-       
         if ([_authenticName isEqualToString:@"认证中"]) {
             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [alertView show];
         }
-        
         if ([_authenticName isEqualToString:@"未认证"])
         {
             [self presentAlertView];
@@ -629,7 +608,6 @@
     RenzhengViewController  * renzheng = [RenzhengViewController new];
     renzheng.identifyType = self.identiyTypeId;
     [self.navigationController pushViewController:renzheng animated:YES];
-    
 }
 
 
@@ -642,14 +620,11 @@
         vc.url = team.url;
         [self.navigationController pushViewController:vc animated:YES];
     }
-    
     if ([_authenticName isEqualToString:@"认证中"]) {
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
+    if ([_authenticName isEqualToString:@"未认证"]){
         [self presentAlertView];
     }
 }
@@ -673,7 +648,6 @@
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
-    
     if ([_authenticName isEqualToString:@"未认证"])
     {
         [self presentAlertView];

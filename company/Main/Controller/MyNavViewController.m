@@ -17,16 +17,7 @@
     
     //1.设置当有导航栏自动添加64的高度的属性为NO
     self.automaticallyAdjustsScrollViewInsets = NO;
-//    [self.navigationBar setBarTintColor:[UIColor redColor]];
-//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-//    [self.navigationBar setTintColor:[UIColor whiteColor]];
-//    NSDictionary *navTitleArr = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],NSForegroundColorAttributeName, nil];
-//    [self.navigationBar setTitleTextAttributes:navTitleArr];
-//    
-//    [self.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbg"] forBarMetrics:UIBarMetricsDefault];
-//    if ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0) {
-//        self.navigationBar.translucent = NO;
-//    }
+
 }
 #pragma mark -使用时只调用一次 设置一些全局变量
 +(void)initialize{

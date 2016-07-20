@@ -84,7 +84,6 @@
     if (_page == 0) {
         [_dataArray removeAllObjects];
     }
-    
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
@@ -114,17 +113,12 @@
             
                 [_dataArray insertObject:cellModel atIndex:0];
             }
-            
-            
-            
             //刷新表
             [self.tableView reloadData];
             
             if (_dataArray.count > 1) {
                 [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
             }
-            
-            
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
@@ -156,9 +150,7 @@
         make.left.top.right.mas_equalTo(0);
         make.height.mas_equalTo(SCREENHEIGHT -50);
     }];
-    
     [self createFooterView];
-    
 }
 
 -(void)createFooterView
@@ -212,9 +204,7 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 
 {
-    
     [self.textField resignFirstResponder];
-    
 }
 
 #pragma mark -发送信息
@@ -242,7 +232,6 @@
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
-    
     if ([_authenticName isEqualToString:@"未认证"])
     {
         self.textField.text = @"";
@@ -274,7 +263,6 @@
     RenzhengViewController  * renzheng = [RenzhengViewController new];
     renzheng.identifyType = self.identiyTypeId;
     [self.navigationController pushViewController:renzheng animated:YES];
-    
 }
 
 -(void)requestSceneComment:(ASIHTTPRequest *)request
@@ -308,7 +296,6 @@
 -(void)nextPage
 {
     _page ++;
-    
     [self startLoadData];
     //    NSLog(@"回到顶部");
 }
@@ -394,8 +381,6 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
-    
     NSLog(@"开始编辑");
 }
 

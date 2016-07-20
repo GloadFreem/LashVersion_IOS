@@ -94,7 +94,6 @@
     }
 }
 
-
 -(void)startLoadData
 {
 //    NSLog(@"----%@",self.investorId);
@@ -276,7 +275,6 @@
         make.bottom.mas_equalTo(_personContent.mas_bottom).offset(10);
     }];
     
-    
     //提交按钮
     _commitBtn = [[UIButton alloc]init];
     [_commitBtn setBackgroundImage:[UIImage imageNamed:@"icon_commit_pro"] forState:UIControlStateNormal];
@@ -360,9 +358,7 @@
                 [_viewController.investOrganizationSecondArray replaceObjectAtIndex:index withObject:_viewController.investModel];
                 [_viewController.tableView reloadData];
             
-            
         }
-        
         
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -507,9 +503,7 @@
     if ([_authenticName isEqualToString:@"已认证"])
     {
         InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
-        
-        //    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-        //    [delegate.tabBar tabBarHidden:YES animated:NO];
+      
         vc.model = _listModel;
         
         [self.navigationController pushViewController:vc animated:YES];

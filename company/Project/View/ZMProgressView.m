@@ -72,7 +72,6 @@
     _loopColor = btnCray;
 }
 
-
 - (void)drawRect:(CGRect)rect {
 
     _circleCenter = CGPointMake(rect.size.width*0.5 , rect.size.height*0.5 );

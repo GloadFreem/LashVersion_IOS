@@ -38,10 +38,6 @@
     
     [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.startPageImage]] placeholderImage:[UIImage new]];
     
-    //根据状态判断 状态图片
-//    if (!model.status) {
-//        _statusImage.hidden = YES;
-//    }
     if ([model.status isEqualToString:@"待路演"]) {
         _statusImage.image = [UIImage imageNamed:@"icon_noroad"];
     }
@@ -67,7 +63,6 @@
         _statusImage.image = [UIImage imageNamed:@"invest_failed@3x"];
     }
    
-    
     //隐藏多余的 label
     for (NSInteger i =model.areas.count; i < _labelArray.count; i ++) {
         UILabel *label = (UILabel *)_labelArray[i];
@@ -89,7 +84,6 @@
     
 //    _timeLabel.text = [NSString stringWithFormat:@"%@天",[self getDateCha:model.endDate]];
     _timeLabel.text = [NSString stringWithFormat:@"%ld天",(long)model.timeLeft];
-    
     _projectLabel.text = model.abbrevName;
     _addressLabel.text = model.address;
     _companyLabel.text = model.fullName;

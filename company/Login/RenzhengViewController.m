@@ -516,64 +516,6 @@
     }
     
     
-//    if ([self.identifyType integerValue] ==1 || [self.identifyType integerValue] == 3 || [self.identifyType integerValue] == 4){
-//        if ([identifyStr isEqualToString:@""] || identifyStr.length != 18) {
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查身份证"];
-//            return;
-//        }
-//        if ([self.identifyType integerValue] == 1 || [self.identifyType integerValue] == 3) {
-//            if([_dataArray[2] isEqualToString:@""]){
-//                [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查公司名称"];
-//                return;
-//            }
-//            if([_dataArray[4] isEqualToString:@""]){
-//                [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查担任职位"];
-//                return;
-//            }
-//        }
-//        
-//        
-//        if([_dataArray[3] isEqualToString:@""]){
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查公司地址"];
-//            return;
-//        }
-//        
-//    }else{
-//        if ([identifyStr isEqualToString:@""] || identifyStr.length == 0) {
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查身份证"];
-//            return;
-//        }
-//        
-//        if([_dataArray[1] isEqualToString:@""]){
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查真实姓名"];
-//            return;
-//        }
-//        
-//        if([_dataArray[2] isEqualToString:@""]){
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查公司地址"];
-//            return;
-//        }
-//        
-//    }
-//    
-//    //项目方
-//    if ([self.identifyType integerValue] == 1) {
-//        Renzheng2ViewController * regist = [Renzheng2ViewController new];
-//        regist.identifyType = self.identifyType;
-//        regist.titleLabel.text = @"(2/2)";
-//        [regist.nextBtn setTitle:@"完成" forState:UIControlStateNormal];
-//        [_dataDic setObject:_dataArray[0] forKey:@"identiyCarNo"];
-//        [_dataDic setObject:_dataArray[1] forKey:@"name"];
-//        [_dataDic setObject:_dataArray[2] forKey:@"companyName"];
-//        [_dataDic setObject:self.companyAddress forKey:@"companyAddress"];
-//        [_dataDic setObject:_dataArray[4] forKey:@"position"];
-//        //字典赋值
-//        regist.dataDic = [NSMutableDictionary dictionaryWithDictionary:_dataDic];
-//        
-//        [self.navigationController pushViewController:regist animated:YES];
-//        }
-    
-    
 }
 
 

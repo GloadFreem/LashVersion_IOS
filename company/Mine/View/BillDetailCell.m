@@ -96,7 +96,6 @@
     .topEqualToView(self.contentView)
     .rightEqualToView(self.contentView);  //高度显示在 setModel里边设置
     
-    
     //月份
     _monthLabel = [UILabel new];
     _monthLabel.font = BGFont(12);
@@ -293,9 +292,6 @@
         _statusLabel.textColor = [UIColor redColor];
     }
     [_statusLabel sizeToFit];
-    
-    
-    
     
     if (_model.isShow == YES) {
         //        NSLog(@"设置高度");

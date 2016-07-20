@@ -90,7 +90,7 @@
 //        NSLog(@"返回:%@",xmlString);
     NSDictionary * xmlDic = [TDUtil convertXMLStringElementToDictory:xmlString];
     
-    NSLog(@"%@",xmlDic);
+//    NSLog(@"%@",xmlDic);
     
     if ([DICVFK(xmlDic, @"code") intValue]==101) {
         
@@ -179,9 +179,6 @@
 {
     [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.signPartner,@"partner",signString,@"req",@"sign",@"method",@"",@"sign",STRING(@"%d", type),@"type",nil] type:0 delegate:self sel:sel];
 }
-
-
-
 #pragma mark -返回上一页
 - (IBAction)leftClick:(UIButton *)sender {
     

@@ -29,7 +29,6 @@
     return self;
 }
 
-
 -(void)setup
 {
     _topView = [UIView new];
@@ -77,7 +76,6 @@
     .topSpaceToView(_teamImage,10)
     .heightIs(0.5);
     
-    
     _scrollView1 = [UIScrollView new];
     _scrollView1.delegate = self;
     [self.contentView addSubview:_scrollView1];
@@ -91,7 +89,6 @@
     _bottomView1 = [UIView new];
     _bottomView1.backgroundColor = colorGray;
     [self.contentView addSubview:_bottomView1];
-    
     
     _bottomView1.sd_layout
     .leftEqualToView(self.contentView)
@@ -109,11 +106,9 @@
     .topSpaceToView(_bottomView1,10)
     .heightIs(120);
     
-    
     _bottomView2 = [UIView new];
     _bottomView2.backgroundColor = colorGray;
     [self.contentView addSubview:_bottomView2];
-    
     
     _bottomView2.sd_layout
     .leftEqualToView(self.contentView)
@@ -178,9 +173,6 @@
         CGFloat widOff = 30 + (width + spaceMargin) * i + 30;
         _scrollView1.contentSize = CGSizeMake(widOff, 120);
     }
-    
-    
-    
 }
 
 -(void)setExtrModelArray:(NSMutableArray *)extrModelArray
@@ -211,14 +203,8 @@
             NSString *end = [extr.content substringFromIndex:2];
             
             nameLabel.text = [NSString stringWithFormat:@"%@\n%@",start,end];
-            
             [_scrollView2 addSubview:nameLabel];
-            //        [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            //            make.top.mas_equalTo(btn.mas_bottom).offset(12);
-            //            make.centerX.mas_equalTo(btn);
-            //            make.height.mas_equalTo(26);
-            //            make.width.mas_equalTo(width);
-            //        }];
+        
             nameLabel.sd_layout
             .topSpaceToView(btn,12)
             .centerXEqualToView(btn)
@@ -226,12 +212,10 @@
             .autoHeightRatio(0);
             
         }
-        
         CGFloat widOff = (width + spaceMargin) * i - spaceMargin;
         _scrollView2.contentSize = CGSizeMake(widOff, 120);
 
     }
-    
 }
 
 -(void)teamBtnClick:(UIButton*)btn
@@ -344,7 +328,6 @@
     widOff = 30 + (width + spaceMargin) * i + 30;
     _scrollView2.contentSize = CGSizeMake(widOff, 120);
 }
-
 
 -(void)loadData
 {

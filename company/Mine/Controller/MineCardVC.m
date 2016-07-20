@@ -42,14 +42,9 @@
     
     _bandDic = [[NSMutableDictionary alloc]initWithObjects:objectArray forKeys:keyArray];
     
-    
-    
-    
     [self setNav];
     //根据状态显示不同的界面
     [self createUI];
-    
-    
 }
 
 -(void)setNav
@@ -103,7 +98,6 @@
     .heightIs(25);
     [_cardNum setSingleLineAutoResizeWithMaxWidth:200];
     
-    
     _desc = [UILabel new];
     _desc.textColor = color74;
     _desc.font = BGFont(14);
@@ -121,7 +115,6 @@
         _cardNum.text = _dataDict[@"cardNo"];
         [_cardNum sizeToFit];
         
-        
         [_btn setBackgroundImage:[UIImage imageNamed:@"icon_jieCard"] forState:UIControlStateNormal];
         [_btn addTarget:self action:@selector(jieCard) forControlEvents:UIControlEventTouchUpInside];
         _btn.sd_layout
@@ -130,11 +123,6 @@
         .leftEqualToView(_cardImage)
         .rightEqualToView(_cardImage)
         .heightIs(50);
-        
-        
-        
-        
-        
     }else{
         _bandName.text = @"未绑定";
         _cardNum.text = @"您暂未绑定银行卡";
@@ -154,8 +142,6 @@
         .leftEqualToView(_cardImage)
         .rightEqualToView(_cardImage)
         .heightIs(50);
-        
-        
     }
     
 }
@@ -183,9 +169,6 @@
 
 -(void)bangCard
 {
-   
-    
-    
     NSString * str = [TDUtil generateUserPlatformNo];
     
     NSMutableDictionary * dic = [NSMutableDictionary new];
@@ -198,7 +181,6 @@
     [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
     [dic setObject:@"ios://bindCardConfirm" forKey:@"callbackUrl"];
     [dic setObject:notifyUrl forKey:@"notifyUrl"];
-    
     
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
@@ -255,7 +237,6 @@
 -(void)unToBind
 {
     NSString * str = [TDUtil generateUserPlatformNo];
-    
     NSMutableDictionary * dic = [NSMutableDictionary new];
     [dic setObject:str forKey:@"platformUserNo"];
     //    [dic setObject:@"PLATFORM" forKey:@"feeMode"];
@@ -290,7 +271,7 @@
 //    NSLog(@"返回:%@",xmlString);
     NSDictionary * xmlDic = [TDUtil convertXMLStringElementToDictory:xmlString];
     
-    NSLog(@"%@",xmlDic);
+//    NSLog(@"%@",xmlDic);
     
     if ([DICVFK(xmlDic, @"code") intValue]==101) {
         NSUserDefaults* data =[NSUserDefaults standardUserDefaults];

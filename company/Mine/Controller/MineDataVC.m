@@ -73,12 +73,9 @@
     
     [self loadInviteCode];
     
-    
     _textArray = [NSArray array];
     [self createLeftArray];
-    
-    
-    
+
     [self createTableView];
     
     [self createBottomView];
@@ -196,17 +193,13 @@
         _bottomLabel.text = @"温馨提示:\r\n       您的认证信息未通过审核，具体原因请查看短信或系统通知";
     }
     
-    
     [self.view addSubview:_bottomLabel];
-    
-    
     
     _bottomLabel.sd_layout
     .leftSpaceToView(self.view,10*WIDTHCONFIG)
     .rightSpaceToView(self.view,10*WIDTHCONFIG)
     .topSpaceToView(_tableView,10*HEIGHTCONFIG)
     .autoHeightRatio(0);
-    
     
     //底部button
     _bottomBtn = [UIButton new];

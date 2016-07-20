@@ -39,12 +39,10 @@
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
-    
     _page = 0;
     [self createUI];
     [self startLoadData];
     [self setNav];
-    
 }
 
 -(void)setNav
@@ -79,7 +77,6 @@
     if (_page == 0) {
         [_dataArray removeAllObjects];
     }
-    
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
@@ -89,15 +86,12 @@
                 ProjectSceneCommentModel *model = modelArray[i];
                 [_dataArray insertObject:model atIndex:0];
             }
-            
             //刷新表
             [_tableView reloadData];
             
             if (_dataArray.count > 1) {
                 [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
             }
-            
-            
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
@@ -145,7 +139,6 @@
         make.left.right.bottom.mas_equalTo(0);
         make.height.mas_equalTo(50);
     }];
-    
     _textField = [[UITextField alloc]init];
     _textField.layer.cornerRadius = 2;
     _textField.layer.masksToBounds = YES;
@@ -185,9 +178,7 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 
 {
-    
     [self.textField resignFirstResponder];
-    
 }
 
 #pragma mark -发送信息
@@ -198,7 +189,6 @@
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentpartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestComment:)];
-        
     }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"评论内容不能内空"];
         return;
@@ -219,7 +209,6 @@
             _page = 0;
             [self startLoadData];
             //刷新前一页评论数据
-            
             [_footerCommentView setProjectId:self.projectId];
 //            [_scene.dataArray removeAllObjects];
 //            [_scene startLoadComment];
@@ -274,7 +263,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
 }
 
 #pragma mark -textFiledDelegate
@@ -284,8 +272,6 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
-    
     NSLog(@"开始编辑");
 }
 

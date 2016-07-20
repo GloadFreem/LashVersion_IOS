@@ -99,8 +99,6 @@
     [self createTableView];
     
 }
-
-
 -(void)loadData
 {
     [SVProgressHUD showWithStatus:@"加载中..."];
@@ -331,7 +329,6 @@
     [super viewWillDisappear:animated];
  
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
-    
     
     //更新列表点赞状态
     if (_viewController && _indexPath) {
@@ -826,11 +823,8 @@
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-
 {
-    
     [self.textField resignFirstResponder];
-    
 }
 
 #pragma mark -textFiledDelegate

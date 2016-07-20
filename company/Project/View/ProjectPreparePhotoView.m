@@ -43,7 +43,6 @@ CGFloat ___maxContentLabelHeight = 0; //根据具体font来定
     UIImage *projectImage = [UIImage imageNamed:@"drafts"];
     _imageView = [[UIImageView alloc]initWithImage:projectImage];
     
-    
     //项目名字
     _projectLabel  = [UILabel new];
     _projectLabel.textColor = [UIColor blackColor];

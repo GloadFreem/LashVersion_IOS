@@ -207,24 +207,6 @@
     
     }
     
-//    if ([textView.text isEqualToString:@""]) {
-//        if (textView.tag == 0) {
-//            textView.text = @"写一写公司介绍";
-//            textView.textColor = color74;
-//            self.companyTextView.text = @"";
-//        }else{
-//            textView.text = @"写一写个人介绍";
-//            textView.textColor = color74;
-//            self.personTextView.text = @"";
-//        }
-//    }else{
-//        if (textView.tag == 0) {
-//            self.companyTextView.text = textView.text;
-//        }else{
-//            self.personTextView.text = textView.text;
-//        }
-//    }
-    
     
 }
 

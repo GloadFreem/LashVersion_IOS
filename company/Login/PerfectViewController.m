@@ -56,7 +56,6 @@
     [self createUI];
     NSString * string = [AES encrypt:IDENTIFYTYPE password:KEY];
     self.partner = [TDUtil encryptMD5String:string];
-    //    NSLog(@"%@",_partner);
     //客服
     self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
     
@@ -241,7 +240,7 @@
     }
     if (sender.tag == 4) {
         _imageBG.image = [UIImage imageNamed:@"icon_blackbg_four"];
-        _textView.text = @"具有优质项目标的，想通过释放股权进行融资，有梦想的创业者、企业家。";
+        _textView.text = @"著名投资人、企业家及创业者、证券从业者、会计师、律师、企业管理咨询师等，能为企业快速发展提供建设性意见和建议的“牛”人。";
     }
     
     sender.selected = !sender.selected;

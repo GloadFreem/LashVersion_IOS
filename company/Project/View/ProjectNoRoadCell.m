@@ -46,7 +46,6 @@
         UIButton *btn = (UIButton*)_btnArray[i];
         btn.hidden = YES;
     }
-    
     for (NSInteger i = 0; i < model.areas.count; i ++) {
         UIButton *btn = (UIButton*)_btnArray[i];
         [btn setTitle:[NSString stringWithFormat:@" %@ ",model.areas[i]] forState:UIControlStateNormal];

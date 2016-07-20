@@ -300,7 +300,6 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _picContainerView.sd_layout
     .leftSpaceToView(self,8);
     
-    
     _moreBtn.sd_layout
     .centerXEqualToView(_contentLabel)
     .topSpaceToView(_picContainerView,16*HEIGHTCONFIG)
@@ -312,7 +311,6 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _model = model;
     
     _shouldOpen = NO;
-    
     _projectLabel.text = model.projectStr;
     _goalNumber.text = model.goalStr;
     [_goalNumber sizeToFit];
@@ -336,8 +334,6 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
         _progress.loopColor = btnCray;
         isFirst = NO;
     }
-    
-    
     //默认显示一行数组
     NSMutableArray *picArray = [NSMutableArray array];
     
@@ -359,7 +355,6 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     }else{
         _first = NO;
     }
-    
     
     if(!model.isOpen)
     {
@@ -404,7 +399,6 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     [self setupAutoHeightWithBottomView:_moreBtn bottomMargin:15];
     
 }
-
 
 /**
  *  展开

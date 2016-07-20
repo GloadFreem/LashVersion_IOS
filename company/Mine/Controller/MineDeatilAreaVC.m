@@ -83,7 +83,6 @@
 {
     NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
 //    NSLog(@"返回:%@",jsonString);
-    
     NSMutableDictionary* dic = [jsonString JSONValue];
     if (dic != nil) {
         NSString *status = [dic objectForKey:@"status"];
@@ -137,7 +136,6 @@
     
     [self modifyAddress];
     
-    
     for (UIViewController *VC in self.navigationController.viewControllers) {
         if ([VC isKindOfClass:[MIneAreaVC class]]) {
             //            AreaViewController *vc = (AreaViewController*)VC;
@@ -152,7 +150,6 @@
             [vc loadAuthenData];
         }
         
-        
         if ([VC isKindOfClass:[MineDataVC class]]) {
             MineDataVC *vc = (MineDataVC*)VC;
             vc.address = address;
@@ -162,13 +159,7 @@
             
             [self.navigationController popToViewController:vc animated:YES];
         }
-        
-        
-        
     }
-    
-    
-    
 //    [self.navigationController popViewControllerAnimated:YES];
     
 }

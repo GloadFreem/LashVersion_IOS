@@ -34,8 +34,6 @@
     NSString * string = [AES encrypt:ZHUCE password:KEY];
     self.partner = [TDUtil encryptMD5String:string];
     
-//    NSLog(@"partner%@",self.partner);
-//    NSLog(@"%@--%@--%@",self.telephone,self.certifyNum,self.ringCode);
 }
 
 -(void)createUI{

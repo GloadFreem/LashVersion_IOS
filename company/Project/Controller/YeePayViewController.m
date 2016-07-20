@@ -32,29 +32,13 @@
     [super viewDidLoad];
     //设置背景颜色
     self.view.backgroundColor=ColorTheme;
-//    //隐藏导航栏
-//    [self.navigationController.navigationBar setHidden:YES];
-//    //设置标题
-//    self.navView.imageView.alpha=1;
-//    [self.navView setTitle:self.titleStr];
-//    self.navView.titleLable.textColor=WriteColor;
-//    
-//    [self.navView.leftButton setImage:nil forState:UIControlStateNormal];
-//    [self.navView.leftButton setTitle:self.title forState:UIControlStateNormal];
-//    [self.navView.leftTouchView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(back:)]];
-//    
-//    [self.view addSubview:self.navView];
     [self setNav];
-    
     self.webView = [[UIWebView alloc]initWithFrame:self.view.frame];
     self.webView.backgroundColor = [UIColor whiteColor];
     self.webView.delegate = self;
     self.webView.dataDetectorTypes  = UIDataDetectorTypeAll;
     [self.view addSubview:self.webView];
-    
-    
-//    self.loadingViewFrame = self.webView.frame;
-    
+
     self.canBack = YES;
     
      [self loadUrl];
@@ -156,7 +140,6 @@
     [self back:nil];
     
 }
-
 -(void)withDraw
 {
     self.drawPartner = [TDUtil encryKeyWithMD5:KEY action:DRAWMONEY];
@@ -426,7 +409,6 @@
             if (selctor) {
                 [self performSelector:selctor withObject:dic];
             }
-            
         }
         
         return NO;
@@ -509,7 +491,7 @@
 
 -(void)requestSign:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if(jsonDic!=nil)
@@ -532,7 +514,7 @@
 -(void)requestFinialSubmmmit:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if(jsonDic!=nil)
@@ -558,7 +540,7 @@
 
 -(void)requestSignFinial:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if(jsonDic!=nil)
@@ -579,7 +561,7 @@
 
 -(void)requestSignBindCard:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if(jsonDic!=nil)

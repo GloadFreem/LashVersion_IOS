@@ -95,11 +95,7 @@
     [imageView setUserInteractionEnabled:YES];
     
     UIButton * intoButton =[[UIButton alloc]init];
-//    UIImage * intoImage =[UIImage imageNamed:@"lead_guide_button_start"];
-//    [intoButton setImage:intoImage forState:UIControlStateNormal];
-    
-//    CGRect intoBound ={CGPointZero,intoImage.size.width*kImageRatio,intoImage.size.height*kImageRatio};
-//    [intoButton setBounds:intoBound];
+
     [intoButton setBackgroundColor:[UIColor clearColor]];
     [intoButton setFrame:CGRectMake(0, 0, SCREENWIDTH/2, SCREENWIDTH/5)];
     [intoButton setCenter:CGPointMake(SCREENWIDTH/2, SCREENHEIGHT*kIntoButtonRatio)];

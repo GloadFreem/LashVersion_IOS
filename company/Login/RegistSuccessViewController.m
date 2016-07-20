@@ -34,8 +34,6 @@
         btn.layer.cornerRadius = 20;
         btn.layer.masksToBounds = YES;
     }
-//    _shiyongBtn.layer.cornerRadius = 20;
-//    _shiyongBtn.layer.masksToBounds = YES;
     _shiyongBtn.layer.borderColor = [[UIColor whiteColor] CGColor];
     _shiyongBtn.layer.borderWidth = 1;
     

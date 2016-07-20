@@ -58,7 +58,6 @@
         [btn setTitle:[NSString stringWithFormat:@" %@ ",model.areas[i]] forState:UIControlStateNormal];
     }
     
-    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

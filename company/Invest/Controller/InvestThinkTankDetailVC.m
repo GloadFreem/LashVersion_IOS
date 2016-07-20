@@ -313,8 +313,6 @@
 //    _personContent.preferredMaxLayoutWidth = maxWidth;
     _personContent.numberOfLines = 0;
     
-    
-    
     [_scrollView addSubview:_personContent];
     //关注按钮
     _attationBtn = [[UIButton alloc]init];

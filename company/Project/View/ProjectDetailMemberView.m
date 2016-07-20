@@ -21,7 +21,6 @@
     return self;
 }
 
-
 #pragma mark- 实例化视图
 +(ProjectDetailMemberView*)instancetationProjectDetailMemberView
 {
@@ -33,18 +32,9 @@
 -(id)initWithCoder:(NSCoder *)aDecoder
 {
     if ([super initWithCoder:aDecoder]) {
-        
         //计算View的高度
-        
         self.viewHeight = SCREENHEIGHT - SCREENWIDTH*0.75 - 50;
-        
         self.width = SCREENWIDTH;
-        
-//        self.emailIconCenter.constant = SCREENWIDTH/4;
-//        self.phoneIconCenter.constant = 3 * SCREENWIDTH/4;
-        
-        
-        
     }
     return self;
 }
@@ -69,7 +59,6 @@
     if (_emailLabel.text) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = _emailLabel.text;
-        
         [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:@"邮箱已复制到剪切板"];
     }
     
@@ -79,14 +68,12 @@
     if (self.phoneLabel.text) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",self.phoneLabel.text]]];
     }
-    
 }
 
 -(void)setProjectId:(NSInteger)projectId
 {
     //初始化网络请求对象
     self.httpUtil  =[[HttpUtils alloc]init];
-    
     _projectId = projectId;
     _memberPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTMEMBER];
     [self loadMemberData];
@@ -115,7 +102,6 @@
                     ProjectDetailMemberModel *model = modelArray[0];
                     self.model = model;
                 }
-                
             }
             
         }else{
@@ -123,7 +109,6 @@
         }
     }
 }
-
 
 -(void)setModel:(ProjectDetailMemberModel *)model
 {

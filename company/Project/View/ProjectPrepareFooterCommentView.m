@@ -29,16 +29,12 @@
         }
         commentPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTCOMMENT];
         [self createUI];
-        
-        
     }
     return self;
-    
 }
 
 -(void)createUI
 {
-    
      UIView *view = [UIView new];
      view.frame = CGRectMake(0, 0, SCREENWIDTH, 50);
      view.backgroundColor = [UIColor whiteColor];
@@ -54,7 +50,6 @@
     .centerYEqualToView(view)
     .leftSpaceToView(view,16);
     
-     
      _commentLabel = [UILabel new];
      _commentLabel.text = @"在线交流";
      _commentLabel.textColor = [UIColor blackColor];
@@ -68,7 +63,6 @@
     .heightIs(18);
     [_commentLabel setSingleLineAutoResizeWithMaxWidth:100];
     
-     
      _commentNumber = [UILabel new];
      _commentNumber.textAlignment  = NSTextAlignmentLeft;
      _commentNumber.textColor = color47;
@@ -81,7 +75,6 @@
     .leftSpaceToView(_commentLabel,1)
     .heightIs(14);
     
-     
      _moreImage = [UIImageView new];
      _moreImage.image = [UIImage imageNamed:@"youjiantou@2x.png"];
      [view addSubview:_moreImage];
@@ -265,7 +258,6 @@
                 [_dataArray addObject:cellModel];
 //                [_modelArray addObject:model];
             }
-            
             [self setData];
             
         }else{

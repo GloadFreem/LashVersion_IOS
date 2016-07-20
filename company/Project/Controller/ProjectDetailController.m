@@ -316,9 +316,6 @@
                 
                 [self createUI];
             }
-            
-            
-            
         }else{
         [SVProgressHUD dismiss];
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -401,7 +398,6 @@
 //        [_titleScrollView insertSubview:_lineView atIndex:0];
     }
     
-    
     return _titleScrollView;
 }
 
@@ -409,9 +405,8 @@
 - (UIScrollView *)subViewScrollView{
     
     if (!_subViewScrollView) {
-        //        _subViewScrollView.backgroundColor = [UIColor greenColor];
-        _subViewScrollView = [[UIScrollView alloc]init];
         
+        _subViewScrollView = [[UIScrollView alloc]init];
         _subViewScrollView.bounces = NO;
         _subViewScrollView.showsHorizontalScrollIndicator = NO;
         _subViewScrollView.showsVerticalScrollIndicator = NO;
@@ -423,12 +418,10 @@
         _subViewScrollView.directionalLockEnabled = YES;
         
         //实例化详情分页面
-        
         _leftView = [[CSZProjectDetailLetfView alloc]init];
         _leftView.model = _model;
         _leftView.delegate = self;
         [_subViewScrollView addSubview:_leftView];
-        
         _leftView.frame = CGRectMake(0, 0, SCREENWIDTH, _leftView.height + 44);
         
         __weak ProjectDetailController * wself = self;
@@ -439,12 +432,9 @@
             }
         }];
         
-        
-        
         [_heightArray addObject:[NSNumber numberWithFloat:_leftView.height]];
         
         //实例化底部按钮视图
-//        _bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREENHEIGHT - 50, SCREENWIDTH, 50)];
         _bottomView = [UIView new];
         [_bottomView setBackgroundColor:[UIColor whiteColor]];
         [self.view addSubview:_bottomView];
@@ -489,15 +479,12 @@
             make.height.mas_equalTo(_kefuBtn.mas_height);
         }];
 
-        
-        
         //实例化成员分页面
         member = [ProjectDetailMemberView instancetationProjectDetailMemberView];
         member.projectId = self.projectId;
         member.frame = CGRectMake(SCREENWIDTH, 0, SCREENWIDTH, member.viewHeight +64);
         [_heightArray addObject:[NSNumber numberWithFloat:member.viewHeight]];
         [_subViewScrollView addSubview:member];
-        
         
         //实例化现场界面
          scene =[[ProjectDetailSceneView alloc]initWithFrame:CGRectMake(2*SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT-CGRectGetMaxY(_titleScrollView.frame) - 64)];
@@ -585,19 +572,14 @@
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
+    if ([_authenticName isEqualToString:@"未认证"]){
         [self presentAlertView];
     }
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-
 {
-    
     [self.textField resignFirstResponder];
-    
 }
 
 -(void)requestSceneComment:(ASIHTTPRequest *)request
@@ -616,8 +598,6 @@
         [scene startLoadComment];
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
          //将视图移到当前位置
-            
-            
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
@@ -635,7 +615,6 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-
 #pragma mark------------------CSZProjectDetailLetfViewDelegate--------------
 -(void)transportTeamModel:(DetailTeams *)team
 {
@@ -648,9 +627,7 @@
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
+    if ([_authenticName isEqualToString:@"未认证"]){
         [self presentAlertView];
     }
 }
@@ -673,9 +650,7 @@
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
+    if ([_authenticName isEqualToString:@"未认证"]){
         [self presentAlertView];
     }
 }
@@ -711,12 +686,10 @@
     switch (sender.tag) {
         case 10:
         {
-            
             [_bottomView setHidden:NO];
             [_footer setHidden:YES];
             _subViewScrollView.height = _leftView.height + 44;
             [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
-            
 //            NSLog(@"点击了第%ld个",sender.tag-10);
         }
             break;
@@ -727,8 +700,6 @@
             _subViewScrollView.height = member.height;
             [_subViewScrollView setupAutoContentSizeWithBottomView:member bottomMargin:0];
 //            NSLog(@"点击了第%ld个",sender.tag-10);
-            
-            
         }
             break;
         case 12:
@@ -746,7 +717,6 @@
     [_scrollView setupAutoContentSizeWithBottomView:_subViewScrollView bottomMargin:0];
     [_scrollView setupAutoHeightWithBottomView:_subViewScrollView bottomMargin:0];
     [_subViewScrollView setContentOffset:CGPointMake(_subViewScrollView.contentOffset.x,0) animated:YES];
-    
     //更新布局
     [_scrollView layoutSubviews];
     
@@ -768,19 +738,16 @@
             10+index == (10+i) ? [bt setTitleColor:selectTitleColor forState:UIControlStateNormal] : [bt setTitleColor:unselectTitleColor forState:UIControlStateNormal];
             
         }
-        
         //重置子scrollView的大小  以及父scrollView的contentSize
 //        CGFloat valueY = CGRectGetMaxY(_titleScrollView.frame);
         switch (index) {
             case 0:
             {
-                
                 [_bottomView setHidden:NO];
                 [_footer setHidden:YES];
                 _subViewScrollView.height = _leftView.height + 44;
                 [_subViewScrollView setupAutoHeightWithBottomView:_leftView bottomMargin:10];
                 [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
-                
             }
                 break;
             case 1:
@@ -789,9 +756,6 @@
                 [_footer setHidden:YES];
                 _subViewScrollView.height = member.height;
                 [_subViewScrollView setupAutoContentSizeWithBottomView:member bottomMargin:0];
-                
-                
-                
             }
                 break;
             case 2:
@@ -800,22 +764,17 @@
                 [_footer setHidden:NO];
                 _subViewScrollView.height = scene.height;
                 [_subViewScrollView setupAutoContentSizeWithBottomView:scene bottomMargin:0];
-                
             }
                 break;
             default:
                 break;
         }
     }
-    
-    
     [_scrollView setupAutoContentSizeWithBottomView:_subViewScrollView bottomMargin:0];
     [_scrollView setupAutoHeightWithBottomView:_subViewScrollView bottomMargin:0];
     [_subViewScrollView setContentOffset:CGPointMake(_subViewScrollView.contentOffset.x,0) animated:YES];
-    
     //更新布局
     [_scrollView layoutSubviews];
-    
 }
 
 -(void)updateLayoutNotification
@@ -823,8 +782,6 @@
     _subViewScrollView.height = _leftView.height;
     [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
 }
-
-
 #pragma mark - 底部按钮点击事件
 -(void)btnClick:(UIButton*)btn
 {
@@ -834,8 +791,7 @@
         NSString *tel = [data objectForKey:@"servicePhone"];
 //        NSLog(@"电话---%@",tel);
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",tel]]];
-        
-    }
+}
 #pragma mark ---------------进入投资界面---------------------
     if (btn.tag == 1) {
         if ([_authenticName isEqualToString:@"已认证"]) {
@@ -854,9 +810,7 @@
             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [alertView show];
         }
-        
-        if ([_authenticName isEqualToString:@"未认证"])
-        {
+        if ([_authenticName isEqualToString:@"未认证"]){
             [self presentAlertView];
         }
     }
@@ -910,9 +864,7 @@
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
+    if ([_authenticName isEqualToString:@"未认证"]){
         [self presentAlertView];
     }
     
@@ -1096,14 +1048,11 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             if (_isCollect) {
-                
                 [_collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
             }else{
                 
                 [_collectBtn setImage:[UIImage imageNamed:@"icon_uncollect"] forState:UIControlStateNormal];
             }
-
-            
         }else{
             
         }
@@ -1115,13 +1064,9 @@
     [textField resignFirstResponder];
     return NO;
 }
-
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
-    
     NSLog(@"开始编辑");
 }
-
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
     if (![textField.text isEqualToString:@""]) {
@@ -1206,23 +1151,17 @@
 {
     [super viewDidAppear:animated];
     
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
-    
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
     self.navigationController.navigationBar.hidden = NO;
-    
     //销毁计时器通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];
     
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
 }
-
 
 -(void)dealloc
 {

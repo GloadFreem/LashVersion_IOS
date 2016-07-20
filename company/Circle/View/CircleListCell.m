@@ -58,7 +58,6 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _iconView.layer.cornerRadius = 20;
     _iconView.layer.masksToBounds = YES;
     
-    
     _nameLabel = [UILabel new];
     _nameLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:17];
     _nameLabel.textColor = color47;
@@ -66,8 +65,6 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _addressLabel = [UILabel new];
     _addressLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:12];
     _addressLabel.textColor = color74;
-    
-    
     
     _companyLabel = [UILabel new];
     _companyLabel.font = BGFont(12);
@@ -106,7 +103,6 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     _picContainerView = [PictureContainerView new];
     
-    
     _partLine = [UIView new];
     _partLine.backgroundColor = color74;
     
@@ -133,8 +129,6 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     [_praiseBtn setTitleColor:color74 forState:UIControlStateNormal];
     [_praiseBtn addTarget:self action:@selector(praiseBtnClick) forControlEvents:UIControlEventTouchUpInside];
     _praiseBtn.titleLabel.font = BGFont(14);
-    
-    
     
     NSArray *views = @[_topView,_iconView, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel,_deleteBtn, _timeLabel, _contentLabel, _moreBtn, _picContainerView, _partLine,_shareBtn,_firstShuView,_commentBtn,_secondShuView,_praiseBtn];
     
@@ -252,7 +246,6 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
 
 -(void)setModel:(CircleListModel *)model
 {
-    
     _model = model;
     _shouldOpenContentLabel = NO;
     if (model.flag) {

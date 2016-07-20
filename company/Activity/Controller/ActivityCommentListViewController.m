@@ -83,7 +83,6 @@
 -(void)createUI
 {
     self.view.backgroundColor = WriteColor;
-    
     _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
@@ -101,8 +100,6 @@
 //    [self.tableView.mj_footer setHidden:YES];
     
     [self.view addSubview:_tableView];
-   
-    
     
     if(!footerView)
     {
@@ -111,9 +108,6 @@
     footerView.backgroundColor = [UIColor whiteColor];
     footerView.delegate = self;
     [self.view addSubview:footerView];
-    
-    
-    
     // 回复框
     _bottomView = [UIView new];
     [_bottomView setBackgroundColor:[UIColor whiteColor]];
@@ -404,8 +398,6 @@
         [cell setModel:[self.commentCellModel.commentItemsArray objectAtIndex:row-1]];
     }
     
-    
-    
     __weak typeof(self) weakSelf = self;
     
     [cell setDidClickCommentLabelBlock:^(NSString* userId,NSString * name, CGRect rectInWindow) {
@@ -417,8 +409,6 @@
     return cell;
     
 }
-
-
 
 //-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 //{
@@ -446,12 +436,6 @@
     return width;
 }
 
-
--(void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 #pragma mark -btnAction
 -(void)btnClick:(UIButton*)btn
 {
@@ -473,12 +457,12 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[IQKeyboardManager sharedManager] setEnableAutoToolbar:YES]
-    ;
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-//    [delegate.tabBar tabBarHidden:NO animated:NO];
-//    self.navigationController.navigationBar.hidden = NO;
+    [[IQKeyboardManager sharedManager] setEnableAutoToolbar:YES];
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

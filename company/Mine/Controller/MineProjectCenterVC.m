@@ -37,8 +37,6 @@
 
 -(void)startLoadData
 {
-    
-    
     //开始请求
 //    [self.httpUtil getDataFromAPIWithOps:LOGO_PROJECT_CENTER postParam:dic type:0 delegate:self sel:@selector(requestGoldInfo:)];
 }

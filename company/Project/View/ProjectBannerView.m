@@ -86,18 +86,9 @@
         make.width.height.mas_equalTo(48);
     }];
     
-//    UIImage * second = [UIImage imageNamed:@"椭圆-4-拷贝"];
-//    _secondBottomImage = [[UIImageView alloc]initWithImage:second];
-//    _secondBottomImage.center = _firstBottomImage.center;
-//    _secondBottomImage.layer.cornerRadius = second.size.width/2;
-//    _secondBottomImage.layer.masksToBounds = YES;
-//    _secondBottomImage.contentMode = UIViewContentModeScaleAspectFit;
-//    [self addSubview:_secondBottomImage];
-    
     //firstLabel
     _firstLabel = [UILabel new];
     _firstLabel.font = [UIFont systemFontOfSize:17];
-//    _firstLabel.text = @"逸景营地";
     [_firstLabel sizeToFit];
     _firstLabel.textColor = [UIColor whiteColor];
     _firstLabel.textAlignment = NSTextAlignmentLeft;
@@ -111,7 +102,6 @@
     //第二个label
     _secondLabel = [UILabel new];
     _secondLabel.font =[UIFont systemFontOfSize:12];
-//    _secondLabel.text = @"新三板VR企业在2015年下半年";
     [_secondLabel sizeToFit];
     _secondLabel.textColor = color(217, 217, 217, 1);
     _secondLabel.textAlignment = NSTextAlignmentLeft;
@@ -125,7 +115,6 @@
     
     //第一个button
     _leftBtn = [UIButton new];
-    //    [_leftBtn setBackgroundColor:[UIColor blackColor]];
     [_leftBtn setTag:20];
     [_leftBtn setTitle:@"路演项目" forState:UIControlStateNormal];
     [_leftBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -149,7 +138,6 @@
     //下划线的宽
     CGFloat sliderWidth = [_leftBtn.titleLabel.text commonStringWidthForFont:19];
     _leftSliderBottomView = [UIView new];
-    //    [_leftSliderBottomView setBackgroundColor:[UIColor orangeColor]];
     _leftSliderBottomView.alpha = 0.8;
     [self addSubview:_leftSliderBottomView];
     [_leftSliderBottomView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -158,7 +146,6 @@
         make.bottom.mas_equalTo(self.mas_bottom);
         make.width.mas_equalTo(sliderWidth);
     }];
-    
     
     //第二个button
     _rightBtn =[UIButton new];
@@ -179,8 +166,6 @@
     
     //右边下划线
     _rightSliderBottomView = [UIView new];
-//    NSLog(@"%f",_rightSliderBottomView.frame.size.width);
-    //    [_rightSliderBottomView setBackgroundColor:[UIColor orangeColor]];;
     _rightSliderBottomView.alpha = 0.8;
     [self addSubview:_rightSliderBottomView];
     [_rightSliderBottomView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -212,7 +197,6 @@
 {
     _selectedNum = selectedNum;
     [self setColorWithNum:_selectedNum];
-    
 }
 
 #pragma mark -设置下划线的颜色
@@ -233,10 +217,7 @@
     button.selected = YES;
     [self setColorWithNum:button.tag];
     _selectedBtn = button;
-    
-    
-    if ([self.delegate respondsToSelector:@selector(transportProjectBannerView:andTagValue:)]) {
-//        NSLog(@"代理方法");
+    if ([self.delegate respondsToSelector:@selector(transportProjectBannerView:andTagValue:)]){
         [self.delegate transportProjectBannerView:self andTagValue:button.tag];
     }
 }

@@ -108,8 +108,6 @@
     if (!isNoMoreData) {
         page ++;
     }
-    
-    
     [self loadActionAttendData];
 }
 /**
@@ -161,8 +159,6 @@
 //            [self.tableView.mj_footer endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
-        
-       
     }
 }
 
@@ -190,7 +186,6 @@
     
 }
 
-
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellId = @"ActivityDetailListCell";
@@ -198,7 +193,6 @@
     if (!cell) {
         cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
     }
-    
     //设置模型
     cell.model = [self.dataAttendSource objectAtIndex:indexPath.row];
     return cell;
@@ -216,7 +210,6 @@
 - (CGFloat)cellContentViewWith
 {
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    
     // 适配ios7
     if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait && [[UIDevice currentDevice].systemVersion floatValue] < 8) {
         width = [UIScreen mainScreen].bounds.size.height;
@@ -235,11 +228,8 @@
 {
     [super viewWillDisappear:animated];
     
-    [[IQKeyboardManager sharedManager] setEnable:YES]
-    ;
-//    AppDelegate * delegate =[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:NO animated:NO];
+    [[IQKeyboardManager sharedManager] setEnable:YES];
+
     self.navigationController.navigationBar.hidden = NO;
     
 }

@@ -53,7 +53,6 @@
     .heightIs(15)
     .centerXIs(58+width);
     
-    
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

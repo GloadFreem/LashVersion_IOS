@@ -88,10 +88,7 @@ static CGFloat textFieldH = 40;
     self.automaticallyAdjustsScrollViewInsets  = NO;
     
     [self setUpNavBar];
-    
-    
     //    [self setupTextField];
-    
     //生成请求partner
     self.actionDetailPartner = [TDUtil encryKeyWithMD5:KEY action:ACTIONDETAIL];
     self.actionAttendPartner = [TDUtil encryKeyWithMD5:KEY action:ATTENDACTION];
@@ -135,7 +132,6 @@ static CGFloat textFieldH = 40;
         make.right.mas_equalTo(self.view.mas_right);
         make.bottom.mas_equalTo(self.view.mas_bottom).offset(-50);
     }];
-    
     
 //    if (!headerView) {
 //        headerView = [ActivityDetailHeaderView new];
@@ -540,10 +536,7 @@ static CGFloat textFieldH = 40;
     if (!footerView) {
         footerView = (ActivityDetailFooterView *)[self tableView:tableView viewForFooterInSection:section];
     }
-    
-    
     return footerView.height;
-    
 }
 
 -(void)layout:(id)sender
@@ -569,10 +562,7 @@ static CGFloat textFieldH = 40;
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     if (_dataArray.count) {
-        
-        
             if (indexPath.row  == 0) {
                 static NSString *cellId =@"ActivityDetailHeaderCell";
                 ActivityDetailHeaderCell *cell =[tableView dequeueReusableCellWithIdentifier:kActivityDetailHeaderCellId];
@@ -594,8 +584,6 @@ static CGFloat textFieldH = 40;
                 return cell;
             }
         
-       
-        
             if (indexPath.row == 1) {
                 static NSString *cellId = @"ActivityDetailExiciseContentCell";
                 ActivityDetailExiciseContentCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
@@ -609,8 +597,6 @@ static CGFloat textFieldH = 40;
                     return cell;
                 }
             }
-        
-        
         
             if (indexPath.row == 2) {
                 static NSString *cellId = @"ActivityDetailExerciseCell";
@@ -637,8 +623,6 @@ static CGFloat textFieldH = 40;
                 cell.model = [self.dataArray objectAtIndex:indexPath.row];
                 return cell;
             }
-       
-        
     }
     return nil;
 }
@@ -850,15 +834,12 @@ static CGFloat textFieldH = 40;
 
 -(void)viewWillDisappear:(BOOL)animated
 {
-    
     [super viewWillDisappear:animated];
     [SVProgressHUD dismiss];
     
-    [[IQKeyboardManager sharedManager] setEnableAutoToolbar:YES]
-    ;
+    [[IQKeyboardManager sharedManager] setEnableAutoToolbar:YES];
     
     self.navigationController.navigationBar.hidden = NO;
-    
 }
 
 - (void)adjustTableViewToFitKeyboardWithRect
@@ -874,7 +855,6 @@ static CGFloat textFieldH = 40;
         {
             self.actionPrisePartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_PRISE];
         }
-        
         //开始请求
         [self actionPrise];
     }
@@ -1179,7 +1159,6 @@ static CGFloat textFieldH = 40;
     if (![textField.text isEqualToString:@""]) {
         
         self.textField.text = textField.text;
-        
         
     }
     NSLog(@"结束编辑");

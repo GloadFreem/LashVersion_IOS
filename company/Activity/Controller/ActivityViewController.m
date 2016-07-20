@@ -259,16 +259,9 @@
     //反选
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     ActivityDetailVC * vc = [ActivityDetailVC new];
-    
-    
     ActivityViewModel * model = [_dataSourceArray objectAtIndex:indexPath.row];
     vc.activityModel = model;
     vc.viewController = self;
-    
-    //隐藏tabbar
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     [self.navigationController pushViewController:vc animated:YES];
     

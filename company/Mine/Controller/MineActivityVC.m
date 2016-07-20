@@ -107,7 +107,7 @@
 -(void)requestInvestList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (_page == 0) {
@@ -169,7 +169,6 @@
     //反选
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     ActivityDetailVC * vc = [ActivityDetailVC new];
-    
     
     ActivityViewModel * model = [_dataArray objectAtIndex:indexPath.row];
     vc.activityModel = model;

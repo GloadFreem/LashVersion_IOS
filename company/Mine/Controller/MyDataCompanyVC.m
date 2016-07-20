@@ -90,9 +90,6 @@
                 
             }
         }
-       
-       
-        
         [self.navigationController popViewControllerAnimated:YES];
         
     }else{
@@ -120,7 +117,7 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            NSLog(@"修改成功");
+//            NSLog(@"修改成功");
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];

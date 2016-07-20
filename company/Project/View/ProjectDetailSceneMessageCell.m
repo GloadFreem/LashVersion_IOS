@@ -105,7 +105,6 @@
 -(void)setModel:(ProjectDetailSceneCellModel *)model
 {
     _model = model;
-    //如果不是自己  靠左布局
     //头像
     [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _nameLabel.text = model.name;
@@ -118,13 +117,9 @@
     _timeLabel.text = str2;
     [_timeLabel sizeToFit];
     
-    
-    
     if (!model.isShowTime) {
         _timeBGView.height = 0;
     }
-    
-    
     [self setupAutoHeightWithBottomView:_timeBGView bottomMargin:10*HEIGHTCONFIG];
 }
 

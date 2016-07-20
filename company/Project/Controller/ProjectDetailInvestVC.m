@@ -101,15 +101,6 @@
     .heightIs(44)
     .rightSpaceToView(self.view, 72);
     
-//    _btnView = [UIView new];
-//    _btnView.backgroundColor = orangeColor;
-//    [self.view addSubview:_btnView];
-//    _btnView.sd_layout
-//    .leftSpaceToView(_textField,0)
-//    .topSpaceToView(remindLabel,9)
-//    .widthIs(48)
-//    .heightIs(44);
-    
     _titleArray = [NSMutableArray arrayWithObjects:@"跟投",@"领投", nil];
     _flagArray = [NSMutableArray arrayWithObjects:@"1",@"0", nil];
     _firstBtn = [UIButton new];
@@ -142,7 +133,6 @@
     .widthIs(48)
     .heightIs(44);
     
-    
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:@"温馨提示：\n1、此处领投，跟投仅为用户意向，待项目达成后项目方会协同各方确定最为合适的领投方；\n2、特别注意：投资金额后面的单位为“万”"];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init];
     [paragraphStyle setLineSpacing:13];
@@ -160,7 +150,6 @@
     .rightEqualToView(_firstBtn)
     .topSpaceToView(_textField, 33)
     .autoHeightRatio(0);
-    
     
     _payBtn = [UIButton new];
     [_payBtn setTag:5];
@@ -190,7 +179,6 @@
         _secondBtn.hidden = !_secondBtn.hidden;
         
     }
-    
     if (btn.tag == 1) {
         NSString *title = _titleArray[0];
         _titleArray[0] = _titleArray[1];
@@ -201,12 +189,10 @@
         
         [_firstBtn setTitle:_titleArray[0] forState:UIControlStateNormal];
         [_secondBtn setTitle:_titleArray[1] forState:UIControlStateNormal];
-        
 //        NSLog(@"点击切换按钮");
         _secondBtn.hidden = YES;
         
     }
-    
     if (btn.tag == 5) {
         if (_textField.text.length) {
             
@@ -231,7 +217,6 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"投资金额不能为空"];
         }
     }
-    
     btn.selected = !btn.selected;
     
 //    NSLog(@"打印领投还是跟投标识---%@",_flagArray[0]);
@@ -245,22 +230,17 @@
 {
     [SVProgressHUD showWithStatus:@"正在加载..."];
     NSString * str = [TDUtil generateUserPlatformNo];
-    
     NSMutableDictionary * dic = [NSMutableDictionary new];
     [dic setObject:str forKey:@"platformUserNo"];
-    
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
-    
     [self sign:signString sel:@selector(requestCheckUserSign:) type:1];
-    
 }
 
 -(void)requestCheckUserSign:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
 //    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
     if(jsonDic!=nil)
     {
         NSString* status = [jsonDic valueForKey:@"status"];
@@ -281,9 +261,7 @@
     NSString *xmlString = [TDUtil convertGBKDataToUTF8String:request.responseData];
 //    NSLog(@"返回:%@",xmlString);
     NSDictionary * xmlDic = [TDUtil convertXMLStringElementToDictory:xmlString];
-    
 //    NSLog(@"%@",xmlDic);
-    
     if ([DICVFK(xmlDic, @"code") intValue]==101) {
         [self goConfirm];
     }else if([DICVFK(xmlDic, @"code") intValue]==1)
@@ -301,10 +279,7 @@
             CGFloat chaAmount = inputAmount - availableAmount;
             _cha = chaAmount;
 //            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[NSString stringWithFormat:@"账户余额不足，还差%f元，前往充值页面",chaAmount]];
-            
             [self performSelector:@selector(goRecharge) withObject:nil afterDelay:2];
-            
-            
         }
         
     }else{
@@ -315,38 +290,31 @@
     [SVProgressHUD dismiss];
 }
 
-
 #pragma mark ----------------易宝用户认证--------------------
 -(void)goConfirm
 {
     NSUserDefaults * data = [NSUserDefaults standardUserDefaults];
     NSString * str = [TDUtil generateUserPlatformNo];
-    
     NSMutableDictionary * dic = [NSMutableDictionary new];
     [dic setObject:str forKey:@"platformUserNo"];
     [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
     [dic setObject:@"G2_IDCARD" forKey:@"idCardType"];
     [dic setObject:@"ios://verify:" forKey:@"callbackUrl"];
-    
     [dic setObject:[data valueForKey:USER_STATIC_TEL]forKey:@"mobile"];
     [dic setObject:[data valueForKey:USER_STATIC_NAME] forKey:@"realName"];
     [dic setObject:[data valueForKey:USER_STATIC_IDNUMBER] forKey:@"idCardNo"];
-    
     [dic setObject:notifyUrl forKey:@"notifyUrl"];
 //    [dic setObject:[data valueForKey:USER_STATIC_NICKNAME] forKey:@"nickName"];
-    
     
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
     [self sign:signString sel:@selector(requestSign:) type:0];
-    
 }
 
 -(void)requestSign:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
 //    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
     if(jsonDic!=nil)
     {
         NSString* status = [jsonDic valueForKey:@"status"];
@@ -379,15 +347,10 @@
 -(void)goInvest
 {
     NSString * str = [TDUtil generateUserPlatformNo];
-    
     NSMutableDictionary * dic = [NSMutableDictionary new];
-    
     NSString* mount =_textField.text;
     float money = [mount floatValue];
-    
     mount = [NSString stringWithFormat:@"%.2f",money * 10000];
-    
-    
     [dic setObject:mount forKey:@"amount"];
     [dic setObject:str forKey:@"platformUserNo"];
     [dic setObject:@"PLATFORM" forKey:@"feeMode"];
@@ -395,18 +358,15 @@
     [dic setObject:@"ios://finialConfirm" forKey:@"callbackUrl"];
     [dic setObject:notifyUrl forKey:@"notifyUrl"];
     
-    
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
     [self sign:signString sel:@selector(requestSignFinial:) type:0];
 }
 
-
 -(void)requestSignFinial:(ASIHTTPRequest *)request{
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
 //    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
     if(jsonDic!=nil)
     {
         NSString* status = [jsonDic valueForKey:@"status"];
@@ -424,53 +384,44 @@
 //            controller.dic = self.dic;
             controller.dic = [NSMutableDictionary new];
             NSString* mount =_textField.text;
-            
             [controller.dic setValue:self.profit forKey:@"profit"];
             [controller.dic setValue:self.abbrevName forKey:@"abbrevName"];
             [controller.dic setValue:self.fullName forKey:@"fullName"];
             [controller.dic setValue:self.borrowerUserNumber forKey:@"borrower_user_no"];
             [controller.dic setValue:[NSString stringWithFormat:@"%ld",(long)self.projectId] forKey:@"projectId"];
-            
             [controller.dic setValue:mount forKey:@"mount"];
-            
             [controller.dic setValue:_flagArray[0] forKey:@"currentSelect"];
             if (payStatus == PayStatusPayfor) {
                 controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,YeePayMent,nil)];
             }
             [SVProgressHUD dismiss];
             [self.navigationController pushViewController:controller animated:YES];
-            
         }else{
         _isClick = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
-        
     }
 }
 #pragma mark-------------------去充值----------------------
 -(void)goRecharge
 {
     NSString * str = [TDUtil generateUserPlatformNo];
-    
     NSMutableDictionary * dic = [NSMutableDictionary new];
-    
     [dic setObject:[NSString stringWithFormat:@"%f",_cha] forKey:@"amount"];
     [dic setObject:str forKey:@"platformUserNo"];
     [dic setObject:@"PLATFORM" forKey:@"feeMode"];
     [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
     [dic setObject:@"ios://finialConfirm" forKey:@"callbackUrl"];
     [dic setObject:notifyUrl forKey:@"notifyUrl"];
-    
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
-    
     [self sign:signString sel:@selector(requestRecharge:) type:0];
 }
 
 -(void)requestRecharge:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -490,13 +441,9 @@
             [controller.dic setValue:self.fullName forKey:@"fullName"];
             [controller.dic setValue:self.borrowerUserNumber forKey:@"borrower_user_no"];
             [controller.dic setValue:[NSString stringWithFormat:@"%ld",(long)self.projectId] forKey:@"projectId"];
-            
             [controller.dic setValue:mount forKey:@"mount"];
-            
             [controller.dic setValue:_flagArray[0] forKey:@"currentSelect"];
-            
             controller.state = PayStatusPayfor;
-            
             controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,YeePayMent,nil)];
             [SVProgressHUD dismiss];
             [self.navigationController pushViewController:controller animated:YES];
@@ -517,13 +464,9 @@
     [textField resignFirstResponder];
     return NO;
 }
-
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
-    
     NSLog(@"开始编辑");
 }
-
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
     if (![textField.text isEqualToString:@""]) {
@@ -537,10 +480,6 @@
 {
     [super viewWillAppear:animated];
     _isClick = NO;
-    //隐藏tabbar
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
 }
 -(void)viewWillDisappear:(BOOL)animated
 {

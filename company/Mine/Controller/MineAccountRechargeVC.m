@@ -123,7 +123,6 @@
 -(void)goRecharge
 {
     NSString * str = [TDUtil generateUserPlatformNo];
-    
     NSMutableDictionary * dic = [NSMutableDictionary new];
     _tradeCode =[TDUtil generateTradeNo];
     //    [dic setObject:[NSString stringWithFormat:@"%f",_cha] forKey:@"amount"];
@@ -133,10 +132,8 @@
     [dic setObject:_tradeCode forKey:@"requestNo"];
     [dic setObject:@"ios://verify" forKey:@"callbackUrl"];
     [dic setObject:notifyUrl forKey:@"notifyUrl"];
-    
     NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
     _request = signString;
-    
     [self sign:signString sel:@selector(requestRecharge:) type:0];
 }
 
@@ -202,7 +199,6 @@
     }
     NSLog(@"结束编辑");
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

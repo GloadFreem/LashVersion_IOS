@@ -109,8 +109,7 @@
                     listModel.projectId = project.projectId;
                     listModel.desc = project.desc;
                     listModel.timeLeft = project.timeLeft;
-                    //少一个areas 数组
-                    
+                    //areas 数组
                     listModel.collectionCount = project.collectionCount;
                     Roadshows *roadshows = project.roadshows[0];
                     listModel.financeTotal = roadshows.roadshowplan.financeTotal;
@@ -145,7 +144,6 @@
 #pragma mark- 设置导航栏
 -(void)setUpNavBar
 {
-    
     self.view.backgroundColor = colorGray;
 //    self.navigationItem.title = @"个人资料";
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -312,7 +310,6 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-
 
 #pragma mark- textView  delegate
 

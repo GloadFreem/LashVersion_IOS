@@ -129,8 +129,6 @@
     .heightIs(12);
     [_addressLabel setSingleLineAutoResizeWithMaxWidth:180];
     
-    
-    
     _shuView.sd_layout
     .leftSpaceToView(_companyLabel,5)
     .centerYEqualToView(_companyLabel)

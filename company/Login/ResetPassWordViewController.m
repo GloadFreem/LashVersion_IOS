@@ -110,22 +110,7 @@
         if ([status integerValue] == 200) {
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
 
-//            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-//            [data setValue:@"YES" forKey:@"isLogin"];
-//            [data setValue:@"NO" forKey:@"isAnimous"];
-//            NSString* phoneNumber = self.telephone;
-//            NSString* password =self.firstTextField.text;
-//            password = [TDUtil encryptPhoneNumWithMD5:phoneNumber passString:password];
-//            
-//            [data setValue:phoneNumber forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
-//            [data setValue:password forKey:STATIC_USER_PASSWORD];
-//            
-//            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
-//            [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
-//            
-//            //进入主界面
-//            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-//            app.window.rootViewController = app.tabBar;
+
             NSDictionary *data= [jsonDic valueForKey:@"data"];
             NSDictionary *idenTypeDic = [NSDictionary dictionaryWithDictionary:[data valueForKey:@"identityType"]];
             NSString *name = idenTypeDic[@"name"];

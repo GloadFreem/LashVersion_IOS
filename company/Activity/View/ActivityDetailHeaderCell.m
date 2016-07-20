@@ -59,12 +59,9 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
 //        maxPictureViewHeight = 84;
 //    }
 
-    
     //更多
     _moreBtn = [UIButton new];
     [_moreBtn setImage:[UIImage imageNamed:@"icon_acticity_more"] forState:UIControlStateNormal];
-
-
     [_moreBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     
     NSArray *views =@[_orangeView,_titleLabel,_contentLabel,_pictureContainerView,_moreBtn];
@@ -130,7 +127,6 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
     }else{
         _first = NO;
     }
-    
     
     if(!model.isOpen)
     {

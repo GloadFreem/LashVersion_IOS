@@ -32,9 +32,6 @@
     _phoneNumber = [data objectForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
     
     [self setup];
-    
-    
-    
 }
 
 #pragma mark -设置导航栏

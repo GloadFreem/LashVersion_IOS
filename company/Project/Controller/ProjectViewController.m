@@ -685,7 +685,6 @@
         _hasMessage = YES;
     }
     
-    
     //通过判断返回数据状态来决定背景图片
     //    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
     if (_hasMessage) {//message_new@2x
@@ -707,20 +706,6 @@
 
     //设置站内信状态
     [self setLetterStatus:nil];
-    
-//    UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    letterBtn.tag = 0;
-//    //通过判断返回数据状态来决定背景图片
-////    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
-//    if (_hasMessage) {//message_new@2x
-//        [letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
-//    }else{
-//    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
-//    }
-//    letterBtn.size = letterBtn.currentBackgroundImage.size;
-//    [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
-//    _letterBtn = letterBtn;
 
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
@@ -763,9 +748,6 @@
         [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
         
         ProjectLetterViewController *letter = [ProjectLetterViewController new];
-        //隐藏tabbar
-//        AppDelegate *delegate = (AppDelegate*)[[UIApplication  sharedApplication] delegate];
-//        [delegate.tabBar tabBarHidden:YES animated:NO];
         
         [self.navigationController pushViewController:letter animated:YES];
         
@@ -773,11 +755,6 @@
     if (button.tag == 1) {
         
         UpProjectViewController *up = [UpProjectViewController new];
-        
-        //隐藏tabbar
-//        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//        
-//        [delegate.tabBar tabBarHidden:YES animated:NO];
         
         [self.navigationController pushViewController:up animated:YES];
     }
@@ -850,10 +827,6 @@
         ProjectDetailController * detail = [[ProjectDetailController alloc]init];
         model = _projectModelArray[indexPath.row];
         detail.projectId = model.projectId;
-        //隐藏tabbar
-//        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//        
-//        [delegate.tabBar tabBarHidden:YES animated:NO];
         
         [self.navigationController pushViewController:detail animated:YES];
     }else{
@@ -862,10 +835,6 @@
         model = _roadModelArray[indexPath.row];
         
         detail.projectId = model.projectId;
-        //隐藏tabbar
-//        AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//        
-//        [delegate.tabBar tabBarHidden:YES animated:NO];
         
         [self.navigationController pushViewController:detail animated:YES];
     }
@@ -895,19 +864,11 @@
             ProjectPrepareDetailVC *detail = [ProjectPrepareDetailVC new];
             
             detail.projectId = model.projectId;
-            //隐藏tabbar
-//            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//            
-//            [delegate.tabBar tabBarHidden:YES animated:NO];
             
             [self.navigationController pushViewController:detail animated:YES];
         }else{
             ProjectDetailController * detail = [[ProjectDetailController alloc]init];
             detail.projectId = model.projectId;
-            //隐藏tabbar
-//            AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//            
-//            [delegate.tabBar tabBarHidden:YES animated:NO];
             
             [self.navigationController pushViewController:detail animated:YES];
         }
@@ -916,10 +877,6 @@
     ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
     vc.url = model.url;
     vc.model = model;
-    //隐藏tabbar
-//    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    
-//    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     [self.navigationController pushViewController:vc animated:YES];
     }

@@ -31,9 +31,9 @@
     }
     
     if (_model.selectedStatus) {
-        [_selectImage setImage:[UIImage imageNamed:@"letterSelected"]];
+        [_selectImage setImage:[UIImage imageNamed:@"icon_letterSelected"]];
     }else{
-        [_selectImage setImage:[UIImage imageNamed:@"letterUnselected"]];
+        [_selectImage setImage:[UIImage imageNamed:@"icon_letterUnselected"]];
     }
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

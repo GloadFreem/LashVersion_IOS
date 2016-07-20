@@ -93,7 +93,6 @@
         make.width.height.mas_equalTo(35);
     }];
     
-    
 }
 
 - (void)shareBtnClick:(UIButton *)btn{
