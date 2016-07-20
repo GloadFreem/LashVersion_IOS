@@ -129,7 +129,7 @@
         
         
         NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",_password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
-        
+        NSLog(@"------%@",dic);
         //加载动画
         //加载动画控件
         if (!activity) {

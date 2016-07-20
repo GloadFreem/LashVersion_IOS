@@ -12,7 +12,7 @@
 
 #define kImageCount 5
 #define kRatioPage 0.95
-#define kIntoButtonRatio 0.85
+#define kIntoButtonRatio 0.825
 #define kImageRatio 0.6
 
 @interface GuidePageViewController ()<UIScrollViewDelegate>
@@ -65,15 +65,21 @@
 -(void)createPageController
 {
     _page = [[UIPageControl alloc]init];
-    [_page setBounds:CGRectMake(0, 0, 150, 55)];
+    [_page setBounds:CGRectMake(0, 0, 150, 10)];
     [_page setCenter:CGPointMake(SCREENWIDTH/2, SCREENHEIGHT*kRatioPage)];
-    
+    [_page setUserInteractionEnabled:NO];
     [_page setNumberOfPages:kImageCount];
     [_page setCurrentPage:0];
     [_page setCurrentPageIndicatorTintColor:orangeColor];
     [_page setPageIndicatorTintColor:[UIColor lightGrayColor]];
     [_page addTarget:self action:@selector(pageClick:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:_page];
+//    [_page mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.mas_equalTo(self.view);
+//        make.height.mas_equalTo(10);
+//        make.width.mas_equalTo(150);
+//        make.bottom.mas_equalTo(self.view.mas_bottom).offset(10);
+//    }];
 }
 
 #pragma mark- page点击事件
@@ -97,7 +103,7 @@
     UIButton * intoButton =[[UIButton alloc]init];
 
     [intoButton setBackgroundColor:[UIColor clearColor]];
-    [intoButton setFrame:CGRectMake(0, 0, SCREENWIDTH/2, SCREENWIDTH/5)];
+    [intoButton setFrame:CGRectMake(0, 0, SCREENWIDTH/2, SCREENWIDTH/3)];
     [intoButton setCenter:CGPointMake(SCREENWIDTH/2, SCREENHEIGHT*kIntoButtonRatio)];
     [intoButton addTarget:self action:@selector(intoButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [imageView addSubview:intoButton];

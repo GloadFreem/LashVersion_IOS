@@ -37,7 +37,7 @@
     // Do any additional setup after loading the view.
     
     _dataArray = [NSArray array];
-    _dataArray  = @[@"安全设置",@"修改登录密码",@"更换绑定手机",@"管理通知",@"声音提醒",@"震动提醒",@"",@"清理缓存",@"版本更新"];
+    _dataArray  = @[@"安全设置",@"修改登录密码",@"更换绑定手机",@"管理通知",@"声音提醒",@"震动提醒",@"",@"清理缓存"];
     
     //获得partner
     self.signupPartner = [TDUtil encryKeyWithMD5:KEY action:SIGNUP];
@@ -246,9 +246,9 @@
         [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:@"缓存已清除"];
     }
     
-    if (indexPath.row == 8) {
-        [self loadVersion];
-    }
+//    if (indexPath.row == 8) {
+//        [self loadVersion];
+//    }
 }
 
 -(void)loadVersion
