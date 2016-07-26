@@ -68,9 +68,7 @@
     //加载本地默认数据
     [self loadDefaultData];
     
-    
 }
-
 
 -(void)loadDefaultData
 {
@@ -79,7 +77,6 @@
     if (phoneNumber) {
         self.phoneField.text = phoneNumber;
     }
-    
     
 }
 
@@ -125,8 +122,6 @@
         _password = [TDUtil encryptPhoneNumWithMD5:phoneNumber passString:_password];
         //激光推送Id
         NSString *regId = [JPUSHService registrationID];
-        
-        
         
         NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",_password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
         NSLog(@"------%@",dic);
