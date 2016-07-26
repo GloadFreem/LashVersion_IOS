@@ -233,7 +233,7 @@
         .leftEqualToView(self.contentView)
         .rightEqualToView(self.contentView)
         .topSpaceToView(_praiseLabel, 15*HEIGHTCONFIG)
-        .heightIs(10);
+        .heightIs(10*HEIGHTCONFIG);
         
     }else{
         [_bottomView sd_clearAutoLayoutSettings];
@@ -241,7 +241,7 @@
         .leftEqualToView(self.contentView)
         .rightEqualToView(self.contentView)
         .topSpaceToView(_praiseBtn, 12*HEIGHTCONFIG)
-        .heightIs(10);
+        .heightIs(10*HEIGHTCONFIG);
     }
     
     [self setupAutoHeightWithBottomView:_bottomView bottomMargin:0];

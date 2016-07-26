@@ -493,9 +493,9 @@
         CircleListModel *listModel = (CircleListModel*)model;
         if (listModel.shouldShowMoreBtn ) {
             if (self.dataArray.count > 1) {
-                return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+50;
+                return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+45;
             }else{
-            return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+26;
+            return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+14;
             }
         }else{
         return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+10;
