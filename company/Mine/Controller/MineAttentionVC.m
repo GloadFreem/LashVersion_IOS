@@ -483,6 +483,8 @@
             InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
             vc.attentionVC =self;
             vc.titleText = @"个人 · 简介";
+            vc.selectedNum = 1;
+            vc.collected = model.collected;
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             [self.navigationController pushViewController:vc animated:YES];
         }
@@ -491,6 +493,8 @@
             InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
             vc.attentionVC =self;
             vc.titleText = @"机构 · 简介";
+            vc.selectedNum = 2;
+            vc.collected = model.collected;
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             [self.navigationController pushViewController:vc animated:YES];
             
@@ -500,7 +504,7 @@
             InvestThinkTankDetailVC *vc = [InvestThinkTankDetailVC new];
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             vc.attentionVC =self;
-            vc.collected = YES;
+            vc.collected = model.collected;
             [self.navigationController pushViewController:vc animated:YES];
         }
 

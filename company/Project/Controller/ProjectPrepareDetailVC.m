@@ -616,9 +616,12 @@
 {
     if ([_authenticName isEqualToString:@"已认证"])
     {
-        PingTaiWebViewController *vc = [PingTaiWebViewController new];
-        vc.url = team.url;
-        [self.navigationController pushViewController:vc animated:YES];
+        if (team.url.length) {
+            PingTaiWebViewController *vc = [PingTaiWebViewController new];
+            vc.url = team.url;
+            vc.titleStr = @"详情";
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
     if ([_authenticName isEqualToString:@"认证中"]) {
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
@@ -634,9 +637,12 @@
     if ([_authenticName isEqualToString:@"已认证"])
     {
         if (![_identiyTypeId isEqualToString:@"1"]) {
-            PingTaiWebViewController *vc = [PingTaiWebViewController new];
-            vc.url = extr.url;
-            [self.navigationController pushViewController:vc animated:YES];
+            if (extr.url.length) {
+                PingTaiWebViewController *vc = [PingTaiWebViewController new];
+                vc.url = extr.url;
+                vc.titleStr = extr.content;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
         }else{
         
             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的身份为项目方，不能查看其他项目方的资料" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];

@@ -188,6 +188,7 @@
             btn.frame = CGRectMake(0 + i*(width + spaceMargin), 23, width, width);
             btn.layer.cornerRadius = 25;
             btn.layer.masksToBounds = YES;
+            btn.tag = i;
             btn.contentMode = UIViewContentModeScaleAspectFill;
             [btn addTarget:self action:@selector(ExrBtnClick:) forControlEvents:UIControlEventTouchUpInside];
             //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
@@ -232,108 +233,4 @@
     }
 }
 
-/*
-#pragma mark--------废弃方法---------------
--(void)setModel:(ProjectDetailLeftTeamModel *)model
-{
-    _model = model;
-    NSInteger i = 0;
-    CGFloat width = 50;
-    CGFloat spaceMargin = 26;
-    UILabel *positionLabel;
-    for (; i < 10; i++) {
-        UIButton *btn = [UIButton new];
-        btn.frame = CGRectMake(0 + i*(width + spaceMargin), 23, width, width);
-        btn.layer.cornerRadius = 25;
-        btn.layer.masksToBounds = YES;
-        
-        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
-        
-        [_scrollView1 addSubview:btn];
-        
-        UILabel *nameLabel = [UILabel new];
-        nameLabel.textAlignment = NSTextAlignmentCenter;
-        nameLabel.textColor = color47;
-        nameLabel.font = BGFont(13);
-        
-        nameLabel.text = @"王明";
-        
-        [_scrollView1 addSubview:nameLabel];
-        [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(btn.mas_bottom).offset(12);
-            make.centerX.mas_equalTo(btn);
-            make.height.mas_equalTo(13);
-        }];
-        
-        positionLabel = [UILabel new];
-        positionLabel.textAlignment = NSTextAlignmentCenter;
-        positionLabel.textColor = color74;
-        positionLabel.font = BGFont(11);
-        
-        positionLabel.text = @"经理";
-        
-        [_scrollView1 addSubview:positionLabel];
-        [positionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(nameLabel.mas_bottom).offset(5);
-            make.centerX.mas_equalTo(btn);
-            make.height.mas_equalTo(11);
-        }];
-    }
-    
-    CGFloat widOff = 30 + (width + spaceMargin) * i + 30;
-    _scrollView1.contentSize = CGSizeMake(widOff, 120);
-    
-    i = 0;
-    width = 50;
-    spaceMargin = 26;
-    for (; i < 10; i++) {
-        UIButton *btn = [UIButton new];
-        btn.frame = CGRectMake(0 + i*(width + spaceMargin), 23, width, width);
-        btn.layer.cornerRadius = 25;
-        btn.layer.masksToBounds = YES;
-        
-        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
-        
-        [_scrollView2 addSubview:btn];
-        
-        UILabel *nameLabel = [UILabel new];
-        nameLabel.textAlignment = NSTextAlignmentCenter;
-        nameLabel.textColor = color47;
-        nameLabel.font = BGFont(13);
-        
-        nameLabel.text = @"商业";
-        
-        [_scrollView2 addSubview:nameLabel];
-        [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(btn.mas_bottom).offset(12);
-            make.centerX.mas_equalTo(btn);
-            make.height.mas_equalTo(13);
-        }];
-        
-        positionLabel = [UILabel new];
-        positionLabel.textAlignment = NSTextAlignmentCenter;
-        positionLabel.textColor = color74;
-        positionLabel.font = BGFont(11);
-        
-        positionLabel.text = @"计划";
-        
-        [_scrollView2 addSubview:positionLabel];
-        [positionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(nameLabel.mas_bottom).offset(5);
-            make.centerX.mas_equalTo(btn);
-            make.height.mas_equalTo(11);
-        }];
-    }
-    
-    widOff = 30 + (width + spaceMargin) * i + 30;
-    _scrollView2.contentSize = CGSizeMake(widOff, 120);
-}
-
--(void)loadData
-{
-    ProjectDetailLeftTeamModel * model = [ProjectDetailLeftTeamModel new];
-    
-    [self setModel:model];
-}
-*/
 @end

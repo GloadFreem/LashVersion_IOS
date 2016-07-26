@@ -134,6 +134,8 @@
             CircleBaseModel *baseModel = [CircleBaseModel mj_objectWithKeyValues:dataDic];
             //一级模型赋值
             listModel.msgContent  = baseModel.content;  //微博内容
+            
+            
             listModel.nameStr = baseModel.users.name;
             //回复atUserId
             [_atUserIdArray addObject:@""];
@@ -488,7 +490,16 @@
     
     id model = self.dataArray[indexPath.row];
     if (indexPath.row == 0) {
-        return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+10;
+        CircleListModel *listModel = (CircleListModel*)model;
+        if (listModel.shouldShowMoreBtn ) {
+            if (self.dataArray.count > 1) {
+                return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+50;
+            }else{
+            return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+26;
+            }
+        }else{
+        return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+10;
+        }
     }
     return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleDetailCommentCell class] contentViewWidth:[self cellContentViewWith]];
 }

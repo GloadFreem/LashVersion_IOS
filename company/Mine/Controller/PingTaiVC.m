@@ -162,15 +162,19 @@
     PingTaiWebViewController *vc = [PingTaiWebViewController new];
     if (sender.tag == 0) {
         vc.url = _paltformUrl;
+        vc.titleStr = @"平台介绍";
     }
     if (sender.tag == 1) {
         vc.url = _userUrl;
+        vc.titleStr = @"新手指南";
     }
     if (sender.tag == 2) {
         vc.url = _protocolUrl;
+        vc.titleStr = @"用户协议";
     }
     if (sender.tag == 3) {
         vc.url = _lawerurl;
+        vc.titleStr = @"免责声明";
     }
     if (vc.url) {
         [self.navigationController  pushViewController:vc animated:YES];

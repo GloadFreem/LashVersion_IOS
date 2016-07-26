@@ -165,8 +165,8 @@
     _praiseBtn.sd_layout
     .leftSpaceToView(contentView, 12*WIDTHCONFIG)
     .topSpaceToView(_middleView, 12*HEIGHTCONFIG)
-    .widthIs(20)
-    .heightIs(20);
+    .widthIs(25)
+    .heightIs(25);
     
     _praiseLabel.sd_layout
     .leftSpaceToView(_praiseBtn, 6*WIDTHCONFIG)
@@ -174,13 +174,13 @@
     .rightSpaceToView(contentView,20)
     .autoHeightRatio(0);
     
-    _bottomView.sd_layout
-    .leftEqualToView(contentView)
-    .rightEqualToView(contentView)
-    .topSpaceToView(_praiseBtn, 12*HEIGHTCONFIG)
-    .heightIs(10*HEIGHTCONFIG);
-
-    [self setupAutoHeightWithBottomView:_bottomView bottomMargin:0];
+//    _bottomView.sd_layout
+//    .leftEqualToView(contentView)
+//    .rightEqualToView(contentView)
+//    .topSpaceToView(_praiseBtn, 12*HEIGHTCONFIG)
+//    .heightIs(10*HEIGHTCONFIG);
+//
+//    [self setupAutoHeightWithBottomView:_bottomView bottomMargin:0];
 }
 #pragma mark -设置模型
 -(void)setModel:(CircleListModel *)model
@@ -233,7 +233,7 @@
         .leftEqualToView(self.contentView)
         .rightEqualToView(self.contentView)
         .topSpaceToView(_praiseLabel, 15*HEIGHTCONFIG)
-        .heightIs(10*HEIGHTCONFIG);
+        .heightIs(10);
         
     }else{
         [_bottomView sd_clearAutoLayoutSettings];
@@ -241,10 +241,11 @@
         .leftEqualToView(self.contentView)
         .rightEqualToView(self.contentView)
         .topSpaceToView(_praiseBtn, 12*HEIGHTCONFIG)
-        .heightIs(10*HEIGHTCONFIG);
+        .heightIs(10);
     }
     
     [self setupAutoHeightWithBottomView:_bottomView bottomMargin:0];
+    
 }
 
 -(void)setIndexPath:(NSIndexPath *)indexPath

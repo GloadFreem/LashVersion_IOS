@@ -204,7 +204,6 @@
     _whiteView.areas = _model.areas;
     //领域赋值
     
-    
     [_scrollView addSubview:_whiteView];
     [_whiteView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(30);
@@ -564,6 +563,9 @@
             
         }
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_model.user.userId],@"userId",flag,@"flag", nil];
+        NSLog(@"%@",_model);
+        NSLog(@"%@",flag);
+        NSLog(@"%@",dic);
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
     }
@@ -581,7 +583,7 @@
 -(void)requestInvestorCollect:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];

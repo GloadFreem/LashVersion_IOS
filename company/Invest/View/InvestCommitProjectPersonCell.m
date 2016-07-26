@@ -26,7 +26,7 @@
 {
     _model = model;
     
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.headSculpture]] placeholderImage:[UIImage new]];
+    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.headSculpture]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _nameLabel.text = model.name;
     _positionLabel.text = model.position;
     _companyLabel.text = model.companyName;

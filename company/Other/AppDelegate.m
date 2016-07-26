@@ -16,9 +16,7 @@
 #import "RegisterViewController.h"
 #import "SetPassWordViewController.h"
 #import "MyNavViewController.h"
-
 #import "ActivityViewModel.h"
-
 #import "GuidePageViewController.h"
 
 #import "JPUSHService.h"
@@ -28,16 +26,14 @@
 
 #import "UMSocialWechatHandler.h"
 #import "UMSocialQQHandler.h"
-
 #import "PingTaiWebViewController.h"
 #import "ProjectDetailController.h"
 #import "ProjectLetterViewController.h"
 #import "ActivityDetailVC.h"
-
-
 #define DENGLU @"loginUser"
 #define LOGINUSER @"isLoginUser"
 #define UmengAppkey @"55c7684de0f55a0d0d0042a8"
+
 @interface AppDelegate ()
 {
     BOOL isSuccess;
@@ -91,7 +87,6 @@
                     self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
                     [self.nav setNavigationBarHidden:YES];
                     [_window setRootViewController:self.nav];
-                    
                 }else{
                     LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
                     
@@ -134,8 +129,8 @@
     }else {
         //categories    nil
         [JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
-                                                          UIRemoteNotificationTypeSound |
-                                                          UIRemoteNotificationTypeAlert)
+                                                UIRemoteNotificationTypeSound |
+                                                UIRemoteNotificationTypeAlert)
                                               categories:nil];
     }
     
@@ -307,7 +302,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:
 (NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // IOS 7 Support Required
-    
+    NSLog(@"%@",userInfo);
     NSString * type = [userInfo valueForKey:@"type"];
     UIViewController * controller;
     NSDictionary * notificationDic;
@@ -337,8 +332,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
         
     }
     
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
     
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
     [JPUSHService handleRemoteNotification:userInfo];
     completionHandler(UIBackgroundFetchResultNewData);
 }

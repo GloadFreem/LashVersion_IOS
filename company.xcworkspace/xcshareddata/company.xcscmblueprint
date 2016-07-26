@@ -8,13 +8,13 @@
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
     "5B24A467953EF4C078D4DF1FC15090D22AE61DE0" : 0,
     "1a0beb16-39a9-491a-8432-0dfbb1476d54++7897" : 0,
-    "AA5E2B662874715740F8A35A631A0A56546A45F4" : 0
+    "B59401D1399EB8C18A1B3640E4413E09B65600CF" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "B1A4EC11-4227-4750-B1F5-B57F4C164030",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "5B24A467953EF4C078D4DF1FC15090D22AE61DE0" : "LashVersion_IOS\/",
     "1a0beb16-39a9-491a-8432-0dfbb1476d54++7897" : "company\/company\/Tools\/Camera\/UIImage-Extensions\/",
-    "AA5E2B662874715740F8A35A631A0A56546A45F4" : "company\/"
+    "B59401D1399EB8C18A1B3640E4413E09B65600CF" : "company\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "company",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -33,7 +33,7 @@
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/GloadFreem\/VeryFast_iOS.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "AA5E2B662874715740F8A35A631A0A56546A45F4"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B59401D1399EB8C18A1B3640E4413E09B65600CF"
     }
   ]
 }

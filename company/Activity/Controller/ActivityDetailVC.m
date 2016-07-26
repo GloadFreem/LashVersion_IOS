@@ -324,6 +324,7 @@ static CGFloat textFieldH = 40;
                 [_dataArray addObject:model];
             }
             
+            [_dataArray addObject:self.activityModel];
             //获取项目参加人数
             [self loadActionAttendData];
             
@@ -348,7 +349,7 @@ static CGFloat textFieldH = 40;
 -(void)requestActionAttendList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -360,25 +361,25 @@ static CGFloat textFieldH = 40;
                 if (dataArray.count) {
                     ActivityAttendModel * baseModel;
                    
-                    [_dataArray addObject:self.activityModel];
-                    
                     [_dataArray addObject:[NSString stringWithFormat:@"%ld",(unsigned long)dataArray.count]];
                     
                     for(NSDictionary * dic in dataArray)
                     {
+                        
                         //解析
                         baseModel =[ActivityAttendModel mj_objectWithKeyValues:dic];
                         
                         [self.dataArray addObject:baseModel];
+                        
                     }
-
-                    //点赞评论
-                    [self loadActionCommentData];
                     
+                }else{
+                [_dataArray addObject:[NSString stringWithFormat:@"0"]];
                 }
                 
             }
-            
+            //点赞评论
+            [self loadActionCommentData];
         }
     }
 }
@@ -508,8 +509,9 @@ static CGFloat textFieldH = 40;
         if (self.dataArray.count >=5) {
             return 8;
         }else{
-            return 3 + self.dataArray.count;
+            return _dataArray.count;
         }
+        
     }
     return 0;
 }

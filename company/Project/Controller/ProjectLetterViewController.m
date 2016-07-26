@@ -290,6 +290,7 @@
         if (model.messagetype.messageTypeId == 1) {//进入webView
             PingTaiWebViewController *web =[PingTaiWebViewController new];
             web.url = model.url;
+            web.titleStr = @"详情";
             [self.navigationController pushViewController:web animated:YES];
         }else{//进入自定义界面
             LetterDetailViewController *detail = [LetterDetailViewController new];

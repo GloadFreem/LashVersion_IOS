@@ -63,7 +63,7 @@
         make.left.mas_equalTo(self.view.mas_left);
         make.top.mas_equalTo(self.view.mas_top);
         make.right.mas_equalTo(self.view.mas_right);
-        make.height.mas_equalTo(380);
+        make.height.mas_equalTo(335*HEIGHTCONFIG);
     }];
     
     UIButton *leaveBtn = [UIButton new];
@@ -170,9 +170,9 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 6) {
-        return 28;
+        return 28*HEIGHTCONFIG;
     }
-    return 44;
+    return 44*HEIGHTCONFIG;
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

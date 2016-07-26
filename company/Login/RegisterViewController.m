@@ -170,7 +170,7 @@
     
     PingTaiWebViewController *vc = [PingTaiWebViewController new];
     vc.url = _protocolUrl;
-    
+    vc.titleStr = @"用户协议";
     [self.navigationController pushViewController:vc animated:YES];
 }
 

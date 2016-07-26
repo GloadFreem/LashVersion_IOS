@@ -175,7 +175,7 @@
         {//积累
             PingTaiWebViewController *vc = [PingTaiWebViewController new];
             vc.url = _getUrl;
-            vc.title = @"金条积累规则";
+            vc.titleStr = @"金条积累规则";
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -183,7 +183,7 @@
         {//使用
             PingTaiWebViewController *vc = [PingTaiWebViewController new];
             vc.url = _useUrl;
-            vc.title = @"金条使用规则";
+            vc.titleStr = @"金条使用规则";
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
