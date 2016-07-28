@@ -55,7 +55,7 @@
 -(void)setModel:(InvestListModel *)model
 {
     _model = model;
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.headSculpture]] placeholderImage:[UIImage new]];
+    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.headSculpture]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _name.text = model.companyName;
     _address.text = model.companyAddress;
     

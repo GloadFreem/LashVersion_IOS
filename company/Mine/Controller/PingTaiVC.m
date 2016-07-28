@@ -49,6 +49,10 @@
     self.protocolPartner = [TDUtil encryKeyWithMD5:KEY action:USERPROTOCOL];
     self.lawerpartner = [TDUtil encryKeyWithMD5:KEY action:LAWERINTRODUCE];
     
+    
+    NSString * version =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    _versionLabel.text = [NSString stringWithFormat:@"金指投  V%@",version];
+    
     [self loadPlatform];
     [self loadUserIntroduce];
     [self loadProtocol];
@@ -67,7 +71,7 @@
 -(void)requestPlatform:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];

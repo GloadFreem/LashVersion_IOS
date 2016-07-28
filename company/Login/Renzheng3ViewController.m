@@ -118,7 +118,7 @@
             [activity startAnimating];
             //上传文件
             [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
-            
+            [SVProgressHUD showWithStatus:@"认证中..."];
         }
     }
 }
@@ -135,19 +135,32 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         
         if ([status integerValue] == 200) {
+            [SVProgressHUD dismiss];
+//            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
+//            app.window.rootViewController = app.tabBar;
             
             //进入项目首页
-            //进入主界面
-            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-            app.window.rootViewController = app.tabBar;
+            UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+            UINavigationController *nav = (UINavigationController*)window.rootViewController;
+            JTabBarController * tabBarController;
+            for (UIViewController *vc in nav.childViewControllers) {
+                if ([vc isKindOfClass:JTabBarController.class]) {
+                    tabBarController = (JTabBarController*)vc;
+                }
+            }
             
+            if (!tabBarController) {
+                tabBarController = [CommentTD createViewControllers];
+            }
+            
+            [self.navigationController pushViewController:tabBarController animated:NO];
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             
         }
     }
     [activity stopAnimating];
-    
+    [SVProgressHUD dismiss];
 }
 
 
@@ -220,6 +233,13 @@
 //让当前控制器对应的状态栏是白色
 -(UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
+}
+
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [SVProgressHUD dismiss];
 }
 
 @end

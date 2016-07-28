@@ -157,7 +157,6 @@ static CGFloat textFieldH = 40;
         [_signUpBtn setBackgroundColor:btnCray];
         [_signUpBtn setEnabled:NO];
     }
-    
     if (_isExpired) {
         [_signUpBtn setTitle:@"已结束" forState:UIControlStateNormal];
         [_signUpBtn setBackgroundColor:btnCray];

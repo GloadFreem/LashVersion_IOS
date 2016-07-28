@@ -203,6 +203,10 @@
     
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
     NSLog(@"返回:%@",jsonString);
+    NSLog(@"%@",request.error);
+//    [activity stopAnimating];
+    [SVProgressHUD dismiss];
+    
     self.isNetRequestError = YES;
     
 }
@@ -210,7 +214,8 @@
 
 
 
-- (void)viewWillAppear:(BOOL)animated { [super viewWillAppear:animated];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
 //    [MobClick beginLogPageView:self.navView.title];
     

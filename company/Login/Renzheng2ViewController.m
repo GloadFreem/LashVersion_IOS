@@ -60,7 +60,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
     
-    NSLog(@"开始编辑");
+//    NSLog(@"开始编辑");
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -115,6 +115,7 @@
         
         [_dicData setObject:self.identifyType forKey:@"identiyTypeId"];
         
+        NSLog(@"打印数据%@",_dicData);
         //读取图片加到图片字典 并请求数据
         //检验照片是否存在
         BOOL retA =[TDUtil checkImageExists:@"identiyCarA"];
@@ -144,6 +145,7 @@
             [activity startAnimating];
             //上传文件
             [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
+            [SVProgressHUD showWithStatus:@"认证中..."];
         }
         
     }
@@ -162,18 +164,31 @@
 -(void)requestSetIdentifyType:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         
         if ([status integerValue] == 200) {
+            [SVProgressHUD dismiss];
+//            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
+//            app.window.rootViewController = app.tabBar;
+            //进入应用
+            UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+            UINavigationController *nav = (UINavigationController*)window.rootViewController;
+            JTabBarController * tabBarController;
+            for (UIViewController *vc in nav.childViewControllers) {
+                if ([vc isKindOfClass:JTabBarController.class]) {
+                    tabBarController = (JTabBarController*)vc;
+                }
+            }
             
-            //进入项目首页
-            //进入主界面
-            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-            app.window.rootViewController = app.tabBar;
+            if (!tabBarController) {
+                tabBarController = [CommentTD createViewControllers];
+            }
+            
+            [self.navigationController pushViewController:tabBarController animated:NO];
             
             
         }else{
@@ -182,7 +197,7 @@
         }
     }
     [activity stopAnimating];
-    
+    [SVProgressHUD dismiss];
 }
 #pragma mark -选择照片事件
 - (IBAction)selectImageBtn:(UIButton *)sender {
@@ -280,5 +295,9 @@
     return UIStatusBarStyleLightContent;
 }
 
-
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [SVProgressHUD dismiss];
+}
 @end

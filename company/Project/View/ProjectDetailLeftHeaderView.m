@@ -76,7 +76,7 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _statusLabel.font = BGFont(18);
     _statusLabel.textAlignment = NSTextAlignmentCenter;
     _statusLabel.textColor = [UIColor whiteColor];
-    _statusLabel.numberOfLines = 3;
+    _statusLabel.numberOfLines = 4;
     
     //进度条
     _progress = [[ZMProgressView alloc]initWithLineColor:orangeColor loopColor:[UIColor lightGrayColor]];
@@ -214,10 +214,10 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     .heightIs(111);
     
     _statusLabel.sd_layout
-    .topSpaceToView(self ,18)
+    .topSpaceToView(self ,10)
     .centerXEqualToView(_statusImage)
     .widthIs(20)
-    .heightIs(80);
+    .heightIs(91);
     
     _goalImage.sd_layout
     .leftSpaceToView(self, 25)

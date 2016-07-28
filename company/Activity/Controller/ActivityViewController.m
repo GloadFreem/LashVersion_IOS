@@ -262,7 +262,10 @@
     ActivityViewModel * model = [_dataSourceArray objectAtIndex:indexPath.row];
     vc.activityModel = model;
     vc.viewController = self;
-    
+    if([TDUtil isArrivedTime:model.endTime])
+    {
+        vc.isExpired = YES;
+    }
     [self.navigationController pushViewController:vc animated:YES];
     
 }

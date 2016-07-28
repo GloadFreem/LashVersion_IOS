@@ -60,15 +60,20 @@
         //时间
         [self.timeLabel setText:[NSString stringWithFormat:@"%@%@%@",dateStr,week,time]];
         
-        //是否过期
-        if(![TDUtil isArrivedTime:_model.endTime])
-        {
-            [self.expiredImage setHidden:YES];
-        }
-        
         if(_model.attended)
         {
             [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
+            [_signUpBtn setBackgroundColor:btnCray];
+            [_signUpBtn setEnabled:NO];
+        }
+        
+        //是否过期
+        if(![TDUtil isArrivedTime:_model.endTime])
+        {//未过期
+            [self.expiredImage setHidden:YES];
+            
+        }else{
+            [_signUpBtn setTitle:@"已结束" forState:UIControlStateNormal];
             [_signUpBtn setBackgroundColor:btnCray];
             [_signUpBtn setEnabled:NO];
         }

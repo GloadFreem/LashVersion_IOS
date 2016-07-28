@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface PingTaiVC : RootViewController
+@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 
 @end

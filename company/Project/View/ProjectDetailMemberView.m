@@ -114,7 +114,7 @@
 {
     _model = model;
     
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.icon]] placeholderImage:[UIImage new]];
+    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.icon]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     //加载数据
     _iconImage.layer.cornerRadius = 41;
     _iconImage.layer.masksToBounds = YES;

@@ -60,11 +60,14 @@
 {
     
     NSURL* url = [NSURL URLWithString:[SERVICE_URL stringByAppendingString:urlStr]];
-    NSLog(@"上传文件:%@",url);
+//    NSLog(@"上传文件:%@",url);
     
     self.requestInstance=[ASIFormDataRequest requestWithURL:url];
-    [self.requestInstance setTimeOutSeconds:5];
+    [self.requestInstance setTimeOutSeconds:15];
+//    [self.requestInstance setPersistentConnectionTimeoutSeconds:30];
+//    [self.requestInstance setNumberOfTimesToRetryOnTimeout:2];
     [self.requestInstance setPostFormat:ASIMultipartFormDataPostFormat];
+//    [self.requestInstance setShouldAttemptPersistentConnection:NO];
     if (postDic!=nil) {
         for (int i=0; i<postDic.count; i++) {
             NSString* key=[[postDic allKeys] objectAtIndex:i];
@@ -122,7 +125,7 @@
     NSString* fileName;
     for (int i = 0 ; i <files.count; i++) {
         fileName = [files objectAtIndex:i];
-        NSString* filePath = [TDUtil loadContentPath:fileName];
+//        NSString* filePath = [TDUtil loadContentPath:fileName];
         fileName = [fileName stringByAppendingString:@".jpg"];
 //        [self.requestInstance setFile:filePath withFileName:fileName andContentType:@"jpg" forKey:[NSString stringWithFormat:@"%@%d",postName,i]];
         
@@ -150,6 +153,7 @@
     
     self.requestInstance=[ASIFormDataRequest requestWithURL:url];
     [self.requestInstance setTimeOutSeconds:5];
+//    [self.requestInstance setShouldAttemptPersistentConnection:NO];
     if (!postDic) {
         [self.requestInstance setRequestMethod:@"POST"];
     }
@@ -221,8 +225,6 @@
     [self setupWithType:type delegate:delegate sel:nil];
     
 }
-
-
 
 - (void)getDataFromAPIWithOps:(NSString *)urlStr
                          type:(NSInteger)type

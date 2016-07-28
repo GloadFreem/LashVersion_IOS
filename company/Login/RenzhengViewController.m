@@ -261,7 +261,7 @@
     //项目方
     if ([self.identifyType integerValue] == 1) {
         if (indexPath.row == 3) {
-            NSLog(@"项目方选择地址");
+//            NSLog(@"项目方选择地址");
             AreaViewController * area = [AreaViewController new];
             [self.navigationController pushViewController:area animated:YES];
         }
@@ -269,24 +269,24 @@
     }else if([self.identifyType integerValue] == 2){
         //投资人
       if (indexPath.row == 2) {
-          NSLog(@"投资人选择地址");
+//          NSLog(@"投资人选择地址");
           AreaViewController * area = [AreaViewController new];
           [self.navigationController pushViewController:area animated:YES];
     }
       if (indexPath.row == 3) {
-          NSLog(@"投资人选择投资领域");
+//          NSLog(@"投资人选择投资领域");
           InvistViewController *invest = [InvistViewController new];
           [self.navigationController pushViewController:invest animated:YES];
         }
     }else if ([self.identifyType integerValue] == 3 || [self.identifyType integerValue] == 4){
       if (indexPath.row == 3) {
-            NSLog(@"投资机构选择地址");
+//            NSLog(@"投资机构选择地址");
             AreaViewController * area = [AreaViewController new];
             [self.navigationController pushViewController:area animated:YES];
         }
         
         if (indexPath.row == 5) {
-            NSLog(@"投资机构选择投资领域");
+//            NSLog(@"投资机构选择投资领域");
             InvistViewController *invest = [InvistViewController new];
             [self.navigationController pushViewController:invest animated:YES];
         }

@@ -267,7 +267,7 @@
     _tomorrowLabel.textColor = [UIColor whiteColor];
     _tomorrowLabel.font = BGFont(16);
     _tomorrowLabel.textAlignment = NSTextAlignmentCenter;
-    _tomorrowLabel.text = [NSString stringWithFormat:@"明天登录即可获得%ld根金条",(long)_tomorrowCount];
+//    _tomorrowLabel.text = [NSString stringWithFormat:@"明天登录即可获得%ld根金条",(long)_tomorrowCount];
     [[UIApplication sharedApplication].windows[0] addSubview:_tomorrowLabel];
     [_tomorrowLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(background.mas_centerX);

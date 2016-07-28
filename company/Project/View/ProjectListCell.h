@@ -36,5 +36,6 @@
 
 @property (weak, nonatomic) IBOutlet ZMProgressView *progressView;
 
+@property (weak, nonatomic) IBOutlet UIImageView *successImage;
 
 @end

@@ -59,9 +59,22 @@
 - (IBAction)probationBtn:(UIButton *)sender {
     
     //进入主界面
-    AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-    app.window.rootViewController = app.tabBar;
+//    AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
+//    app.window.rootViewController = app.tabBar;
+    
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in self.navigationController.childViewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+        }
+    }
+    
+    if (!tabBarController) {
+        tabBarController = [CommentTD createViewControllers];
+    }
+    
+    [self.navigationController pushViewController:tabBarController animated:NO];
+    
 }
-
 
 @end

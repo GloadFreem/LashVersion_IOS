@@ -245,7 +245,7 @@
     }
     
     [self setupAutoHeightWithBottomView:_bottomView bottomMargin:0];
-    
+    [self updateLayout];
 }
 
 -(void)setIndexPath:(NSIndexPath *)indexPath

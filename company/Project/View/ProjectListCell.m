@@ -36,8 +36,8 @@
 {
     _model = model;
     
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.startPageImage]] placeholderImage:[UIImage new]];
-    
+    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.startPageImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
+    NSLog(@"%@",_model.status);
     if ([model.status isEqualToString:@"待路演"]) {
         _statusImage.image = [UIImage imageNamed:@"icon_noroad"];
     }
@@ -46,23 +46,25 @@
         _statusImage.image = [UIImage imageNamed:@"invest_roading"];
     }
     
-//    if ([model.status isEqualToString:@"预选"]) {
-//        _statusImage.image = [UIImage imageNamed:@"invest_yuxuan"];
-//    }
-    
     if ([model.status isEqualToString:@"融资中"]) {
         //
         UIImage * image = [UIImage imageNamed:@"icon_raising"];
         _statusImage.image =  image;
     }
     
-    if ([model.status isEqualToString:@"融资成功"]) {
-        _statusImage.image = [UIImage imageNamed:@"invest_raisefund"];
-    }
     if ([model.status isEqualToString:@"融资失败"]) {
         _statusImage.image = [UIImage imageNamed:@"invest_failed@3x"];
     }
-   
+    
+    if ([model.status isEqualToString:@"融资成功"]) {
+//        _statusImage.image = [UIImage imageNamed:@"invest_raisefund"];
+        [_statusImage setHidden:YES];
+        [_successImage setHidden:NO];
+    }else{
+        [_statusImage setHidden:NO];
+        [_successImage setHidden:YES];
+    }
+    
     //隐藏多余的 label
     for (NSInteger i =model.areas.count; i < _labelArray.count; i ++) {
         UILabel *label = (UILabel *)_labelArray[i];

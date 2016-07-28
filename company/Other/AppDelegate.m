@@ -101,7 +101,6 @@
                 
             }
         }
-
     }else{
         GuidePageViewController *vc = [GuidePageViewController new];
         self.nav = [[UINavigationController alloc]initWithRootViewController:vc];
@@ -284,7 +283,6 @@
     self.tabBar.textColor = orangeColor;
     MyNavViewController *navMine = [[MyNavViewController alloc]initWithRootViewController:[[MineViewController alloc]init]];
     self.tabBar.centerViewController = navMine;
-    
 }
 
 #pragma mark -push

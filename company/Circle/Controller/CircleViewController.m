@@ -251,7 +251,7 @@
 -(void)loadData
 {
     if (_isFirst) {
-        [SVProgressHUD show];
+        [SVProgressHUD showWithStatus:@"加载中"];
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     //开始请求
