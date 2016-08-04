@@ -267,6 +267,11 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     _positionLabel.text = model.positionStr;
     [_positionLabel sizeToFit];
+    if ([model.positionStr isEqualToString:@""]) {
+        [_shuView setHidden:YES];
+    }else{
+        [_shuView setHidden:NO];
+    }
     
     _timeLabel.text = [TDUtil getDateCha:model.timeSTr];
     

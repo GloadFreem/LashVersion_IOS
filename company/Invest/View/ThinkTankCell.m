@@ -46,6 +46,8 @@
     [super awakeFromNib];
     // Initialization code
     
+    _companyNameWidth.constant = 195 *WIDTHCONFIG;
+    
     _iconImage.layer.cornerRadius = 30;
     _iconImage.layer.masksToBounds = YES;
     _iconImage.layer.borderWidth = 0.5;

@@ -46,15 +46,36 @@
     if (areas.count == 1) {
         _leftBtn.hidden = YES;
         _rightBtn.hidden = YES;
+        _middleBtn.hidden = NO;
         [_middleBtn setTitle:areas[0] forState:UIControlStateNormal];
+        _middleBtnWidth.constant = 60;
     }
     if (areas.count == 2) {
+        _leftBtn.hidden = NO;
+        _rightBtn.hidden = NO;
         _middleBtn.hidden = YES;
-        [_leftBtn setTitle:areas[0] forState:UIControlStateNormal];
+        _middleBtnWidth.constant = 0.00000000001f;
+        NSString *str = areas[0];
+        if (str.length > 3) {
+            _leftBtnWidth.constant = 70*WIDTHCONFIG;
+        }else{
+            _leftBtnWidth.constant = 50*WIDTHCONFIG;
+        }
+        [_leftBtn setTitle:str forState:UIControlStateNormal];
         [_rightBtn setTitle:areas[1] forState:UIControlStateNormal];
     }
     if (areas.count == 3) {
-        [_leftBtn setTitle:areas[0] forState:UIControlStateNormal];
+        _leftBtn.hidden = NO;
+        _rightBtn.hidden = NO;
+        _middleBtn.hidden = NO;
+        _middleBtnWidth.constant = 60;
+        NSString *str = areas[0];
+        if (str.length > 3) {
+            _leftBtnWidth.constant = 70*WIDTHCONFIG;
+        }else{
+            _leftBtnWidth.constant = 50*WIDTHCONFIG;
+        }
+        [_leftBtn setTitle:str forState:UIControlStateNormal];
         [_middleBtn setTitle:areas[1] forState:UIControlStateNormal];
         [_rightBtn setTitle:areas[2] forState:UIControlStateNormal];
     }

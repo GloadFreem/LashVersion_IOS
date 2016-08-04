@@ -34,6 +34,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *content;
 @property (weak, nonatomic) IBOutlet UIButton *attentionBtn;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *companyNameWidth;
+
+
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 
 

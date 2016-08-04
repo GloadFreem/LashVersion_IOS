@@ -31,6 +31,8 @@
 
 #define LOGOATTENTION @"requestMineCollection"
 
+#define INVESTORCOLLECT @"requestInvestorCollect"
+
 @interface MineAttentionVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
 @property (nonatomic, strong) UIView *titleView;
 @property (nonatomic, strong) UIButton *projectBtn;    //
@@ -47,7 +49,7 @@
 @property (nonatomic, assign) NSInteger investPage;
 
 
-
+@property (nonatomic, copy) NSString *investorCollectPartner;
 
 @property (nonatomic, strong) NSMutableArray *identifyArray;
 @property (nonatomic, strong) NSMutableArray *statusArray;
@@ -78,6 +80,8 @@
     
     //获得partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:LOGOATTENTION];
+    
+    self.investorCollectPartner = [TDUtil encryKeyWithMD5:KEY action:INVESTORCOLLECT];
     
     [self startLoadData];
     
@@ -485,6 +489,9 @@
             vc.titleText = @"个人 · 简介";
             vc.selectedNum = 1;
             vc.collected = model.collected;
+            vc.titleStr = @"投资人详情";
+            vc.collectModel = model;
+            vc.investorCollectPartner = self.investorCollectPartner;
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             [self.navigationController pushViewController:vc animated:YES];
         }
@@ -495,6 +502,9 @@
             vc.titleText = @"机构 · 简介";
             vc.selectedNum = 2;
             vc.collected = model.collected;
+            vc.titleStr = @"投资机构详情";
+            vc.collectModel = model;
+            vc.investorCollectPartner = self.investorCollectPartner;
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             [self.navigationController pushViewController:vc animated:YES];
             
@@ -504,10 +514,11 @@
             InvestThinkTankDetailVC *vc = [InvestThinkTankDetailVC new];
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             vc.attentionVC =self;
+            vc.collectModel = model;
             vc.collected = model.collected;
+            vc.investorCollectPartner = self.investorCollectPartner;
             [self.navigationController pushViewController:vc animated:YES];
         }
-
     }
 }
 #pragma mark- 创建tableView

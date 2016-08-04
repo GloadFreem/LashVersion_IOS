@@ -327,8 +327,7 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
-    
-    NSLog(@"开始编辑");
+//    NSLog(@"开始编辑");
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -353,13 +352,12 @@
         self.dataArray[textField.tag] = textField.text;
     }
     
-    
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
 }
 
 #pragma mark- 下一步按钮点击校验信息
 - (IBAction)nextStupClick:(UIButton *)sender {
-    NSLog(@"%@",_dataArray);
+//    NSLog(@"%@",_dataArray);
     
     //判断身份证照片是否存在
     if (!_selectedA) {
@@ -611,18 +609,18 @@
         //保存图片
        BOOL ret = [TDUtil saveContent:image fileName:@"identiyCarA"];
         if (ret) {
-            NSLog(@"身份证正面保存成功");
+//            NSLog(@"身份证正面保存成功");
             _selectedA = YES;
         }else{
-            NSLog(@"身份证正面保存失败");
+//            NSLog(@"身份证正面保存失败");
         }
     }else{
         BOOL ret =[TDUtil saveContent:image fileName:@"identiyCarB"];
         if (ret) {
-            NSLog(@"身份证反面保存成功");
+//            NSLog(@"身份证反面保存成功");
             _selectedB = YES;
         }else{
-            NSLog(@"身份证反面保存失败");
+//            NSLog(@"身份证反面保存失败");
         }
     }
 }

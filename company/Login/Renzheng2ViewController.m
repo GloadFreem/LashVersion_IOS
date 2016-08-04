@@ -47,7 +47,7 @@
     self.nextBtn.layer.masksToBounds = YES;
     
     //打印数据字典
-    NSLog(@"数据字典：%@",self.dicData);
+//    NSLog(@"数据字典：%@",self.dicData);
     
 }
 
@@ -83,7 +83,7 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入营业执照号"];
     }
     
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
 }
 #pragma mark - 返回上一页
 - (IBAction)leftBack:(UIButton *)sender {
@@ -115,7 +115,7 @@
         
         [_dicData setObject:self.identifyType forKey:@"identiyTypeId"];
         
-        NSLog(@"打印数据%@",_dicData);
+//        NSLog(@"打印数据%@",_dicData);
         //读取图片加到图片字典 并请求数据
         //检验照片是否存在
         BOOL retA =[TDUtil checkImageExists:@"identiyCarA"];
@@ -142,12 +142,11 @@
             [activity setColor:WriteColor];
             
             //开始加载动画
-            [activity startAnimating];
+//            [activity startAnimating];
             //上传文件
             [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
             [SVProgressHUD showWithStatus:@"认证中..."];
         }
-        
     }
 #pragma mark -投机机构身份验证界面  ||  智囊团身份验证界面
     if ([self.identifyType integerValue] == 3 || [self.identifyType integerValue] == 4) {
@@ -164,7 +163,7 @@
 -(void)requestSetIdentifyType:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -190,13 +189,11 @@
             
             [self.navigationController pushViewController:tabBarController animated:NO];
             
-            
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-            
         }
     }
-    [activity stopAnimating];
+//    [activity stopAnimating];
     [SVProgressHUD dismiss];
 }
 #pragma mark -选择照片事件
@@ -271,14 +268,13 @@
     //压缩图片
     image = [TDUtil drawInRectImage:image size:CGSizeMake(1128, 800)];
     
-    
         //保存图片
         BOOL ret = [TDUtil saveContent:image fileName:@"buinessLicence"];
         if (ret) {
-            NSLog(@"身份证正面保存成功");
+//            NSLog(@"身份证正面保存成功");
             _isSelectedImage = YES;
         }else{
-            NSLog(@"身份证正面保存失败");
+//            NSLog(@"身份证正面保存失败");
         }
     
 }

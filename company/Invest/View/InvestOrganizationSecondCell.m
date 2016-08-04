@@ -67,7 +67,8 @@
     //标题赋值
     for (NSInteger i = 0; i < model.areas.count; i ++) {
         UILabel *label = (UILabel*)_labelArray[i];
-        label.text = [NSString stringWithFormat:@" %@ ",model.areas[i]];
+        label.hidden = NO;
+        label.text = [NSString stringWithFormat:@"%@ ",model.areas[i]];
     }
     
     if (model.commited) {

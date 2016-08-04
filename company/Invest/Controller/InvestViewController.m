@@ -132,6 +132,7 @@
 #pragma mark - 开始请求数据
 -(void)startLoadData
 {
+    [SVProgressHUD showWithStatus:@"加载中"];
     //投资人
     if (_tableViewSelected == 1) {
         
@@ -156,8 +157,10 @@
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",_identyType,@"type",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     
+//    [SVProgressHUD showWithStatus:@"加载中"];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:INVEST_PUBLIC_LIST postParam:dic type:0 delegate:self sel:@selector(requestInvestList:)];
+    [self.httpUtil getDataFromAPIWithOps:INVEST_PUBLIC_LIST postParam:dic type:1 delegate:self sel:@selector(requestInvestList:)];
+    [SVProgressHUD dismiss];
 }
 
 -(void)requestInvestList:(ASIHTTPRequest *)request
@@ -185,108 +188,125 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            //投资人列表
-            if (_tableViewSelected == 1) {
-                NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
-
-                NSArray *investBaseModelArray = [InvestBaseModel mj_objectArrayWithKeyValuesArray:dataArray];
-                for (NSInteger i = 0; i < investBaseModelArray.count; i ++) {
-                    InvestListModel *listModel = [InvestListModel new];
-                    InvestBaseModel *baseModel = investBaseModelArray[i];
-                    listModel.headSculpture =baseModel.user.headSculpture;
-                    listModel.name = baseModel.user.name;
-                    listModel.areas = baseModel.areas;
-                    listModel.userId = [NSString stringWithFormat:@"%ld",(long)baseModel.user.userId];
-                    listModel.collectCount = baseModel.collectCount;
-                    listModel.collected = baseModel.collected;
-                    listModel.commited = baseModel.commited;
-                    //二级认证信息
-                    Authentics *authentics = baseModel.user.authentics[0];
-                    listModel.position = authentics.position;
-                    listModel.companyName = authentics.companyName;
-                    City *city = authentics.city;
-                    Province *province = city.province;
-                    listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
-                    [_investPersonArray addObject:listModel];
+            if (jsonDic[@"data"]) {
+                //投资人列表
+                if (_tableViewSelected == 1) {
+                    NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
                     
-                }
-            }
-            
-            //投资机构列表
-            if (_tableViewSelected == 2) {
-                
-                InvestOrganizationBaseModel *baseModel =[InvestOrganizationBaseModel mj_objectWithKeyValues:jsonDic[@"data"]];
-    
-                NSArray *firstArray = [NSArray arrayWithArray:baseModel.founddations];
-                for (NSInteger i= 0; i < firstArray.count;  i ++) {
-                    OrganizationFirstModel *model = [OrganizationFirstModel new];
-                    OrganizationFounddations *foundation = firstArray[i];
-                    model.image = foundation.image;
-                    model.name = foundation.name;
-                    model.content = foundation.content;
-                    model.foundationId = foundation.foundationId;
-                    model.url = foundation.url;
-                    [_investOrganizationArray addObject:model];
-                }
-                NSArray *secondArray = [NSArray arrayWithArray:baseModel.investors];
-                for (NSInteger i = 0; i < secondArray.count; i ++) {
-                    InvestListModel *model =[InvestListModel new];
-                    OrganizationInvestors *investor = secondArray[i];
-                    model.areas = investor.areas;
-                    model.collectCount = investor.collectCount;
-                    model.collected = investor.collected;
-                    model.commited = investor.commited;
-                    //二级认证信息
-                    OrganizationAuthentics *authentics =investor.user.authentics[0];
-                    model.headSculpture = investor.user.headSculpture;
-                    model.companyName = authentics.companyName;
-                    
-                    OrganizationCity *city = authentics.city;
-                    OrganizationProvince *province = city.province;
-                    model.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
-                    model.userId = [NSString stringWithFormat:@"%ld",(long)investor.user.userId];
-                    [_investOrganizationSecondArray addObject:model];
-                    
-                }
-            }
-            
-            //智囊团
-            if (_tableViewSelected == 3) {
-                NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
-                NSArray *thinkTankBaseModelArray = [ThinkTankBaseModel mj_objectArrayWithKeyValuesArray:dataArray];
-                for (NSInteger i = 0; i < thinkTankBaseModelArray.count; i ++) {
-                    InvestListModel *listModel = [InvestListModel new];
-                    ThinkTankBaseModel *baseModel = thinkTankBaseModelArray[i];
-                    listModel.headSculpture =baseModel.user.headSculpture;
-                    listModel.name = baseModel.user.name;
-                    listModel.userId = [NSString stringWithFormat:@"%ld",(long)baseModel.user.userId];
-                    listModel.collectCount = baseModel.collectCount;
-                    listModel.commited = baseModel.commited;
-                    listModel.collected = baseModel.collected;
-                    //二级认证信息
-                    ThinkAuthentics *authentics = baseModel.user.authentics[0];
-                    listModel.position = authentics.position;
-                    listModel.companyName = authentics.companyName;
-                    ThinkCity *city = authentics.city;
-                    ThinkProvince *province = city.province;
-                    listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
-                    listModel.introduce = authentics.introduce;
-                    [_thinkTankArray addObject:listModel];
+                    NSArray *investBaseModelArray = [InvestBaseModel mj_objectArrayWithKeyValuesArray:dataArray];
+                    for (NSInteger i = 0; i < investBaseModelArray.count; i ++) {
+                        InvestListModel *listModel = [InvestListModel new];
+                        InvestBaseModel *baseModel = investBaseModelArray[i];
+                        listModel.headSculpture =baseModel.user.headSculpture;
+                        listModel.name = baseModel.user.name;
+                        listModel.areas = baseModel.areas;
+                        listModel.userId = [NSString stringWithFormat:@"%ld",(long)baseModel.user.userId];
+                        listModel.collectCount = baseModel.collectCount;
+                        listModel.collected = baseModel.collected;
+                        listModel.commited = baseModel.commited;
+                        //二级认证信息
+                        Authentics *authentics = baseModel.user.authentics[0];
+                        listModel.position = authentics.position;
+                        listModel.companyName = authentics.companyName;
+                        City *city = authentics.city;
+                        Province *province = city.province;
+                        if ([city.name isEqualToString:@"北京市"] || [city.name isEqualToString:@"上海市"] || [city.name isEqualToString:@"天津市"] || [city.name isEqualToString:@"重庆市"] || [city.name isEqualToString:@"香港"] || [city.name isEqualToString:@"澳门"] || [city.name isEqualToString:@"钓鱼岛"]) {
+                            listModel.companyAddress = [NSString stringWithFormat:@"%@",province.name];
+                        }else{
+                        listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
+                        }
+                        [_investPersonArray addObject:listModel];
+                        
+                    }
                 }
                 
+                //投资机构列表
+                if (_tableViewSelected == 2) {
+                    
+                    InvestOrganizationBaseModel *baseModel =[InvestOrganizationBaseModel mj_objectWithKeyValues:jsonDic[@"data"]];
+                    
+                    NSArray *firstArray = [NSArray arrayWithArray:baseModel.founddations];
+                    for (NSInteger i= 0; i < firstArray.count;  i ++) {
+                        OrganizationFirstModel *model = [OrganizationFirstModel new];
+                        OrganizationFounddations *foundation = firstArray[i];
+                        model.image = foundation.image;
+                        model.name = foundation.name;
+                        model.content = foundation.content;
+                        model.foundationId = foundation.foundationId;
+                        model.url = foundation.url;
+                        [_investOrganizationArray addObject:model];
+                    }
+                    NSArray *secondArray = [NSArray arrayWithArray:baseModel.investors];
+                    for (NSInteger i = 0; i < secondArray.count; i ++) {
+                        InvestListModel *model =[InvestListModel new];
+                        OrganizationInvestors *investor = secondArray[i];
+                        model.areas = investor.areas;
+                        model.collectCount = investor.collectCount;
+                        model.collected = investor.collected;
+                        model.commited = investor.commited;
+                        //二级认证信息
+                        OrganizationAuthentics *authentics =investor.user.authentics[0];
+                        model.headSculpture = investor.user.headSculpture;
+                        model.companyName = authentics.companyName;
+                        
+                        OrganizationCity *city = authentics.city;
+                        OrganizationProvince *province = city.province;
+                        if ([city.name isEqualToString:@"北京市"] || [city.name isEqualToString:@"上海市"] || [city.name isEqualToString:@"天津市"] || [city.name isEqualToString:@"重庆市"] || [city.name isEqualToString:@"香港"] || [city.name isEqualToString:@"澳门"] || [city.name isEqualToString:@"钓鱼岛"]) {
+                            model.companyAddress = [NSString stringWithFormat:@"%@",province.name];
+                        }else{
+                            model.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
+                        }
+                        model.userId = [NSString stringWithFormat:@"%ld",(long)investor.user.userId];
+                        [_investOrganizationSecondArray addObject:model];
+                        
+                    }
+                }
+                
+                //智囊团
+                if (_tableViewSelected == 3) {
+                    NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
+                    NSArray *thinkTankBaseModelArray = [ThinkTankBaseModel mj_objectArrayWithKeyValuesArray:dataArray];
+                    for (NSInteger i = 0; i < thinkTankBaseModelArray.count; i ++) {
+                        InvestListModel *listModel = [InvestListModel new];
+                        ThinkTankBaseModel *baseModel = thinkTankBaseModelArray[i];
+                        listModel.headSculpture =baseModel.user.headSculpture;
+                        listModel.name = baseModel.user.name;
+                        listModel.userId = [NSString stringWithFormat:@"%ld",(long)baseModel.user.userId];
+                        listModel.collectCount = baseModel.collectCount;
+                        listModel.commited = baseModel.commited;
+                        listModel.collected = baseModel.collected;
+                        //二级认证信息
+                        ThinkAuthentics *authentics = baseModel.user.authentics[0];
+                        listModel.position = authentics.position;
+                        listModel.companyName = authentics.companyName;
+                        ThinkCity *city = authentics.city;
+                        ThinkProvince *province = city.province;
+                        if ([city.name isEqualToString:@"北京市"] || [city.name isEqualToString:@"上海市"] || [city.name isEqualToString:@"天津市"] || [city.name isEqualToString:@"重庆市"] || [city.name isEqualToString:@"香港"] || [city.name isEqualToString:@"澳门"] || [city.name isEqualToString:@"钓鱼岛"]) {
+                            listModel.companyAddress = [NSString stringWithFormat:@"%@",province.name];
+                        }else{
+                            listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
+                        }
+                        listModel.introduce = authentics.introduce;
+                        [_thinkTankArray addObject:listModel];
+                    }
+                    
+                }
+                
+                [self.tableView reloadData];
+                //结束刷新
+                [self.tableView.mj_header endRefreshing];
+                [self.tableView.mj_footer endRefreshing];
             }
             
-            [self.tableView reloadData];
-            //结束刷新
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
         }else{
+            
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
+    
 }
 
 
@@ -347,6 +367,10 @@
 
 - (UIScrollView *)subViewScrollView{
     
+    if (!self.tableView) {
+        self.tableView = [[UITableView alloc]init];
+    }
+    
     if (!_subViewScrollView) {
         _subViewScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 40, SCREENWIDTH, SCREENHEIGHT-64-49-40)];
         _subViewScrollView.backgroundColor = [UIColor greenColor];
@@ -404,8 +428,35 @@
     //子scrollView的偏移量
     _subViewScrollView.contentOffset=CGPointMake(SCREENWIDTH*(sender.tag-10), 0);
     //当没有数据才下载数据
-    if (!_investPersonArray.count || !_investOrganizationArray.count || !_thinkTankArray.count) {
-        [self startLoadData];
+//    if (!_investPersonArray.count || !_investOrganizationArray.count || !_thinkTankArray.count) {
+//        [self startLoadData];
+//    }
+    switch (_tableViewSelected) {
+        case 1:
+        {
+            if (!_investPersonArray.count) {
+                [self startLoadData];
+            }
+            
+        }
+            break;
+        case 2:
+        {
+            if (!_investOrganizationSecondArray.count && !_investOrganizationArray.count) {
+                [self startLoadData];
+            }
+        }
+            break;
+        case 3:
+        {
+            if (!_thinkTankArray.count) {
+                [self startLoadData];
+            }
+            
+        }
+            break;
+        default:
+            break;
     }
 }
 
@@ -429,24 +480,30 @@
             10+index == (10+i) ? [bt setTitleColor:selectTitleColor forState:UIControlStateNormal] : [bt setTitleColor:unselectTitleColor forState:UIControlStateNormal];
         }
         //当没有数据才下载数据
-        if (!_investPersonArray.count || !_investOrganizationArray.count || !_thinkTankArray.count) {
-            [self startLoadData];
-        }
+//        if (!_investPersonArray.count || !_investOrganizationArray.count || !_thinkTankArray.count) {
+//            [self startLoadData];
+//        }
         switch (index) {
             case 0:
             {
-                
+                if (!_investPersonArray.count) {
+                    [self startLoadData];
+                }
                 
             }
                 break;
             case 1:
             {
-                
+                if (!_investOrganizationSecondArray.count && !_investOrganizationArray.count) {
+                    [self startLoadData];
+                }
             }
                 break;
             case 2:
             {
-                
+                if (!_thinkTankArray.count) {
+                    [self startLoadData];
+                }
                 
             }
                 break;
@@ -547,7 +604,7 @@
                 cell.model = _investOrganizationArray[indexPath.row];
             }
             return cell;
-        }
+        }else{
         
         InvestOrganizationSecondCell * cell = [InvestOrganizationSecondCell cellWithTableView:tableView];
         if (_investOrganizationSecondArray.count) {
@@ -560,15 +617,19 @@
             cell.commitBtn.hidden = YES;
         }
         return cell;
+        }
     };
     //智囊团
-    tableView = _thinkTankTableView;
-    ThinkTankCell *  cell = [ThinkTankCell cellWithTableView:tableView];
-    if (_thinkTankArray.count) {
-        cell.model = _thinkTankArray[indexPath.row];
+    if (_tableViewSelected == 3) {
+        tableView = _thinkTankTableView;
+        ThinkTankCell *  cell = [ThinkTankCell cellWithTableView:tableView];
+        if (_thinkTankArray.count) {
+            cell.model = _thinkTankArray[indexPath.row];
+        }
+        cell.delegate =self;
+        return cell;
     }
-    cell.delegate =self;
-    return cell;
+    return nil;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

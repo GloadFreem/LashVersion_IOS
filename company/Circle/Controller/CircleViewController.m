@@ -157,7 +157,7 @@
     listModel.flag = false;
     listModel.userId = [_selfId integerValue];
     
-    listModel.addressStr = usersAuthenticsModel.companyAddress;
+    listModel.addressStr = usersAuthenticsModel.city.name;
     listModel.companyStr = usersAuthenticsModel.companyName;
     listModel.positionStr = usersAuthenticsModel.position;
     NSMutableArray *picArray = [NSMutableArray array];
@@ -298,7 +298,7 @@
                 //实例化认证人模型
                 if (authenticsArray.count) {
                     CircleUsersAuthenticsModel *usersAuthenticsModel =authenticsArray[0];
-                    listModel.addressStr = usersAuthenticsModel.companyAddress;
+                    listModel.addressStr = usersAuthenticsModel.city.name;
                     listModel.companyStr = usersAuthenticsModel.companyName;
                     listModel.positionStr = usersAuthenticsModel.position;
                 }

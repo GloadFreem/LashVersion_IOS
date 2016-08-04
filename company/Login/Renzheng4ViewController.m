@@ -205,7 +205,7 @@
         [activity setColor:WriteColor];
         
         //开始加载动画
-        [activity startAnimating];
+//        [activity startAnimating];
         //上传文件
         [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
         [SVProgressHUD showWithStatus:@"认证中..."];
@@ -245,7 +245,7 @@
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             }
     }
-    [activity stopAnimating];
+//    [activity stopAnimating];
     [SVProgressHUD dismiss];
 }
 

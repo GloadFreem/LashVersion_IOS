@@ -113,7 +113,7 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
     if (model.shouldShowMoreButton) { //如果文字高度超过三行
         _first = YES;
         if (model.isOpen) {  //如果展开
-            _pictureContainerView.pictureStringArray = model.pictureArray;
+//            _pictureContainerView.pictureStringArray = model.pictureArray;
 
             _contentLabel.sd_layout.maxHeightIs(MAXFLOAT);
 //            _pictureContainerView.sd_layout.maxHeightIs(MAXFLOAT);
@@ -132,9 +132,14 @@ CGFloat maxPictureViewHeight = 0;  //根据具体情况来定
     {
         if(model.pictureArray && model.pictureArray.count>0)
         {
-            for (NSInteger i =0; i<3; i++) {
-                [picArray addObject:model.pictureArray[i]];
+            if (model.pictureArray.count >=3) {
+                for (NSInteger i =0; i<3; i++) {
+                    [picArray addObject:model.pictureArray[i]];
+                }
+            }else{
+                [picArray addObjectsFromArray:model.pictureArray];
             }
+            
         }
        
         _pictureContainerView.pictureStringArray = picArray;

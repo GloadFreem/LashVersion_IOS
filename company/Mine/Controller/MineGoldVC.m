@@ -275,8 +275,8 @@
                 arr = @[UMShareToWechatTimeline];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareContent;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareContent;
                 
                 //                NSLog(@"分享到朋友圈");
             }

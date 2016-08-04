@@ -348,7 +348,7 @@ static CGFloat textFieldH = 40;
 -(void)requestActionAttendList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -505,12 +505,11 @@ static CGFloat textFieldH = 40;
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.dataArray.count) {
-        if (self.dataArray.count >=5) {
+        if (self.dataArray.count > 8) {
             return 8;
         }else{
-            return _dataArray.count;
+        return self.dataArray.count;
         }
-        
     }
     return 0;
 }

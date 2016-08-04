@@ -52,7 +52,7 @@
 -(void)requestCity:(ASIHTTPRequest *)request
 {
     NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     
     NSMutableDictionary* dic = [jsonString JSONValue];
     if (dic != nil) {
@@ -99,8 +99,13 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     self.city = _dataArray[indexPath.row];
-    NSString *address = [NSString stringWithFormat:@"%@ | %@",self.province,self.city];
-    
+    NSString *address;
+    if ([self.city isEqualToString:@"北京市"] || [self.city isEqualToString:@"上海市"] || [self.city isEqualToString:@"天津市"] || [self.city isEqualToString:@"重庆市"] || [self.city isEqualToString:@"香港"] || [self.city isEqualToString:@"澳门"] || [self.city isEqualToString:@"钓鱼岛"]) {
+        address = [NSString stringWithFormat:@"%@",self.province];
+        
+    }else{
+        address = [NSString stringWithFormat:@"%@ | %@",self.province,self.city];
+    }
     for (UIViewController *VC in self.navigationController.viewControllers) {
         if ([VC isKindOfClass:[AreaViewController class]]) {
 //            AreaViewController *vc = (AreaViewController*)VC;
@@ -109,12 +114,11 @@
             
         }
         
-            
-        
             if ([VC isKindOfClass:[RenzhengViewController class]]) {
                 RenzhengViewController *vc = (RenzhengViewController*)VC;
                 vc.companyAddress = address;
                 vc.cityId = _idArray[indexPath.row];
+                
                 [vc refreshData];
            
         }

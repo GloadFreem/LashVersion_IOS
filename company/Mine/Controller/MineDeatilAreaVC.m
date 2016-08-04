@@ -131,8 +131,16 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     self.city = _dataArray[indexPath.row];
-    NSString *address = [NSString stringWithFormat:@"%@ | %@",self.province,self.city];
+    NSString *address;
+    if ([self.city isEqualToString:@"北京市"] || [self.city isEqualToString:@"上海市"] || [self.city isEqualToString:@"天津市"] || [self.city isEqualToString:@"重庆市"] || [self.city isEqualToString:@"香港"] || [self.city isEqualToString:@"澳门"] || [self.city isEqualToString:@"钓鱼岛"]) {
+        address = [NSString stringWithFormat:@"%@",self.province];
+    
+    }else{
+        address = [NSString stringWithFormat:@"%@ | %@",self.province,self.city];
+        
+    }
     _cityId = [NSString stringWithFormat:@"%@",_idArray[indexPath.row]];
+    
     
     [self modifyAddress];
     
@@ -153,7 +161,6 @@
         if ([VC isKindOfClass:[MineDataVC class]]) {
             MineDataVC *vc = (MineDataVC*)VC;
             vc.address = address;
-//            vc.cityId = _idArray[indexPath.row];
             
             [vc.tableView reloadData];
             
@@ -166,13 +173,12 @@
 -(void)modifyAddress
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.addressPartner,@"partner",_cityId,@"cityId", nil];
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_MODIFY_CITY postParam:dic type:0 delegate:self sel:@selector(requestAddress:)];
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_MODIFY_CITY postParam:dic type:1 delegate:self sel:@selector(requestAddress:)];
 }
 -(void)requestAddress:(ASIHTTPRequest *)request
 {
     NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* dic = [jsonString JSONValue];
     if (dic!= nil) {
         NSString *status = [dic valueForKey:@"status"];

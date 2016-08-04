@@ -153,7 +153,7 @@
             if (authenticsArray.count) {
                 //实例化认证人模型
                 CircleUsersAuthenticsModel *usersAuthenticsModel =authenticsArray[0];
-                listModel.addressStr = usersAuthenticsModel.companyAddress;
+                listModel.addressStr = usersAuthenticsModel.city.name;
                 listModel.companyStr = usersAuthenticsModel.companyName;
                 listModel.positionStr = usersAuthenticsModel.position;
             }
@@ -491,15 +491,8 @@
     id model = self.dataArray[indexPath.row];
     if (indexPath.row == 0) {
         CircleListModel *listModel = (CircleListModel*)model;
-        if (listModel.shouldShowMoreBtn ) {
-            if (self.dataArray.count > 1) {
-                return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+45;
-            }else{
-            return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+14;
-            }
-        }else{
-        return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]]+10;
-        }
+
+        return [_tableView cellHeightForIndexPath:indexPath model:listModel keyPath:@"model" cellClass:[CircleDetailHeaderCell class] contentViewWidth:[self cellContentViewWith]];
     }
     return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleDetailCommentCell class] contentViewWidth:[self cellContentViewWith]];
 }
@@ -514,15 +507,7 @@
         }
         
         cell.indexPath = indexPath;
-//        __weak typeof (self) weakSelf = self;
-//        if (!cell.moreButtonClickedBlock) {
-//            [cell setMoreButtonClickedBlock:^(NSIndexPath *indexPath) {
-//                CircleListModel *model =weakSelf.dataArray[indexPath.row];
-//                model.isOpening  = !model.isOpening;
-//                [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-//            }];
-//            
-//        }
+
         cell.delegate = self;
         
         cell.model = self.dataArray[indexPath.row];
@@ -530,6 +515,7 @@
         return cell;
         
     }
+    
     static NSString *cellId = @"CircleDetailCommentCell";
     CircleDetailCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -47,9 +47,9 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="逸景营地投资有限公司" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6h-1z-I6j">
-                        <rect key="frame" x="84" y="51" width="210" height="15"/>
+                        <rect key="frame" x="84" y="51" width="195" height="15"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="210" id="hlg-F8-f41"/>
+                            <constraint firstAttribute="width" constant="195" id="hlg-F8-f41"/>
                             <constraint firstAttribute="height" constant="15" id="ukD-Me-PAT"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -57,7 +57,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="北京 | 西安" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MwA-ML-Bsn">
-                        <rect key="frame" x="308" y="54" width="59" height="12"/>
+                        <rect key="frame" x="289" y="54" width="78" height="12"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="12" id="RfB-1E-RXq"/>
                         </constraints>
@@ -118,10 +118,6 @@
                             <action selector="attentionClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Ecm-pA-CUm"/>
                         </connections>
                     </button>
-                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nYv-sC-jeC">
-                        <rect key="frame" x="-36" y="-77" width="1" height="35"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="MwA-ML-Bsn" secondAttribute="trailing" constant="8" id="0Gm-Bs-wmf"/>
@@ -137,6 +133,7 @@
                     <constraint firstItem="h6h-1z-I6j" firstAttribute="top" secondItem="b2t-tQ-gQx" secondAttribute="bottom" constant="10" id="HbZ-nf-k26"/>
                     <constraint firstAttribute="trailing" secondItem="4Mi-oU-War" secondAttribute="trailing" id="IFk-XL-d9A"/>
                     <constraint firstItem="cyB-AP-kel" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="Qrx-kI-bQS"/>
+                    <constraint firstItem="MwA-ML-Bsn" firstAttribute="leading" secondItem="h6h-1z-I6j" secondAttribute="trailing" constant="10" id="Spq-Lu-oFU"/>
                     <constraint firstItem="h6h-1z-I6j" firstAttribute="leading" secondItem="b2t-tQ-gQx" secondAttribute="leading" id="UWo-Kr-OJK"/>
                     <constraint firstItem="olv-6m-ncC" firstAttribute="leading" secondItem="b2t-tQ-gQx" secondAttribute="trailing" constant="12" id="VT2-hH-eDX"/>
                     <constraint firstItem="kJO-Wi-DUR" firstAttribute="width" secondItem="h1h-jM-cak" secondAttribute="width" id="WDq-Kx-tHV"/>

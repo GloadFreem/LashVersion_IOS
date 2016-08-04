@@ -134,9 +134,16 @@
         _companyName = authentics.companyName;
         _position = authentics.position;
         
-        NSString *province = authentics.city.province.name;
         NSString *city = authentics.city.name;
-        _address = [NSString stringWithFormat:@"%@ | %@",province,city];
+        NSString *province = authentics.city.province.name;
+        if ([city isEqualToString:@"北京市"] || [city isEqualToString:@"上海市"] || [city isEqualToString:@"天津市"] || [city isEqualToString:@"重庆市"] || [city isEqualToString:@"香港"] || [city isEqualToString:@"澳门"] || [city isEqualToString:@"钓鱼岛"]) {
+            _address = [NSString stringWithFormat:@"%@",province];
+        }else{
+            _address = [NSString stringWithFormat:@"%@ | %@",province,city];
+        }
+        
+        
+        
         
 
     }

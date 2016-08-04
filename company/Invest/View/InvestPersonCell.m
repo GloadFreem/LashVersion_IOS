@@ -25,7 +25,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    _companyNameWidth.constant = 210 * WIDTHCONFIG;
+    _companyNameWidth.constant = 195 * WIDTHCONFIG;
     
     _iconImage.layer.cornerRadius = 30;
     _iconImage.layer.masksToBounds = YES;
@@ -66,13 +66,18 @@
     _companyName.text = model.companyName;
     _companyAddress.text = model.companyAddress;
     
+    
+    
     for (NSInteger i = model.areas.count; i < _btnArray.count; i ++) {
         UIButton *btn = (UIButton*)_btnArray[i];
         btn.hidden = YES;
     }
+    
     //标题赋值
     for (NSInteger i = 0; i < model.areas.count; i ++) {
+        
         UIButton *btn = (UIButton*)_btnArray[i];
+        btn.hidden = NO;
         [btn setTitle:[NSString stringWithFormat:@" %@ ",model.areas[i]] forState:UIControlStateNormal];
     }
     

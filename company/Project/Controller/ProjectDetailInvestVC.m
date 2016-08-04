@@ -300,7 +300,7 @@
     [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
     [dic setObject:@"G2_IDCARD" forKey:@"idCardType"];
     [dic setObject:@"ios://verify:" forKey:@"callbackUrl"];
-    [dic setObject:[data valueForKey:USER_STATIC_TEL]forKey:@"mobile"];
+    [dic setObject:[data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE]forKey:@"mobile"];
     [dic setObject:[data valueForKey:USER_STATIC_NAME] forKey:@"realName"];
     [dic setObject:[data valueForKey:USER_STATIC_IDNUMBER] forKey:@"idCardNo"];
     [dic setObject:notifyUrl forKey:@"notifyUrl"];
@@ -465,7 +465,7 @@
     return NO;
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    NSLog(@"开始编辑");
+//    NSLog(@"开始编辑");
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
@@ -473,7 +473,7 @@
         
         _textField.text = textField.text;
     }
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
 }
 
 -(void)viewWillAppear:(BOOL)animated

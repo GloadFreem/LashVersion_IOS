@@ -26,7 +26,7 @@
 @property (nonatomic, copy) NSString *type;
 
 @property (nonatomic, strong) MineAttentionVC *attentionVC;
-@property (nonatomic, strong) MineCollectionListModel *attentionModel;
+@property (nonatomic, strong) MineCollectionListModel *collectModel;
 @property (nonatomic, strong) UITableView *tableView;
 
 @end

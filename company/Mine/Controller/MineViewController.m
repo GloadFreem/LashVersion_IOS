@@ -47,7 +47,7 @@
 
 @property (nonatomic, assign) NSInteger identiyTypeId;
 @property (nonatomic, assign) NSInteger authId;
-
+@property (nonatomic, assign) BOOL isAuthentic;
 
 @property (nonatomic, copy) NSString *shareTitle;
 @property (nonatomic, copy) NSString *contentText;
@@ -58,13 +58,15 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconHeight;
 
-
+@property (nonatomic, assign) BOOL isFirst;
 @end
 
 @implementation MineViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _isFirst = YES;
     
     _iconWidth.constant =_iconHeight.constant= 83 *WIDTHCONFIG ;
     _iconBtn.layer.cornerRadius = 41.5 *WIDTHCONFIG;
@@ -115,6 +117,10 @@
 #pragma mark -下载认证信息
 -(void)loadAuthenData
 {
+    if (_isFirst) {
+        [SVProgressHUD showWithStatus:@"加载中..."];
+        _isFirst = NO;
+    }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
@@ -123,7 +129,7 @@
 -(void)requestAuthenInfo:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -133,16 +139,28 @@
             AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
             _authenticModel = baseModel;
             
-            
             NSArray *authenticsArray = baseModel.authentics;
             if (authenticsArray.count) {
                 ProjectAuthentics *authentics = authenticsArray[0];
                 
                 _nameStr = authentics.name;
-                if (authentics.companyName && authentics.companyName.length && authentics.position && authentics.position.length) {
-                    _companyStr = [NSString stringWithFormat:@"%@ | %@",authentics.companyName,authentics.position];
+                
+                ProjectAuthenticstatus *authenticsstatus = authentics.authenticstatus;
+                if ([authenticsstatus.name isEqualToString:@"已认证"] || [authenticsstatus.name isEqualToString:@"认证中"]) {
+                    if ([authenticsstatus.name isEqualToString:@"已认证"]) {
+                        _isAuthentic = YES;
+                    }else{
+                        _isAuthentic = NO;
+                    }
+                    
+                    if (authentics.companyName && authentics.companyName.length && authentics.position && authentics.position.length) {
+                        _companyStr = [NSString stringWithFormat:@"%@ | %@",authentics.companyName,authentics.position];
+                    }else{
+                        _companyStr = @"";
+                    }
                 }else{
-                    _companyStr = @"";
+                    _nameStr = baseModel.telephone;
+                    _isAuthentic = NO;
                 }
                 
                 _identiyTypeId = authentics.identiytype.identiyTypeId;
@@ -158,8 +176,6 @@
 -(void)setModel
 {
     
-//    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
-    
     [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"] options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [_iconBtn setBackgroundImage:image forState:UIControlStateNormal];
@@ -170,14 +186,20 @@
     NSString *nickName = [data objectForKey:@"nickName"];
     if (_nameStr && _nameStr.length) {
         _name.text = _nameStr;
-        [_vipImage setHidden:NO];
+        
     }else{
         _name.text = nickName;
+        
+    }
+    if (_isAuthentic) {
+        [_vipImage setHidden:NO];
+    }else{
         [_vipImage setHidden:YES];
     }
-    
+//    NSLog(@"%@",_nameStr);
     _company.text = _companyStr;
     
+    [SVProgressHUD dismiss];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -186,17 +208,15 @@
     //下载认证信息
     [self loadAuthenData];
     
-//    if(self.bottomView != nil)
-//    {
-//        [self.bottomView removeFromSuperview];
-//    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear: animated];
     [self.navigationController.navigationBar setHidden:NO];
+    [SVProgressHUD dismiss];
 }
+
 #pragma mark -进入头像详情页面
 - (IBAction)iconDetail:(UIButton *)sender {
     MineDataVC *vc = [MineDataVC new];
@@ -241,7 +261,7 @@
                 MineProjectViewController *vc = [MineProjectViewController new];
                 vc.type = _identiyTypeId - 1;
                 [self.navigationController pushViewController:vc animated:YES];
-                NSLog(@"项目方");
+//                NSLog(@"项目方");
                 return;
                 
             }
@@ -251,7 +271,7 @@
                 vc.type = _identiyTypeId -1 ;
                 [self.navigationController  pushViewController:vc animated:YES];
                 
-                NSLog(@"投资人");
+//                NSLog(@"投资人");
                 return;
             }
             if (_identiyTypeId == 3) {//投资机构
@@ -260,14 +280,14 @@
                 vc.type = _identiyTypeId -1 ;
                 [self.navigationController pushViewController:vc animated:YES];
                 
-                NSLog(@"投机机构");
+//                NSLog(@"投机机构");
                 return;
             }
             if (_identiyTypeId == 4) {//智囊团
                 MineThinkTankViewController *vc = [MineThinkTankViewController new];
                 vc.type = _identiyTypeId -1;
                 [self.navigationController pushViewController:vc animated:YES];
-                NSLog(@"智囊团");
+//                NSLog(@"智囊团");
                 return;
             }
             

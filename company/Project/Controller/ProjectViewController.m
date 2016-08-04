@@ -420,7 +420,7 @@
         }
     }
 }
-#pragma mark -下载认证信息
+#pragma mark -------------------下载认证信息--------------------------
 -(void)loadAuthenData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
@@ -517,7 +517,6 @@
                     listModel.projectId = project.projectId;
                     listModel.timeLeft = project.timeLeft;
                     
-                    //少一个areas数组
                     listModel.areas = [project.industoryType componentsSeparatedByString:@"，"];
                     listModel.collectionCount = project.collectionCount;
                     if (project.roadshows.count) {
@@ -780,9 +779,6 @@
     }
     return 172;
 }
-
-
-
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

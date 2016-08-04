@@ -248,7 +248,11 @@
     [_whiteImage addSubview:_address];
     DetailCity *city = authentics.city;
     DetailProvince *province = city.province;
-    _address.text = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
+    if ([city.name isEqualToString:@"北京市"] || [city.name isEqualToString:@"上海市"] || [city.name isEqualToString:@"天津市"] || [city.name isEqualToString:@"重庆市"] || [city.name isEqualToString:@"香港"] || [city.name isEqualToString:@"澳门"] || [city.name isEqualToString:@"钓鱼岛"]) {
+        _address.text = [NSString stringWithFormat:@"%@",province.name];
+    }else{
+        _address.text = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
+    }
     
     //透明的View
     _firstView = [[UIView alloc]init];

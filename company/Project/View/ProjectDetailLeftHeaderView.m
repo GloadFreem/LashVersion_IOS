@@ -13,7 +13,6 @@
 #import "ZMProgressView.h"
 CGFloat __maxContentLabelHeight = 0; //根据具体font来定
 
-
 @implementation ProjectDetailLeftHeaderView
 {
     UIView *_topView;                //顶部阴影区
@@ -68,15 +67,16 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _topView.backgroundColor = colorGray;
     
     //状态图标
-    UIImage *statusImage = [UIImage imageNamed:@"icon_statusbg"];
-    _statusImage = [[UIImageView alloc]initWithImage:statusImage];
+//    UIImage *statusImage = [UIImage imageNamed:@"icon_statusbg"];
+//    _statusImage = [[UIImageView alloc]initWithImage:statusImage];
+    _statusImage = [UIImageView new];
     
     //状态语
-    _statusLabel = [UILabel new];
-    _statusLabel.font = BGFont(18);
-    _statusLabel.textAlignment = NSTextAlignmentCenter;
-    _statusLabel.textColor = [UIColor whiteColor];
-    _statusLabel.numberOfLines = 4;
+//    _statusLabel = [UILabel new];
+//    _statusLabel.font = BGFont(18);
+//    _statusLabel.textAlignment = NSTextAlignmentCenter;
+//    _statusLabel.textColor = [UIColor whiteColor];
+//    _statusLabel.numberOfLines = 4;
     
     //进度条
     _progress = [[ZMProgressView alloc]initWithLineColor:orangeColor loopColor:[UIColor lightGrayColor]];
@@ -174,7 +174,7 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     [_moreBtn setBackgroundImage:[UIImage imageNamed:@"icon_more"] forState:UIControlStateNormal];
     [_moreBtn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
     
-    NSArray *views = @[_topView, _iconImage, _progress,_projectLabel, _partLine, _statusImage, _statusLabel, _goalImage, _goalLabel, _goalNumber, _achieveImage, _achieveLabel, _achieveNumber, _timeImage, _timeLabel, _timeNumber,  _addressImage, _addressLabel, _addressContent, _contentLabel, _picContainerView, _moreBtn];
+    NSArray *views = @[_topView, _iconImage, _progress,_projectLabel, _partLine, _statusImage, _goalImage, _goalLabel, _goalNumber, _achieveImage, _achieveLabel, _achieveNumber, _timeImage, _timeLabel, _timeNumber,  _addressImage, _addressLabel, _addressContent, _contentLabel, _picContainerView, _moreBtn];
     [self sd_addSubviews:views];
     
     _topView.sd_layout
@@ -213,11 +213,11 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     .widthIs(56)
     .heightIs(111);
     
-    _statusLabel.sd_layout
-    .topSpaceToView(self ,10)
-    .centerXEqualToView(_statusImage)
-    .widthIs(20)
-    .heightIs(91);
+//    _statusLabel.sd_layout
+//    .topSpaceToView(self ,10)
+//    .centerXEqualToView(_statusImage)
+//    .widthIs(20)
+//    .heightIs(91);
     
     _goalImage.sd_layout
     .leftSpaceToView(self, 25)
@@ -320,8 +320,20 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     [_timeNumber sizeToFit];
     _addressContent.text = model.addressStr;
     [_addressContent sizeToFit];
-    _statusLabel.text = model.statusStr;
+//    _statusLabel.text = model.statusStr;
     _contentLabel.text = model.content;
+    
+    UIImage *image;
+    if ([model.statusStr isEqualToString:@"融资成功"]) {
+        image = [UIImage imageNamed:@"icon_detail_success"];
+    }
+    if ([model.statusStr isEqualToString:@"融资中"]) {
+        image = [UIImage imageNamed:@"icon_detail_rasing"];
+    }
+    if ([model.statusStr isEqualToString:@"待路演"]) {
+        image = [UIImage imageNamed:@"icon_detail_noRoad"];
+    }
+    _statusImage.image = image;
     
     if (isFirst) {
         _progress.animatable = YES;

@@ -86,7 +86,7 @@
                 [_idArray addObject:dic[@"provinceId"]];
             }
             
-            NSLog(@"数据下载成功");
+//            NSLog(@"数据下载成功");
             [_tableView reloadData];
         }
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];

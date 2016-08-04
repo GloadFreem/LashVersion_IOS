@@ -684,7 +684,7 @@
         
     }
     //子scrollView的偏移量
-    NSLog(@"移动%f",SCREENWIDTH*(sender.tag-10));
+//    NSLog(@"移动%f",SCREENWIDTH*(sender.tag-10));
     _subViewScrollView.contentOffset=CGPointMake(SCREENWIDTH*(sender.tag-10), 0);
     
     //重置子scrollView的大小  以及父scrollView的contentSize
@@ -1071,7 +1071,7 @@
     return NO;
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    NSLog(@"开始编辑");
+//    NSLog(@"开始编辑");
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
@@ -1079,7 +1079,7 @@
         
         self.textField.text = textField.text;
     }
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
 }
 
 

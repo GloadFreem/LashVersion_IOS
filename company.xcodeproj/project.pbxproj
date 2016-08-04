@@ -800,7 +800,6 @@
 		443730751D3FCC4600DED1D6 /* CircleListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 443730631D3FCC4600DED1D6 /* CircleListModel.m */; };
 		443730761D3FCC4600DED1D6 /* CircleDetailCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 443730661D3FCC4600DED1D6 /* CircleDetailCommentCell.m */; };
 		443730771D3FCC4600DED1D6 /* CircleDetailHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 443730681D3FCC4600DED1D6 /* CircleDetailHeaderCell.m */; };
-		443730781D3FCC4600DED1D6 /* CircleDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4437306A1D3FCC4600DED1D6 /* CircleDetailHeaderView.m */; };
 		443730791D3FCC4600DED1D6 /* CircleListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4437306C1D3FCC4600DED1D6 /* CircleListCell.m */; };
 		4437307A1D3FCC4600DED1D6 /* CircleShareBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4437306E1D3FCC4600DED1D6 /* CircleShareBottomView.m */; };
 		443730B21D3FCC5600DED1D6 /* ActivityAttendListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4437307E1D3FCC5600DED1D6 /* ActivityAttendListViewController.m */; };
@@ -951,6 +950,12 @@
 		44AC3A061D49E39D00D9C878 /* icon_success@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44AC3A041D49E39D00D9C878 /* icon_success@3x.png */; };
 		44AC3A091D4A12D100D9C878 /* icon_success_list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44AC3A071D4A12D100D9C878 /* icon_success_list@2x.png */; };
 		44AC3A0A1D4A12D100D9C878 /* icon_success_list@3x .png in Resources */ = {isa = PBXBuildFile; fileRef = 44AC3A081D4A12D100D9C878 /* icon_success_list@3x .png */; };
+		44D1382F1D4B0217000132ED /* icon_detail_noRoad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D138291D4B0217000132ED /* icon_detail_noRoad@2x.png */; };
+		44D138301D4B0217000132ED /* icon_detail_noRoad@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D1382A1D4B0217000132ED /* icon_detail_noRoad@3x.png */; };
+		44D138311D4B0217000132ED /* icon_detail_rasing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D1382B1D4B0217000132ED /* icon_detail_rasing@2x.png */; };
+		44D138321D4B0217000132ED /* icon_detail_rasing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D1382C1D4B0217000132ED /* icon_detail_rasing@3x.png */; };
+		44D138331D4B0217000132ED /* icon_detail_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D1382D1D4B0217000132ED /* icon_detail_success@2x.png */; };
+		44D138341D4B0217000132ED /* icon_detail_success@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D1382E1D4B0217000132ED /* icon_detail_success@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1969,8 +1974,6 @@
 		443730661D3FCC4600DED1D6 /* CircleDetailCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailCommentCell.m; sourceTree = "<group>"; };
 		443730671D3FCC4600DED1D6 /* CircleDetailHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailHeaderCell.h; sourceTree = "<group>"; };
 		443730681D3FCC4600DED1D6 /* CircleDetailHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailHeaderCell.m; sourceTree = "<group>"; };
-		443730691D3FCC4600DED1D6 /* CircleDetailHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleDetailHeaderView.h; sourceTree = "<group>"; };
-		4437306A1D3FCC4600DED1D6 /* CircleDetailHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleDetailHeaderView.m; sourceTree = "<group>"; };
 		4437306B1D3FCC4600DED1D6 /* CircleListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleListCell.h; sourceTree = "<group>"; };
 		4437306C1D3FCC4600DED1D6 /* CircleListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleListCell.m; sourceTree = "<group>"; };
 		4437306D1D3FCC4600DED1D6 /* CircleShareBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleShareBottomView.h; sourceTree = "<group>"; };
@@ -2254,6 +2257,12 @@
 		44AC3A041D49E39D00D9C878 /* icon_success@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_success@3x.png"; sourceTree = "<group>"; };
 		44AC3A071D4A12D100D9C878 /* icon_success_list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_success_list@2x.png"; sourceTree = "<group>"; };
 		44AC3A081D4A12D100D9C878 /* icon_success_list@3x .png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_success_list@3x .png"; sourceTree = "<group>"; };
+		44D138291D4B0217000132ED /* icon_detail_noRoad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_noRoad@2x.png"; sourceTree = "<group>"; };
+		44D1382A1D4B0217000132ED /* icon_detail_noRoad@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_noRoad@3x.png"; sourceTree = "<group>"; };
+		44D1382B1D4B0217000132ED /* icon_detail_rasing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_rasing@2x.png"; sourceTree = "<group>"; };
+		44D1382C1D4B0217000132ED /* icon_detail_rasing@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_rasing@3x.png"; sourceTree = "<group>"; };
+		44D1382D1D4B0217000132ED /* icon_detail_success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_success@2x.png"; sourceTree = "<group>"; };
+		44D1382E1D4B0217000132ED /* icon_detail_success@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_success@3x.png"; sourceTree = "<group>"; };
 		88AB72B1372C8348B3F810BE /* Pods_company.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_company.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEFDAA502A93819A474A0120 /* Pods-company.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-company.release.xcconfig"; path = "Pods/Target Support Files/Pods-company/Pods-company.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2482,33 +2491,33 @@
 		443729A71D3FC7EF00DED1D6 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				443729A81D3FC7EF00DED1D6 /* LetterDetailViewController.h */,
-				443729A91D3FC7EF00DED1D6 /* LetterDetailViewController.m */,
-				443729AA1D3FC7EF00DED1D6 /* PaySuccessViewController.h */,
-				443729AB1D3FC7EF00DED1D6 /* PaySuccessViewController.m */,
+				443729BB1D3FC7EF00DED1D6 /* ProjectViewController.h */,
+				443729BC1D3FC7EF00DED1D6 /* ProjectViewController.m */,
+				443729BD1D3FC7EF00DED1D6 /* ProjectViewController.xib */,
 				443729AC1D3FC7EF00DED1D6 /* ProjectBannerDetailVC.h */,
 				443729AD1D3FC7EF00DED1D6 /* ProjectBannerDetailVC.m */,
 				443729AE1D3FC7EF00DED1D6 /* ProjectDetailController.h */,
 				443729AF1D3FC7EF00DED1D6 /* ProjectDetailController.m */,
 				443729B01D3FC7EF00DED1D6 /* ProjectDetailController.xib */,
+				443729B91D3FC7EF00DED1D6 /* ProjectSceneCommentVC.h */,
+				443729BA1D3FC7EF00DED1D6 /* ProjectSceneCommentVC.m */,
 				443729B11D3FC7EF00DED1D6 /* ProjectDetailInvestVC.h */,
 				443729B21D3FC7EF00DED1D6 /* ProjectDetailInvestVC.m */,
 				443729B31D3FC7EF00DED1D6 /* ProjectLetterViewController.h */,
 				443729B41D3FC7EF00DED1D6 /* ProjectLetterViewController.m */,
-				443729B51D3FC7EF00DED1D6 /* ProjectPrepareCommentVC.h */,
-				443729B61D3FC7EF00DED1D6 /* ProjectPrepareCommentVC.m */,
+				443729A81D3FC7EF00DED1D6 /* LetterDetailViewController.h */,
+				443729A91D3FC7EF00DED1D6 /* LetterDetailViewController.m */,
 				443729B71D3FC7EF00DED1D6 /* ProjectPrepareDetailVC.h */,
 				443729B81D3FC7EF00DED1D6 /* ProjectPrepareDetailVC.m */,
-				443729B91D3FC7EF00DED1D6 /* ProjectSceneCommentVC.h */,
-				443729BA1D3FC7EF00DED1D6 /* ProjectSceneCommentVC.m */,
-				443729BB1D3FC7EF00DED1D6 /* ProjectViewController.h */,
-				443729BC1D3FC7EF00DED1D6 /* ProjectViewController.m */,
-				443729BD1D3FC7EF00DED1D6 /* ProjectViewController.xib */,
+				443729B51D3FC7EF00DED1D6 /* ProjectPrepareCommentVC.h */,
+				443729B61D3FC7EF00DED1D6 /* ProjectPrepareCommentVC.m */,
 				443729BE1D3FC7EF00DED1D6 /* UpProjectViewController.h */,
 				443729BF1D3FC7EF00DED1D6 /* UpProjectViewController.m */,
 				443729C01D3FC7EF00DED1D6 /* UpProjectViewController.xib */,
 				443729C11D3FC7EF00DED1D6 /* YeePayViewController.h */,
 				443729C21D3FC7EF00DED1D6 /* YeePayViewController.m */,
+				443729AA1D3FC7EF00DED1D6 /* PaySuccessViewController.h */,
+				443729AB1D3FC7EF00DED1D6 /* PaySuccessViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -3606,6 +3615,12 @@
 				44372CD21D3FCB5C00DED1D6 /* icon_raising@3x.png */,
 				44372CD31D3FCB5C00DED1D6 /* icon_roading@2x.png */,
 				44372CD41D3FCB5C00DED1D6 /* icon_roading@3x.png */,
+				44D138291D4B0217000132ED /* icon_detail_noRoad@2x.png */,
+				44D1382A1D4B0217000132ED /* icon_detail_noRoad@3x.png */,
+				44D1382B1D4B0217000132ED /* icon_detail_rasing@2x.png */,
+				44D1382C1D4B0217000132ED /* icon_detail_rasing@3x.png */,
+				44D1382D1D4B0217000132ED /* icon_detail_success@2x.png */,
+				44D1382E1D4B0217000132ED /* icon_detail_success@3x.png */,
 				44372CD51D3FCB5C00DED1D6 /* icon_share_btn@2x.png */,
 				44372CD61D3FCB5C00DED1D6 /* icon_share_btn@3x.png */,
 				44372CD71D3FCB5C00DED1D6 /* icon_statusbg@2x.png */,
@@ -3820,14 +3835,14 @@
 				44372F851D3FCC3600DED1D6 /* MineAccountRechargeVC.m */,
 				44372F861D3FCC3600DED1D6 /* MineActivityVC.h */,
 				44372F871D3FCC3600DED1D6 /* MineActivityVC.m */,
-				44372F881D3FCC3600DED1D6 /* MIneAreaVC.h */,
-				44372F891D3FCC3600DED1D6 /* MIneAreaVC.m */,
 				44372F8A1D3FCC3600DED1D6 /* MineAttentionVC.h */,
 				44372F8B1D3FCC3600DED1D6 /* MineAttentionVC.m */,
 				44372F8C1D3FCC3600DED1D6 /* MineCardVC.h */,
 				44372F8D1D3FCC3600DED1D6 /* MineCardVC.m */,
 				44372F8E1D3FCC3600DED1D6 /* MineDataVC.h */,
 				44372F8F1D3FCC3600DED1D6 /* MineDataVC.m */,
+				44372F881D3FCC3600DED1D6 /* MIneAreaVC.h */,
+				44372F891D3FCC3600DED1D6 /* MIneAreaVC.m */,
 				44372F901D3FCC3600DED1D6 /* MineDeatilAreaVC.h */,
 				44372F911D3FCC3600DED1D6 /* MineDeatilAreaVC.m */,
 				44372F921D3FCC3600DED1D6 /* MineGoldMingxiVC.h */,
@@ -4004,8 +4019,6 @@
 				443730661D3FCC4600DED1D6 /* CircleDetailCommentCell.m */,
 				443730671D3FCC4600DED1D6 /* CircleDetailHeaderCell.h */,
 				443730681D3FCC4600DED1D6 /* CircleDetailHeaderCell.m */,
-				443730691D3FCC4600DED1D6 /* CircleDetailHeaderView.h */,
-				4437306A1D3FCC4600DED1D6 /* CircleDetailHeaderView.m */,
 				4437306B1D3FCC4600DED1D6 /* CircleListCell.h */,
 				4437306C1D3FCC4600DED1D6 /* CircleListCell.m */,
 				4437306D1D3FCC4600DED1D6 /* CircleShareBottomView.h */,
@@ -4735,6 +4748,7 @@
 				44372EB81D3FCB5C00DED1D6 /* jintiao24.png in Resources */,
 				443730441D3FCC3600DED1D6 /* MineProjectCenterHeaderCell.xib in Resources */,
 				44372E6F1D3FCB5C00DED1D6 /* letterArrow@3x.png in Resources */,
+				44D138311D4B0217000132ED /* icon_detail_rasing@2x.png in Resources */,
 				44372EAF1D3FCB5C00DED1D6 /* jintiao15.png in Resources */,
 				44372E741D3FCB5C00DED1D6 /* LetterUnselected@2x.png in Resources */,
 				44372E761D3FCB5C00DED1D6 /* message@2x.png in Resources */,
@@ -4745,6 +4759,7 @@
 				44372E871D3FCB5C00DED1D6 /* bill_whitebg1@2x.png in Resources */,
 				44372EC31D3FCB5C00DED1D6 /* jintiao35.png in Resources */,
 				44372DBD1D3FCB5C00DED1D6 /* iconfont_dianzan@2x.png in Resources */,
+				44D138321D4B0217000132ED /* icon_detail_rasing@3x.png in Resources */,
 				44372DE91D3FCB5C00DED1D6 /* activity@2x.png in Resources */,
 				44372DC41D3FCB5C00DED1D6 /* i@3x.png in Resources */,
 				44372E2B1D3FCB5C00DED1D6 /* icon-1460354657038@2x.png in Resources */,
@@ -4834,6 +4849,7 @@
 				44372DA01D3FCB5C00DED1D6 /* mine_gold_whitebg@3x.png in Resources */,
 				44372E001D3FCB5C00DED1D6 /* mine@2x.png in Resources */,
 				44372EE01D3FCB5C00DED1D6 /* icon_share_btn@2x.png in Resources */,
+				44D1382F1D4B0217000132ED /* icon_detail_noRoad@2x.png in Resources */,
 				44AC3A0A1D4A12D100D9C878 /* icon_success_list@3x .png in Resources */,
 				44372DBE1D3FCB5C00DED1D6 /* iconfont_dianzan@3x.png in Resources */,
 				44372DFF1D3FCB5C00DED1D6 /* Contents.json in Resources */,
@@ -4845,6 +4861,7 @@
 				44372E2A1D3FCB5C00DED1D6 /* icon-1460354238081@3x.png in Resources */,
 				44372D8F1D3FCB5C00DED1D6 /* icon_open@2x.png in Resources */,
 				44372DDC1D3FCB5C00DED1D6 /* logo_pingtai@3x.png in Resources */,
+				44D138301D4B0217000132ED /* icon_detail_noRoad@3x.png in Resources */,
 				44372DC81D3FCB5C00DED1D6 /* icon_name_unselect@3x.png in Resources */,
 				44372E531D3FCB5C00DED1D6 /* iconfont_zan@3x.png in Resources */,
 				44372D3E1D3FCB5C00DED1D6 /* ImageSelectedOff.png in Resources */,
@@ -5021,6 +5038,7 @@
 				44372F0F1D3FCB5C00DED1D6 /* 多边形-2@2x.png in Resources */,
 				44372EC81D3FCB5C00DED1D6 /* Documents@2x.png in Resources */,
 				44372ED01D3FCB5C00DED1D6 /* icon_collect@2x.png in Resources */,
+				44D138331D4B0217000132ED /* icon_detail_success@2x.png in Resources */,
 				44372E371D3FCB5C00DED1D6 /* thinkTank_whitebg@3x.png in Resources */,
 				4484D1B21D193712001F4C3A /* UMSCommentDetailController.xib in Resources */,
 				44372DF81D3FCB5C00DED1D6 /* dock_bg@3x.png in Resources */,
@@ -5106,6 +5124,7 @@
 				44372DE41D3FCB5C00DED1D6 /* logo_wallet@3x.png in Resources */,
 				44372DB41D3FCB5C00DED1D6 /* icon_commit@3x.png in Resources */,
 				44372E591D3FCB5C00DED1D6 /* icon-logo@3x.png in Resources */,
+				44D138341D4B0217000132ED /* icon_detail_success@3x.png in Resources */,
 				44372E411D3FCB5C00DED1D6 /* icon_answer@3x.png in Resources */,
 				44372D321D3FCB5C00DED1D6 /* imagebj@3x.png in Resources */,
 				44372E9D1D3FCB5C00DED1D6 /* 圆角矩形-5-拷贝@2x.png in Resources */,
@@ -5350,7 +5369,6 @@
 			files = (
 				443730051D3FCC3600DED1D6 /* AppSetModifyPasswordVC.m in Sources */,
 				443730071D3FCC3600DED1D6 /* AppSetVC.m in Sources */,
-				443730781D3FCC4600DED1D6 /* CircleDetailHeaderView.m in Sources */,
 				443730281D3FCC3600DED1D6 /* BillDetailCellModel.m in Sources */,
 				44871B7A1D02B37800020DD9 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				443729371D3FC6DF00DED1D6 /* LoadingView.m in Sources */,

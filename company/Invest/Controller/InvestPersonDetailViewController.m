@@ -58,17 +58,17 @@
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
-    
+    NSLog(@"zhuangtai--%@----zhi---%@",_authenticName,_identiyTypeId);
     // Do any additional setup after loading the view from its nib.
     
     //获得partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:INVESTDETAIL];
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:SHAREINVESTOR];
     
-    [self startLoadData];
 //    [self startLoadShare];
-    [self createUI];
+    
 }
+
 -(void)startLoadShare
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",self.investorId,@"investorId",self.type,@"type", nil];
@@ -98,7 +98,7 @@
 {
 //    NSLog(@"----%@",self.investorId);
 //    NSLog(@"----- 数量%@",self.attentionCount);
-    [SVProgressHUD show];
+    [SVProgressHUD showWithStatus:@"加载中..."];
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.investorId,@"investorId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:INVEST_LIST_DETAIL postParam:dic type:1 delegate:self sel:@selector(requestInvestDetail:)];
@@ -107,7 +107,7 @@
 -(void)requestInvestDetail:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
+        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -118,9 +118,7 @@
             self.attentionCount = [NSString stringWithFormat:@"%ld",(long)detailModel.collectCount];
             
             _model = detailModel;
-//            NSLog(@"dayin模型----%@",_model);
-            
-            
+    
         }else{
           [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
@@ -199,11 +197,14 @@
     DetailCity *city = authentics.city;
     DetailProvince *province = city.province;
     _whiteView.companyLabel.text = authentics.companyName;
-    _whiteView.addressLabel.text = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
+    if ([city.name isEqualToString:@"北京市"] || [city.name isEqualToString:@"上海市"] || [city.name isEqualToString:@"天津市"] || [city.name isEqualToString:@"重庆市"] || [city.name isEqualToString:@"香港"] || [city.name isEqualToString:@"澳门"] || [city.name isEqualToString:@"钓鱼岛"]) {
+        _whiteView.addressLabel.text = [NSString stringWithFormat:@"%@",province.name];
+    }else{
+        _whiteView.addressLabel.text = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
+    }
     //拿到投资领域
     _whiteView.areas = _model.areas;
     //领域赋值
-    
     
     [_scrollView addSubview:_whiteView];
     [_whiteView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -563,7 +564,12 @@
             flag = @"2";
             
         }
+        NSLog(@"dayin模型----%@",_model.user);
+        NSLog(@"打印flag---%@",flag);
+        NSLog(@"打印partner---%@",self.investorCollectPartner);
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_model.user.userId],@"userId",flag,@"flag", nil];
+        NSLog(@"数据字典---%@",dic);
+        
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
     }
@@ -581,7 +587,7 @@
 -(void)requestInvestorCollect:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -604,17 +610,21 @@
             _attentionCount = [NSString stringWithFormat:@"%ld",(long)count];
             
 
-            NSLog(@"关注成功");
+//            NSLog(@"关注成功");
         }else{
-            NSLog(@"关注失败");
+//            NSLog(@"关注失败");
         }
     }
 }
 
-
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    NSLog(@"zhuangtai--%@----zhi---%@",_authenticName,_identiyTypeId);
+    [self startLoadData];
+    [self createUI];
+    
     self.navigationController.navigationBar.hidden = YES;
     
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
@@ -644,7 +654,7 @@
     [super viewWillDisappear:animated];
     
     self.navigationController.navigationBar.hidden = NO;
-    
+    [SVProgressHUD dismiss];
 }
 
 - (void)didReceiveMemoryWarning {

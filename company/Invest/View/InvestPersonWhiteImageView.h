@@ -22,6 +22,7 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *middleBtn;
 
+
 @property (weak, nonatomic) IBOutlet UIButton *rightBtn;
 
 @property (nonatomic, strong) NSArray *areas;
@@ -29,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *middleBtnWidth;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *middleBtnCenterX;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftBtnWidth;
 
 
 #pragma mark- 实例化视图

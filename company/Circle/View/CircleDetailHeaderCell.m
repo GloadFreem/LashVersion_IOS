@@ -206,6 +206,11 @@
     
     _positionLabel.text = model.positionStr;
     [_positionLabel sizeToFit];
+    if ([model.positionStr isEqualToString:@""]) {
+        [_shuView setHidden:YES];
+    }else{
+        [_shuView setHidden:NO];
+    }
     
     _timeLabel.text = [TDUtil getDateCha:model.timeSTr];
     [_timeLabel sizeToFit];
