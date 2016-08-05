@@ -12,6 +12,8 @@
 @interface ProjectBannerDetailVC ()<UIWebViewDelegate,CircleShareBottomViewDelegate>
 @property (strong, nonatomic) UIWebView * webView;
 @property (nonatomic,strong)UIView * bottomView;
+@property (strong, nonatomic) UIView *gifView;
+@property (strong, nonatomic) UIImageView *gifImageView;
 
 @end
 
@@ -20,6 +22,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self.view setBackgroundColor:[UIColor whiteColor]];
     
     [self setNav];
     _webView  =[[UIWebView alloc]initWithFrame:self.view.frame];
@@ -44,6 +48,31 @@
     
     self.navigationItem.title = @"详情";
 }
+
+#pragma mark-----创建loadingView
+-(void)createLoadingView
+{
+    _gifView = [[UIView alloc]initWithFrame:self.view.frame];
+    _gifView.backgroundColor = [UIColor blackColor];
+    _gifView.alpha = 0.3;
+    [self.view addSubview:_gifView];
+    
+    
+    _gifImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 174, 174)];
+    _gifImageView.center = self.view.center;
+    UIImage *image = [UIImage sd_animatedGIFNamed:@"jinzhit001"];
+    _gifImageView.image = image;
+    [self.view addSubview:_gifImageView];
+    
+}
+#pragma mark----移除loadingView
+-(void)removeLoadingView
+{
+    [_gifImageView removeFromSuperview];
+    [_gifView removeFromSuperview];
+    [self.view addSubview:_webView];
+}
+
 
 -(void)leftBack
 {
@@ -191,21 +220,20 @@
     }else{
         [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_url]]];
     }
-    [self.view addSubview:_webView];
     
 }
 
 -(void)webViewDidStartLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
-        [SVProgressHUD showWithStatus:@"加载中..."];
+//        [SVProgressHUD showWithStatus:@"加载中..."];
     }
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
-        [SVProgressHUD dismiss];
+        [self removeLoadingView];
     }
     
 }
@@ -213,7 +241,7 @@
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     if (webView == self.webView) {
-        [SVProgressHUD dismiss];
+        [self removeLoadingView];
     }
     [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"加载失败"];
 }
@@ -225,6 +253,8 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self createLoadingView];    //创建加载动画
+    
     [self.navigationController.navigationBar setHidden:NO];
     
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
@@ -257,7 +287,8 @@
 {
     [super viewWillDisappear:animated];
     
-    [SVProgressHUD dismiss];
+    [self removeLoadingView];
+//    [SVProgressHUD dismiss];
 }
 
 @end

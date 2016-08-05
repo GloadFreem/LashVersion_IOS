@@ -263,6 +263,7 @@
             
              NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.wePartner,@"partner",snsAccount.openId,@"wechatID",@"1",@"platform",regId,@"regid", nil];
             
+            [SVProgressHUD showWithStatus:@"登录中..."];
             //开始请求
             [self.httpUtil getDataFromAPIWithOps:WECHATLOGINUSER postParam:dic type:0 delegate:self sel:@selector(requestWELogin:)];
             
@@ -281,6 +282,9 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            
+            [SVProgressHUD dismiss];
+            
             NSDictionary *data= [jsonDic valueForKey:@"data"];
             NSDictionary *idenTypeDic = [NSDictionary dictionaryWithDictionary:[data valueForKey:@"identityType"]];
             NSString *name = idenTypeDic[@"name"];
@@ -316,9 +320,11 @@
             }
             
         }else{
+        [SVProgressHUD dismiss];
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -341,7 +347,7 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
+    [SVProgressHUD dismiss];
 }
 -(void)dealloc
 {

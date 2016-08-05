@@ -142,7 +142,7 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _timeNumber.font = BGFont(14);
     
     //所在地
-    UIImage *addressImage = [UIImage imageNamed:@"地址"];
+    UIImage *addressImage = [UIImage imageNamed:@"icon_pro_address"];
     _addressImage = [[UIImageView alloc]initWithImage:addressImage];
     
     _addressLabel = [UILabel new];

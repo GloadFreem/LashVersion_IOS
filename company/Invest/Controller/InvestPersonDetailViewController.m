@@ -58,7 +58,7 @@
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
-    NSLog(@"zhuangtai--%@----zhi---%@",_authenticName,_identiyTypeId);
+//    NSLog(@"zhuangtai--%@----zhi---%@",_authenticName,_identiyTypeId);
     // Do any additional setup after loading the view from its nib.
     
     //获得partner
@@ -107,7 +107,7 @@
 -(void)requestInvestDetail:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-        NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -564,11 +564,11 @@
             flag = @"2";
             
         }
-        NSLog(@"dayin模型----%@",_model.user);
-        NSLog(@"打印flag---%@",flag);
-        NSLog(@"打印partner---%@",self.investorCollectPartner);
+//        NSLog(@"dayin模型----%@",_model.user);
+//        NSLog(@"打印flag---%@",flag);
+//        NSLog(@"打印partner---%@",self.investorCollectPartner);
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_model.user.userId],@"userId",flag,@"flag", nil];
-        NSLog(@"数据字典---%@",dic);
+//        NSLog(@"数据字典---%@",dic);
         
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
@@ -587,7 +587,7 @@
 -(void)requestInvestorCollect:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -621,7 +621,7 @@
 {
     [super viewWillAppear:animated];
     
-    NSLog(@"zhuangtai--%@----zhi---%@",_authenticName,_identiyTypeId);
+//    NSLog(@"zhuangtai--%@----zhi---%@",_authenticName,_identiyTypeId);
     [self startLoadData];
     [self createUI];
     

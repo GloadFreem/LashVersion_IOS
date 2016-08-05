@@ -136,7 +136,7 @@
 -(void)toWithdrawConfirm:(NSDictionary*)dic
 {
     [self withDraw];
-    NSLog(@"%@",dic);
+//    NSLog(@"%@",dic);
     [self back:nil];
     
 }
@@ -189,7 +189,7 @@
  */
 -(void)verify:(NSDictionary*)dic
 {
-    NSLog(@"%@",dic);
+//    NSLog(@"%@",dic);
     
     _tradeCode = dic[@"requestNo"];
     switch (self.state) {
@@ -319,7 +319,7 @@
 
 -(void)finialConfirm:(NSDictionary*)dicData
 {
-    NSLog(@"%@",dicData);
+//    NSLog(@"%@",dicData);
     if ([DICVFK(dicData, @"code") intValue]==1) {
         self.canBack = NO;
     }
@@ -357,7 +357,7 @@
 
 -(void)tenderConfirm:(NSDictionary*)dicData
 {
-    NSLog(@"%@",dicData);
+//    NSLog(@"%@",dicData);
 //    self.startLoading = YES;
     NSMutableDictionary* dic = [[NSMutableDictionary alloc]init];
     float mount = [DICVFK(self.dic, @"mount") floatValue];
