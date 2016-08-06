@@ -88,12 +88,11 @@
 @property (nonatomic, copy) NSString *commentStr; //评论内容
 @property (nonatomic, assign) NSInteger sceneId;
 
-
 @property (nonatomic, strong) UITextField *textField;
 
 @property (nonatomic, copy) NSString *collectPartner;
 
-@property (nonatomic, copy) NSString *sharePartner;
+@property (nonatomic, copy) NSString *sharePartner;    //分享的部分内容
 @property (nonatomic, copy) NSString *shareContent;
 @property (nonatomic, copy) NSString *shareurl;
 @property (nonatomic, copy) NSString *shareImage;
