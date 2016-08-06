@@ -45,7 +45,6 @@
 
 #pragma mark- 自定义类别
 #import "UIBarButtonItem+LYJ.h"
-#import "UIViewController+NavBarHidden.h"
 #import "UIView+Extension.h"
 
 #pragma mark -searchbar
