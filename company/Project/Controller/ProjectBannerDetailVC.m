@@ -58,8 +58,9 @@
     [self.view addSubview:_gifView];
     
     
-    _gifImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 174, 174)];
-    _gifImageView.center = self.view.center;
+    _gifImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 174*WIDTHCONFIG, 174*WIDTHCONFIG)];
+    _gifImageView.centerX = self.view.centerX;
+    _gifImageView.centerY = self.view.centerY - 50*WIDTHCONFIG;
     UIImage *image = [UIImage sd_animatedGIFNamed:@"jinzhit001"];
     _gifImageView.image = image;
     [self.view addSubview:_gifImageView];

@@ -145,13 +145,12 @@
     [self loadShareData];
     [self loadSceneData];
     
-    
     _heightArray = [NSMutableArray array];                  //子视图高度数组
     
     _scrollView.bounces = NO;                               //关闭弹性
     
     _scrollView.autoresizingMask = UIViewAutoresizingNone;
-    //添加广告栏
+    
     //下载客服电话
     [self loadServicePhone];
     
@@ -252,8 +251,7 @@
     _titleArray = @[@"详情",@"成员",@"现场"];
     _lineColor = orangeColor;
     _type = 0;
-    [_scrollView addSubview:self.titleScrollView];
-            //添加点击按钮
+    [_scrollView addSubview:self.titleScrollView];          //添加点击按钮
     [_scrollView addSubview:self.subViewScrollView];        //添加最下边scrollview
     
     [_scrollView setupAutoContentSizeWithBottomView:_subViewScrollView bottomMargin:0];
@@ -376,7 +374,7 @@
         [button setTitle:_titleArray[i] forState:UIControlStateNormal];
         [button.titleLabel setFont:titleFont];
         button.tag = i+10;
-        
+        //默认选中现场界面
         i==2 ? [button setTitleColor:selectTitleColor forState:UIControlStateNormal] : [button setTitleColor: unselectTitleColor forState:UIControlStateNormal];
         
         [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -386,7 +384,7 @@
     
     _lineView = [[UIView alloc] initWithFrame:CGRectZero];
     [_lineView setBackgroundColor:self.lineColor ? _lineColor : defaultLineColor];
-    
+    //默认停留现场界面
     if (self.type == 0) {
         
         _lineView.frame = CGRectMake(2*SCREENWIDTH/3, CGRectGetHeight(_titleScrollView.frame)-2, SCREENWIDTH/3, 2.1);
@@ -434,10 +432,48 @@
         
         [_heightArray addObject:[NSNumber numberWithFloat:_leftView.height]];
         
+        //实例化认投底部按钮视图
+        [self.view addSubview:self.bottomView];
+        
+        
+        //实例化成员分页面
+        member = [ProjectDetailMemberView instancetationProjectDetailMemberView];
+        member.projectId = self.projectId;
+        member.frame = CGRectMake(SCREENWIDTH, 0, SCREENWIDTH, member.viewHeight +64);
+        [_heightArray addObject:[NSNumber numberWithFloat:member.viewHeight]];
+        [_subViewScrollView addSubview:member];
+        
+        
+        //实例化现场界面
+         scene =[[ProjectDetailSceneView alloc]initWithFrame:CGRectMake(2*SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT-CGRectGetMaxY(_titleScrollView.frame) - 64)];
+        scene.projectId = self.projectId;
+        scene.delegate = self;
+        scene.authenticName = self.authenticName;
+        scene.bannerView = bannerView;
+        [_subViewScrollView addSubview:scene];
+        
+        _subViewScrollView.y = POS_Y(_titleScrollView);
+        _subViewScrollView.height = scene.height;
+        _subViewScrollView.width = SCREENWIDTH;
+        
+        //加底部回复框
+        [self.view addSubview:self.footer];
+        
+    }
+    
+    [_footer setHidden:NO];
+    [_bottomView setHidden:YES];
+    _subViewScrollView.contentOffset=CGPointMake(SCREENWIDTH*2, 0);
+    
+    return _subViewScrollView;
+}
+#pragma mark-----实例化底部按钮视图------------- 认投------------
+-(UIView*)bottomView
+{
+    if (!_bottomView) {
         //实例化底部按钮视图
         _bottomView = [UIView new];
         [_bottomView setBackgroundColor:[UIColor whiteColor]];
-        [self.view addSubview:_bottomView];
         [_bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.mas_equalTo(0);
             make.height.mas_equalTo(50);
@@ -478,32 +514,18 @@
             make.right.mas_equalTo(_bottomView.mas_right).offset(-8*WIDTHCONFIG);
             make.height.mas_equalTo(_kefuBtn.mas_height);
         }];
-
-        //实例化成员分页面
-        member = [ProjectDetailMemberView instancetationProjectDetailMemberView];
-        member.projectId = self.projectId;
-        member.frame = CGRectMake(SCREENWIDTH, 0, SCREENWIDTH, member.viewHeight +64);
-        [_heightArray addObject:[NSNumber numberWithFloat:member.viewHeight]];
-        [_subViewScrollView addSubview:member];
-        
-        //实例化现场界面
-         scene =[[ProjectDetailSceneView alloc]initWithFrame:CGRectMake(2*SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT-CGRectGetMaxY(_titleScrollView.frame) - 64)];
-        scene.projectId = self.projectId;
-        scene.delegate = self;
-        scene.authenticName = self.authenticName;
-        scene.bannerView = bannerView;
-        [_subViewScrollView addSubview:scene];
-        
-        _subViewScrollView.y = POS_Y(_titleScrollView);
-        _subViewScrollView.height = scene.height;
-        _subViewScrollView.width = SCREENWIDTH;
-        
-        //加底部回复框
+    }
+    return _bottomView;
+}
+#pragma mark--------------底部回复框--------------
+-(UIView*)footer
+{
+    if (!_footer) {
         _footer =[[UIView alloc]init];
-//        _footer.backgroundColor = [UIColor redColor];
+        //        _footer.backgroundColor = [UIColor redColor];
         _footer.frame = CGRectMake(0, SCREENHEIGHT-50, SCREENWIDTH, 50);
         _footer.hidden = YES;
-        [self.view addSubview:_footer];
+        
         
         _textField = [[UITextField alloc]init];
         _textField.layer.cornerRadius = 2;
@@ -540,15 +562,9 @@
             make.width.mas_equalTo(70);
         }];
     }
-    
-    [_footer setHidden:NO];
-    [_bottomView setHidden:YES];
-    _subViewScrollView.contentOffset=CGPointMake(SCREENWIDTH*2, 0);
-    
-    return _subViewScrollView;
+    return _footer;
 }
-
-#pragma mark -发送信息
+#pragma mark -----------------发送信息---------------------
 -(void)sendMessage:(UIButton*)btn
 {
     [self.textField resignFirstResponder];
@@ -788,7 +804,8 @@
     _subViewScrollView.height = _leftView.height;
     [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
 }
-#pragma mark - 底部按钮点击事件
+
+#pragma mark ---------------------- 底部按钮点击事件------------------
 -(void)btnClick:(UIButton*)btn
 {
     if (btn.tag == 0) {
@@ -798,7 +815,7 @@
 //        NSLog(@"电话---%@",tel);
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",tel]]];
 }
-#pragma mark ---------------进入投资界面---------------------
+#pragma mark -----------------------进入投资界面---------------------
     if (btn.tag == 1) {
         if ([_authenticName isEqualToString:@"已认证"]) {
             ProjectDetailInvestVC *vc = [ProjectDetailInvestVC new];
@@ -875,7 +892,7 @@
     }
     
 }
-#pragma mark ---------------开始分享------------------------
+#pragma mark ------------------------------开始分享---------------------------------
 
 - (UIView*)topView {
     UIViewController *recentView = self;
@@ -1015,7 +1032,7 @@
     
 }
 
-#pragma mark -收藏
+#pragma mark ------------------------------收藏----------------------------
 - (IBAction)collectBtn:(UIButton *)sender {
     
     if ([_authenticName isEqualToString:@"已认证"]){
@@ -1041,7 +1058,6 @@
     {
         [self presentAlertView];
     }
-    
     
 }
 

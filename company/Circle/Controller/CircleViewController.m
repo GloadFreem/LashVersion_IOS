@@ -13,8 +13,6 @@
 #import "CircleShareBottomView.h"
 #import "RenzhengViewController.h"
 
-#import "CircleForwardVC.h"
-
 #import "CircleListModel.h"
 #import "CircleListCell.h"
 #import "CircleReleaseVC.h"
