@@ -284,31 +284,6 @@
     NSLog(@"结束编辑");
 }
 
-
-//#pragma mark- textView  delegate
-//
-//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
-//    if ([text isEqualToString:@"\n"]) {
-//        [textView resignFirstResponder];
-//        return NO;
-//    }
-//    return YES;
-//}
-//
-//-(void)textViewDidBeginEditing:(UITextView *)textView
-//{
-//    NSLog(@"开始编辑");
-//}
-//
-//-(void)textViewDidChange:(UITextView *)textView
-//{
-//    if (![textView.text isEqualToString:@""]) {
-//        self.textView.text = textView.text;
-//    }
-//    NSLog(@"正在编辑");
-//}
-
-
 - (CGFloat)cellContentViewWith
 {
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
@@ -327,6 +302,7 @@
     [self.navigationController.navigationBar setHidden:NO];
     
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -410,22 +410,6 @@
     
 }
 
-//-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-//{
-//    if(!footerView)
-//    {
-//        footerView  = [[ActivityCommentListFooterView alloc]init];
-//        footerView.delegate = self;
-//    }
-//    
-//    return footerView;
-//}
-//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{   
-//    return footerView.height;
-//}
-
-
 - (CGFloat)cellContentViewWith
 {
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
@@ -477,7 +461,7 @@
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
-    NSLog(@"开始编辑");
+//    NSLog(@"开始编辑");
     _textField.text = @"";
 }
 
@@ -487,7 +471,7 @@
         
         self.textField.text = textField.text;
     }
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
 }
 
 #pragma footerDelegate
@@ -505,8 +489,6 @@
 
 -(void)didClickCommentButton
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
         //更新约束
 //        [self updateFrame];
         [_bottomView setHidden:NO];
@@ -516,17 +498,6 @@
         _textField.placeholder = @"";
         //恢复为评论状态
         self.commentToUser = @"0";
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
     
 }
 
@@ -542,49 +513,13 @@
  */
 -(void)actionPrise
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
+
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionPrisePartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", (long)self.headerModel.flag),@"flag", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:ACTION_PRISE postParam:dic type:0 delegate:self sel:@selector(requestPriseAction:)];
-    }
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
+
 }
 
--(void)presentAlertView
-{
-    //没有认证 提醒去认证
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
-    __block ActivityCommentListViewController* blockSelf = self;
-    
-    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [blockSelf btnCertain:nil];
-    }];
-    
-    [alertController addAction:cancleAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
--(void)btnCertain:(id)sender
-{
-    RenzhengViewController  * renzheng = [RenzhengViewController new];
-    renzheng.identifyType = self.identiyTypeId;
-    [self.navigationController pushViewController:renzheng animated:YES];
-    
-}
 
 -(void)requestPriseAction:(ASIHTTPRequest*)request
 {
@@ -636,8 +571,7 @@
  */
 -(void)actionComment
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
+
         NSString * content = self.textField.text;
         if([content isEqualToString:@""] ||[content isEqualToString:@"请输入评论内容"])
         {
@@ -664,17 +598,7 @@
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%d", flag),@"flag",content,@"content",self.commentToUser,@"atUserId", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestCommentAction:)];
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
+
 }
 
 -(void)requestCommentAction:(ASIHTTPRequest*)request

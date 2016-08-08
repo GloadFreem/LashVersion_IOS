@@ -16,9 +16,9 @@
 
 #import "InvestPersonDetailViewController.h"
 #import "InvestThinkTankDetailVC.h"
-#import "InvestWebViewController.h"
 #import "InvestCommitProjectVC.h"
 #import "RenzhengViewController.h"
+#import "PingTaiWebViewController.h"
 
 #import "InvestBaseModel.h"
 #import "InvestListModel.h"
@@ -659,9 +659,10 @@
         if (indexPath.section == 0) {
             
             OrganizationFirstModel *model = _investOrganizationArray[indexPath.row];
-            InvestWebViewController *webView = [InvestWebViewController new];
+            PingTaiWebViewController *webView = [PingTaiWebViewController new];
             
             webView.url = model.url;
+            webView.titleStr = @"基金详情";
             [self.navigationController pushViewController:webView animated:YES];
 
         }
@@ -764,58 +765,18 @@
 
 -(void)didClickCommitBtn:(InvestPersonCell *)cell andModel:(InvestListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
         InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
 
         vc.model = model;
         vc.viewController = self;
         
         [self.navigationController pushViewController:vc animated:YES];
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
-}
-
--(void)presentAlertView
-{
-    //没有认证 提醒去认证
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
-    __block InvestViewController* blockSelf = self;
-    
-    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [blockSelf btnCertain:nil];
-    }];
-    
-    [alertController addAction:cancleAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
--(void)btnCertain:(id)sender
-{
-    RenzhengViewController  * renzheng = [RenzhengViewController new];
-    renzheng.identifyType = self.identiyTypeId;
-    [self.navigationController pushViewController:renzheng animated:YES];
 }
 
 
 -(void)didClickAttentionBtn:(InvestPersonCell *)cell andModel:(InvestListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
-   if ([_authenticName isEqualToString:@"已认证"])
-   {
+
        klistModel = model;
        klistCell = cell;
        
@@ -897,17 +858,6 @@
        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
        //开始请求
        [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
-   }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
     
 }
 
@@ -935,29 +885,15 @@
 #pragma mark -----投资机构InvestOrganizationSecondCellDelegate-------------------
 -(void)didClickCommitBtn:(InvestOrganizationSecondCell *)cell andModel:(InvestListModel *)model
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
         InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
         vc.model = model;
         
         [self.navigationController pushViewController:vc animated:YES];
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
     
 }
 -(void)didClickAttentionBtn:(InvestOrganizationSecondCell *)cell andModel:(InvestListModel *)model
 {
-     if ([_authenticName isEqualToString:@"已认证"])
-     {
+
          klistModel = model;
          klistCell = cell;
          
@@ -1040,23 +976,12 @@
          //开始请求
          [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
 
-     }
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
 }
 
 #pragma mark -智囊团  ThinkTankCellDelegate -------------------------
 -(void)didClickAttentionBtnInCell:(ThinkTankCell*)cell andModel:(InvestListModel*)model
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
+
         klistModel = model;
         klistCell = cell;
         
@@ -1137,22 +1062,7 @@
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
-    }
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
-        
 }
-
-
-
-
 
 #pragma mark- 视图即将显示
 -(void)viewWillAppear:(BOOL)animated

@@ -81,7 +81,6 @@
     [self startLoadData];
 //    [self startLoadShare];
     
-//    [self setKeyScrollView:_scrollView scrolOffsetY:300 options:nil];
     [self createUI];
 }
 -(void)startLoadShare
@@ -132,35 +131,15 @@
             _model = detailModel;
             
 //            NSLog(@"dayin模型----%@",_model);
-            //2.设置导航栏内容
-//            [self setUpNavBar];
-            
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
-    
     [SVProgressHUD dismiss];
 }
-#pragma mark- 设置导航栏
--(void)setUpNavBar
-{
-    self.navigationItem.title = @"智囊团详情";
-    UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftback.tag = 0;
-    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(45, 30);
-    [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
-//    UIButton * shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    shareBtn.tag = 1;
-//    [shareBtn setBackgroundImage:[UIImage imageNamed:@"write-拷贝-2"] forState:UIControlStateNormal];
-//    shareBtn.size = shareBtn.currentBackgroundImage.size;
-//    [shareBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
-    
-}
+
+
 -(void)createUI
 {   //背景图片
     _backgroundImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
@@ -501,7 +480,7 @@
     }];
 }
 
-#pragma mark -btnAction
+#pragma mark ---------------btnAction---------------
 -(void)btnClick:(UIButton*)btn
 {
     if (btn.tag == 0) {
@@ -520,140 +499,12 @@
         [_viewController.tableView reloadData];
         [self.navigationController popViewControllerAnimated:YES];
     }
-#pragma mark -分享按钮处理
-    if (btn.tag == 1) {
-        [self startShare];
-    }
+
 }
 
-#pragma mark -开始分享
-
-- (UIView*)topView {
-    UIViewController *recentView = self;
-    while (recentView.parentViewController != nil) {
-        recentView = recentView.parentViewController;
-    }
-    return recentView.view;
-}
-
-/**
- *  点击空白区域shareView消失
- */
-
-- (void)dismissBG
-{
-    if(self.bottomView != nil)
-    {
-        [self.bottomView removeFromSuperview];
-    }
-}
-
--(void)startShare
-{
-    NSArray *titleList = @[@"QQ",@"微信",@"朋友圈",@"短信"];
-    NSArray *imageList = @[@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
-    CircleShareBottomView *share = [CircleShareBottomView new];
-    share.tag = 1;
-    [share createShareViewWithTitleArray:titleList imageArray:imageList];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
-    [share addGestureRecognizer:tap];
-    [[self topView] addSubview:share];
-    self.bottomView = share;
-    share.delegate = self;
-}
--(void)sendShareBtnWithView:(CircleShareBottomView *)view index:(int)index
-{
-    //分享
-    if (view.tag == 1) {
-        //得到用户SID
-        NSString * shareImage = _shareImage;
-        NSString *shareContentString = [NSString stringWithFormat:@"%@",_shareContent];
-        NSArray *arr = nil;
-        NSString *shareContent;
-        
-        switch (index) {
-            case 0:{
-                if ([QQApiInterface isQQInstalled])
-                {
-                    // QQ好友
-                    arr = @[UMShareToQQ];
-                    [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
-                }
-                else
-                {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的设备没有安装QQ" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                    [alert show];
-                    return;
-                }
-                
-            }
-                break;
-            case 1:{
-                // 微信好友
-                arr = @[UMShareToWechatSession];
-                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
-                
-//                NSLog(@"分享到微信");
-            }
-                break;
-            case 2:{
-                // 微信朋友圈
-                arr = @[UMShareToWechatTimeline];
-                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
-                
-//                NSLog(@"分享到朋友圈");
-            }
-                break;
-            case 3:{
-                // 短信
-                arr = @[UMShareToSms];
-                shareContent = shareContentString;
-                
-//                NSLog(@"分享短信");
-            }
-                break;
-            case 100:{
-                [self dismissBG];
-            }
-                break;
-            default:
-                break;
-        }
-        if(arr == nil)
-        {
-            return;
-        }
-                if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-                    shareImage = nil;
-                }
-        UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
-                                            shareImage];
-        
-        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
-            if (response.responseCode == UMSResponseCodeSuccess) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [self performSelector:@selector(dismissBG) withObject:nil/*可传任意类型参数*/ afterDelay:1.0];
-                    
-                });
-            }
-        }];
-    }
-}
-#pragma mark -------关注事件处理
+#pragma mark --------------------------------关注事件处理----------------------------------
 -(void)attentionClick:(UIButton*)btn
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
         _collected = !_collected;
         NSString *flag;
         if (_collected) {
@@ -668,44 +519,6 @@
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_model.user.userId],@"userId",flag,@"flag", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
-    
-}
-
--(void)presentAlertView
-{
-    //没有认证 提醒去认证
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
-    __block InvestThinkTankDetailVC* blockSelf = self;
-    
-    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [blockSelf btnCertain:nil];
-    }];
-    
-    [alertController addAction:cancleAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
--(void)btnCertain:(id)sender
-{
-    RenzhengViewController  * renzheng = [RenzhengViewController new];
-    renzheng.identifyType = self.identiyTypeId;
-    [self.navigationController pushViewController:renzheng animated:YES];
     
 }
 
@@ -749,8 +562,6 @@
             //                        [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",model.collectCount] forState:UIControlStateNormal];
             //                    }
             
-            
-            
             NSLog(@"关注成功");
         }else{
             NSLog(@"关注失败");
@@ -789,10 +600,13 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.navigationController.navigationBar setHidden:NO];
-
-    
 }
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self.navigationController.navigationBar setHidden:NO];
+}
+
 //-(void)dealloc
 //{
 //    [_scrollView removeObserver:self forKeyPath:@"contentOffset"];

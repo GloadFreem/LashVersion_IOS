@@ -22,6 +22,7 @@
 
 -(void)didClickBtnInTeamExrViewWithModel:(DetailExtr*)extr;
 
+-(void)didClickCoverBtn;
 
 @end
 
@@ -30,6 +31,7 @@
 
 @property (nonatomic, assign) id<ProjectDetailLeftTeamViewDelegate>delegate;
 
+@property (nonatomic, copy) NSString *authenticName;
 @property (nonatomic, strong) NSMutableArray *extrModelArray;
 @property (nonatomic, strong) ProjectDetailLeftTeamModel *model;
 @property (nonatomic, strong) NSMutableArray *teamModelArray;

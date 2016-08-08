@@ -211,7 +211,7 @@
 -(void)sendMessage:(UIButton*)btn
 {
     [self.textField resignFirstResponder];
-    if ([_authenticName isEqualToString:@"已认证"]) {
+
         if (self.sceneId) {
             if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
                 NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
@@ -226,44 +226,8 @@
             self.textField.text = @"";
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"路演现场暂未开放评论"];
         }
-    }
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        self.textField.text = @"";
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        self.textField.text = @"";
-        [self presentAlertView];
-    }
 }
 
--(void)presentAlertView
-{
-    //没有认证 提醒去认证
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
-    __block ProjectSceneCommentVC* blockSelf = self;
-    
-    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [blockSelf btnCertain:nil];
-    }];
-    
-    [alertController addAction:cancleAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
--(void)btnCertain:(id)sender
-{
-    RenzhengViewController  * renzheng = [RenzhengViewController new];
-    renzheng.identifyType = self.identiyTypeId;
-    [self.navigationController pushViewController:renzheng animated:YES];
-}
 
 -(void)requestSceneComment:(ASIHTTPRequest *)request
 {
@@ -394,36 +358,10 @@
 }
 
 
-/*
-#pragma mark- textView  delegate
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
-    if ([text isEqualToString:@"\n"]) {
-        [textView resignFirstResponder];
-        return NO;
-    }
-    return YES;
-}
-
--(void)textViewDidBeginEditing:(UITextView *)textView
-{
-    NSLog(@"开始编辑");
-}
-
--(void)textViewDidChange:(UITextView *)textView
-{
-    if (![textView.text isEqualToString:@""]) {
-        self.textField.text = textView.text;
-    }
-    NSLog(@"正在编辑");
-}
-*/
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     [self.navigationController.navigationBar setHidden:NO];
-    
     _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
 }

@@ -432,47 +432,10 @@
         [_heightArray addObject:[NSNumber numberWithFloat:_leftView.height]];
         
         //实例化认投底部按钮视图
-        [self.view addSubview:self.bottomView];
-        
-        
-        //实例化成员分页面
-        member = [ProjectDetailMemberView instancetationProjectDetailMemberView];
-        member.projectId = self.projectId;
-        member.frame = CGRectMake(SCREENWIDTH, 0, SCREENWIDTH, member.viewHeight +64);
-        [_heightArray addObject:[NSNumber numberWithFloat:member.viewHeight]];
-        [_subViewScrollView addSubview:member];
-        
-        
-        //实例化现场界面
-         scene =[[ProjectDetailSceneView alloc]initWithFrame:CGRectMake(2*SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT-CGRectGetMaxY(_titleScrollView.frame) - 64)];
-        scene.projectId = self.projectId;
-        scene.delegate = self;
-        scene.authenticName = self.authenticName;
-        scene.bannerView = bannerView;
-        [_subViewScrollView addSubview:scene];
-        
-        _subViewScrollView.y = POS_Y(_titleScrollView);
-        _subViewScrollView.height = scene.height;
-        _subViewScrollView.width = SCREENWIDTH;
-        
-        //加底部回复框
-        [self.view addSubview:self.footer];
-        
-    }
-    
-    [_footer setHidden:NO];
-    [_bottomView setHidden:YES];
-    _subViewScrollView.contentOffset=CGPointMake(SCREENWIDTH*2, 0);
-    
-    return _subViewScrollView;
-}
-#pragma mark-----实例化底部按钮视图------------- 认投------------
--(UIView*)bottomView
-{
-    if (!_bottomView) {
         //实例化底部按钮视图
         _bottomView = [UIView new];
         [_bottomView setBackgroundColor:[UIColor whiteColor]];
+        [self.view addSubview:_bottomView];
         [_bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.mas_equalTo(0);
             make.height.mas_equalTo(50);
@@ -513,9 +476,41 @@
             make.right.mas_equalTo(_bottomView.mas_right).offset(-8*WIDTHCONFIG);
             make.height.mas_equalTo(_kefuBtn.mas_height);
         }];
+
+        
+        
+        //实例化成员分页面
+        member = [ProjectDetailMemberView instancetationProjectDetailMemberView];
+        member.projectId = self.projectId;
+        member.frame = CGRectMake(SCREENWIDTH, 0, SCREENWIDTH, member.viewHeight +64);
+        [_heightArray addObject:[NSNumber numberWithFloat:member.viewHeight]];
+        [_subViewScrollView addSubview:member];
+        
+        
+        //实例化现场界面
+         scene =[[ProjectDetailSceneView alloc]initWithFrame:CGRectMake(2*SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT-CGRectGetMaxY(_titleScrollView.frame) - 64)];
+        scene.projectId = self.projectId;
+        scene.delegate = self;
+        scene.authenticName = self.authenticName;
+        scene.bannerView = bannerView;
+        [_subViewScrollView addSubview:scene];
+        
+        _subViewScrollView.y = POS_Y(_titleScrollView);
+        _subViewScrollView.height = scene.height;
+        _subViewScrollView.width = SCREENWIDTH;
+        
+        //加底部回复框
+        [self.view addSubview:self.footer];
+        
     }
-    return _bottomView;
+    
+    [_footer setHidden:NO];
+    [_bottomView setHidden:YES];
+    _subViewScrollView.contentOffset=CGPointMake(SCREENWIDTH*2, 0);
+    
+    return _subViewScrollView;
 }
+
 #pragma mark--------------底部回复框--------------
 -(UIView*)footer
 {
@@ -567,7 +562,7 @@
 -(void)sendMessage:(UIButton*)btn
 {
     [self.textField resignFirstResponder];
-    if ([_authenticName isEqualToString:@"已认证"]) {
+
         if (self.sceneId) {
             if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
                 NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
@@ -582,14 +577,7 @@
             self.textField.text = @"";
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"路演现场暂未开放评论"];
         }
-    }
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    if ([_authenticName isEqualToString:@"未认证"]){
-        [self presentAlertView];
-    }
+
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -633,21 +621,12 @@
 #pragma mark------------------CSZProjectDetailLetfViewDelegate--------------
 -(void)transportTeamModel:(DetailTeams *)team
 {
-    if ([_authenticName isEqualToString:@"已认证"]){
         if (team.url.length) {
             PingTaiWebViewController *vc = [PingTaiWebViewController new];
             vc.url = team.url;
             vc.titleStr = @"详情";
             [self.navigationController pushViewController:vc animated:YES];
         }
-    }
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    if ([_authenticName isEqualToString:@"未认证"]){
-        [self presentAlertView];
-    }
 }
 
 -(void)transportExrModel:(DetailExtr *)extr
@@ -879,16 +858,7 @@
 #pragma mark -分享
 - (IBAction)shareBtn:(UIButton *)sender {
     
-    if ([_authenticName isEqualToString:@"已认证"]){
     [self startShare];
-    }
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    if ([_authenticName isEqualToString:@"未认证"]){
-        [self presentAlertView];
-    }
     
 }
 #pragma mark ------------------------------开始分享---------------------------------
@@ -1034,7 +1004,6 @@
 #pragma mark ------------------------------收藏----------------------------
 - (IBAction)collectBtn:(UIButton *)sender {
     
-    if ([_authenticName isEqualToString:@"已认证"]){
         _isCollect = !_isCollect;
         NSString *flag;
         if (_isCollect) {
@@ -1046,17 +1015,6 @@
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",flag,@"flag", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestProjectCollect:)];
-    }
-   
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
     
 }
 
@@ -1097,40 +1055,6 @@
 //    NSLog(@"结束编辑");
 }
 
-
-#pragma mark- textView  delegate
-/*
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
-    if ([text isEqualToString:@"\n"]) {
-        [textView resignFirstResponder];
-        return NO;
-    }
-    return YES;
-}
-
--(void)textViewDidBeginEditing:(UITextView *)textView
-{
-    NSLog(@"开始编辑");
-}
-
--(void)textViewDidChange:(UITextView *)textView
-{
-    if (![textView.text isEqualToString:@""]) {
-        self.textField.text = textView.text;
-    }
-    NSLog(@"正在编辑");
-}
-
-
--(void)textViewDidEndEditing:(UITextView *)textView
-{
-    if (![textView.text isEqualToString:@""]) {
-        self.textField.text = textView.text;
-    }
-    NSLog(@"结束编辑");
-    
-}
-*/
 
 -(void)viewWillAppear:(BOOL)animated
 {

@@ -17,7 +17,8 @@
     UILabel *_teamLabel;
     UIView *_partLine;
     UIView *_bottomView1;
-     UIView *_bottomView2;
+    UIView *_bottomView2;
+    UIButton *_coverBtn;
 }
 -(instancetype)init
 {
@@ -105,6 +106,24 @@
     .rightSpaceToView(self.contentView,10)
     .topSpaceToView(_bottomView1,10)
     .heightIs(120);
+    
+    _coverBtn = [UIButton new];
+    [_coverBtn setBackgroundImage:[UIImage imageNamed:@"icon_project_cover"] forState:UIControlStateNormal];
+    [_coverBtn setBackgroundImage:[UIImage imageNamed:@"icon_project_cover"] forState:UIControlStateHighlighted];
+    [_coverBtn addTarget:self action:@selector(coverBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_coverBtn];
+    
+    _coverBtn.sd_layout
+    .leftEqualToView(self.contentView)
+    .rightEqualToView(self.contentView)
+    .topEqualToView(_scrollView2)
+    .heightIs(120);
+    
+    if ([self.authenticName isEqualToString:@"已认证"]) {
+        [_coverBtn setHidden:YES];
+    }else{
+        [_coverBtn setHidden:NO];
+    }
     
     _bottomView2 = [UIView new];
     _bottomView2.backgroundColor = colorGray;
@@ -233,4 +252,10 @@
     }
 }
 
+-(void)coverBtnClick
+{
+    if ([self.delegate respondsToSelector:@selector(didClickCoverBtn)]) {
+        [self.delegate didClickCoverBtn];
+    }
+}
 @end

@@ -79,6 +79,7 @@
     headerView = [ProjectDetailLeftHeaderView new];
     
     teamView = [ProjectDetailLeftTeamView new];
+    teamView.authenticName = self.authenticName;
     teamView.delegate = self;
     
     //2.添加到View
@@ -124,4 +125,10 @@
     }
 }
 
+-(void)didClickCoverBtn
+{
+    if ([self.delegate respondsToSelector:@selector(transportCoverClick)]) {
+        [self.delegate transportCoverClick];
+    }
+}
 @end

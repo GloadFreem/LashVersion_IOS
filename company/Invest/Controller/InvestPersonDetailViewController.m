@@ -58,6 +58,9 @@
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    
 //    NSLog(@"zhuangtai--%@----zhi---%@",_authenticName,_identiyTypeId);
     // Do any additional setup after loading the view from its nib.
     
@@ -364,195 +367,21 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
     
-#pragma mark -----分享
-    if (btn.tag == 61) {
-        
-        
-        [self startShare];
-    }
 }
 
-#pragma mark -开始分享
-
-- (UIView*)topView {
-    UIViewController *recentView = self;
-    while (recentView.parentViewController != nil) {
-        recentView = recentView.parentViewController;
-    }
-    return recentView.view;
-}
-
-/**
- *  点击空白区域shareView消失
- */
-
-- (void)dismissBG
-{
-    if(self.bottomView != nil)
-    {
-        [self.bottomView removeFromSuperview];
-    }
-}
-
--(void)startShare
-{
-    NSArray *titleList = @[@"QQ",@"微信",@"朋友圈",@"短信"];
-    NSArray *imageList = @[@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
-    CircleShareBottomView *share = [CircleShareBottomView new];
-    share.tag = 1;
-    [share createShareViewWithTitleArray:titleList imageArray:imageList];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
-    [share addGestureRecognizer:tap];
-    [[self topView] addSubview:share];
-    self.bottomView = share;
-    share.delegate = self;
-}
--(void)sendShareBtnWithView:(CircleShareBottomView *)view index:(int)index
-{
-    //分享
-    if (view.tag == 1) {
-        //得到用户SID
-        NSString* shareImage = _shareImage;
-        NSString *shareContentString = [NSString stringWithFormat:@"%@",_shareContent];
-        NSArray *arr = nil;
-        NSString *shareContent;
-        
-        switch (index) {
-            case 0:{
-                if ([QQApiInterface isQQInstalled])
-                {
-                    // QQ好友
-                    arr = @[UMShareToQQ];
-                    [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
-                    [UMSocialData defaultData].extConfig.qqData.title = @"金指投投融资";
-                    [UMSocialData defaultData].extConfig.qzoneData.title = @"金指投投融资";
-                }
-                else
-                {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的设备没有安装QQ" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                    [alert show];
-                    return;
-                }
-                
-            }
-                break;
-            case 1:{
-                // 微信好友
-                arr = @[UMShareToWechatSession];
-                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
-                
-//                NSLog(@"分享到微信");
-            }
-                break;
-            case 2:{
-                // 微信朋友圈
-                arr = @[UMShareToWechatTimeline];
-                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = @"金指投投融资";
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"金指投投融资";
-                
-//                NSLog(@"分享到朋友圈");
-            }
-                break;
-            case 3:{
-                // 短信
-                arr = @[UMShareToSms];
-                shareContent = shareContentString;
-                
-//                NSLog(@"分享短信");
-            }
-                break;
-            case 100:{
-                [self dismissBG];
-            }
-                break;
-            default:
-                break;
-        }
-        if(arr == nil)
-        {
-            return;
-        }
-                if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
-                    shareImage = nil;
-                }
-        UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
-                                            shareImage];
-        
-        [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
-            if (response.responseCode == UMSResponseCodeSuccess) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [self performSelector:@selector(dismissBG) withObject:nil afterDelay:1.0];
-                    
-                    
-                });
-            }
-        }];
-    }
-}
-
-
-#pragma mark -----  提交按钮
+#pragma mark ----------------------  提交按钮  -----------------------
 -(void)commitClick:(UIButton*)btn
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
         InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
       
         vc.model = _listModel;
         
         [self.navigationController pushViewController:vc animated:YES];
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
-}
-
--(void)presentAlertView
-{
-    //没有认证 提醒去认证
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
-    __block InvestPersonDetailViewController* blockSelf = self;
-    
-    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [blockSelf btnCertain:nil];
-    }];
-    
-    [alertController addAction:cancleAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
--(void)btnCertain:(id)sender
-{
-    RenzhengViewController  * renzheng = [RenzhengViewController new];
-    renzheng.identifyType = self.identiyTypeId;
-    [self.navigationController pushViewController:renzheng animated:YES];
-    
 }
 
 #pragma mark ----- 关注按钮
 -(void)attentionClick:(UIButton*)btn
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
         _collected = !_collected;
         NSString *flag;
         if (_collected) {
@@ -572,16 +401,6 @@
         
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
-    }
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
    
 }
 -(void)requestInvestorCollect:(ASIHTTPRequest*)request
@@ -609,7 +428,6 @@
             }
             _attentionCount = [NSString stringWithFormat:@"%ld",(long)count];
             
-
 //            NSLog(@"关注成功");
         }else{
 //            NSLog(@"关注失败");
@@ -653,10 +471,14 @@
 {
     [super viewWillDisappear:animated];
     
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
     self.navigationController.navigationBar.hidden = NO;
     [SVProgressHUD dismiss];
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

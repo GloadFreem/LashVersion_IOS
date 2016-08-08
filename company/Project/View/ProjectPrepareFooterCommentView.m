@@ -286,7 +286,6 @@
                 [_secondIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model2.iconImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
                 _secondName.text = model2.name;
                 _secondTime.text = model2.time;
-                //    NSLog(@"打印 事件啊啊氨基酸擦----%@",model2.time);
                 _secondContent.text = model2.content;
             }
             

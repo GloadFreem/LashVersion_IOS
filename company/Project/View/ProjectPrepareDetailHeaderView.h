@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) ProjectDetailBaseMOdel *model;
 
+
 @property (nonatomic, strong) UIImageView *icon;
 @property (nonatomic, strong) UILabel *projectName;
 @property (nonatomic, strong) UILabel *companyName;

@@ -133,15 +133,6 @@ static CGFloat textFieldH = 40;
         make.bottom.mas_equalTo(self.view.mas_bottom).offset(-50);
     }];
     
-//    if (!headerView) {
-//        headerView = [ActivityDetailHeaderView new];
-//        [headerView setMoreButtonClickedBlock:^(BOOL isOpen) {
-//            _headerModel.isOpen = !_headerModel.isOpen;
-//        }];
-//    }
-//    headerView.height = 360;
-//    headerView.model = _headerModel;
-//    _tableView.tableHeaderView = headerView;
     
     //报名按钮
     _signUpBtn = [[UIButton alloc]init];
@@ -496,8 +487,6 @@ static CGFloat textFieldH = 40;
     return footerView;
 }
 
-
-
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -674,8 +663,6 @@ static CGFloat textFieldH = 40;
 
 -(void)startShare
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
         NSArray *titleList = @[@"QQ",@"微信",@"朋友圈",@"短信"];
         NSArray *imageList = @[@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
         CircleShareBottomView *share = [CircleShareBottomView new];
@@ -686,17 +673,7 @@ static CGFloat textFieldH = 40;
         [[self topView] addSubview:share];
         self.bottomView = share;
         share.delegate = self;
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
+
 }
 
 -(void)sendShareBtnWithView:(CircleShareBottomView *)view index:(int)index
@@ -849,33 +826,20 @@ static CGFloat textFieldH = 40;
 #pragma footerDelegate
 -(void)didClickLikeButton
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
+
         if(!self.actionPrisePartner)
         {
             self.actionPrisePartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_PRISE];
         }
         //开始请求
         [self actionPrise];
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
-    
+
 }
 
 
 -(void)didClickCommentButton
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
+
         if(!self.actionCommentPartner)
         {
             self.actionCommentPartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_COMMENT];
@@ -885,16 +849,7 @@ static CGFloat textFieldH = 40;
         [self.textField setText:@""];
         [self.textField setPlaceholder:@""];
         [self.textField becomeFirstResponder];
-    }
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
+
 }
 
 -(void)didClickShowAllButton
@@ -1031,8 +986,6 @@ static CGFloat textFieldH = 40;
 #pragma ActivityDelegate
 -(void)attendAction:(id)model
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
         ActivityBlackCoverView * attendView = [ActivityBlackCoverView instancetationActivityBlackCoverView];
         attendView.delegate = self;
         attendView.tag = 1000;
@@ -1040,44 +993,10 @@ static CGFloat textFieldH = 40;
         [attendView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.mas_equalTo(0);
         }];
-    }
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
+
 }
 
--(void)presentAlertView
-{
-    //没有认证 提醒去认证
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
-    __block ActivityDetailVC* blockSelf = self;
-    
-    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [blockSelf btnCertain:nil];
-    }];
-    
-    [alertController addAction:cancleAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
 
--(void)btnCertain:(id)sender
-{
-    RenzhengViewController  * renzheng = [RenzhengViewController new];
-    renzheng.identifyType = self.identiyTypeId;
-    [self.navigationController pushViewController:renzheng animated:YES];
-    
-}
 #pragma ActivityBlackCoverViewDelegate
 -(void)clickBtnInView:(ActivityBlackCoverView *)view andIndex:(NSInteger)index content:(NSString *)content
 {
@@ -1147,7 +1066,7 @@ static CGFloat textFieldH = 40;
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
-    NSLog(@"开始编辑");
+//    NSLog(@"开始编辑");
     
     UIView * view  = [self.view viewWithTag:10001];
     view.alpha = 1;
@@ -1161,7 +1080,7 @@ static CGFloat textFieldH = 40;
         self.textField.text = textField.text;
         
     }
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
     UIView * view  = [self.view viewWithTag:10001];
     view.alpha = 0;
 }

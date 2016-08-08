@@ -552,19 +552,7 @@
     
     
     if ([_selfId isEqualToString:_userId]) {
-        
-        
-        if ([_authenticName isEqualToString:@"认证中"]) {
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-            [alertView show];
-        }
-        
-        if ([_authenticName isEqualToString:@"未认证"])
-        {
-            [self presentAlertView];
-        }
-        if ([_authenticName isEqualToString:@"已认证"])
-        {
+
             _deleteModel = _dataArray[indexPath.row];
             
             //        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"不能回复自己"];
@@ -584,7 +572,6 @@
             [self presentViewController:alertController animated:YES completion:nil];
             
             return;
-        }
         
     }else{
     
@@ -611,33 +598,6 @@
         }
 }
 
--(void)presentAlertView
-{
-    //没有认证 提醒去认证
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
-    __block CircleDetailVC* blockSelf = self;
-    
-    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [blockSelf btnCertainClick:nil];
-    }];
-    
-    [alertController addAction:cancleAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
--(void)btnCertainClick:(id)sender
-{
-    RenzhengViewController  * renzheng = [RenzhengViewController new];
-    renzheng.identifyType = self.identiyTypeId;
-    [self.navigationController pushViewController:renzheng animated:YES];
-    
-}
-
 -(void)requestDeleteComment:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
@@ -656,9 +616,7 @@
 -(void)sendComment:(UIButton*)btn
 {
     [_textField resignFirstResponder];
-    
-     if ([_authenticName isEqualToString:@"已认证"])
-     {
+
          if ([_textField.text isEqualToString:@""]) {
              [_textField resignFirstResponder];
              [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"回复内容不能为空"];
@@ -687,17 +645,6 @@
          
          //开始请求
          [self.httpUtil getDataFromAPIWithOps:CIRCLE_COMMENT_FEELING postParam:dic type:0 delegate:self sel:@selector(requestCircleComment:)];
-     }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
     
 }
 
@@ -834,7 +781,6 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
     
     NSLog(@"开始编辑");
 }

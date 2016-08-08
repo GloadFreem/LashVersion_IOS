@@ -163,7 +163,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     _companyLabel.sd_layout
     .leftEqualToView(_nameLabel)
-    .topSpaceToView(_nameLabel,8)
+    .topSpaceToView(_nameLabel,5)
     .heightIs(12);
     [_companyLabel setSingleLineAutoResizeWithMaxWidth:180];
     
@@ -203,7 +203,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .widthIs(30);
     
     _picContainerView.sd_layout
-    .leftEqualToView(_contentLabel);//已经在内部实现宽度和高度的自适应所以不需要在设置高度和宽度，top值是具体有无图片在setmodel方法设置
+    .centerXEqualToView(self.contentView);//已经在内部实现宽度和高度的自适应所以不需要在设置高度和宽度，top值是具体有无图片在setmodel方法设置
     _partLine.sd_layout
     .leftEqualToView(contentView)
     .rightEqualToView(contentView)

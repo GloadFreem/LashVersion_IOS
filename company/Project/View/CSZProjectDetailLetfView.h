@@ -24,12 +24,15 @@
 
 -(void)transportExrModel:(DetailExtr*)extr;
 
+-(void)transportCoverClick;
+
 @end
 
 @interface CSZProjectDetailLetfView : UIView<ProjectDetailLeftTeamViewDelegate>
 
 @property (nonatomic,assign) id<CSZProjectDetailLetfViewDelegate>delegate;
 
+@property (nonatomic, copy) NSString *authenticName;
 @property (nonatomic, strong) ProjectDetailLeftTeamModel *teamModel;
 @property (nonatomic, strong) ProjectDetailLeftHeaderModel *headerModel;
 @property (nonatomic, strong) ProjectDetailBaseMOdel *model;

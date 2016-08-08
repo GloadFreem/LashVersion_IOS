@@ -15,7 +15,9 @@
 
 #import "CircleListModel.h"
 #import "CircleListCell.h"
+#import "CircleListMineCell.h"
 #import "CircleReleaseVC.h"
+
 
 #import "CircleBaseModel.h"
 #import "CircleDetailVC.h"
@@ -59,6 +61,7 @@
 @property (nonatomic, copy) NSString *deletePartner;
 @property (nonatomic, strong) CircleListModel *deleteModel;
 @property (nonatomic, copy) NSString *selfId;//本人ID
+@property (nonatomic, copy) NSString *selfIconStr;
 
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
@@ -93,6 +96,7 @@
     
     NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
     _selfId = [data objectForKey:USER_STATIC_USER_ID];
+    _selfIconStr = [data objectForKey:USER_STATIC_HEADER_PIC];
     
     _isFirst = YES;
     _page = 0;
@@ -264,11 +268,14 @@
     
     if (_page == 0) {
         [_dataArray removeAllObjects];
+        
     }
     
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
+            
+            [_dataArray addObject:_selfIconStr];
             
             //解析数据  将data字典转换为BaseModel
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
@@ -341,12 +348,25 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == 0) {
+        return 70;
+    }else{
     id model = self.dataArray[indexPath.row];
     return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]];
+    }
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == 0) {
+        static NSString *cellId = @"CircleListMineCell";
+        CircleListMineCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (!cell) {
+            cell = [[CircleListMineCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+        }
+        cell.iconStr = self.dataArray[indexPath.row];
+        return cell;
+    }else{
     static NSString *cellId = @"CircleListCell";
     CircleListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
@@ -374,6 +394,8 @@
     }
     
     return cell;
+    }
+    return nil;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -395,50 +417,13 @@
 #pragma mark -发布动态
 -(void)releaseBtnClick:(UIButton*)btn
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
+
         CircleReleaseVC *vc = [CircleReleaseVC new];
         
         [self.navigationController pushViewController:vc animated:YES];
-    }
     
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
 }
 
--(void)presentAlertView
-{
-    //没有认证 提醒去认证
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
-    __block CircleViewController* blockSelf = self;
-    
-    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [blockSelf btnCertain:nil];
-    }];
-    
-    [alertController addAction:cancleAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
--(void)btnCertain:(id)sender
-{
-    RenzhengViewController  * renzheng = [RenzhengViewController new];
-    renzheng.identifyType = self.identiyTypeId;
-    [self.navigationController pushViewController:renzheng animated:YES];
-    
-}
 - (CGFloat)cellContentViewWith
 {
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
@@ -499,26 +484,12 @@
 #pragma maerk -分享按钮
 -(void)didClickShareBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model
 {
-    if ([_authenticName isEqualToString:@"已认证"]){
         if (model.publicContentId) {
             NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"2",@"type",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId", nil];
             
             //开始请求
             [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareStatus:)];
         }
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
-    
-    
 }
 #pragma mark -分享请求网址
 -(void)requestShareStatus:(ASIHTTPRequest *)request
@@ -686,8 +657,6 @@
 #pragma mark -点赞按钮
 -(void)didClickPraiseBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
         if (model.publicContentId) {
             kcell = cell;
             kmodel = model;
@@ -708,19 +677,6 @@
             //开始请求
             [self.httpUtil getDataFromAPIWithOps:CYCLE_CELL_PRAISE postParam:dic type:0 delegate:self sel:@selector(requestPraiseStatus:)];
         }
-        
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"])
-    {
-        [self presentAlertView];
-    }
-    
 }
 
 -(void)requestPraiseStatus:(ASIHTTPRequest*)request
