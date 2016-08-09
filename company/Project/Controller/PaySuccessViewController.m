@@ -11,7 +11,8 @@
 #import "ProjectDetailInvestVC.h"
 #import "YeePayViewController.h"
 #import "ProjectDetailController.h"
-#import "MineProjectCenterVC.h"
+
+#import "MineProjectViewController.h"
 
 @implementation PaySuccessViewController
 -(void)viewDidLoad
@@ -141,8 +142,7 @@
 -(void)btnAction:(id)sender
 {
     
-    
-    MineProjectCenterVC *vc = [MineProjectCenterVC new];
+    MineProjectViewController *vc = [MineProjectViewController new];
     [self.navigationController pushViewController:vc animated:YES];
     
     for (UIViewController *VC in self.navigationController.viewControllers) {

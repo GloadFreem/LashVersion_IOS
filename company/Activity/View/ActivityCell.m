@@ -60,17 +60,22 @@
         //时间
         [self.timeLabel setText:[NSString stringWithFormat:@"%@%@%@",dateStr,week,time]];
         
-        if(_model.attended)
-        {
-            [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
-            [_signUpBtn setBackgroundColor:btnCray];
-            [_signUpBtn setEnabled:NO];
-        }
         
+//        NSLog(@"结束时间---%@",_model.endTime);
         //是否过期
-        if(![TDUtil isArrivedTime:_model.endTime])
+        if([TDUtil isArrivedTime:_model.endTime])
         {//未过期
-            [self.expiredImage setHidden:YES];
+//            [self.expiredImage setHidden:YES];
+            [_signUpBtn setTitle:@"立即报名" forState:UIControlStateNormal];
+            [_signUpBtn setBackgroundColor:orangeColor];
+            [_signUpBtn setEnabled:YES];
+            
+            if(_model.attended)
+            {
+                [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
+                [_signUpBtn setBackgroundColor:btnCray];
+                [_signUpBtn setEnabled:NO];
+            }
             
         }else{
             [_signUpBtn setTitle:@"已结束" forState:UIControlStateNormal];

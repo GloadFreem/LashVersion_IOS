@@ -14,7 +14,7 @@
 
 #define SHAREINVESTOR @"requestShareInvestor"
 
-@interface InvestThinkTankDetailVC ()<UIScrollViewDelegate,CircleShareBottomViewDelegate>
+@interface InvestThinkTankDetailVC ()<UIScrollViewDelegate>
 
 @property (nonatomic, copy) NSString *sharePartner;
 @property (nonatomic, copy) NSString *shareContent;

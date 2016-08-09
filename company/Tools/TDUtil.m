@@ -328,16 +328,37 @@
 +(BOOL)isArrivedTime:(NSString*)compareTimeStr
 {
     //当前时间
-    NSDate* now =[NSDate new];
-    //假设超过指定时间
-    //    now=[self dateFromString:[self dateTimeWithOps:0 startHourStr:TODAY_MEAL_END_TIME]];
-    
-    NSString* dateStr=[self dateTimeWithOps:0 startHourStr:compareTimeStr];
-    //结束时间
-    NSDate* targetDate =[self dateFromString:dateStr];
-    //计算与指定时间秒数之差
-    NSInteger seconds = [targetDate timeIntervalSinceDate:now];
-    if (seconds>0) {
+//    NSDate* now =[NSDate new];
+//    //假设超过指定时间
+//    //    now=[self dateFromString:[self dateTimeWithOps:0 startHourStr:TODAY_MEAL_END_TIME]];
+//    
+//    NSString* dateStr=[self dateTimeWithOps:0 startHourStr:compareTimeStr];
+//    //结束时间
+//    NSDate* targetDate =[self dateFromString:dateStr];
+//    //计算与指定时间秒数之差
+//    NSInteger seconds = [targetDate timeIntervalSinceDate:now];
+//    if (seconds>0) {
+//        return false;
+//    }else{
+//        return true;
+//    }
+    NSDate *nowDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss.0";
+    //当前时间字符串格式
+    NSString *nowDateStr = [dateFormatter stringFromDate:nowDate];
+    //截止时间date格式
+    NSDate *expireDate = [dateFormatter dateFromString:compareTimeStr];
+    //当前时间date格式
+    nowDate = [dateFormatter dateFromString:nowDateStr];
+    //当前日历
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    //需要对比的时间数据
+    NSCalendarUnit unit = NSCalendarUnitYear | NSCalendarUnitMonth
+    | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+    //对比时间差
+    NSDateComponents *dateCom = [calendar components:unit fromDate:expireDate toDate:nowDate options:0];
+    if (dateCom.second > 0) {
         return false;
     }else{
         return true;

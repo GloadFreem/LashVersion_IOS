@@ -30,6 +30,7 @@
     _nameLabel.text = model.name;
     _positionLabel.text = model.position;
     _companyLabel.text = model.companyName;
+    
     _addressLabel.text = model.companyAddress;
     
 }

@@ -11,7 +11,6 @@
 #import "MineAttentionVC.h"
 #import "MineActivityVC.h"
 #import "MineGoldVC.h"
-#import "MineProjectCenterVC.h"
 #import "AppSetVC.h"
 #import "PingTaiVC.h"
 #import "MineDataVC.h"
@@ -24,6 +23,7 @@
 #define SIGNVERIFY @"signVerify"
 #define AUTHENINFO @"authenticInfoUser"
 
+#import "RenzhengViewController.h"
 #import "MineInvestViewController.h"
 #import "MineProjectViewController.h"
 #import "MineThinkTankViewController.h"
@@ -48,6 +48,9 @@
 @property (nonatomic, assign) NSInteger identiyTypeId;
 @property (nonatomic, assign) NSInteger authId;
 @property (nonatomic, assign) BOOL isAuthentic;
+
+@property (nonatomic, copy) NSString *authenticName;
+//@property (nonatomic, copy) NSString *identiyTypeId;
 
 @property (nonatomic, copy) NSString *shareTitle;
 @property (nonatomic, copy) NSString *contentText;
@@ -146,6 +149,7 @@
                 _nameStr = authentics.name;
                 
                 ProjectAuthenticstatus *authenticsstatus = authentics.authenticstatus;
+                
                 if ([authenticsstatus.name isEqualToString:@"已认证"] || [authenticsstatus.name isEqualToString:@"认证中"]) {
                     if ([authenticsstatus.name isEqualToString:@"已认证"]) {
                         _isAuthentic = YES;
@@ -163,6 +167,7 @@
                     _isAuthentic = NO;
                 }
                 
+                _authenticName = authenticsstatus.name;
                 _identiyTypeId = authentics.identiytype.identiyTypeId;
                 _authId = authentics.authId;
             }
@@ -232,9 +237,17 @@
     switch (sender.tag) {
         case 0:
         {
-            //先检查是否是易宝用户---非易宝账号则去实名认证---是易宝账号则进入资金页面
-            [self isCheckUserConfirmed];
-            
+            if ([_authenticName isEqualToString:@"已认证"]) {
+                //先检查是否是易宝用户---非易宝账号则去实名认证---是易宝账号则进入资金页面
+                [self isCheckUserConfirmed];
+            }
+            if ([_authenticName isEqualToString:@"认证中"]) {
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                [alertView show];
+            }
+            if ([_authenticName isEqualToString:@"未认证"] || [_authenticName isEqualToString:@"认证失败"]){
+                [self presentAlertView];
+            }
         }
             break;
         case 1:
@@ -317,6 +330,39 @@
 
 }
 
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    NSString *message;
+    if ([_authenticName isEqualToString:@"未认证"]) {
+        message = @"您还没有实名认证，请先实名认证";
+    }else{
+        message = @"您的实名认证未通过，请继续认证";
+    }
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:message preferredStyle:UIAlertControllerStyleAlert];
+    __block MineViewController* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = [NSString stringWithFormat:@"%ld",self.identiyTypeId];
+    [self.navigationController pushViewController:renzheng animated:YES];
+    
+}
 #pragma mark -开始分享
 
 #pragma mark  转发

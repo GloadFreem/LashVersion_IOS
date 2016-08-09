@@ -765,12 +765,58 @@
 
 -(void)didClickCommitBtn:(InvestPersonCell *)cell andModel:(InvestListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
         InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
-
+        
         vc.model = model;
         vc.viewController = self;
         
         [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，通过后方可使用此功能！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"] || [_authenticName isEqualToString:@"认证失败"])
+    {
+        [self presentAlertView];
+    }
+}
+
+-(void)presentAlertView
+{
+    //没有认证 提醒去认证
+    NSString *message;
+    if ([_authenticName isEqualToString:@"未认证"]) {
+        message = @"您还没有实名认证，请先实名认证";
+    }else{
+        message = @"您的实名认证未通过，请继续认证";
+    }
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:message preferredStyle:UIAlertControllerStyleAlert];
+    __block InvestViewController* blockSelf = self;
+    
+    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [blockSelf btnCertain:nil];
+    }];
+    
+    [alertController addAction:cancleAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)btnCertain:(id)sender
+{
+    RenzhengViewController  * renzheng = [RenzhengViewController new];
+    renzheng.identifyType = self.identiyTypeId;
+    [self.navigationController pushViewController:renzheng animated:YES];
 }
 
 
@@ -885,10 +931,23 @@
 #pragma mark -----投资机构InvestOrganizationSecondCellDelegate-------------------
 -(void)didClickCommitBtn:(InvestOrganizationSecondCell *)cell andModel:(InvestListModel *)model
 {
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
         InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
         vc.model = model;
         
         [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    if ([_authenticName isEqualToString:@"未认证"] || [_authenticName isEqualToString:@"认证失败"])
+    {
+        [self presentAlertView];
+    }
     
 }
 -(void)didClickAttentionBtn:(InvestOrganizationSecondCell *)cell andModel:(InvestListModel *)model

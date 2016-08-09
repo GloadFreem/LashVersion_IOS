@@ -469,6 +469,7 @@
         }
     }
 }
+
 #pragma mark---------------------------请求表格数据---------------------------
 -(void)startLoadData
 {
@@ -586,6 +587,7 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
+            
             NSArray *bannerModelArray = [ProjectBannerModel mj_objectArrayWithKeyValuesArray:dataArray];
             for (NSInteger i = 0; i < bannerModelArray.count; i ++) {
                 ProjectBannerModel *baseModel = bannerModelArray[i];

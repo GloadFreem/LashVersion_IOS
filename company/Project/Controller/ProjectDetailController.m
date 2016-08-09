@@ -642,7 +642,7 @@
             }
         }else{
             
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的身份为项目方，不能查看其他项目方的资料" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的身份为项目方，不能查看其他项目方的资料!" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [alertView show];
         }
     }
@@ -650,7 +650,7 @@
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
     }
-    if ([_authenticName isEqualToString:@"未认证"]){
+    if ([_authenticName isEqualToString:@"未认证"] || [_authenticName isEqualToString:@"认证失败"]){
         [self presentAlertView];
     }
 }
@@ -808,10 +808,10 @@
             [self.navigationController pushViewController:vc animated:YES];
         }
         if ([_authenticName isEqualToString:@"认证中"]) {
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，通过后方可查看！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [alertView show];
         }
-        if ([_authenticName isEqualToString:@"未认证"]){
+        if ([_authenticName isEqualToString:@"未认证"] || [_authenticName isEqualToString:@"认证失败"]){
             [self presentAlertView];
         }
     }
@@ -820,7 +820,14 @@
 -(void)presentAlertView
 {
     //没有认证 提醒去认证
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还没有实名认证，请先实名认证" preferredStyle:UIAlertControllerStyleAlert];
+    NSString *message;
+    if ([_authenticName isEqualToString:@"未认证"]) {
+        message = @"您还没有实名认证，请先实名认证";
+    }else{
+        message = @"您的实名认证未通过，请继续认证";
+    }
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:message preferredStyle:UIAlertControllerStyleAlert];
     __block ProjectDetailController* blockSelf = self;
     
     UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {

@@ -15,7 +15,6 @@
 
 #import "CircleListModel.h"
 #import "CircleListCell.h"
-#import "CircleListMineCell.h"
 #import "CircleReleaseVC.h"
 
 
@@ -65,6 +64,8 @@
 
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
+@property (nonatomic, strong) UIView *headerView;
 
 @end
 
@@ -217,6 +218,8 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
+//    _tableView.tableHeaderView = self.headerView;
+    
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
@@ -235,6 +238,79 @@
     
 }
 
+-(UIView*)headerView
+{
+    if (!_headerView) {
+        _headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 70)];
+//        _headerView.backgroundColor = [UIColor whiteColor];
+        
+        UIView *topView = [UIView new];
+        [topView setBackgroundColor:colorGray];
+        [_headerView addSubview:topView];
+        
+        topView.sd_layout
+        .leftEqualToView(_headerView)
+        .rightEqualToView(_headerView)
+        .topEqualToView(_headerView)
+        .heightIs(8);
+        
+        UIImageView *iconImage = [UIImageView new];
+        iconImage.layer.cornerRadius = 20;
+        iconImage.layer.masksToBounds = YES;
+        [iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.selfIconStr]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
+        
+        [_headerView addSubview:iconImage];
+        
+        iconImage.sd_layout
+        .leftSpaceToView(_headerView,8)
+        .topSpaceToView(topView, 10)
+        .widthIs(40)
+        .heightIs(40);
+        
+        UILabel *titleLabel = [UILabel new];
+        titleLabel.text = @"我的话题";
+        titleLabel.font = BGFont(19);
+        titleLabel.textAlignment = NSTextAlignmentLeft;
+        titleLabel.textColor = color(50, 50, 50, 1);
+        [titleLabel sizeToFit];
+        [_headerView addSubview:titleLabel];
+        
+        titleLabel.sd_layout
+        .leftSpaceToView(iconImage,10)
+        .centerYEqualToView(iconImage)
+        .heightIs(19);
+        [titleLabel setSingleLineAutoResizeWithMaxWidth:150];
+        
+        UIImageView *arrowImage = [UIImageView new];
+        arrowImage.image = [UIImage imageNamed:@"icon_right"];
+        [_headerView addSubview:arrowImage];
+        
+        arrowImage.sd_layout
+        .rightSpaceToView( _headerView,12)
+        .centerYEqualToView(iconImage)
+        .widthIs(9)
+        .heightIs(15);
+        
+        UIButton *btn = [UIButton new];
+        [btn addTarget:self action:@selector(myCircle) forControlEvents:UIControlEventTouchUpInside];
+        [btn setBackgroundColor:[UIColor clearColor]];
+        [_headerView addSubview:btn];
+        
+        btn.sd_layout
+        .leftEqualToView(_headerView)
+        .topEqualToView(_headerView)
+        .rightEqualToView(_headerView)
+        .bottomEqualToView(_headerView);
+    }
+    
+    
+    return _headerView;
+}
+
+-(void)myCircle
+{
+    NSLog(@"进入我的界面");
+}
 -(void)nextPage
 {
     _page ++;
@@ -274,8 +350,6 @@
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
-            
-            [_dataArray addObject:_selfIconStr];
             
             //解析数据  将data字典转换为BaseModel
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
@@ -348,25 +422,21 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
-        return 70;
-    }else{
     id model = self.dataArray[indexPath.row];
     return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]];
-    }
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
-        static NSString *cellId = @"CircleListMineCell";
-        CircleListMineCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-        if (!cell) {
-            cell = [[CircleListMineCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-        }
-        cell.iconStr = self.dataArray[indexPath.row];
-        return cell;
-    }else{
+//    if (indexPath.row == 0) {
+//        static NSString *cellId = @"CircleListMineCell";
+//        CircleListMineCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+//        if (!cell) {
+//            cell = [[CircleListMineCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
+//        }
+//        cell.iconStr = self.dataArray[indexPath.row];
+//        return cell;
+//    }else{
     static NSString *cellId = @"CircleListCell";
     CircleListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
@@ -394,8 +464,8 @@
     }
     
     return cell;
-    }
-    return nil;
+//    }
+//    return nil;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

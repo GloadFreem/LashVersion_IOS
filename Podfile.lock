@@ -12,6 +12,9 @@ PODS:
     - Reachability
   - ASIHTTPRequest/S3 (1.8.2):
     - ASIHTTPRequest/Core
+  - FMDB (2.6.2):
+    - FMDB/standard (= 2.6.2)
+  - FMDB/standard (2.6.2)
   - GDataXML-HTML (1.3.0)
   - MJExtension (3.0.10)
   - MJRefresh (3.1.0)
@@ -23,6 +26,7 @@ PODS:
 
 DEPENDENCIES:
   - ASIHTTPRequest (~> 1.8.2)
+  - FMDB (~> 2.6.2)
   - GDataXML-HTML (~> 1.3.0)
   - MJExtension (~> 3.0.10)
   - MJRefresh (~> 3.1.0)
@@ -31,6 +35,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
+  FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   GDataXML-HTML: 7adc03668cab35c288f1dbb8929a179f0fece898
   MJExtension: d86aacb740c87519d20e3cca55b6fa4be6cc7548
   MJRefresh: 743e6404967d1c2c688472ea3ecfde247d872db4
@@ -38,6 +43,6 @@ SPEC CHECKSUMS:
   SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9
   SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
 
-PODFILE CHECKSUM: a4e9f679b00c6485e8be4978cbe8b14ba8cceb02
+PODFILE CHECKSUM: fb6ca8e1222ce31b309b8d5830c2141b207311ec
 
 COCOAPODS: 1.0.0

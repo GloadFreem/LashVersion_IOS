@@ -97,7 +97,9 @@
                         modelJ.isShow = YES;
                     }
                 }
-                [self.tableView reloadData];
+                if (_dataArray.count) {
+                    [self.tableView reloadData];
+                }
                 [_tableView.mj_header endRefreshing];
                 [_tableView.mj_footer endRefreshing];
             }

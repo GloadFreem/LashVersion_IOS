@@ -9,6 +9,7 @@
 #import "MineProjectViewController.h"
 #import "UpProjectViewController.h"
 #import "MIneProjectCommitRecordVC.h"
+#import "RenzhengViewController.h"
 
 #import "MineLogoProjectBaseModel.h"
 #import "ProjectListProModel.h"
@@ -31,6 +32,9 @@
 
 @property (nonatomic, copy) NSString *recordPartner;
 
+@property (nonatomic, copy) NSString *authenticName;  //认证信息
+@property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
 @end
 
 @implementation MineProjectViewController
@@ -38,6 +42,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
+    _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -68,7 +76,7 @@
 -(void)requestList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-        NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic != nil) {
@@ -254,6 +262,7 @@
     
     if (_dataArray.count) {
         if (indexPath.row == _dataArray.count) {//进入提交项目界面
+            
             UpProjectViewController *up = [UpProjectViewController new];
             
             [self.navigationController pushViewController:up animated:YES];
@@ -271,12 +280,10 @@
             
         }
     }else{
-        UpProjectViewController *up = [UpProjectViewController new];
-        
-        [self.navigationController pushViewController:up animated:YES];
+            UpProjectViewController *up = [UpProjectViewController new];
+            [self.navigationController pushViewController:up animated:YES];
+       
     }
-    
-    
 }
 
 #pragma mark---------MineProjectCenterYuXuanCellDelegate-------------

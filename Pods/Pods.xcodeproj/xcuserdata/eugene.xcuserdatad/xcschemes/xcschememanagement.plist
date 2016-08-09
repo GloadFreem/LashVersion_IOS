@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FMDB.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>GDataXML-HTML.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -52,12 +57,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>23CF27B2BA6AC7125EFFEDA8C5AA819F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>3C34098A7DACA89F52BF902062730F50</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5F2AEC95231DD42F4DACB1CB66DB6806</key>
+		<key>5A1968000596CC4EC2F208287B2107D3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -72,17 +82,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8D8BD0D051DEEA1CB0C3D1CA12621C3A</key>
+		<key>A70DE73290CF974B58F9BCA042625A3E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C6537C63AD44CBC089EDFE8BB15F8929</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>E7FF33B5DFF643A2ACA9ADC4A3CFF8E4</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E8BFED3DB1AB8FEFE730E3AD94FE189E</key>
 		<dict>
 			<key>primary</key>
 			<true/>

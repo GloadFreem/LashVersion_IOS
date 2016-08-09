@@ -713,7 +713,6 @@
 		443730131D3FCC3600DED1D6 /* MineGoldVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372F951D3FCC3600DED1D6 /* MineGoldVC.m */; };
 		443730141D3FCC3600DED1D6 /* MineGoldVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44372F961D3FCC3600DED1D6 /* MineGoldVC.xib */; };
 		443730151D3FCC3600DED1D6 /* MineInvestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372F981D3FCC3600DED1D6 /* MineInvestViewController.m */; };
-		443730161D3FCC3600DED1D6 /* MineProjectCenterVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372F9A1D3FCC3600DED1D6 /* MineProjectCenterVC.m */; };
 		443730171D3FCC3600DED1D6 /* MIneProjectCommitRecordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372F9C1D3FCC3600DED1D6 /* MIneProjectCommitRecordVC.m */; };
 		443730181D3FCC3600DED1D6 /* MineProjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372F9E1D3FCC3600DED1D6 /* MineProjectViewController.m */; };
 		443730191D3FCC3600DED1D6 /* MineRingCodeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372FA01D3FCC3600DED1D6 /* MineRingCodeVC.m */; };
@@ -931,6 +930,7 @@
 		44D138331D4B0217000132ED /* icon_detail_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D1382D1D4B0217000132ED /* icon_detail_success@2x.png */; };
 		44D138341D4B0217000132ED /* icon_detail_success@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D1382E1D4B0217000132ED /* icon_detail_success@3x.png */; };
 		44E2AB9F1D548AF40067845E /* jinzhit001.gif in Resources */ = {isa = PBXBuildFile; fileRef = 44E2AB9E1D548AF40067845E /* jinzhit001.gif */; };
+		44F8098D1D59B29700756C1A /* DataBaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F8098C1D59B29700756C1A /* DataBaseHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1805,8 +1805,6 @@
 		44372F961D3FCC3600DED1D6 /* MineGoldVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MineGoldVC.xib; sourceTree = "<group>"; };
 		44372F971D3FCC3600DED1D6 /* MineInvestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineInvestViewController.h; sourceTree = "<group>"; };
 		44372F981D3FCC3600DED1D6 /* MineInvestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineInvestViewController.m; sourceTree = "<group>"; };
-		44372F991D3FCC3600DED1D6 /* MineProjectCenterVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineProjectCenterVC.h; sourceTree = "<group>"; };
-		44372F9A1D3FCC3600DED1D6 /* MineProjectCenterVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineProjectCenterVC.m; sourceTree = "<group>"; };
 		44372F9B1D3FCC3600DED1D6 /* MIneProjectCommitRecordVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIneProjectCommitRecordVC.h; sourceTree = "<group>"; };
 		44372F9C1D3FCC3600DED1D6 /* MIneProjectCommitRecordVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MIneProjectCommitRecordVC.m; sourceTree = "<group>"; };
 		44372F9D1D3FCC3600DED1D6 /* MineProjectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineProjectViewController.h; sourceTree = "<group>"; };
@@ -2190,6 +2188,8 @@
 		44D1382D1D4B0217000132ED /* icon_detail_success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_success@2x.png"; sourceTree = "<group>"; };
 		44D1382E1D4B0217000132ED /* icon_detail_success@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_success@3x.png"; sourceTree = "<group>"; };
 		44E2AB9E1D548AF40067845E /* jinzhit001.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = jinzhit001.gif; sourceTree = "<group>"; };
+		44F8098B1D59B29700756C1A /* DataBaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBaseHelper.h; sourceTree = "<group>"; };
+		44F8098C1D59B29700756C1A /* DataBaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataBaseHelper.m; sourceTree = "<group>"; };
 		88AB72B1372C8348B3F810BE /* Pods_company.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_company.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEFDAA502A93819A474A0120 /* Pods-company.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-company.release.xcconfig"; path = "Pods/Target Support Files/Pods-company/Pods-company.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2559,6 +2559,7 @@
 		44372A5C1D3FC96400DED1D6 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				44F8098A1D59B29700756C1A /* DataBaseHelper */,
 				44372A5D1D3FC96400DED1D6 /* AES */,
 				44372A661D3FC96400DED1D6 /* Camera */,
 				44372A841D3FC96400DED1D6 /* dialog */,
@@ -3760,8 +3761,6 @@
 				44372F961D3FCC3600DED1D6 /* MineGoldVC.xib */,
 				44372F971D3FCC3600DED1D6 /* MineInvestViewController.h */,
 				44372F981D3FCC3600DED1D6 /* MineInvestViewController.m */,
-				44372F991D3FCC3600DED1D6 /* MineProjectCenterVC.h */,
-				44372F9A1D3FCC3600DED1D6 /* MineProjectCenterVC.m */,
 				44372F9B1D3FCC3600DED1D6 /* MIneProjectCommitRecordVC.h */,
 				44372F9C1D3FCC3600DED1D6 /* MIneProjectCommitRecordVC.m */,
 				44372F9D1D3FCC3600DED1D6 /* MineProjectViewController.h */,
@@ -4477,6 +4476,15 @@
 				44E2AB9E1D548AF40067845E /* jinzhit001.gif */,
 			);
 			name = gif;
+			sourceTree = "<group>";
+		};
+		44F8098A1D59B29700756C1A /* DataBaseHelper */ = {
+			isa = PBXGroup;
+			children = (
+				44F8098B1D59B29700756C1A /* DataBaseHelper.h */,
+				44F8098C1D59B29700756C1A /* DataBaseHelper.m */,
+			);
+			path = DataBaseHelper;
 			sourceTree = "<group>";
 		};
 		E953DC4E7C9C70DF45C9AFAF /* Pods */ = {
@@ -5509,10 +5517,10 @@
 				443730B21D3FCC5600DED1D6 /* ActivityAttendListViewController.m in Sources */,
 				44871B851D02B37800020DD9 /* NSString+MLLabel.m in Sources */,
 				44372AE21D3FC96400DED1D6 /* SBJsonParser.m in Sources */,
-				443730161D3FCC3600DED1D6 /* MineProjectCenterVC.m in Sources */,
 				44372A311D3FC7EF00DED1D6 /* ProjectDetailMemberModel.m in Sources */,
 				44372AE11D3FC96400DED1D6 /* SBJsonBase.m in Sources */,
 				44871B841D02B37800020DD9 /* NSMutableAttributedString+MLLabel.m in Sources */,
+				44F8098D1D59B29700756C1A /* DataBaseHelper.m in Sources */,
 				443729A41D3FC78100DED1D6 /* WSetPassWordViewController.m in Sources */,
 				44372A411D3FC7F000DED1D6 /* ProjectDetailMemberView.m in Sources */,
 				443730751D3FCC4600DED1D6 /* CircleListModel.m in Sources */,
@@ -5681,8 +5689,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shaanxi gold investment enterprise management consulting Co., Ltd. (PT9XT89LQL)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shaanxi gold investment enterprise management consulting Co., Ltd. (PT9XT89LQL)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5704,7 +5712,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jinzht.pro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "001dfe14-16b0-464e-bb9e-b92bd79ab5d0";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
