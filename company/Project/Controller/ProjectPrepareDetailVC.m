@@ -41,7 +41,6 @@
 @property (nonatomic, strong) ProjectDetailLeftTeamView *teamView;
 @property (nonatomic, strong) ProjectPreparePhotoView *photoView;
 
-
 @property (nonatomic, strong) ProjectDetailBaseMOdel *baseModel;
 @property (nonatomic, strong) UIButton *collectBtn;
 @property (nonatomic, assign) BOOL isCollect;            //是否关注
@@ -70,7 +69,7 @@
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
-    
+//    NSLog(@"认证状态---%@",_authenticName);
     
     // Do any additional setup after loading the view.
     if (!_dataArray) {
@@ -83,6 +82,9 @@
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:PROJECTSHARE];
     //客服
     self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
+    
+    //设置加载视图大小
+    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
     
     [self startLoadData];
     
@@ -120,7 +122,8 @@
 
 -(void)startLoadData
 {
-    [SVProgressHUD showWithStatus:@"加载中..."];
+//    [SVProgressHUD showWithStatus:@"加载中..."];
+    self.startLoading = YES;
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_projectId],@"projectId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestProjectDetail:)];
@@ -145,13 +148,25 @@
             
             [self createBottomView];
             
-            [SVProgressHUD dismiss];
+//            [SVProgressHUD dismiss];
+            self.startLoading = NO;
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
+    }else{
+        self.isNetRequestError = YES;
     }
-    [SVProgressHUD dismiss];
+}
+
+-(void)refresh
+{
+    [self startLoadData];
+}
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
 }
 
 -(void)loadShareData
@@ -526,13 +541,13 @@
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
         
+        __weak typeof (self) weakSelf = self;
         [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
-                    [self performSelector:@selector(dismissBG) withObject:nil/*可传任意类型参数*/ afterDelay:1.0];
-                    
+                    [weakSelf performSelector:@selector(dismissBG) withObject:nil/*可传任意类型参数*/ afterDelay:1.0];
                     
                 });
             }
@@ -543,13 +558,11 @@
 #pragma mark-------ProjectPrepareFooterCommentViewDelagate--------
 -(void)didClickBtn:(NSMutableArray *)dataArray
 {
-
         ProjectPrepareCommentVC *vc = [ProjectPrepareCommentVC new];
         vc.projectId =self.projectId;
         vc.dataArray = dataArray;
         vc.footerCommentView = _footerView;
         [self.navigationController pushViewController:vc animated:YES];
-    
 }
 
 -(void)presentAlertView
@@ -667,7 +680,5 @@
 {
     [super viewDidDisappear:animated];
     self.navigationController.navigationBar.hidden = NO;
-    
-    [SVProgressHUD dismiss];
 }
 @end

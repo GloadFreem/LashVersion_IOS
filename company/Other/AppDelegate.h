@@ -14,11 +14,10 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) UINavigationController * nav;
 @property (nonatomic, strong) JTabBarController * tabBar;
-
 @property (nonatomic, copy) NSString *partner;
 @property (nonatomic, copy) NSString *loginPartner;
-
 @property(retain,nonatomic)HttpUtils* httpUtil; //网络请求对象
+
 
 -(void)createViewControllers;
 

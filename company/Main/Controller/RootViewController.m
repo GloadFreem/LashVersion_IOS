@@ -10,7 +10,7 @@
 
 @interface RootViewController ()
 {
-    LoadingView* loadingView;
+    LoadingView *loadingView;
 }
 @end
 
@@ -25,8 +25,6 @@
     
 }
 
-
-
 /**
  *  网络请求错误
  *
@@ -39,9 +37,9 @@
     if (self.isNetRequestError) {
         if (!loadingView) {
             if (self.loadingViewFrame.size.height>0) {
-                loadingView =[LoadingUtil shareinstance:self.view frame:self.loadingViewFrame];
+                loadingView =[LoadingUtil shareInstance:self.view frame:self.loadingViewFrame];
             }else{
-                loadingView = [LoadingUtil shareinstance:self.view];
+                loadingView = [LoadingUtil shareInstance:self.view];
             }
             loadingView.delegate  =self;
         }
@@ -54,7 +52,6 @@
     }
     
 }
-
 /**
  *  设置开始加载
  *
@@ -67,9 +64,9 @@
     if (self.startLoading) {
         if (!loadingView) {
             if (self.loadingViewFrame.size.height>0) {
-                loadingView =[LoadingUtil shareinstance:self.view frame:self.loadingViewFrame];
+                loadingView =[LoadingUtil shareInstance:self.view frame:self.loadingViewFrame];
             }else{
-                loadingView = [LoadingUtil shareinstance:self.view];
+                loadingView = [LoadingUtil shareInstance:self.view];
             }
             loadingView.delegate  =self;
         }else{
@@ -145,37 +142,13 @@
     
 }
 
-/**
- *  设置返回状态码
- *
- *  @param code 状态码
- */
--(void)setCode:(int)code
-{
-    self->_code = code;
-    switch (self.code) {
-        case 0:
-            break;
-        case 1:
-            break;
-        case 2:
-            break;
-        case -1:
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"login" object:nil];
-            break;
-        default:
-            break;
-    }
-}
 
 /**
  *  重新加载，刷新
  */
 -(void)refresh
 {
-    
     self.startLoading = YES;
-    
 }
 
 /**
@@ -183,32 +156,25 @@
  */
 -(void)resetLoadingView
 {
-    
     [self.view bringSubviewToFront:loadingView];
-    
 }
 
 //==============================网络请求处理开始==============================//
+
+
+
 -(void)requestFinished:(ASIHTTPRequest *)request
 {
-    
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
     NSLog(@"返回:%@",jsonString);
     self.startLoading =NO;
-    
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
-    NSLog(@"%@",request.error);
-//    [activity stopAnimating];
-    [SVProgressHUD dismiss];
-    
+    NSLog(@"返回:%@",jsonString);    
     self.isNetRequestError = YES;
-    
 }
 //==============================网络请求处理结束==============================//
 
@@ -236,9 +202,7 @@
 
 -(void)dealloc
 {
-    
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
-    
+
 }
 
 /*

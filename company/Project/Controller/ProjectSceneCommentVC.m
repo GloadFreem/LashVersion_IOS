@@ -23,6 +23,7 @@
 @property (nonatomic, strong) UIView *footer;
 
 @property (nonatomic, strong) UITextField *textField;
+@property (nonatomic, strong) UIButton *sendBtn;
 @end
 
 @implementation ProjectSceneCommentVC
@@ -183,6 +184,7 @@
     btn.titleLabel.font = [UIFont systemFontOfSize:17];
     btn.layer.cornerRadius = 3;
     btn.layer.masksToBounds = YES;
+    _sendBtn = btn;
     [_footer addSubview:btn];
     
     [_textField mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -214,6 +216,9 @@
 
         if (self.sceneId) {
             if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
+                
+                _sendBtn.enabled = NO;
+                
                 NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
                 //开始请求
                 [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
@@ -253,6 +258,7 @@
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
+    _sendBtn.enabled = YES;
 }
 
 

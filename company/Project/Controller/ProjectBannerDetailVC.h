@@ -10,7 +10,7 @@
 
 #import "ProjectBannerListModel.h"
 
-@interface ProjectBannerDetailVC : UIViewController
+@interface ProjectBannerDetailVC : RootViewController
 
 @property (nonatomic, strong) ProjectBannerListModel *model;
 

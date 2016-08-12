@@ -99,6 +99,9 @@
     _selfId = [data objectForKey:USER_STATIC_USER_ID];
     _selfIconStr = [data objectForKey:USER_STATIC_HEADER_PIC];
     
+    //设置 加载视图界面
+    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 49);
+    
     _isFirst = YES;
     _page = 0;
     [self setupNav];
@@ -224,7 +227,7 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-    [self.tableView.mj_header beginRefreshing];
+//    [self.tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
 
     [self.view addSubview:_tableView];
@@ -235,7 +238,6 @@
         make.right.mas_equalTo(self.view.mas_right);
         make.bottom.mas_equalTo(self.view.mas_bottom);
     }];
-    
 }
 
 -(UIView*)headerView
@@ -303,13 +305,12 @@
         .bottomEqualToView(_headerView);
     }
     
-    
     return _headerView;
 }
 
 -(void)myCircle
 {
-    NSLog(@"进入我的界面");
+//    NSLog(@"进入我的界面");
 }
 -(void)nextPage
 {
@@ -329,7 +330,8 @@
 -(void)loadData
 {
     if (_isFirst) {
-        [SVProgressHUD showWithStatus:@"加载中"];
+//        [SVProgressHUD showWithStatus:@"加载中"];
+        self.startLoading = YES;
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     //开始请求
@@ -398,20 +400,31 @@
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
             if (_isFirst) {
-                [SVProgressHUD dismiss];
                 _isFirst = NO;
             }
             
         }else{
             
-            [SVProgressHUD dismiss];
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             
         }
-        
+        self.startLoading = NO;
+    }else{
+        self.isNetRequestError = YES;
     }
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self loadData];
 }
 
 #pragma mark -tableViewDatasource
@@ -815,8 +828,6 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [SVProgressHUD dismiss];
     
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"publish" object:nil];
 

@@ -117,8 +117,13 @@
             //开始加载动画
 //            [activity startAnimating];
             //上传文件
+            self.loadingViewFrame = self.view.frame;
+            
+            self.startLoading = YES;
+            self.isTransparent  = YES;
+            
             [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
-            [SVProgressHUD showWithStatus:@"认证中..."];
+//            [SVProgressHUD showWithStatus:@"认证中..."];
         }
     }
 }
@@ -128,14 +133,15 @@
 -(void)requestSetIdentifyType:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         
         if ([status integerValue] == 200) {
-            [SVProgressHUD dismiss];
+//            [SVProgressHUD dismiss];
+            self.startLoading = NO;
 //            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
 //            app.window.rootViewController = app.tabBar;
             
@@ -155,16 +161,20 @@
             
             [self.navigationController pushViewController:tabBarController animated:NO];
         }else{
+            self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             
         }
     }
 //    [activity stopAnimating];
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD dismiss];
 }
 
 
-
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = NO;
+}
 
 #pragma mark- textView  delegate
 
@@ -239,7 +249,7 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD dismiss];
 }
 
 @end

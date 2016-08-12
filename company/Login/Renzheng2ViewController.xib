@@ -65,9 +65,9 @@
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="营业执照注册号" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cDc-gN-Wnq">
-                    <rect key="frame" x="10" y="359.5" width="119" height="20.5"/>
+                    <rect key="frame" x="10" y="359.5" width="125" height="20.5"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="119" id="Q5o-Ad-Kes"/>
+                        <constraint firstAttribute="width" constant="125" id="Q5o-Ad-Kes"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -89,7 +89,7 @@
                     </connections>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入营业执照注册号" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="5ig-5l-VEr">
-                    <rect key="frame" x="139" y="360.5" width="186" height="20"/>
+                    <rect key="frame" x="145" y="360.5" width="180" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="200" id="3ql-hK-oHV"/>
                     </constraints>

@@ -1,34 +1,43 @@
 //
 //  LoadingUtil.h
-//  JinZhiTou
+//  company
 //
-//  Created by air on 15/8/13.
-//  Copyright (c) 2015年 金指投. All rights reserved.
+//  Created by Eugene on 16/8/11.
+//  Copyright © 2016年 Eugene. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "LoadingView.h"
+
 @interface LoadingUtil : UIView
+
 //单例
-+(LoadingView*)shareinstance:(UIView*)view;
++(LoadingView*)shareInstance:(UIView*)view;
+
 //单例
-+(LoadingView*)shareinstance:(UIView*)view frame:(CGRect)frame;
++(LoadingView*)shareInstance:(UIView *)view frame:(CGRect)frame;
+
 //显示
 +(void)showLoadingView:(UIView*)view;
+
 //使用实例显示
 +(void)showLoadingView:(UIView *)view withLoadingView:(LoadingView*)loadingView;
+
 //关闭加载页
 +(void)closeLoadingView:(LoadingView*)loadingView;
+
 /**
- *  关闭加载视图
  *
- *  @param loadingView loadingInstance
+ *  加载视图
+ *
  */
 +(void)show:(LoadingView*)loadingView;
+
 /**
+ *
  *  关闭
  *
- *  @param loadingView loadingInstance
  */
 +(void)close:(LoadingView*)loadingView;
+
 @end

@@ -212,6 +212,7 @@
         if (self.textViewStr && self.textViewStr.length >= 20) {
             ProjectListProModel *listModel = _dataArray[0];
             NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)listModel.projectId],@"projectId",self.textViewStr,@"content",[NSString stringWithFormat:@"%@",self.model.userId],@"userId", nil];
+            _certainBtn.enabled = NO;
             //开始请求
             [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COMMIT postParam:dic type:0 delegate:self sel:@selector(requestUpProject:)];
             
@@ -243,6 +244,7 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
+    _certainBtn.enabled = YES;
 }
 
 -(void)delayMethod
@@ -364,7 +366,6 @@
     }
     
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
     [delegate.tabBar tabBarHidden:YES animated:NO];
 }
 

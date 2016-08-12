@@ -112,7 +112,8 @@
 {
 //    NSLog(@"----%@",self.investorId);
 //    NSLog(@"----- 数量%@",self.attentionCount);
-    [SVProgressHUD show];
+//    [SVProgressHUD show];
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.investorId,@"investorId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:INVEST_LIST_DETAIL postParam:dic type:1 delegate:self sel:@selector(requestInvestDetail:)];
@@ -136,7 +137,7 @@
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD dismiss];
 }
 
 
@@ -330,7 +331,7 @@
     
     //标题
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_scrollView.mas_top).offset(25);
+        make.top.mas_equalTo(_scrollView.mas_top).offset(30);
         make.centerX.equalTo(_scrollView);
         make.height.mas_equalTo(18);
     }];
@@ -517,6 +518,7 @@
             
         }
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_model.user.userId],@"userId",flag,@"flag", nil];
+       _attationBtn.enabled = NO;
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_INVESTOR_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestInvestorCollect:)];
     
@@ -567,6 +569,7 @@
             NSLog(@"关注失败");
         }
     }
+    _attationBtn.enabled = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated

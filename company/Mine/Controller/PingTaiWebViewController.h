@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PingTaiWebViewController : UIViewController
+@interface PingTaiWebViewController : RootViewController
 
 @property (nonatomic, copy) NSString *url;
 @property (nonatomic, copy) NSString *titleStr;

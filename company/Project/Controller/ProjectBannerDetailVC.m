@@ -28,8 +28,11 @@
     [self setNav];
     _webView  =[[UIWebView alloc]initWithFrame:self.view.frame];
     _webView.delegate = self;
-    [self startLoadDetailData];
+    [self.view addSubview:_webView];
     
+    [self startLoadDetailData];
+    //加载视图区域
+    self.loadingViewFrame = _webView.frame;
 }
 
 -(void)setNav
@@ -53,15 +56,14 @@
 -(void)createLoadingView
 {
     _gifView = [[UIView alloc]initWithFrame:self.view.frame];
-    _gifView.backgroundColor = [UIColor blackColor];
-    _gifView.alpha = 0.3;
+    _gifView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_gifView];
     
     
     _gifImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 174*WIDTHCONFIG, 174*WIDTHCONFIG)];
     _gifImageView.centerX = self.view.centerX;
     _gifImageView.centerY = self.view.centerY - 50*WIDTHCONFIG;
-    UIImage *image = [UIImage sd_animatedGIFNamed:@"jinzhit001"];
+    UIImage *image = [UIImage sd_animatedGIFNamed:@"loadingView"];
     _gifImageView.image = image;
     [self.view addSubview:_gifImageView];
     
@@ -71,7 +73,7 @@
 {
     [_gifImageView removeFromSuperview];
     [_gifView removeFromSuperview];
-    [self.view addSubview:_webView];
+    
 }
 
 
@@ -228,13 +230,15 @@
 {
     if (webView == self.webView) {
 //        [SVProgressHUD showWithStatus:@"加载中..."];
+        self.startLoading = YES;
     }
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
-        [self removeLoadingView];
+//        [self removeLoadingView];
+        self.startLoading = NO;
     }
     
 }
@@ -242,9 +246,12 @@
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     if (webView == self.webView) {
-        [self removeLoadingView];
+//        [self removeLoadingView];
+        self.startLoading = YES;
+        self.isNetRequestError = YES;
     }
-    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"加载失败"];
+    
+//    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"加载失败"];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -254,7 +261,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self createLoadingView];    //创建加载动画
+//    [self createLoadingView];    //创建加载动画
     
     [self.navigationController.navigationBar setHidden:NO];
     
@@ -287,9 +294,6 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self removeLoadingView];
-//    [SVProgressHUD dismiss];
 }
 
 @end

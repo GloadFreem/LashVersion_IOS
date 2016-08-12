@@ -23,7 +23,7 @@
 
 
 @property (nonatomic, strong) UITextField *textField;
-
+@property (nonatomic, strong) UIButton *sendBtn;
 @end
 
 @implementation ProjectPrepareCommentVC
@@ -157,6 +157,7 @@
     btn.titleLabel.font = [UIFont systemFontOfSize:17];
     btn.layer.cornerRadius = 3;
     btn.layer.masksToBounds = YES;
+    _sendBtn = btn;
     [_footer addSubview:btn];
     
     [_textField mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -186,6 +187,7 @@
 {
     [self.textField resignFirstResponder];
     if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
+        _sendBtn.enabled = NO;
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentpartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestComment:)];
@@ -217,6 +219,7 @@
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
+    _sendBtn.enabled = YES;
 }
 
 #pragma mark -刷新控件
@@ -272,7 +275,7 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    NSLog(@"开始编辑");
+//    NSLog(@"开始编辑");
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -281,7 +284,7 @@
         
         self.textField.text = textField.text;
     }
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
 }
 
 - (CGFloat)cellContentViewWith

@@ -1,20 +1,21 @@
 //
 //  LoadingUtil.m
-//  JinZhiTou
+//  company
 //
-//  Created by air on 15/8/13.
-//  Copyright (c) 2015年 金指投. All rights reserved.
+//  Created by Eugene on 16/8/11.
+//  Copyright © 2016年 Eugene. All rights reserved.
 //
 
 #import "LoadingUtil.h"
 
 @implementation LoadingUtil
+
 /**
  *  实例化 加载页面视图
  *
  *  @return 实例化
  */
-+(LoadingView*)shareinstance:(UIView*)view
++(LoadingView*)shareInstance:(UIView *)view
 {
     LoadingView* loadingView = [[LoadingView alloc]initWithFrame:CGRectMake(0, kTopBarHeight+kStatusBarHeight, WIDTH(view), HEIGHT(view)-kTopBarHeight-kStatusBarHeight)];
     loadingView.view = view;
@@ -28,7 +29,7 @@
  *
  *  @return 加载页面实例
  */
-+(LoadingView*)shareinstance:(UIView *)view frame:(CGRect)frame
++(LoadingView*)shareInstance:(UIView *)view frame:(CGRect)frame
 {
     LoadingView* loadingView = [[LoadingView alloc]initWithFrame:frame];
     loadingView.view = view;
@@ -42,11 +43,9 @@
  */
 +(void)showLoadingView:(UIView *)view
 {
-    
-    LoadingView * loadingView = [self shareinstance:view];
+    LoadingView * loadingView = [self shareInstance:view];
     [loadingView setFrame:CGRectMake(0, kTopBarHeight+kStatusBarHeight, WIDTH(view), HEIGHT(view)-kTopBarHeight-kStatusBarHeight)];
     [view addSubview:loadingView];
-    [loadingView startAnimation];
 }
 
 /**
@@ -60,7 +59,6 @@
     [loadingView setFrame:CGRectMake(0, kTopBarHeight+kStatusBarHeight, WIDTH(view), HEIGHT(view)-kTopBarHeight-kStatusBarHeight)];
     [view addSubview:loadingView];
     [view bringSubviewToFront:loadingView];
-    [loadingView startAnimation];
 }
 
 /**
@@ -93,7 +91,6 @@
         if (![view.subviews containsObject:loadingView]) {
             [view addSubview:loadingView];
             [view bringSubviewToFront:loadingView];
-            [loadingView startAnimation];
         }
     }
     
@@ -103,4 +100,13 @@
 {
     [loadingView removeFromSuperview];
 }
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
 @end

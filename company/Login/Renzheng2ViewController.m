@@ -29,8 +29,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-   
-    
     //初始化导航栏标题 和 下一步按钮标题
     if ([self.identifyType integerValue]== 1) {
         self.titleLabel.text = @"(2/2)";
@@ -144,8 +142,12 @@
             //开始加载动画
 //            [activity startAnimating];
             //上传文件
+            self.loadingViewFrame = self.view.frame;
+            self.isTransparent = YES;
+            self.startLoading = YES;
+            
             [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
-            [SVProgressHUD showWithStatus:@"认证中..."];
+//            [SVProgressHUD showWithStatus:@"认证中..."];
         }
     }
 #pragma mark -投机机构身份验证界面  ||  智囊团身份验证界面
@@ -163,14 +165,15 @@
 -(void)requestSetIdentifyType:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         
         if ([status integerValue] == 200) {
-            [SVProgressHUD dismiss];
+//            [SVProgressHUD dismiss];
+            self.startLoading = NO;
 //            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
 //            app.window.rootViewController = app.tabBar;
             //进入应用
@@ -190,12 +193,19 @@
             [self.navigationController pushViewController:tabBarController animated:NO];
             
         }else{
+            self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
 //    [activity stopAnimating];
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD dismiss];
 }
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = NO;
+}
+
 #pragma mark -选择照片事件
 - (IBAction)selectImageBtn:(UIButton *)sender {
     
@@ -294,6 +304,6 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD dismiss];
 }
 @end

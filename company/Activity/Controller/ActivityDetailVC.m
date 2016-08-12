@@ -96,7 +96,8 @@ static CGFloat textFieldH = 40;
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:SHAREACTION];
     //初始化 控件
     [self createUI];
-    
+    //设置加载视图范围
+    self.loadingViewFrame = self.view.frame;
     //请求数据
     [self loadActionDetailData];
     
@@ -244,14 +245,14 @@ static CGFloat textFieldH = 40;
 #pragma mark--------loadShareData分享数据-------------
 -(void)loadShareData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"4",@"type",@"1",@"contentId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"4",@"type",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareData:)];
 }
 -(void)requestShareData:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -272,7 +273,9 @@ static CGFloat textFieldH = 40;
 
 -(void)loadActionDetailData
 {
-    [SVProgressHUD showWithStatus:@"加载中..."];
+//    [SVProgressHUD showWithStatus:@"加载中..."];
+    self.startLoading = YES;
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestActionDetailList:)];
@@ -322,6 +325,8 @@ static CGFloat textFieldH = 40;
 
 //
         }
+    }else{
+        self.isNetRequestError = YES;
     }
 }
 
@@ -371,6 +376,8 @@ static CGFloat textFieldH = 40;
             //点赞评论
             [self loadActionCommentData];
         }
+    }else{
+        self.isNetRequestError = YES;
     }
 }
 
@@ -436,9 +443,20 @@ static CGFloat textFieldH = 40;
             [self performSelector:@selector(layout:) withObject:nil afterDelay:0.1];
             
         }
+    }else{
+        self.isNetRequestError = YES;
     }
 }
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
 
+-(void)refresh
+{
+    [self loadActionDetailData];
+}
 
 -(void)setHeaderModel:(ActivityDetailHeaderModel *)headerModel
 {
@@ -546,8 +564,10 @@ static CGFloat textFieldH = 40;
     }
     
     [self.tableView reloadData];
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD dismiss];
+    self.startLoading = NO;
 }
+
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

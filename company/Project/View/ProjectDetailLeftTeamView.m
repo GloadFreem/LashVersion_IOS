@@ -107,22 +107,24 @@
     .topSpaceToView(_bottomView1,10)
     .heightIs(120);
     
-    _coverBtn = [UIButton new];
-    [_coverBtn setBackgroundImage:[UIImage imageNamed:@"icon_project_cover"] forState:UIControlStateNormal];
-    [_coverBtn setBackgroundImage:[UIImage imageNamed:@"icon_project_cover"] forState:UIControlStateHighlighted];
-    [_coverBtn addTarget:self action:@selector(coverBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView addSubview:_coverBtn];
-    
-    _coverBtn.sd_layout
-    .leftEqualToView(self.contentView)
-    .rightEqualToView(self.contentView)
-    .topEqualToView(_scrollView2)
-    .heightIs(120);
-    
     if ([self.authenticName isEqualToString:@"已认证"]) {
-        [_coverBtn setHidden:YES];
+
+        if (_coverBtn) {
+            [_coverBtn removeFromSuperview];
+        }
     }else{
-        [_coverBtn setHidden:NO];
+        if (!_coverBtn) {
+            _coverBtn = [UIButton new];
+            [_coverBtn setBackgroundImage:[UIImage imageNamed:@"icon_project_cover"] forState:UIControlStateNormal];
+            [_coverBtn setBackgroundImage:[UIImage imageNamed:@"icon_project_cover"] forState:UIControlStateHighlighted];
+            [_coverBtn addTarget:self action:@selector(coverBtnClick) forControlEvents:UIControlEventTouchUpInside];
+            _coverBtn.sd_layout
+            .leftEqualToView(self.contentView)
+            .rightEqualToView(self.contentView)
+            .topEqualToView(_scrollView2)
+            .heightIs(120);
+        }
+        [self.contentView addSubview:_coverBtn];
     }
     
     _bottomView2 = [UIView new];

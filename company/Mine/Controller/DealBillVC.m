@@ -70,44 +70,46 @@
             if (_page == 0) {
                 [_dataArray removeAllObjects];
             }
-            if ([jsonDic[@"data"] count]) {
+            if ( jsonDic[@"data"] && [jsonDic[@"data"] count]) {
                 NSArray *modelArray =[BillDetailCellModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
                 for (NSInteger i =0; i < modelArray.count; i ++) {
                     
                     [_dataArray addObject:modelArray[i]];
                 }
             }
-            for (NSInteger i =0; i < _dataArray.count - 1; i ++) {
-                if (i == 0) {
-                    BillDetailCellModel *model = _dataArray[0];
-                    model.isShow = YES;
-                }
-                BillDetailCellModel *modelI = _dataArray[i];
-                NSArray *arr1 = [modelI.record.tradeDate componentsSeparatedByString:@" "];
-                NSArray *arr2 = [arr1[0] componentsSeparatedByString:@"-"];
-                NSString *year1 = arr2[0];
-                for (NSInteger j =i +1; j < _dataArray.count; j ++) {
-                    BillDetailCellModel *modelJ = _dataArray[j];
-                    arr1 = [modelJ.record.tradeDate componentsSeparatedByString:@" "];
-                    arr2 = [arr1[0] componentsSeparatedByString:@"-"];
-                    NSString *year2 = arr2[0];
-                    if ([year1 isEqualToString:year2]) {
-                        modelJ.isShow = NO;
-                    }else{
-                        modelJ.isShow = YES;
+            if (_dataArray.count > 1) {
+                
+                for (NSInteger i =0; i < _dataArray.count - 1; i ++) {
+                    if (i == 0) {
+                        BillDetailCellModel *model = _dataArray[0];
+                        model.isShow = YES;
                     }
+                    BillDetailCellModel *modelI = _dataArray[i];
+                    NSArray *arr1 = [modelI.record.tradeDate componentsSeparatedByString:@" "];
+                    NSArray *arr2 = [arr1[0] componentsSeparatedByString:@"-"];
+                    NSString *year1 = arr2[0];
+                    for (NSInteger j =i +1; j < _dataArray.count; j ++) {
+                        BillDetailCellModel *modelJ = _dataArray[j];
+                        arr1 = [modelJ.record.tradeDate componentsSeparatedByString:@" "];
+                        arr2 = [arr1[0] componentsSeparatedByString:@"-"];
+                        NSString *year2 = arr2[0];
+                        if ([year1 isEqualToString:year2]) {
+                            modelJ.isShow = NO;
+                        }else{
+                            modelJ.isShow = YES;
+                        }
                 }
-                if (_dataArray.count) {
-                    [self.tableView reloadData];
-                }
-                [_tableView.mj_header endRefreshing];
-                [_tableView.mj_footer endRefreshing];
             }
+                [self.tableView reloadData];
+
+        }
+            
         }else{
-            [_tableView.mj_header endRefreshing];
-            [_tableView.mj_footer endRefreshing];
+            
         }
     }
+    [_tableView.mj_header endRefreshing];
+    [_tableView.mj_footer endRefreshing];
 }
 -(void)createTableView
 {

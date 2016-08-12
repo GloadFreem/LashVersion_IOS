@@ -48,8 +48,6 @@
 #import "UIView+Extension.h"
 
 #pragma mark -searchbar
-#import "LoadingUtil.h"
-#import "LoadingView.h"
 #import "NSString+SBJSON.h"
 #import "DialogUtil.h"
 #import "SDImageCache.h"

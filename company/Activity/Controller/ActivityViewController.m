@@ -34,6 +34,8 @@
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
 
+@property (nonatomic, assign) BOOL isFirst;
+
 @end
 
 @implementation ActivityViewController
@@ -46,6 +48,8 @@
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
+    _isFirst = YES;
+    
     //初始化tableView
     [self createTableView];
     //初始化搜索框
@@ -57,6 +61,9 @@
     
     self.page = 0;
     self.searchPage = 0;
+    //设置加载视图范围
+    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT -49);
+    
     //加载数据
     [self loadActionListData];
     
@@ -112,6 +119,11 @@
 
 -(void)loadActionListData
 {
+    if (_isFirst) {
+        //        [SVProgressHUD showWithStatus:@"加载中"];
+        self.startLoading = YES;
+    }
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionListPartner,@"partner",STRING(@"%ld",(long)self.page),@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_LIST postParam:dic type:0 delegate:self sel:@selector(requestActionList:)];
@@ -137,6 +149,9 @@
                 [array addObject:baseModel];
             }
             
+            if (_isFirst) {
+                _isFirst = NO;
+            }
             //设置数据模型
             self.dataSourceArray = array;
             [self.tableView.mj_header endRefreshing];
@@ -145,7 +160,21 @@
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
         }
+        self.startLoading = NO;
+    }else{
+         self.isNetRequestError  =YES;
     }
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self loadActionListData];
 }
 
 -(void)setDataSourceArray:(NSMutableArray *)dataSourceArray
@@ -171,7 +200,7 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-    [self.tableView.mj_header beginRefreshing];
+//    [self.tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     
     

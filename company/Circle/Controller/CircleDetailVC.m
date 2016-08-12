@@ -30,6 +30,7 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) UITextField *textField;
+@property (nonatomic, strong) UIButton *sendBtn;
 @property (nonatomic, copy) NSString *userId;  //回复人ID
 @property (nonatomic, copy) NSString *flag;
 @property (nonatomic, strong) NSMutableArray *atUserIdArray; //回复人id数组
@@ -51,6 +52,8 @@
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
 
+@property (nonatomic, assign) BOOL isFirst;
+
 @end
 
 @implementation CircleDetailVC
@@ -71,6 +74,7 @@
     self.praisePartner = [TDUtil encryKeyWithMD5:KEY action:CIRCLE_PRAISE];
     self.deletePartner = [TDUtil encryKeyWithMD5:KEY action:DELETECOMMENT];
     
+    _isFirst = YES;
     
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -90,18 +94,24 @@
     NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
     _selfId = [data objectForKey:USER_STATIC_USER_ID];
     
-    //请求数据
-    [self loadData];
+    //设置加载视图范围
+    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
     
     //设置导航栏
     [self setupNav];
     
     [self createTableView];
     
+    //请求数据
+    [self loadData];
+    
 }
 -(void)loadData
 {
-    [SVProgressHUD showWithStatus:@"加载中..."];
+//    [SVProgressHUD showWithStatus:@"加载中..."];
+    if (_isFirst) {
+       self.startLoading = YES;
+    }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestCircleDetail:)];
@@ -221,6 +231,9 @@
                 [_dataArray addObject:detailCommentModel];
             }
             
+            if (_isFirst) {
+                _isFirst = NO;
+            }
 //            NSLog(@"dataArray的个数：---%ld",_dataArray.count);
             [_tableView reloadData];
             [self.tableView.mj_header endRefreshing];
@@ -228,14 +241,28 @@
             
         }else{
             
-            [SVProgressHUD dismiss];
+//            [SVProgressHUD dismiss];
             [self.tableView.mj_footer endRefreshing];
 
             [self.tableView.mj_header endRefreshing];
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             
         }
+        self.startLoading = NO;
+    }else{
+        self.isNetRequestError  =YES;
     }
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self loadData];
 }
 
 #pragma mark -loadMoreData 
@@ -255,7 +282,6 @@
     if (jsonDic!=nil) {
       NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            [SVProgressHUD dismiss];
             //解析数据
             //将字典数组转化为模型数组  拿到CircleCommentsModel模型数组
             NSArray *modelArray = [CircleCommentsModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
@@ -288,7 +314,6 @@
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
         }else{
-            [SVProgressHUD dismiss];
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -434,6 +459,7 @@
     answerBtn.layer.masksToBounds = YES;
     answerBtn.titleLabel.font = BGFont(16);
     [answerBtn addTarget:self action:@selector(sendComment:) forControlEvents:UIControlEventTouchUpInside];
+    _sendBtn = answerBtn;
     [view addSubview:answerBtn];
     [answerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(field.mas_right).offset(5);
@@ -644,6 +670,7 @@
          
          
          //开始请求
+          _sendBtn.enabled = NO;
          [self.httpUtil getDataFromAPIWithOps:CIRCLE_COMMENT_FEELING postParam:dic type:0 delegate:self sel:@selector(requestCircleComment:)];
     
 }
@@ -664,7 +691,7 @@
     }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
     }
-    
+    _sendBtn.enabled = YES;
 }
 #pragma mark -cell_delegate  点赞按钮事件处理
 -(void)didClickPraiseBtn:(CircleDetailHeaderCell *)cell model:(CircleListModel *)model
@@ -748,7 +775,6 @@
         if ([status intValue] == 200) {
             _praiseSuccess = YES;
             
-            
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
@@ -782,7 +808,7 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
-    NSLog(@"开始编辑");
+//    NSLog(@"开始编辑");
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -791,7 +817,7 @@
         
         self.textField.text = textField.text;
     }
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
 }
 
 @end

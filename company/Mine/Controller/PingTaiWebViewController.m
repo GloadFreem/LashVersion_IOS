@@ -27,6 +27,10 @@
     
     _webView  =[[UIWebView alloc]initWithFrame:self.view.frame];
     _webView.delegate =self;
+    [self.view addSubview:_webView];
+    
+    self.loadingViewFrame = _webView.frame;
+    
     [self startLoadDetailData];
 }
 
@@ -46,15 +50,13 @@
 -(void)createLoadingView
 {
     _gifView = [[UIView alloc]initWithFrame:self.view.frame];
-    _gifView.backgroundColor = [UIColor blackColor];
-    _gifView.alpha = 0.3;
+    _gifView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_gifView];
     
-    
-    _gifImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 174*WIDTHCONFIG, 174*WIDTHCONFIG)];
+    _gifImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 150*WIDTHCONFIG, 150*WIDTHCONFIG)];
     _gifImageView.centerX = self.view.centerX;
     _gifImageView.centerY = self.view.centerY - 50;
-    UIImage *image = [UIImage sd_animatedGIFNamed:@"jinzhit001"];
+    UIImage *image = [UIImage sd_animatedGIFNamed:@"loadingView"];
     _gifImageView.image = image;
     [self.view addSubview:_gifImageView];
     
@@ -64,7 +66,7 @@
 {
     [_gifImageView removeFromSuperview];
     [_gifView removeFromSuperview];
-    [self.view addSubview:_webView];
+    
 }
 
 -(void)leftBack
@@ -88,16 +90,14 @@
 {
     if (webView == self.webView) {
 //        [SVProgressHUD showWithStatus:@"加载中..."];
-        
+        self.startLoading = YES;
     }
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
-//        [SVProgressHUD dismiss];
-        [self removeLoadingView];
-        
+        self.startLoading = NO;
     }
     
 }
@@ -105,10 +105,9 @@
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     if (webView == self.webView) {
-//        [SVProgressHUD dismiss];
-        [self removeLoadingView];
+        self.startLoading = YES;
+        self.isNetRequestError = YES;
     }
-    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"加载失败"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -120,14 +119,12 @@
 {
     [super viewWillAppear:animated];
     
-    [self createLoadingView];    //创建加载动画
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-//    [SVProgressHUD dismiss];
-    [self removeLoadingView];
+
 }
 
 /*

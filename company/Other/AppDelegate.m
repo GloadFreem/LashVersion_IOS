@@ -88,8 +88,8 @@
                     [self.nav setNavigationBarHidden:YES];
                     [_window setRootViewController:self.nav];
                 }else{
-                    LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
                     
+                    LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
                     self.nav = [[UINavigationController alloc]initWithRootViewController:login];
                     [_window setRootViewController:self.nav];
                 }

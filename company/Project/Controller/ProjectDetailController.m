@@ -89,7 +89,7 @@
 @property (nonatomic, assign) NSInteger sceneId;
 
 @property (nonatomic, strong) UITextField *textField;
-
+@property (nonatomic, strong) UIButton *sendBtn;
 @property (nonatomic, copy) NSString *collectPartner;
 
 @property (nonatomic, copy) NSString *sharePartner;    //分享的部分内容
@@ -136,13 +136,15 @@
     self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    //设置加载视图范围
+    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64);
     //下载认证信息
     [self loadAuthenData];
     
     //下载详情数据
     [self startLoadData];
     [self loadShareData];
-    [self loadSceneData];
+    
     
     _heightArray = [NSMutableArray array];                  //子视图高度数组
     
@@ -153,7 +155,6 @@
     //下载客服电话
     [self loadServicePhone];
     
-
 }
 -(void)loadServicePhone
 {
@@ -271,7 +272,9 @@
 }
 -(void)startLoadData
 {
-    [SVProgressHUD showWithStatus:@"加载中..."];
+//    [SVProgressHUD showWithStatus:@"加载中..."];
+    self.startLoading = YES;
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestProjectDetail:)];
@@ -312,11 +315,14 @@
                 scene.bannerView = bannerView;
                 
                 [self createUI];
+                
+                [self loadSceneData];
             }
         }else{
-        [SVProgressHUD dismiss];
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+        self.isNetRequestError  =YES;
         }
+    }else{
+        self.isNetRequestError  =YES;
     }
 }
 
@@ -324,7 +330,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE postParam:dic type:0 delegate:self sel:@selector(requestProjectScene:)];
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE postParam:dic type:1 delegate:self sel:@selector(requestProjectScene:)];
 }
 -(void)requestProjectScene:(ASIHTTPRequest *)request
 {
@@ -343,9 +349,23 @@
             }
             
         }else{
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
+        self.startLoading = NO;
+    }else{
+        self.isNetRequestError  =YES;
     }
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self startLoadData];
 }
 
 #pragma mark - 设置下滑条
@@ -528,7 +548,7 @@
         _textField.layer.borderWidth = 0.5;
         _textField.delegate = self;
         _textField.font = BGFont(15);
-        _textField.returnKeyType = UIReturnKeyDone;
+        _textField.returnKeyType = UIReturnKeySend;
         [_footer addSubview:_textField];
         
         UIButton * btn =[[UIButton alloc]init];
@@ -539,6 +559,7 @@
         btn.titleLabel.font = [UIFont systemFontOfSize:17];
         btn.layer.cornerRadius = 3;
         btn.layer.masksToBounds = YES;
+        _sendBtn = btn;
         [_footer addSubview:btn];
         
         [_textField mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -562,9 +583,12 @@
 -(void)sendMessage:(UIButton*)btn
 {
     [self.textField resignFirstResponder];
-
+    
         if (self.sceneId) {
             if (self.textField.text && ![self.textField.text isEqualToString:@""]) {
+                
+                _sendBtn.enabled = NO;
+                
                 NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%@",self.textField.text],@"content", nil];
                 //开始请求
                 [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
@@ -593,7 +617,7 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            
+        
         self.textField.text = @"";
         [self.textField resignFirstResponder];
 #pragma mark ---------刷新表格-----------
@@ -605,6 +629,7 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
+    _sendBtn.enabled = YES;
 }
 #pragma mark ------------------ProjectDetailSceneViewDelegate--------------
 -(void)didClickMoreBtn

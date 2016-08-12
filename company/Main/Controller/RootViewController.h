@@ -8,16 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+#import "HttpUtils.h"
 #import "LoadingView.h"
 #import "LoadingUtil.h"
-#import "HttpUtils.h"
 
 @interface RootViewController : UIViewController<LoadingViewDelegate>
 
 @property (nonatomic, copy) NSString *partner;
 
 @property(assign,nonatomic)int code;
-
 @property(retain,nonatomic)NSString* content; //提示信息内容
 @property(assign,nonatomic)BOOL startLoading; //是否开始加载
 @property(assign,nonatomic)BOOL isTransparent; //是否透明显示全局视图

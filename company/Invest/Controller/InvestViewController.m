@@ -108,8 +108,6 @@
     
     _identyType = @"2";
     
-    [self startLoadData];
-    
     //初始化模型数组
     _investPersonArray = [NSMutableArray array];
     _investOrganizationArray = [NSMutableArray array];
@@ -121,7 +119,10 @@
     _lineColor = orangeColor;
     _type = 0;
     [self.view addSubview:self.titleScrollView];          //添加点击按钮
-    [self.view addSubview:self.subViewScrollView];
+//    [self.view addSubview:self.subViewScrollView];
+    
+    
+    [self startLoadData];
 }
 
 -(void)createUI
@@ -132,7 +133,8 @@
 #pragma mark - 开始请求数据
 -(void)startLoadData
 {
-    [SVProgressHUD showWithStatus:@"加载中"];
+//    [SVProgressHUD showWithStatus:@"加载中"];
+    
     //投资人
     if (_tableViewSelected == 1) {
         
@@ -158,9 +160,11 @@
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",_identyType,@"type",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     
 //    [SVProgressHUD showWithStatus:@"加载中"];
+    
+    self.startLoading = YES;
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:INVEST_PUBLIC_LIST postParam:dic type:1 delegate:self sel:@selector(requestInvestList:)];
-    [SVProgressHUD dismiss];
+
 }
 
 -(void)requestInvestList:(ASIHTTPRequest *)request
@@ -188,6 +192,7 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            
             if (jsonDic[@"data"]) {
                 //投资人列表
                 if (_tableViewSelected == 1) {
@@ -303,12 +308,26 @@
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
+        
+        self.startLoading = NO;
+        
+    }else{
+        self.isNetRequestError  =YES;
     }
     
 }
 
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self startLoadData];
+}
 
 #pragma mark - 设置下滑条
 - (void)setLineColor:(UIColor *)lineColor{
@@ -395,6 +414,10 @@
         _thinkTankTableView = [[UITableView alloc]init];
         [self createTableView:_thinkTankTableView index:2];
     }
+
+    //加载视图大小
+    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT -49);
+    
     return _subViewScrollView;
 }
 
@@ -765,59 +788,17 @@
 
 -(void)didClickCommitBtn:(InvestPersonCell *)cell andModel:(InvestListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
+
         InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
         
         vc.model = model;
         vc.viewController = self;
         
         [self.navigationController pushViewController:vc animated:YES];
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，通过后方可使用此功能！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"] || [_authenticName isEqualToString:@"认证失败"])
-    {
-        [self presentAlertView];
-    }
+  
 }
 
--(void)presentAlertView
-{
-    //没有认证 提醒去认证
-    NSString *message;
-    if ([_authenticName isEqualToString:@"未认证"]) {
-        message = @"您还没有实名认证，请先实名认证";
-    }else{
-        message = @"您的实名认证未通过，请继续认证";
-    }
-    
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:message preferredStyle:UIAlertControllerStyleAlert];
-    __block InvestViewController* blockSelf = self;
-    
-    UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [blockSelf btnCertain:nil];
-    }];
-    
-    [alertController addAction:cancleAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
 
--(void)btnCertain:(id)sender
-{
-    RenzhengViewController  * renzheng = [RenzhengViewController new];
-    renzheng.identifyType = self.identiyTypeId;
-    [self.navigationController pushViewController:renzheng animated:YES];
-}
 
 
 -(void)didClickAttentionBtn:(InvestPersonCell *)cell andModel:(InvestListModel *)model andIndexPath:(NSIndexPath *)indexPath
@@ -895,11 +876,8 @@
            default:
                break;
        }
-       
-       
-       
+    
        [self.tableView reloadData];
-       
        
        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",model.userId,@"userId",flag,@"flag", nil];
        //开始请求
@@ -931,23 +909,11 @@
 #pragma mark -----投资机构InvestOrganizationSecondCellDelegate-------------------
 -(void)didClickCommitBtn:(InvestOrganizationSecondCell *)cell andModel:(InvestListModel *)model
 {
-    if ([_authenticName isEqualToString:@"已认证"])
-    {
+
         InvestCommitProjectVC *vc = [InvestCommitProjectVC new];
         vc.model = model;
         
         [self.navigationController pushViewController:vc animated:YES];
-    }
-    
-    if ([_authenticName isEqualToString:@"认证中"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertView show];
-    }
-    
-    if ([_authenticName isEqualToString:@"未认证"] || [_authenticName isEqualToString:@"认证失败"])
-    {
-        [self presentAlertView];
-    }
     
 }
 -(void)didClickAttentionBtn:(InvestOrganizationSecondCell *)cell andModel:(InvestListModel *)model

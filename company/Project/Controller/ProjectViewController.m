@@ -122,16 +122,16 @@
     //金条
     self.goldPartner = [TDUtil encryKeyWithMD5:KEY action:GOLDCOUNT];
     
-    self.navigationItem.title = @"项目";
+    //设置 加载视图界面
+    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 49);
+    
+    [self createUI];
     
     [self startLoadBannerData];
     
-    [self startLoadData];
     //下载认证信息
     [self loadAuthenData];
 
-    [self createUI];
-    
     [self loadMessage];
     
     [self loadVersion];
@@ -139,7 +139,6 @@
     
 //    [self createGoldView];
     //保存登录时间
-    
     [self compareTime];
     
     //添加监听
@@ -483,7 +482,7 @@
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page",[NSString stringWithFormat:@"%@",_type],@"type", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_LIST postParam:dic type:0 delegate:self sel:@selector(requestProjectList:)];
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_LIST postParam:dic type:1 delegate:self sel:@selector(requestProjectList:)];
 }
 
 -(void)requestProjectList:(ASIHTTPRequest *)request
@@ -563,13 +562,31 @@
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
+        
+        self.startLoading = NO;
+    }else{
+        self.isNetRequestError = YES;
     }
 }
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self startLoadBannerData];
+}
+
 #pragma mark----------------------------请求banner数据----------------------
 -(void)startLoadBannerData
 {
 
-    [SVProgressHUD showWithStatus:@"加载中..."];
+//    [SVProgressHUD showWithStatus:@"加载中..."];
+    //设置加载动画
+    self.startLoading = YES;
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.bannerPartner,@"partner", nil];
     //开始请求
@@ -616,9 +633,12 @@
             //搭建banner
             [self createBanner];
             
+            [self startLoadData];
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
+    }else{
+        self.isNetRequestError  =YES;
     }
 }
 #pragma mark------------------------------创建banner------------------------
@@ -639,8 +659,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    [self.navigationController.navigationBar setHidden:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;
@@ -670,11 +688,44 @@
     
 
 }
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [super viewWillAppear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
+    self.navigationController.navigationBar.translucent=NO;
+    [self.navigationController.navigationBar setHidden:NO];
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:NO animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:NO animated:NO];
+        }
+    }
+    
+    //不隐藏tabbar
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:NO animated:NO];
+    
+}
 #pragma mark -视图即将消失
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD dismiss];
 }
 
 #pragma mark-------------------站内信通知信息----------------------
@@ -704,7 +755,7 @@
 -(void)createUI
 {
     self.navigationItem.title = @"项目";
-
+    
     //设置站内信状态
     [self setLetterStatus:nil];
 
@@ -712,7 +763,7 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-    [_tableView.mj_header beginRefreshing];
+//    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     
 }

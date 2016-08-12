@@ -219,7 +219,8 @@
         login = [[LoginRegistViewController alloc]init];
     }
     
-    [self.navigationController pushViewController:login animated:NO];
+//    [self.navigationController pushViewController:login animated:NO];
+    [self.navigationController popToViewController:login animated:NO];
     
 
 }

@@ -221,7 +221,6 @@
     self.startLoading =NO;
     [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网络请求错误"];
     [activity stopAnimating];
-    
 }
 #pragma mark -没有账号
 //没有账号
@@ -262,8 +261,11 @@
             [data synchronize];
             
              NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.wePartner,@"partner",snsAccount.openId,@"wechatID",@"1",@"platform",regId,@"regid", nil];
+            self.loadingViewFrame = self.view.frame;
+//            [SVProgressHUD showWithStatus:@"登录中..."];
+            self.startLoading = YES;
+            self.isTransparent = YES;
             
-            [SVProgressHUD showWithStatus:@"登录中..."];
             //开始请求
             [self.httpUtil getDataFromAPIWithOps:WECHATLOGINUSER postParam:dic type:0 delegate:self sel:@selector(requestWELogin:)];
             
@@ -282,8 +284,8 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            
-            [SVProgressHUD dismiss];
+            self.startLoading = NO;
+//            [SVProgressHUD dismiss];
             
             NSDictionary *data= [jsonDic valueForKey:@"data"];
             NSDictionary *idenTypeDic = [NSDictionary dictionaryWithDictionary:[data valueForKey:@"identityType"]];
@@ -320,7 +322,8 @@
             }
             
         }else{
-        [SVProgressHUD dismiss];
+//        [SVProgressHUD dismiss];
+            self.startLoading = NO;
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
