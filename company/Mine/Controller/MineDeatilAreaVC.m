@@ -14,7 +14,7 @@
 #define MODIFYADDRESS @"requestModifyCity"
 @interface MineDeatilAreaVC ()<UITableViewDelegate,UITableViewDataSource>
 
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableViewCustomView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *idArray;
 @property (nonatomic, copy) NSString *city;
@@ -36,6 +36,8 @@
     if (!_idArray) {
         _idArray  = [NSMutableArray array];
     }
+    
+    self.loadingViewFrame = self.view.frame;
     
     [self setupNav];
     
@@ -64,7 +66,7 @@
 
 -(void)createTableView
 {
-    _tableView = [UITableView new];
+    _tableView = [UITableViewCustomView new];
     _tableView.delegate = self;
     _tableView.dataSource =self;
     [self.view addSubview:_tableView];
@@ -76,6 +78,9 @@
 -(void)loadData
 {
     NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.provinceId,@"provinceId", nil];
+    
+    self.startLoading = YES;
+    
     [self.httpUtil getDataFromAPIWithOps:CITY_LIST postParam:dic type:0 delegate:self sel:@selector(requestCity:)];
 }
 
@@ -87,19 +92,40 @@
     if (dic != nil) {
         NSString *status = [dic objectForKey:@"status"];
         if ([status integerValue] == 200)  {
+            
+            self.startLoading = NO;
+            
             NSArray *dataArray = [NSArray arrayWithArray:dic[@"data"]];
             for (NSDictionary *dic in dataArray) {
                 [_dataArray addObject:dic[@"name"]];
                 [_idArray addObject:dic[@"cityId"]];
             }
-            
+            if (_dataArray.count <= 0 || _idArray.count <= 0) {
+                self.tableView.isNone = YES;
+            }else{
+                self.tableView.isNone = NO;
+            }
             [_tableView reloadData];
         }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];
+            self.startLoading = NO;
         }
+    }else{
+        self.isNetRequestError = YES;
     }
     
 }
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self loadData];
+}
+
 #pragma mark -tableViewDatasource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

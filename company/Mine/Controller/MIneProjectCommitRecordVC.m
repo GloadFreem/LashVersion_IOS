@@ -14,7 +14,7 @@
 #define COMMITRECORD @"requestProjectCommitRecords"
 @interface MIneProjectCommitRecordVC ()<UITableViewDelegate,UITableViewDataSource>
 
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableViewCustomView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
 @property (nonatomic, assign) NSInteger page;
@@ -31,49 +31,84 @@
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
-    
     _page = 0;
-    [self startLoadData];
     [self setupNav];
-    
     [self createTableView];
+    
+    self.loadingViewFrame = self.view.frame;
+    
+    [self startLoadData];
+    
+    
+   
 }
 -(void)startLoadData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+    self.startLoading = YES;
     //    开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COMMIT_RECORD postParam:dic type:0 delegate:self sel:@selector(requestList:)];
 }
 -(void)requestList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
+            self.startLoading = NO;
+            
             if (_page == 0) {
                 [_dataArray removeAllObjects];
             }
+            NSMutableArray *tempArray = [NSMutableArray new];
             NSArray *modelArray =[MineProjectCommitRecordBaseModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
             for (NSInteger i =0; i < modelArray.count; i ++) {
                 MineProjectCommitRecordBaseModel *model = modelArray[i];
-                [_dataArray addObject:model];
+                [tempArray addObject:model];
             }
+            self.dataArray = tempArray;
             
             
-            [self.tableView reloadData];
             [_tableView.mj_header endRefreshing];
             [_tableView.mj_footer endRefreshing];
         }else{
+            self.startLoading = NO;
+            
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             
             [_tableView.mj_header endRefreshing];
             [_tableView.mj_footer endRefreshing];
         }
+    }else{
+        self.isNetRequestError = YES;
     }
 }
+
+-(void)setDataArray:(NSMutableArray *)dataArray
+{
+    self->_dataArray = dataArray;
+    if (_dataArray.count <= 0) {
+        self.tableView.isNone = YES;
+    }else{
+        self.tableView.isNone = NO;
+    }
+    [self.tableView reloadData];
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self startLoadData];
+}
+
 #pragma mark -设置导航栏
 -(void)setupNav
 {
@@ -92,7 +127,7 @@
 }
 -(void)createTableView
 {
-    _tableView  = [UITableView new];
+    _tableView  = [UITableViewCustomView new];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -103,7 +138,7 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-    [_tableView.mj_header beginRefreshing];
+//    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     //    tableView.mj_footer.hidden = YES;
     _tableView.mj_footer.automaticallyHidden = NO;

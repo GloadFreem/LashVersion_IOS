@@ -19,7 +19,7 @@
 #define INNERMESSAGE @"requestInnerMessageList"
 @interface ProjectLetterViewController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property (nonatomic, strong) UITableView *tableView; //列表
+@property (nonatomic, strong) UITableViewCustomView *tableView; //列表
 @property (nonatomic, strong) NSMutableArray *dataArray;    //数据
 
 @property (nonatomic, strong) NSMutableArray *deleteArray;
@@ -70,6 +70,7 @@
 -(void)startLoadData
 {
     NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.messagePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+    self.startLoading = YES;
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_INNER_MESSAGE postParam:dic type:0 delegate:self sel:@selector(requestMessageList:)];
 }
@@ -81,33 +82,59 @@
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            self.startLoading = NO;
             
             if (_page == 0) {
                 [_dataArray removeAllObjects];
                 [_deleteArray removeAllObjects];
             }
+            NSMutableArray *tempArray = [NSMutableArray new];
             NSArray *modelArray = [LetterBaseModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
             for (NSInteger i = 0; i < modelArray.count; i ++) {
                 LetterBaseModel *baseModel = modelArray[i];
-                [_dataArray addObject:baseModel];
+                [tempArray addObject:baseModel];
             }
-            [self.tableView reloadData];
+            self.dataArray = tempArray;
+        
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
         }else{
             //结束刷新
+            self.startLoading = NO;
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
+    }else{
+        self.isNetRequestError = YES;
     }
 }
 
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self startLoadData];
+}
+-(void)setDataArray:(NSMutableArray *)dataArray
+{
+    self->_dataArray = dataArray;
+    if (self.dataArray.count <= 0) {
+        self.tableView.isNone = YES;
+    }else{
+        self.tableView.isNone = NO;
+    }
+    [self.tableView reloadData];
+}
 #pragma mark -创建tableView
 -(void)createTableView
 {
-    _tableView = [[UITableView alloc]init];
+    _tableView = [[UITableViewCustomView alloc]init];
     _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _tableView.delegate =self;
     _tableView.dataSource =self;
@@ -116,7 +143,7 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-    [_tableView.mj_header beginRefreshing];
+//    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
    
     [self.view addSubview:_tableView];
@@ -127,7 +154,7 @@
         make.bottom.mas_equalTo(self.view.bottom).offset(0);
 //        make.height.mas_equalTo(SCREENHEIGHT-64);
     }];
-    
+    self.loadingViewFrame = self.tableView.frame;
 }
 
 -(void)nextPage

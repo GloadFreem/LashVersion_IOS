@@ -179,18 +179,21 @@
 
 -(void)setDataSourceArray:(NSMutableArray *)dataSourceArray
 {
-    _dataSourceArray = dataSourceArray;
+    self->_dataSourceArray = dataSourceArray;
     if(_dataSourceArray.count>0)
     {
-        //刷新数据
-        [self.tableView reloadData];
+        self.tableView.isNone = NO;
+    }else{
+        self.tableView.isNone = YES;
     }
+    //刷新数据
+    [self.tableView reloadData];
 }
 
 #pragma mark -初始化 tableView
 -(void)createTableView
 {
-    _tableView = [[UITableView alloc]init];
+    _tableView = [[UITableViewCustomView alloc]init];
     _tableView.backgroundColor = color(239, 239, 244, 1);
     _tableView.delegate =self;
     _tableView.dataSource =self;
@@ -202,8 +205,6 @@
     _tableView.mj_header.automaticallyChangeAlpha = YES;
 //    [self.tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
-    
-    
     [self.view addSubview:_tableView];
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.view.mas_top);
@@ -211,7 +212,6 @@
         make.right.mas_equalTo(self.view.mas_right);
         make.bottom.mas_equalTo(self.view.mas_bottom);
     }];
-
 }
 
 -(void)refreshHttp

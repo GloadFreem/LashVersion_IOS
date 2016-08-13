@@ -21,7 +21,7 @@
 
 @interface MineThinkTankViewController ()<UITableViewDataSource,UITableViewDelegate>
 
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableViewCustomView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *commentArray;
 @property (nonatomic, strong) NSMutableArray *commentStatusArray;
@@ -57,11 +57,15 @@
     
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTCENTER];
     
-    [self startLoadData];
-    
     [self setupNav];
     
     [self createTableView];
+    
+    self.loadingViewFrame = self.view.frame;
+    
+    [self startLoadData];
+    
+    
 }
 
 
@@ -69,7 +73,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_type],@"type",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     
-    
+    self.startLoading = YES;
     //    开始请求
     [self.httpUtil getDataFromAPIWithOps:LOGO_PROJECT_CENTER postParam:dic type:0 delegate:self sel:@selector(requestList:)];
 }
@@ -82,6 +86,8 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            
+            self.startLoading = NO;
             
             if (_page == 0) {
                 [_investStatusArray removeAllObjects];
@@ -144,19 +150,39 @@
 //                    NSLog(@"加入数组陈宫");
                 }
             }
+            if (_commentArray.count <= 0 && _investArray.count <= 0) {
+                self.tableView.isNone = YES;
+            }else{
+                self.tableView.isNone = NO;
+            }
 //            NSLog(@"数组个数-----%ld",(unsigned long)_investArray.count);
             [self.tableView reloadData];
             [_tableView.mj_header endRefreshing];
             [_tableView.mj_footer endRefreshing];
             
         }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-            
             [_tableView.mj_header endRefreshing];
             [_tableView.mj_footer endRefreshing];
+            self.startLoading = NO;
+        
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
+    }else{
+        self.isNetRequestError = YES;
     }
 }
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self startLoadData];
+}
+
 #pragma mark -设置导航栏
 -(void)setupNav
 {
@@ -171,7 +197,7 @@
 
 -(void)createTableView
 {
-    _tableView  = [UITableView new];
+    _tableView  = [UITableViewCustomView new];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -182,7 +208,7 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-    [_tableView.mj_header beginRefreshing];
+//    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     //    tableView.mj_footer.hidden = YES;
     _tableView.mj_footer.automaticallyHidden = NO;

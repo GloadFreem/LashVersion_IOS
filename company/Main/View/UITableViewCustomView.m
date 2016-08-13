@@ -28,10 +28,10 @@
             view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH(self), HEIGHT(self))];
             view.tag = 100001;
             emptyImgView = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH(self)/2-75, HEIGHT(self)/2-140, 150, 115)];
-            emptyImgView.image = IMAGE(@"noData", @"png");
+            emptyImgView.image = [UIImage imageNamed:@"noData"];
             emptyImgView.contentMode = UIViewContentModeScaleAspectFill;
             [view addSubview:emptyImgView];
-            
+            [self addSubview:view];
         }
         self.separatorStyle = UITableViewCellSelectionStyleNone;
         view.alpha = 1;

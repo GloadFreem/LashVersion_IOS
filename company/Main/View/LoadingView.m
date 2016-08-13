@@ -57,10 +57,10 @@
             _refreshBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH(self)/2-60, POS_Y(_labelMessage), 120, 40)];
             _refreshBtn.layer.borderWidth = 1;
             _refreshBtn.layer.cornerRadius = 5;
-            _refreshBtn.layer.borderColor = AppColorTheme.CGColor;
+            _refreshBtn.layer.borderColor = color(91, 115, 150, 1).CGColor;
             [_refreshBtn setTitle:@"再试一试" forState:UIControlStateNormal];
-            [_refreshBtn setTitleColor:AppColorTheme forState:UIControlStateNormal];
-            [_refreshBtn setTitleColor:AppColorTheme forState:UIControlStateHighlighted];
+            [_refreshBtn setTitleColor:color(91, 115, 150, 1) forState:UIControlStateNormal];
+            [_refreshBtn setTitleColor:color(91, 115, 150, 1) forState:UIControlStateHighlighted];
             [_refreshBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
             [_refreshBtn addTarget:self action:@selector(refresh) forControlEvents:UIControlEventTouchUpInside];
         }

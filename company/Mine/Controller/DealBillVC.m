@@ -15,7 +15,7 @@
 
 @interface DealBillVC ()<UITableViewDelegate,UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UITableViewCustomView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) NSInteger page;
 
@@ -32,9 +32,13 @@
         _dataArray = [NSMutableArray array];
     }
     [self setupNav];
+    [self createTableView];
+    
+    self.loadingViewFrame = self.view.frame;
+    
     _page = 0;
     [self loadData];
-    [self createTableView];
+    
 }
 
 #pragma mark -设置导航栏
@@ -56,6 +60,8 @@
 -(void)loadData
 {
     NSDictionary *dic =[NSDictionary  dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+    self.startLoading = YES;
+    
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_TRADE_LIST postParam:dic type:0 delegate:self sel:@selector(requestTradeList:)];
 }
@@ -67,29 +73,33 @@
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            
+            self.startLoading = NO;
+            
             if (_page == 0) {
                 [_dataArray removeAllObjects];
             }
+            NSMutableArray *tempArray = [NSMutableArray new];
             if ( jsonDic[@"data"] && [jsonDic[@"data"] count]) {
                 NSArray *modelArray =[BillDetailCellModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
                 for (NSInteger i =0; i < modelArray.count; i ++) {
                     
-                    [_dataArray addObject:modelArray[i]];
+                    [tempArray addObject:modelArray[i]];
                 }
             }
-            if (_dataArray.count > 1) {
-                
-                for (NSInteger i =0; i < _dataArray.count - 1; i ++) {
+            
+            if (tempArray.count > 1) {
+                for (NSInteger i =0; i < tempArray.count - 1; i ++) {
                     if (i == 0) {
-                        BillDetailCellModel *model = _dataArray[0];
+                        BillDetailCellModel *model = tempArray[0];
                         model.isShow = YES;
                     }
-                    BillDetailCellModel *modelI = _dataArray[i];
+                    BillDetailCellModel *modelI = tempArray[i];
                     NSArray *arr1 = [modelI.record.tradeDate componentsSeparatedByString:@" "];
                     NSArray *arr2 = [arr1[0] componentsSeparatedByString:@"-"];
                     NSString *year1 = arr2[0];
-                    for (NSInteger j =i +1; j < _dataArray.count; j ++) {
-                        BillDetailCellModel *modelJ = _dataArray[j];
+                    for (NSInteger j =i +1; j < tempArray.count; j ++) {
+                        BillDetailCellModel *modelJ = tempArray[j];
                         arr1 = [modelJ.record.tradeDate componentsSeparatedByString:@" "];
                         arr2 = [arr1[0] componentsSeparatedByString:@"-"];
                         NSString *year2 = arr2[0];
@@ -98,19 +108,46 @@
                         }else{
                             modelJ.isShow = YES;
                         }
+                   }
+               }
+            }else{
+                if (tempArray.count) {
+                    BillDetailCellModel *model = tempArray[0];
+                    model.isShow = YES;
                 }
             }
-                [self.tableView reloadData];
-
+            self.dataArray = tempArray;
         }
-            
-        }else{
-            
-        }
+    }else{
+        self.isNetRequestError = YES;
     }
+    
     [_tableView.mj_header endRefreshing];
     [_tableView.mj_footer endRefreshing];
 }
+
+-(void)setDataArray:(NSMutableArray *)dataArray
+{
+    self->_dataArray = dataArray;
+    if (_dataArray.count <= 0) {
+        self.tableView.isNone = YES;
+    }else{
+        self.tableView.isNone = NO;
+    }
+    [self.tableView reloadData];
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self loadData];
+}
+
 -(void)createTableView
 {
     _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
@@ -118,7 +155,7 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-    [_tableView.mj_header beginRefreshing];
+//    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     //    tableView.mj_footer.hidden = YES;
     _tableView.mj_footer.automaticallyHidden = NO;

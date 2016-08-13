@@ -94,11 +94,21 @@
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
-    [self createUI];
-    
     //获得partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:INVESPUBLICTLIST];
     self.investorCollectPartner = [TDUtil encryKeyWithMD5:KEY action:INVESTORCOLLECT];
+    
+    //加载视图大小
+    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT -49);
+    
+    [self createUI];
+    
+    [self startLoadData];
+}
+
+-(void)createUI
+{
+    self.navigationItem.title = @"投资人";
     
     //默认请求投资人列表
     _tableViewSelected =1;
@@ -119,15 +129,8 @@
     _lineColor = orangeColor;
     _type = 0;
     [self.view addSubview:self.titleScrollView];          //添加点击按钮
-//    [self.view addSubview:self.subViewScrollView];
+    [self.view addSubview:self.subViewScrollView];
     
-    
-    [self startLoadData];
-}
-
--(void)createUI
-{
-    self.navigationItem.title = @"投资人";
 }
 
 #pragma mark - 开始请求数据
@@ -162,6 +165,7 @@
 //    [SVProgressHUD showWithStatus:@"加载中"];
     
     self.startLoading = YES;
+    
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:INVEST_PUBLIC_LIST postParam:dic type:1 delegate:self sel:@selector(requestInvestList:)];
 
@@ -315,7 +319,6 @@
     }else{
         self.isNetRequestError  =YES;
     }
-    
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request
@@ -414,9 +417,6 @@
         _thinkTankTableView = [[UITableView alloc]init];
         [self createTableView:_thinkTankTableView index:2];
     }
-
-    //加载视图大小
-    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT -49);
     
     return _subViewScrollView;
 }
@@ -745,7 +745,7 @@
     tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     tableView.mj_header.automaticallyChangeAlpha = YES;
-    [tableView.mj_header beginRefreshing];
+//    [tableView.mj_header beginRefreshing];
     tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
 //    tableView.mj_footer.hidden = YES;
     tableView.mj_footer.automaticallyHidden = NO;

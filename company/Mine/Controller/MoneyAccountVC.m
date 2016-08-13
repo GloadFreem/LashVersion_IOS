@@ -35,6 +35,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *leftText;
 @property (weak, nonatomic) IBOutlet UILabel *rightText;
 
+@property (nonatomic, assign) BOOL isFirst;
+
 @end
 
 @implementation MoneyAccountVC
@@ -49,15 +51,22 @@
     self.signPartner = [TDUtil encryKeyWithMD5:KEY action:SIGNVERIFY];
     self.withDrawPartner = [TDUtil encryKeyWithMD5:KEY action:WITHDRAW];
     
+    _isFirst = YES;
+    
     //自定义nav
 //    [self setupNav];
-    
+    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
     
 }
 
 #pragma mark ----------认证是否是易宝用户-------------
 -(void)isCheckUserConfirmed
 {
+    
+    if (_isFirst) {
+        self.startLoading = YES;
+    }
+    
     NSString * str = [TDUtil generateUserPlatformNo];
     
     NSMutableDictionary * dic = [NSMutableDictionary new];
@@ -173,6 +182,23 @@
     
     [nsmStr appendString:str2];
     _rightText.text = nsmStr;
+    
+    if (_isFirst) {
+        _isFirst = NO;
+    }
+    
+    self.startLoading = NO;
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self isCheckUserConfirmed];
 }
 
 -(void)sign:(NSString*)signString sel:(SEL)sel type:(int)type

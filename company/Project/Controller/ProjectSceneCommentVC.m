@@ -17,13 +17,16 @@
 {
     NSTimer *_timer;
 }
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableViewCustomView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, strong) UIView *footer;
 
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UIButton *sendBtn;
+
+@property (nonatomic, assign) BOOL isFirst;
+
 @end
 
 @implementation ProjectSceneCommentVC
@@ -41,9 +44,15 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     _page = 0;
     
-    [self startLoadData];
+    _isFirst = YES;
+    
     [self setNav];
     [self createUI];
+    
+    self.loadingViewFrame = self.view.frame;
+    
+    [self startLoadData];
+    
     
 }
 
@@ -71,7 +80,13 @@
 }
 -(void)startLoadData
 {
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+   
+    if (_isFirst) {
+        self.startLoading = YES;
+    }
+    
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestCommentList:)];
 }
@@ -88,6 +103,12 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            
+            self.startLoading = NO;
+            
+            if (_isFirst) {
+                _isFirst = NO;
+            }
             
             NSArray *modelArray = [ProjectSceneCommentModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
             for (NSInteger i = 0; i < modelArray.count; i ++) {
@@ -114,6 +135,13 @@
             
                 [_dataArray insertObject:cellModel atIndex:0];
             }
+            
+            if (_dataArray.count <= 0) {
+                self.tableView.isNone = YES;
+            }else{
+                self.tableView.isNone = NO;
+            }
+            
             //刷新表
             [self.tableView reloadData];
             
@@ -125,17 +153,33 @@
             [self.tableView.mj_footer endRefreshing];
             
         }else{
+            
+            self.startLoading = NO;
+            
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
         }
+    }else{
+        self.isNetRequestError = YES;
     }
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self startLoadData];
 }
 
 -(void)createUI
 {
-    _tableView = [[UITableView alloc]init];
+    _tableView = [[UITableViewCustomView alloc]init];
     _tableView.dataSource =self;
     _tableView.delegate =self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -144,7 +188,7 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-    [_tableView.mj_header beginRefreshing];
+//    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {

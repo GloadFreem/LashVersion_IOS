@@ -219,7 +219,7 @@
 {
     [self createHeaderView];
     
-    _tableView = [[UITableView alloc]init];
+    _tableView = [[UITableViewCustomView alloc]init];
     _tableView.backgroundColor = [UIColor whiteColor];
     _tableView.delegate =self;
     _tableView.dataSource =self;
@@ -460,8 +460,11 @@
 
 -(void)setDataArray:(NSMutableArray *)dataArray
 {
-    _dataArray = dataArray;
-    if (dataArray!=nil && dataArray.count) {
+    self->_dataArray = dataArray;
+    if (_dataArray.count <= 0 ) {
+        self.tableView.isNone = YES;
+    }else{
+        self.tableView.isNone = NO;
         [self.tableView reloadData];
     }
 }

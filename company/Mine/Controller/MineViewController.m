@@ -86,6 +86,8 @@
     
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:INVITEFRIEND];
     
+    self.loadingViewFrame = self.view.frame;
+    
     [self loadShareData];
     
 }
@@ -121,8 +123,7 @@
 -(void)loadAuthenData
 {
     if (_isFirst) {
-        [SVProgressHUD showWithStatus:@"加载中..."];
-        _isFirst = NO;
+        self.startLoading = YES;
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
     //开始请求
@@ -137,6 +138,7 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            
             NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
             
             AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
@@ -174,7 +176,13 @@
             
             [self setModel];
             
+            if (_isFirst) {
+                _isFirst = NO;
+            }
+            
         }
+    }else{
+        self.isNetRequestError = YES;
     }
 }
 
@@ -204,8 +212,20 @@
 //    NSLog(@"%@",_nameStr);
     _company.text = _companyStr;
     
-    [SVProgressHUD dismiss];
+    self.startLoading = NO;
 }
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self loadAuthenData];
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -219,7 +239,7 @@
 {
     [super viewWillDisappear: animated];
     [self.navigationController.navigationBar setHidden:NO];
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD dismiss];
 }
 
 #pragma mark -进入头像详情页面

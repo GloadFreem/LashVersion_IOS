@@ -10,5 +10,5 @@
 
 @interface CircleViewController : RootViewController
 @property (nonatomic, strong) NSMutableArray *dataArray;  //数据数组
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableViewCustomView *tableView;
 @end

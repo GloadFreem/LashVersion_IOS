@@ -15,7 +15,7 @@
 #define GOLDDETAIL @"requestUserGoldTradeList"
 @interface MineGoldMingxiVC ()<UITableViewDelegate,UITableViewDataSource>
 
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableViewCustomView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
 @property (nonatomic, assign) NSInteger page;
@@ -31,15 +31,21 @@
     [self setupNav];
     self.partner = [TDUtil encryKeyWithMD5:KEY action:GOLDDETAIL];
     _page = 0;
-    [self startLoadData];
+    
+    self.loadingViewFrame = self.view.frame;
     
     [self createTableView];
+    
+    [self startLoadData];
+    
+    
 
 }
 -(void)startLoadData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     
+    self.startLoading = YES;
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:LOGO_GOLD_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestGoldDetail:)];
 }
@@ -57,25 +63,28 @@
                 [_dataArray removeAllObjects];
             }
             
+            NSMutableArray *tempArray = [NSMutableArray new];
+            
             if (jsonDic[@"data"] && [jsonDic[@"data"] count]) {
                 NSArray *modelArray = [MineGoldMingxiModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+                
                 for (NSInteger i =0; i < modelArray.count; i ++) {
                     
-                    [_dataArray addObject:modelArray[i]];
+                    [tempArray addObject:modelArray[i]];
                 }
                 
-                if (_dataArray.count > 1) {
-                    for (NSInteger i =0; i < _dataArray.count - 1; i++) {
+                if (tempArray.count > 1) {
+                    for (NSInteger i =0; i < tempArray.count - 1; i++) {
                         if (i == 0) {
-                            MineGoldMingxiModel *model = _dataArray[0];
+                            MineGoldMingxiModel *model = tempArray[0];
                             model.isShow = YES;
                         }
-                        MineGoldMingxiModel *modelI = _dataArray[i];
+                        MineGoldMingxiModel *modelI = tempArray[i];
                         NSArray *arr1 = [modelI.tradeDate componentsSeparatedByString:@" "];
                         NSArray *arr2 = [arr1[0] componentsSeparatedByString:@"-"];
                         NSString *month1 = arr2[1];
-                        for (NSInteger j = i + 1; j < _dataArray.count; j ++) {
-                            MineGoldMingxiModel *modelJ = _dataArray[j];
+                        for (NSInteger j = i + 1; j < tempArray.count; j ++) {
+                            MineGoldMingxiModel *modelJ = tempArray[j];
                             arr1 = [modelJ.tradeDate componentsSeparatedByString:@" "];
                             arr2 = [arr1[0] componentsSeparatedByString:@"-"];
                             NSString *month2 = arr2[1];
@@ -87,23 +96,50 @@
                         }
                     }
                 }else{
-                    MineGoldMingxiModel *model = _dataArray[0];
-                    model.isShow = YES;
+                    if (tempArray.count) {
+                        MineGoldMingxiModel *model = tempArray[0];
+                        model.isShow = YES;
+                    }
                 }
+                self.dataArray = tempArray;
                 
-                
-                [self.tableView reloadData];
                 [_tableView.mj_header endRefreshing];
                 [_tableView.mj_footer endRefreshing];
 
             }
+        
         }else{
             [_tableView.mj_header endRefreshing];
             [_tableView.mj_footer endRefreshing];
         }
+        self.startLoading = NO;
+    }else{
+         self.isNetRequestError = YES;
     }
     [_tableView.mj_footer endRefreshing];
 }
+
+-(void)setDataArray:(NSMutableArray *)dataArray
+{
+    self->_dataArray = dataArray;
+    if (_dataArray.count <= 0) {
+        self.tableView.isNone = YES;
+    }else{
+        self.tableView.isNone = NO;
+    }
+    [self.tableView reloadData];
+}
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self startLoadData];
+}
+
 #pragma mark -设置导航栏
 -(void)setupNav
 {
@@ -118,7 +154,7 @@
 
 -(void)createTableView
 {
-    _tableView  = [UITableView new];
+    _tableView  = [UITableViewCustomView new];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;

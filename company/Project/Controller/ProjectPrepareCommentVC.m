@@ -15,7 +15,7 @@
 @interface ProjectPrepareCommentVC ()<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate>
 @property (nonatomic, copy) NSString *commentpartner;
 
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableViewCustomView *tableView;
 
 @property (nonatomic, assign) NSInteger page;
 
@@ -24,6 +24,9 @@
 
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UIButton *sendBtn;
+
+@property (nonatomic, assign) BOOL isFirst;
+
 @end
 
 @implementation ProjectPrepareCommentVC
@@ -39,10 +42,17 @@
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
+    
+    _isFirst = YES;
+    
     _page = 0;
-    [self createUI];
-    [self startLoadData];
     [self setNav];
+    [self createUI];
+    
+    self.loadingViewFrame = self.view.frame;
+    
+    [self startLoadData];
+    
 }
 
 -(void)setNav
@@ -64,6 +74,11 @@
 -(void)startLoadData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+    
+    if (_isFirst) {
+        self.startLoading = YES;
+    }
+    
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestCommentList:)];
 }
@@ -81,33 +96,62 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
+            self.startLoading = NO;
+            
+            if (_isFirst) {
+                _isFirst= NO;
+            }
+            
             NSArray *modelArray = [ProjectSceneCommentModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
             for (NSInteger i  = 0 ; i < modelArray.count ; i ++) {
                 ProjectSceneCommentModel *model = modelArray[i];
                 [_dataArray insertObject:model atIndex:0];
             }
-            //刷新表
-            [_tableView reloadData];
             
-            if (_dataArray.count > 1) {
-                [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
             }
+            if (_dataArray.count <= 0) {
+                self.tableView.isNone = YES;
+            }else{
+                self.tableView.isNone = NO;
+            }
+        
+        //刷新表
+        [_tableView reloadData];
+        
+        if (_dataArray.count > 1) {
+            [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+            
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
             
         }else{
+            self.startLoading = NO;
+            
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         //结束刷新
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
+    }else{
+        self.isNetRequestError = YES;
     }
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self startLoadData];
 }
 
 -(void)createUI
 {
-    _tableView = [[UITableView alloc]init];
+    _tableView = [[UITableViewCustomView alloc]init];
 //    _tableView.bounces = NO;
     _tableView.delegate =self;
     _tableView.dataSource =self;
@@ -116,9 +160,7 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-    if (!_dataArray.count) {
-        [_tableView.mj_header beginRefreshing];
-    }
+    
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {

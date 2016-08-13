@@ -217,7 +217,7 @@
 #pragma mark -创建tableView
 -(void)createTableView
 {
-    _tableView  = [UITableView new];
+    _tableView  = [UITableViewCustomView new];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -355,6 +355,7 @@
             
             //解析数据  将data字典转换为BaseModel
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
+            NSMutableArray *tempArray = [NSMutableArray new];
 //            NSLog(@"shuzu------%@",dataArray[0]);
             for (NSInteger i =0; i < dataArray.count; i ++) {
                 //实例化圈子模型
@@ -392,11 +393,13 @@
                 listModel.picNamesArray = [NSArray arrayWithArray:picArray];
 //                NSLog(@"照片数组---%@",listModel.picNamesArray);
                 //将model加入数据数组
-                [_dataArray addObject:listModel];
+                [tempArray addObject:listModel];
                 
             }
+            self.dataArray = tempArray;
+            
 //            NSLog(@"数组个数---%ld",_dataArray.count);
-            [_tableView reloadData];
+
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
             if (_isFirst) {
@@ -414,6 +417,17 @@
     }else{
         self.isNetRequestError = YES;
     }
+}
+
+-(void)setDataArray:(NSMutableArray *)dataArray
+{
+    self->_dataArray = dataArray;
+    if (_dataArray.count <= 0) {
+        self.tableView.isNone = YES;
+    }else{
+        self.tableView.isNone = NO;
+    }
+    [self.tableView reloadData];
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request

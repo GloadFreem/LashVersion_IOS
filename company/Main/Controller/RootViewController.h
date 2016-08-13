@@ -11,6 +11,7 @@
 #import "HttpUtils.h"
 #import "LoadingView.h"
 #import "LoadingUtil.h"
+#import "UITableViewCustomView.h"
 
 @interface RootViewController : UIViewController<LoadingViewDelegate>
 

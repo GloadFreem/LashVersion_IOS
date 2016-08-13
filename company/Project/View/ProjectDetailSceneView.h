@@ -33,7 +33,7 @@
 
 @property (nonatomic, assign) NSInteger projectId;
 
-@property (strong, nonatomic) UITableView * tableView;
+@property (strong, nonatomic) UITableViewCustomView * tableView;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (nonatomic ,copy) NSString *url;
 

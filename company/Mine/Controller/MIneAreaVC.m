@@ -11,7 +11,7 @@
 #define PROVINCE @"getProvinceListAuthentic"
 
 @interface MIneAreaVC ()<UITableViewDataSource,UITableViewDelegate>
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableViewCustomView *tableView;
 @property (nonatomic, strong) NSMutableArray * dataArray;
 @property (nonatomic, strong) NSMutableArray * idArray;
 
@@ -32,6 +32,8 @@
     [self setupNav];
     NSString * string = [AES encrypt:PROVINCE password:KEY];
     self.partner = [TDUtil encryptMD5String:string];
+    
+    self.loadingViewFrame = self.view.frame;
     
     [self createTableView];
     [self createData];
@@ -56,7 +58,7 @@
 }
 -(void)createTableView
 {
-    _tableView = [UITableView new];
+    _tableView = [UITableViewCustomView new];
     _tableView.delegate = self;
     _tableView.dataSource =self;
     [self.view addSubview:_tableView];
@@ -69,6 +71,9 @@
 -(void)createData{
     
     NSDictionary *dic= [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner", nil];
+    
+    self.startLoading = YES;
+    
     [self.httpUtil getDataFromAPIWithOps:PROVINCE_LIST postParam:dic type:0 delegate:self sel:@selector(requestProvice:)];
 }
 
@@ -80,18 +85,41 @@
     if (dic!=nil) {
         NSString *status = [dic objectForKey:@"status"];
         if ([status integerValue] == 200) {
+            
+            self.startLoading = NO;
+            
             NSArray *dataArray = [[NSArray alloc]initWithArray:dic[@"data"]];
             for (NSDictionary *dic in dataArray) {
                 [_dataArray addObject:dic[@"name"]];
                 [_idArray addObject:dic[@"provinceId"]];
             }
             
+            if (_dataArray.count <= 0 || _idArray.count <= 0) {
+                self.tableView.isNone = YES;
+            }else{
+                self.tableView.isNone = NO;
+            }
 //            NSLog(@"数据下载成功");
             [_tableView reloadData];
+        }else{
+            self.startLoading = NO;
         }
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];
+    }else{
+        self.isNetRequestError = YES;
     }
 }
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self createData];
+}
+
 #pragma mark- tableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
