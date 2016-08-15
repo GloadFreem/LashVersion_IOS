@@ -35,6 +35,8 @@
                         <constraint firstAttribute="width" constant="20" id="rDn-30-hfZ"/>
                     </constraints>
                     <state key="normal" image="leftBack.png"/>
+                    <state key="selected" image="leftBack.png"/>
+                    <state key="highlighted" image="leftBack.png"/>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="9ld-qS-M2Z"/>

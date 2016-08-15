@@ -55,7 +55,7 @@
                     </constraints>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gbU-lS-vbZ">
-                    <rect key="frame" x="67" y="554" width="240" height="40"/>
+                    <rect key="frame" x="67" y="549" width="240" height="40"/>
                     <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="240" id="Qj6-TQ-lMV"/>
@@ -84,6 +84,8 @@
                         <constraint firstAttribute="height" constant="20" id="mnb-3X-AyI"/>
                     </constraints>
                     <state key="normal" image="leftBack.png"/>
+                    <state key="selected" image="leftBack.png"/>
+                    <state key="highlighted" image="leftBack.png"/>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="GNZ-h3-32W"/>
@@ -119,7 +121,7 @@
                 <constraint firstItem="h73-bp-EOe" firstAttribute="centerY" secondItem="oAq-wU-B6U" secondAttribute="centerY" id="rQm-ZH-9SK"/>
                 <constraint firstAttribute="trailing" secondItem="ntX-bH-4E0" secondAttribute="trailing" id="tRH-hh-LvP"/>
                 <constraint firstItem="h73-bp-EOe" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="yc1-LT-90U"/>
-                <constraint firstItem="gbU-lS-vbZ" firstAttribute="top" secondItem="ntX-bH-4E0" secondAttribute="bottom" constant="30" id="zzL-ZH-i76"/>
+                <constraint firstItem="gbU-lS-vbZ" firstAttribute="top" secondItem="ntX-bH-4E0" secondAttribute="bottom" constant="25" id="zzL-ZH-i76"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>

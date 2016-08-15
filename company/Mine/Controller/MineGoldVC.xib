@@ -8,6 +8,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MineGoldVC">
             <connections>
                 <outlet property="countLabel" destination="ZSn-TT-Prv" id="0oP-ML-JsU"/>
+                <outlet property="goldWidth" destination="Z0K-wk-wa8" id="J1a-Cq-MEX"/>
+                <outlet property="goldheight" destination="rni-Wf-gpA" id="8vH-s0-psG"/>
+                <outlet property="topBgHeight" destination="6eh-3n-4JW" id="teU-52-rax"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -47,7 +50,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZSn-TT-Prv">
-                            <rect key="frame" x="187.5" y="102" width="0.0" height="47"/>
+                            <rect key="frame" x="187" y="102" width="0.0" height="47"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="47" id="RVO-O1-eAf"/>
                             </constraints>
@@ -56,7 +59,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="根" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vqy-M4-4JP">
-                            <rect key="frame" x="190.5" y="133" width="12" height="12"/>
+                            <rect key="frame" x="190" y="133" width="12" height="12"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="12" id="ozO-Yl-VKi"/>
                             </constraints>
@@ -65,7 +68,11 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mine_gold.png" translatesAutoresizingMaskIntoConstraints="NO" id="tbS-pM-uqK">
-                            <rect key="frame" x="45" y="149" width="284" height="178"/>
+                            <rect key="frame" x="45" y="149" width="284" height="175"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="284" id="Z0K-wk-wa8"/>
+                                <constraint firstAttribute="height" constant="175" id="rni-Wf-gpA"/>
+                            </constraints>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -74,6 +81,7 @@
                         <constraint firstAttribute="height" constant="324" id="6eh-3n-4JW"/>
                         <constraint firstItem="ZSn-TT-Prv" firstAttribute="centerX" secondItem="5Kq-Hx-FHv" secondAttribute="centerX" id="7bF-CQ-Vrk"/>
                         <constraint firstItem="1RZ-5N-ktN" firstAttribute="leading" secondItem="5Kq-Hx-FHv" secondAttribute="leading" constant="12" id="Ehy-5o-DHD"/>
+                        <constraint firstAttribute="bottom" secondItem="tbS-pM-uqK" secondAttribute="bottom" id="Mqv-OE-eGo"/>
                         <constraint firstItem="tbS-pM-uqK" firstAttribute="top" secondItem="ZSn-TT-Prv" secondAttribute="bottom" id="Niy-oy-jac"/>
                         <constraint firstItem="tbS-pM-uqK" firstAttribute="centerX" secondItem="5Kq-Hx-FHv" secondAttribute="centerX" id="RhB-tj-TFa"/>
                         <constraint firstItem="xdB-K6-eWu" firstAttribute="leading" secondItem="1RZ-5N-ktN" secondAttribute="leading" id="SA8-0y-WdF"/>
@@ -108,11 +116,11 @@
                         <constraint firstAttribute="height" constant="0.5" id="Jg9-O6-ttL"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A4R-ib-ow9">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A4R-ib-ow9" customClass="MineGoldBtn">
                     <rect key="frame" x="0.0" y="324" width="187" height="115"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <inset key="titleEdgeInsets" minX="-35" minY="40" maxX="0.0" maxY="0.0"/>
-                    <inset key="imageEdgeInsets" minX="60" minY="-20" maxX="0.0" maxY="0.0"/>
+                    <inset key="imageEdgeInsets" minX="72" minY="-20" maxX="0.0" maxY="0.0"/>
                     <state key="normal" title="收支明细" image="mine_gold_mingxi.png">
                         <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -120,7 +128,7 @@
                         <action selector="btnClick:" destination="-1" eventType="touchUpInside" id="6TG-g1-uDe"/>
                     </connections>
                 </button>
-                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dSY-ZX-Pd6">
+                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dSY-ZX-Pd6" customClass="MineGoldBtn">
                     <rect key="frame" x="188" y="324" width="187" height="115"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <inset key="titleEdgeInsets" minX="-35" minY="40" maxX="0.0" maxY="0.0"/>
@@ -132,7 +140,7 @@
                         <action selector="btnClick:" destination="-1" eventType="touchUpInside" id="IK3-sJ-srF"/>
                     </connections>
                 </button>
-                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DDR-gv-HiZ">
+                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DDR-gv-HiZ" customClass="MineGoldBtn">
                     <rect key="frame" x="0.0" y="440" width="187" height="114"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <inset key="titleEdgeInsets" minX="-35" minY="40" maxX="0.0" maxY="0.0"/>
@@ -144,7 +152,7 @@
                         <action selector="btnClick:" destination="-1" eventType="touchUpInside" id="Sql-wa-nHT"/>
                     </connections>
                 </button>
-                <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U4q-lM-ui8">
+                <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U4q-lM-ui8" customClass="MineGoldBtn">
                     <rect key="frame" x="188" y="440" width="187" height="114"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <inset key="titleEdgeInsets" minX="-35" minY="40" maxX="0.0" maxY="0.0"/>

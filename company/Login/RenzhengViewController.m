@@ -75,13 +75,13 @@
     
     //初始化tableView高度
     if ([self.identifyType integerValue] == 3 || [self.identifyType integerValue] == 4) {
-        _tableViewHeight.constant = 510;
+        _tableViewHeight.constant = 510*HEIGHTCONFIG;
         
     }else if ([self.identifyType integerValue] == 1){
-        _tableViewHeight.constant = 460;
+        _tableViewHeight.constant = 460*HEIGHTCONFIG;
     }
     else{
-        _tableViewHeight.constant = 410;
+        _tableViewHeight.constant = 410*HEIGHTCONFIG;
     }
     
     [self createData];
@@ -170,7 +170,7 @@
     if (indexPath.section == 0) {
         return 200;
     }
-    return 50;
+    return 44*HEIGHTCONFIG;
 }
 //第二段区头高度为10
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{

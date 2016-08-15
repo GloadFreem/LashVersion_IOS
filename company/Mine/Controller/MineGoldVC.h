@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "VerticalButton.h"
 
 @interface MineGoldVC : RootViewController
 

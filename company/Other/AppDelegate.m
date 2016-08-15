@@ -53,8 +53,6 @@
     [self createViewControllers];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     
-    [NSThread sleepForTimeInterval:2];
-    
     //获取缓存数据
     NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
     NSString* isStart= [data valueForKey:@"isStart"];

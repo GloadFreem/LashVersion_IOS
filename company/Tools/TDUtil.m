@@ -354,11 +354,11 @@
     NSCalendarUnit unit = NSCalendarUnitYear | NSCalendarUnitMonth
     | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
     //对比时间差
-    NSDateComponents *dateCom = [calendar components:unit fromDate:expireDate toDate:nowDate options:0];
+    NSDateComponents *dateCom = [calendar components:unit fromDate:nowDate toDate:expireDate options:0];
     if (dateCom.second > 0) {
-        return false;
+        return true;//未过期
     }else{
-        return true;
+        return false;//已过期
     }
 }
 

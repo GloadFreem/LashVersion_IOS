@@ -14,14 +14,17 @@
 -(id)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 150*WIDTHCONFIG, 150*WIDTHCONFIG)];
+        _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 100*WIDTHCONFIG, 100*WIDTHCONFIG)];
         ;
         _imageView.centerX = self.centerX;
-        _imageView.centerY = self.centerY - 100;
+        _imageView.centerY = self.centerY - 50;
         
         UIImage *image = [UIImage sd_animatedGIFNamed:@"loadingView"];
         _imageView.image = image;
+        
         [self addSubview:_imageView];
+        
+        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -71,10 +74,10 @@
         [_labelMessage removeFromSuperview];
         [_refreshBtn removeFromSuperview];
         
-        _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 150*WIDTHCONFIG, 150*WIDTHCONFIG)];
+        _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 100*WIDTHCONFIG, 100*WIDTHCONFIG)];
         ;
         _imageView.centerX = self.centerX;
-        _imageView.centerY = self.centerY - 100;
+        _imageView.centerY = self.centerY - 50;
         
         UIImage *image = [UIImage sd_animatedGIFNamed:@"loadingView"];
         _imageView.image = image;

@@ -80,6 +80,11 @@
 @property (nonatomic, copy) NSString *authenticName;
 @property (nonatomic, copy) NSString *identiyTypeId;
 
+
+@property (nonatomic, assign) BOOL isFirst;
+@property (nonatomic, assign) BOOL isSecond;
+@property (nonatomic, assign) BOOL isThird;
+
 @end
 
 @implementation InvestViewController
@@ -97,6 +102,10 @@
     //获得partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:INVESPUBLICTLIST];
     self.investorCollectPartner = [TDUtil encryKeyWithMD5:KEY action:INVESTORCOLLECT];
+    
+    _isFirst = YES;
+    _isSecond = YES;
+    _isThird = YES;
     
     //加载视图大小
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT -49);
@@ -141,13 +150,21 @@
     //投资人
     if (_tableViewSelected == 1) {
         
+        if (_isFirst) {
+            self.startLoading = YES;
+            
+        }
         _identyType = @"2";
         _page = _investPage;
         self.tableView =_investPersonTableView;
+        
     }
     
     //投机机构
     if (_tableViewSelected == 2) {
+        if (_isSecond) {
+            self.startLoading = YES;
+        }
         _identyType = @"3";
         _page = _organizationPage;
         self.tableView = _investOrganizationTableView;
@@ -155,6 +172,9 @@
     
     //智囊团
     if (_tableViewSelected == 3) {
+        if (_isThird) {
+            self.startLoading = YES;
+        }
         _identyType = @"4";
         _page = _tankPage;
         self.tableView = _thinkTankTableView;
@@ -164,10 +184,10 @@
     
 //    [SVProgressHUD showWithStatus:@"加载中"];
     
-    self.startLoading = YES;
+    
     
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:INVEST_PUBLIC_LIST postParam:dic type:1 delegate:self sel:@selector(requestInvestList:)];
+    [self.httpUtil getDataFromAPIWithOps:INVEST_PUBLIC_LIST postParam:dic type:0 delegate:self sel:@selector(requestInvestList:)];
 
 }
 
@@ -227,6 +247,9 @@
                         [_investPersonArray addObject:listModel];
                         
                     }
+                    if (_isFirst) {
+                        _isFirst = NO;
+                    }
                 }
                 
                 //投资机构列表
@@ -269,6 +292,9 @@
                         [_investOrganizationSecondArray addObject:model];
                         
                     }
+                    if (_isSecond) {
+                        _isSecond = NO;
+                    }
                 }
                 
                 //智囊团
@@ -297,6 +323,9 @@
                         }
                         listModel.introduce = authentics.introduce;
                         [_thinkTankArray addObject:listModel];
+                    }
+                    if (_isThird) {
+                        _isThird = NO;
                     }
                     
                 }
@@ -607,8 +636,11 @@
         tableView = _investPersonTableView;
         InvestPersonCell *cell = [InvestPersonCell cellWithTableView:tableView];
         if (_investPersonArray.count) {
-            cell.model = _investPersonArray[indexPath.row];
-            cell.indexPath = indexPath;
+            if (_investPersonArray[indexPath.row]) {
+                cell.model = _investPersonArray[indexPath.row];
+                cell.indexPath = indexPath;
+            }
+            
         }
         if ([self.identiyTypeId isEqualToString:@"1"]) {
             cell.cimmitBtn.hidden = NO;
@@ -624,14 +656,19 @@
             InvestOrganizationCell * cell = [InvestOrganizationCell cellWithTableView:tableView];
             
             if (_investOrganizationArray.count) {
-                cell.model = _investOrganizationArray[indexPath.row];
+                if (_investOrganizationArray[indexPath.row]) {
+                    cell.model = _investOrganizationArray[indexPath.row];
+                }
+                
             }
             return cell;
         }else{
         
         InvestOrganizationSecondCell * cell = [InvestOrganizationSecondCell cellWithTableView:tableView];
         if (_investOrganizationSecondArray.count) {
-            cell.model = _investOrganizationSecondArray[indexPath.row];
+            if (_investOrganizationSecondArray[indexPath.row]) {
+                cell.model = _investOrganizationSecondArray[indexPath.row];
+            }
         }
         cell.delegate = self;
         if ([self.identiyTypeId isEqualToString:@"1"]) {
@@ -647,7 +684,9 @@
         tableView = _thinkTankTableView;
         ThinkTankCell *  cell = [ThinkTankCell cellWithTableView:tableView];
         if (_thinkTankArray.count) {
-            cell.model = _thinkTankArray[indexPath.row];
+            if (_thinkTankArray[indexPath.row]) {
+                cell.model = _thinkTankArray[indexPath.row];
+            }
         }
         cell.delegate =self;
         return cell;

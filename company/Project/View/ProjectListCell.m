@@ -37,7 +37,7 @@
     _model = model;
     
     [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.startPageImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
-    NSLog(@"%@",_model.status);
+//    NSLog(@"%@",_model.status);
     if ([model.status isEqualToString:@"待路演"]) {
         _statusImage.image = [UIImage imageNamed:@"icon_noroad"];
     }

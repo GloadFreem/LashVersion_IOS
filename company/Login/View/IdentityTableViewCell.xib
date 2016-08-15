@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -44,6 +44,12 @@
                         <state key="normal" title="添加照片" image="jiahao.jpg" backgroundImage="imagebj.png">
                             <color key="titleColor" red="0.45490196078431372" green="0.45490196078431372" blue="0.45490196078431372" alpha="1" colorSpace="calibratedRGB"/>
                         </state>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="1O8-1i-oZb"/>
+                                <exclude reference="v54-VT-tDZ"/>
+                            </mask>
+                        </variation>
                         <connections>
                             <action selector="btnClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="iq0-hC-FB8"/>
                         </connections>
@@ -60,6 +66,11 @@
                         <state key="normal" title="添加照片" image="jiahao.jpg" backgroundImage="imagebj.png">
                             <color key="titleColor" red="0.4549019608" green="0.4549019608" blue="0.4549019608" alpha="1" colorSpace="calibratedRGB"/>
                         </state>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="jwY-Le-y9Q"/>
+                            </mask>
+                        </variation>
                         <connections>
                             <action selector="btnClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="VKJ-fe-U1h"/>
                         </connections>
@@ -89,7 +100,9 @@
                     <constraint firstItem="1MX-O6-XGS" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="YMa-9W-KkI"/>
                     <constraint firstItem="1MX-O6-XGS" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="25" id="ikF-eN-puM"/>
                     <constraint firstItem="tE8-gX-caG" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="jjz-uK-Zxn"/>
+                    <constraint firstItem="TwL-8x-8jn" firstAttribute="height" secondItem="1MX-O6-XGS" secondAttribute="height" id="lB7-EV-cvq"/>
                     <constraint firstItem="1MX-O6-XGS" firstAttribute="top" secondItem="lh5-fp-M5p" secondAttribute="bottom" constant="12" id="pht-P3-X0b"/>
+                    <constraint firstItem="TwL-8x-8jn" firstAttribute="width" secondItem="1MX-O6-XGS" secondAttribute="width" id="ri6-Jo-PQd"/>
                     <constraint firstItem="a8a-zo-rhO" firstAttribute="top" secondItem="1MX-O6-XGS" secondAttribute="bottom" constant="10" id="wuA-BV-BY0"/>
                     <constraint firstItem="TwL-8x-8jn" firstAttribute="centerY" secondItem="1MX-O6-XGS" secondAttribute="centerY" id="xjL-JK-rri"/>
                 </constraints>

@@ -87,6 +87,7 @@
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:INVITEFRIEND];
     
     self.loadingViewFrame = self.view.frame;
+    self.isTransparent = YES;
     
     [self loadShareData];
     

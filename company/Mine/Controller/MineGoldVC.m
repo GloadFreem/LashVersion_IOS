@@ -22,6 +22,10 @@
 
 @property (nonatomic,strong)UIView * bottomView;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topBgHeight;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *goldWidth;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *goldheight;
 
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;
 
@@ -39,6 +43,8 @@
 @property (nonatomic, copy) NSString *useUrl;
 @property (nonatomic, copy) NSString *getUrl;
 
+@property (nonatomic, assign) BOOL isFirst;
+
 @end
 
 @implementation MineGoldVC
@@ -46,6 +52,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    self.topBgHeight.constant = 324*HEIGHTCONFIG;
+    self.goldWidth.constant = 284*WIDTHCONFIG;
+    self.goldheight.constant = 175*WIDTHCONFIG;
+    
+    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENWIDTH-64);
+    self.isTransparent = YES;
+    _isFirst = YES;
     
     self.partner = [TDUtil encryKeyWithMD5:KEY action:GOLDACCOUNT];
     self.codePartner = [TDUtil encryKeyWithMD5:KEY action:INVITEFRIEND];
@@ -123,6 +137,9 @@
 
 -(void)startLoadData
 {
+    if (_isFirst) {
+        self.startLoading = YES;
+    }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:LOGO_GOLD_ACCOUNT postParam:dic type:0 delegate:self sel:@selector(requestGoldInfo:)];
@@ -145,7 +162,7 @@
             [self setModel];
             
         }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+            self.isNetRequestError = YES;
         }
     }
 }
@@ -153,7 +170,24 @@
 -(void)setModel
 {
     _countLabel.text = [NSString stringWithFormat:@"%@",_count];
+    
+    if (_isFirst) {
+        _isFirst = NO;
+    }
+    self.startLoading = NO;
 }
+
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
+}
+
+-(void)refresh
+{
+    [self startLoadData];
+}
+
 - (IBAction)leftBack:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2D26298F1D4C5A88D985DBDF /* Pods_company.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AB72B1372C8348B3F810BE /* Pods_company.framework */; };
+		440146A51D61BD0000332532 /* MineGoldBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 440146A41D61BD0000332532 /* MineGoldBtn.m */; };
 		443728521D3FC5FC00DED1D6 /* GuidePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 443728511D3FC5FC00DED1D6 /* GuidePageViewController.m */; };
 		443729191D3FC6DF00DED1D6 /* MyNavViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 443728CD1D3FC6DF00DED1D6 /* MyNavViewController.m */; };
 		4437291A1D3FC6DF00DED1D6 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 443728CF1D3FC6DF00DED1D6 /* RootViewController.m */; };
@@ -934,6 +935,8 @@
 
 /* Begin PBXFileReference section */
 		08DB24DD5F3D02EA9147373C /* Pods-company.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-company.debug.xcconfig"; path = "Pods/Target Support Files/Pods-company/Pods-company.debug.xcconfig"; sourceTree = "<group>"; };
+		440146A31D61BD0000332532 /* MineGoldBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineGoldBtn.h; sourceTree = "<group>"; };
+		440146A41D61BD0000332532 /* MineGoldBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineGoldBtn.m; sourceTree = "<group>"; };
 		443728501D3FC5FC00DED1D6 /* GuidePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuidePageViewController.h; sourceTree = "<group>"; };
 		443728511D3FC5FC00DED1D6 /* GuidePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuidePageViewController.m; sourceTree = "<group>"; };
 		443728CC1D3FC6DF00DED1D6 /* MyNavViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNavViewController.h; sourceTree = "<group>"; };
@@ -2366,6 +2369,8 @@
 				443729771D3FC78100DED1D6 /* RegistNameTableViewCell.xib */,
 				443729781D3FC78100DED1D6 /* VerticalButton.h */,
 				443729791D3FC78100DED1D6 /* VerticalButton.m */,
+				440146A31D61BD0000332532 /* MineGoldBtn.h */,
+				440146A41D61BD0000332532 /* MineGoldBtn.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -5436,6 +5441,7 @@
 				44372AD91D3FC96400DED1D6 /* MWTapDetectingImageView.m in Sources */,
 				44871B761D02B37800020DD9 /* MASLayoutConstraint.m in Sources */,
 				4437304D1D3FCC3600DED1D6 /* MyDataHeaderCell.m in Sources */,
+				440146A51D61BD0000332532 /* MineGoldBtn.m in Sources */,
 				44871B6C1D02B37800020DD9 /* IQTextView.m in Sources */,
 				443730741D3FCC4600DED1D6 /* CircleDetailCommentModel.m in Sources */,
 				4437304A1D3FCC3600DED1D6 /* MIneProjectSecondYuXuanCell.m in Sources */,
