@@ -104,7 +104,7 @@
             self.startLoading = NO;
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }else{
         self.isNetRequestError = YES;
@@ -121,6 +121,7 @@
 {
     [self startLoadData];
 }
+
 -(void)setDataArray:(NSMutableArray *)dataArray
 {
     self->_dataArray = dataArray;
@@ -142,7 +143,7 @@
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
-    _tableView.mj_header.automaticallyChangeAlpha = YES;
+//    _tableView.mj_header.automaticallyChangeAlpha = YES;
 //    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
    

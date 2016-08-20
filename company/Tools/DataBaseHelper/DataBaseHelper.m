@@ -9,6 +9,8 @@
 #import "DataBaseHelper.h"
 #import "FMDB.h"
 
+#define SQLITE_NAME @"BGSqlite.sqlite"
+
 @interface DataBaseHelper()
 @property(nonatomic,strong)FMDatabaseQueue * dbQueue;
 @end
@@ -37,78 +39,136 @@ static id _instace;
 {
     return _instace; 
 }
-#pragma mark 创建数据库
--(FMDatabaseQueue *)DatabaseWithDBName:(NSString *)dbName
+
+-(id)init
 {
-    NSString * dbPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0]stringByAppendingPathComponent:dbName];
-    NSLog(@"DB path is %@",dbPath);
-    _dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
-    return _dbQueue;
-}
-#pragma mark 创建表
--(BOOL)createTable:(NSString *)table WithKey:(NSDictionary *)keyTypes
-{
-    __block BOOL ret = YES;
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"create table if not exists %@ (",table]];
-    NSArray *keys = [keyTypes allKeys];
-    for (NSInteger i = 0; i < keys.count; i++) {
-        switch ([[keyTypes valueForKey:keys[i]]integerValue]) {
-            case DBdatatypeNSString:
-                [sql appendFormat:@"%@ %@",keys[i],@"text"];
-                break;
-            case DBdatatypeInteger:
-                [sql appendFormat:@"%@ %@",keys[i],@"integer"];
-                break;
-            case DBdatatypeNSdate:
-                [sql appendFormat:@"%@ %@",keys[i],@"date"];
-                break;
-            case DBdatatypeNSdata:
-                [sql appendFormat:@"%@ %@",keys[i],@"blob"];
-                break;
-            case DBdatatypeBoolean:
-                [sql appendFormat:@"%@ %@",keys[i],@"boolean"];
-                break;
-            case DBdatatypeDouble:
-                [sql appendFormat:@"%@ %@",keys[i],@"double"];
-                break;
-            default:
-                break;
-        }
-        if (i<keys.count-1) {
-            [sql appendString:@","];
-            }
-        }
-    [sql appendString:@")"];
-    [_dbQueue inDatabase:^(FMDatabase *db) {
-        if (![db executeUpdate:sql]) {
-            ret = NO;
-        }
-    }];
-    return ret;
-}
-#pragma mark 添加
--(BOOL)insertInTable:(NSString *)table WithKey:(NSDictionary *)keyValues
-{
-    __block BOOL ret = YES;
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"insert into %@ (", table]];
-    NSMutableString *values = [[NSMutableString alloc] initWithString:@") values ("];
-    NSArray *keys = [keyValues allKeys];
-    for (NSInteger i = 0; i < keys.count; i++) {
-        [sql appendString:keys[i]];
-        [values appendString:@"?"];
-        if (i<keys.count-1) {
-            [sql appendString:@","];
-            [values appendString:@","];
+    if (self = [super init]) {
+        // 0.获得沙盒中的数据库文件名
+        if (!_dbQueue) {
+            NSString * dbPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0]stringByAppendingPathComponent:SQLITE_NAME];
+            NSLog(@"DB path is %@",dbPath);
+            _dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
         }
     }
-    [sql appendFormat:@"%@%@",values,@")"];
+    return self;
+}
+
+/**
+ 默认建立主键id
+ 创建表(如果存在久不创建) keys 数据存放要求@[字段名称1,字段名称2]
+ */
+-(BOOL)createTableWithTableName:(NSString*)name keys:(NSArray*)keys{
+    if (name == nil) {
+        NSLog(@"表名不能为空!");
+        return NO;
+    }else if (keys == nil){
+        NSLog(@"字段数组不能为空!");
+        return NO;
+    }else;
+    __block BOOL result;
+    //创表
     [_dbQueue inDatabase:^(FMDatabase *db) {
-        if (![db executeUpdate:sql withArgumentsInArray:[keyValues allValues]]) {
-            ret = NO;
+        NSString* header = [NSString stringWithFormat:@"create table if not exists %@ (id integer primary key autoincrement",name];//,name text,age integer);
+        NSMutableString* sql = [[NSMutableString alloc] init];
+        [sql appendString:header];
+        for(int i=0;i<keys.count;i++){
+            [sql appendFormat:@",%@ text",keys[i]];
+            if (i == (keys.count-1)) {
+                [sql appendString:@");"];
+            }
+        }
+        result = [db executeUpdate:sql];
+    }];
+    return result;
+}
+
+/**
+ 数据库中是否存在表
+ */
+- (BOOL)isExistWithTableName:(NSString*)name{
+    if (name==nil){
+        NSLog(@"表名不能为空!");
+        return NO;
+    }
+    __block BOOL result;
+    [_dbQueue inDatabase:^(FMDatabase *db) {
+        result = [db tableExists:name];
+    }];
+    return result;
+}
+
+/**
+ 插入值
+ */
+-(BOOL)insertIntoTableName:(NSString*)name Dict:(NSDictionary*)dict{
+    if (name == nil) {
+        NSLog(@"表名不能为空!");
+        return NO;
+    }else if (dict == nil){
+        NSLog(@"插入值字典不能为空!");
+        return NO;
+    }else;
+    
+    __block BOOL result;
+    
+    [_dbQueue inDatabase:^(FMDatabase *db) {
+        NSArray* keys = dict.allKeys;
+        NSArray* values = dict.allValues;
+        NSMutableString* SQL = [[NSMutableString alloc] init];
+        [SQL appendFormat:@"insert into %@(",name];
+        for(int i=0;i<keys.count;i++){
+            [SQL appendFormat:@"%@",keys[i]];
+            if(i == (keys.count-1)){
+                [SQL appendString:@") "];
+            }else{
+                [SQL appendString:@","];
+            }
+        }
+        [SQL appendString:@"values("];
+        for(int i=0;i<values.count;i++){
+            [SQL appendString:@"?"];
+            if(i == (keys.count-1)){
+                [SQL appendString:@");"];
+            }else{
+                [SQL appendString:@","];
+            }
+        }
+        result = [db executeUpdate:SQL withArgumentsInArray:values];
+        //NSLog(@"插入 -- %d",result);
+    }];
+    return result;
+}
+
+
+/**
+ 全部查询
+ */
+-(NSArray*)queryWithTableName:(NSString*)name{
+    if (name==nil){
+        NSLog(@"表名不能为空!");
+        return nil;
+    }
+    
+    __block NSMutableArray* arrM = [[NSMutableArray alloc] init];
+    [_dbQueue inDatabase:^(FMDatabase *db) {
+        NSString* SQL = [NSString stringWithFormat:@"select * from %@",name];
+        // 1.查询数据
+        FMResultSet *rs = [db executeQuery:SQL];
+        // 2.遍历结果集
+        while (rs.next) {
+            NSMutableDictionary* dictM = [[NSMutableDictionary alloc] init];
+            for (int i=0;i<[[[rs columnNameToIndexMap] allKeys] count];i++) {
+                dictM[[rs columnNameForIndex:i]] = [rs stringForColumnIndex:i];
+            }
+            [arrM addObject:dictM];
         }
     }];
-    return ret;
+    //NSLog(@"查询 -- %@",arrM);
+    return arrM;
+    
 }
+
+
 #pragma mark 修改更新
 -(BOOL)updateInTable:(NSString *)table WithKey:(NSDictionary *)keyValues
 {
@@ -259,4 +319,22 @@ static id _instace;
     }];
     return ret;
 }
+
+/**
+ 删除表
+ */
+-(BOOL)dropTable:(NSString*)name{
+    if (name==nil){
+        NSLog(@"表名不能为空!");
+        return NO;
+    }
+    __block BOOL result;
+    [_dbQueue inDatabase:^(FMDatabase *db) {
+        NSString* SQL = [NSString stringWithFormat:@"drop table %@;",name];
+        result = [db executeUpdate:SQL];
+    }];
+    return result;
+}
+
+
 @end

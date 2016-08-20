@@ -277,7 +277,8 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     [_timeLabel sizeToFit];
     
-    _contentLabel.text = model.msgContent;
+//    _contentLabel.text = model.msgContent;
+    [TDUtil setLabelMutableText:_contentLabel content:model.msgContent lineSpacing:5 headIndent:0];
     _picContainerView.pictureStringArray = model.picNamesArray;
     
     if (model.shouldShowMoreBtn) { //如果文字高度超过60

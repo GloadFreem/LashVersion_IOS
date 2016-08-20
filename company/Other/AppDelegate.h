@@ -18,6 +18,8 @@
 @property (nonatomic, copy) NSString *loginPartner;
 @property(retain,nonatomic)HttpUtils* httpUtil; //网络请求对象
 
+@property (nonatomic, weak) Reachability  *hostReach;
+@property (nonatomic, assign) BOOL netEnable;
 
 -(void)createViewControllers;
 

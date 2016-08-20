@@ -35,7 +35,7 @@
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
 
 @property (nonatomic, assign) BOOL isFirst;
-
+@property (nonatomic, strong) NSMutableArray *tempArray;
 @end
 
 @implementation ActivityViewController
@@ -49,6 +49,9 @@
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
     _isFirst = YES;
+    if (!_tempArray) {
+        _tempArray = [NSMutableArray array];
+    }
     
     //初始化tableView
     [self createTableView];
@@ -137,8 +140,14 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            
+            if (_page == 0) {
+                [_tempArray removeAllObjects];
+                
+            }
+            
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
-            NSMutableArray * array = [[NSMutableArray alloc] init];
+//            NSMutableArray * array = [[NSMutableArray alloc] init];
             
             //解析
             NSDictionary *dataDic;
@@ -146,14 +155,15 @@
             for (int i=0; i<dataArray.count; i++) {
                 dataDic = dataArray[i];
                 baseModel = [ActivityViewModel mj_objectWithKeyValues:dataDic];
-                [array addObject:baseModel];
+                [_tempArray addObject:baseModel];
             }
             
             if (_isFirst) {
                 _isFirst = NO;
             }
             //设置数据模型
-            self.dataSourceArray = array;
+            self.dataSourceArray = _tempArray;
+            
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
         }else{

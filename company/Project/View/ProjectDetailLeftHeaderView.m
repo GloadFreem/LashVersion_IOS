@@ -321,7 +321,8 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _addressContent.text = model.addressStr;
     [_addressContent sizeToFit];
 //    _statusLabel.text = model.statusStr;
-    _contentLabel.text = model.content;
+//    _contentLabel.text = model.content;
+    [TDUtil setLabelMutableText:_contentLabel content:model.content lineSpacing:5 headIndent:0];
     
     UIImage *image;
     if ([model.statusStr isEqualToString:@"融资成功"]) {

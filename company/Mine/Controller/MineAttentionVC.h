@@ -12,6 +12,8 @@
 
 @property (nonatomic, strong) NSMutableArray *projectArray;
 @property (nonatomic, strong) NSMutableArray *investArray;
+@property (nonatomic, strong) NSMutableArray *temProjectArray;
+@property (nonatomic, strong) NSMutableArray *temInvestArray;
 
 @property (nonatomic, assign) BOOL isChange;
 @property (nonatomic, strong) UITableViewCustomView *tableView; //当前biao

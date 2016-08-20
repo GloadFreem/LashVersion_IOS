@@ -110,8 +110,8 @@
     _timelabel.text = str;
     [_timelabel sizeToFit];
     
-    _contentLabel.text = model.contentStr;
-    
+//    _contentLabel.text = model.contentStr;
+    [TDUtil setLabelMutableText:_contentLabel content:model.contentStr lineSpacing:5 headIndent:0];
     [self setupAutoHeightWithBottomView:_contentLabel bottomMargin:15*HEIGHTCONFIG];
 }
 

@@ -94,7 +94,12 @@
                 ProjectSceneModel *model = modelArray[0];
                 
                 _url = model.audioPath;
+//                NSLog(@"打印语音链接---%@",_url);
                 _sceneId = model.sceneId;
+                _totoalTime = [self getTime:model.totlalTime];
+//                NSLog(@"语音时长---%ld",model.totlalTime);
+                [self initialControls];
+                
                 [self startLoadComment];
                 
                 if (_isFirst) {
@@ -112,6 +117,26 @@
     }
 }
 
+-(NSString*)getTime:(NSInteger)time
+{
+    time = time/1000;
+    
+    NSString *timeStr;
+    if (time <= 59) {
+        timeStr = [NSString stringWithFormat:@"00:00:%ld",(long)time];
+    }else if (60 < time  && time <= 3599 ){
+        NSInteger minute = time / 60;
+        NSInteger second = time % 60;
+        timeStr = [NSString stringWithFormat:@"00:%.2ld:%.2ld",(long)minute,(long)second];
+    }else{
+        NSInteger hour = time / 3600;
+        NSInteger minute = (time % 3600) / 60;
+        NSInteger second = time % 3600 % 60;
+        timeStr = [NSString stringWithFormat:@"%.2ld:%.2ld:%.2ld",(long)hour,(long)minute,(long)second];
+        
+    }
+    return timeStr;
+}
 -(void)loadDataRegular
 {
 //    _page = 0;
@@ -282,7 +307,7 @@
     }];
     
     UILabel *label =[[UILabel alloc]init];
-    label.text = @"00:00:00";
+    label.text = _totoalTime;
     label.textAlignment = NSTextAlignmentRight;
     label.textColor = [UIColor darkGrayColor];
     label.font =[UIFont systemFontOfSize:12];
@@ -297,6 +322,7 @@
     _slider.continuous = YES;
     [_slider setUserInteractionEnabled:YES];
     [_slider addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged];
+    
     [_slider setThumbImage:[UIImage imageNamed:@"icon_slider_point"] forState:UIControlStateNormal];
     [headerView addSubview:_slider];
     [_slider mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -305,6 +331,8 @@
         make.right.mas_equalTo(label.mas_left).offset(-10);
         make.height.mas_equalTo(30);
     }];
+    
+    
 }
 
 
@@ -363,7 +391,7 @@
 // 各控件设初始值
 - (void)initialControls{
     [self stop];
-    _label.text = @"00:00:00";
+    _label.text = _totoalTime;
 }
 #pragma mark ------------是否播放-------------------
 -(void)playClick:(UIButton*)btn
@@ -378,15 +406,20 @@
 
 -(void)play
 {
-    _player.isPlayMusic = YES;
-    [self.player.player play];
-    _bannerView.scrollView.scrollEnabled = NO;
-    [startBtn setImage:[UIImage imageNamed:@"icon_pause"] forState:UIControlStateNormal];
+    if (![_url isEqualToString:@""]) {
+        _player.isPlayMusic = YES;
+        [self.player.player play];
+//        _bannerView.scrollView.scrollEnabled = YES;
+        [startBtn setImage:[UIImage imageNamed:@"icon_pause"] forState:UIControlStateNormal];
+    }else{
+     [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:@"该项目暂无音频"];
+    }
+    
 }
 - (void)stop{
     _player.isPlayMusic = NO;
     [self.player.player pause];
-    _bannerView.scrollView.scrollEnabled = YES;
+//    _bannerView.scrollView.scrollEnabled = YES;
     [startBtn setImage:[UIImage imageNamed:@"iconfont-bofang"] forState:UIControlStateNormal];
 }
 
@@ -395,13 +428,17 @@
 //    AVPlayerItem *item = (AVPlayerItem *)object;
     if ([keyPath isEqualToString:@"status"]) {
         if ([playerItem status] == AVPlayerStatusReadyToPlay) {
-            NSLog(@"AVPlayerStatusReadyToPlay");
+//            NSLog(@"AVPlayerStatusReadyToPlay");
 //            CMTime duration = item.duration;// 获取音频总长度
 //            [self setMaxDuratuin:CMTimeGetSeconds(duration)];
 //            [self play];
+            _slider.userInteractionEnabled = YES;
         }else if([playerItem status] == AVPlayerStatusFailed) {
-            NSLog(@"AVPlayerStatusFailed");
+            _slider.userInteractionEnabled = NO;
+            
+//            NSLog(@"AVPlayerStatusFailed");
             [self stop];
+            
         }
     }
 }
@@ -469,7 +506,8 @@
     }
 }
 
-#pragma mark- slider的进度事件
+
+#pragma mark---------- slider的进度事件
 -(void)valueChanged
 {
     CMTime currentTime=CMTimeMultiplyByFloat64(_player.player.currentItem.duration, _slider.value);

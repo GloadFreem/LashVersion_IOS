@@ -67,6 +67,10 @@
 
 @property (nonatomic, strong) UIView *headerView;
 
+@property (nonatomic, assign) BOOL isShare;
+@property (nonatomic, strong) NSIndexPath *currentIndexPath;
+
+@property (nonatomic, strong) NSMutableArray *tempArray;
 @end
 
 @implementation CircleViewController
@@ -82,6 +86,9 @@
     
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
+    }
+    if (!_tempArray) {
+        _tempArray = [NSMutableArray array];
     }
     //获得内容partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:CIRCLE_CONTENT];
@@ -345,7 +352,7 @@
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (_page == 0) {
-        [_dataArray removeAllObjects];
+        [_tempArray removeAllObjects];
         
     }
     
@@ -355,7 +362,6 @@
             
             //解析数据  将data字典转换为BaseModel
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
-            NSMutableArray *tempArray = [NSMutableArray new];
 //            NSLog(@"shuzu------%@",dataArray[0]);
             for (NSInteger i =0; i < dataArray.count; i ++) {
                 //实例化圈子模型
@@ -393,10 +399,10 @@
                 listModel.picNamesArray = [NSArray arrayWithArray:picArray];
 //                NSLog(@"照片数组---%@",listModel.picNamesArray);
                 //将model加入数据数组
-                [tempArray addObject:listModel];
+                [_tempArray addObject:listModel];
                 
             }
-            self.dataArray = tempArray;
+            self.dataArray = _tempArray;
             
 //            NSLog(@"数组个数---%ld",_dataArray.count);
 
@@ -581,11 +587,19 @@
 #pragma maerk -分享按钮
 -(void)didClickShareBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model
 {
+    
         if (model.publicContentId) {
-            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"2",@"type",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId", nil];
+          
+            if (_currentIndexPath == cell.indexPath) {
+                [self startShare];
+            }else{
             
-            //开始请求
-            [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareStatus:)];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"2",@"type",[NSString stringWithFormat:@"%ld",(long)model.publicContentId],@"contentId", nil];
+                
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareStatus:)];
+            }
+            
         }
 }
 #pragma mark -分享请求网址
@@ -667,7 +681,7 @@
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
                     [UMSocialData defaultData].extConfig.qqData.title = _shareTitle;
-                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
+//                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
                 }
                 else
                 {
@@ -682,9 +696,9 @@
                 // 微信好友
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
+//                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
+//                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到微信");
             }
@@ -692,9 +706,9 @@
             case 2:{
                 // 微信朋友圈
                 arr = @[UMShareToWechatTimeline];
-                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
+//                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+//                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到朋友圈");
@@ -729,12 +743,12 @@
         [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
+//                dispatch_async(dispatch_get_main_queue(), ^{
+                
                     [self performSelector:@selector(dismissBG) withObject:nil afterDelay:1.0];
                     
                     
-                });
+//                });
             }
         }];
     }

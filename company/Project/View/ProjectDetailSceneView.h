@@ -37,6 +37,8 @@
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (nonatomic ,copy) NSString *url;
 
+@property (nonatomic, copy) NSString *totoalTime;
+
 @property (nonatomic, copy) NSString *scenePartner;
 @property (nonatomic, copy) NSString *commentPartner;
 @property (nonatomic, copy) NSString *pptPartner;

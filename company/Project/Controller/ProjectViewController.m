@@ -7,6 +7,11 @@
 //
 
 #import "ProjectViewController.h"
+#import "NetStatusViewController.h"
+
+#import "DataBaseHelper.h"
+
+#import "LoginRegistViewController.h"
 
 #import "UpProjectViewController.h"
 #import "ProjectLetterViewController.h"
@@ -25,23 +30,28 @@
 #import "ProjectDetailController.h"
 #import "ProjectPrepareDetailVC.h"
 
+
 #define HASMESSAGE @"requestHasMessageInfo"
 #define AUTHENINFO @"authenticInfoUser"
 #define PROJECTLIST @"requestProjectList"
 #define BANNERSYSTEM @"bannerSystem"
 #define VERSIONINFO @"versionInfoSystem"
 #define GOLDCOUNT @"requestUserGoldGetInfo"
+#define LOGINUSER @"isLoginUser"
+#define DENGLU @"loginUser"
 
 #define BannerHeight  SCREENWIDTH * 0.5 + 45
 @interface ProjectViewController ()<UITableViewDataSource,UITableViewDelegate,ProjectBannerViewDelegate>
 
 {
+    ProjectBannerView * _bannerView;
+    DataBaseHelper *_dataBase;
     CAEmitterLayer * _fireEmitter;//发射器对象
     UIImageView *imageView;
     NSTimer *timer;
 }
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UITableViewCustomView *tableView;
 
 @property (nonatomic, copy) NSString *authenPartner;
 @property (nonatomic, assign) NSInteger selectedCellNum;//选择显示cell的类型
@@ -50,6 +60,8 @@
 @property (nonatomic, strong) NSMutableArray *bannerModelArray; //banner数组
 @property (nonatomic, strong) NSMutableArray *projectModelArray;
 @property (nonatomic, strong) NSMutableArray *roadModelArray;
+@property (nonatomic, strong) NSMutableArray *tempProArray;
+@property (nonatomic, strong) NSMutableArray *tempRoadArray;
 
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, assign) NSInteger projectPage;
@@ -99,6 +111,14 @@
     if (!_roadModelArray) {
         _roadModelArray = [NSMutableArray array];
     }
+    if (!_tempProArray) {
+        _tempProArray = [NSMutableArray array];
+    }
+    if (!_tempRoadArray) {
+        _tempRoadArray =[NSMutableArray array];
+    }
+    //数据库工具
+    _dataBase = [DataBaseHelper sharedInstance];
     
     [self.view setBackgroundColor:[UIColor clearColor]];
     
@@ -126,8 +146,7 @@
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 49);
     
     [self createUI];
-    
-    [self startLoadBannerData];
+//    [self startLoadBannerData];
     
     //下载认证信息
     [self loadAuthenData];
@@ -136,6 +155,11 @@
     
     [self loadVersion];
     
+    //自动登录
+    if ([TDUtil checkNetworkState] != NetStatusNone)
+    {
+        [self isLogin];
+    }
     
 //    [self createGoldView];
     //保存登录时间
@@ -144,7 +168,24 @@
     //添加监听
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setLetterStatus:) name:@"setLetterStatus" object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netNotEnable) name:@"netNotEnable" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netEnable) name:@"netEnable" object:nil];
 }
+
+-(void)netEnable
+{
+//    [self isLogin];
+    if (_netView) {
+        [_netView removeFromSuperview];
+    }
+}
+
+-(void)netNotEnable
+{
+    [self.view addSubview:_netView];
+}
+
+
 -(void)saveDate
 {
     NSString *firstLogin = [TDUtil CurrentDay];
@@ -158,7 +199,7 @@
     NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
     NSString *firstDate = [data objectForKey:@"firstLogin"];
     if ([currentTime isEqualToString:firstDate]) {
-        [SVProgressHUD dismiss];
+        
     }else{
         [self loadGoldCount];
     }
@@ -183,7 +224,6 @@
             
             [self saveDate];
             
-            [SVProgressHUD dismiss];
             [self createGoldImageView];
         }else{
         
@@ -342,59 +382,7 @@
     imageView.image = image;
 }
 
-/*
-#pragma mark-------创建金条掉落动画视图-------粒子动画-------废弃-------
--(void)createGoldView
-{
-    UIView *background = [UIView new];
-    [background setBackgroundColor:[UIColor blackColor]];
-    background.alpha = 0.5;
-    
-    background.tag=1000;
-//    [self.view addSubview:background];
-    [[UIApplication sharedApplication].windows[0] addSubview:background];
-    
-    //测试
-    [self.view bringSubviewToFront:background];
-    [background mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.mas_equalTo(0);
-        make.top.mas_equalTo(0);
-        make.bottom.mas_equalTo(0);
-    }];
-    //初始化发射器
-    _fireEmitter = [[CAEmitterLayer alloc]init];
-    _fireEmitter.emitterPosition = CGPointMake(self.view.frame.size.width/2, -20);
-    _fireEmitter.emitterSize = CGSizeMake(self.view.frame.size.width/4, 20);
-    _fireEmitter.renderMode = kCAEmitterLayerLine;
-    _fireEmitter.emitterShape = kCAEmitterLayerLine;
-    //发射单元
-    CAEmitterCell *goldCell = [CAEmitterCell emitterCell];
-    goldCell.contents=(id)[[UIImage imageNamed:@"logo-shezhi@2x.png"]CGImage];
-    //产生数量美妙
-    goldCell.birthRate=5;
-    goldCell.lifetime=50.0;
-    
-//    goldCell.lifetimeRange=1.5;
-//    goldCell.color=[[UIColor colorWithRed:0.8 green:0.4 blue:0.2 alpha:0.1]CGColor];
-    [goldCell setName:@"fire"];
-    //秒速
-    goldCell.velocity=160;
-    goldCell.velocityRange=80;
-    goldCell.emissionLongitude=M_PI+M_PI_2;
-    // 掉落角度范围
-    goldCell.emissionRange=M_PI;
-    //缩放比例
-    goldCell.scale = 0.05;
-//    goldCell.scaleSpeed=0.3;
-    goldCell.scaleRange = 0.5;
-    //旋转速度
-    goldCell.spin=0.2;
-    
-    _fireEmitter.emitterCells=[NSArray arrayWithObjects:goldCell,nil];
-    [background.layer addSublayer:_fireEmitter];
-    
-}
- */
+
 #pragma mark--------------------是否站内信未读--------------------
 -(void)loadMessage
 {
@@ -419,12 +407,13 @@
         }
     }
 }
+
 #pragma mark -------------------下载认证信息--------------------------
 -(void)loadAuthenData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
+    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:1 delegate:self sel:@selector(requestAuthenInfo:)];
 }
 
 -(void)requestAuthenInfo:(ASIHTTPRequest*)request
@@ -472,7 +461,6 @@
 #pragma mark---------------------------请求表格数据---------------------------
 -(void)startLoadData
 {
-    
     if (_selectedCellNum == 20) {
         _type = @"0";
         _page = _projectPage;
@@ -493,9 +481,9 @@
     
     if (_page == 0) {
         if (_selectedCellNum == 20) {
-            [_projectModelArray removeAllObjects];
+            [_tempProArray removeAllObjects];
         }else{
-            [_roadModelArray removeAllObjects];
+            [_tempRoadArray removeAllObjects];
         }
     }
     
@@ -503,55 +491,26 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
-            NSArray *dataArray = [Project mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+            NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
+            
+            NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
+            dictM[@"data"] = jsonString;
+            
             if (_selectedCellNum == 20) {
                 
-                for (NSInteger i =0; i < dataArray.count; i ++) {
-                    ProjectListProModel *listModel = [ProjectListProModel new];
-                    Project *project = (Project*)dataArray[i];
-                    listModel.startPageImage = project.startPageImage;
-                    listModel.abbrevName = project.abbrevName;
-                    listModel.address = project.address;
-                    listModel.fullName = project.fullName;
-                    listModel.status = project.financestatus.name;
-                    listModel.projectId = project.projectId;
-                    listModel.timeLeft = project.timeLeft;
-                    
-                    listModel.areas = [project.industoryType componentsSeparatedByString:@"，"];
-                    listModel.collectionCount = project.collectionCount;
-                    if (project.roadshows.count) {
-                        Roadshows *roadshows = project.roadshows[0];
-                        listModel.financedMount = roadshows.roadshowplan.financedMount;
-                        listModel.financeTotal = roadshows.roadshowplan.financeTotal;
-                        listModel.endDate = roadshows.roadshowplan.endDate;
-                    }
-                    
-                    [_projectModelArray addObject:listModel];
+                if (_page == 0) {
+                    [self saveDataToBaseTable:PROJECTTABLE data:dictM];
                 }
+                [self analysisProjectListData:dataArray];
                 
             }else{
-            
-                for (NSInteger i =0; i < dataArray.count; i ++) {
-                    ProjectListProModel *listModel = [ProjectListProModel new];
-                    Project *project = (Project*)dataArray[i];
-                    listModel.startPageImage = project.startPageImage;
-                    listModel.abbrevName = project.abbrevName;
-                    listModel.address = project.address;
-                    listModel.fullName = project.fullName;
-                    listModel.status = project.financestatus.name;
-                    listModel.projectId = project.projectId;
-                    //少一个areas数组
-                    listModel.areas = [project.industoryType componentsSeparatedByString:@"，"];
-//                    NSLog(@"领域 ----%@",project.industoryType);
-                    listModel.collectionCount = project.collectionCount;
-                    Roadshows *roadshows = project.roadshows[0];
-                    listModel.financedMount = roadshows.roadshowplan.financedMount;
-                    listModel.financeTotal = roadshows.roadshowplan.financeTotal;
-                    listModel.endDate = roadshows.roadshowplan.endDate;
-                    
-                    [_roadModelArray addObject:listModel];
+
+                if (_page == 0) {
+                    [self saveDataToBaseTable:ROADTABLE data:dictM];
                 }
+                [self analysisNoRoadListData:dataArray];
             }
+            
             [self.tableView reloadData];
             //结束刷新
             [self.tableView.mj_header endRefreshing];
@@ -560,7 +519,7 @@
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
         
         self.startLoading = NO;
@@ -568,11 +527,94 @@
         self.isNetRequestError = YES;
     }
 }
+#pragma mark-----解析项目列表路演------
+-(void)analysisProjectListData:(NSArray*)array
+{
+    
+    NSArray *dataArray = [Project mj_objectArrayWithKeyValuesArray:array];
+    for (NSInteger i =0; i < dataArray.count; i ++) {
+        ProjectListProModel *listModel = [ProjectListProModel new];
+        Project *project = (Project*)dataArray[i];
+        listModel.startPageImage = project.startPageImage;
+        listModel.abbrevName = project.abbrevName;
+        listModel.address = project.address;
+        listModel.fullName = project.fullName;
+        listModel.status = project.financestatus.name;
+        listModel.projectId = project.projectId;
+        listModel.timeLeft = project.timeLeft;
+        
+        listModel.areas = [project.industoryType componentsSeparatedByString:@"，"];
+        listModel.collectionCount = project.collectionCount;
+        if (project.roadshows.count) {
+            Roadshows *roadshows = project.roadshows[0];
+            listModel.financedMount = roadshows.roadshowplan.financedMount;
+            listModel.financeTotal = roadshows.roadshowplan.financeTotal;
+            listModel.endDate = roadshows.roadshowplan.endDate;
+        }
+        
+        [_tempProArray addObject:listModel];
+    }
+    self.projectModelArray = _tempProArray;
+}
+
+-(void)setProjectModelArray:(NSMutableArray *)projectModelArray
+{
+    self->_projectModelArray = projectModelArray;
+    if (_projectModelArray.count <= 0) {
+        self.tableView.isNone = YES;
+//        NSLog(@"表一无数据");
+    }else{
+        self.tableView.isNone = NO;
+        
+    }
+}
+#pragma mark------解析预选项目---------
+-(void)analysisNoRoadListData:(NSArray*)array
+{
+    NSArray *dataArray = [Project mj_objectArrayWithKeyValuesArray:array];
+    
+    for (NSInteger i =0; i < dataArray.count; i ++) {
+        ProjectListProModel *listModel = [ProjectListProModel new];
+        Project *project = (Project*)dataArray[i];
+        listModel.startPageImage = project.startPageImage;
+        listModel.abbrevName = project.abbrevName;
+        listModel.address = project.address;
+        listModel.fullName = project.fullName;
+        listModel.status = project.financestatus.name;
+        listModel.projectId = project.projectId;
+        //少一个areas数组
+        listModel.areas = [project.industoryType componentsSeparatedByString:@"，"];
+        //                    NSLog(@"领域 ----%@",project.industoryType);
+        listModel.collectionCount = project.collectionCount;
+        Roadshows *roadshows = project.roadshows[0];
+        listModel.financedMount = roadshows.roadshowplan.financedMount;
+        listModel.financeTotal = roadshows.roadshowplan.financeTotal;
+        listModel.endDate = roadshows.roadshowplan.endDate;
+        
+        [_tempRoadArray addObject:listModel];
+    }
+    self.roadModelArray = _tempRoadArray;
+}
+
+-(void)setRoadModelArray:(NSMutableArray *)roadModelArray
+{
+    self->_roadModelArray = roadModelArray;
+    if (_roadModelArray.count <= 0) {
+        self.tableView.isNone = YES;
+//        NSLog(@"表二无数据");
+    }else{
+        self.tableView.isNone = NO;
+        
+    }
+}
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    self.startLoading = YES;
-    self.isNetRequestError = YES;
+    if ([TDUtil checkNetworkState] != NetStatusNone)
+    {
+        self.startLoading = YES;
+        self.isNetRequestError = YES;
+    }
 }
 
 -(void)refresh
@@ -594,44 +636,66 @@
     
 }
 
+-(void)saveDataToBaseTable:(NSString*)tableName data:(NSDictionary*)dic
+{
+    BOOL rett = [_dataBase cleanTable:tableName];
+    if (rett) {
+//        NSLog(@"%@清理成功",tableName);
+    }else{
+//        NSLog(@"%@清理失败",tableName);
+    }
+    BOOL ret = [_dataBase insertIntoTableName:tableName Dict:dic];
+    if (ret) {
+//        NSLog(@"%@插入成功",tableName);
+    }else{
+//        NSLog(@"%@插入失败",tableName);
+    }
+}
+
+-(NSArray*)getDataFromBaseTable:(NSString*)tableName
+{
+//    NSMutableString* data = [[NSMutableString alloc] init];
+    NSArray *tableArr = [_dataBase queryWithTableName:tableName];
+    if (tableArr.count) {
+        NSDictionary* dict = tableArr[0];
+        //    for(NSString* key in dict.allKeys){
+        //        if ([key isEqualToString:@"data"]) {
+        ////            [data appendFormat:@"%@: %@   ",key,dict[key]];
+        ////            NSLog(@"打印字符串---%@",data);
+        ////
+        ////            NSLog(@"打印字典---%@",dic);
+        //
+        //        }
+        //    }
+        NSMutableDictionary *dic = [dict[@"data"] JSONValue];
+        NSArray *dataArray =[NSArray arrayWithArray:dic[@"data"]];
+        //    NSLog(@"打印数组---%@",dataArray);
+        return dataArray;
+    }
+    return nil;
+}
+
 -(void)requestBannerList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//            NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            
+            
+            NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
+            dictM[@"data"] = jsonString;
+            [self saveDataToBaseTable:BANNERTABLE data:dictM];
+            
+//            NSArray *arr = [self getDataFromBaseTable:BANNERTABLE];
+            
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
             
-            NSArray *bannerModelArray = [ProjectBannerModel mj_objectArrayWithKeyValuesArray:dataArray];
-            for (NSInteger i = 0; i < bannerModelArray.count; i ++) {
-                ProjectBannerModel *baseModel = bannerModelArray[i];
-                ProjectBannerListModel *listModel = [ProjectBannerListModel new];
-                listModel.type = baseModel.type;
-                listModel.image = baseModel.body.image;
-                listModel.url = baseModel.body.url;
-                listModel.desc = baseModel.body.desc;
-                listModel.bannerId = baseModel.body.bannerId;
-                listModel.name = baseModel.body.name;
-                if ([baseModel.type isEqualToString:@"Project"]) {
-                    listModel.industoryType = baseModel.extr.industoryType;
-                    listModel.status = baseModel.extr.financestatus.name;
-                    listModel.projectId = baseModel.extr.projectId;
-                    if (baseModel.extr.roadshows.count) {
-                        BannerRoadshows *roadshows = baseModel.extr.roadshows[0];
-                        BannerRoadshowplan *roadshowplan = roadshows.roadshowplan;
-                        listModel.financedMount = roadshowplan.financedMount;
-                        listModel.financeTotal = roadshowplan.financeTotal;
-                    }
-                    
-                }
-                [_bannerModelArray addObject:listModel];
-//                NSLog(@"打印数组个数---%ld",_bannerModelArray.count);
-            }
-            //搭建banner
-            [self createBanner];
+            //解析banner数据
+            [self analysisBannerData:dataArray];
             
             [self startLoadData];
         }else{
@@ -641,91 +705,55 @@
         self.isNetRequestError  =YES;
     }
 }
+#pragma mark----------------解析banner数据-----------------
+-(void)analysisBannerData:(NSArray*)array
+{
+    NSArray *bannerModelArray = [ProjectBannerModel mj_objectArrayWithKeyValuesArray:array];
+    for (NSInteger i = 0; i < bannerModelArray.count; i ++) {
+        ProjectBannerModel *baseModel = bannerModelArray[i];
+        ProjectBannerListModel *listModel = [ProjectBannerListModel new];
+        listModel.type = baseModel.type;
+        listModel.image = baseModel.body.image;
+        listModel.url = baseModel.body.url;
+        listModel.desc = baseModel.body.desc;
+        listModel.bannerId = baseModel.body.bannerId;
+        listModel.name = baseModel.body.name;
+        if ([baseModel.type isEqualToString:@"Project"]) {
+            listModel.industoryType = baseModel.extr.industoryType;
+            listModel.status = baseModel.extr.financestatus.name;
+            listModel.projectId = baseModel.extr.projectId;
+            if (baseModel.extr.roadshows.count) {
+                BannerRoadshows *roadshows = baseModel.extr.roadshows[0];
+                BannerRoadshowplan *roadshowplan = roadshows.roadshowplan;
+                listModel.financedMount = roadshowplan.financedMount;
+                listModel.financeTotal = roadshowplan.financeTotal;
+            }
+            
+        }
+        [_bannerModelArray addObject:listModel];
+        //    NSLog(@"打印数组个数---%ld",_bannerModelArray.count);
+    }
+    //搭建banner
+    [self setBanner];
+}
+
 #pragma mark------------------------------创建banner------------------------
 -(void)createBanner
 {
-    _selectedCellNum = 20;
-    
-    ProjectBannerView * bannerView = [[ProjectBannerView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, BannerHeight)];
-    [bannerView setSelectedNum:20];
-    bannerView.modelArray = _bannerModelArray;
-    
-    bannerView.imageCount = _bannerModelArray.count;
-    [bannerView relayoutWithModelArray:_bannerModelArray];
-    bannerView.delegate = self;
-    _tableView.tableHeaderView = bannerView;
+    if (!_bannerView) {
+        _selectedCellNum = 20;
+        _bannerView = [[ProjectBannerView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, BannerHeight)];
+        [_bannerView setSelectedNum:20];
+        _bannerView.delegate = self;
+        _tableView.tableHeaderView = _bannerView;
+    }
 }
-#pragma mark -视图即将显示
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
-    self.navigationController.navigationBar.translucent=NO;
-    [self.navigationController.navigationBar setHidden:NO];
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    //不隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
-    
 
-}
--(void)viewDidAppear:(BOOL)animated
+-(void)setBanner
 {
-    [super viewDidAppear:animated];
-    
-    [super viewWillAppear:animated];
-    
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
-    self.navigationController.navigationBar.translucent=NO;
-    [self.navigationController.navigationBar setHidden:NO];
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    //不隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
-    
-}
-#pragma mark -视图即将消失
--(void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-//    [SVProgressHUD dismiss];
+    _bannerView.modelArray = _bannerModelArray;
+    _bannerView.imageCount = _bannerModelArray.count;
+    [_bannerView relayoutWithModelArray:_bannerModelArray];
 }
 
 #pragma mark-------------------站内信通知信息----------------------
@@ -751,10 +779,19 @@
     _letterBtn = letterBtn;
 }
 
-
 -(void)createUI
 {
+
+    [self createBanner];
     self.navigationItem.title = @"项目";
+    
+     _netView  = [noNetView new];
+     _netView.frame = CGRectMake(0, 0, SCREENWIDTH, 40);
+    _netView.delegate = self;
+     if ([TDUtil checkNetworkState] == NetStatusNone)
+     {
+         [self.view addSubview:_netView];
+     }
     
     //设置站内信状态
     [self setLetterStatus:nil];
@@ -765,8 +802,15 @@
     _tableView.mj_header.automaticallyChangeAlpha = YES;
 //    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
-    
 }
+#pragma mark-------------没有网络点击事件处理--------------
+-(void)didClickBtnInView
+{
+//    NSLog(@"没有网络事件处理");
+    NetStatusViewController *netStatus =[NetStatusViewController new];
+    [self.navigationController pushViewController:netStatus animated:YES];
+}
+
 #pragma mark -刷新控件
 -(void)nextPage
 {
@@ -936,7 +980,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.versionPartner,@"partner",@"1",@"platform", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:VERSIONINFOSYSTEM postParam:dic type:0 delegate:self sel:@selector(requestVersion:)];
+    [self.httpUtil getDataFromAPIWithOps:VERSIONINFOSYSTEM postParam:dic type:1 delegate:self sel:@selector(requestVersion:)];
 }
 -(void)requestVersion:(ASIHTTPRequest *)request
 {
@@ -1012,6 +1056,182 @@
             [application openURL:[NSURL URLWithString:_url]];
         }
     }
+}
+
+#pragma mark----------------loadOffLineData---加载离线数据----------------
+-(void)loadOffLineData
+{
+    //先从数据库加载 没有数据  则进行数据请求
+    NSArray *bannerArray = [self getDataFromBaseTable:BANNERTABLE];
+    if (bannerArray.count) {
+        [self analysisBannerData:bannerArray];
+        
+        NSArray *projectArray = [self getDataFromBaseTable:PROJECTTABLE];
+        if (projectArray.count) {
+//                NSLog(@"%@-----%ld",projectArray,projectArray.count);
+        [self analysisProjectListData:projectArray];
+        [self.tableView reloadData];
+        }
+        NSArray *noRoadArray = [self getDataFromBaseTable:ROADTABLE];
+        if (noRoadArray.count) {
+            [self analysisNoRoadListData:noRoadArray];
+        }
+        
+    }else{
+        if ([TDUtil checkNetworkState] != NetStatusNone)
+        {
+            [self startLoadBannerData];
+        }
+        
+    }
+}
+
+
+#pragma mark-------------------------自动登录-----------------------
+-(void)isLogin
+{
+    _loginPartner = [TDUtil encryKeyWithMD5:KEY action:LOGINUSER];
+    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.loginPartner,@"partner", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:ISLOGINUSER postParam:dic type:1 delegate:self sel:@selector(requestIsLogin:)];
+    
+}
+-(void)requestIsLogin:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+//        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    
+    if (jsonDic!=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status intValue] == 200) {
+        NSLog(@"登陆状态在线");
+            [self startLoadBannerData];
+        }else{
+            //自动登录
+            
+            //获取缓存数据
+            NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
+            NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+            NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
+            //激光推送Id
+            NSString *regId = [JPUSHService registrationID];
+            
+            NSString * string = [AES encrypt:DENGLU password:KEY];
+            self.partner = [TDUtil encryptMD5String:string];
+            NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
+            //开始请求
+            [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:1 delegate:self sel:@selector(requestLogin:)];
+        }
+    }
+}
+-(void)requestLogin:(ASIHTTPRequest *)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    
+    if (jsonDic!=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status intValue] == 200) {
+            NSLog(@"登陆成功");
+//            isSuccess = YES;
+            
+            [self startLoadBannerData];
+            
+            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+            
+            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
+            [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
+            
+        }else{
+            LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+            [self.navigationController pushViewController:login animated:NO];
+        }
+        
+    }
+}
+
+#pragma mark -视图即将显示
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
+    self.navigationController.navigationBar.translucent=NO;
+    [self.navigationController.navigationBar setHidden:NO];
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:NO animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:NO animated:NO];
+        }
+    }
+    
+    //不隐藏tabbar
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:NO animated:NO];
+    
+    
+}
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
+    self.navigationController.navigationBar.translucent=NO;
+    [self.navigationController.navigationBar setHidden:NO];
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:NO animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:NO animated:NO];
+        }
+    }
+    
+    //不隐藏tabbar
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:NO animated:NO];
+    
+    if (!self.bannerModelArray.count) {
+        [self loadOffLineData];
+    }
+    
+    
+}
+#pragma mark -视图即将消失
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    //    [SVProgressHUD dismiss];
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"netEnable" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"netNotEnable" object:nil];
 }
 
 @end

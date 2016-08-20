@@ -54,6 +54,8 @@
 @property (nonatomic, strong) NSMutableArray *identifyArray;
 @property (nonatomic, strong) NSMutableArray *statusArray;
 
+@property (nonatomic, assign) BOOL isFirst;
+@property (nonatomic, assign) BOOL isSecond;
 @end
 
 @implementation MineAttentionVC
@@ -67,6 +69,12 @@
     if (!_investArray) {
         _investArray  = [NSMutableArray array];
     }
+    if (!_temProjectArray) {
+        _temProjectArray = [NSMutableArray array];
+    }
+    if (!_temInvestArray) {
+        _temInvestArray = [NSMutableArray array];
+    }
     if (!_identifyArray) {
         _identifyArray = [NSMutableArray array];
     }
@@ -77,6 +85,9 @@
     _identyType = @"0";       //默认请求项目
     _projectPage = 0;
     _investPage = 0;
+    
+    _isFirst = YES;
+    _isSecond = YES;
     
     //获得partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:LOGOATTENTION];
@@ -156,17 +167,25 @@
         _identyType = @"0";
         _page = _projectPage;
         self.tableView = _projectTableView;
+        
+        if (_isFirst) {
+            self.startLoading = YES;
+        }
     }
     
     if (_selectedTableView == 1) {
         _identyType = @"1";
         _page = _investPage;
         self.tableView = _investTableView;
+        
+        if (_isSecond) {
+            self.startLoading = YES;
+        }
     }
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",_identyType,@"type",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     
-    self.startLoading = YES;
+    
     
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:LOGO_ATTENTION_LIST postParam:dic type:0 delegate:self sel:@selector(requestInvestList:)];
@@ -180,10 +199,10 @@
     //如果刷新到顶部  移除原来数组数据
     if (_page == 0) {
         if (_selectedTableView == 0) {
-            [_projectArray removeAllObjects];
+            [_temProjectArray removeAllObjects];
         }
         if (_selectedTableView == 1) {
-            [_investArray removeAllObjects];
+            [_temInvestArray removeAllObjects];
             [_identifyArray removeAllObjects];
         }
     }
@@ -197,7 +216,7 @@
             //项目
             if (_selectedTableView == 0) {
                 NSArray *dataArray = [MineCollectionProjectModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
-                NSMutableArray *tempArray = [NSMutableArray new];
+//                NSMutableArray *tempArray = [NSMutableArray new];
                 for (NSInteger i = 0; i < dataArray.count; i ++) {
                     ProjectListProModel *listModel = [ProjectListProModel new];
                     MineCollectionProjectModel *baseModel = dataArray[i];
@@ -216,15 +235,18 @@
                     listModel.endDate = roadshows.roadshowplan.endDate;
                     
                     [_statusArray addObject:baseModel.financestatus.name];
-                    [tempArray addObject:listModel];
+                    [_temProjectArray addObject:listModel];
                 }
-                self.projectArray = tempArray;
+                self.projectArray = _temProjectArray;
+                if (_isFirst) {
+                    _isFirst = NO;
+                }
             }
 //            NSLog(@"数组个数---%ld",_projectArray.count);
             //投资
             if (_selectedTableView == 1) {
                 NSArray *dataArray = [MineCollectionInvestModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
-                NSMutableArray *tempArray = [NSMutableArray new];
+//                NSMutableArray *tempArray = [NSMutableArray new];
                 for (NSInteger i =0; i < dataArray.count; i ++) {
                     MineCollectionInvestModel *baseModel = dataArray[i];
                     MineCollectionListModel *listModel = [MineCollectionListModel new];
@@ -252,9 +274,12 @@
                     if (authentics.identiytype.name) {
                         [_identifyArray addObject:authentics.identiytype.name];
                     }
-                    [tempArray addObject:listModel];
+                    [_temInvestArray addObject:listModel];
                 }
-                self.investArray = tempArray;
+                self.investArray = _temInvestArray;
+                if (_isSecond) {
+                    _isSecond = NO;
+                }
             }
             
             //结束刷新
@@ -265,7 +290,7 @@
             self.startLoading = NO;
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }else{
         self.isNetRequestError = YES;
@@ -622,6 +647,31 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBar.translucent=NO;
+    [self.navigationController.navigationBar setHidden:NO];
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    //不隐藏tabbar
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
 
 }
 - (void)didReceiveMemoryWarning {

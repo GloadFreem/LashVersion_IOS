@@ -11,6 +11,7 @@
 @interface RootViewController ()
 {
     LoadingView *loadingView;
+    
 }
 @end
 
@@ -189,9 +190,12 @@
     
 }
 
-- (void)viewWillDisappear:(BOOL)animated { [super viewWillDisappear:animated];
+
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     
-//    [MobClick endLogPageView:self.navView.title];
+    //    [MobClick endLogPageView:self.navView.title];
     
 }
 

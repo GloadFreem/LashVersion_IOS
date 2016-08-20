@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "Reachability.h"
 #import "HttpUtils.h"
 #import "LoadingView.h"
 #import "LoadingUtil.h"

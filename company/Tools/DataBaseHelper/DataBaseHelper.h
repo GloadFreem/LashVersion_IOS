@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, DBdatatype) {
  *
  *  @return DatabaseQueue
  */
--(FMDatabaseQueue *)DatabaseWithDBName:(NSString *)dbName;
+-(FMDatabase *)DatabaseWithDBName:(NSString *)dbName;
 
 /**
  *  建表
@@ -48,13 +48,31 @@ typedef NS_ENUM(NSInteger, DBdatatype) {
  */
 -(BOOL)createTable:(NSString *)table WithKey:(NSDictionary *)keyTypes;
 
+-(BOOL)createTableWithTableName:(NSString*)name keys:(NSArray*)keys;
+
+/**
+ 数据库中是否存在表
+ */
+- (BOOL)isExistWithTableName:(NSString*)name;
+
+
 /**
  *  表添加值
  *
  *  @param table     表名
  *  @param keyValues 字段及对应的值
  */
--(BOOL)insertInTable:(NSString *)table WithKey:(NSDictionary *)keyValues;
+//-(BOOL)insertInTable:(NSString *)table WithKey:(NSDictionary *)keyValues;
+
+/**
+ 插入值
+ */
+-(BOOL)insertIntoTableName:(NSString*)name Dict:(NSDictionary*)dict;
+
+/**
+ 全部查询
+ */
+-(NSArray*)queryWithTableName:(NSString*)name;
 
 /**
  *  查询数据 限制数据条数10
@@ -152,4 +170,10 @@ typedef NS_ENUM(NSInteger, DBdatatype) {
  *  @return YES/NO
  */
 -(BOOL)cleanTable:(NSString *)table;
+
+/**
+ 删除表(表也删除)
+ */
+-(BOOL)dropTable:(NSString*)name;
+
 @end

@@ -36,47 +36,6 @@
     _scrollView.delegate = self;
     [self addSubview:_scrollView];
     
-    /*
-    //button的Y值
-    CGFloat buttonY = CGRectGetMaxY(_scrollView.frame);
-    //详情button
-    _detailBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, buttonY, btnWidth, btnHeight)];
-    _detailBtn.tag = 1000;
-    [_detailBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    _detailBtn.selected = YES;
-    [_detailBtn setTitle:@"详情" forState:UIControlStateNormal];
-    [_detailBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [_detailBtn setTitleColor:[UIColor orangeColor] forState:UIControlStateSelected];
-    _detailBtn.titleLabel.font = [UIFont systemFontOfSize:16];
-    _detailBtn.selected = YES;//初始化详情按钮 被点击
-    _selectedBtn = _detailBtn;
-    
-    [self addSubview:_detailBtn];
-    
-    //成员button
-    _memberBtn = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_detailBtn.frame), buttonY, btnWidth, btnHeight)];
-    [_memberBtn setTag:1001];
-    [_memberBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_memberBtn setTitle:@"成员" forState:UIControlStateNormal];
-    [_memberBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [_memberBtn setTitleColor:[UIColor orangeColor] forState:UIControlStateSelected];
-    _detailBtn.titleLabel.font = [UIFont systemFontOfSize:16];
-    [self addSubview:_memberBtn];
-    //现场button
-    _sceneBtn = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_memberBtn.frame), buttonY, btnWidth, btnHeight)];
-    [_sceneBtn setTag:1002];
-    [_sceneBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_sceneBtn setTitle:@"现场" forState:UIControlStateNormal];
-    [_sceneBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [_sceneBtn setTitleColor:[UIColor orangeColor] forState:UIControlStateSelected];
-    _sceneBtn.titleLabel.font = [UIFont systemFontOfSize:16];
-    [self addSubview:_sceneBtn];
-    
-    _sliderLine = [[UIView alloc]initWithFrame:CGRectMake((btnWidth-slederWidth)/2,CGRectGetMaxY(_detailBtn.frame)-3,slederWidth,3 )];
-    [_sliderLine setBackgroundColor:[UIColor orangeColor]];
-    
-    [self addSubview:_sliderLine];
-    */
 }
 
 /*

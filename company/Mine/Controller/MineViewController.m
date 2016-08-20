@@ -123,9 +123,9 @@
 #pragma mark -下载认证信息
 -(void)loadAuthenData
 {
-    if (_isFirst) {
-        self.startLoading = YES;
-    }
+//    if (_isFirst) {
+//        self.startLoading = YES;
+//    }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
@@ -177,13 +177,13 @@
             
             [self setModel];
             
-            if (_isFirst) {
-                _isFirst = NO;
-            }
+//            if (_isFirst) {
+//                _isFirst = NO;
+//            }
             
         }
     }else{
-        self.isNetRequestError = YES;
+//        self.isNetRequestError = YES;
     }
 }
 
@@ -213,13 +213,13 @@
 //    NSLog(@"%@",_nameStr);
     _company.text = _companyStr;
     
-    self.startLoading = NO;
+//    self.startLoading = NO;
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    self.startLoading = YES;
-    self.isNetRequestError = YES;
+//    self.startLoading = YES;
+//    self.isNetRequestError = YES;
 }
 
 -(void)refresh

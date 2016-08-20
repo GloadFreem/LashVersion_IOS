@@ -266,6 +266,8 @@
     //广告栏视图
     bannerView= [[ProjectDetailBannerView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH*0.75)];
     
+    bannerView.scrollView.scrollEnabled = YES;
+    
     [bannerView relayoutWithModelArr:arr];
     
     [_scrollView addSubview:bannerView];
@@ -947,7 +949,7 @@
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareurl;
                     [UMSocialData defaultData].extConfig.qqData.title = _shareTitle;
-                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
+//                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
                 }
                 else
                 {
@@ -962,9 +964,9 @@
                 // 微信好友
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
+//                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
+//                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到微信");
             }
@@ -972,9 +974,9 @@
             case 2:{
                 // 微信朋友圈
                 arr = @[UMShareToWechatTimeline];
-                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
+//                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
+//                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到朋友圈");
@@ -1010,11 +1012,11 @@
         [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
+//                dispatch_async(dispatch_get_main_queue(), ^{
+                
                     [self performSelector:@selector(dismissBG) withObject:nil afterDelay:1.0];
                     
-                });
+//                });
             }
         }];
     }

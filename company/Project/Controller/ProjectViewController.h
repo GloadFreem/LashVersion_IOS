@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "noNetView.h"
 
-@interface ProjectViewController : RootViewController
+@interface ProjectViewController : RootViewController<noNetViewDelegate>
+
+@property (nonatomic, copy) NSString *loginPartner;
+@property (nonatomic, strong) noNetView *netView;
 
 @end

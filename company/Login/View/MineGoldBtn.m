@@ -14,8 +14,6 @@
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    
-    [super layoutSubviews];
     CGFloat midX = self.frame.size.width / 2;
     CGFloat midY = self.frame.size.height/ 2 ;
     self.titleLabel.center = CGPointMake(midX, midY + 30);

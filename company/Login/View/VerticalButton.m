@@ -12,7 +12,6 @@
 
 -(void)layoutSubviews
 {
-    [super layoutSubviews];
     
     [super layoutSubviews];
     CGFloat midX = self.frame.size.width / 2;

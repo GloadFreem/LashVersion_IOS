@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+
+#import "DataBaseHelper.h"
+
 #import "ProjectViewController.h"
 #import "InvestViewController.h"
 #import "MineViewController.h"
@@ -34,6 +37,7 @@
 #define LOGINUSER @"isLoginUser"
 #define UmengAppkey @"55c7684de0f55a0d0d0042a8"
 
+
 @interface AppDelegate ()
 {
     BOOL isSuccess;
@@ -52,6 +56,23 @@
     _window.backgroundColor = [UIColor whiteColor];
     [self createViewControllers];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
+    //创建数据库
+    [self createTable];
+    
+    
+    // 监测网络情况
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(netStatusChanged:)
+                                                 name: kReachabilityChangedNotification
+                                               object: nil];
+    
+    self.hostReach = [Reachability reachabilityForInternetConnection];
+    [_hostReach startNotifier];
+    [self updateInterfaceWithReachability:_hostReach];
+    
+    
+    
+    [NSThread sleepForTimeInterval:1];
     
     //获取缓存数据
     NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
@@ -59,51 +80,78 @@
     NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
     NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
     //激光推送Id
-    NSString *regId = [JPUSHService registrationID];
+//    NSString *regId = [JPUSHService registrationID];
+    
     self.httpUtil = [[HttpUtils alloc]init];
     
-    [self isLogin];
-    
-    if (isStart && [isStart isEqualToString:@"true"]) {
-        if (isLogin)
+    if (isStart && [isStart isEqualToString:@"true"]){
+        
+        if (phoneNumber && password)
         {
             self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
             [self.nav setNavigationBarHidden:YES];
             [_window setRootViewController:self.nav];
-            
         }else{
-            
-            if (phoneNumber && password)
-            {
-                NSString * string = [AES encrypt:DENGLU password:KEY];
-                self.partner = [TDUtil encryptMD5String:string];
-                NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
-                //开始请求
-                [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:1 delegate:self sel:@selector(requestLogin:)];
-                if (isSuccess)
-                {
-                    self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
-                    [self.nav setNavigationBarHidden:YES];
-                    [_window setRootViewController:self.nav];
-                }else{
-                    
-                    LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
-                    self.nav = [[UINavigationController alloc]initWithRootViewController:login];
-                    [_window setRootViewController:self.nav];
-                }
-            }else{
-                LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
-                
-                self.nav = [[UINavigationController alloc]initWithRootViewController:login];
-                [_window setRootViewController:self.nav];
-                
-            }
+            LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+        
+            self.nav = [[UINavigationController alloc]initWithRootViewController:login];
+            [_window setRootViewController:self.nav];
         }
     }else{
         GuidePageViewController *vc = [GuidePageViewController new];
         self.nav = [[UINavigationController alloc]initWithRootViewController:vc];
         [_window setRootViewController:self.nav];
     }
+
+//      [self isLogin];
+//
+//    if (isStart && [isStart isEqualToString:@"true"]) {
+//        
+//        if (isLogin)
+//        {
+//            self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
+//            [self.nav setNavigationBarHidden:YES];
+//            [_window setRootViewController:self.nav];
+//            
+//        }else{
+//        
+//            if (phoneNumber && password)
+//            {
+//                
+//                NSString * string = [AES encrypt:DENGLU password:KEY];
+//                self.partner = [TDUtil encryptMD5String:string];
+//                NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
+//                //开始请求
+//                [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:1 delegate:self sel:@selector(requestLogin:)];
+//                if (isSuccess)
+//                {
+//                
+//                    self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
+//                    [self.nav setNavigationBarHidden:YES];
+//                    [_window setRootViewController:self.nav];
+//                    
+//                }else{
+//                    
+//                    LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+//                    self.nav = [[UINavigationController alloc]initWithRootViewController:login];
+//                    [_window setRootViewController:self.nav];
+//                }
+//                
+//            }else{
+//                LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+//                
+//                self.nav = [[UINavigationController alloc]initWithRootViewController:login];
+//                [_window setRootViewController:self.nav];
+//                
+//            }
+//            
+//        }
+//        
+//    }else{
+//        GuidePageViewController *vc = [GuidePageViewController new];
+//        self.nav = [[UINavigationController alloc]initWithRootViewController:vc];
+//        [_window setRootViewController:self.nav];
+//    }
     
     
     [_window makeKeyAndVisible];
@@ -172,6 +220,34 @@
             NSLog(@"%@",dic);
         }
 //    }
+}
+
+- (void)updateInterfaceWithReachability:(Reachability *)reachability
+{
+    NetworkStatus netStatus = [reachability currentReachabilityStatus];
+    switch (netStatus) {
+        case NotReachable:
+            NSLog(@"====当前网络状态不可达=======http://www.cnblogs.com/xiaofeixiang");
+            //网络不可用通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"netNotEnable" object:nil userInfo:nil];
+            break;
+        case ReachableViaWiFi:
+            NSLog(@"====当前网络状态为Wifi=======博客园-Fly_Elephant");
+        case ReachableViaWWAN:
+            NSLog(@"====当前网络状态为3G=======keso");
+            //网络可用通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"netEnable" object:nil userInfo:nil];
+            
+            break;
+    }
+}
+
+-(void)netStatusChanged:(NSNotification*)noti
+{
+    Reachability* curReach = [noti object];
+    NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+    [self updateInterfaceWithReachability:curReach];
+    
 }
 
 
@@ -342,6 +418,10 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     return [UMSocialSnsService handleOpenURL:url];
 }
 
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(nonnull NSDictionary<NSString *,id> *)options{
+    return [UMSocialSnsService handleOpenURL:url];
+}
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     BOOL result = [UMSocialSnsService handleOpenURL:url];
@@ -350,6 +430,49 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
         
     }
     return result;
+}
+
+
+#pragma mark-------------------------数据库-------------------------
+-(void)createTable
+{
+    DataBaseHelper *dataBase = [DataBaseHelper sharedInstance];
+    
+    if ([dataBase isExistWithTableName:BANNERTABLE]) {
+        NSLog(@"BANNERTABLE表存在");
+//        [dataBase dropTable:BANNERTABLE];
+    }else{
+        BOOL ret = [dataBase createTableWithTableName:BANNERTABLE keys:@[@"data"]];
+        if (ret) {
+            NSLog(@"BANNERTABLE创建成功");
+        }else{
+            NSLog(@"BANNERTABLE创建失败");
+        }
+    }
+    
+    if ([dataBase isExistWithTableName:PROJECTTABLE]) {
+        NSLog(@"PROJECTTABLE表存在");
+//        [dataBase dropTable:PROJECTTABLE];
+    }else{
+        BOOL ret = [dataBase createTableWithTableName:PROJECTTABLE keys:@[@"data"]];
+        if (ret) {
+            NSLog(@"PROJECTTABLE创建成功");
+        }else{
+            NSLog(@"PROJECTTABLE创建失败");
+        }
+    }
+    
+    if ([dataBase isExistWithTableName:ROADTABLE]) {
+        NSLog(@"ROADTABLE表存在");
+//        [dataBase dropTable:ROADTABLE];
+    }else{
+        BOOL ret = [dataBase createTableWithTableName:ROADTABLE keys:@[@"data"]];
+        if (ret) {
+            NSLog(@"ROADTABLE创建成功");
+        }else{
+            NSLog(@"ROADTABLE创建失败");
+        }
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

@@ -215,7 +215,8 @@
     _timeLabel.text = [TDUtil getDateCha:model.timeSTr];
     [_timeLabel sizeToFit];
     
-    _contentLabel.text = model.msgContent;
+//    _contentLabel.text = model.msgContent;
+    [TDUtil setLabelMutableText:_contentLabel content:model.msgContent lineSpacing:5 headIndent:0];
     _contentLabel.sd_layout.maxHeightIs(MAXFLOAT);
     _picContainerView.pictureStringArray = model.picNamesArray;
     

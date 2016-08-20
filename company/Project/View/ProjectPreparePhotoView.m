@@ -114,7 +114,8 @@ CGFloat ___maxContentLabelHeight = 0; //根据具体font来定
     _shouldOpen = NO;
     
     _projectLabel.text = model.projectStr;
-    _contentLabel.text = model.content;
+//    _contentLabel.text = model.content;
+    [TDUtil setLabelMutableText:_contentLabel content:model.content lineSpacing:5 headIndent:0];
     
     //默认显示一行数组
     NSMutableArray *picArray = [NSMutableArray array];

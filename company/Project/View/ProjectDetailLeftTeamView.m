@@ -159,7 +159,7 @@
             btn.contentMode = UIViewContentModeScaleAspectFill;
             [btn addTarget:self action:@selector(teamBtnClick:) forControlEvents:UIControlEventTouchUpInside];
             //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
-            [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",team.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
+            [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",team.icon]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
             [_scrollView1 addSubview:btn];
             
             UILabel *nameLabel = [UILabel new];
@@ -213,7 +213,7 @@
             btn.contentMode = UIViewContentModeScaleAspectFill;
             [btn addTarget:self action:@selector(ExrBtnClick:) forControlEvents:UIControlEventTouchUpInside];
             //        [btn setBackgroundImage:IMAGENAMED(@"Avatar-sample-165") forState:UIControlStateNormal];
-            [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",extr.icon]] forState:UIControlStateNormal placeholderImage:[UIImage new]];
+            [btn sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",extr.icon]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
             [_scrollView2 addSubview:btn];
             
             UILabel *nameLabel = [UILabel new];
