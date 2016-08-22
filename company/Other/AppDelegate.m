@@ -103,57 +103,6 @@
         [_window setRootViewController:self.nav];
     }
 
-//      [self isLogin];
-//
-//    if (isStart && [isStart isEqualToString:@"true"]) {
-//        
-//        if (isLogin)
-//        {
-//            self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
-//            [self.nav setNavigationBarHidden:YES];
-//            [_window setRootViewController:self.nav];
-//            
-//        }else{
-//        
-//            if (phoneNumber && password)
-//            {
-//                
-//                NSString * string = [AES encrypt:DENGLU password:KEY];
-//                self.partner = [TDUtil encryptMD5String:string];
-//                NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
-//                //开始请求
-//                [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:1 delegate:self sel:@selector(requestLogin:)];
-//                if (isSuccess)
-//                {
-//                
-//                    self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
-//                    [self.nav setNavigationBarHidden:YES];
-//                    [_window setRootViewController:self.nav];
-//                    
-//                }else{
-//                    
-//                    LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
-//                    self.nav = [[UINavigationController alloc]initWithRootViewController:login];
-//                    [_window setRootViewController:self.nav];
-//                }
-//                
-//            }else{
-//                LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
-//                
-//                self.nav = [[UINavigationController alloc]initWithRootViewController:login];
-//                [_window setRootViewController:self.nav];
-//                
-//            }
-//            
-//        }
-//        
-//    }else{
-//        GuidePageViewController *vc = [GuidePageViewController new];
-//        self.nav = [[UINavigationController alloc]initWithRootViewController:vc];
-//        [_window setRootViewController:self.nav];
-//    }
-    
-    
     [_window makeKeyAndVisible];
     
     //设置键盘防遮挡输入框
@@ -227,14 +176,14 @@
     NetworkStatus netStatus = [reachability currentReachabilityStatus];
     switch (netStatus) {
         case NotReachable:
-            NSLog(@"====当前网络状态不可达=======http://www.cnblogs.com/xiaofeixiang");
+//            NSLog(@"====当前网络状态不可达=======http://www.cnblogs.com/xiaofeixiang");
             //网络不可用通知
         [[NSNotificationCenter defaultCenter] postNotificationName:@"netNotEnable" object:nil userInfo:nil];
             break;
         case ReachableViaWiFi:
-            NSLog(@"====当前网络状态为Wifi=======博客园-Fly_Elephant");
+//            NSLog(@"====当前网络状态为Wifi=======博客园-Fly_Elephant");
         case ReachableViaWWAN:
-            NSLog(@"====当前网络状态为3G=======keso");
+//            NSLog(@"====当前网络状态为3G=======keso");
             //网络可用通知
         [[NSNotificationCenter defaultCenter] postNotificationName:@"netEnable" object:nil userInfo:nil];
             
@@ -250,56 +199,6 @@
     
 }
 
-
--(void)requestLogin:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
-    if (jsonDic!=nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status intValue] == 200) {
-//            NSLog(@"登陆成功");
-            isSuccess = YES;
-            
-            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-            
-            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
-            [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
-            
-        }else{
-            
-            
-        }
-        
-    }
-    
-}
-
--(void)isLogin
-{
-    _loginPartner = [TDUtil encryKeyWithMD5:KEY action:LOGINUSER];
-    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.loginPartner,@"partner", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:ISLOGINUSER postParam:dic type:1 delegate:self sel:@selector(requestIsLogin:)];
-    
-}
--(void)requestIsLogin:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
-    if (jsonDic!=nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status intValue] == 200) {
-//            NSLog(@"登陆成功");
-            isLogin = YES;
-            
-        }
-    }
-}
 
 //-(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 //{

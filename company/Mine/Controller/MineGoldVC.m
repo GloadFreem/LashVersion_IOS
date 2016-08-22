@@ -57,7 +57,7 @@
     self.goldWidth.constant = 284*WIDTHCONFIG;
     self.goldheight.constant = 175*WIDTHCONFIG;
     
-    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENWIDTH-64);
+    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
     self.isTransparent = YES;
     _isFirst = YES;
     
@@ -138,7 +138,10 @@
 -(void)startLoadData
 {
     if (_isFirst) {
-        self.startLoading = YES;
+        if ([TDUtil checkNetworkState] != NetStatusNone)
+        {
+            self.startLoading = YES;
+        }
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",nil];
     //开始请求
@@ -179,8 +182,11 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    self.startLoading = YES;
-    self.isNetRequestError = YES;
+    if ([TDUtil checkNetworkState] != NetStatusNone)
+    {
+        self.startLoading = YES;
+        self.isNetRequestError = YES;
+    }
 }
 
 -(void)refresh

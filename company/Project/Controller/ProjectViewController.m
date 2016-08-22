@@ -91,6 +91,12 @@
 @property (nonatomic, assign) NSInteger second;
 @property (nonatomic, assign) NSInteger secondLeave;
 
+//登录状态
+@property (nonatomic, assign)BOOL isLogin;
+@property (nonatomic, assign) BOOL isSuccess;
+
+@property (nonatomic, assign) BOOL haveData;
+
 @end
 
 @implementation ProjectViewController
@@ -146,8 +152,6 @@
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 49);
     
     [self createUI];
-//    [self startLoadBannerData];
-    
     //下载认证信息
     [self loadAuthenData];
 
@@ -177,6 +181,9 @@
 //    [self isLogin];
     if (_netView) {
         [_netView removeFromSuperview];
+    }
+    if (!_isLogin && !_isSuccess) {
+        [self autoLogin];
     }
 }
 
@@ -208,7 +215,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.goldPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_USER_GOLD_GETCOUNT postParam:dic type:1 delegate:self sel:@selector(requestGoldCount:)];
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_USER_GOLD_GETCOUNT postParam:dic type:0 delegate:self sel:@selector(requestGoldCount:)];
 }
 -(void)requestGoldCount:(ASIHTTPRequest*)request
 {
@@ -413,7 +420,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:1 delegate:self sel:@selector(requestAuthenInfo:)];
+    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
 }
 
 -(void)requestAuthenInfo:(ASIHTTPRequest*)request
@@ -470,7 +477,7 @@
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page",[NSString stringWithFormat:@"%@",_type],@"type", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_LIST postParam:dic type:1 delegate:self sel:@selector(requestProjectList:)];
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_LIST postParam:dic type:0 delegate:self sel:@selector(requestProjectList:)];
 }
 
 -(void)requestProjectList:(ASIHTTPRequest *)request
@@ -625,14 +632,13 @@
 #pragma mark----------------------------请求banner数据----------------------
 -(void)startLoadBannerData
 {
-
-//    [SVProgressHUD showWithStatus:@"加载中..."];
     //设置加载动画
-    self.startLoading = YES;
-    
+    if (!_haveData) {
+        self.startLoading = YES;
+    }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.bannerPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:BANNER_SYSTEM postParam:dic type:1 delegate:self sel:@selector(requestBannerList:)];
+    [self.httpUtil getDataFromAPIWithOps:BANNER_SYSTEM postParam:dic type:0 delegate:self sel:@selector(requestBannerList:)];
     
 }
 
@@ -980,7 +986,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.versionPartner,@"partner",@"1",@"platform", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:VERSIONINFOSYSTEM postParam:dic type:1 delegate:self sel:@selector(requestVersion:)];
+    [self.httpUtil getDataFromAPIWithOps:VERSIONINFOSYSTEM postParam:dic type:0 delegate:self sel:@selector(requestVersion:)];
 }
 -(void)requestVersion:(ASIHTTPRequest *)request
 {
@@ -1076,7 +1082,7 @@
         if (noRoadArray.count) {
             [self analysisNoRoadListData:noRoadArray];
         }
-        
+        _haveData = YES;
     }else{
         if ([TDUtil checkNetworkState] != NetStatusNone)
         {
@@ -1093,7 +1099,7 @@
     _loginPartner = [TDUtil encryKeyWithMD5:KEY action:LOGINUSER];
     NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.loginPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:ISLOGINUSER postParam:dic type:1 delegate:self sel:@selector(requestIsLogin:)];
+    [self.httpUtil getDataFromAPIWithOps:ISLOGINUSER postParam:dic type:0 delegate:self sel:@selector(requestIsLogin:)];
     
 }
 -(void)requestIsLogin:(ASIHTTPRequest *)request
@@ -1106,24 +1112,28 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
         NSLog(@"登陆状态在线");
-            [self startLoadBannerData];
+        _isLogin = YES;
+        [self startLoadBannerData];
         }else{
             //自动登录
-            
-            //获取缓存数据
-            NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
-            NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
-            NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
-            //激光推送Id
-            NSString *regId = [JPUSHService registrationID];
-            
-            NSString * string = [AES encrypt:DENGLU password:KEY];
-            self.partner = [TDUtil encryptMD5String:string];
-            NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
-            //开始请求
-            [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:1 delegate:self sel:@selector(requestLogin:)];
+            [self autoLogin];
         }
     }
+}
+-(void)autoLogin
+{
+    //获取缓存数据
+    NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
+    NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+    NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
+    //激光推送Id
+    NSString *regId = [JPUSHService registrationID];
+    
+    NSString * string = [AES encrypt:DENGLU password:KEY];
+    self.partner = [TDUtil encryptMD5String:string];
+    NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:0 delegate:self sel:@selector(requestLogin:)];
 }
 -(void)requestLogin:(ASIHTTPRequest *)request
 {
@@ -1135,8 +1145,7 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
             NSLog(@"登陆成功");
-//            isSuccess = YES;
-            
+            _isSuccess = YES;
             [self startLoadBannerData];
             
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
@@ -1209,7 +1218,6 @@
             [tabBarController tabBarHidden:NO animated:NO];
         }
     }
-    
     //不隐藏tabbar
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
@@ -1218,14 +1226,11 @@
     if (!self.bannerModelArray.count) {
         [self loadOffLineData];
     }
-    
-    
 }
 #pragma mark -视图即将消失
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    //    [SVProgressHUD dismiss];
 }
 
 -(void)dealloc

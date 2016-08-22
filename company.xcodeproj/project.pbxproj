@@ -108,8 +108,6 @@
 		44372A4B1D3FC7F000DED1D6 /* ProjectPrepareCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372A0A1D3FC7EF00DED1D6 /* ProjectPrepareCommentCell.m */; };
 		44372A4C1D3FC7F000DED1D6 /* ProjectPrepareDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372A0C1D3FC7EF00DED1D6 /* ProjectPrepareDetailHeaderView.m */; };
 		44372A4D1D3FC7F000DED1D6 /* ProjectPrepareFooterCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372A0E1D3FC7EF00DED1D6 /* ProjectPrepareFooterCommentView.m */; };
-		44372A4E1D3FC7F000DED1D6 /* ProjectPrepareHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372A101D3FC7EF00DED1D6 /* ProjectPrepareHeaderCell.m */; };
-		44372A4F1D3FC7F000DED1D6 /* ProjectPrepareHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44372A111D3FC7EF00DED1D6 /* ProjectPrepareHeaderCell.xib */; };
 		44372A501D3FC7F000DED1D6 /* ProjectPreparePhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372A131D3FC7EF00DED1D6 /* ProjectPreparePhotoView.m */; };
 		44372A511D3FC7F000DED1D6 /* ProjectSceneOtherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372A151D3FC7EF00DED1D6 /* ProjectSceneOtherCell.m */; };
 		44372A521D3FC7F000DED1D6 /* ZMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44372A171D3FC7EF00DED1D6 /* ZMProgressView.m */; };
@@ -802,6 +800,8 @@
 		443730CB1D3FCC5600DED1D6 /* ActivityDetailListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 443730AD1D3FCC5600DED1D6 /* ActivityDetailListCell.xib */; };
 		443730CC1D3FCC5600DED1D6 /* ActivityPriseViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 443730AF1D3FCC5600DED1D6 /* ActivityPriseViewCell.m */; };
 		443730CD1D3FCC5600DED1D6 /* PictureContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 443730B11D3FCC5600DED1D6 /* PictureContainerView.m */; };
+		44847ADA1D6A9F9500BE572D /* iconfont_firstNews@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44847AD61D6A9F9500BE572D /* iconfont_firstNews@2x.png */; };
+		44847ADB1D6A9F9500BE572D /* iconfont_firstNews@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44847AD71D6A9F9500BE572D /* iconfont_firstNews@3x.png */; };
 		4484D17E1D19184F001F4C3A /* jpush-ios-2.1.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4484D17C1D19184F001F4C3A /* jpush-ios-2.1.8.a */; };
 		4484D1801D19189E001F4C3A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4484D17F1D19189E001F4C3A /* CFNetwork.framework */; };
 		4484D1821D1918C7001F4C3A /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4484D1811D1918C7001F4C3A /* CoreFoundation.framework */; };
@@ -1112,9 +1112,6 @@
 		44372A0C1D3FC7EF00DED1D6 /* ProjectPrepareDetailHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectPrepareDetailHeaderView.m; sourceTree = "<group>"; };
 		44372A0D1D3FC7EF00DED1D6 /* ProjectPrepareFooterCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectPrepareFooterCommentView.h; sourceTree = "<group>"; };
 		44372A0E1D3FC7EF00DED1D6 /* ProjectPrepareFooterCommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectPrepareFooterCommentView.m; sourceTree = "<group>"; };
-		44372A0F1D3FC7EF00DED1D6 /* ProjectPrepareHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectPrepareHeaderCell.h; sourceTree = "<group>"; };
-		44372A101D3FC7EF00DED1D6 /* ProjectPrepareHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectPrepareHeaderCell.m; sourceTree = "<group>"; };
-		44372A111D3FC7EF00DED1D6 /* ProjectPrepareHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectPrepareHeaderCell.xib; sourceTree = "<group>"; };
 		44372A121D3FC7EF00DED1D6 /* ProjectPreparePhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectPreparePhotoView.h; sourceTree = "<group>"; };
 		44372A131D3FC7EF00DED1D6 /* ProjectPreparePhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectPreparePhotoView.m; sourceTree = "<group>"; };
 		44372A141D3FC7EF00DED1D6 /* ProjectSceneOtherCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSceneOtherCell.h; sourceTree = "<group>"; };
@@ -1965,6 +1962,8 @@
 		443730AF1D3FCC5600DED1D6 /* ActivityPriseViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityPriseViewCell.m; sourceTree = "<group>"; };
 		443730B01D3FCC5600DED1D6 /* PictureContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureContainerView.h; sourceTree = "<group>"; };
 		443730B11D3FCC5600DED1D6 /* PictureContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureContainerView.m; sourceTree = "<group>"; };
+		44847AD61D6A9F9500BE572D /* iconfont_firstNews@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont_firstNews@2x.png"; sourceTree = "<group>"; };
+		44847AD71D6A9F9500BE572D /* iconfont_firstNews@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont_firstNews@3x.png"; sourceTree = "<group>"; };
 		4484D17C1D19184F001F4C3A /* jpush-ios-2.1.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jpush-ios-2.1.8.a"; sourceTree = "<group>"; };
 		4484D17D1D19184F001F4C3A /* JPUSHService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUSHService.h; sourceTree = "<group>"; };
 		4484D17F1D19189E001F4C3A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -2515,9 +2514,6 @@
 				44372A0C1D3FC7EF00DED1D6 /* ProjectPrepareDetailHeaderView.m */,
 				44372A0D1D3FC7EF00DED1D6 /* ProjectPrepareFooterCommentView.h */,
 				44372A0E1D3FC7EF00DED1D6 /* ProjectPrepareFooterCommentView.m */,
-				44372A0F1D3FC7EF00DED1D6 /* ProjectPrepareHeaderCell.h */,
-				44372A101D3FC7EF00DED1D6 /* ProjectPrepareHeaderCell.m */,
-				44372A111D3FC7EF00DED1D6 /* ProjectPrepareHeaderCell.xib */,
 				44372A121D3FC7EF00DED1D6 /* ProjectPreparePhotoView.h */,
 				44372A131D3FC7EF00DED1D6 /* ProjectPreparePhotoView.m */,
 				44372A141D3FC7EF00DED1D6 /* ProjectSceneOtherCell.h */,
@@ -3300,6 +3296,8 @@
 		44372C2A1D3FCB5C00DED1D6 /* 活动ios */ = {
 			isa = PBXGroup;
 			children = (
+				44847AD61D6A9F9500BE572D /* iconfont_firstNews@2x.png */,
+				44847AD71D6A9F9500BE572D /* iconfont_firstNews@3x.png */,
 				44372C2B1D3FCB5C00DED1D6 /* icon_acticity_close@2x.png */,
 				44372C2C1D3FCB5C00DED1D6 /* icon_acticity_close@3x.png */,
 				44372C2D1D3FCB5C00DED1D6 /* icon_acticity_more@2x.png */,
@@ -4698,7 +4696,6 @@
 				44372D881D3FCB5C00DED1D6 /* icon_ringbg@3x.png in Resources */,
 				44372E891D3FCB5C00DED1D6 /* bill_whitebg2@2x.png in Resources */,
 				448718811D02AD9900020DD9 /* LaunchScreen.storyboard in Resources */,
-				44372A4F1D3FC7F000DED1D6 /* ProjectPrepareHeaderCell.xib in Resources */,
 				44A7B20D1D588EB200181EA5 /* iconfont_leftTime@3x.png in Resources */,
 				44372EC51D3FCB5C00DED1D6 /* ...............................................................@3x.png in Resources */,
 				44372D5E1D3FCB5C00DED1D6 /* icon_share_msg@2x.png in Resources */,
@@ -4751,6 +4748,7 @@
 				44372D491D3FCB5C00DED1D6 /* ImageSelectedSmallOn@3x.png in Resources */,
 				44372EC21D3FCB5C00DED1D6 /* jintiao34.png in Resources */,
 				4437303E1D3FCC3600DED1D6 /* MineAttentionInvestThinkTankCell.xib in Resources */,
+				44847ADB1D6A9F9500BE572D /* iconfont_firstNews@3x.png in Resources */,
 				44372F191D3FCB5C00DED1D6 /* iconfont-bofang@2x.png in Resources */,
 				44372DE61D3FCB5C00DED1D6 /* placeholderIcon@3x.png in Resources */,
 				44372E521D3FCB5C00DED1D6 /* iconfont_zan@2x.png in Resources */,
@@ -5157,6 +5155,7 @@
 				44372E2C1D3FCB5C00DED1D6 /* icon-1460354657038@3x.png in Resources */,
 				44372D931D3FCB5C00DED1D6 /* mine_gold_calender@2x.png in Resources */,
 				44372D3D1D3FCB5C00DED1D6 /* btn_back_nor.png in Resources */,
+				44847ADA1D6A9F9500BE572D /* iconfont_firstNews@2x.png in Resources */,
 				44372F011D3FCB5C00DED1D6 /* upLoad@2x.png in Resources */,
 				44372E5D1D3FCB5C00DED1D6 /* icon_loginbg@3x.png in Resources */,
 				443730041D3FCC3600DED1D6 /* AppSetChangePhoneVC.xib in Resources */,
@@ -5294,7 +5293,6 @@
 				44871B8C1D02B37800020DD9 /* MLLinkLabel.m in Sources */,
 				44871B7E1D02B37800020DD9 /* UIView+SDAutoLayout.m in Sources */,
 				443730471D3FCC3600DED1D6 /* MineProjectCenterYuXuanCell.m in Sources */,
-				44372A4E1D3FC7F000DED1D6 /* ProjectPrepareHeaderCell.m in Sources */,
 				443730361D3FCC3600DED1D6 /* BillDetailCell.m in Sources */,
 				44372A291D3FC7EF00DED1D6 /* MusicModel.m in Sources */,
 				443730C11D3FCC5600DED1D6 /* ActivityCommentCell.m in Sources */,

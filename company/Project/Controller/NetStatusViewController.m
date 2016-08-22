@@ -10,7 +10,7 @@
 
 @interface NetStatusViewController ()
 
-@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *firstTitleLabel;
 @property (nonatomic, strong) UILabel *subTitleLabel;
 @property (nonatomic, strong) UILabel *contentLabel;
 @property (nonatomic, strong) UILabel *secondTitleLabel;
@@ -25,6 +25,7 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     [self setupNav];
+    [self createUI];
 }
 
 -(void)setupNav
@@ -44,76 +45,80 @@
 
 -(void)createUI
 {
-    _titleLabel = [UILabel new];
-    _titleLabel.textColor = [UIColor blackColor];
-    _titleLabel.font = [UIFont boldSystemFontOfSize:20];
-    _titleLabel.textAlignment = NSTextAlignmentLeft;
-    _titleLabel.text = @"您的设备未启用移动网络或Wi-Fi网络";
-    [self.view addSubview:_titleLabel];
+    _firstTitleLabel = [UILabel new];
+    _firstTitleLabel.textColor = [UIColor blackColor];
+    _firstTitleLabel.font = [UIFont boldSystemFontOfSize:18*WIDTHCONFIG];
+    _firstTitleLabel.textAlignment = NSTextAlignmentLeft;
+    _firstTitleLabel.text = @"您的设备未启用移动网络或Wi-Fi网络";
+    [self.view addSubview:_firstTitleLabel];
     
     UIView *contentView = self.view;
     
-    _titleLabel.sd_layout
+    _firstTitleLabel.sd_layout
     .leftSpaceToView(contentView,20)
-    .topSpaceToView(contentView,40)
-    .heightIs(22);
-    [_titleLabel setSingleLineAutoResizeWithMaxWidth:300];
+    .topSpaceToView(contentView,25)
+    .heightIs(20);
+    [_firstTitleLabel setSingleLineAutoResizeWithMaxWidth:300];
     
     _subTitleLabel = [UILabel new];
     _subTitleLabel.textColor = color47;
-    _subTitleLabel.font = BGFont(16);
+    _subTitleLabel.font = [UIFont boldSystemFontOfSize:14*WIDTHCONFIG];
     _subTitleLabel.textAlignment = NSTextAlignmentLeft;
     _subTitleLabel.text = @"如需要连接到互联网，可以参照以下方法：";
     [self.view addSubview:_subTitleLabel];
     _subTitleLabel.sd_layout
-    .leftEqualToView(_titleLabel)
-    .topSpaceToView(_titleLabel,40)
-    .heightIs(17);
-    [_subTitleLabel setSingleLineAutoResizeWithMaxWidth:300];
+    .leftEqualToView(_firstTitleLabel)
+    .topSpaceToView(_firstTitleLabel,15)
+    .heightIs(15);
+    [_subTitleLabel setSingleLineAutoResizeWithMaxWidth:300*WIDTHCONFIG];
     
     _contentLabel = [UILabel new];
     _contentLabel.textColor = color47;
-    _contentLabel.font = BGFont(16);
+    _contentLabel.font = BGFont(14*WIDTHCONFIG);
     _contentLabel.textAlignment = NSTextAlignmentLeft;
-    _contentLabel.numberOfLines = 0;
     [self.view addSubview:_contentLabel];
+    
+    NSString *str = @"在设备的“设置”-“Wi-Fi网络”设置面板中选择一个可用的Wi-Fi热点接入。\n在设备的“设置”-“通用”-“网络”设置面板中启用蜂窝移动数据(启用后运营商可能会收取数据通信费用)。";
+
+//    _contentLabel.text = str;
+    
     _contentLabel.sd_layout
-    .topSpaceToView(_subTitleLabel,18)
-    .leftEqualToView(_titleLabel)
+    .topSpaceToView(_subTitleLabel,8)
+    .leftEqualToView(_firstTitleLabel)
     .rightSpaceToView(contentView,20)
     .autoHeightRatio(0);
-    
-    NSString *str = @"在设备的“设置”-“Wi-Fi网络”设置面板中选择一个可用的Wi-Fi热点接入。\n在设备的“设置”-“通用”-“网络”设置面板中启用蜂窝移动数据（启用后运营商可能会收取数据通信费用）。";
-    
     [TDUtil setLabelMutableText:_contentLabel content:str lineSpacing:3 headIndent:0];
+    _contentLabel.isAttributedContent = YES;
+    
     
     _secondTitleLabel = [UILabel new];
     _secondTitleLabel.textColor = color47;
-    _contentLabel.font = BGFont(16);
-    _contentLabel.textAlignment = NSTextAlignmentLeft;
-    _contentLabel.text = @"如果您已接入Wi-Fi网络：";
+    _secondTitleLabel.font = [UIFont boldSystemFontOfSize:14*WIDTHCONFIG];
+    _secondTitleLabel.textAlignment = NSTextAlignmentLeft;
+    _secondTitleLabel.text = @"如果您已接入Wi-Fi网络：";
     [self.view addSubview:_secondTitleLabel];
+    
     _secondTitleLabel.sd_layout
-    .leftEqualToView(_titleLabel)
-    .topSpaceToView(_contentLabel,50)
-    .heightIs(16);
-    [_secondTitleLabel setSingleLineAutoResizeWithMaxWidth:300];
+    .leftEqualToView(_firstTitleLabel)
+    .topSpaceToView(_contentLabel,15)
+    .heightIs(15);
+    [_secondTitleLabel setSingleLineAutoResizeWithMaxWidth:300*WIDTHCONFIG];
     
     _secondContentLabel = [UILabel new];
     _secondContentLabel.textColor = color47;
     _secondContentLabel.textAlignment = NSTextAlignmentLeft;
-    _secondContentLabel.font = BGFont(16);
+    _secondContentLabel.font = BGFont(14*WIDTHCONFIG);
     _secondContentLabel.numberOfLines = 0;
-    NSString *string = @"请检查您所连接的Wi-Fi热点是否已接入互联网，或该热点是否允许您的设备访问互联网";
-    [TDUtil setLabelMutableText:_secondContentLabel content:string lineSpacing:3 headIndent:0];
+    NSString *string = @"请检查您所连接的Wi-Fi热点是否已接入互联网，或该热点是否允许您的设备访问互联网。";
+    
     [self.view addSubview:_secondContentLabel];
     _secondContentLabel.sd_layout
-    .leftEqualToView(_titleLabel)
-    .topSpaceToView(_secondTitleLabel,18)
-    .rightSpaceToView(contentView, 20)
+    .leftEqualToView(_secondTitleLabel)
+    .topSpaceToView(_secondTitleLabel,8)
+    .rightSpaceToView(contentView,20)
     .autoHeightRatio(0);
-    
-    
+    [TDUtil setLabelMutableText:_secondContentLabel content:string lineSpacing:3 headIndent:0];
+    _secondContentLabel.isAttributedContent = YES;
     
 }
 -(void)leftBack

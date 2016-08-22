@@ -130,10 +130,10 @@
 //        [self.requestInstance setFile:filePath withFileName:fileName andContentType:@"jpg" forKey:[NSString stringWithFormat:@"%@%d",postName,i]];
         
         UIImage * image = [TDUtil loadContent:[files objectAtIndex:i]];
-//        NSData * imageData = UIImageJPEGRepresentation(image, 100);
-        NSData * imageData = UIImagePNGRepresentation(image);
+        image = [TDUtil imageWithImage:image scaledToSize:CGSizeMake(image.size.width/2, image.size.height/2)];
+        NSData * imageData = UIImageJPEGRepresentation(image, 0.8);
+//        NSData * imageData = UIImagePNGRepresentation(image);
         [self.requestInstance addData:imageData withFileName:fileName andContentType:@"image/jpeg" forKey:@"images"];
-        
     }
     
     //设置请求模式

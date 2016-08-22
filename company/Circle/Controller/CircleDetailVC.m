@@ -94,6 +94,7 @@
     NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
     _selfId = [data objectForKey:USER_STATIC_USER_ID];
     
+    
     //设置加载视图范围
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
     
@@ -576,13 +577,9 @@
         _beCommentName = [NSString stringWithFormat:@"%@",_beCommentNameArray[indexPath.row]];
         _nameIndex = [_beCommentNameArray indexOfObject:_beCommentName];
     }
-    
-    
-    if ([_selfId isEqualToString:_userId]) {
-
+    if ([_selfId isEqual:_userId]) {
             _deleteModel = _dataArray[indexPath.row];
-            
-            //        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"不能回复自己"];
+        
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
             __block CircleDetailVC* blockSelf = self;
             
@@ -599,13 +596,11 @@
             [self presentViewController:alertController animated:YES completion:nil];
             
             return;
-        
     }else{
     
     [_textField becomeFirstResponder];
     }
-//    NSLog(@"回复人数组----%@",_atUserIdArray);
-    
+
 }
 #pragma mark---删除评论---
 -(void)btnCertain:(id)sender

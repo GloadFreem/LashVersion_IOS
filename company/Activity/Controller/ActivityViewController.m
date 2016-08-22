@@ -36,6 +36,8 @@
 
 @property (nonatomic, assign) BOOL isFirst;
 @property (nonatomic, strong) NSMutableArray *tempArray;
+
+@property (nonatomic, strong) UIView *headerView;
 @end
 
 @implementation ActivityViewController
@@ -207,6 +209,7 @@
     _tableView.backgroundColor = color(239, 239, 244, 1);
     _tableView.delegate =self;
     _tableView.dataSource =self;
+//    _tableView.tableHeaderView = self.headerView;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     //设置刷新控件
@@ -241,6 +244,78 @@
     }
 }
 
+-(UIView*)headerView
+{
+    if (!_headerView) {
+        _headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 70)];
+        //        _headerView.backgroundColor = [UIColor whiteColor];
+        
+        UIView *topView = [UIView new];
+        [topView setBackgroundColor:colorGray];
+        [_headerView addSubview:topView];
+        
+        topView.sd_layout
+        .leftEqualToView(_headerView)
+        .rightEqualToView(_headerView)
+        .topEqualToView(_headerView)
+        .heightIs(10);
+        
+        UIImageView *iconImage = [UIImageView new];
+//        iconImage.layer.cornerRadius = 20;
+//        iconImage.layer.masksToBounds = YES;
+        [iconImage setImage:[UIImage imageNamed:@"iconfont_firstNews"]];
+        
+        [_headerView addSubview:iconImage];
+        
+        iconImage.sd_layout
+        .leftSpaceToView(_headerView,8)
+        .topSpaceToView(topView, 10)
+        .widthIs(20)
+        .heightIs(20);
+        
+        UILabel *titleLabel = [UILabel new];
+        titleLabel.text = @"今日头条";
+        titleLabel.font = BGFont(19);
+        titleLabel.textAlignment = NSTextAlignmentLeft;
+        titleLabel.textColor = [TDUtil colorWithHexString:@"68aaea"];
+        [titleLabel sizeToFit];
+        [_headerView addSubview:titleLabel];
+        
+        titleLabel.sd_layout
+        .leftSpaceToView(iconImage,10)
+        .centerYEqualToView(iconImage)
+        .heightIs(19);
+        [titleLabel setSingleLineAutoResizeWithMaxWidth:150];
+        
+        UIImageView *arrowImage = [UIImageView new];
+        arrowImage.image = [UIImage imageNamed:@"icon_right"];
+        [_headerView addSubview:arrowImage];
+        
+        arrowImage.sd_layout
+        .rightSpaceToView( _headerView,12)
+        .centerYEqualToView(iconImage)
+        .widthIs(9)
+        .heightIs(15);
+        
+        UIButton *btn = [UIButton new];
+        [btn addTarget:self action:@selector(firstNews) forControlEvents:UIControlEventTouchUpInside];
+        [btn setBackgroundColor:[UIColor clearColor]];
+        [_headerView addSubview:btn];
+        
+        btn.sd_layout
+        .leftEqualToView(_headerView)
+        .topEqualToView(_headerView)
+        .rightEqualToView(_headerView)
+        .bottomEqualToView(_headerView);
+    }
+    
+    return _headerView;
+}
+
+-(void)firstNews
+{
+    NSLog(@"今日头条");
+}
 -(void)createSearchView
 {
     _textField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH-20, 29)];

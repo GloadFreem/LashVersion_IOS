@@ -200,7 +200,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _moreBtn.sd_layout
     .leftEqualToView(_contentLabel)
     .topSpaceToView(_contentLabel,0)
-    .widthIs(30);
+    .widthIs(40);
     
     _picContainerView.sd_layout
     .centerXEqualToView(self.contentView);//已经在内部实现宽度和高度的自适应所以不需要在设置高度和宽度，top值是具体有无图片在setmodel方法设置
@@ -280,7 +280,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
 //    _contentLabel.text = model.msgContent;
     [TDUtil setLabelMutableText:_contentLabel content:model.msgContent lineSpacing:5 headIndent:0];
     _picContainerView.pictureStringArray = model.picNamesArray;
-    
+//    NSLog(@"-----zhaopian---%@",model.picNamesArray);
     if (model.shouldShowMoreBtn) { //如果文字高度超过60
         _moreBtn.sd_layout.heightIs(20);
         _moreBtn.hidden = NO;

@@ -49,8 +49,8 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZSn-TT-Prv">
-                            <rect key="frame" x="187" y="102" width="0.0" height="47"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZSn-TT-Prv">
+                            <rect key="frame" x="171" y="102" width="32.5" height="47"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="47" id="RVO-O1-eAf"/>
                             </constraints>
@@ -59,7 +59,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="根" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vqy-M4-4JP">
-                            <rect key="frame" x="190" y="133" width="12" height="12"/>
+                            <rect key="frame" x="206" y="133" width="12" height="12"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="12" id="ozO-Yl-VKi"/>
                             </constraints>
