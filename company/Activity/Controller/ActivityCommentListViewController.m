@@ -403,6 +403,7 @@
     [cell setDidClickCommentLabelBlock:^(NSString* userId,NSString * name, CGRect rectInWindow) {
         weakSelf.textField.placeholder =[NSString stringWithFormat:@"  回复：%@",name];
         [weakSelf.textField becomeFirstResponder];
+        [weakSelf.bottomView setHidden:NO];
         weakSelf.isReplayingComment = YES;
         weakSelf.commentToUser = userId;
     }];

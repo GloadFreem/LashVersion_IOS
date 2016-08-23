@@ -26,7 +26,17 @@
 @property(assign,nonatomic)CGRect loadingViewFrame; //自定义加载视图大小
 @property(retain,nonatomic)NSMutableDictionary* dataDic; //字典数据
 
+
+
 - (void) refresh;  //刷新
 - (void) resetLoadingView; //重置加载视图
+
+
+#pragma mark--------从数据库加载数据-------------
+-(NSArray*)getDataFromBaseTable:(NSString*)tableName;
+#pragma mark-------保存数据------
+-(void)saveDataToBaseTable:(NSString*)tableName data:(NSDictionary*)dic;
+
+-(id)getOrgazinationDataFromBaseTable:(NSString*)tableName;
 
 @end

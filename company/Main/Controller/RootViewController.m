@@ -11,7 +11,7 @@
 @interface RootViewController ()
 {
     LoadingView *loadingView;
-    
+    DataBaseHelper *_dataBase;
 }
 @end
 
@@ -24,6 +24,8 @@
     //初始化网络请求对象
     self.httpUtil  =[[HttpUtils alloc]init];
     
+    //数据库工具
+    _dataBase = [DataBaseHelper sharedInstance];
 }
 
 /**
@@ -180,6 +182,55 @@
 //==============================网络请求处理结束==============================//
 
 
+#pragma mark--------从数据库加载数据-------------
+-(NSArray*)getDataFromBaseTable:(NSString*)tableName
+{
+    //    NSMutableString* data = [[NSMutableString alloc] init];
+    NSArray *tableArr = [_dataBase queryWithTableName:tableName];
+    if (tableArr.count) {
+        NSDictionary* dict = tableArr[0];
+//            for(NSString* key in dict.allKeys){
+//                if ([key isEqualToString:@"data"]) {
+//        //            [data appendFormat:@"%@: %@   ",key,dict[key]];
+//        //            NSLog(@"打印字符串---%@",data);
+//        //
+//        //            NSLog(@"打印字典---%@",dic);
+//        
+//                }
+//            }
+        NSMutableDictionary *dic = [dict[@"data"] JSONValue];
+        NSArray *dataArray =[NSArray arrayWithArray:dic[@"data"]];
+        //    NSLog(@"打印数组---%@",dataArray);
+        return dataArray;
+    }
+    return nil;
+}
+-(id)getOrgazinationDataFromBaseTable:(NSString*)tableName
+{
+    NSArray *tableArr = [_dataBase queryWithTableName:tableName];
+    if (tableArr.count) {
+        NSDictionary *dict = tableArr[0];
+        NSMutableDictionary *dic = [dict[@"data"] JSONValue];
+        return dic[@"data"];
+    }
+    return nil;
+}
+#pragma mark-------保存数据------
+-(void)saveDataToBaseTable:(NSString*)tableName data:(NSDictionary*)dic
+{
+    BOOL rett = [_dataBase cleanTable:tableName];
+    if (rett) {
+//                NSLog(@"%@清理成功",tableName);
+    }else{
+        //        NSLog(@"%@清理失败",tableName);
+    }
+    BOOL ret = [_dataBase insertIntoTableName:tableName Dict:dic];
+    if (ret) {
+//                NSLog(@"%@插入成功",tableName);
+    }else{
+        //        NSLog(@"%@插入失败",tableName);
+    }
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

@@ -33,7 +33,7 @@
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     
-    leftback.size = CGSizeMake(80, 30);
+    leftback.size = CGSizeMake(80*WIDTHCONFIG, 30);
     leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     leftback.titleLabel.text = @"返回";
     [leftback.titleLabel setTextColor:[UIColor whiteColor]];
@@ -58,7 +58,7 @@
     .leftSpaceToView(contentView,20)
     .topSpaceToView(contentView,25)
     .heightIs(20);
-    [_firstTitleLabel setSingleLineAutoResizeWithMaxWidth:300];
+    [_firstTitleLabel setSingleLineAutoResizeWithMaxWidth:300*WIDTHCONFIG];
     
     _subTitleLabel = [UILabel new];
     _subTitleLabel.textColor = color47;

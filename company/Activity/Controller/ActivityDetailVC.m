@@ -437,6 +437,11 @@ static CGFloat textFieldH = 40;
                 [tempArray addObject:commentItemModel];
             }
             
+            if (tempArray.count >5) {
+                tempArray = [NSMutableArray arrayWithArray:@[tempArray[0],tempArray[1],tempArray[2],tempArray[3],tempArray[4]]];
+                
+            }
+            
             self.commentCellModel.commentItemsArray  = [tempArray copy];
             
             NSMutableArray *tempLikes = [NSMutableArray new];

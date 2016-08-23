@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "JTabBarController.h"
 #import "HttpUtils.h"
+#import "DataBaseHelper.h"
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -18,6 +20,7 @@
 @property (nonatomic, copy) NSString *loginPartner;
 @property(retain,nonatomic)HttpUtils* httpUtil; //网络请求对象
 
+@property (nonatomic, assign) DataBaseHelper *dataBase;
 @property (nonatomic, weak) Reachability  *hostReach;
 @property (nonatomic, assign) BOOL netEnable;
 

@@ -34,10 +34,11 @@
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
 
-@property (nonatomic, assign) BOOL isFirst;
 @property (nonatomic, strong) NSMutableArray *tempArray;
 
 @property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, assign) BOOL haveData;   //是否有离线数据
+
 @end
 
 @implementation ActivityViewController
@@ -50,7 +51,6 @@
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
-    _isFirst = YES;
     if (!_tempArray) {
         _tempArray = [NSMutableArray array];
     }
@@ -70,7 +70,7 @@
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT -49);
     
     //加载数据
-    [self loadActionListData];
+//    [self loadActionListData];
     
 }
 
@@ -116,16 +116,31 @@
             [self.tableView.mj_footer endRefreshing];
         }
     }
-    [SVProgressHUD dismiss];
 }
+#pragma mark----------加载离线数据-----------
+-(void)loadOffLineData
+{
+    //先从数据库加载 没有数据  则进行数据请求
+    NSArray *activityArray = [self getDataFromBaseTable:ACTIVITYTABLE];
+    if (activityArray.count) {
+        [self analysisActivityListData:activityArray];
+        _haveData = YES;
+    }else{
+        if ([TDUtil checkNetworkState] != NetStatusNone)
+        {
+            [self loadActionListData];
+        }
+        
+    }
+}
+
 /**
  *  获取活动列表
  */
 
 -(void)loadActionListData
 {
-    if (_isFirst) {
-        //        [SVProgressHUD showWithStatus:@"加载中"];
+    if (!_haveData) {
         self.startLoading = YES;
     }
     
@@ -143,45 +158,52 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
+            NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
+            NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
+            dictM[@"data"] = jsonString;
             if (_page == 0) {
                 [_tempArray removeAllObjects];
-                
+                [self saveDataToBaseTable:ACTIVITYTABLE data:dictM];
+                _haveData = YES;
             }
             
-            NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
-//            NSMutableArray * array = [[NSMutableArray alloc] init];
+            //解析数据
+            [self analysisActivityListData:dataArray];
             
-            //解析
-            NSDictionary *dataDic;
-            ActivityViewModel * baseModel;
-            for (int i=0; i<dataArray.count; i++) {
-                dataDic = dataArray[i];
-                baseModel = [ActivityViewModel mj_objectWithKeyValues:dataDic];
-                [_tempArray addObject:baseModel];
-            }
-            
-            if (_isFirst) {
-                _isFirst = NO;
-            }
-            //设置数据模型
-            self.dataSourceArray = _tempArray;
-            
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
         }else{
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
+
         }
         self.startLoading = NO;
     }else{
          self.isNetRequestError  =YES;
     }
+    
+    //结束刷新
+    [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
+}
+
+-(void)analysisActivityListData:(NSArray*)array
+{
+    NSDictionary *dataDic;
+    ActivityViewModel * baseModel;
+    for (int i=0; i<array.count; i++) {
+        dataDic = array[i];
+        baseModel = [ActivityViewModel mj_objectWithKeyValues:dataDic];
+        [_tempArray addObject:baseModel];
+    }
+    //设置数据模型
+    self.dataSourceArray = _tempArray;
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
+    if ([TDUtil checkNetworkState] != NetStatusNone){
     self.startLoading = YES;
     self.isNetRequestError = YES;
+    }
+    [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
 }
 
 -(void)refresh
@@ -454,6 +476,16 @@
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:NO animated:NO];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (!self.dataSourceArray.count) {
+        [self loadOffLineData];
+    }
+    
 }
 #pragma mark -视图即将消失
 -(void)viewWillDisappear:(BOOL)animated

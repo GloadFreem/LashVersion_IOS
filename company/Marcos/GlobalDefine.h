@@ -24,6 +24,12 @@
 #define PROJECTTABLE @"project"
 #define BANNERTABLE @"banner"
 
+#define INVESTPERSONTABLE @"investPerson"
+#define INVESTORGANIZATIONTABLE @"investOrganization"
+#define INVESTORGANIZATIONSECONDTABLE @"investOrganizationSecond"
+#define THINKTANKTABLE @"thinkTank"
+#define CIRCLETABLE @"circle"
+#define ACTIVITYTABLE @"activity"
 //常量
 #define VIEWWIDTH 320   //视图宽度
 #define VIEWSTART 0     //视图起始坐标x
@@ -159,8 +165,8 @@
 
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
-#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-//#define SERVICE_URL @"http://192.168.5.137:8080/jinzht/"//本地
+//#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
+#define SERVICE_URL @"http://192.168.5.141:8080/jinzht/"//本地
 
 #define KEY @"jinzht_server_security"
 #define PLATFORM @"1"

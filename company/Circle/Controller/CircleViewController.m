@@ -71,6 +71,8 @@
 @property (nonatomic, strong) NSIndexPath *currentIndexPath;
 
 @property (nonatomic, strong) NSMutableArray *tempArray;
+@property (nonatomic, assign) BOOL haveData;   //是否有离线数据
+
 @end
 
 @implementation CircleViewController
@@ -82,7 +84,6 @@
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
-    
     
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -116,7 +117,7 @@
     //注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(publishContent:) name:@"publish" object:nil];
     //下载数据
-    [self loadData];
+//    [self loadData];
     //下载认证信息
     [self loadAuthenData];
 }
@@ -205,7 +206,6 @@
             
 //            [self refreshHttp];
         }else{
-            //        self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网速不好，请手动刷新"];
         }
     }
@@ -334,10 +334,26 @@
 //    NSLog(@"下拉刷新");
 }
 
+
+#pragma mark-----加载离线数据
+-(void)loadOffLineData
+{
+    //先从数据库加载 没有数据  则进行数据请求
+    NSArray *circleArray = [self getDataFromBaseTable:CIRCLETABLE];
+    if (circleArray.count) {
+        [self analysisCircleListData:circleArray];
+        _haveData = YES;
+    }else{
+        if ([TDUtil checkNetworkState] != NetStatusNone)
+        {
+            [self loadData];
+        }
+    }
+}
+
 -(void)loadData
 {
-    if (_isFirst) {
-//        [SVProgressHUD showWithStatus:@"加载中"];
+    if (!_haveData) {
         self.startLoading = YES;
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
@@ -351,71 +367,24 @@
 //    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
-    if (_page == 0) {
-        [_tempArray removeAllObjects];
-        
-    }
-    
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
             
             //解析数据  将data字典转换为BaseModel
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
-//            NSLog(@"shuzu------%@",dataArray[0]);
-            for (NSInteger i =0; i < dataArray.count; i ++) {
-                //实例化圈子模型
-                CircleListModel *listModel = [CircleListModel new];
-                
-                //实例化返回数据baseModel
-                CircleBaseModel *baseModel = [CircleBaseModel mj_objectWithKeyValues:dataArray[i]];
-                //一级模型赋值
-                listModel.timeSTr = baseModel.publicDate;              //发布时间
-                listModel.iconNameStr = baseModel.users.headSculpture; //发布者头像
-                listModel.nameStr = baseModel.users.name;              //发布者名字
-                listModel.userId = baseModel.users.userId;
-                listModel.msgContent = baseModel.content;
-                listModel.publicContentId = baseModel.publicContentId; //帖子ID
-                listModel.shareCount = baseModel.shareCount;           //分享数量
-                listModel.commentCount = baseModel.commentCount;       //评论数量
-                listModel.priseCount = baseModel.priseCount;           //点赞数量
-                listModel.flag = baseModel.flag;
-                
-                //拿到usrs认证数组
-                NSArray *authenticsArray = [NSArray arrayWithArray:baseModel.users.authentics];
-                //实例化认证人模型
-                if (authenticsArray.count) {
-                    CircleUsersAuthenticsModel *usersAuthenticsModel =authenticsArray[0];
-                    listModel.addressStr = usersAuthenticsModel.city.name;
-                    listModel.companyStr = usersAuthenticsModel.companyName;
-                    listModel.positionStr = usersAuthenticsModel.position;
-                }
-                
-                NSMutableArray *picArray = [NSMutableArray array];
-                for (NSInteger i = 0; i < baseModel.contentimageses.count; i ++) {
-                    CircleContentimagesesModel *imageModel = baseModel.contentimageses[i];
-                    [picArray addObject:imageModel.url];
-                }
-                listModel.picNamesArray = [NSArray arrayWithArray:picArray];
-//                NSLog(@"照片数组---%@",listModel.picNamesArray);
-                //将model加入数据数组
-                [_tempArray addObject:listModel];
-                
-            }
-            self.dataArray = _tempArray;
+            NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
+            dictM[@"data"] = jsonString;
             
-//            NSLog(@"数组个数---%ld",_dataArray.count);
-
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
-            if (_isFirst) {
-                _isFirst = NO;
+            if (_page == 0) {
+                [_tempArray removeAllObjects];
+                [self saveDataToBaseTable:CIRCLETABLE data:dictM];
+                _haveData = YES;
             }
+
+            [self analysisCircleListData:dataArray];
             
         }else{
-            
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             
         }
@@ -423,6 +392,53 @@
     }else{
         self.isNetRequestError = YES;
     }
+    //结束刷新
+    [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
+}
+
+-(void)analysisCircleListData:(NSArray*)array
+{
+    for (NSInteger i =0; i < array.count; i ++) {
+        //实例化圈子模型
+        CircleListModel *listModel = [CircleListModel new];
+        
+        //实例化返回数据baseModel
+        CircleBaseModel *baseModel = [CircleBaseModel mj_objectWithKeyValues:array[i]];
+        //一级模型赋值
+        listModel.timeSTr = baseModel.publicDate;              //发布时间
+        listModel.iconNameStr = baseModel.users.headSculpture; //发布者头像
+        listModel.nameStr = baseModel.users.name;              //发布者名字
+        listModel.userId = baseModel.users.userId;
+        listModel.msgContent = baseModel.content;
+        listModel.publicContentId = baseModel.publicContentId; //帖子ID
+        listModel.shareCount = baseModel.shareCount;           //分享数量
+        listModel.commentCount = baseModel.commentCount;       //评论数量
+        listModel.priseCount = baseModel.priseCount;           //点赞数量
+        listModel.flag = baseModel.flag;
+        
+        //拿到usrs认证数组
+        NSArray *authenticsArray = [NSArray arrayWithArray:baseModel.users.authentics];
+        //实例化认证人模型
+        if (authenticsArray.count) {
+            CircleUsersAuthenticsModel *usersAuthenticsModel =authenticsArray[0];
+            listModel.addressStr = usersAuthenticsModel.city.name;
+            listModel.companyStr = usersAuthenticsModel.companyName;
+            listModel.positionStr = usersAuthenticsModel.position;
+        }
+        
+        NSMutableArray *picArray = [NSMutableArray array];
+        for (NSInteger i = 0; i < baseModel.contentimageses.count; i ++) {
+            CircleContentimagesesModel *imageModel = baseModel.contentimageses[i];
+            [picArray addObject:imageModel.url];
+        }
+        listModel.picNamesArray = [NSArray arrayWithArray:picArray];
+        //                NSLog(@"照片数组---%@",listModel.picNamesArray);
+        //将model加入数据数组
+        [_tempArray addObject:listModel];
+        
+    }
+    self.dataArray = _tempArray;
 }
 
 -(void)setDataArray:(NSMutableArray *)dataArray
@@ -438,8 +454,14 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    self.startLoading = YES;
-    self.isNetRequestError = YES;
+    if ([TDUtil checkNetworkState] != NetStatusNone)
+    {
+        self.startLoading = YES;
+        self.isNetRequestError = YES;
+    }
+    //结束刷新
+    [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
 }
 
 -(void)refresh
@@ -461,21 +483,11 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if (indexPath.row == 0) {
-//        static NSString *cellId = @"CircleListMineCell";
-//        CircleListMineCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-//        if (!cell) {
-//            cell = [[CircleListMineCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-//        }
-//        cell.iconStr = self.dataArray[indexPath.row];
-//        return cell;
-//    }else{
     static NSString *cellId = @"CircleListCell";
     CircleListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[CircleListCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
     }
-    
     cell.indexPath = indexPath;
     __weak typeof (self) weakSelf = self;
     if (!cell.moreButtonClickedBlock) {
@@ -485,7 +497,6 @@
             [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         }];
     }
-    
     cell.delegate = self;
     if (self.dataArray.count) {
         cell.model = self.dataArray[indexPath.row];
@@ -495,10 +506,7 @@
             [cell.deleteBtn setHidden:YES];
         }
     }
-    
     return cell;
-//    }
-//    return nil;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -517,7 +525,7 @@
         [self.navigationController pushViewController:detail animated:YES];
     }
 }
-#pragma mark -发布动态
+#pragma mark --------发布动态
 -(void)releaseBtnClick:(UIButton*)btn
 {
 
@@ -584,7 +592,7 @@
     }
 }
 
-#pragma maerk -分享按钮
+#pragma maerk ---------分享按钮
 -(void)didClickShareBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model
 {
     
@@ -602,7 +610,7 @@
             
         }
 }
-#pragma mark -分享请求网址
+#pragma mark ---------分享请求网址
 -(void)requestShareStatus:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
@@ -850,6 +858,15 @@
     [self.navigationController.navigationBar setHidden:NO];
     
     self.navigationController.navigationBar.translucent=NO;
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (!self.dataArray.count) {
+        [self loadOffLineData];
+    }
     
 }
 #pragma mark -视图即将消失

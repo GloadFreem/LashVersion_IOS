@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FMDB.h"
 /**
  *  可以存储数据类型  string  integer  data  boolean  date
  *  keyTypes      存储的字段  以及对应数据类型

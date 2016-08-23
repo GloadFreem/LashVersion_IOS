@@ -335,45 +335,42 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 #pragma mark-------------------------数据库-------------------------
 -(void)createTable
 {
-    DataBaseHelper *dataBase = [DataBaseHelper sharedInstance];
+    _dataBase = [DataBaseHelper sharedInstance];
     
-    if ([dataBase isExistWithTableName:BANNERTABLE]) {
-        NSLog(@"BANNERTABLE表存在");
-//        [dataBase dropTable:BANNERTABLE];
-    }else{
-        BOOL ret = [dataBase createTableWithTableName:BANNERTABLE keys:@[@"data"]];
-        if (ret) {
-            NSLog(@"BANNERTABLE创建成功");
-        }else{
-            NSLog(@"BANNERTABLE创建失败");
-        }
-    }
+    [self checkUpTable:BANNERTABLE];
     
-    if ([dataBase isExistWithTableName:PROJECTTABLE]) {
-        NSLog(@"PROJECTTABLE表存在");
-//        [dataBase dropTable:PROJECTTABLE];
-    }else{
-        BOOL ret = [dataBase createTableWithTableName:PROJECTTABLE keys:@[@"data"]];
-        if (ret) {
-            NSLog(@"PROJECTTABLE创建成功");
-        }else{
-            NSLog(@"PROJECTTABLE创建失败");
-        }
-    }
+    [self checkUpTable:PROJECTTABLE];
     
-    if ([dataBase isExistWithTableName:ROADTABLE]) {
-        NSLog(@"ROADTABLE表存在");
-//        [dataBase dropTable:ROADTABLE];
+    [self checkUpTable:ROADTABLE];
+    
+    [self checkUpTable:INVESTPERSONTABLE];
+    
+    [self checkUpTable:INVESTORGANIZATIONTABLE];
+    
+//    [self checkUpTable:INVESTORGANIZATIONSECONDTABLE];
+    
+    [self checkUpTable:THINKTANKTABLE];
+    
+    [self checkUpTable:CIRCLETABLE];
+    
+    [self checkUpTable:ACTIVITYTABLE];
+    
+}
+
+-(void)checkUpTable:(NSString*)tableName
+{
+    if ([_dataBase isExistWithTableName:tableName]) {
+        NSLog(@"%@表存在",tableName);
+        //        [dataBase dropTable:ACTIVITYTABLE];
     }else{
-        BOOL ret = [dataBase createTableWithTableName:ROADTABLE keys:@[@"data"]];
+        BOOL ret = [_dataBase createTableWithTableName:tableName keys:@[@"data"]];
         if (ret) {
-            NSLog(@"ROADTABLE创建成功");
+            NSLog(@"%@创建成功",tableName);
         }else{
-            NSLog(@"ROADTABLE创建失败");
+            NSLog(@"%@创建失败",tableName);
         }
     }
 }
-
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.

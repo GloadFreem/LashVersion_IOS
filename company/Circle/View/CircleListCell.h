@@ -29,6 +29,5 @@
 @property (nonatomic, strong) NSIndexPath *indexPath;    //
 @property (nonatomic, copy) void (^moreButtonClickedBlock)(NSIndexPath*indexPath);  //
 @property (nonatomic, strong) UIButton *praiseBtn;
-
 @property (nonatomic, strong) UIButton *deleteBtn;
 @end

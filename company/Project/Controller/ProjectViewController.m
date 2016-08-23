@@ -92,10 +92,10 @@
 @property (nonatomic, assign) NSInteger secondLeave;
 
 //登录状态
-@property (nonatomic, assign)BOOL isLogin;
+@property (nonatomic, assign)BOOL hasLogin;
 @property (nonatomic, assign) BOOL isSuccess;
 
-@property (nonatomic, assign) BOOL haveData;
+@property (nonatomic, assign) BOOL haveData;   //是否有离线数据
 
 @end
 
@@ -123,8 +123,6 @@
     if (!_tempRoadArray) {
         _tempRoadArray =[NSMutableArray array];
     }
-    //数据库工具
-    _dataBase = [DataBaseHelper sharedInstance];
     
     [self.view setBackgroundColor:[UIColor clearColor]];
     
@@ -182,7 +180,7 @@
     if (_netView) {
         [_netView removeFromSuperview];
     }
-    if (!_isLogin && !_isSuccess) {
+    if (!_hasLogin && !_isSuccess) {
         [self autoLogin];
     }
 }
@@ -486,13 +484,6 @@
 //    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
-    if (_page == 0) {
-        if (_selectedCellNum == 20) {
-            [_tempProArray removeAllObjects];
-        }else{
-            [_tempRoadArray removeAllObjects];
-        }
-    }
     
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -503,9 +494,11 @@
             NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
             dictM[@"data"] = jsonString;
             
+            
             if (_selectedCellNum == 20) {
                 
                 if (_page == 0) {
+                    [_tempProArray removeAllObjects];
                     [self saveDataToBaseTable:PROJECTTABLE data:dictM];
                 }
                 [self analysisProjectListData:dataArray];
@@ -513,6 +506,7 @@
             }else{
 
                 if (_page == 0) {
+                    [_tempRoadArray removeAllObjects];
                     [self saveDataToBaseTable:ROADTABLE data:dictM];
                 }
                 [self analysisNoRoadListData:dataArray];
@@ -526,13 +520,15 @@
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
         
         self.startLoading = NO;
     }else{
         self.isNetRequestError = YES;
     }
+    //结束刷新
+    [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
 }
 #pragma mark-----解析项目列表路演------
 -(void)analysisProjectListData:(NSArray*)array
@@ -622,6 +618,9 @@
         self.startLoading = YES;
         self.isNetRequestError = YES;
     }
+    //结束刷新
+    [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
 }
 
 -(void)refresh
@@ -642,44 +641,9 @@
     
 }
 
--(void)saveDataToBaseTable:(NSString*)tableName data:(NSDictionary*)dic
-{
-    BOOL rett = [_dataBase cleanTable:tableName];
-    if (rett) {
-//        NSLog(@"%@清理成功",tableName);
-    }else{
-//        NSLog(@"%@清理失败",tableName);
-    }
-    BOOL ret = [_dataBase insertIntoTableName:tableName Dict:dic];
-    if (ret) {
-//        NSLog(@"%@插入成功",tableName);
-    }else{
-//        NSLog(@"%@插入失败",tableName);
-    }
-}
 
--(NSArray*)getDataFromBaseTable:(NSString*)tableName
-{
-//    NSMutableString* data = [[NSMutableString alloc] init];
-    NSArray *tableArr = [_dataBase queryWithTableName:tableName];
-    if (tableArr.count) {
-        NSDictionary* dict = tableArr[0];
-        //    for(NSString* key in dict.allKeys){
-        //        if ([key isEqualToString:@"data"]) {
-        ////            [data appendFormat:@"%@: %@   ",key,dict[key]];
-        ////            NSLog(@"打印字符串---%@",data);
-        ////
-        ////            NSLog(@"打印字典---%@",dic);
-        //
-        //        }
-        //    }
-        NSMutableDictionary *dic = [dict[@"data"] JSONValue];
-        NSArray *dataArray =[NSArray arrayWithArray:dic[@"data"]];
-        //    NSLog(@"打印数组---%@",dataArray);
-        return dataArray;
-    }
-    return nil;
-}
+
+
 
 -(void)requestBannerList:(ASIHTTPRequest *)request
 {
@@ -690,16 +654,13 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            
-            
+            //保存数据
             NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
             dictM[@"data"] = jsonString;
             [self saveDataToBaseTable:BANNERTABLE data:dictM];
             
-//            NSArray *arr = [self getDataFromBaseTable:BANNERTABLE];
             
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
-            
             //解析banner数据
             [self analysisBannerData:dataArray];
             
@@ -945,11 +906,15 @@
     
     if (_selectedCellNum == 20 && !_projectModelArray.count) {
         [self startLoadData];
+    }else{
+        [_tableView reloadData];
     }
     if (_selectedCellNum == 21 && !_roadModelArray.count) {
         [self startLoadData];
+    }else{
+        [_tableView reloadData];
     }
-    [_tableView reloadData];
+    
     //tableView开始更新
 //    [_tableView beginUpdates];
 //    [_tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
@@ -1111,8 +1076,8 @@
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
-        NSLog(@"登陆状态在线");
-        _isLogin = YES;
+//        NSLog(@"登陆状态在线");
+        _hasLogin = YES;
         [self startLoadBannerData];
         }else{
             //自动登录
@@ -1144,7 +1109,7 @@
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
-            NSLog(@"登陆成功");
+//            NSLog(@"登陆成功");
             _isSuccess = YES;
             [self startLoadBannerData];
             
