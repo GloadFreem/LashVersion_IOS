@@ -61,6 +61,10 @@
 
 @end
 
+@implementation CircleUsersAuthenticsIdentiytypeModel
+
+
+@end
 
 @implementation CircleUsersAuthenticsModel
 
@@ -69,7 +73,18 @@
 @end
 
 
+@implementation CircleFeeingtypeModel
 
+@end
+
+@implementation CircleContenttypeModel
+
+
+@end
+
+@implementation CircleContentshareModel
+
+@end
 
 @implementation CircleUsersModel
 
@@ -94,3 +109,5 @@
 
 
 @end
+
+

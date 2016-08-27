@@ -10,6 +10,8 @@
 #import "ProjectPrepareCommentVC.h"
 #import "RenzhengViewController.h"
 
+#import "ShareToCircleView.h"
+
 #import "CircleShareBottomView.h"
 
 #import "ProjectPrepareDetailHeaderView.h"
@@ -25,12 +27,12 @@
 #import "ProjectDetailLeftHeaderModel.h"
 #import "ProjectDetailLeftFooterModel.h"
 
-
+#define SHARETOCIRCLE @"shareContentToFeeling"
 #define CUSTOMSERVICE @"customServiceSystem"
 #define PROJECTCOLLECT @"requestProjectCollect"
 #define PROJECTDETAIL @"requestProjectDetail"
 #define PROJECTSHARE @"requestProjectShare"
-@interface ProjectPrepareDetailVC ()<UIScrollViewDelegate,ProjectPrepareFooterCommentViewDelagate,CircleShareBottomViewDelegate,ProjectDetailLeftTeamViewDelegate>
+@interface ProjectPrepareDetailVC ()<UIScrollViewDelegate,ProjectPrepareFooterCommentViewDelagate,CircleShareBottomViewDelegate,ProjectDetailLeftTeamViewDelegate,ShareToCircleViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -53,11 +55,15 @@
 @property (nonatomic, copy) NSString *shareurl;
 @property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic,strong)UIView * bottomView;
+@property (nonatomic, strong) ShareToCircleView *shareCircleView;
+@property (nonatomic, copy) NSString *circlePartner;
 
 @property (nonatomic, copy) NSString *servicePartner;
 
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
+
 
 @end
 
@@ -80,6 +86,8 @@
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTDETAIL];
     self.collectPartner = [TDUtil encryKeyWithMD5:KEY action:PROJECTCOLLECT];
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:PROJECTSHARE];
+    self.circlePartner = [TDUtil encryKeyWithMD5:KEY action:SHARETOCIRCLE];
+    
     //客服
     self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
     
@@ -117,6 +125,7 @@
         }else{
             
         }
+        
     }
 }
 
@@ -178,7 +187,7 @@
 -(void)requestShare:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -453,11 +462,11 @@
 
 -(void)startShare
 {
-    NSArray *titleList = @[@"QQ",@"微信",@"朋友圈",@"短信"];
-    NSArray *imageList = @[@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
+    NSArray *titleList = @[@"圈子",@"QQ",@"微信",@"朋友圈",@"短信"];
+    NSArray *imageList = @[@"icon_share_circle@2x",@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
     CircleShareBottomView *share = [CircleShareBottomView new];
     share.tag = 1;
-    [share createShareViewWithTitleArray:titleList imageArray:imageList];
+    [share createShareCircleViewWithTitleArray:titleList imageArray:imageList];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
     [share addGestureRecognizer:tap];
     [[self topView] addSubview:share];
@@ -476,6 +485,13 @@
         
         switch (index) {
             case 0:{
+                [self dismissBG];
+                [self createShareCircleView];
+                
+//                NSLog(@"分享圈子");
+            }
+                break;
+            case 1:{
                 if ([QQApiInterface isQQInstalled])
                 {
                     // QQ好友
@@ -493,7 +509,7 @@
                 
             }
                 break;
-            case 1:{
+            case 2:{
                 // 微信好友
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
@@ -504,7 +520,7 @@
 //                NSLog(@"分享到微信");
             }
                 break;
-            case 2:{
+            case 3:{
                 // 微信朋友圈
                 arr = @[UMShareToWechatTimeline];
 //                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
@@ -515,7 +531,7 @@
 //                NSLog(@"分享到朋友圈");
             }
                 break;
-            case 3:{
+            case 4:{
                 // 短信
                 arr = @[UMShareToSms];
                 shareContent = shareContentString;
@@ -554,7 +570,57 @@
         }];
     }
 }
+-(void)createShareCircleView
+{
+    ShareToCircleView *shareView =[[[NSBundle mainBundle] loadNibNamed:@"ShareToCircleView" owner:nil options:nil] lastObject];
+    shareView.backgroundColor = [UIColor clearColor];
+    [shareView instancetationShareToCircleViewWithimage:_shareImage title:_shareTitle content:_shareContent];
+    shareView.tag = 1000;
+    [[UIApplication sharedApplication].windows[0] addSubview:shareView];
+    [shareView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    shareView.delegate = self;
+    _shareCircleView = shareView;
+}
 
+#pragma mark-------ShareToCircleViewDelegate--------
+-(void)clickBtnInView:(ShareToCircleView *)view andIndex:(NSInteger)index content:(NSString *)content
+{
+    if (index == 0) {
+        [view removeFromSuperview];
+    }else{
+        [self shareToCircle];
+//        NSLog(@"调接口");
+        [_shareCircleView removeFromSuperview];
+        
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.circlePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"contentId",@"7",@"type",content,@"comment",[NSString stringWithFormat:@"%ld,1",(long)self.projectId],@"content",_shareContent,@"description",_shareImage,@"image",@"金指投项目",@"tag",nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:SHARE_TO_CIRCLE postParam:dic type:0 delegate:self sel:@selector(requestShareToCircle:)];
+    }
+}
+
+-(void)requestShareToCircle:(ASIHTTPRequest*)request
+{
+    
+    
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+//        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic!=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+//            NSLog(@"分享成功");
+        }
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+    }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网络好像出了点问题，检查一下"];
+    }
+}
+-(void)shareToCircle
+{
+    
+}
 #pragma mark-------ProjectPrepareFooterCommentViewDelagate--------
 -(void)didClickBtn:(NSMutableArray *)dataArray
 {

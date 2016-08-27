@@ -11,11 +11,12 @@
 #import "InvestDetailModel.h"
 #import "RenzhengViewController.h"
 #import "CircleShareBottomView.h"
-
+#import "CirclePersonVC.h"
 #import "InvestCommitProjectVC.h"
 
 #define SHAREINVESTOR @"requestShareInvestor"
 #define INVESTDETAIL  @"requestInvestorDetail"
+#define INVESTORCOLLECT @"requestInvestorCollect"
 
 @interface InvestPersonDetailViewController ()<UIScrollViewDelegate>
 
@@ -40,6 +41,7 @@
 @property (nonatomic, strong) UILabel *personLabel;    //个人简介
 @property (nonatomic, strong) UILabel *personContent;    //简介内容
 
+@property (nonatomic, strong) UIButton *circleBtn;
 @property (nonatomic, strong) UIButton *commitBtn;    //提交按钮
 @property (nonatomic, strong) UIButton *attentionBtn;  //关注按钮
 
@@ -67,6 +69,10 @@
     //获得partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:INVESTDETAIL];
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:SHAREINVESTOR];
+    self.investorCollectPartner = [TDUtil encryKeyWithMD5:KEY action:INVESTORCOLLECT];
+    
+    [self startLoadData];
+    [self createUI];
     
 //    [self startLoadShare];
     
@@ -101,11 +107,10 @@
 {
 //    NSLog(@"----%@",self.investorId);
 //    NSLog(@"----- 数量%@",self.attentionCount);
-//    [SVProgressHUD showWithStatus:@"加载中..."];
     
     self.startLoading = YES;
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.investorId,@"investorId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.investorId,@"investorId", VERSION,@"version",nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:INVEST_LIST_DETAIL postParam:dic type:1 delegate:self sel:@selector(requestInvestDetail:)];
 }
@@ -124,6 +129,7 @@
             self.attentionCount = [NSString stringWithFormat:@"%ld",(long)detailModel.collectCount];
             
             _model = detailModel;
+
     
         }else{
           [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -135,6 +141,20 @@
 #pragma mark -搭建UI
 -(void)createUI
 {
+    //认证信息
+    DetailAuthentics *authentics = _model.user.authentics[0];
+    if (authentics.identiytype.identiyTypeId == 1) {//项目方
+        self.titleText = @"个人 · 简介";
+        self.titleStr = @"项目方详情";
+    }
+    if (authentics.identiytype.identiyTypeId == 2) {//投资人
+        self.titleText = @"个人 · 简介";
+        self.titleStr = @"投资人详情";
+    }
+    if (authentics.identiytype.identiyTypeId == 3) {//投资机构
+        self.titleText = @"机构 · 简介";
+        self.titleStr = @"投资机构详情";
+    }
     //背景
     _background = [[UIImageView alloc]init];
     _background.image = [UIImage imageNamed:@"touziren-bg"];
@@ -197,7 +217,7 @@
     [_whiteView.iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_model.user.headSculpture]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _whiteView.nameLabel.text = _model.user.name;
     
-    DetailAuthentics *authentics = _model.user.authentics[0];
+    
     _whiteView.positionLabel.text = authentics.position;
 //    _whiteView.companyLabel.text = authentics.companyName;
     DetailCity *city = authentics.city;
@@ -282,6 +302,18 @@
         make.bottom.mas_equalTo(_personContent.mas_bottom).offset(10);
     }];
     
+    //圈子按钮
+    _circleBtn = [UIButton new];
+    [_circleBtn addTarget:self action:@selector(circleBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_circleBtn setImage:[UIImage imageNamed:@"icon_circleBtn"] forState:UIControlStateNormal];
+    [_circleBtn setTitle:@" 圈子话题" forState:UIControlStateNormal];
+    [_circleBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_circleBtn setBackgroundColor:orangeColor];
+    _circleBtn.layer.cornerRadius = 3;
+    _circleBtn.layer.masksToBounds = YES;
+    _circleBtn.titleLabel.font = BGFont(16);
+    
+    [_scrollView addSubview:_circleBtn];
     //提交按钮
     _commitBtn = [[UIButton alloc]init];
     [_commitBtn setBackgroundImage:[UIImage imageNamed:@"icon_commit_pro"] forState:UIControlStateNormal];
@@ -292,9 +324,7 @@
     _attentionBtn = [[UIButton alloc]init];
     _attentionBtn.layer.cornerRadius =3;
     _attentionBtn.layer.masksToBounds = YES;
-    
     [_attentionBtn addTarget:self action:@selector(attentionClick:) forControlEvents:UIControlEventTouchUpInside];
-    
     [_attentionBtn setImage:[UIImage imageNamed:@"icon-guanzhu"] forState:UIControlStateNormal];
     [_attentionBtn.titleLabel setFont:BGFont(16)];
     
@@ -307,6 +337,21 @@
     }
     [_scrollView addSubview:_attentionBtn];
     
+    if (_isCircle) {
+        
+        [_circleBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(_mengBanView.mas_bottom).offset(27);
+            make.right.mas_equalTo(_scrollView.mas_centerX).offset(-23);
+                    make.width.mas_equalTo(110*WIDTHCONFIG);
+                    make.height.mas_equalTo(30*WIDTHCONFIG);
+        }];
+        [_attentionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(_scrollView.mas_centerX).offset(23);
+            make.width.height.mas_equalTo(_circleBtn);
+            make.top.mas_equalTo(_circleBtn.mas_top);
+        }];
+        
+    }else{
     if ([self.identiyTypeId isEqualToString:@"1"]) {
         [_commitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(_mengBanView.mas_bottom).offset(27);
@@ -328,7 +373,7 @@
             make.height.mas_equalTo(40);
         }];
     }
-    
+    }
     [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(_attentionBtn.mas_bottom).offset(69);
     }];
@@ -337,6 +382,7 @@
 
 -(void)btnClick:(UIButton*)btn
 {
+    //返回按钮点击处理
     if (btn.tag == 60) {
         
         if (_selectedNum == 1) {
@@ -350,7 +396,6 @@
                 }
                 [_viewController.investPersonArray replaceObjectAtIndex:index withObject:_viewController.investModel];
                 [_viewController.tableView reloadData];
-            
             
         }
         if (_selectedNum == 2) {
@@ -371,6 +416,15 @@
     }
     
 }
+#pragma mark ----------------------  圈子按钮  -----------------------
+-(void)circleBtnClick:(UIButton*)btn
+{
+    NSLog(@"投资人圈子入口");
+    CirclePersonVC *vc = [CirclePersonVC new];
+    vc.titleStr = [NSString stringWithFormat:@"%@的话题",_model.user.name];
+    vc.userId = self.investorId;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 #pragma mark ----------------------  提交按钮  -----------------------
 -(void)commitClick:(UIButton*)btn
@@ -384,7 +438,7 @@
 }
 
 
-#pragma mark ----- 关注按钮
+#pragma mark ---------------------- 关注按钮  -------------------------
 -(void)attentionClick:(UIButton*)btn
 {
         _collected = !_collected;
@@ -446,9 +500,7 @@
     [super viewWillAppear:animated];
     
 //    NSLog(@"zhuangtai--%@----zhi---%@",_authenticName,_identiyTypeId);
-    [self startLoadData];
-    [self createUI];
-    
+
     self.navigationController.navigationBar.hidden = YES;
     
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
@@ -483,7 +535,6 @@
 {
     [super viewDidDisappear:animated];
     self.navigationController.navigationBar.hidden = NO;
-//    [SVProgressHUD dismiss];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

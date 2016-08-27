@@ -713,18 +713,19 @@
     if (_tableViewSelected == 1) {
         InvestListModel *listModel = _investPersonArray[indexPath.row];
         InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
-        
-        vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
-        vc.titleText = @"个人 · 简介";
-        vc.investorId = listModel.userId;
-        vc.collected  = listModel.collected;
-        vc.investorCollectPartner = self.investorCollectPartner;
-        vc.viewController = self;
         self.investModel = listModel;
-        vc.selectedNum = 1;
-        vc.listModel = listModel;
-        vc.type = @"5";
-        vc.titleStr = @"投资人详情";
+        
+//        vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
+//        vc.titleText = @"个人 · 简介";
+        vc.investorId = listModel.userId;
+        
+//        vc.collected  = listModel.collected;
+//        vc.investorCollectPartner = self.investorCollectPartner;
+        vc.viewController = self;  //圈子进入可忽略
+        vc.selectedNum = 1;       //圈子进入可忽略
+        vc.listModel = listModel; //圈子进入可忽略
+//        vc.type = @"5";
+//        vc.titleStr = @"投资人详情";
         [self.navigationController pushViewController:vc animated:YES];
     }
     
@@ -746,17 +747,19 @@
             
             InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
             
-            vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
+//            vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
             vc.investorId = listModel.userId;
-            vc.titleText = @"机构 · 简介";
-            vc.collected  = listModel.collected;
-            vc.investorCollectPartner = self.investorCollectPartner;
+//            vc.titleText = @"机构 · 简介";
+//            vc.collected  = listModel.collected;
+//            vc.investorCollectPartner = self.investorCollectPartner;
             self.investModel  = listModel;
-            vc.viewController =self;
-            vc.selectedNum = 2;
-            vc.listModel = listModel;
-            vc.type = @"6";
-            vc.titleStr = @"投资机构详情";
+            
+            vc.viewController =self;   //圈子进入可忽略
+            vc.selectedNum = 2;        //圈子进入可忽略
+            vc.listModel = listModel;  //圈子进入可忽略
+            
+//            vc.type = @"6";
+//            vc.titleStr = @"投资机构详情";
             [self.navigationController pushViewController:vc animated:YES];
             
         }
@@ -768,14 +771,13 @@
         InvestThinkTankDetailVC * vc = [InvestThinkTankDetailVC new];
 
         vc.investorId = listModel.userId;
-        vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
+//        vc.attentionCount = [NSString stringWithFormat:@"%ld",(long)listModel.collectCount];
+//        vc.collected  = listModel.collected;
+//        vc.investorCollectPartner = self.investorCollectPartner;
         
-        vc.collected  = listModel.collected;
-        vc.investorCollectPartner = self.investorCollectPartner;
         self.investModel = listModel;
         vc.viewController =self;
-        vc.type = @"7";
-
+//        vc.type = @"7";
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

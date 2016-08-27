@@ -23,4 +23,6 @@
 
 - (void)createShareViewWithTitleArray:(NSArray *)titleArr imageArray:(NSArray *)imageArr;
 
+- (void)createShareCircleViewWithTitleArray:(NSArray *)titleArr imageArray:(NSArray *)imageArr;
+
 @end

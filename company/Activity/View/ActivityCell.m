@@ -56,6 +56,7 @@
         NSString * week = [TDUtil weekOfDate:dateStr];
         //时间:HS
         NSString * time = [TDUtil dateTimeFromString:_model.startTime];
+//        NSLog(@"原时间--%@,改之后的时间---%@",_model.startTime,time);
         
         //时间
         [self.timeLabel setText:[NSString stringWithFormat:@"%@%@%@",dateStr,week,time]];

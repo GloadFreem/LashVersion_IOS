@@ -135,26 +135,29 @@
 +(NSString *)dateTimeFromString:(NSString *)dateString{
     //2015-02-06 10:00:00.0
     
-    dateString=[dateString substringToIndex:19];
-    NSDate *destDate= [self dateFromString:dateString];
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:(NSCalendarUnitHour|NSCalendarUnitSecond) fromDate:destDate];
-    
-    NSString* str;
-    int hour=(int)components.hour;
-    int second=(int)components.second;
-    if (hour<10) {
-        str=[NSString stringWithFormat:@"0%d:",hour];
-    }else{
-        str=[NSString stringWithFormat:@"%d:",hour];
-    }
-    
-    if (second<10) {
-        str=[str stringByAppendingString:[NSString stringWithFormat:@"0%d",second]];
-    }else{
-        str=[str stringByAppendingString:[NSString stringWithFormat:@"%d",second]];
-    }
-    return str;
+//    dateString=[dateString substringToIndex:19];
+//    NSDate *destDate= [self dateFromString:dateString];
+//    NSCalendar *cal = [NSCalendar currentCalendar];
+//    NSDateComponents *components = [cal components:(NSCalendarUnitHour|NSCalendarUnitSecond) fromDate:destDate];
+//    
+//    NSString* str;
+//    int hour=(int)components.hour;
+//    int second=(int)components.second;
+//    NSLog(@"打印分钟数---%ld",(long)components.second);
+//    if (hour<10) {
+//        str=[NSString stringWithFormat:@"0%d:",hour];
+//    }else{
+//        str=[NSString stringWithFormat:@"%d:",hour];
+//    }
+//    
+//    if (second<10) {
+//        str=[str stringByAppendingString:[NSString stringWithFormat:@"0%d",second]];
+//    }else{
+//        str=[str stringByAppendingString:[NSString stringWithFormat:@"%d",second]];
+//    }
+//    NSString *str;
+    dateString = [dateString substringWithRange:NSMakeRange(11, 5)];
+    return dateString;
     
 }
 

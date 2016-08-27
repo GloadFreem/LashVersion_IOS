@@ -21,6 +21,9 @@
     UILabel *_positionLabel;
     UILabel *_timeLabel;
     UILabel *_contentLabel;
+    
+    CircleContentView *_contentView;
+    
     PictureContainerView *_picContainerView;
     UIView *_middleView;
     
@@ -74,6 +77,9 @@
     _contentLabel.font = BGFont(15);
     _contentLabel.numberOfLines = 0;
     
+    _contentView = [CircleContentView new];
+    _contentView.delegate = self;
+    
     _picContainerView = [PictureContainerView new];
     
     _middleView = [UIView new];
@@ -92,7 +98,7 @@
     _bottomView.backgroundColor = colorGray;
     
     
-    NSArray *views = @[_topView,_iconView, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel, _timeLabel, _contentLabel,_picContainerView,_middleView, _praiseBtn, _praiseLabel, _bottomView];
+    NSArray *views = @[_topView,_iconView, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel, _timeLabel, _contentLabel, _contentView,_picContainerView,_middleView, _praiseBtn, _praiseLabel, _bottomView];
     
     [self.contentView sd_addSubviews:views];
     
@@ -152,6 +158,11 @@
     .topSpaceToView(_iconView,12)
     .rightSpaceToView(contentView,margin)
     .autoHeightRatio(0);
+    
+    _contentView.sd_layout
+    .leftSpaceToView(contentView,8)
+    .rightSpaceToView(contentView,8)
+    .topSpaceToView(_contentLabel,5);
     
     _picContainerView.sd_layout
     .leftEqualToView(_contentLabel);//已经在内部实现宽度和高度的自适应所以不需要在设置高度和宽度，top值是具体有无图片在setmodel方法设置
@@ -216,7 +227,7 @@
     [_timeLabel sizeToFit];
     
 //    _contentLabel.text = model.msgContent;
-    [TDUtil setLabelMutableText:_contentLabel content:model.msgContent lineSpacing:5 headIndent:0];
+    [TDUtil setLabelMutableText:_contentLabel content:model.msgContent lineSpacing:0 headIndent:0];
     _contentLabel.sd_layout.maxHeightIs(MAXFLOAT);
     _picContainerView.pictureStringArray = model.picNamesArray;
     
@@ -224,7 +235,19 @@
     if (model.picNamesArray.count) {
         picContainerTopMargin = 10*HEIGHTCONFIG;
     }
-    _picContainerView.sd_layout.topSpaceToView(_contentLabel,picContainerTopMargin);
+    //今日头条
+    if (_model.feelingTypeId == 1) {
+        _contentView.sd_layout.heightIs(0);
+        _contentView.isHidden = YES;
+    }else{
+        _contentView.sd_layout.heightIs(85);
+        _contentView.titleLabelText = model.titleText;
+        _contentView.imageName = model.contentImage;
+        _contentView.contentLabelText = model.contentText;
+        _contentView.isHidden = NO;
+    }
+    
+    _picContainerView.sd_layout.topSpaceToView(_contentView,picContainerTopMargin);
     _praiseLabel.text = model.priseLabel;
     CGFloat height = [_praiseLabel.text commonStringHeighforLabelWidth:SCREENWIDTH -20 -12 -16 - 10 withFontSize:12];
     if (height > _praiseLabel.font.lineHeight * 3) {

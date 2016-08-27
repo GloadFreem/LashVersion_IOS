@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CircleListModel.h"
+#import "CircleContentView.h"
 
 @class CircleDetailHeaderCell;
 
@@ -16,9 +17,12 @@
 
 -(void)didClickPraiseBtn:(CircleDetailHeaderCell*)cell model:(CircleListModel*)model;
 
+-(void)didClickContentBtnInCell:(CircleDetailHeaderCell*)cell andModel:(CircleListModel*)model;
+
 @end
 
-@interface CircleDetailHeaderCell : UITableViewCell
+@interface CircleDetailHeaderCell : UITableViewCell<CircleContentViewDelegate>
+
 
 @property (nonatomic, weak) id<CircleDetailHeaderCellDelegate>delegate;
 @property (nonatomic, strong) NSIndexPath *indexPath;

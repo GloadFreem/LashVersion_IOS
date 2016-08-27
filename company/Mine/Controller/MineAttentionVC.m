@@ -562,12 +562,12 @@
         if ([_identifyArray[indexPath.row] isEqualToString:@"个人投资者"]) {
             InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
             vc.attentionVC =self;
-            vc.titleText = @"个人 · 简介";
+//            vc.titleText = @"个人 · 简介";
             vc.selectedNum = 1;
-            vc.collected = model.collected;
-            vc.titleStr = @"投资人详情";
-            vc.collectModel = model;
-            vc.investorCollectPartner = self.investorCollectPartner;
+//            vc.collected = model.collected;
+//            vc.titleStr = @"投资人详情";
+//            vc.collectModel = model;
+//            vc.investorCollectPartner = self.investorCollectPartner;
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             [self.navigationController pushViewController:vc animated:YES];
         }
@@ -575,12 +575,12 @@
         if ([_identifyArray[indexPath.row] isEqualToString:@"机构投资者"]) {
             InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
             vc.attentionVC =self;
-            vc.titleText = @"机构 · 简介";
+//            vc.titleText = @"机构 · 简介";
             vc.selectedNum = 2;
-            vc.collected = model.collected;
-            vc.titleStr = @"投资机构详情";
-            vc.collectModel = model;
-            vc.investorCollectPartner = self.investorCollectPartner;
+//            vc.collected = model.collected;
+//            vc.titleStr = @"投资机构详情";
+//            vc.collectModel = model;
+//            vc.investorCollectPartner = self.investorCollectPartner;
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             [self.navigationController pushViewController:vc animated:YES];
             
@@ -590,13 +590,14 @@
             InvestThinkTankDetailVC *vc = [InvestThinkTankDetailVC new];
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             vc.attentionVC =self;
-            vc.collectModel = model;
-            vc.collected = model.collected;
-            vc.investorCollectPartner = self.investorCollectPartner;
+//            vc.collectModel = model;
+//            vc.collected = model.collected;
+//            vc.investorCollectPartner = self.investorCollectPartner;
             [self.navigationController pushViewController:vc animated:YES];
         }
     }
 }
+
 #pragma mark- 创建tableView
 -(void)createTableView:(UITableView*)tableView index:(int)index
 {

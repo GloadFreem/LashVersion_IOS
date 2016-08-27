@@ -34,4 +34,6 @@
 
 @property (nonatomic, copy) NSString *titleStr;
 
+@property (nonatomic, assign) BOOL isCircle;
+
 @end

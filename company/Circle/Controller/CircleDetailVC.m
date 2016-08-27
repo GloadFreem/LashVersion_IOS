@@ -94,7 +94,6 @@
     NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
     _selfId = [data objectForKey:USER_STATIC_USER_ID];
     
-    
     //设置加载视图范围
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
     
@@ -113,7 +112,7 @@
     if (_isFirst) {
        self.startLoading = YES;
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",VERSION,@"version",nil];
     //开始请求
 //    NSLog(@"dayin数据---%@",dic);
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestCircleDetail:)];
@@ -146,9 +145,14 @@
             CircleBaseModel *baseModel = [CircleBaseModel mj_objectWithKeyValues:dataDic];
             //一级模型赋值
             listModel.msgContent  = baseModel.content;  //微博内容
-            
-            
             listModel.nameStr = baseModel.users.name;
+            //新增数据
+            listModel.contentText = baseModel.contentshare.desc;
+            listModel.contentImage = baseModel.contentshare.image;
+            listModel.url = baseModel.contentshare.content;
+            listModel.titleText = baseModel.contentshare.contenttype.name;
+            listModel.feelingTypeId = baseModel.feeingtype.feelingTypeId;
+            
             //回复atUserId
             [_atUserIdArray addObject:@""];
             
@@ -689,7 +693,12 @@
     }
     _sendBtn.enabled = YES;
 }
-#pragma mark -cell_delegate  点赞按钮事件处理
+#pragma mark -cell_delegate------  点击今日头条--------
+-(void)didClickContentBtnInCell:(CircleDetailHeaderCell *)cell andModel:(CircleListModel *)model
+{
+    NSLog(@"点击详情今日头条");
+}
+#pragma mark -cell_delegate------  点赞按钮事件处理  -----------
 -(void)didClickPraiseBtn:(CircleDetailHeaderCell *)cell model:(CircleListModel *)model
 {
     model.flag = !model.flag;

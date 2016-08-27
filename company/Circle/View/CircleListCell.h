@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CircleListModel.h"
+#import "CircleContentView.h"
 
 @class CircleListCell;
 @protocol CircleListCellDelegate <NSObject>
@@ -18,9 +19,13 @@
 
 -(void)didClickDeleteInCell:(CircleListCell*)cell andModel:(CircleListModel*)model andIndexPath:(NSIndexPath*)indexPath;
 
+-(void)didClickContentBtnInCell:(CircleListCell*)cell andModel:(CircleListModel*)model andIndexPath:(NSIndexPath*)indexPath;
+
+-(void)didClickIconBtnInCell:(CircleListCell*)cell andModel:(CircleListModel*)model andIndexPath:(NSIndexPath*)indexPath;
+
 @end
 
-@interface CircleListCell : UITableViewCell
+@interface CircleListCell : UITableViewCell<CircleContentViewDelegate>
 
 @property (nonatomic, weak) id<CircleListCellDelegate> delegate;
 
@@ -30,4 +35,5 @@
 @property (nonatomic, copy) void (^moreButtonClickedBlock)(NSIndexPath*indexPath);  //
 @property (nonatomic, strong) UIButton *praiseBtn;
 @property (nonatomic, strong) UIButton *deleteBtn;
+
 @end

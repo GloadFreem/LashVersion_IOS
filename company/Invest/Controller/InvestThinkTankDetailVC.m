@@ -10,8 +10,10 @@
 #import "InvestDetailModel.h"
 #import "CircleShareBottomView.h"
 #import "RenzhengViewController.h"
-#define INVESTDETAIL  @"requestInvestorDetail"
+#import "CirclePersonVC.h"
 
+#define INVESTDETAIL  @"requestInvestorDetail"
+#define INVESTORCOLLECT @"requestInvestorCollect"
 #define SHAREINVESTOR @"requestShareInvestor"
 
 @interface InvestThinkTankDetailVC ()<UIScrollViewDelegate>
@@ -50,6 +52,7 @@
 @property (nonatomic, strong) UILabel *personLabel;    //个人简介
 @property (nonatomic, strong) UILabel *personContent;  //个人内容
 
+@property (nonatomic, strong) UIButton *circleBtn;
 @property (nonatomic, strong) UIButton *attationBtn;
 
 @property (nonatomic, strong) InvestDetailModel *model;
@@ -68,7 +71,6 @@
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     
-    
     // Do any additional setup after loading the view from its nib.
     //1、设置当有导航栏自动添加64高度的属性为NO
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -76,13 +78,14 @@
     //获得partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:INVESTDETAIL];
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:SHAREINVESTOR];
-    
+    self.investorCollectPartner = [TDUtil encryKeyWithMD5:KEY action:INVESTORCOLLECT];
     
     [self startLoadData];
 //    [self startLoadShare];
     
     [self createUI];
 }
+
 -(void)startLoadShare
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",self.investorId,@"investorId",self.type,@"type", nil];
@@ -112,9 +115,8 @@
 {
 //    NSLog(@"----%@",self.investorId);
 //    NSLog(@"----- 数量%@",self.attentionCount);
-//    [SVProgressHUD show];
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.investorId,@"investorId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.investorId,@"investorId",VERSION,@"version", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:INVEST_LIST_DETAIL postParam:dic type:1 delegate:self sel:@selector(requestInvestDetail:)];
 }
@@ -130,14 +132,13 @@
             
             InvestDetailModel *detailModel =[InvestDetailModel mj_objectWithKeyValues:jsonDic[@"data"]];
             _model = detailModel;
-            
+            self.attentionCount = [NSString stringWithFormat:@"%ld",(long)_model.collectCount];
 //            NSLog(@"dayin模型----%@",_model);
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
-//    [SVProgressHUD dismiss];
 }
 
 
@@ -298,18 +299,30 @@
     _personContent.numberOfLines = 0;
     
     [_scrollView addSubview:_personContent];
+    
+    //圈子按钮
+    _circleBtn = [UIButton new];
+    [_circleBtn addTarget:self action:@selector(circleBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_circleBtn setImage:[UIImage imageNamed:@"icon_circleBtn"] forState:UIControlStateNormal];
+    [_circleBtn setTitle:@" 圈子话题" forState:UIControlStateNormal];
+    [_circleBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_circleBtn setBackgroundColor:orangeColor];
+    _circleBtn.layer.cornerRadius = 5;
+    _circleBtn.layer.masksToBounds = YES;
+    _circleBtn.titleLabel.font = BGFont(15);
+    [_scrollView addSubview:_circleBtn];
+    
     //关注按钮
     _attationBtn = [[UIButton alloc]init];
     [_attationBtn addTarget:self action:@selector(attentionClick:) forControlEvents:UIControlEventTouchUpInside];
-    
     [_attationBtn setImage:[UIImage imageNamed:@"icon-guanzhu"] forState:UIControlStateNormal];
-    _attationBtn.layer.cornerRadius = 5;
+    _attationBtn.layer.cornerRadius = 3;
     _attationBtn.layer.masksToBounds = YES;
     _attationBtn.titleLabel.textColor = [UIColor whiteColor];
     _attationBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [_scrollView addSubview:_attationBtn];
     
-    if (_collected) {
+    if (_model.collected) {
         [_attationBtn setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
         [_attationBtn setBackgroundColor:btnCray];
     }else{
@@ -468,6 +481,20 @@
         make.right.mas_equalTo(_scrollView.mas_right).offset(-18);
         make.bottom.mas_equalTo(_personContent.mas_bottom).offset(17);
     }];
+    if (_isCircle) {
+        
+        [_circleBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(_secondView.mas_bottom).offset(27);
+            make.right.mas_equalTo(_scrollView.mas_centerX).offset(-23);
+                    make.width.mas_equalTo(110*WIDTHCONFIG);
+                    make.height.mas_equalTo(30*WIDTHCONFIG);
+        }];
+        [_attationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(_scrollView.mas_centerX).offset(23);
+            make.width.height.mas_equalTo(_circleBtn);
+            make.top.mas_equalTo(_circleBtn.mas_top);
+        }];
+    }else{
     //关注按钮
     [_attationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_secondView.mas_bottom).offset(20);
@@ -475,7 +502,7 @@
         make.right.mas_equalTo(_secondView.mas_right).offset(-20);
         make.height.mas_equalTo(40);
     }];
-    
+    }
     [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(_attationBtn.mas_bottom).offset(20);
     }];
@@ -484,12 +511,13 @@
 #pragma mark ---------------btnAction---------------
 -(void)btnClick:(UIButton*)btn
 {
+    //返回按钮处理
     if (btn.tag == 0) {
         //获得当前点击的模型在数组的位置
         NSInteger index = [_viewController.thinkTankArray indexOfObject:_viewController.investModel];
         //改变当前模型的状态属性
-        _viewController.investModel.collected  = _collected;
-        if (_collected) {
+        _viewController.investModel.collected  = _model.collected;
+        if (_model.collected) {
             _viewController.investModel.collectCount ++;
         }else{
             _viewController.investModel.collectCount --;
@@ -500,15 +528,25 @@
         [_viewController.tableView reloadData];
         [self.navigationController popViewControllerAnimated:YES];
     }
-
+    
 }
 
+
+#pragma mark----------------------------------圈子入口-------------------------------------
+-(void)circleBtnClick:(UIButton*)btn
+{
+    NSLog(@"智囊团点击圈子入口");
+    CirclePersonVC *vc = [CirclePersonVC new];
+    vc.titleStr = [NSString stringWithFormat:@"%@的话题",_model.user.name];
+    vc.userId = self.investorId;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 #pragma mark --------------------------------关注事件处理----------------------------------
 -(void)attentionClick:(UIButton*)btn
 {
-        _collected = !_collected;
+        _model.collected = !_model.collected;
         NSString *flag;
-        if (_collected) {
+        if (_model.collected) {
             //关注
             flag = @"1";
             
@@ -517,6 +555,7 @@
             flag = @"2";
             
         }
+    
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.investorCollectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_model.user.userId],@"userId",flag,@"flag", nil];
        _attationBtn.enabled = NO;
         //开始请求
@@ -535,7 +574,7 @@
             
             NSInteger  count=  [_attentionCount integerValue];
             
-            if (_collected) {
+            if (_model.collected) {
                 
                 count ++;
                 [_attationBtn  setTitle:[NSString stringWithFormat:@" 已关注"] forState:UIControlStateNormal];
@@ -549,20 +588,6 @@
                 
             }
             _attentionCount = [NSString stringWithFormat:@"%ld",(long)count];
-            
-            
-            //                    InvestListModel * model = (InvestListModel*)klistModel;
-            //                    InvestPersonCell * cell = (InvestPersonCell*)klistCell;
-            //                    if (model.collected) {
-            //                        model.collectCount ++;
-            //                        //刷新cell
-            //                        [cell.collectBtn setTitle:[NSString stringWithFormat:@" 已关注(%ld)",model.collectCount] forState:UIControlStateNormal];
-            //                    }else{
-            //                        //关注数量减1
-            //                        model.collectCount --;
-            //                        //刷新cell
-            //                        [cell.collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",model.collectCount] forState:UIControlStateNormal];
-            //                    }
             
             NSLog(@"关注成功");
         }else{

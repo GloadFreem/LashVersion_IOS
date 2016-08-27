@@ -16,4 +16,8 @@
 
 @property (nonatomic, copy) NSString *url;
 
+@property (nonatomic, copy) NSString *image;
+@property (nonatomic, copy) NSString *titleText;
+@property (nonatomic, copy) NSString *contentText;
+
 @end

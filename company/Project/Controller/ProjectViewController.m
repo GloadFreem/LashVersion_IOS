@@ -941,7 +941,9 @@
     ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
     vc.url = model.url;
     vc.model = model;
-    
+    vc.image = model.image;
+    vc.titleText = model.name;
+    vc.contentText = model.desc;
     [self.navigationController pushViewController:vc animated:YES];
     }
 }

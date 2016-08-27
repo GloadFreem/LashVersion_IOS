@@ -10,8 +10,9 @@
 
 #import "PictureContainerView.h"
 
+//ececf0
 
-const CGFloat _contentLabelFontSize = 15;
+const CGFloat _contentLabelFontSize = 15 ;
 CGFloat _maxContentLabelHeight = 0; //根据具体font而定
 
 @implementation CircleListCell
@@ -19,6 +20,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
 {
     UIView *_topView;
     UIImageView *_iconView;
+    UIButton *_iconBtn;
     UILabel *_nameLabel;
     UILabel *_addressLabel;
     UILabel *_companyLabel;
@@ -28,6 +30,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     UILabel *_timeLabel;
     UILabel *_contentLabel;
     UIButton *_moreBtn;
+    CircleContentView *_contentView;
     PictureContainerView *_picContainerView;
     UIView *_partLine;
     UIButton *_shareBtn;
@@ -54,9 +57,11 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _topView = [UIView new];
     [_topView setBackgroundColor:colorGray];
     
-    _iconView = [UIImageView new];
-    _iconView.layer.cornerRadius = 20;
-    _iconView.layer.masksToBounds = YES;
+    _iconBtn = [UIButton new];
+//    _iconBtn = [UIImageView new];
+    _iconBtn.layer.cornerRadius = 20;
+    _iconBtn.layer.masksToBounds = YES;
+    [_iconBtn addTarget:self action:@selector(iconClick) forControlEvents:UIControlEventTouchUpInside];
     
     _nameLabel = [UILabel new];
     _nameLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:17];
@@ -101,6 +106,9 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     [_moreBtn addTarget:self action:@selector(moreBtnClick) forControlEvents:UIControlEventTouchUpInside];
     _moreBtn.titleLabel.font = BGFont(14);
     
+    _contentView = [CircleContentView new];
+    _contentView.delegate = self;
+    
     _picContainerView = [PictureContainerView new];
     
     _partLine = [UIView new];
@@ -130,7 +138,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     [_praiseBtn addTarget:self action:@selector(praiseBtnClick) forControlEvents:UIControlEventTouchUpInside];
     _praiseBtn.titleLabel.font = BGFont(14);
     
-    NSArray *views = @[_topView,_iconView, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel,_deleteBtn, _timeLabel, _contentLabel, _moreBtn, _picContainerView, _partLine,_shareBtn,_firstShuView,_commentBtn,_secondShuView,_praiseBtn];
+    NSArray *views = @[_topView,_iconBtn, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel,_deleteBtn, _timeLabel, _contentLabel, _moreBtn, _contentView,_picContainerView, _partLine,_shareBtn,_firstShuView,_commentBtn,_secondShuView,_praiseBtn];
     
     [self.contentView sd_addSubviews:views];
     
@@ -143,14 +151,14 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .rightEqualToView(contentView)
     .heightIs(8);
     
-    _iconView.sd_layout
+    _iconBtn.sd_layout
     .leftSpaceToView(contentView,margin)
     .topSpaceToView(_topView,margin)
     .widthIs(40)
     .heightIs(40);
     
     _nameLabel.sd_layout
-    .leftSpaceToView(_iconView,9)
+    .leftSpaceToView(_iconBtn,9)
     .topSpaceToView(_topView,8)
     .heightIs(17);
     [_nameLabel setSingleLineAutoResizeWithMaxWidth:150];
@@ -193,7 +201,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     _contentLabel.sd_layout
     .leftSpaceToView(contentView,17)
-    .topSpaceToView(_iconView,12)
+    .topSpaceToView(_iconBtn,12)
     .rightSpaceToView(contentView,margin)
     .autoHeightRatio(0);
     //moreBtn的告诉在setModel里边设置
@@ -202,8 +210,13 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .topSpaceToView(_contentLabel,0)
     .widthIs(40);
     
+    _contentView.sd_layout
+    .leftSpaceToView(contentView,8)
+    .rightSpaceToView(contentView,8)
+    .topSpaceToView(_moreBtn,5);
+    
     _picContainerView.sd_layout
-    .centerXEqualToView(self.contentView);//已经在内部实现宽度和高度的自适应所以不需要在设置高度和宽度，top值是具体有无图片在setmodel方法设置
+    .centerXEqualToView(contentView);//已经在内部实现宽度和高度的自适应所以不需要在设置高度和宽度，top值是具体有无图片在setmodel方法设置
     _partLine.sd_layout
     .leftEqualToView(contentView)
     .rightEqualToView(contentView)
@@ -254,7 +267,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
         [_praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
     }
 //    NSLog(@"图片地址---%@",model.iconNameStr);
-    [_iconView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconNameStr]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
+    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconNameStr]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _nameLabel.text = model.nameStr;
     //防止单行文本label在重用时宽度计算不准的问题
     [_nameLabel sizeToFit];
@@ -278,7 +291,8 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     [_timeLabel sizeToFit];
     
 //    _contentLabel.text = model.msgContent;
-    [TDUtil setLabelMutableText:_contentLabel content:model.msgContent lineSpacing:5 headIndent:0];
+    [TDUtil setLabelMutableText:_contentLabel content:model.msgContent lineSpacing:0 headIndent:0];
+    [_contentLabel sizeToFit];
     _picContainerView.pictureStringArray = model.picNamesArray;
 //    NSLog(@"-----zhaopian---%@",model.picNamesArray);
     if (model.shouldShowMoreBtn) { //如果文字高度超过60
@@ -296,6 +310,23 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
         _moreBtn.hidden = YES;
     }
     
+    //是圈子
+//    NSLog(@"打印是不是圈子---%ld",(long)_model.feelingTypeId);
+    if (_model.feelingTypeId == 1) {
+        _contentView.sd_layout.heightIs(0);
+        _contentView.isHidden = YES;
+    }else{
+        _contentView.sd_layout.heightIs(85);
+        _contentView.titleLabelText = model.titleText;
+        _contentView.imageName = model.contentImage;
+        _contentView.contentLabelText = model.contentText;
+        _contentView.isHidden = NO;
+    }
+//    _contentView.sd_layout.heightIs(85);
+//    _contentView.titleLabelText = model.titleText;
+//    _contentView.imageName = model.contentImage;
+//    _contentView.contentLabelText = model.contentText;
+    
     CGFloat picContainerTopMargin = 0;
     if (model.picNamesArray.count) {
         picContainerTopMargin = 10;
@@ -304,7 +335,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     [_shareBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.shareCount] forState:UIControlStateNormal];
     [_commentBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.commentCount] forState:UIControlStateNormal];
     [_praiseBtn setTitle:[NSString stringWithFormat:@" %ld",(long)model.priseCount] forState:UIControlStateNormal];
-    _picContainerView.sd_layout.topSpaceToView(_moreBtn,picContainerTopMargin);
+    _picContainerView.sd_layout.topSpaceToView(_contentView,picContainerTopMargin);
     
     [self setupAutoHeightWithBottomView:_shareBtn bottomMargin:5];
 }
@@ -313,6 +344,14 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
 {
     _indexPath = indexPath;
 }
+
+-(void)iconClick
+{
+    if ([self.delegate respondsToSelector:@selector(didClickIconBtnInCell:andModel:andIndexPath:)]) {
+        [self.delegate didClickIconBtnInCell:self andModel:_model andIndexPath:_indexPath];
+    }
+}
+
 -(void)moreBtnClick
 {
     if (self.moreButtonClickedBlock) {
@@ -347,5 +386,14 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     if ([self.delegate respondsToSelector:@selector(didClickDeleteInCell:andModel:andIndexPath:)]) {
         [self.delegate didClickDeleteInCell:self andModel:_model andIndexPath:_indexPath];
     }
+}
+
+-(void)didClickContentView
+{
+    if ([self.delegate respondsToSelector:@selector(didClickContentBtnInCell:andModel:andIndexPath:)]) {
+//        NSLog(@"点击按钮");
+        [self.delegate didClickContentBtnInCell:self andModel:_model andIndexPath:_indexPath];
+    }
+    
 }
 @end

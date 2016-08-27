@@ -25,6 +25,10 @@
 
 @end
 
+@implementation DetailIdentiytype
+
+
+@end
 
 @implementation DetailCity
 

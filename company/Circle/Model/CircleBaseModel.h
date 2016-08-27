@@ -94,6 +94,13 @@
 
 @end
 
+@interface CircleUsersAuthenticsIdentiytypeModel : NSObject
+
+@property (nonatomic, copy) NSString *name;
+
+@property (nonatomic, assign) NSInteger identiyTypeId;
+
+@end
 
 #pragma mark -发微博认证人模型
 @interface CircleUsersAuthenticsModel : NSObject
@@ -103,6 +110,8 @@
 @property (nonatomic, copy) NSString *companyName;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *position;
+
+@property (nonatomic, strong) CircleUsersAuthenticsIdentiytypeModel *identiytype;
 
 @end
 
@@ -120,6 +129,34 @@
 
 @end
 
+@interface CircleFeeingtypeModel : NSObject
+
+@property (nonatomic, copy) NSString *name;
+
+@property (nonatomic, assign) NSInteger feelingTypeId;
+
+@end
+
+@interface CircleContenttypeModel : NSObject
+
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, assign) NSInteger typeId;
+
+@end
+
+@interface CircleContentshareModel : NSObject
+
+@property (nonatomic, copy) NSString *desc;
+
+@property (nonatomic, copy) NSString *content;
+
+@property (nonatomic, copy) NSString *image;
+
+@property (nonatomic, assign) NSInteger shareId;
+
+@property (nonatomic, strong) CircleContenttypeModel *contenttype;
+
+@end
 
 
 @interface CircleBaseModel : NSObject
@@ -146,5 +183,10 @@
 //发布时间
 @property (nonatomic, copy) NSString *publicDate;
 
+@property (nonatomic, strong) CircleFeeingtypeModel *feeingtype;
+
+@property (nonatomic, strong) CircleContentshareModel *contentshare;
 
 @end
+
+

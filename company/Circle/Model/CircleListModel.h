@@ -24,6 +24,14 @@
 @property (nonatomic, copy) NSString *priseLabel;   //点赞人名字
 @property (nonatomic, assign) BOOL flag;            //是否点赞
 
+@property (nonatomic, assign) NSInteger identiyTypeId; //身份类型
+@property (nonatomic, assign) NSInteger feelingTypeId;
+
+@property (nonatomic, copy) NSString *url;
+@property (nonatomic, copy) NSString *contentImage;
+@property (nonatomic, copy) NSString *contentText;
+@property (nonatomic, copy) NSString *titleText;
+
 @property (nonatomic, assign) NSInteger userId;
 
 @property (nonatomic, assign, getter = isLiked) BOOL liked;

@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "GDataXMLNode.h"
 
 #import "DataBaseHelper.h"
 
@@ -59,6 +60,8 @@
     //创建数据库
     [self createTable];
     
+    //xml解析
+    [self analysisXml];
     
     // 监测网络情况
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -331,6 +334,21 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     return result;
 }
 
+#pragma mark------------------------解析xml------------------------
+-(void)analysisXml
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"emoji" ofType:@"xml"];
+    NSData *data = [[NSData alloc]initWithContentsOfFile:path];
+    //对象初始化
+    GDataXMLDocument *doc = [[GDataXMLDocument alloc]initWithData:data error:nil];
+    //获取根节点
+    GDataXMLElement *rootElement = [doc rootElement];
+    //获取其他节点
+    NSArray *dicts = [rootElement elementsForName:@"dict"];
+    for (GDataXMLElement *dict in dicts) {
+    
+    }
+}
 
 #pragma mark-------------------------数据库-------------------------
 -(void)createTable

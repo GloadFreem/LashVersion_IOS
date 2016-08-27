@@ -7,7 +7,7 @@
 //
 
 #import "CircleViewController.h"
-
+#import "CirclePersonVC.h"
 #import "AuthenticInfoBaseModel.h"
 
 #import "CircleShareBottomView.h"
@@ -17,10 +17,16 @@
 #import "CircleListCell.h"
 #import "CircleReleaseVC.h"
 
-
 #import "CircleBaseModel.h"
 #import "CircleDetailVC.h"
 #import "CircleShareBottomView.h"
+
+#import "InvestPersonDetailViewController.h"
+#import "InvestThinkTankDetailVC.h"
+
+#import "ProjectBannerDetailVC.h"
+#import "ProjectPrepareDetailVC.h"
+#import "ProjectDetailController.h"
 
 #define DELETELIST @"requestPublicContentDelete"
 #define AUTHENINFO @"authenticInfoUser"
@@ -28,6 +34,7 @@
 #define CIRCLE_PRAISE @"requestPriseFeeling"
 #define CIRCLE_SHARE @"requestShareFeeling"
 #define CIRCLE_UPDATE_SHARE @"requestUpdateShareFeeling"
+
 @interface CircleViewController ()<CircleShareBottomViewDelegate,UITableViewDelegate,UITableViewDataSource,CircleListCellDelegate>
 {
     id kcell;
@@ -228,7 +235,7 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
-//    _tableView.tableHeaderView = self.headerView;
+    _tableView.tableHeaderView = self.headerView;
     
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
@@ -318,6 +325,11 @@
 -(void)myCircle
 {
 //    NSLog(@"进入我的界面");
+    CirclePersonVC *vc = [CirclePersonVC new];
+    vc.titleStr = @"我的话题";
+    vc.userId = _selfId;
+    [self.navigationController pushViewController:vc animated:YES];
+    
 }
 -(void)nextPage
 {
@@ -356,7 +368,7 @@
     if (!_haveData) {
         self.startLoading = YES;
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",VERSION,@"version",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CYCLE_CONTENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestCircleContentList:)];
 }
@@ -416,6 +428,13 @@
         listModel.commentCount = baseModel.commentCount;       //评论数量
         listModel.priseCount = baseModel.priseCount;           //点赞数量
         listModel.flag = baseModel.flag;
+        //新增数据
+        listModel.contentText = baseModel.contentshare.desc;
+        listModel.contentImage = baseModel.contentshare.image;
+        listModel.url = baseModel.contentshare.content;
+//        NSLog(@"%@",baseModel.contentshare.content);
+        listModel.titleText = baseModel.contentshare.contenttype.name;
+        listModel.feelingTypeId = baseModel.feeingtype.feelingTypeId;
         
         //拿到usrs认证数组
         NSArray *authenticsArray = [NSArray arrayWithArray:baseModel.users.authentics];
@@ -425,6 +444,7 @@
             listModel.addressStr = usersAuthenticsModel.city.name;
             listModel.companyStr = usersAuthenticsModel.companyName;
             listModel.positionStr = usersAuthenticsModel.position;
+            listModel.identiyTypeId = usersAuthenticsModel.identiytype.identiyTypeId;
         }
         
         NSMutableArray *picArray = [NSMutableArray array];
@@ -477,8 +497,8 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id model = self.dataArray[indexPath.row];
-    return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]];
+        id model = self.dataArray[indexPath.row];
+        return  [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[CircleListCell class] contentViewWidth:[self cellContentViewWith]];
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -546,8 +566,60 @@
     return width;
 }
 
-#pragma mark---------------- CircleListCellDelegate--------------
-#pragma mark------------------------删除按钮----------------------
+#pragma mark---------------- CircleListCellDelegate------------
+#pragma mark-----------------点击头像----------------
+-(void)didClickIconBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
+{
+//    NSLog(@"进入个人中心");
+    if (model.identiyTypeId == 1 || model.identiyTypeId == 2 || model.identiyTypeId == 3) {
+        InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
+        vc.isCircle = YES;
+        vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if (model.identiyTypeId == 4) {
+        InvestThinkTankDetailVC *vc = [InvestThinkTankDetailVC new];
+        vc.isCircle = YES;
+        vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+}
+#pragma mark-----------------点击contentBtn---------
+-(void)didClickContentBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
+{
+//    NSLog(@"处理点击事件");
+    if (model.feelingTypeId == 2) {//链接
+        ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
+        vc.url = model.url;
+        vc.image = model.contentImage;
+        vc.titleText = model.titleText;
+        vc.contentText = model.contentText;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if (model.feelingTypeId == 3) {//项目
+        NSArray *array = [model.url componentsSeparatedByString:@","];
+        if (array.count == 2) {
+            if ([array[1] isEqualToString:@"0"]) {//路演
+                ProjectDetailController *detail =[ProjectDetailController new];
+                detail.projectId = [array[0] integerValue];
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+            
+            if ([array[1] isEqualToString:@"1"]) {//预选
+                ProjectPrepareDetailVC *detail =[ProjectPrepareDetailVC new];
+                detail.projectId = [array[0] integerValue];
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+        }
+    }
+    if (model.feelingTypeId == 4) {//活动
+        
+    }
+    
+}
+
+#pragma mark------------------删除按钮----------------------
 -(void)didClickDeleteInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
     if (model.publicContentId) {
@@ -683,6 +755,11 @@
         
         switch (index) {
             case 0:{
+                
+//                NSLog(@"点击分享圈子");
+           }
+                break;
+            case 1:{
                 if ([QQApiInterface isQQInstalled])
                 {
                     // QQ好友
@@ -700,7 +777,7 @@
                 
             }
                 break;
-            case 1:{
+            case 2:{
                 // 微信好友
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
@@ -711,7 +788,7 @@
                 //                NSLog(@"分享到微信");
             }
                 break;
-            case 2:{
+            case 3:{
                 // 微信朋友圈
                 arr = @[UMShareToWechatTimeline];
 //                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
@@ -722,7 +799,7 @@
                 //                NSLog(@"分享到朋友圈");
             }
                 break;
-            case 3:{
+            case 4:{
                 // 短信
                 arr = @[UMShareToSms];
                 shareContent = shareContentString;
@@ -761,7 +838,7 @@
         }];
     }
 }
-#pragma mark -评论按钮
+#pragma mark -------------------评论按钮-------------------
 -(void)didClickCommentBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
     //进入详情页
@@ -773,7 +850,7 @@
         [self.navigationController pushViewController:detail animated:YES];
     }
 }
-#pragma mark -点赞按钮
+#pragma mark -------------------点赞按钮--------------------
 -(void)didClickPraiseBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
         if (model.publicContentId) {

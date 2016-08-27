@@ -257,7 +257,8 @@
         
         [button setTitle:self.titles[i] forState:UIControlStateNormal];
         [button setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont systemFontOfSize:10];
+//        button.titleLabel.font = [UIFont systemFontOfSize:10];
+        button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:10];
         
         button.tag = i;
         [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];

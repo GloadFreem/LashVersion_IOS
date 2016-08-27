@@ -166,7 +166,7 @@
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-#define SERVICE_URL @"http://192.168.5.141:8080/jinzht/"//本地
+#define SERVICE_URL @"http://192.168.5.162:8080/jinzht/"//本地
 
 #define KEY @"jinzht_server_security"
 #define PLATFORM @"1"
@@ -174,7 +174,7 @@
 #define FORGET_TYPE @"1"
 #define CERTIFY_TYPE @"2"
 #define CHANGE_PHONE_TYPE @"3"
-
+#define VERSION @"1"
 //身份证号
 #define USER_STATIC_IDNUMBER @"user_static_ido"
 //真实姓名
@@ -258,6 +258,10 @@
 #pragma mark----------------------------------------------------------------------------
 #pragma mark --------------------------圈子接口------------------------------------------
 #pragma mark----------------------------------------------------------------------------
+//分享到圈子
+#define SHARE_TO_CIRCLE @"shareContentToFeeling.action"
+//个人圈子列表
+#define CYCLE_USER_LIST @"requestUsersFeelingList.action"
 //圈子功能
 #define CYCLE_CONTENT_LIST @"requestFeelingList.action"
 //圈子首页点赞

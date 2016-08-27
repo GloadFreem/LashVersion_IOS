@@ -8,12 +8,18 @@
 
 #import "ProjectBannerDetailVC.h"
 #import "CircleShareBottomView.h"
+#import "ShareToCircleView.h"
 
-@interface ProjectBannerDetailVC ()<UIWebViewDelegate,CircleShareBottomViewDelegate>
+#define SHARETOCIRCLE @"shareContentToFeeling"
+
+@interface ProjectBannerDetailVC ()<UIWebViewDelegate,CircleShareBottomViewDelegate,ShareToCircleViewDelegate>
 @property (strong, nonatomic) UIWebView * webView;
 @property (nonatomic,strong)UIView * bottomView;
 @property (strong, nonatomic) UIView *gifView;
 @property (strong, nonatomic) UIImageView *gifImageView;
+
+@property (nonatomic, strong) ShareToCircleView *shareCircleView;
+@property (nonatomic, copy) NSString *circlePartner;
 
 @end
 
@@ -22,6 +28,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.circlePartner = [TDUtil encryKeyWithMD5:KEY action:SHARETOCIRCLE];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
@@ -58,7 +66,6 @@
     _gifView = [[UIView alloc]initWithFrame:self.view.frame];
     _gifView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_gifView];
-    
     
     _gifImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 174*WIDTHCONFIG, 174*WIDTHCONFIG)];
     _gifImageView.centerX = self.view.centerX;
@@ -111,11 +118,11 @@
 
 -(void)startShare
 {
-    NSArray *titleList = @[@"QQ",@"微信",@"朋友圈",@"短信"];
-    NSArray *imageList = @[@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
+    NSArray *titleList = @[@"圈子",@"QQ",@"微信",@"朋友圈",@"短信"];
+    NSArray *imageList = @[@"icon_share_circle@2x",@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
     CircleShareBottomView *share = [CircleShareBottomView new];
     share.tag = 1;
-    [share createShareViewWithTitleArray:titleList imageArray:imageList];
+    [share createShareCircleViewWithTitleArray:titleList imageArray:imageList];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
     [share addGestureRecognizer:tap];
     [[self topView] addSubview:share];
@@ -127,19 +134,26 @@
     //分享
     if (view.tag == 1) {
         //得到用户SID
-        NSString* shareImage = _model.image;
-        NSString *shareContentString = [NSString stringWithFormat:@"%@",_model.desc];
+        NSString* shareImage = _image;
+        NSString *shareContentString = [NSString stringWithFormat:@"%@",_contentText];
         NSArray *arr = nil;
         NSString *shareContent;
         
         switch (index) {
             case 0:{
+                [self dismissBG];
+                [self createShareCircleView];
+                
+                //                NSLog(@"分享圈子");
+            }
+                break;
+            case 1:{
                 if ([QQApiInterface isQQInstalled])
                 {
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _url;
-                    [UMSocialData defaultData].extConfig.qqData.title = _model.name;
+                    [UMSocialData defaultData].extConfig.qqData.title = _titleText;
 //                    [UMSocialData defaultData].extConfig.qzoneData.title = _model.name;
                 }
                 else
@@ -151,29 +165,29 @@
                 
             }
                 break;
-            case 1:{
+            case 2:{
                 // 微信好友
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _url;
 //                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _url;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = _model.name;
+                [UMSocialData defaultData].extConfig.wechatSessionData.title = _titleText;
 //                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _model.name;
                 
                 //                NSLog(@"分享到微信");
             }
                 break;
-            case 2:{
+            case 3:{
                 // 微信朋友圈
                 arr = @[UMShareToWechatTimeline];
 //                [UMSocialData defaultData].extConfig.wechatSessionData.url = _url;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _url;
 //                [UMSocialData defaultData].extConfig.wechatSessionData.title = _model.name;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _model.name;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _titleText;
                 
                 //                NSLog(@"分享到朋友圈");
             }
                 break;
-            case 3:{
+            case 4:{
                 // 短信
                 arr = @[UMShareToSms];
                 shareContent = shareContentString;
@@ -194,7 +208,7 @@
         }
         if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
             shareImage = nil;
-            shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_model.name,_model.desc,_url];
+            shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_titleText,_contentText,_url];
         }
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
@@ -210,6 +224,53 @@
 //                });
             }
         }];
+    }
+}
+
+-(void)createShareCircleView
+{
+    ShareToCircleView *shareView =[[[NSBundle mainBundle] loadNibNamed:@"ShareToCircleView" owner:nil options:nil] lastObject];
+    shareView.backgroundColor = [UIColor clearColor];
+    [shareView instancetationShareToCircleViewWithimage:_model.image title:_model.name content:_model.desc];
+    shareView.tag = 1000;
+    [[UIApplication sharedApplication].windows[0] addSubview:shareView];
+    [shareView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    shareView.delegate = self;
+    _shareCircleView = shareView;
+}
+
+#pragma mark-------ShareToCircleViewDelegate--------
+-(void)clickBtnInView:(ShareToCircleView *)view andIndex:(NSInteger)index content:(NSString *)content
+{
+    if (index == 0) {
+        [view removeFromSuperview];
+    }else{
+        //        NSLog(@"调接口");
+        [_shareCircleView removeFromSuperview];
+        
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.circlePartner,@"partner",@"",@"contentId",@"8",@"type",content,@"comment",_url,@"content",_model.desc,@"description",_model.image,@"image",@"今日投条",@"tag",nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:SHARE_TO_CIRCLE postParam:dic type:0 delegate:self sel:@selector(requestShareToCircle:)];
+    }
+}
+
+-(void)requestShareToCircle:(ASIHTTPRequest*)request
+{
+    
+    
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic!=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            //            NSLog(@"分享成功");
+        }
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+    }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网络好像出了点问题，检查一下"];
     }
 }
 

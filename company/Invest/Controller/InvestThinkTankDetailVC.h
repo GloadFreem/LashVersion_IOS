@@ -19,7 +19,7 @@
 @property (nonatomic, copy) NSString *investorId;
 @property (nonatomic, copy) NSString *attentionCount;
 
-@property (nonatomic, assign) BOOL collected;
+//@property (nonatomic, assign) BOOL collected;
 
 @property (nonatomic, copy) NSString *investorCollectPartner;
 
@@ -28,5 +28,7 @@
 @property (nonatomic, strong) MineAttentionVC *attentionVC;
 @property (nonatomic, strong) MineCollectionListModel *collectModel;
 @property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, assign) BOOL isCircle;
 
 @end

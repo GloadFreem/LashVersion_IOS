@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class DetailUser,DetailAuthentics,DetailCity,DetailProvince;
+@class DetailUser,DetailAuthentics,DetailCity,DetailProvince,DetailIdentiytype;
 
 @interface InvestDetailModel : NSObject
 
@@ -21,7 +21,6 @@
 @property (nonatomic, assign) BOOL commited;
 
 @property (nonatomic, strong) DetailUser *user;
-
 
 @end
 @interface DetailUser : NSObject
@@ -58,6 +57,17 @@
 @property (nonatomic, copy) NSString *companyAddress;
 
 @property (nonatomic, copy) NSString *name;
+
+@property (nonatomic, strong) DetailIdentiytype *identiytype;
+
+@end
+
+
+@interface DetailIdentiytype : NSObject
+
+@property (nonatomic, copy) NSString *name;
+
+@property (nonatomic, assign) NSInteger identiyTypeId;
 
 @end
 
