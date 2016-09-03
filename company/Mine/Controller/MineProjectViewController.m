@@ -332,6 +332,37 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBar.translucent=NO;
+    [self.navigationController.navigationBar setHidden:NO];
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    //不隐藏tabbar
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

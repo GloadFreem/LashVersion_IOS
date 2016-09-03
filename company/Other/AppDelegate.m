@@ -60,9 +60,6 @@
     //创建数据库
     [self createTable];
     
-    //xml解析
-    [self analysisXml];
-    
     // 监测网络情况
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(netStatusChanged:)
@@ -72,10 +69,6 @@
     self.hostReach = [Reachability reachabilityForInternetConnection];
     [_hostReach startNotifier];
     [self updateInterfaceWithReachability:_hostReach];
-    
-    
-    
-    [NSThread sleepForTimeInterval:1];
     
     //获取缓存数据
     NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
@@ -334,22 +327,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     return result;
 }
 
-#pragma mark------------------------解析xml------------------------
--(void)analysisXml
-{
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"emoji" ofType:@"xml"];
-    NSData *data = [[NSData alloc]initWithContentsOfFile:path];
-    //对象初始化
-    GDataXMLDocument *doc = [[GDataXMLDocument alloc]initWithData:data error:nil];
-    //获取根节点
-    GDataXMLElement *rootElement = [doc rootElement];
-    //获取其他节点
-    NSArray *dicts = [rootElement elementsForName:@"dict"];
-    for (GDataXMLElement *dict in dicts) {
-    
-    }
-}
-
 #pragma mark-------------------------数据库-------------------------
 -(void)createTable
 {
@@ -378,14 +355,14 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 -(void)checkUpTable:(NSString*)tableName
 {
     if ([_dataBase isExistWithTableName:tableName]) {
-        NSLog(@"%@表存在",tableName);
+//        NSLog(@"%@表存在",tableName);
         //        [dataBase dropTable:ACTIVITYTABLE];
     }else{
         BOOL ret = [_dataBase createTableWithTableName:tableName keys:@[@"data"]];
         if (ret) {
-            NSLog(@"%@创建成功",tableName);
+//            NSLog(@"%@创建成功",tableName);
         }else{
-            NSLog(@"%@创建失败",tableName);
+//            NSLog(@"%@创建失败",tableName);
         }
     }
 }

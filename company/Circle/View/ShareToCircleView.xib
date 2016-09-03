@@ -19,7 +19,7 @@
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="71I-y5-xsy">
-                            <rect key="frame" x="20" y="120" width="335" height="240"/>
+                            <rect key="frame" x="20" y="120" width="335" height="245"/>
                             <subviews>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="说点什么吧.." translatesAutoresizingMaskIntoConstraints="NO" id="Nlp-LG-OFq">
                                     <rect key="frame" x="10" y="10" width="315" height="115"/>
@@ -46,7 +46,7 @@
                                                 <constraint firstAttribute="height" constant="16" id="7h5-JK-xjB"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eD1-NJ-dYU">
@@ -55,7 +55,7 @@
                                                 <constraint firstAttribute="height" constant="13" id="nHz-rn-fTA"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -74,7 +74,7 @@
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wEs-8N-TcY">
-                                    <rect key="frame" x="0.0" y="205" width="167.5" height="35"/>
+                                    <rect key="frame" x="0.0" y="205" width="167.5" height="40"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="46" id="6B6-wL-Hbq"/>
                                     </constraints>
@@ -91,7 +91,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b5f-h7-m0K">
-                                    <rect key="frame" x="167.5" y="205" width="167.5" height="35"/>
+                                    <rect key="frame" x="167.5" y="205" width="167.5" height="40"/>
                                     <state key="normal" title="确定">
                                         <color key="titleColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
                                     </state>
@@ -116,7 +116,7 @@
                                 <constraint firstItem="ACz-Si-9vL" firstAttribute="leading" secondItem="71I-y5-xsy" secondAttribute="leading" constant="10" id="cOG-Fa-50d"/>
                                 <constraint firstItem="ACz-Si-9vL" firstAttribute="top" secondItem="Nlp-LG-OFq" secondAttribute="bottom" constant="10" id="kkG-SS-nS1"/>
                                 <constraint firstItem="Nlp-LG-OFq" firstAttribute="leading" secondItem="71I-y5-xsy" secondAttribute="leading" constant="10" id="nau-52-10R"/>
-                                <constraint firstAttribute="height" constant="240" id="tV4-nu-XlN"/>
+                                <constraint firstAttribute="height" constant="245" id="tV4-nu-XlN"/>
                             </constraints>
                         </view>
                     </subviews>

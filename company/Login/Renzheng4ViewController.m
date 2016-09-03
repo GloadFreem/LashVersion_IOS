@@ -187,31 +187,28 @@
     
     BOOL retC =[TDUtil checkImageExists:@"buinessLicence"];
     
-    //加到上传文件字典
-    if (retA && retB && retC) {
-        NSDictionary *fileDic = [[NSDictionary alloc]initWithObjectsAndKeys:@"identiyCarA",@"identiyCarA",@"identiyCarB",@"identiyCarB",@"buinessLicence",@"buinessLicence", nil];
-        //加载动画
-        //加载动画控件
-        if (!activity) {
-            //进度
-            activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(WIDTH(self.nextBtn)/3-18, HEIGHT(self.nextBtn)/2-15, 30, 30)];//指定进度轮的大小
-            [activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];//设置进度轮显示类型
-            [self.nextBtn addSubview:activity];
-        }else{
-            if (!activity.isAnimating) {
-                [activity startAnimating];
-            }
+    //开始加载动画
+    //上传文件
+    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
+    self.startLoading = YES;
+    self.isTransparent  = YES;
+    
+    if ([self.identifyType integerValue] == 2) {//投资人
+        //加到上传文件字典
+        if (retA && retB) {
+            NSDictionary *fileDic = [[NSDictionary alloc]initWithObjectsAndKeys:@"identiyCarA",@"identiyCarA",@"identiyCarB",@"identiyCarB", nil];
+            
+            [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
+            
         }
-        [activity setColor:WriteColor];
-        
-        //开始加载动画
-//        [activity startAnimating];
-        //上传文件
-        self.loadingViewFrame = self.view.frame;
-        self.startLoading = YES;
-        self.isTransparent  = YES;
-        [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
-//        [SVProgressHUD showWithStatus:@"认证中..."];
+    }else{
+        //加到上传文件字典
+        if (retA && retB && retC) {
+            NSDictionary *fileDic = [[NSDictionary alloc]initWithObjectsAndKeys:@"identiyCarA",@"identiyCarA",@"identiyCarB",@"identiyCarB",@"buinessLicence",@"buinessLicence", nil];
+            
+            [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
+            
+        }
     }
 }
 

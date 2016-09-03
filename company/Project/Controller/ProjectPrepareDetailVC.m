@@ -590,9 +590,12 @@
     if (index == 0) {
         [view removeFromSuperview];
     }else{
-        [self shareToCircle];
+
 //        NSLog(@"调接口");
         [_shareCircleView removeFromSuperview];
+        if ([content isEqualToString:@"说点什么吧..."]) {
+            content = @"";
+        }
         
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.circlePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"contentId",@"7",@"type",content,@"comment",[NSString stringWithFormat:@"%ld,1",(long)self.projectId],@"content",_shareContent,@"description",_shareImage,@"image",@"金指投项目",@"tag",nil];
         //开始请求
@@ -617,10 +620,7 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网络好像出了点问题，检查一下"];
     }
 }
--(void)shareToCircle
-{
-    
-}
+
 #pragma mark-------ProjectPrepareFooterCommentViewDelagate--------
 -(void)didClickBtn:(NSMutableArray *)dataArray
 {

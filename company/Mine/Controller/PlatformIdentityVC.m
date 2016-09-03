@@ -29,7 +29,7 @@
 -(void)setModel
 {
     _introduceLabel.numberOfLines = 0;
-    NSLog(@"%@",_identifyType);
+//    NSLog(@"%@",_identifyType);
     _identifyLabel.text = _identifyType;
     if ([_identifyType isEqualToString:@"项目方"]) {
         _iconImage.image = [UIImage imageNamed:@"icon_project.png"];

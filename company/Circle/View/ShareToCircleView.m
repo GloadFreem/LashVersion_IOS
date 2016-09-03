@@ -21,8 +21,7 @@
 {
     _titleLabel.text = title;
     _contentLabel.text = content;
-    NSLog(@"%@",content);
-    _contentLabel.backgroundColor = [UIColor whiteColor];
+//    NSLog(@"%@",content);
     [_imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",image]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     
 }
@@ -43,6 +42,7 @@
         [_textView resignFirstResponder];
     }
 }
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

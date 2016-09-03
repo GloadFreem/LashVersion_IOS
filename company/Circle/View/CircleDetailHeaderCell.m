@@ -290,6 +290,15 @@
     }
 }
 
+#pragma mark-点击转发详情---
+-(void)didClickContentView
+{
+    if ([self.delegate respondsToSelector:@selector(didClickContentBtnInCell:andModel:)]) {
+        //        NSLog(@"点击按钮");
+        [self.delegate didClickContentBtnInCell:self andModel:_model];
+    }
+    
+}
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

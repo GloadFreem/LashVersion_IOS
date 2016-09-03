@@ -311,7 +311,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     }
     
     //是圈子
-//    NSLog(@"打印是不是圈子---%ld",(long)_model.feelingTypeId);
+    NSLog(@"打印是不是圈子---%ld",(long)_model.feelingTypeId);
     if (_model.feelingTypeId == 1) {
         _contentView.sd_layout.heightIs(0);
         _contentView.isHidden = YES;

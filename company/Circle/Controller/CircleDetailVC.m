@@ -13,7 +13,9 @@
 #import "CircleListModel.h"
 #import "CircleBaseModel.h"
 #import "CircleDetailHeaderCell.h"
-#import "RenzhengViewController.h"
+#import "ProjectBannerDetailVC.h"
+#import "ProjectDetailController.h"
+#import "ProjectPrepareDetailVC.h"
 
 #define CIRCLE_PRAISE @"requestPriseFeeling"
 #define CIRCLEDETAIL @"requestFeelingDetail"
@@ -697,6 +699,33 @@
 -(void)didClickContentBtnInCell:(CircleDetailHeaderCell *)cell andModel:(CircleListModel *)model
 {
     NSLog(@"点击详情今日头条");
+    if (model.feelingTypeId == 2) {//链接
+        ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
+        vc.url = model.url;
+        vc.image = model.contentImage;
+        vc.titleText = model.titleText;
+        vc.contentText = model.contentText;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if (model.feelingTypeId == 3) {//项目
+        NSArray *array = [model.url componentsSeparatedByString:@","];
+        if (array.count == 2) {
+            if ([array[1] isEqualToString:@"0"]) {//路演
+                ProjectDetailController *detail =[ProjectDetailController new];
+                detail.projectId = [array[0] integerValue];
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+            
+            if ([array[1] isEqualToString:@"1"]) {//预选
+                ProjectPrepareDetailVC *detail =[ProjectPrepareDetailVC new];
+                detail.projectId = [array[0] integerValue];
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+        }
+    }
+    if (model.feelingTypeId == 4) {//活动
+        
+    }
 }
 #pragma mark -cell_delegate------  点赞按钮事件处理  -----------
 -(void)didClickPraiseBtn:(CircleDetailHeaderCell *)cell model:(CircleListModel *)model

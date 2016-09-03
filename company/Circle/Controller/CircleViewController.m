@@ -376,7 +376,7 @@
 -(void)requestCircleContentList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -435,7 +435,7 @@
 //        NSLog(@"%@",baseModel.contentshare.content);
         listModel.titleText = baseModel.contentshare.contenttype.name;
         listModel.feelingTypeId = baseModel.feeingtype.feelingTypeId;
-        
+        NSLog(@"打印数据类型---%ld",baseModel.feeingtype.feelingTypeId);
         //拿到usrs认证数组
         NSArray *authenticsArray = [NSArray arrayWithArray:baseModel.users.authentics];
         //实例化认证人模型
@@ -570,7 +570,14 @@
 #pragma mark-----------------点击头像----------------
 -(void)didClickIconBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
-//    NSLog(@"进入个人中心");
+    if ([_selfId integerValue] == model.userId) {
+        //    NSLog(@"进入个人中心");
+        CirclePersonVC *vc = [CirclePersonVC new];
+        vc.titleStr = @"我的话题";
+        vc.userId = _selfId;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else{
+
     if (model.identiyTypeId == 1 || model.identiyTypeId == 2 || model.identiyTypeId == 3) {
         InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
         vc.isCircle = YES;
@@ -582,6 +589,8 @@
         vc.isCircle = YES;
         vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
         [self.navigationController pushViewController:vc animated:YES];
+    }
+    
     }
     
 }

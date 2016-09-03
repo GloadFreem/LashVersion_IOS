@@ -250,6 +250,10 @@
         //        NSLog(@"调接口");
         [_shareCircleView removeFromSuperview];
         
+        if ([content isEqualToString:@"说点什么吧..."]) {
+            content = @"";
+        }
+        
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.circlePartner,@"partner",@"",@"contentId",@"8",@"type",content,@"comment",_url,@"content",_model.desc,@"description",_model.image,@"image",@"今日投条",@"tag",nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:SHARE_TO_CIRCLE postParam:dic type:0 delegate:self sel:@selector(requestShareToCircle:)];

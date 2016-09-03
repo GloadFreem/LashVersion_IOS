@@ -454,25 +454,27 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row == 0) {
+        [self chooseicon];
+        return;
+    }
+    if (indexPath.row == 1) {
+        MineRingCodeVC *vc = [MineRingCodeVC new];
+        vc.inviteCode = _inviteCode;
+        vc.icon = _icon;
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    if (indexPath.row == 4) {
+        PlatformIdentityVC *vc = [PlatformIdentityVC new];
+        vc.identifyType = _identifyType;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
     
     if ([_authenticType isEqualToString:@"已认证"]) {
-        if (indexPath.row == 0) {
-            [self chooseicon];
-            
-        }
         
-        if (indexPath.row == 1) {
-            MineRingCodeVC *vc = [MineRingCodeVC new];
-            vc.inviteCode = _inviteCode;
-            vc.icon = _icon;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-        if (indexPath.row == 4) {
-            PlatformIdentityVC *vc = [PlatformIdentityVC new];
-            vc.identifyType = _identifyType;
-            
-            [self.navigationController pushViewController:vc animated:YES];
-        }
         if (indexPath.row == 8) {
             MyDataCompanyVC *vc = [MyDataCompanyVC new];
             vc.titleName = @"职位";
@@ -613,7 +615,6 @@
                     
                 }
             }
-            
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];

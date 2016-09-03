@@ -36,7 +36,7 @@
         make.left.equalTo(self.mas_left);
         make.right.equalTo(self.mas_right);
         make.bottom.equalTo(self.mas_bottom);
-        make.height.mas_equalTo(192*HEIGHTCONFIG);
+        make.height.mas_equalTo(200*HEIGHTCONFIG);
     }];
     
     UILabel *shareLabel = [UILabel new];
@@ -90,7 +90,7 @@
     [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(shareView.mas_centerX);
         make.bottom.mas_equalTo(shareView.mas_bottom).offset(-19*HEIGHTCONFIG);
-        make.width.height.mas_equalTo(35);
+        make.width.height.mas_equalTo(35*HEIGHTCONFIG);
     }];
 
 }
@@ -110,7 +110,7 @@
         make.left.equalTo(self.mas_left);
         make.right.equalTo(self.mas_right);
         make.bottom.equalTo(self.mas_bottom);
-        make.height.mas_equalTo(192*HEIGHTCONFIG);
+        make.height.mas_equalTo(200*HEIGHTCONFIG);
     }];
     
     UILabel *shareLabel = [UILabel new];
@@ -164,7 +164,7 @@
     [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(shareView.mas_centerX);
         make.bottom.mas_equalTo(shareView.mas_bottom).offset(-19*HEIGHTCONFIG);
-        make.width.height.mas_equalTo(35);
+        make.width.height.mas_equalTo(35*HEIGHTCONFIG);
     }];
     
 }
