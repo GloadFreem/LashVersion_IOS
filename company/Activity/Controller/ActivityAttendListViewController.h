@@ -10,6 +10,7 @@
 #import "ActivityViewModel.h"
 @interface ActivityAttendListViewController : RootViewController
 
-@property(nonatomic, retain)ActivityViewModel * activityModel;
+//@property(nonatomic, retain)ActivityViewModel * activityModel;
+@property (nonatomic, assign) NSInteger actionId;
 
 @end

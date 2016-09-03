@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-
+@class ActionIntroduceFrame;
 
 @interface ActivityDetailHeaderModel : NSObject
 
@@ -19,10 +19,13 @@
 @property (nonatomic, assign) NSInteger actionId;
 @property (nonatomic, copy) NSArray *pictureArray;    //
 
-
+@property (nonatomic, strong) NSArray<ActionIntroduceFrame *> *actionIntroduceFrames;
 
 @property (nonatomic, assign) BOOL isOpen;
 
 @property (nonatomic, assign) BOOL shouldShowMoreButton;
+
+- (instancetype)initWithDic:(NSDictionary *)dic;
++ (instancetype)activityViewModelWithDic:(NSDictionary *)dic;
 
 @end

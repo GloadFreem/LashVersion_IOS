@@ -27,7 +27,6 @@
     
 }
 
-
 -(void)createUI{
     
     for (UIButton * btn in _btnArray) {
@@ -58,9 +57,6 @@
 
 - (IBAction)probationBtn:(UIButton *)sender {
     
-    //进入主界面
-//    AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-//    app.window.rootViewController = app.tabBar;
     
     JTabBarController * tabBarController;
     for (UIViewController *vc in self.navigationController.childViewControllers) {

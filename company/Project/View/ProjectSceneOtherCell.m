@@ -117,7 +117,8 @@
     [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconImage]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _nameLabel.text = model.name;
     [_nameLabel sizeToFit];
-    _contentLabel.text = model.content;
+    _contentLabel.text = [model.content stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     //    NSLog(@"--------%@",model.time);
     NSArray *arr1 = [model.time componentsSeparatedByString:@" "];
     NSString *str1 = arr1[1];

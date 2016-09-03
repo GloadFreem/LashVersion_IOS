@@ -8,15 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "ActivityDetailCommentCellModel.h"
-#import "ActivityDetailCommentView.h"
+
 
 @protocol ActivityDetailFooterViewDelegate <NSObject>
 
 @optional
 
 -(void)didClickShowAllButton;
--(void)didClickLikeButton;
--(void)didClickCommentButton;
 
 @end
 

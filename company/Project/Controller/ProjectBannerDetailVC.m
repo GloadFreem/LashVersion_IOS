@@ -12,7 +12,7 @@
 
 #define SHARETOCIRCLE @"shareContentToFeeling"
 
-@interface ProjectBannerDetailVC ()<UIWebViewDelegate,CircleShareBottomViewDelegate,ShareToCircleViewDelegate>
+@interface ProjectBannerDetailVC ()<UIWebViewDelegate,CircleShareBottomViewDelegate,ShareToCircleViewDelegate,UITextViewDelegate>
 @property (strong, nonatomic) UIWebView * webView;
 @property (nonatomic,strong)UIView * bottomView;
 @property (strong, nonatomic) UIView *gifView;
@@ -56,8 +56,7 @@
     [shareBtn addTarget:self action:@selector(shareBtnClick) forControlEvents:UIControlEventTouchUpInside];
     shareBtn.size = CGSizeMake(35, 35);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
-    
-    self.navigationItem.title = @"详情";
+    self.navigationItem.title = self.titleStr;
 }
 
 #pragma mark-----创建loadingView
@@ -82,7 +81,6 @@
     [_gifView removeFromSuperview];
     
 }
-
 
 -(void)leftBack
 {
@@ -231,12 +229,13 @@
 {
     ShareToCircleView *shareView =[[[NSBundle mainBundle] loadNibNamed:@"ShareToCircleView" owner:nil options:nil] lastObject];
     shareView.backgroundColor = [UIColor clearColor];
-    [shareView instancetationShareToCircleViewWithimage:_model.image title:_model.name content:_model.desc];
+    [shareView instancetationShareToCircleViewWithimage:_image title:_titleStr content:_contentText];
     shareView.tag = 1000;
     [[UIApplication sharedApplication].windows[0] addSubview:shareView];
     [shareView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];
+    shareView.textView.delegate = self;
     shareView.delegate = self;
     _shareCircleView = shareView;
 }
@@ -253,8 +252,10 @@
         if ([content isEqualToString:@"说点什么吧..."]) {
             content = @"";
         }
-        
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.circlePartner,@"partner",@"",@"contentId",@"8",@"type",content,@"comment",_url,@"content",_model.desc,@"description",_model.image,@"image",@"今日投条",@"tag",nil];
+        if (_model.desc.length > 200) {
+            _model.desc = [_model.desc substringToIndex:200];
+        }
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.circlePartner,@"partner",@"",@"contentId",@"8",@"type",content,@"comment",_url,@"content",_contentText,@"description",_image,@"image",self.titleStr,@"tag",nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:SHARE_TO_CIRCLE postParam:dic type:0 delegate:self sel:@selector(requestShareToCircle:)];
     }
@@ -262,10 +263,8 @@
 
 -(void)requestShareToCircle:(ASIHTTPRequest*)request
 {
-    
-    
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //        NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -280,21 +279,17 @@
 
 -(void)startLoadDetailData
 {
-    
-    
     if (![_url hasPrefix:@"http://"]) {
         NSString * url =[NSString stringWithFormat:@"http://%@",_url];
         [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
     }else{
         [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_url]]];
     }
-    
 }
 
 -(void)webViewDidStartLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
-//        [SVProgressHUD showWithStatus:@"加载中..."];
         self.startLoading = YES;
     }
 }
@@ -302,22 +297,44 @@
 -(void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
-//        [self removeLoadingView];
         self.startLoading = NO;
     }
-    
 }
 
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     if (webView == self.webView) {
-//        [self removeLoadingView];
         self.startLoading = YES;
         self.isNetRequestError = YES;
     }
-    
-//    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"加载失败"];
 }
+
+#pragma mark -textViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    if ([text isEqualToString:@"\n"]) {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
+-(void)textViewDidBeginEditing:(UITextView *)textView
+{
+    textView.font= BGFont(18);
+    textView.textColor = color47;
+    if ([textView.text isEqualToString:@"说点什么吧..."]) {
+        textView.text = @"";
+    }
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@""]) {
+        textView.font = BGFont(15);
+        textView.text = @"说点什么吧...";
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

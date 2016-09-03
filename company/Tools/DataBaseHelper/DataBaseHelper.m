@@ -309,6 +309,7 @@ static id _instace;
     }
     return ret;
 }
+
 -(BOOL)cleanTable:(NSString *)table
 {
     __block BOOL ret = YES;

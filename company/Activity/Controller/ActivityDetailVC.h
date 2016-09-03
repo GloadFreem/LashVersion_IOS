@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 
 #import "ActivityViewController.h"
-
+@class ActivityViewModel;
 @interface ActivityDetailVC : RootViewController
 @property(nonatomic, retain)ActivityViewModel * activityModel;
 
 @property (nonatomic, strong) ActivityViewController *viewController;
+@property (nonatomic, assign) NSInteger actionId;
 
 @property (nonatomic, assign) BOOL isExpired;
+
 @end

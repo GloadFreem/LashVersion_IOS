@@ -101,7 +101,6 @@
 }
 -(void)createLeftArray
 {
-    
     NSArray *authenticsArray = _authenticModel.authentics;
     if (authenticsArray.count) {
         ProjectAuthentics *authentics = authenticsArray[0];
@@ -142,10 +141,6 @@
             _address = [NSString stringWithFormat:@"%@ | %@",province,city];
         }
         
-        
-        
-        
-
     }
 }
 #pragma mark- 创建tableView
@@ -305,150 +300,161 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
-        static NSString * cellId = @"MyDataIconCell";
-        MyDataIconCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-        if (!cell) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+    
+        if (indexPath.row == 0) {
+            static NSString * cellId = @"MyDataIconCell";
+            MyDataIconCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!cell) {
+                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+            }
+            if (_textArray[indexPath.row]) {
+                cell.titleLabel.text = _textArray[indexPath.row];
+            }
+            [cell.iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_icon]] placeholderImage:[UIImage new]];
+            _iconImage = cell.iconImage;
+            return cell;
         }
-        cell.titleLabel.text = _textArray[indexPath.row];
-        [cell.iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_icon]] placeholderImage:[UIImage new]];
-        _iconImage = cell.iconImage;
-        return cell;
-    }
-    if (indexPath.row == 1 || indexPath.row == 4 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9) {
-        static NSString *cellId = @"MyDataArrowCell";
-        MyDataArrowCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-        if (!cell) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+        if (indexPath.row == 1 || indexPath.row == 4 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9) {
+            static NSString *cellId = @"MyDataArrowCell";
+            MyDataArrowCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!cell) {
+                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+            }
+            
+            if (indexPath.row == 1 || indexPath.row == 9) {
+                cell.bottomLine.hidden = YES;
+            }
+            if (_textArray[indexPath.row]) {
+               cell.leftLabel.text = _textArray[indexPath.row];
+            }
+            //平台身份   ----不变
+            if (indexPath.row == 1) {
+                cell.rightLabel.text = _inviteCode;
+                cell.rightLabel.textColor = color47;
+            }
+            if (indexPath.row == 4) {
+                cell.rightLabel.text = _identifyType;
+                cell.rightLabel.textColor = color47;
+            }
+            if ([_authenticType isEqualToString:@"认证失败"]) {
+                if (indexPath.row == 7) {
+                    cell.rightLabel.text = @"";
+                }
+                if (indexPath.row == 8) {
+                    cell.rightLabel.text = @"";
+                }
+                if (indexPath.row == 9) {
+                    cell.rightLabel.text = @"";
+                }
+            }
+            if ([_authenticType isEqualToString:@"认证中"]) {
+                if (indexPath.row == 7) {
+                    cell.rightLabel.text = @"认证中";
+                }
+                if (indexPath.row == 8) {
+                    cell.rightLabel.text = @"认证中";
+                }
+                if (indexPath.row == 9) {
+                    cell.rightLabel.text = @"认证中";
+                }
+            }
+            if ([_authenticType isEqualToString:@"已认证"]) {
+                if (indexPath.row == 7) {
+                    cell.rightLabel.text = _companyName;
+                }
+                if (indexPath.row == 8) {
+                    cell.rightLabel.text = _position;
+                }
+                if (indexPath.row == 9) {
+                    cell.rightLabel.text = _address;
+                }
+            }
+            if ([_authenticType isEqualToString:@"未认证"]) {
+                cell.rightLabel.textColor = [UIColor redColor];
+                if (indexPath.row == 7) {
+                    cell.rightLabel.text = @"未认证";
+                }
+                if (indexPath.row == 8) {
+                    cell.rightLabel.text = @"未认证";
+                }
+                if (indexPath.row == 9) {
+                    cell.rightLabel.text = @"未认证";
+                }
+                
+                if(indexPath.row == 1 || indexPath.row==4)
+                {
+                    cell.rightLabel.textColor = color47;
+                }
+                
+                NSLog(@"cell row:%ld",(long)indexPath.row);
+            }
+            
+            
+            
+            return cell;
+        }
+        if (indexPath.row == 2 || indexPath.row == 6) {
+            static NSString *cellId =@"MyDataHeaderCell";
+            MyDataHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!cell) {
+                cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+            }
+            if (_textArray[indexPath.row]) {
+                cell.titleLabel.text = _textArray[indexPath.row];
+            }
+            
+            return cell;
         }
         
-        if (indexPath.row == 1 || indexPath.row == 9) {
+        static NSString *cellId = @"MyDataNoArrowCell";
+        MyDataNoArrowCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (!cell) {
+            cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+        }
+        if (indexPath.row == 5) {
             cell.bottomLine.hidden = YES;
         }
+        if (_textArray[indexPath.row]) {
         cell.leftLabel.text = _textArray[indexPath.row];
-        //平台身份   ----不变
-        if (indexPath.row == 1) {
-            cell.rightLabel.text = _inviteCode;
-            cell.rightLabel.textColor = color47;
         }
-        if (indexPath.row == 4) {
-            cell.rightLabel.text = _identifyType;
-            cell.rightLabel.textColor = color47;
-        }
+    
         if ([_authenticType isEqualToString:@"认证失败"]) {
-            if (indexPath.row == 7) {
+            if (indexPath.row == 3) {
                 cell.rightLabel.text = @"";
             }
-            if (indexPath.row == 8) {
-                cell.rightLabel.text = @"";
-            }
-            if (indexPath.row == 9) {
-                cell.rightLabel.text = @"";
-            }
-        }
-        if ([_authenticType isEqualToString:@"认证中"]) {
-            if (indexPath.row == 7) {
-                cell.rightLabel.text = @"认证中";
-            }
-            if (indexPath.row == 8) {
-                cell.rightLabel.text = @"认证中";
-            }
-            if (indexPath.row == 9) {
-                cell.rightLabel.text = @"认证中";
+            if (indexPath.row == 5) {
+                cell.rightLabel.text = @"认证失败";
+                cell.rightLabel.textColor = [UIColor redColor];
             }
         }
         if ([_authenticType isEqualToString:@"已认证"]) {
-            if (indexPath.row == 7) {
-                cell.rightLabel.text = _companyName;
+            if (indexPath.row == 3) {
+                cell.rightLabel.text = _name;
             }
-            if (indexPath.row == 8) {
-                cell.rightLabel.text = _position;
-            }
-            if (indexPath.row == 9) {
-                cell.rightLabel.text = _address;
+            if (indexPath.row == 5) {
+                cell.rightLabel.text = _identifyNum;
             }
         }
         if ([_authenticType isEqualToString:@"未认证"]) {
-            cell.rightLabel.textColor = [UIColor redColor];
-            if (indexPath.row == 7) {
+            if (indexPath.row == 3) {
                 cell.rightLabel.text = @"未认证";
             }
-            if (indexPath.row == 8) {
+            if (indexPath.row == 5) {
                 cell.rightLabel.text = @"未认证";
             }
-            if (indexPath.row == 9) {
-                cell.rightLabel.text = @"未认证";
-            }
-            
-            if(indexPath.row == 1 || indexPath.row==4)
-            {
-                cell.rightLabel.textColor = color47;
-            }
-            
-            NSLog(@"cell row:%ld",(long)indexPath.row);
-        }
-        
-        
-        
-        return cell;
-    }
-    if (indexPath.row == 2 || indexPath.row == 6) {
-        static NSString *cellId =@"MyDataHeaderCell";
-        MyDataHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-        if (!cell) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
-        }
-        cell.titleLabel.text = _textArray[indexPath.row];
-        
-        return cell;
-    }
-    
-    static NSString *cellId = @"MyDataNoArrowCell";
-    MyDataNoArrowCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
-    }
-    if (indexPath.row == 5) {
-        cell.bottomLine.hidden = YES;
-    }
-    cell.leftLabel.text = _textArray[indexPath.row];
-    if ([_authenticType isEqualToString:@"认证失败"]) {
-        if (indexPath.row == 3) {
-            cell.rightLabel.text = @"";
-        }
-        if (indexPath.row == 5) {
-            cell.rightLabel.text = @"认证失败";
             cell.rightLabel.textColor = [UIColor redColor];
         }
-    }
-    if ([_authenticType isEqualToString:@"已认证"]) {
-        if (indexPath.row == 3) {
-            cell.rightLabel.text = _name;
+        if ([_authenticType isEqualToString:@"认证中"]) {
+            if (indexPath.row == 3) {
+                cell.rightLabel.text = @"认证中";
+            }
+            if (indexPath.row == 5) {
+                cell.rightLabel.text = @"认证中";
+            }
         }
-        if (indexPath.row == 5) {
-            cell.rightLabel.text = _identifyNum;
-        }
-    }
-    if ([_authenticType isEqualToString:@"未认证"]) {
-        if (indexPath.row == 3) {
-            cell.rightLabel.text = @"未认证";
-        }
-        if (indexPath.row == 5) {
-            cell.rightLabel.text = @"未认证";
-        }
-        cell.rightLabel.textColor = [UIColor redColor];
-    }
-    if ([_authenticType isEqualToString:@"认证中"]) {
-        if (indexPath.row == 3) {
-            cell.rightLabel.text = @"认证中";
-        }
-        if (indexPath.row == 5) {
-            cell.rightLabel.text = @"认证中";
-        }
-    }
-   
-    return cell;
+        
+        return cell;
+
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

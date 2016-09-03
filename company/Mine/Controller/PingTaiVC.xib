@@ -147,19 +147,19 @@
                         <action selector="btnClick:" destination="-1" eventType="touchUpInside" id="4K2-Vf-VqF"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="youjiantou" translatesAutoresizingMaskIntoConstraints="NO" id="80q-m5-Iek">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="youjiantou.png" translatesAutoresizingMaskIntoConstraints="NO" id="80q-m5-Iek">
                     <rect key="frame" x="348" y="224" width="7" height="13"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="youjiantou" translatesAutoresizingMaskIntoConstraints="NO" id="xG1-jk-9h3">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="youjiantou.png" translatesAutoresizingMaskIntoConstraints="NO" id="xG1-jk-9h3">
                     <rect key="frame" x="348" y="446" width="7" height="13"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="youjiantou" translatesAutoresizingMaskIntoConstraints="NO" id="zVr-8v-Qyr">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="youjiantou.png" translatesAutoresizingMaskIntoConstraints="NO" id="zVr-8v-Qyr">
                     <rect key="frame" x="348" y="387" width="7" height="13"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="youjiantou" translatesAutoresizingMaskIntoConstraints="NO" id="5th-CN-Pmb">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="youjiantou.png" translatesAutoresizingMaskIntoConstraints="NO" id="5th-CN-Pmb">
                     <rect key="frame" x="348" y="300" width="7" height="13"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="youjiantou" translatesAutoresizingMaskIntoConstraints="NO" id="9PV-wE-H0e">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="youjiantou.png" translatesAutoresizingMaskIntoConstraints="NO" id="9PV-wE-H0e">
                     <rect key="frame" x="348" y="343" width="7" height="13"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="平台介绍" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5d-pn-uoW">
@@ -187,7 +187,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="意见反馈" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v7m-Sy-9Yf">
-                    <rect key="frame" x="27" y="442.5" width="68" height="21"/>
+                    <rect key="frame" x="27" y="442" width="68" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.24313725489999999" green="0.27058823529999998" blue="0.30980392159999998" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
@@ -259,6 +259,6 @@
     </objects>
     <resources>
         <image name="pingtai_logo.png" width="81" height="81"/>
-        <image name="youjiantou" width="7" height="13"/>
+        <image name="youjiantou.png" width="7" height="13"/>
     </resources>
 </document>

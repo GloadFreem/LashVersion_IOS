@@ -23,10 +23,12 @@
 
 #import "InvestPersonDetailViewController.h"
 #import "InvestThinkTankDetailVC.h"
-
+#import "HeadlineDetailViewController.h"
 #import "ProjectBannerDetailVC.h"
 #import "ProjectPrepareDetailVC.h"
 #import "ProjectDetailController.h"
+
+#import "ActivityDetailVC.h"
 
 #define DELETELIST @"requestPublicContentDelete"
 #define AUTHENINFO @"authenticInfoUser"
@@ -68,6 +70,10 @@
 @property (nonatomic, strong) CircleListModel *deleteModel;
 @property (nonatomic, copy) NSString *selfId;//本人ID
 @property (nonatomic, copy) NSString *selfIconStr;
+@property (nonatomic, copy) NSString *selfName;
+@property (nonatomic, copy) NSString *selfPositionStr;
+@property (nonatomic, copy) NSString *selfCompanyName;
+@property (nonatomic, copy) NSString *selfCity;
 
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
@@ -91,6 +97,13 @@
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+    _selfId = [defaults objectForKey:USER_STATIC_USER_ID];
+    _selfIconStr = [defaults objectForKey:USER_STATIC_HEADER_PIC];
+    _selfName = [defaults objectForKey:USER_STATIC_NAME];
+    _selfPositionStr = [defaults objectForKey:USER_STATIC_POSITION];
+    _selfCompanyName = [defaults objectForKey:USER_STATIC_COMPANY_NAME];
+    _selfCity = [defaults objectForKey:USER_STATIC_CITY];
+    
     
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -110,9 +123,7 @@
     self.authenPartner = [TDUtil encryKeyWithMD5:KEY action:AUTHENINFO];
     self.deletePartner = [TDUtil encryKeyWithMD5:KEY action:DELETELIST];
     
-    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-    _selfId = [data objectForKey:USER_STATIC_USER_ID];
-    _selfIconStr = [data objectForKey:USER_STATIC_HEADER_PIC];
+    
     
     //设置 加载视图界面
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 49);
@@ -126,33 +137,9 @@
     //下载数据
 //    [self loadData];
     //下载认证信息
-    [self loadAuthenData];
+    
 }
 
-#pragma mark -下载认证信息
--(void)loadAuthenData
-{
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
-}
-
--(void)requestAuthenInfo:(ASIHTTPRequest*)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            
-            authenticInfoModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
-//            NSLog(@"打印个人信息：----%@",authenticInfoModel);
-//
-        }
-    }
-}
 
 #pragma mark -发布照片通知
 -(void)publishContent:(NSDictionary*)dic
@@ -162,14 +149,10 @@
     
     //实例化圈子模型
     CircleListModel *listModel = [CircleListModel new];
-    //拿到usrs认证数组
-    NSArray *authenticsArray = [NSArray arrayWithArray:authenticInfoModel.authentics];
-    //实例化认证人模型
-    CircleUsersAuthenticsModel *usersAuthenticsModel =authenticsArray[0];
     //一级模型赋值
     listModel.timeSTr = [TDUtil CurrentDate];              //发布时间
-    listModel.iconNameStr = authenticInfoModel.headSculpture; //发布者头像
-    listModel.nameStr = usersAuthenticsModel.name;              //发布者名字
+    listModel.iconNameStr = _selfIconStr; //发布者头像
+    listModel.nameStr = _selfName;              //发布者名字
     listModel.msgContent = content;
     listModel.publicContentId = 0; //帖子ID
     listModel.shareCount = 0;           //分享数量
@@ -177,10 +160,12 @@
     listModel.priseCount = 0;           //点赞数量
     listModel.flag = false;
     listModel.userId = [_selfId integerValue];
+    listModel.feelingTypeId = 1;
     
-    listModel.addressStr = usersAuthenticsModel.city.name;
-    listModel.companyStr = usersAuthenticsModel.companyName;
-    listModel.positionStr = usersAuthenticsModel.position;
+    listModel.addressStr = _selfCity;
+    listModel.companyStr = _selfCompanyName;
+    listModel.positionStr = _selfPositionStr;
+    
     NSMutableArray *picArray = [NSMutableArray array];
     for (NSInteger i = 0; i < uploadFiles.count; i ++) {
         [picArray addObject:uploadFiles[i]];
@@ -282,7 +267,7 @@
         .topSpaceToView(topView, 10)
         .widthIs(40)
         .heightIs(40);
-        
+
         UILabel *titleLabel = [UILabel new];
         titleLabel.text = @"我的话题";
         titleLabel.font = BGFont(19);
@@ -368,7 +353,7 @@
     if (!_haveData) {
         self.startLoading = YES;
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",VERSION,@"version",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",VERSION,@"version",[NSString stringWithFormat:@"%ld",(long)_page],@"page",PLATFORM,@"platform", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CYCLE_CONTENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestCircleContentList:)];
 }
@@ -376,7 +361,7 @@
 -(void)requestCircleContentList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -422,7 +407,7 @@
         listModel.iconNameStr = baseModel.users.headSculpture; //发布者头像
         listModel.nameStr = baseModel.users.name;              //发布者名字
         listModel.userId = baseModel.users.userId;
-        listModel.msgContent = baseModel.content;
+        listModel.msgContent = [baseModel.content stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         listModel.publicContentId = baseModel.publicContentId; //帖子ID
         listModel.shareCount = baseModel.shareCount;           //分享数量
         listModel.commentCount = baseModel.commentCount;       //评论数量
@@ -433,9 +418,9 @@
         listModel.contentImage = baseModel.contentshare.image;
         listModel.url = baseModel.contentshare.content;
 //        NSLog(@"%@",baseModel.contentshare.content);
-        listModel.titleText = baseModel.contentshare.contenttype.name;
+        listModel.titleText = baseModel.contentshare.tag;
         listModel.feelingTypeId = baseModel.feeingtype.feelingTypeId;
-        NSLog(@"打印数据类型---%ld",baseModel.feeingtype.feelingTypeId);
+        
         //拿到usrs认证数组
         NSArray *authenticsArray = [NSArray arrayWithArray:baseModel.users.authentics];
         //实例化认证人模型
@@ -604,6 +589,7 @@
         vc.image = model.contentImage;
         vc.titleText = model.titleText;
         vc.contentText = model.contentText;
+        vc.titleStr = model.titleText;
         [self.navigationController pushViewController:vc animated:YES];
     }
     if (model.feelingTypeId == 3) {//项目
@@ -623,9 +609,11 @@
         }
     }
     if (model.feelingTypeId == 4) {//活动
-        
+        NSArray *array = [model.url componentsSeparatedByString:@","];
+        ActivityDetailVC *vc =[ActivityDetailVC new];
+        vc.actionId = [array[0] integerValue];
+        [self.navigationController pushViewController:vc animated:YES];
     }
-    
 }
 
 #pragma mark------------------删除按钮----------------------

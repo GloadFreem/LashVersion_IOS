@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ActivityViewModel.h"
 #import "ActivityDetailHeaderModel.h"
+
 @interface ActivityCommentListViewController : RootViewController
 @property (nonatomic, strong) ActivityDetailHeaderModel * headerModel;
-@property(nonatomic, retain)ActivityViewModel * activityModel;
+@property (nonatomic, assign) NSInteger actionId;
 @end

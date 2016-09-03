@@ -62,6 +62,8 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconHeight;
 
 @property (nonatomic, assign) BOOL isFirst;
+@property (nonatomic, assign) BOOL isFinish;
+
 @end
 
 @implementation MineViewController
@@ -69,8 +71,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _isFirst = YES;
-    
+    _isFinish = YES;
     _iconWidth.constant =_iconHeight.constant= 83 *WIDTHCONFIG ;
     _iconBtn.layer.cornerRadius = 41.5 *WIDTHCONFIG;
     _iconBtn.layer.masksToBounds = YES;
@@ -88,7 +89,6 @@
     
     self.loadingViewFrame = self.view.frame;
     self.isTransparent = YES;
-    
     [self loadShareData];
     
 }
@@ -169,7 +169,6 @@
                     _nameStr = baseModel.telephone;
                     _isAuthentic = NO;
                 }
-                
                 _authenticName = authenticsstatus.name;
                 _identiyTypeId = authentics.identiytype.identiyTypeId;
                 _authId = authentics.authId;
@@ -180,16 +179,15 @@
 //            if (_isFirst) {
 //                _isFirst = NO;
 //            }
-            
         }
     }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
 //        self.isNetRequestError = YES;
     }
 }
 
 -(void)setModel
 {
-    
     [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"] options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [_iconBtn setBackgroundImage:image forState:UIControlStateNormal];
@@ -203,7 +201,6 @@
         
     }else{
         _name.text = nickName;
-        
     }
     if (_isAuthentic) {
         [_vipImage setHidden:NO];
@@ -212,7 +209,9 @@
     }
 //    NSLog(@"%@",_nameStr);
     _company.text = _companyStr;
-    
+    if (!_isFirst) {
+        _isFirst = YES;
+    }
 //    self.startLoading = NO;
 }
 
@@ -220,6 +219,15 @@
 {
 //    self.startLoading = YES;
 //    self.isNetRequestError = YES;
+}
+
+-(void)requestFinished:(ASIHTTPRequest *)request
+{
+//    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+//    NSLog(@"返回:%@",jsonString);
+//    self.startLoading =NO;
+    _isFinish = YES;
+    
 }
 
 -(void)refresh
@@ -232,7 +240,10 @@
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:YES];
     //下载认证信息
-    [self loadAuthenData];
+    if (_isFinish) {
+        [self loadAuthenData];
+        _isFinish = NO;
+    }
     
 }
 
@@ -240,16 +251,17 @@
 {
     [super viewWillDisappear: animated];
     [self.navigationController.navigationBar setHidden:NO];
-//    [SVProgressHUD dismiss];
 }
 
 #pragma mark -进入头像详情页面
 - (IBAction)iconDetail:(UIButton *)sender {
-    MineDataVC *vc = [MineDataVC new];
-    vc.authenticModel = _authenticModel;
-    vc.identiyTypeId = _identiyTypeId;
-    vc.authId = _authId;
-    [self.navigationController pushViewController:vc animated:YES];
+    if (_isFirst) {
+        MineDataVC *vc = [MineDataVC new];
+        vc.authenticModel = _authenticModel;
+        vc.identiyTypeId = _identiyTypeId;
+        vc.authId = _authId;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 #pragma mark -进入各个小界面
@@ -380,12 +392,11 @@
 -(void)btnCertain:(id)sender
 {
     RenzhengViewController  * renzheng = [RenzhengViewController new];
-    renzheng.identifyType = [NSString stringWithFormat:@"%ld",self.identiyTypeId];
+    renzheng.identifyType = [NSString stringWithFormat:@"%ld",(long)self.identiyTypeId];
     [self.navigationController pushViewController:renzheng animated:YES];
-    
 }
-#pragma mark -开始分享
 
+#pragma mark -开始分享
 #pragma mark  转发
 
 - (UIView*)topView {

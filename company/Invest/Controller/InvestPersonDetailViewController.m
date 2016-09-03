@@ -135,8 +135,6 @@
           [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
-    
-    [SVProgressHUD dismiss];
 }
 #pragma mark -搭建UI
 -(void)createUI
@@ -341,12 +339,12 @@
         
         [_circleBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(_mengBanView.mas_bottom).offset(27);
-            make.right.mas_equalTo(_scrollView.mas_centerX).offset(-23);
-                    make.width.mas_equalTo(110*WIDTHCONFIG);
+            make.right.mas_equalTo(_scrollView.mas_centerX).offset(-20);
+                    make.width.mas_equalTo(125*WIDTHCONFIG);
                     make.height.mas_equalTo(30*WIDTHCONFIG);
         }];
         [_attentionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(_scrollView.mas_centerX).offset(23);
+            make.left.mas_equalTo(_scrollView.mas_centerX).offset(20);
             make.width.height.mas_equalTo(_circleBtn);
             make.top.mas_equalTo(_circleBtn.mas_top);
         }];
@@ -355,12 +353,12 @@
     if ([self.identiyTypeId isEqualToString:@"1"]) {
         [_commitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(_mengBanView.mas_bottom).offset(27);
-            make.right.mas_equalTo(_scrollView.mas_centerX).offset(-23);
+            make.right.mas_equalTo(_scrollView.mas_centerX).offset(-20);
             //        make.width.mas_equalTo(90);
             //        make.height.mas_equalTo(30);
         }];
         [_attentionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(_scrollView.mas_centerX).offset(23);
+            make.left.mas_equalTo(_scrollView.mas_centerX).offset(20);
             make.width.height.mas_equalTo(_commitBtn);
             make.top.mas_equalTo(_commitBtn.mas_top);
         }];

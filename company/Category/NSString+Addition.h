@@ -53,5 +53,11 @@
 //纯数字
 - (BOOL)isNumber;
 
+/// 十六进制转换为普通字符串
++ (NSString *)stringFromHexString:(NSString *)hexString;
+/// 普通字符串转换为十六进制
++ (NSString *)hexStringFromString:(NSString *)string;
+/// 判断是否为表情
++ (BOOL)stringIsTureContainsEmoji:(NSString *)string;
 
 @end

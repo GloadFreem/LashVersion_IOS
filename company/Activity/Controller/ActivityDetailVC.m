@@ -6,7 +6,7 @@
 //  Copyright © 2016年 Eugene. All rights reserved.
 //
 
-#import "ActivityCell.h"
+
 #import "ActionComment.h"
 #import "ActivityDetailVC.h"
 #import "ActionDetailModel.h"
@@ -24,21 +24,29 @@
 #import "RenzhengViewController.h"
 
 #import "ActivityDetailHeaderCell.h"
-
+#import "ShareToCircleView.h"
 #import "CircleShareBottomView.h"
+#import "ActivityInfoCell.h"
+#import "ActivityBottomView.h"
+#import "ActionIntroduceFrame.h"
+#import "ActionIntroduce.h"
+
+#import "LQQMonitorKeyboard.h"
 
 #define kActivityDetailHeaderCellId @"ActivityDetailHeaderCell"
-static CGFloat textFieldH = 40;
+static CGFloat tableViewH = 0;
+static int preFlag = 0;
+
+#define SHARETOCIRCLE @"shareContentToFeeling"
 
 #define SHAREACTION @"requestShareAction"
 #define COMMENTLIST @"requestPriseListAction"
 #define ATTENDACTION @"requestAttendListAction"
 #define ACTIONDETAIL @"requestDetailAction"
-@interface ActivityDetailVC ()<UITableViewDelegate,UITableViewDataSource,ActivityDetailFooterViewDelegate,UITextFieldDelegate,ActivityViewDelegate,ActivityBlackCoverViewDelegate,CircleShareBottomViewDelegate>
+@interface ActivityDetailVC ()<UITableViewDelegate,UITableViewDataSource,ActivityDetailFooterViewDelegate,UITextFieldDelegate,ActivityBlackCoverViewDelegate,CircleShareBottomViewDelegate,ActivityBottomViewDelegate,ShareToCircleViewDelegate,UITextViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) UIButton *signUpBtn;          //报名按钮
-@property (nonatomic, strong) UIButton *shareBtn;           //分享按钮
+@property (nonatomic, strong) ActivityBottomView *bottomView;          //报名按钮
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, assign) BOOL isReplayingComment;
 @property (nonatomic, copy) NSString * actionPrisePartner;
@@ -56,12 +64,23 @@ static CGFloat textFieldH = 40;
 @property (nonatomic, copy) NSString *shareImage;
 @property (nonatomic, copy) NSString *shareUrl; //分享地址
 @property (nonatomic, copy) NSString *contentText;
-@property (nonatomic,strong)UIView * bottomView;
+@property (nonatomic,strong) UIView * shareView;
+@property (nonatomic, strong) ShareToCircleView *shareCircleView;
+@property (nonatomic, copy) NSString *circlePartner;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
-
+/** 点赞按钮 */
+@property (nonatomic, strong) UIButton *agreeBtn;
+@property (nonatomic, copy) NSString *praiseFlag;
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+
+@property (nonatomic, strong) ActivityBlackCoverView *blackCoverView;
+/** 保存活动结束中的第一段文字 */
+@property (nonatomic, copy) NSString *firstContext;
+@property (nonatomic, strong) UIView *returnView;
+
+@property (nonatomic, copy) NSString *selfId;
 
 @end
 
@@ -71,20 +90,20 @@ static CGFloat textFieldH = 40;
     //底部点赞评论
     ActivityDetailFooterView *footerView;
     
-    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    tableViewH = 0;
     
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+    _selfId =[defaults valueForKey:USER_STATIC_USER_ID];
     
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
     
-    // Do any additional setup after loading the view.
     self.automaticallyAdjustsScrollViewInsets  = NO;
     
     [self setUpNavBar];
@@ -94,31 +113,32 @@ static CGFloat textFieldH = 40;
     self.actionAttendPartner = [TDUtil encryKeyWithMD5:KEY action:ATTENDACTION];
     self.actionCommentListPartner = [TDUtil encryKeyWithMD5:KEY action:COMMENTLIST];
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:SHAREACTION];
-    
-    //设置加载视图范围
-    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
-    
+    self.circlePartner = [TDUtil encryKeyWithMD5:KEY action:SHARETOCIRCLE];
     //初始化 控件
     [self createUI];
-    
+    //设置加载视图范围
+    self.loadingViewFrame = self.view.frame;
     //请求数据
     [self loadActionDetailData];
     
     //获取分享数据
     [self loadShareData];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadActionCommentData) name:@"refreshComment" object:nil];
 }
+
 -(void)setUpNavBar
 {
     [self.navigationItem setTitle:@"活动详情"];
-    UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftback.tag = 0;
-    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
-    leftback.size = CGSizeMake(80, 30);
-    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
-    [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
+    
+    [Encapsulation returnWithViewController:self img:@"leftBack"];
+    
+    UIButton * shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [shareBtn setImage:[UIImage imageNamed:@"write-share"] forState:UIControlStateNormal];
+    shareBtn.size = shareBtn.currentImage.size;
+    [shareBtn addTarget:self action:@selector(startShare) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
 }
-
 #pragma mark -初始化控件
 -(void)createUI
 {
@@ -130,70 +150,25 @@ static CGFloat textFieldH = 40;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.bounces = NO;
     [self.view addSubview:_tableView];
-    [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.view.mas_top);
-        make.left.mas_equalTo(self.view.mas_left);
-        make.right.mas_equalTo(self.view.mas_right);
-        make.bottom.mas_equalTo(self.view.mas_bottom).offset(-50);
-    }];
+    _tableView.frame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT-50-44);
+        
+    CGFloat bottomViewH = 50;
+    CGFloat bottomViewY = SCREENHEIGHT - bottomViewH - 64;
     
-    
-    //报名按钮
-    _signUpBtn = [[UIButton alloc]init];
-    _signUpBtn.backgroundColor = orangeColor;
-    [_signUpBtn setTitle:@"我要报名" forState:UIControlStateNormal];
-    [_signUpBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_signUpBtn.titleLabel setFont:BGFont(19)];
-    [_signUpBtn addTarget:self action:@selector(attendAction:) forControlEvents:UIControlEventTouchUpInside];
-    
-    if(_activityModel.attended)
-    {
-        [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
-        [_signUpBtn setBackgroundColor:btnCray];
-        [_signUpBtn setEnabled:NO];
-    }
-    if (_isExpired) {
-        [_signUpBtn setTitle:@"已结束" forState:UIControlStateNormal];
-        [_signUpBtn setBackgroundColor:btnCray];
-        [_signUpBtn setEnabled:NO];
-    }
-    
-    [self.view addSubview:_signUpBtn];
-    //分享按钮
-    _shareBtn = [[UIButton alloc]init];
-    _shareBtn.backgroundColor = color(67, 179, 204, 1);
-    [_shareBtn setTitle:@"我要分享" forState:UIControlStateNormal];
-    [_shareBtn addTarget:self action:@selector(startShare) forControlEvents:UIControlEventTouchUpInside];
-    [_shareBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_shareBtn.titleLabel setFont:BGFont(19)];
-    [self.view addSubview:_shareBtn];
-    CGFloat width = SCREENWIDTH/2;
-    CGFloat height = 50;
-    [_signUpBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.view.mas_left);
-        make.bottom.mas_equalTo(self.view.mas_bottom);
-        make.height.mas_equalTo(height);
-        make.width.mas_equalTo(width);
-    }];
-    [_shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.view.mas_right);
-        make.bottom.mas_equalTo(self.view.mas_bottom);
-        make.height.mas_equalTo(height);
-        make.width.mas_equalTo(width);
-    }];
+    _bottomView = [[ActivityBottomView alloc] initWithFrame:CGRectMake(0, bottomViewY, SCREENWIDTH, bottomViewH)];
+    [self.view addSubview:_bottomView];
+    _bottomView.delegate = self;
     
     // 回复框
     UIView *view = [UIView new];
-    [view setFrame:CGRectMake(0, SCREENHEIGHT - 50*HEIGHTCONFIG - 64, SCREENWIDTH, 50 * HEIGHTCONFIG)];
-    [view setBackgroundColor:[UIColor whiteColor]];
+    [view setFrame:CGRectMake(0, SCREENHEIGHT , SCREENWIDTH, 50)];
+    [view setBackgroundColor:color(210, 213, 219, 1)];
     [self.view addSubview:view];
-    [view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.view);
-        make.top.equalTo(_tableView.mas_bottom);
-    }];
+    _returnView = view;
+    
     
     view.tag = 10001;
-    [view setAlpha:0];
+//    [view setAlpha:0];
     
     UIView *line = [UIView new];
     line.backgroundColor = colorGray;
@@ -202,31 +177,33 @@ static CGFloat textFieldH = 40;
         make.left.right.top.mas_equalTo(view);
         make.height.mas_equalTo(0.5);
     }];
-    //输入框
-    UITextField *field = [UITextField new];
-    field.placeholder = @"请输入评论内容";
-    field.layer.cornerRadius = 3;
-    field.layer.borderColor = colorGray.CGColor;
-    field.layer.borderWidth = .5f;
-    field.delegate = self;
-    [field setValue:color74 forKeyPath:@"_placeholderLabel.textColor"];
-    field.textAlignment = NSTextAlignmentLeft;
-    field.textColor = [UIColor blackColor];
-    field.font = BGFont(14);
-    field.returnKeyType = UIReturnKeyDone;
-    _textField = field;
-    CGRect frame = [field frame];
+    // 输入框
+    _textField = [UITextField new];
+    _textField.backgroundColor = RGBCOLOR(255, 255, 255);
+    _textField.placeholder = @"请输入评论内容";
+    _textField.layer.cornerRadius = 3;
+    _textField.layer.borderColor = colorGray.CGColor;
+    _textField.layer.borderWidth = .5f;
+    _textField.delegate = self;
+    [_textField setValue:color74 forKeyPath:@"_placeholderLabel.textColor"];
+    _textField.textAlignment = NSTextAlignmentLeft;
+    _textField.textColor = [UIColor blackColor];
+    _textField.font = BGFont(14);
+    _textField.returnKeyType = UIReturnKeySend;
+    _textField.keyboardType = UIKeyboardTypeDefault;
+    CGRect frame = [_textField frame];
     frame.size.width = 15.0f;
     UIView *leftView = [[UIView alloc]initWithFrame:frame];
-    field.leftView = leftView;
-    field.leftViewMode = UITextFieldViewModeAlways;
-    [view addSubview:field];
-    [field mas_makeConstraints:^(MASConstraintMaker *make) {
+    _textField.leftView = leftView;
+    _textField.leftViewMode = UITextFieldViewModeAlways;
+    [view addSubview:_textField];
+    [_textField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(view.mas_left).offset(12);
         make.right.mas_equalTo(view.mas_right).offset(-76);
         make.centerY.mas_equalTo(view.mas_centerY);
         make.height.mas_equalTo(36);
     }];
+
     
     UIButton *answerBtn = [UIButton new];
     [answerBtn setTitle:@"发表" forState:UIControlStateNormal];
@@ -238,9 +215,9 @@ static CGFloat textFieldH = 40;
     [answerBtn addTarget:self action:@selector(actionComment) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:answerBtn];
     [answerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(field.mas_right).offset(5);
-        make.height.mas_equalTo(field.mas_height);
-        make.centerY.mas_equalTo(field.mas_centerY);
+        make.left.mas_equalTo(_textField.mas_right).offset(5);
+        make.height.mas_equalTo(_textField.mas_height);
+        make.centerY.mas_equalTo(_textField.mas_centerY);
         make.right.mas_equalTo(view.mas_right).offset(-12);
     }];
 }
@@ -248,10 +225,11 @@ static CGFloat textFieldH = 40;
 #pragma mark--------loadShareData分享数据-------------
 -(void)loadShareData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"4",@"type",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"4",@"type",STRING(@"%ld", (long)self.actionId),@"contentId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_SHARE postParam:dic type:0 delegate:self sel:@selector(requestShareData:)];
 }
+
 -(void)requestShareData:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
@@ -266,7 +244,6 @@ static CGFloat textFieldH = 40;
             _shareUrl = dataDic[@"url"];
             _shareImage = dataDic[@"image"];
             _contentText = dataDic[@"content"];
-//            NSLog(@"问题照片---%@",_shareImage);
         }
     }
 }
@@ -277,11 +254,10 @@ static CGFloat textFieldH = 40;
 
 -(void)loadActionDetailData
 {
-//    [SVProgressHUD showWithStatus:@"加载中..."];
+
     self.startLoading = YES;
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId", nil];
-//    NSLog(@"详情字典---%@",dic);
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId", @"1", @"version", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestActionDetailList:)];
 }
@@ -289,7 +265,7 @@ static CGFloat textFieldH = 40;
 -(void)requestActionDetailList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"详情返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -297,12 +273,53 @@ static CGFloat textFieldH = 40;
             //解析
             ActionDetailModel * baseModel =[ActionDetailModel mj_objectWithKeyValues:jsonDic[@"data"]];
             
+            self.activityModel = [ActivityViewModel new];
+            self.activityModel.attended = baseModel.attended;
+            _bottomView.attend = baseModel.attended;
+            self.activityModel.flag = baseModel.flag;
+            self.activityModel.imgUrl = baseModel.startPageImage;
+            self.activityModel.startTime = baseModel.startTime;
+            self.activityModel.endTime = baseModel.endTime;
+//            NSLog(@"打印结束时间---%@",baseModel.endTime);
+            if(![TDUtil isArrivedTime:baseModel.endTime])
+            {
+                _bottomView.isExpired = YES;
+            }
+            self.activityModel.memberLimit = baseModel.memberLimit;
+            self.activityModel.address = baseModel.address;
+            self.activityModel.name = baseModel.name;
+            self.activityModel.actionId = baseModel.actionId;
+             _bottomView.flag = baseModel.flag;
+            preFlag = baseModel.flag;
+            
             
             ActivityDetailHeaderModel *model =[ActivityDetailHeaderModel new];
             model.flag = baseModel.flag;
             model.title = baseModel.name;
             model.content = baseModel.desc;
             model.actionId = baseModel.actionId;
+
+            ActionIntroduceFrame *actionIntroF = [[ActionIntroduceFrame alloc] init];
+            actionIntroF.tableViewH = 0;
+            
+            NSMutableArray *tempArr = [NSMutableArray array];
+            for (NSDictionary *dic in baseModel.actionintroduces) {
+                ActionIntroduce *actionIntro = [ActionIntroduce ActionIntroducesWithDic:dic];
+                ActionIntroduceFrame *actionIntroF = [[ActionIntroduceFrame alloc] init];
+                actionIntroF.actionIntro = actionIntro;
+                
+                if (actionIntro.type == 0) {
+                    if (_firstContext.length == 0) {
+                        _firstContext = actionIntro.content;
+                    }
+                    tableViewH += actionIntroF.cellHeight;
+                } else {
+                    tableViewH += 180;
+                }
+                [tempArr addObject:actionIntroF];
+            }
+            tableViewH+=40;
+            model.actionIntroduceFrames = tempArr;
             
             NSArray * array = baseModel.actionimages;
             NSMutableArray* imageArray = [NSMutableArray new];
@@ -327,11 +344,8 @@ static CGFloat textFieldH = 40;
             [self loadActionAttendData];
             
 //            NSLog(@"打印header模型---%@",self.headerModel);
-
-//
         }
-    }
-    else{
+    }else{
         self.isNetRequestError = YES;
     }
 }
@@ -342,16 +356,15 @@ static CGFloat textFieldH = 40;
 
 -(void)loadActionAttendData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",@"0",@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",@"0",@"page", nil];
     //开始请求
-//    NSLog(@"中间字典---%@",dic);
     [self.httpUtil getDataFromAPIWithOps:ACTION_ATTEND postParam:dic type:0 delegate:self sel:@selector(requestActionAttendList:)];
 }
 
 -(void)requestActionAttendList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"中间返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -383,8 +396,7 @@ static CGFloat textFieldH = 40;
             //点赞评论
             [self loadActionCommentData];
         }
-    }
-    else{
+    }else{
         self.isNetRequestError = YES;
     }
 }
@@ -392,19 +404,17 @@ static CGFloat textFieldH = 40;
 /**
  *  评论列表
  */
-
 -(void)loadActionCommentData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentListPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",@"0",@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentListPartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",@"0",@"page",PLATFORM,@"platform", nil];
     //开始请求
-//    NSLog(@"评论字典---%@",dic);
     [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestActionCommentList:)];
 }
 
 -(void)requestActionCommentList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"评论返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -420,6 +430,8 @@ static CGFloat textFieldH = 40;
             NSMutableArray * tempArray = [NSMutableArray new];
             for(NSDictionary * dic in dataCommentArray)
             {
+                if (tempArray.count > 4) break;
+                    
                 //解析
                 baseModel =[ActionComment mj_objectWithKeyValues:dic];
                 
@@ -437,11 +449,6 @@ static CGFloat textFieldH = 40;
                 [tempArray addObject:commentItemModel];
             }
             
-            if (tempArray.count >5) {
-                tempArray = [NSMutableArray arrayWithArray:@[tempArray[0],tempArray[1],tempArray[2],tempArray[3],tempArray[4]]];
-                
-            }
-            
             self.commentCellModel.commentItemsArray  = [tempArray copy];
             
             NSMutableArray *tempLikes = [NSMutableArray new];
@@ -453,14 +460,15 @@ static CGFloat textFieldH = 40;
             }
             self.commentCellModel.likeItemsArray = [tempLikes copy];
             
+            
             [self performSelector:@selector(layout:) withObject:nil afterDelay:0.1];
             
         }
-    }
-    else{
+    }else{
         self.isNetRequestError = YES;
     }
 }
+
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     self.startLoading = YES;
@@ -479,22 +487,7 @@ static CGFloat textFieldH = 40;
 
 -(void)dealloc
 {
-    [_textField removeFromSuperview];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-- (void)setupTextField
-{
-    _textField = [UITextField new];
-    _textField.returnKeyType = UIReturnKeyDone;
-    _textField.delegate = self;
-    _textField.layer.borderColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.8].CGColor;
-    _textField.layer.borderWidth = 1;
-    _textField.backgroundColor = [UIColor whiteColor];
-    _textField.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height, self.view.width, textFieldH);
-    [[UIApplication sharedApplication].keyWindow addSubview:_textField];
-    
-    [_textField becomeFirstResponder];
-    [_textField resignFirstResponder];
 }
 
 #pragma mark --------------tableViewDataSource---------------------
@@ -506,30 +499,28 @@ static CGFloat textFieldH = 40;
         
         footerView = [ActivityDetailFooterView new];
         [footerView setDidClickCommentLabelBlock:^(NSString * commentId,NSString * repleyName, CGRect rectInWindow) {
-            weakSelf.textField.placeholder =[NSString stringWithFormat:@"  回复：%@",repleyName];
-            [weakSelf.textField becomeFirstResponder];
-            weakSelf.isReplayingComment = YES;
-            weakSelf.commentToUser = commentId;
-            [weakSelf adjustTableViewToFitKeyboardWithRect];
+            NSInteger num1 = [weakSelf.selfId integerValue];
+            NSInteger num2 = [commentId integerValue];
+            if (num1 != num2) {
+                weakSelf.textField.placeholder =[NSString stringWithFormat:@" 回复：%@",repleyName];
+                [weakSelf.textField becomeFirstResponder];
+                [weakSelf.bottomView setHidden:NO];
+                weakSelf.isReplayingComment = YES;
+                weakSelf.commentToUser = commentId;
+            }
         }];
         footerView.delegate = self;
     }
-    
-//    NSLog(@"高度:%f",footerView.height);
     return footerView;
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.dataArray.count) {
         if (self.dataArray.count > 8) {
             return 8;
         }else{
-        return self.dataArray.count;
+            return self.dataArray.count;
         }
     }
     return 0;
@@ -539,10 +530,11 @@ static CGFloat textFieldH = 40;
 {
     if (_dataArray.count) {
         if (indexPath.row == 0) {
-            return [self.tableView cellHeightForIndexPath:indexPath model:self.headerModel keyPath:@"model" cellClass:[ActivityDetailHeaderCell class] contentViewWidth:[self cellContentViewWith]];
+            return 318.5;
         }
         if (indexPath.row == 1) {
-            return 140;
+//            return 1500;
+            return tableViewH+10+30;
         }
         if (indexPath.row == 2) {
             return 48;
@@ -550,7 +542,7 @@ static CGFloat textFieldH = 40;
         return 67;
     }
     
-    return 0.0000001f;
+    return 0.00000000001f;
     
 }
 -(CGFloat)tableView:(UITableView *)tableView estimatedHeightForFooterInSection:(NSInteger)section{
@@ -579,95 +571,76 @@ static CGFloat textFieldH = 40;
     
     [self.tableView reloadData];
     self.startLoading = NO;
-//    [SVProgressHUD dismiss];
 }
 
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_dataArray.count) {
-            if (indexPath.row  == 0) {
-                static NSString *cellId =@"ActivityDetailHeaderCell";
-                ActivityDetailHeaderCell *cell =[tableView dequeueReusableCellWithIdentifier:kActivityDetailHeaderCellId];
-                if (!cell) {
-                    cell = [[ActivityDetailHeaderCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-                }
-                cell.indexPath = indexPath;
-                __weak typeof (self) weakSelf = self;
-                if (!cell.moreButtonClickedBlock) {
-                    [cell setMoreButtonClickedBlock:^(NSIndexPath *indexPath) {
-                        ActivityDetailHeaderModel *model =weakSelf.headerModel;
-                        model.isOpen = !model.isOpen;
-                        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                    }];
-                }
-                if (_dataArray[indexPath.row]) {
-                    cell.model = _dataArray[indexPath.row];
-                }
+        
+        if (indexPath.row == 0) {
+            static NSString *cellId = @"ActivityDetailExiciseContentCell";
+            ActivityDetailExiciseContentCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!cell) {
+                cell = [[[NSBundle mainBundle]loadNibNamed:cellId owner:nil options:nil] lastObject];
+            }
+            if (_dataArray[indexPath.row+1]) {
+                cell.model = _dataArray[indexPath.row+1];
+                [cell.dinstanceLabel setHidden:YES];
                 return cell;
             }
+        }
         
-            if (indexPath.row == 1) {
-                static NSString *cellId = @"ActivityDetailExiciseContentCell";
-                ActivityDetailExiciseContentCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
-                if (!cell) {
-                    cell = [[[NSBundle mainBundle]loadNibNamed:cellId owner:nil options:nil] lastObject];
-                }
-                if (_dataArray[indexPath.row]) {
-                    cell.model = _dataArray[indexPath.row];
-                    [cell.dinstanceLabel setHidden:YES];
-                    //               cell.model = self.activityModel;
-                    return cell;
-                }
-            }
+        if (indexPath.row == 1) {
+            ActivityInfoCell *cell = [ActivityInfoCell cellWithTableView:tableView];
+            ActivityDetailHeaderModel *headerModel = _dataArray[0];
+            cell.actionIntroFs = headerModel.actionIntroduceFrames;
+            cell.tableViewH = tableViewH;
+            return cell;
+        }
         
-            if (indexPath.row == 2) {
-                static NSString *cellId = @"ActivityDetailExerciseCell";
-                ActivityDetailExerciseCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
-                if (!cell) {
-                    cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
-                    
-                }
-                if (_dataArray[indexPath.row]) {
-                    cell.countLabel.text =  [NSString stringWithFormat:@"(%@)",_dataArray[indexPath.row]];
-                    //                cell.countLabel.text = STRING(@"(%ld)", (unsigned long)self.dataAttendSource.count);
-                    return cell;
-                }
-                
-            }
-        
-            static NSString *cellId = @"ActivityDetailListCell";
-            ActivityDetailListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (indexPath.row == 2) {
+            static NSString *cellId = @"ActivityDetailExerciseCell";
+            ActivityDetailExerciseCell *cell =[tableView dequeueReusableCellWithIdentifier:cellId];
             if (!cell) {
                 cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+                
             }
-            //设置模型
+
             if (_dataArray[indexPath.row]) {
-                cell.model = [self.dataArray objectAtIndex:indexPath.row];
+                cell.countLabel.text =  [NSString stringWithFormat:@"(%@)",_dataArray[2]];
                 return cell;
             }
+        }
+        
+        static NSString *cellId = @"ActivityDetailListCell";
+        ActivityDetailListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (!cell) {
+            cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+        }
+        //设置模型
+        if (_dataArray[indexPath.row]) {
+            cell.model = [self.dataArray objectAtIndex:indexPath.row];
+            return cell;
+        }
     }
     return nil;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger row = indexPath.row;
-    
-    if(row==2)
+    if(2 == indexPath.row)
     {
         ActivityAttendListViewController * attendListViewController = [[ActivityAttendListViewController alloc]init];
-        attendListViewController.activityModel = self.activityModel;
+        attendListViewController.actionId = self.actionId;
         [self.navigationController pushViewController:attendListViewController animated:YES];
     }
 }
 
 #pragma mark -btnAction
--(void)btnClick:(UIButton*)btn
+- (void)backHome:(UIViewController *)mySelf
 {
-    if (btn.tag == 0) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark-------startShare分享-----------
@@ -689,24 +662,25 @@ static CGFloat textFieldH = 40;
 
 - (void)dismissBG
 {
-    if(self.bottomView != nil)
+    if(self.shareView != nil)
     {
-        [self.bottomView removeFromSuperview];
+        [self.shareView removeFromSuperview];
     }
 }
 
 -(void)startShare
 {
-        NSArray *titleList = @[@"QQ",@"微信",@"朋友圈",@"短信"];
-        NSArray *imageList = @[@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
-        CircleShareBottomView *share = [CircleShareBottomView new];
-        share.tag = 1;
-        [share createShareViewWithTitleArray:titleList imageArray:imageList];
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
-        [share addGestureRecognizer:tap];
-        [[self topView] addSubview:share];
-        self.bottomView = share;
-        share.delegate = self;
+    NSArray *titleList = @[@"圈子",@"QQ",@"微信",@"朋友圈",@"短信"];
+    NSArray *imageList = @[@"icon_share_circle@2x",@"icon_share_qq",@"icon_share_wx",@"icon_share_friend",@"icon_share_msg"];
+    CircleShareBottomView *share = [CircleShareBottomView new];
+    share.tag = 1;
+    [share createShareCircleViewWithTitleArray:titleList imageArray:imageList];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissBG)];
+    [share addGestureRecognizer:tap];
+    [[self topView] addSubview:share];
+    self.shareView = share;
+    share.delegate = self;
+
 
 }
 
@@ -722,13 +696,17 @@ static CGFloat textFieldH = 40;
         
         switch (index) {
             case 0:{
+                [self dismissBG];
+                [self createShareCircleView];
+            }
+                break;
+            case 1:{
                 if ([QQApiInterface isQQInstalled])
                 {
                     // QQ好友
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
                     [UMSocialData defaultData].extConfig.qqData.title = _shareTitle;
-                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
                 }
                 else
                 {
@@ -739,29 +717,25 @@ static CGFloat textFieldH = 40;
                 
             }
                 break;
-            case 1:{
+            case 2:{
                 // 微信好友
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
-//                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
-//                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
-                NSLog(@"分享到微信");
-            }
-                break;
-            case 2:{
-                // 微信朋友圈
-                arr = @[UMShareToWechatTimeline];
-//                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-//                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
-                
-                NSLog(@"分享到朋友圈");
+                //                NSLog(@"分享到微信");
             }
                 break;
             case 3:{
+                // 微信朋友圈
+                arr = @[UMShareToWechatTimeline];
+                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
+                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
+                
+                //                NSLog(@"分享到朋友圈");
+            }
+                break;
+            case 4:{
                 // 短信
                 arr = @[UMShareToSms];
                 
@@ -785,27 +759,77 @@ static CGFloat textFieldH = 40;
             shareImage = nil;
             shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_shareTitle,_contentText,_shareUrl];
         }
-        
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
         
+        __weak typeof (self) weakSelf = self;
         [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
-//            if (response.responseCode == UMSResponseCodeSuccess) {
-//                
-//                NSLog(@"分享完成");
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    
-//                    [self performSelector:@selector(dismissBG) withObject:nil afterDelay:1.0];
-//                    
-//                    
-//                });
-//            }
-
+            if (response.responseCode == UMSResponseCodeSuccess) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [weakSelf performSelector:@selector(dismissBG) withObject:nil afterDelay:1.0];
+                    
+                    
+                });
+            }
         }];
     }
 }
 
+-(void)createShareCircleView
+{
+    ShareToCircleView *shareView =[[[NSBundle mainBundle] loadNibNamed:@"ShareToCircleView" owner:nil options:nil] lastObject];
+    shareView.backgroundColor = [UIColor clearColor];
+    [shareView instancetationShareToCircleViewWithimage:self.activityModel.imgUrl title:self.activityModel.name content:_firstContext];
+    shareView.tag = 1000;
+    [[UIApplication sharedApplication].windows[0] addSubview:shareView];
+    [shareView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    shareView.textView.delegate = self;
+//    [shareView.textView becomeFirstResponder];
+    shareView.delegate = self;
+    _shareCircleView = shareView;
+}
 
+#pragma mark-------ShareToCircleViewDelegate--------
+-(void)clickBtnInView:(ShareToCircleView *)view andIndex:(NSInteger)index content:(NSString *)content
+{
+    if (index == 0) {
+        [view removeFromSuperview];
+    }else{
+        //        NSLog(@"调接口");
+        [_shareCircleView removeFromSuperview];
+        if ([content isEqualToString:@"说点什么吧..."]) {
+            content = @"";
+        }
+        if (_firstContext.length>200) {
+            _firstContext = [_firstContext substringToIndex:200];
+        }
+        
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.circlePartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",@"6",@"type",content,@"comment",STRING(@"%ld", (long)self.actionId),@"content",_firstContext,@"description",self.activityModel.imgUrl,@"image",@"金指投活动",@"tag",nil];
+        NSLog(@"%@",dic);
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:SHARE_TO_CIRCLE postParam:dic type:0 delegate:self sel:@selector(requestShareToCircle:)];
+    }
+}
+
+-(void)requestShareToCircle:(ASIHTTPRequest*)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+//        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic!=nil) {
+        NSString *status = [jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            //            NSLog(@"分享成功");
+        }
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+    }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网络好像出了点问题，检查一下"];
+    }
+}
 - (CGFloat)cellContentViewWith
 {
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
@@ -844,36 +868,42 @@ static CGFloat textFieldH = 40;
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
+    [IQKeyboardManager sharedManager].enable = NO;
+    
+    [LQQMonitorKeyboard LQQAddMonitorWithShowBack:^(NSInteger height) {
+        
+        _returnView.frame = CGRectMake(0, self.view.frame.size.height - height - 50, SCREENWIDTH, 50);
+        //        NSLog(@"键盘出现了 == %ld",(long)height);
+        
+    } andDismissBlock:^(NSInteger height) {
+        
+        _returnView.frame = CGRectMake(0, self.view.frame.size.height , SCREENWIDTH, 50);
+        //        NSLog(@"键盘消失了 == %ld",(long)height);
+        
+    }];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-//    [SVProgressHUD dismiss];
-    
     [[IQKeyboardManager sharedManager] setEnableAutoToolbar:YES];
-    
+    [IQKeyboardManager sharedManager].enable = YES;
     self.navigationController.navigationBar.hidden = NO;
 }
 
-- (void)adjustTableViewToFitKeyboardWithRect
-{
-    
-}
 #pragma footerDelegate
--(void)didClickLikeButton
+-(void)didClickLikeButton:(UIButton*)btn
 {
 
-        if(!self.actionPrisePartner)
-        {
-            self.actionPrisePartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_PRISE];
-        }
-        //开始请求
-        [self actionPrise];
-
+    if(!self.actionPrisePartner)
+    {
+        self.actionPrisePartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_PRISE];
+    }
+    
+    _agreeBtn = btn;
+    [self actionPrise];
 }
-
 
 -(void)didClickCommentButton
 {
@@ -886,24 +916,28 @@ static CGFloat textFieldH = 40;
         _commentToUser = @"0";
         [self.textField setText:@""];
         [self.textField setPlaceholder:@""];
+    
         [self.textField becomeFirstResponder];
 
 }
 
+#pragma mark - 代理方法
+// 查看全部活动评论的代理
 -(void)didClickShowAllButton
 {
     ActivityCommentListViewController * controller  = [[ActivityCommentListViewController alloc]init];
-    controller.activityModel = self.activityModel;
     controller.headerModel = self.headerModel;
+    controller.actionId =self.actionId;
     [self.navigationController pushViewController:controller animated:YES];
 }
 
-/**
- *  活动点赞
- */
+/** 活动点赞 */
 -(void)actionPrise
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", (long)self.headerModel.flag),@"flag", nil];
+    
+    int isPrise = preFlag == 1 ? 2 : 1;
+    preFlag = isPrise;
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",STRING(@"%d", isPrise),@"flag", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_PRISE postParam:dic type:0 delegate:self sel:@selector(requestPriseAction:)];
 }
@@ -917,9 +951,8 @@ static CGFloat textFieldH = 40;
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSDictionary * dic = [jsonDic valueForKey:@"data"];
-            self.headerModel.flag = [[dic valueForKey:@"flag"] integerValue];
+//            self.praiseFlag = [dic valueForKey:@"flag"];
             ActivityDetailCellLikeItemModel * model = [[ActivityDetailCellLikeItemModel alloc]init];
-            
             //获取自身userId
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             NSString * userId = [data valueForKey:USER_STATIC_USER_ID];
@@ -930,7 +963,7 @@ static CGFloat textFieldH = 40;
             
             
             NSMutableArray * array = [NSMutableArray arrayWithArray:self.commentCellModel.likeItemsArray];
-            if(self.headerModel.flag==1)
+            if(preFlag==2)
             {
                 
                 if(array && array.count>0)
@@ -950,7 +983,8 @@ static CGFloat textFieldH = 40;
             self.commentCellModel.likeItemsArray = array;
             
             [self performSelector:@selector(layout:) withObject:nil afterDelay:0.1];
-            
+            // 当点赞或取消点赞时改变该按钮的选中状态，即改变图片颜色
+            _agreeBtn.selected = !_agreeBtn.selected;
         }
     }
 }
@@ -963,6 +997,7 @@ static CGFloat textFieldH = 40;
     NSString * content = self.textField.text;
     if([content isEqualToString:@""] ||[content isEqualToString:@"请输入评论内容"])
     {
+        [_textField resignFirstResponder];
          [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入评论内容"];
         return;
     }
@@ -971,7 +1006,8 @@ static CGFloat textFieldH = 40;
     {
         _commentToUser = @"0";
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%d", 2),@"flag",content,@"content",STRING(@"%@", _commentToUser),@"atUserId", nil];
+    
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",STRING(@"%d", 2),@"flag",content,@"content",STRING(@"%@", _commentToUser),@"atUserId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestCommentAction:)];
 }
@@ -979,7 +1015,6 @@ static CGFloat textFieldH = 40;
 -(void)requestCommentAction:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -996,16 +1031,15 @@ static CGFloat textFieldH = 40;
             commentItemModel.firstUserName = [[dic valueForKey:@"usersByUserId"] valueForKey:@"name"];
             commentItemModel.firstUserId = [[dic valueForKey:@"usersByUserId"] valueForKey:@"userId"];
             
-            
             if([dic valueForKey:@"usersByAtUserId"])
             {
                 commentItemModel.secondUserName = [[dic valueForKey:@"usersByAtUserId"] valueForKey:@"name"];
                 commentItemModel.secondUserId = [[dic valueForKey:@"usersByAtUserId"] valueForKey:@"userId"];
-                
             }
             commentItemModel.commentString = baseModel.content;
-            
-            [tempArray insertObject:commentItemModel atIndex:0];
+            if (tempArray.count < 5) {
+                [tempArray insertObject:commentItemModel atIndex:0];
+            }
             
             self.commentCellModel.commentItemsArray  = [tempArray copy];
             
@@ -1016,13 +1050,14 @@ static CGFloat textFieldH = 40;
             [self.textField resignFirstResponder];
             [self.textField setText:@""];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+            
+            [self loadActionCommentData];
         }
     }
 }
 
-
 #pragma ActivityDelegate
--(void)attendAction:(id)model
+-(void)attendAction
 {
         ActivityBlackCoverView * attendView = [ActivityBlackCoverView instancetationActivityBlackCoverView];
         attendView.delegate = self;
@@ -1034,9 +1069,8 @@ static CGFloat textFieldH = 40;
 
 }
 
-
 #pragma ActivityBlackCoverViewDelegate
--(void)clickBtnInView:(ActivityBlackCoverView *)view andIndex:(NSInteger)index content:(NSString *)content
+-(void)clickBtnInBlackView:(ActivityBlackCoverView *)view andIndex:(NSInteger)index content:(NSString *)content
 {
     if (index==0) {
         [view removeFromSuperview];
@@ -1055,7 +1089,7 @@ static CGFloat textFieldH = 40;
 {
     NSString * parthner = [TDUtil encryKeyWithMD5:KEY action:ATTEND_ACTION];
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",parthner,@"partner",content,@"content",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",parthner,@"partner",content,@"content",STRING(@"%ld", (long)self.actionId),@"contentId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ATTEND_ACTION postParam:dic type:0 delegate:self sel:@selector(requestAttendAction:)];
 }
@@ -1078,48 +1112,66 @@ static CGFloat textFieldH = 40;
         }
         
         //更改本页报名按钮状态
-        [_signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
-        [_signUpBtn setBackgroundColor:btnCray];
-        [_signUpBtn setEnabled:NO];
-        //更改上一页cell报名按钮状态
-        _activityModel.attended = YES;
-        NSInteger index = [_viewController.dataSourceArray indexOfObject:_activityModel];
-        [_viewController.dataSourceArray replaceObjectAtIndex:index withObject:_activityModel];
-        [_viewController.tableView reloadData];
+        [_bottomView.signUpBtn setTitle:@"已报名" forState:UIControlStateNormal];
+        [_bottomView.signUpBtn setBackgroundColor:btnCray];
+        [_bottomView.signUpBtn setEnabled:NO];
+        
+        // 报名完成之后重新请求数据更新UI
+        NSMutableArray *tempDataArr = [NSMutableArray array];
+        for (int i = 0; i < 2; i++) {
+            [tempDataArr addObject:self.dataArray[i]];
+        }
+        self.dataArray = tempDataArr;
+        
+        [self loadActionAttendData];
+
         
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
     }
 }
 
+#pragma mark -textViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    if ([text isEqualToString:@"\n"]) {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
+-(void)textViewDidBeginEditing:(UITextView *)textView
+{
+    textView.font= BGFont(18);
+    textView.textColor = color47;
+    if ([textView.text isEqualToString:@"说点什么吧..."]) {
+        textView.text = @"";
+    }
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@""]) {
+        textView.font = BGFont(15);
+        textView.text = @"说点什么吧...";
+    }
+}
 
 #pragma mark -textFiledDelegate
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField.text.length) {
-        [_textField resignFirstResponder];
-        [self actionComment];
-        
-    }
-    return NO;
+    [self actionComment];
+    return YES;
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
-//    NSLog(@"开始编辑");
-    
-    UIView * view  = [self.view viewWithTag:10001];
-    view.alpha = 1;
-    
+
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
-    
     if (![textField.text isEqualToString:@""]) {
-        
         self.textField.text = textField.text;
-        
     }
-//    NSLog(@"结束编辑");
-    UIView * view  = [self.view viewWithTag:10001];
-    view.alpha = 0;
 }
+
+
+
 @end

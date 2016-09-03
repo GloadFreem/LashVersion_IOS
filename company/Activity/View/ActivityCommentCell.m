@@ -12,6 +12,7 @@
 @interface ActivityCommentCell()<MLLinkLabelDelegate>
 {
     MLLinkLabel *label ;
+    UIImageView *commentImgView;
 }
 @end
 @implementation ActivityCommentCell
@@ -19,41 +20,56 @@
 {
     if(self  = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
     {
-        [self setup];
-        return self;
+        commentImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_answer"]];
+        [self.contentView addSubview:commentImgView];
+        
+        
+        label = [MLLinkLabel new];
+        UIColor *highLightColor = orangeColor;
+        label.linkTextAttributes = @{NSForegroundColorAttributeName : highLightColor};
+        label.font = [UIFont systemFontOfSize:14];
+        label.delegate = self;
+        label.isAttributedContent = YES;
+        [self.contentView addSubview:label];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentLabelTapped:)];
+        [self addGestureRecognizer:tap];
+        
+        label.sd_layout
+        .topSpaceToView(self.contentView,5)
+        .leftSpaceToView(self.contentView,50)
+        .rightSpaceToView(self.contentView,20)
+        .autoHeightRatio(0);
+        
+        [self setupAutoHeightWithBottomView:label bottomMargin:5];
     }
     
-    return nil;
+    return self;
 }
 
--(void)setup
+- (void)setRow:(NSInteger)row
 {
-    label = [MLLinkLabel new];
-    UIColor *highLightColor = orangeColor;
-    label.linkTextAttributes = @{NSForegroundColorAttributeName : highLightColor};
-    label.font = [UIFont systemFontOfSize:14];
-    label.delegate = self;
-    label.isAttributedContent = YES;
-    [self.contentView addSubview:label];
-    
-//    label.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentLabelTapped:)];
-    [self addGestureRecognizer:tap];
-    
-    
-    label.sd_layout
-    .topSpaceToView(self.contentView,5)
-    .leftSpaceToView(self.contentView,20)
-    .rightSpaceToView(self.contentView,20)
-    .autoHeightRatio(0);
-    
-    [self setupAutoHeightWithBottomView:label bottomMargin:5];
+    _row = row;
+    if (1 == _row) {
+        commentImgView.hidden = NO;
+        commentImgView.sd_layout.leftSpaceToView(self.contentView, 20)
+        .topSpaceToView(self.contentView, 10)
+        .widthIs(16)
+        .heightIs(16);
+        
+        label.sd_layout.topSpaceToView(self.contentView, 10);
+    } else{
+        commentImgView.hidden = YES;
+    }
 }
+
 -(void)setModel:(ActivityDetailCellCommentItemModel *)model
 {
     _model = model;
     if(_model)
     {
+        self.model.commentString = [self.model.commentString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
         label.attributedText = [self generateAttributedStringWithCommentItemModel:self.model];
         
         [label updateLayout];

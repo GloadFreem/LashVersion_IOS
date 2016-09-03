@@ -49,6 +49,8 @@
     payStatus  = PayStatusNormal;
     [self setNav];
     [self setup];
+    //设置加载视图范围
+    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64);
 }
 
 -(void)setNav
@@ -228,7 +230,8 @@
 #pragma mark ----------认证是否是易宝用户-------------
 -(void)isCheckUserConfirmed
 {
-    [SVProgressHUD showWithStatus:@"正在加载..."];
+    self.startLoading = YES;
+    
     NSString * str = [TDUtil generateUserPlatformNo];
     NSMutableDictionary * dic = [NSMutableDictionary new];
     [dic setObject:str forKey:@"platformUserNo"];
@@ -250,7 +253,7 @@
             [self.httpUtil getDataFromYeePayAPIWithOps:@"" postParam:dic type:0 delegate:self sel:@selector(requestCheckUser:)];
         }else{
             _isClick = NO;
-            [SVProgressHUD dismiss];
+            self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
         
@@ -286,8 +289,7 @@
         _isClick = NO;
         self.isNetRequestError = YES;
     }
-    
-    [SVProgressHUD dismiss];
+    self.startLoading = NO;
 }
 
 #pragma mark ----------------易宝用户认证--------------------
@@ -319,7 +321,6 @@
     {
         NSString* status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
-            [SVProgressHUD dismiss];
             NSDictionary * data = [jsonDic valueForKey:@"data"];
             NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:_request,@"req",[data valueForKey:@"sign"],@"sign", nil];
             YeePayViewController * controller = [[YeePayViewController alloc]init];
@@ -333,11 +334,13 @@
             controller.state = PayStatusConfirm;
 //            [controller.dic setValue:STRING(@"%d", currentSelect) forKey:@"currentSelect"];
             controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,YeePayToRegister,nil)];
-            [self.navigationController pushViewController:controller animated:YES];
             self.startLoading = NO;
+            [self.navigationController pushViewController:controller animated:YES];
+            
             return;
         }else{
             _isClick = NO;
+            self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
         self.isNetRequestError = YES;
@@ -394,10 +397,11 @@
             if (payStatus == PayStatusPayfor) {
                 controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,YeePayMent,nil)];
             }
-            [SVProgressHUD dismiss];
+            self.startLoading = NO;
             [self.navigationController pushViewController:controller animated:YES];
         }else{
         _isClick = NO;
+            self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
@@ -445,7 +449,7 @@
             [controller.dic setValue:_flagArray[0] forKey:@"currentSelect"];
             controller.state = PayStatusPayfor;
             controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,YeePayMent,nil)];
-            [SVProgressHUD dismiss];
+            self.startLoading = NO;
             [self.navigationController pushViewController:controller animated:YES];
         }else{
         _isClick = NO;
@@ -484,6 +488,6 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [SVProgressHUD dismiss];
+    self.startLoading = NO;
 }
 @end

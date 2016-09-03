@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ActivityViewModel.h"
+
 @interface ActivityDetailExiciseContentCell : UITableViewCell
 @property (nonatomic, retain) ActivityViewModel * model;
 @property (strong, nonatomic) IBOutlet UILabel *timeLabel;
@@ -15,6 +16,5 @@
 @property (strong, nonatomic) IBOutlet UILabel *addressLabel;
 @property (strong, nonatomic) IBOutlet UILabel *dinstanceLabel;
 @property (strong, nonatomic) IBOutlet UIButton *statusButton;
-
 
 @end

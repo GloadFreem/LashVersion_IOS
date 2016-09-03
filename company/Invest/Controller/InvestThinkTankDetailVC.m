@@ -485,12 +485,12 @@
         
         [_circleBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(_secondView.mas_bottom).offset(27);
-            make.right.mas_equalTo(_scrollView.mas_centerX).offset(-23);
-                    make.width.mas_equalTo(110*WIDTHCONFIG);
+            make.right.mas_equalTo(_scrollView.mas_centerX).offset(-20);
+                    make.width.mas_equalTo(125*WIDTHCONFIG);
                     make.height.mas_equalTo(30*WIDTHCONFIG);
         }];
         [_attationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(_scrollView.mas_centerX).offset(23);
+            make.left.mas_equalTo(_scrollView.mas_centerX).offset(20);
             make.width.height.mas_equalTo(_circleBtn);
             make.top.mas_equalTo(_circleBtn.mas_top);
         }];
@@ -498,8 +498,8 @@
     //关注按钮
     [_attationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_secondView.mas_bottom).offset(20);
-        make.left.mas_equalTo(_secondView.mas_left).offset(20);
-        make.right.mas_equalTo(_secondView.mas_right).offset(-20);
+        make.left.mas_equalTo(_secondView.mas_left);
+        make.right.mas_equalTo(_secondView.mas_right);
         make.height.mas_equalTo(40);
     }];
     }

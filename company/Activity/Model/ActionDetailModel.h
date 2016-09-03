@@ -9,8 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @class Actionimages;
+
 @interface ActionDetailModel : NSObject
 @property (nonatomic, strong) NSArray<NSString *> *actionprises;
+
+@property (nonatomic, copy) NSString * startPageImage;
 
 @property (nonatomic, assign) NSInteger type;
 @property (nonatomic ,assign)NSString * address;
@@ -18,7 +21,7 @@
 
 @property (nonatomic, assign) NSInteger memberLimit;
 
-@property (nonatomic, assign) NSInteger flag;
+@property (nonatomic, assign) Boolean flag;
 
 @property (nonatomic, assign) NSInteger actionId;
 
@@ -28,8 +31,9 @@
 
 @property (nonatomic, copy) NSString *name;
 
+@property (nonatomic, assign) Boolean attended;
 @property (nonatomic, strong) NSArray<Actionimages *> *actionimages;
-
+@property (nonatomic, strong) NSArray *actionintroduces;
 @end
 
 @interface Actionimages : NSObject

@@ -156,6 +156,7 @@
 
 @property (nonatomic, strong) CircleContenttypeModel *contenttype;
 
+@property (nonatomic, copy) NSString *tag;
 @end
 
 

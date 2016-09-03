@@ -162,16 +162,16 @@
                         </mask>
                     </variation>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="24K-IJ-0XW">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="24K-IJ-0XW">
                     <rect key="frame" x="67" y="335" width="16" height="16"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="16" id="5c4-K8-7Ob"/>
                         <constraint firstAttribute="width" constant="16" id="67D-Y0-L6K"/>
                     </constraints>
-                    <state key="normal" backgroundImage="icon_unselectedBtn.png">
+                    <state key="normal" image="icon_unselectedBtn.png">
                         <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </state>
-                    <state key="selected" backgroundImage="icon_selectedBtn.png">
+                    <state key="selected" image="icon_selectedBtn.png">
                         <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>

@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, DBdatatype) {
  *
  *  @return DatabaseQueue
  */
--(FMDatabase *)DatabaseWithDBName:(NSString *)dbName;
+//-(FMDatabase *)DatabaseWithDBName:(NSString *)dbName;
 
 /**
  *  建表
@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger, DBdatatype) {
  *  @param table    表名
  *  @param keyTypes 所含字段以及对应字段类型 字典
  */
--(BOOL)createTable:(NSString *)table WithKey:(NSDictionary *)keyTypes;
+//-(BOOL)createTable:(NSString *)table WithKey:(NSDictionary *)keyTypes;
 
 -(BOOL)createTableWithTableName:(NSString*)name keys:(NSArray*)keys;
 

@@ -12,6 +12,10 @@
 #import "CircleBaseModel.h"
 #import "CircleShareBottomView.h"
 #import "CircleDetailVC.h"
+#import "ProjectBannerDetailVC.h"
+#import "ProjectDetailController.h"
+#import "ProjectPrepareDetailVC.h"
+#import "ActivityDetailVC.h"
 
 #define CIRCLE_CONTENT @"requestFeelingList"
 #define CIRCLE_PRAISE @"requestPriseFeeling"
@@ -156,7 +160,7 @@
     if (_isFirst) {
         self.startLoading = YES;
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.userPartner,@"partner",self.userId,@"userId",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.userPartner,@"partner",self.userId,@"userId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",PLATFORM,@"platform", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CYCLE_USER_LIST postParam:dic type:0 delegate:self sel:@selector(requestCircleUserList:)];
 }
@@ -178,12 +182,14 @@
             if (_isFirst) {
                 _isFirst = NO;
             }
+            
             [self analysisCircleListData:dataArray];
             
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             
         }
+        
         self.startLoading = NO;
     }else{
         self.isNetRequestError = YES;
@@ -206,7 +212,7 @@
         listModel.iconNameStr = baseModel.users.headSculpture; //发布者头像
         listModel.nameStr = baseModel.users.name;              //发布者名字
         listModel.userId = baseModel.users.userId;
-        listModel.msgContent = baseModel.content;
+        listModel.msgContent = [baseModel.content stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         listModel.publicContentId = baseModel.publicContentId; //帖子ID
         listModel.shareCount = baseModel.shareCount;           //分享数量
         listModel.commentCount = baseModel.commentCount;       //评论数量
@@ -216,7 +222,7 @@
         listModel.contentText = baseModel.contentshare.desc;
         listModel.contentImage = baseModel.contentshare.image;
         listModel.url = baseModel.contentshare.content;
-        listModel.titleText = baseModel.contentshare.contenttype.name;
+        listModel.titleText = baseModel.contentshare.tag;
         listModel.feelingTypeId = baseModel.feeingtype.feelingTypeId;
         
         //拿到usrs认证数组
@@ -257,11 +263,8 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    if ([TDUtil checkNetworkState] != NetStatusNone)
-    {
-        self.startLoading = YES;
-        self.isNetRequestError = YES;
-    }
+    self.startLoading = YES;
+    self.isNetRequestError = YES;
     //结束刷新
     [self.tableView.mj_header endRefreshing];
     [self.tableView.mj_footer endRefreshing];
@@ -333,7 +336,38 @@
 #pragma mark-----------------点击contentBtn---------
 -(void)didClickContentBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"处理点击事件");
+//    NSLog(@"处理点击事件");
+    if (model.feelingTypeId == 2) {//链接
+        ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
+        vc.url = model.url;
+        vc.image = model.contentImage;
+        vc.titleText = model.titleText;
+        vc.contentText = model.contentText;
+        vc.titleStr = model.titleText;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if (model.feelingTypeId == 3) {//项目
+        NSArray *array = [model.url componentsSeparatedByString:@","];
+        if (array.count == 2) {
+            if ([array[1] isEqualToString:@"0"]) {//路演
+                ProjectDetailController *detail =[ProjectDetailController new];
+                detail.projectId = [array[0] integerValue];
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+            
+            if ([array[1] isEqualToString:@"1"]) {//预选
+                ProjectPrepareDetailVC *detail =[ProjectPrepareDetailVC new];
+                detail.projectId = [array[0] integerValue];
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+        }
+    }
+    if (model.feelingTypeId == 4) {//活动
+        NSArray *array = [model.url componentsSeparatedByString:@","];
+        ActivityDetailVC *vc =[ActivityDetailVC new];
+        vc.actionId = [array[0] integerValue];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 #pragma maerk ---------分享按钮
@@ -434,7 +468,6 @@
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareUrl;
                     [UMSocialData defaultData].extConfig.qqData.title = _shareTitle;
-                    //                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
                 }
                 else
                 {
@@ -449,9 +482,7 @@
                 // 微信好友
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
-                //                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
-                //                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到微信");
             }
@@ -459,9 +490,7 @@
             case 2:{
                 // 微信朋友圈
                 arr = @[UMShareToWechatTimeline];
-                //                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                //                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到朋友圈");

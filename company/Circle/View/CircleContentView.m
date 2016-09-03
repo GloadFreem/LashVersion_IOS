@@ -82,6 +82,7 @@
     _contentLabel.numberOfLines = 2;
     _contentLabel.userInteractionEnabled = NO;
     _contentLabel.textAlignment = NSTextAlignmentLeft;
+    _contentLabel.lineBreakMode = NSLineBreakByTruncatingTail;
 //    _contentLabel.backgroundColor = colorBlue;
     [_bottomView addSubview:_contentLabel];
     _contentLabel.sd_layout
@@ -98,7 +99,7 @@
     [self addSubview:_titleLabel];
     
     _titleLabel.sd_layout
-    .leftSpaceToView(self,14)
+    .leftSpaceToView(self,5)
     .heightIs(11)
     .topSpaceToView(_bottomBtn,4);
     [_titleLabel setSingleLineAutoResizeWithMaxWidth:150];
@@ -138,7 +139,8 @@
 {
     if (contentLabelText) {
 //        _contentLabel.text = contentLabelText;
-        [TDUtil setLabelMutableText:_contentLabel content:contentLabelText lineSpacing:5 headIndent:0];
+        [TDUtil setLabelMutableText:_contentLabel content:contentLabelText lineSpacing:3 headIndent:0];
+        _contentLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     }
 }
 

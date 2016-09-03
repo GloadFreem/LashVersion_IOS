@@ -8,6 +8,11 @@
 
 #import "ActivityDetailExiciseContentCell.h"
 
+@interface ActivityDetailExiciseContentCell ()
+@property (weak, nonatomic) IBOutlet UIImageView *imgView;
+
+@end
+
 @implementation ActivityDetailExiciseContentCell
 
 - (void)awakeFromNib {
@@ -30,6 +35,8 @@
     
     if(_model)
     {
+        
+        [_imgView sd_setImageWithURL:[NSURL URLWithString:_model.imgUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
         //地址
         [self.addressLabel setText:_model.address];
         //人数限制
@@ -46,14 +53,12 @@
         //时间
         [self.timeLabel setText:[NSString stringWithFormat:@"%@%@%@",dateStr,week,time]];
         
-        
         //收费情况
         NSString * status = @"免费";
         if(model.type==0){
             status = @"收费";
         }
         [self.statusButton setTitle:status forState:UIControlStateNormal];
-        
     }
 }
 

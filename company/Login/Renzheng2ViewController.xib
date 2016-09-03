@@ -159,7 +159,7 @@
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <inset key="titleEdgeInsets" minX="-15" minY="55" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="65" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="添加照片" image="jiahao" backgroundImage="imagebj.png">
+                            <state key="normal" title="添加照片" image="jiahao.jpg" backgroundImage="imagebj.png">
                                 <color key="titleColor" red="0.4549019608" green="0.4549019608" blue="0.4549019608" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                             <variation key="default">
@@ -235,7 +235,7 @@
     </objects>
     <resources>
         <image name="imagebj.png" width="300" height="180"/>
-        <image name="jiahao" width="20" height="20"/>
+        <image name="jiahao.jpg" width="20" height="20"/>
         <image name="leftBack.png" width="12" height="20"/>
         <image name="navBJ.png" width="375" height="64"/>
     </resources>

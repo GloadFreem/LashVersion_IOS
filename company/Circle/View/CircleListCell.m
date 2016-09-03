@@ -37,13 +37,16 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     UIView *_firstShuView;
     UIButton *_commentBtn;
     UIView*_secondShuView;
-    
+    UIView *_bottomLine;
     BOOL _shouldOpenContentLabel;
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+        self.layer.borderColor = colorGray.CGColor;
+        self.layer.borderWidth = 0.01f;
         [self setup];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
@@ -113,6 +116,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     _partLine = [UIView new];
     _partLine.backgroundColor = color74;
+    _partLine.alpha = 0.5;
     
     _shareBtn =[UIButton new];
     [_shareBtn setImage:[UIImage imageNamed:@"iconfont_share"] forState:UIControlStateNormal];
@@ -138,7 +142,10 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     [_praiseBtn addTarget:self action:@selector(praiseBtnClick) forControlEvents:UIControlEventTouchUpInside];
     _praiseBtn.titleLabel.font = BGFont(14);
     
-    NSArray *views = @[_topView,_iconBtn, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel,_deleteBtn, _timeLabel, _contentLabel, _moreBtn, _contentView,_picContainerView, _partLine,_shareBtn,_firstShuView,_commentBtn,_secondShuView,_praiseBtn];
+    _bottomLine =[UIView new];
+    [_bottomLine setBackgroundColor:colorGray];
+    
+    NSArray *views = @[_topView,_iconBtn, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel,_deleteBtn, _timeLabel, _contentLabel, _moreBtn, _contentView,_picContainerView, _partLine,_shareBtn,_firstShuView,_commentBtn,_secondShuView,_praiseBtn,_bottomLine];
     
     [self.contentView sd_addSubviews:views];
     
@@ -207,8 +214,8 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     //moreBtn的告诉在setModel里边设置
     _moreBtn.sd_layout
     .leftEqualToView(_contentLabel)
-    .topSpaceToView(_contentLabel,0)
-    .widthIs(40);
+    .topSpaceToView(_contentLabel,5)
+    .widthIs(50);
     
     _contentView.sd_layout
     .leftSpaceToView(contentView,8)
@@ -220,7 +227,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _partLine.sd_layout
     .leftEqualToView(contentView)
     .rightEqualToView(contentView)
-    .topSpaceToView(_picContainerView,10)
+    .topSpaceToView(_picContainerView,5)
     .heightIs(0.5);
     
     CGFloat width = (SCREENWIDTH-2)/3;
@@ -254,6 +261,12 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .centerYEqualToView(_shareBtn)
     .widthIs(width)
     .heightIs(height);
+    
+    _bottomLine.sd_layout
+    .leftEqualToView(contentView)
+    .rightEqualToView(contentView)
+    .bottomEqualToView(contentView)
+    .heightIs(0.5);
     
 }
 
@@ -291,12 +304,13 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     [_timeLabel sizeToFit];
     
 //    _contentLabel.text = model.msgContent;
+    
     [TDUtil setLabelMutableText:_contentLabel content:model.msgContent lineSpacing:0 headIndent:0];
     [_contentLabel sizeToFit];
     _picContainerView.pictureStringArray = model.picNamesArray;
 //    NSLog(@"-----zhaopian---%@",model.picNamesArray);
     if (model.shouldShowMoreBtn) { //如果文字高度超过60
-        _moreBtn.sd_layout.heightIs(20);
+        _moreBtn.sd_layout.heightIs(23);
         _moreBtn.hidden = NO;
         if (model.isOpening) {//如果需要展开
             _contentLabel.sd_layout.maxHeightIs(MAXFLOAT);
@@ -311,7 +325,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     }
     
     //是圈子
-    NSLog(@"打印是不是圈子---%ld",(long)_model.feelingTypeId);
+//    NSLog(@"打印是不是圈子---%ld",(long)_model.feelingTypeId);
     if (_model.feelingTypeId == 1) {
         _contentView.sd_layout.heightIs(0);
         _contentView.isHidden = YES;

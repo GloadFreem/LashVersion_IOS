@@ -12,6 +12,9 @@
 #import "ProjectSceneOtherCell.h"
 #import "RenzhengViewController.h"
 
+#import "LQQMonitorKeyboard.h"
+
+
 #define REQUESTSCENECOMMENT @"requestProjectSceneCommentList"
 @interface ProjectSceneCommentVC ()<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate>
 {
@@ -27,6 +30,9 @@
 
 @property (nonatomic, assign) BOOL isFirst;
 
+
+
+
 @end
 
 @implementation ProjectSceneCommentVC
@@ -37,6 +43,7 @@
     
     //获得内容partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:REQUESTSCENECOMMENT];
+    
     
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -81,7 +88,7 @@
 -(void)startLoadData
 {
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.sceneId],@"sceneId",[NSString stringWithFormat:@"%ld",(long)_page],@"page", @"1",@"platform",nil];
    
     if (_isFirst) {
         self.startLoading = YES;
@@ -183,7 +190,12 @@
     _tableView.dataSource =self;
     _tableView.delegate =self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.backgroundColor = color(237, 238, 239, 1);
     [self.view addSubview:_tableView];
+    
+    
+    
+    
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
@@ -191,22 +203,49 @@
 //    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     
+    [self createFooterView];
+    
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.right.mas_equalTo(0);
-        make.height.mas_equalTo(SCREENHEIGHT -50);
+//        make.height.mas_equalTo(SCREENHEIGHT -50-64);
+        make.bottom.mas_equalTo(_footer).offset(0);
     }];
-    [self createFooterView];
 }
+
+
+
+
 
 -(void)createFooterView
 {
     //加底部回复框
     _footer =[[UIView alloc]init];
+//    _footer.frame = CGRectMake(0, self.view.frame.size.height - 64-50, SCREENWIDTH, 50);
     [_footer setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:_footer];
     [_footer mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.mas_equalTo(0);
         make.height.mas_equalTo(50);
+    }];
+    [LQQMonitorKeyboard LQQAddMonitorWithShowBack:^(NSInteger height) {
+        
+//        _footer.frame = CGRectMake(0, self.view.frame.size.height - 50 - height, SCREENWIDTH, 50);
+        //        NSLog(@"键盘出现了 == %ld",(long)height);
+        [_footer mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.mas_equalTo(0);
+            make.height.mas_equalTo(50);
+            make.top.mas_equalTo(SCREENHEIGHT-height - 114);
+        }];
+        
+    } andDismissBlock:^(NSInteger height) {
+        
+//        _footer.frame = CGRectMake(0, self.view.frame.size.height - 50, SCREENWIDTH, 50);
+        //        NSLog(@"键盘消失了 == %ld",(long)height);
+        [_footer mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.bottom.right.mas_equalTo(0);
+            make.height.mas_equalTo(50);
+        }];
+        
     }];
     
     _textField = [[UITextField alloc]init];
@@ -215,7 +254,7 @@
     _textField.layer.borderColor = [UIColor darkGrayColor].CGColor;
     _textField.layer.borderWidth = 0.5;
     _textField.delegate = self;
-    _textField.returnKeyType = UIReturnKeyDone;
+    _textField.returnKeyType = UIReturnKeySend;
     _textField.font = BGFont(15);
     
     [_footer addSubview:_textField];
@@ -248,7 +287,6 @@
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-
 {
     [self.textField resignFirstResponder];
 }
@@ -342,7 +380,7 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_dataArray.count) {
+    if (_dataArray[indexPath.row]) {
         ProjectDetailSceneCellModel *model = _dataArray[indexPath.row];
         
         if (model.flag) {
@@ -351,17 +389,20 @@
             if (cell == nil) {
                 cell = [[ProjectDetailSceneMessageCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
             }
+            cell.userInteractionEnabled = YES;
             cell.model = model;
             return cell;
-        }
+        }else{
         
         static NSString *cellId = @"ProjectSceneOtherCell";
         ProjectSceneOtherCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         if (!cell) {
             cell = [[ProjectSceneOtherCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
         }
+        cell.userInteractionEnabled = YES;
         cell.model = model;
         return cell;
+        }
     }
     
     return nil;
@@ -371,6 +412,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -390,12 +432,12 @@
 
 #pragma mark -textFiledDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
+    [self sendMessage:nil];
     return NO;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    NSLog(@"开始编辑");
+//    NSLog(@"开始编辑");
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -404,7 +446,7 @@
         
         self.textField.text = textField.text;
     }
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
 }
 
 
@@ -414,9 +456,25 @@
     [self.navigationController.navigationBar setHidden:NO];
     _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
+    
+    [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
+    [IQKeyboardManager sharedManager].enable = NO;
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
+    [IQKeyboardManager sharedManager].enable = YES;
+    
+    [_timer setFireDate:[NSDate distantFuture]];
+    [_timer invalidate];
+    _timer = nil;
+}
+
+
 -(void)dealloc{
+    [_timer setFireDate:[NSDate distantFuture]];
     [_timer invalidate];
     _timer = nil;
 }

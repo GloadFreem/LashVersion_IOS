@@ -96,7 +96,7 @@
     _textView.textColor = color74;
     _textView.font = BGFont(15);
     _textView.backgroundColor =[TDUtil colorWithHexString:@"F5F5F5"];
-    _textView.returnKeyType = UIReturnKeyDefault;
+    _textView.returnKeyType = UIReturnKeyDone;
     _textView.keyboardType = UIKeyboardTypeDefault;
     _textView.textAlignment = NSTextAlignmentLeft;
     _textView.layer.cornerRadius = 3;
@@ -143,6 +143,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
+    [IQKeyboardManager sharedManager].enable = NO;
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
+    [IQKeyboardManager sharedManager].enable = YES;
+}
 /*
 #pragma mark - Navigation
 

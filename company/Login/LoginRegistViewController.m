@@ -122,6 +122,7 @@
         _password = [TDUtil encryptPhoneNumWithMD5:phoneNumber passString:_password];
         //激光推送Id
         NSString *regId = [JPUSHService registrationID];
+//        NSString *regId = @"141fe1da9ead0e753f8";
         
         NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",_password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
         NSLog(@"------%@",dic);
@@ -254,6 +255,7 @@
             //微信授权登录
             //激光推送Id
             NSString *regId = [JPUSHService registrationID];
+//            NSString *regId = @"141fe1da9ead0e753f8";
             
             _wePic = snsAccount.iconURL;
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
@@ -262,16 +264,13 @@
             
              NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.wePartner,@"partner",snsAccount.openId,@"wechatID",@"1",@"platform",regId,@"regid", nil];
             self.loadingViewFrame = self.view.frame;
-//            [SVProgressHUD showWithStatus:@"登录中..."];
+
             self.startLoading = YES;
             self.isTransparent = YES;
             
             //开始请求
             [self.httpUtil getDataFromAPIWithOps:WECHATLOGINUSER postParam:dic type:0 delegate:self sel:@selector(requestWELogin:)];
             
-//            NSDictionary *dict = @{@"oauthType":@"2",@"nickName":snsAccount.userName,@"accountId":snsAccount.usid,@"pic":snsAccount.iconURL,@"parentId":@"0",@"deviceId":deviceId,@"pushToken":pushToken};
-            
-//            [self requsetOauthLoginWithDict:dict];
         }
     });
 }
@@ -285,7 +284,6 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             self.startLoading = NO;
-//            [SVProgressHUD dismiss];
             
             NSDictionary *data= [jsonDic valueForKey:@"data"];
             NSDictionary *idenTypeDic = [NSDictionary dictionaryWithDictionary:[data valueForKey:@"identityType"]];
@@ -310,9 +308,6 @@
                     tabBarController = [CommentTD createViewControllers];
                 }
                
-//                AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-//                app.window.rootViewController = tabBarController;
-                
                 [self.navigationController pushViewController:tabBarController animated:NO];
                 
                 NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
@@ -322,8 +317,7 @@
             }
             
         }else{
-//        [SVProgressHUD dismiss];
-            self.startLoading = NO;
+        self.startLoading = NO;
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
@@ -332,7 +326,30 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    UINavigationController *nav = (UINavigationController*)window.rootViewController;
+    JTabBarController * tabBarController;
+    for (UIViewController *vc in nav.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:JTabBarController.class]) {
+            tabBarController = (JTabBarController*)vc;
+            [tabBarController tabBarHidden:YES animated:NO];
+        }
+    }
+    
+    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [delegate.tabBar tabBarHidden:YES animated:NO];
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -350,7 +367,6 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [SVProgressHUD dismiss];
 }
 -(void)dealloc
 {

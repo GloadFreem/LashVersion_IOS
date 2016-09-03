@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import "MeasureTool.h"
 #import "ShareToCircleView.h"
-
+#import "LQQMonitorKeyboard.h"
 #import "JTabBarController.h"
 
 #import "ProjectDetailBannerView.h"
@@ -55,7 +55,7 @@
 #define titleFont [UIFont systemFontOfSize:16]
 
 
-@interface ProjectDetailController ()<CSZProjectDetailLetfViewDelegate,ProjectDetailBannerViewDelegate,UIScrollViewDelegate,UITextViewDelegate,ProjectDetailSceneViewDelegate,CircleShareBottomViewDelegate,UITextFieldDelegate,ShareToCircleViewDelegate>
+@interface ProjectDetailController ()<CSZProjectDetailLetfViewDelegate,ProjectDetailBannerViewDelegate,UIScrollViewDelegate,UITextViewDelegate,ProjectDetailSceneViewDelegate,CircleShareBottomViewDelegate,UITextFieldDelegate,ShareToCircleViewDelegate,UITextViewDelegate>
 {
     ProjectDetailMemberView * member;
     ProjectDetailBannerView * bannerView;
@@ -272,6 +272,7 @@
 {
     //广告栏视图
     bannerView= [[ProjectDetailBannerView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH*0.75)];
+    bannerView.userInteractionEnabled = YES;
     
     bannerView.scrollView.scrollEnabled = YES;
     
@@ -279,9 +280,9 @@
     
     [_scrollView addSubview:bannerView];
 }
+
 -(void)startLoadData
 {
-//    [SVProgressHUD showWithStatus:@"加载中..."];
     self.startLoading = YES;
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId", nil];
@@ -298,7 +299,6 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            [SVProgressHUD dismiss];
             //容错
             if (jsonDic[@"data"] !=nil) {
                 ProjectDetailBaseMOdel *baseModel = [ProjectDetailBaseMOdel mj_objectWithKeyValues:jsonDic[@"data"]];
@@ -337,7 +337,7 @@
 
 -(void)loadSceneData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_scenePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",@"1",@"platform", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE postParam:dic type:1 delegate:self sel:@selector(requestProjectScene:)];
 }
@@ -545,7 +545,7 @@
 {
     if (!_footer) {
         _footer =[[UIView alloc]init];
-        //        _footer.backgroundColor = [UIColor redColor];
+        _footer.backgroundColor = [UIColor whiteColor];
         _footer.frame = CGRectMake(0, SCREENHEIGHT-50, SCREENWIDTH, 50);
         _footer.hidden = YES;
         
@@ -611,11 +611,6 @@
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"路演现场暂未开放评论"];
         }
 
-}
-
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self.textField resignFirstResponder];
 }
 
 -(void)requestSceneComment:(ASIHTTPRequest *)request
@@ -722,6 +717,7 @@
         {
             [_bottomView setHidden:NO];
             [_footer setHidden:YES];
+            [_textField resignFirstResponder];
             _subViewScrollView.height = _leftView.height + 44;
             [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
 //            NSLog(@"点击了第%ld个",sender.tag-10);
@@ -731,6 +727,7 @@
         {
             [_bottomView setHidden:YES];
             [_footer setHidden:YES];
+            [_textField resignFirstResponder];
             _subViewScrollView.height = member.height;
             [_subViewScrollView setupAutoContentSizeWithBottomView:member bottomMargin:0];
 //            NSLog(@"点击了第%ld个",sender.tag-10);
@@ -881,19 +878,19 @@
 {
     //销毁播放器
     [scene removeObserverAndNotification];
-    
     RenzhengViewController  * renzheng = [RenzhengViewController new];
     renzheng.identifyType = self.identiyTypeId;
     [self.navigationController pushViewController:renzheng animated:YES];
     
 }
 - (IBAction)leftBack:(UIButton *)sender {
-    [SVProgressHUD dismiss];
     if (!_isCollect) {
         [_attentionVC.projectArray removeObject:_listModel];
         [_tableView reloadData];
     }
-
+    
+    //销毁计时器通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark -分享
@@ -965,7 +962,6 @@
                     arr = @[UMShareToQQ];
                     [UMSocialData defaultData].extConfig.qqData.url = _shareurl;
                     [UMSocialData defaultData].extConfig.qqData.title = _shareTitle;
-//                    [UMSocialData defaultData].extConfig.qzoneData.title = _shareTitle;
                 }
                 else
                 {
@@ -980,9 +976,7 @@
                 // 微信好友
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
-//                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
-//                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到微信");
             }
@@ -990,9 +984,7 @@
             case 3:{
                 // 微信朋友圈
                 arr = @[UMShareToWechatTimeline];
-//                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareurl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareurl;
-//                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
                 //                NSLog(@"分享到朋友圈");
@@ -1047,6 +1039,7 @@
     [shareView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];
+    shareView.textView.delegate = self;
     shareView.delegate = self;
     _shareCircleView = shareView;
 }
@@ -1064,7 +1057,9 @@
         if ([content isEqualToString:@"说点什么吧..."]) {
             content = @"";
         }
-        
+        if (_shareContent.length > 200) {
+            _shareContent = [_shareContent substringToIndex:200];
+        }
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.circlePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"contentId",@"7",@"type",content,@"comment",[NSString stringWithFormat:@"%ld,0",(long)self.projectId],@"content",_shareContent,@"description",_shareImage,@"image",@"金指投项目",@"tag",nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:SHARE_TO_CIRCLE postParam:dic type:0 delegate:self sel:@selector(requestShareToCircle:)];
@@ -1140,13 +1135,39 @@
     }
 }
 
+#pragma mark -textViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    if ([text isEqualToString:@"\n"]) {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
+-(void)textViewDidBeginEditing:(UITextView *)textView
+{
+    textView.font= BGFont(18);
+    textView.textColor = color47;
+    if ([textView.text isEqualToString:@"说点什么吧..."]) {
+        textView.text = @"";
+    }
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@""]) {
+        textView.font = BGFont(15);
+        textView.text = @"说点什么吧...";
+    }
+}
 #pragma mark -textFiledDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
-    return NO;
+    
+    [self sendMessage:nil];
+    return YES;
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-//    NSLog(@"开始编辑");
+
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
@@ -1154,7 +1175,6 @@
         
         self.textField.text = textField.text;
     }
-//    NSLog(@"结束编辑");
 }
 
 
@@ -1188,11 +1208,24 @@
     
      [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
-    
+    [IQKeyboardManager sharedManager].enable = NO;
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
     
     [self performSelector:@selector(updateLayoutNotification) withObject:nil afterDelay:0.5];
+    
+    [LQQMonitorKeyboard LQQAddMonitorWithShowBack:^(NSInteger height) {
+        
+        _footer.frame = CGRectMake(0, self.view.frame.size.height - 50 - height, SCREENWIDTH, 50);
+        //        NSLog(@"键盘出现了 == %ld",(long)height);
+        
+    } andDismissBlock:^(NSInteger height) {
+        
+        _footer.frame = CGRectMake(0, self.view.frame.size.height - 50, SCREENWIDTH, 50);
+        //        NSLog(@"键盘消失了 == %ld",(long)height);
+        
+    }];
 }
+
 
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -1204,17 +1237,15 @@
     [super viewWillDisappear:animated];
     
     self.navigationController.navigationBar.hidden = NO;
-    //销毁计时器通知
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];
     
+    
+    [IQKeyboardManager sharedManager].enable = YES;
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
 }
 
 -(void)dealloc
 {
-
     [scene removeObserverAndNotification];
-    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

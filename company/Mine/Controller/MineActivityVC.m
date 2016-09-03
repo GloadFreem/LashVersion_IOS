@@ -7,7 +7,8 @@
 //
 
 #import "MineActivityVC.h"
-#import "ActivityCell.h"
+
+#import "ActivityListCell.h"
 
 #import "ActivityDetailVC.h"
 
@@ -36,15 +37,10 @@
     }
     self.partner = [TDUtil encryKeyWithMD5:KEY action:LOGOACTIVITY];
     _page = 0;
-    
     self.loadingViewFrame = self.view.frame;
-    
     [self setupNav];
     [self createTableView];
-    
     [self startLoadData];
-    
-    
 }
 
 #pragma mark -设置导航栏
@@ -89,7 +85,6 @@
 -(void)nextPage
 {
     _page ++;
-    
     [self startLoadData];
     //    NSLog(@"回到顶部");
 }
@@ -131,23 +126,16 @@
                 ActivityViewModel *model = modelArray[i];
                 [tempArray addObject:model];
             }
-            
             self.dataArray = tempArray;
-            
-            //结束刷新
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
         }else{
-            //结束刷新
-            self.startLoading = NO;
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-        
         }
     }else{
         self.isNetRequestError = YES;
     }
+    //结束刷新
+    [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request
@@ -179,21 +167,24 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 175;
+    return 175 + 120;
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellId = @"ActivityCell";
-    ActivityCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    ActivityListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+        cell = [[ActivityListCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
     }
     if (_dataArray.count) {
         cell.model = _dataArray[indexPath.row];
+        if ([TDUtil isArrivedTime:cell.model.endTime]) {
+            cell.model.isExpired = YES;
+        }else{
+            cell.model.isExpired = NO;
+        }
     }
-    [cell.signUpBtn setHidden:YES];
-    
     return cell;
 }
 
@@ -204,12 +195,7 @@
     ActivityDetailVC * vc = [ActivityDetailVC new];
     
     ActivityViewModel * model = [_dataArray objectAtIndex:indexPath.row];
-    vc.activityModel = model;
-    
-    if([TDUtil isArrivedTime:model.endTime])
-    {
-        vc.isExpired = YES;
-    }
+    vc.actionId = model.actionId;
     
     [self.navigationController pushViewController:vc animated:YES];
 }

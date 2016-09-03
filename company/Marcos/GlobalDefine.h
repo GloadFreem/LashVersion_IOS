@@ -159,14 +159,20 @@
 /***===================================================================================**
  *                                          服务器数据获取相关
  *
- 
- 
  ***===================================================================================**/
 
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
-//#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-#define SERVICE_URL @"http://192.168.5.173:8080/jinzht/"//本地
+#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
+//#define SERVICE_URL @"http://192.168.5.173:8080/jinzht/"//本地
+
+// 如果是DEBUG模式用测试服务器地址
+#if DEBUG
+#define JZT_URL(url) [@"http://192.168.5.173:8080/jinzht/" stringByAppendingString:url]
+#else
+#define JZT_URL(url) [@"http://www.jinzht.com:8080/jinzht/" stringByAppendingString:url]
+#endif
+
 
 #define KEY @"jinzht_server_security"
 #define PLATFORM @"1"
@@ -209,7 +215,8 @@
 #define USER_STATIC_USER_AUTHENTIC_STATUS @"user_static_user_authentic_status"
 //用户身份
 #define USER_STATIC_USER_AUTHENTIC_TYPE @"user_static_user_authentic_type"
-
+//城市
+#define USER_STATIC_CITY @"user_static_city"
 
 //#define SERVICE_URL @"http://www.jinzht.com:8000/phone/"//服务器域名地址
 //#define BUINESS_SERVER @"http://220.181.25.233:8081/member/bhawireless/" //易宝支付测试环境
@@ -334,17 +341,21 @@
 
 //评论列表
 #define REQUEST_COMMENT_LIST @"requestProjectCommentList.action"
+//评论
+#define REQUEST_PROJECT_COMMENT @"requestProjectComment.action"
 
 //现场
 #define REQUEST_SCENE @"requestScene.action"
 //现场评论列表
 #define REQUEST_SCENE_COMMENT_LIST @"requestProjectSceneCommentList.action"
-//播放ppt
-#define REQUEST_RECORDATA @"requestRecorData.action"
 //现场评论
 #define REQUEST_SCENE_COMMENT @"requestSceneComment.action"
-//评论
-#define REQUEST_PROJECT_COMMENT @"requestProjectComment.action"
+//播放ppt
+#define REQUEST_RECORDATA @"requestRecorData.action"
+
+//删除评论
+#define REQUEST_COMMENT_DELETE @"requestProjectCommentDelete.action"
+
 
 #pragma mark-----------------------站内信-------------------------------
 

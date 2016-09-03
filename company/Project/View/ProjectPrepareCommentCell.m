@@ -15,6 +15,7 @@
     UILabel *_name;
     UILabel *_time;
     UILabel *_content;
+    UIView *_bottomLine;
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -49,7 +50,9 @@
     _content.textAlignment = NSTextAlignmentLeft;
     _content.font = BGFont(14);
     
-    NSArray *views = @[_icon, _name, _time, _content];
+    _bottomLine = [UIView new];
+    _bottomLine.backgroundColor = colorGray;
+    NSArray *views = @[_icon, _name, _time, _content,_bottomLine];
     [self.contentView sd_addSubviews:views];
     
     UIView *contentView = self.contentView;
@@ -78,7 +81,12 @@
     .rightSpaceToView(contentView,10)
     .autoHeightRatio(0);
 
-    [self setupAutoHeightWithBottomView:_content bottomMargin:20];
+    _bottomLine.sd_layout
+    .leftEqualToView(contentView)
+    .topSpaceToView(_content,19)
+    .rightEqualToView(contentView)
+    .heightIs(1);
+    [self setupAutoHeightWithBottomView:_bottomLine bottomMargin:0];
 }
 
 -(void)setModel:(ProjectSceneCommentModel *)model
@@ -89,7 +97,7 @@
     [_name sizeToFit];
     _time.text = model.commentDate;
     [_time sizeToFit];
-    _content.text = model.content;
+    _content.text = [model.content stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
 - (void)awakeFromNib {

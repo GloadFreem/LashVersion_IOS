@@ -133,4 +133,85 @@
     return [pred evaluateWithObject:self];
 }
 
+/// 十六进制转换为普通字符串
++ (NSString *)stringFromHexString:(NSString *)hexString { //
+    
+    char *myBuffer = (char *)malloc((int)[hexString length] / 2 + 1);
+    bzero(myBuffer, [hexString length] / 2 + 1);
+    for (int i = 0; i < [hexString length] - 1; i += 2) {
+        unsigned int anInt;
+        NSString * hexCharStr = [hexString substringWithRange:NSMakeRange(i, 2)];
+        NSScanner * scanner = [[NSScanner alloc] initWithString:hexCharStr];
+        [scanner scanHexInt:&anInt];
+        myBuffer[i / 2] = (char)anInt;
+    }
+    NSString *unicodeString = [NSString stringWithCString:myBuffer encoding:4];
+    NSLog(@"------字符串=======%@",unicodeString);
+    return unicodeString; 
+    
+    
+}
+
+/// 普通字符串转换为十六进制的
++ (NSString *)hexStringFromString:(NSString *)string{
+    NSData *myD = [string dataUsingEncoding:NSUTF8StringEncoding];
+    Byte *bytes = (Byte *)[myD bytes];
+    //下面是Byte 转换为16进制。
+    NSString *hexStr=@"";
+    for(int i=0;i<[myD length];i++)
+        
+    {
+        NSString *newHexStr = [NSString stringWithFormat:@"%x",bytes[i]&0xff];///16进制数
+        
+        if([newHexStr length]==1)
+            
+            hexStr = [NSString stringWithFormat:@"%@0%@",hexStr,newHexStr];
+        
+        else
+            
+            hexStr = [NSString stringWithFormat:@"%@%@",hexStr,newHexStr]; 
+    } 
+    return hexStr; 
+}
+
+/// 判断是否为表情
++ (BOOL)stringIsTureContainsEmoji:(NSString *)string
+{
+    __block BOOL returnValue = NO;
+    
+    [string enumerateSubstringsInRange:NSMakeRange(0, [string length])
+                               options:NSStringEnumerationByComposedCharacterSequences
+                            usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+                                const unichar hs = [substring characterAtIndex:0];
+                                if (0xd800 <= hs && hs <= 0xdbff) {
+                                    if (substring.length > 1) {
+                                        const unichar ls = [substring characterAtIndex:1];
+                                        const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                                        if (0x1d000 <= uc && uc <= 0x1f77f) {
+                                            returnValue = YES;
+                                        }
+                                    }
+                                } else if (substring.length > 1) {
+                                    const unichar ls = [substring characterAtIndex:1];
+                                    if (ls == 0x20e3) {
+                                        returnValue = YES;
+                                    }
+                                } else {
+                                    if (0x2100 <= hs && hs <= 0x27ff) {
+                                        returnValue = YES;
+                                    } else if (0x2B05 <= hs && hs <= 0x2b07) {
+                                        returnValue = YES;
+                                    } else if (0x2934 <= hs && hs <= 0x2935) {
+                                        returnValue = YES;
+                                    } else if (0x3297 <= hs && hs <= 0x3299) {
+                                        returnValue = YES;
+                                    } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
+                                        returnValue = YES;
+                                    }
+                                }
+                            }];
+    
+    return returnValue;
+}
+
 @end

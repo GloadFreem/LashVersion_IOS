@@ -101,29 +101,16 @@
         if (retA && retB && retC) {
             NSDictionary *fileDic = [[NSDictionary alloc]initWithObjectsAndKeys:@"identiyCarA",@"identiyCarA",@"identiyCarB",@"identiyCarB",@"buinessLicence",@"buinessLicence", nil];
             //加载动画
-            //加载动画控件
-            if (!activity) {
-                //进度
-                activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(WIDTH(self.nextBtn)/3-18, HEIGHT(self.nextBtn)/2-15, 30, 30)];//指定进度轮的大小
-                [activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];//设置进度轮显示类型
-                [self.nextBtn addSubview:activity];
-            }else{
-                if (!activity.isAnimating) {
-                    [activity startAnimating];
-                }
-            }
-            [activity setColor:WriteColor];
             
             //开始加载动画
-//            [activity startAnimating];
             //上传文件
-            self.loadingViewFrame = self.view.frame;
+            self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
             
             self.startLoading = YES;
             self.isTransparent  = YES;
             
             [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
-//            [SVProgressHUD showWithStatus:@"认证中..."];
+
         }
     }
 }
@@ -140,11 +127,8 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         
         if ([status integerValue] == 200) {
-//            [SVProgressHUD dismiss];
+
             self.startLoading = NO;
-//            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-//            app.window.rootViewController = app.tabBar;
-            
             //进入项目首页
             UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
             UINavigationController *nav = (UINavigationController*)window.rootViewController;
@@ -166,8 +150,7 @@
             
         }
     }
-//    [activity stopAnimating];
-//    [SVProgressHUD dismiss];
+
 }
 
 
@@ -249,7 +232,7 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-//    [SVProgressHUD dismiss];
+
 }
 
 @end

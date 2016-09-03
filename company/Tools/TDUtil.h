@@ -560,8 +560,11 @@
 
 //是否是身份证号
 +(BOOL) isidentityCard:(NSString*)str;
-//清除缓存
+//清除个人信息
 +(void)clearMemory;
+//清除数据库
++(void)clearDataBase;
+
 //时间差
 +(NSString*)getDateCha:(NSString*)endDate;
 

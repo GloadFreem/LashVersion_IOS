@@ -40,7 +40,6 @@
     return self;
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -53,10 +52,6 @@
     NSString * version =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     _versionLabel.text = [NSString stringWithFormat:@"金指投  V%@",version];
     
-    [self loadPlatform];
-    [self loadUserIntroduce];
-    [self loadProtocol];
-    [self loadLawer];
     
     [self setupNav];
 }
@@ -65,7 +60,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.platformPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUESTPLATFORMINTRODUCE postParam:dic type:0 delegate:self sel:@selector(requestPlatform:)];
+    [self.httpUtil getDataFromAPIWithOps:REQUESTPLATFORMINTRODUCE postParam:dic type:1 delegate:self sel:@selector(requestPlatform:)];
     
 }
 -(void)requestPlatform:(ASIHTTPRequest *)request
@@ -86,7 +81,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.userIntroducePartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUESTUSERGUIDE postParam:dic type:0 delegate:self sel:@selector(requestUser:)];
+    [self.httpUtil getDataFromAPIWithOps:REQUESTUSERGUIDE postParam:dic type:1 delegate:self sel:@selector(requestUser:)];
 }
 
 -(void)requestUser:(ASIHTTPRequest *)request
@@ -107,7 +102,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.protocolPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUESTUSERPROTOCOL postParam:dic type:0 delegate:self sel:@selector(requestProtocol:)];
+    [self.httpUtil getDataFromAPIWithOps:REQUESTUSERPROTOCOL postParam:dic type:1 delegate:self sel:@selector(requestProtocol:)];
 }
 -(void)requestProtocol:(ASIHTTPRequest *)request
 {
@@ -126,7 +121,7 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.lawerpartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUESTLAWERINTRODUCE postParam:dic type:0 delegate:self sel:@selector(requestLawer:)];
+    [self.httpUtil getDataFromAPIWithOps:REQUESTLAWERINTRODUCE postParam:dic type:1 delegate:self sel:@selector(requestLawer:)];
 }
 
 -(void)requestLawer:(ASIHTTPRequest *)request
@@ -165,18 +160,23 @@
     
     PingTaiWebViewController *vc = [PingTaiWebViewController new];
     if (sender.tag == 0) {
+        [self loadPlatform];
+        
         vc.url = _paltformUrl;
         vc.titleStr = @"平台介绍";
     }
     if (sender.tag == 1) {
+        [self loadUserIntroduce];
         vc.url = _userUrl;
         vc.titleStr = @"新手指南";
     }
     if (sender.tag == 2) {
+        [self loadProtocol];
         vc.url = _protocolUrl;
         vc.titleStr = @"用户协议";
     }
     if (sender.tag == 3) {
+        [self loadLawer];
         vc.url = _lawerurl;
         vc.titleStr = @"免责声明";
     }

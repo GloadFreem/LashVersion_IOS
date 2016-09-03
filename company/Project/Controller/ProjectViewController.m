@@ -443,14 +443,13 @@
             if (authenticsArray.count) {
                 ProjectAuthentics *authentics = authenticsArray[0];
                 
+                [data setObject:authentics.city.name forKey:USER_STATIC_CITY];
                 [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
                 [data setValue:authentics.name forKey:USER_STATIC_NAME];
                 [data setValue:authentics.identiyCarA forKey:USER_STATIC_IDPIC];
                 [data setValue:authentics.identiyCarNo forKey:USER_STATIC_IDNUMBER];
                 [data setValue:authentics.position forKey:USER_STATIC_POSITION];
-                //            [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
                 [data setValue:authentics.authenticstatus.name forKey:USER_STATIC_USER_AUTHENTIC_STATUS];
-                
                 [data setValue:[NSString stringWithFormat:@"%ld",(long)authentics.identiytype.identiyTypeId] forKey:USER_STATIC_USER_AUTHENTIC_TYPE];
             }
             
@@ -940,6 +939,7 @@
     }else{
     ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
     vc.url = model.url;
+    vc.titleStr = model.name;
     vc.model = model;
     vc.image = model.image;
     vc.titleText = model.name;
@@ -1055,7 +1055,6 @@
         {
             [self startLoadBannerData];
         }
-        
     }
 }
 

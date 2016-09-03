@@ -7,6 +7,7 @@
 //
 
 #import "ActivityDetailFooterView.h"
+#import "ActivityDetailCommentView.h"
 
 @interface ActivityDetailFooterView()
 
@@ -17,9 +18,7 @@
 @property (nonatomic, strong) UIButton *totalBtn;
 @property (nonatomic, strong) UIView *partLine;
 @property (nonatomic, strong) ActivityDetailCommentView *commentView;
-@property (nonatomic, strong) UIButton *praiseBtn;
-@property (nonatomic, strong) UIButton *commentBtn;
-
+@property (nonatomic, strong) UILabel *moreL;
 @end
 @implementation ActivityDetailFooterView
 
@@ -27,6 +26,7 @@
 {
     if ( self = [super initWithFrame:frame]) {
         [self setupViews];
+        self.backgroundColor = RGBCOLOR(255, 255, 255);
     }
     return self;
 }
@@ -75,7 +75,7 @@
     _totalBtn = [UIButton new];
     [_totalBtn setBackgroundImage:[UIImage imageNamed:@"icon_rightArrow"] forState:UIControlStateNormal];
     _totalBtn.size = _totalBtn.currentBackgroundImage.size;
-    [_totalBtn addTarget:self action:@selector(totalBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_totalBtn addTarget:self action:@selector(showAllAction) forControlEvents:UIControlEventTouchUpInside];
     [_topView addSubview:_totalBtn];
     _totalBtn.sd_layout
     .centerYEqualToView(_topView)
@@ -95,7 +95,7 @@
     .heightIs(13);
     [_totalLabel setSingleLineAutoResizeWithMaxWidth:150];
     
-    [_topView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showAllAction:)]];
+    [_topView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showAllAction)]];
     
     _partLine = [UIView new];
     _partLine.backgroundColor = colorGray;
@@ -108,7 +108,7 @@
     
     __weak typeof(self) weakSelf = self;
     _commentView = [ActivityDetailCommentView new];
-//    _commentView.backgroundColor = [UIColor redColor];
+    _commentView.backgroundColor = RGBCOLOR(255, 255, 255);
     [_commentView setDidClickCommentLabelBlock:^(NSString *commentId,NSString * repleyName,  CGRect rectInWindow) {
         if (weakSelf.didClickCommentLabelBlock) {
             weakSelf.didClickCommentLabelBlock(commentId,repleyName, rectInWindow);
@@ -120,29 +120,17 @@
     .rightSpaceToView(self, 17)
     .topSpaceToView(_topView, 13);
     
-    _praiseBtn = [UIButton new];
-    [_praiseBtn setBackgroundImage:[UIImage imageNamed:@"iconfont-zan"] forState:UIControlStateNormal];
-    [_praiseBtn addTarget:self action:@selector(praiseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    _praiseBtn.size = _praiseBtn.currentBackgroundImage.size;
-    [self addSubview:_praiseBtn];
-    _praiseBtn.sd_layout
-    .topSpaceToView(_commentView, 30)
-    .rightSpaceToView(self, 24 + SCREENWIDTH/2)
-    .widthIs(42)
-    .heightIs(42);
+    _moreL = [[UILabel alloc] init];
+    _moreL.text = @"...";
+    _moreL.backgroundColor = [UIColor whiteColor];
+    _moreL.textAlignment = NSTextAlignmentLeft;
+    [self addSubview:_moreL];
+    _moreL.sd_layout.topSpaceToView(_commentView, 0).widthIs(150).heightIs(30).leftSpaceToView(self, 58);
     
-    _commentBtn =[UIButton new];
-    [_commentBtn setBackgroundImage:[UIImage imageNamed:@"icon_comment"] forState:UIControlStateNormal];
-    [_commentBtn addTarget:self action:@selector(commentBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    _commentBtn.size = _commentBtn.currentBackgroundImage.size;
-    [self addSubview:_commentBtn];
-    _commentBtn.sd_layout
-    .topEqualToView(_praiseBtn)
-    .leftSpaceToView(_praiseBtn, 48)
-    .widthIs(42)
-    .heightIs(42);
-    
-    
+    UIView *bottomView = [[UIView alloc] init];
+    bottomView.backgroundColor = RGBCOLOR(227, 227, 227);
+    [self addSubview:bottomView];
+    bottomView.sd_layout.topSpaceToView(_moreL, 0).widthIs(SCREENWIDTH).heightIs(10);
 }
 
 -(void)setModel:(ActivityDetailCommentCellModel *)model
@@ -153,19 +141,23 @@
     
     [_commentView setupWithLikeItemsArray:model.likeItemsArray commentItemsArray:model.commentItemsArray];
     
-    if (!model.commentItemsArray.count && !model.likeItemsArray.count) {
-        _commentView.fixedWith = @0; // 如果没有评论或者点赞，设置commentview的固定宽度为0（设置了fixedWith的控件将不再在自动布局过程中调整宽度）
-        _commentView.fixedHeight = @0; // 如果没有评论或者点赞，设置commentview的固定高度为0（设置了fixedHeight的控件将不再在自动布局过程中调整高度）
-        _commentView.sd_layout.topSpaceToView(_partLine, 0);
-    }else{
+//    if (!model.commentItemsArray.count && !model.likeItemsArray.count) {
+//        _commentView.fixedWith = @0; // 如果没有评论或者点赞，设置commentview的固定宽度为0（设置了fixedWith的控件将不再在自动布局过程中调整宽度）
+//        _commentView.fixedHeight = @0; // 如果没有评论或者点赞，设置commentview的固定高度为0（设置了fixedHeight的控件将不再在自动布局过程中调整高度）
+//        _commentView.sd_layout.topSpaceToView(_partLine, 0);
+//    }else{
         _commentView.fixedHeight = nil; // 取消固定宽度约束
         _commentView.fixedWith = nil; // 取消固定高度约束
         _commentView.sd_layout.topSpaceToView(_partLine, 13);
+//    }
+    
+    if (model.commentItemsArray.count < 6) {
+        [_moreL removeFromSuperview];
     }
     
     [_topView layoutSubviews];
     
-    [self setupAutoHeightWithBottomView:_praiseBtn bottomMargin:38];
+    [self setupAutoHeightWithBottomView:_moreL bottomMargin:10];
     
 }
 
@@ -183,44 +175,11 @@
         .topSpaceToView(_partLine,13);
     }
 }
--(void)totalBtnClick:(UIButton*)btn
-{
-    NSLog(@"点击查看全部");
-}
-
-/**
- *  点赞
- *
- *  @param btn button
- */
--(void)praiseBtnClick:(UIButton*)btn
-{
-    if([_delegate respondsToSelector:@selector(didClickLikeButton)])
-    {
-        [_delegate didClickLikeButton];
-    }
-
-}
-
-/**
- *  评论
- *
- *  @param btn button
- */
--(void)commentBtnClick:(UIButton*)btn
-{
-    if([_delegate respondsToSelector:@selector(didClickCommentButton)])
-    {
-        [_delegate didClickCommentButton];
-    }
-}
 
 /**
  *  查看全部
- *
- *  @param sender button
  */
--(void)showAllAction:(id)sender
+-(void)showAllAction
 {
     if([_delegate respondsToSelector:@selector(didClickShowAllButton)])
     {

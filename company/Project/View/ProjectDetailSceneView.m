@@ -190,7 +190,7 @@
 
 -(void)startLoadComment
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_sceneId],@"sceneId",@"0",@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",_commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_sceneId],@"sceneId",@"0",@"page",@"1",@"platform", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_SCENE_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestSceneComment:)];
 }
@@ -371,7 +371,7 @@
                 
             }
             //实时监听遍历是否换页
-            [weakSelf updatePPT:current];
+//            [weakSelf updatePPT:current];
             //当前时间
             CMTime currentTime=Wplayer.currentItem.currentTime;
             //总时间
@@ -451,19 +451,20 @@
 -(void)updatePPT:(NSInteger)current
 {
     for (NSInteger i = 0; i < _pptArray.count; i ++) {
-        ProjectPPTModel *model = _pptArray[i];
-        if (current >= model.startTime && current <= model.endTime) {
-            
+//        ProjectPPTModel *model = _pptArray[i];
+//        if (current >= model.startTime && current <= model.endTime) {
+        
           //NSLog(@"当前ppt页数----%ld",(long)model.sortIndex);
             NSInteger currentPage = _bannerView.scrollView.contentOffset.x/SCREENWIDTH;
             if (currentPage == _pptArray.count -2) {
                 [self startLoadMore];
-            }
-            [_bannerView nextPage: model.sortIndex];
+//            }
+//            [_bannerView nextPage: model.sortIndex];
 //            NSLog(@"翻到-----%ld页",(long)model.sortIndex);
         }
     }
 }
+
 #pragma mark----更新进度条----
 -(void)updateVideoSlider:(CGFloat)currentTime
 {

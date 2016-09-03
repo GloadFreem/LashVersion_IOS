@@ -227,7 +227,9 @@
     [_timeLabel sizeToFit];
     
 //    _contentLabel.text = model.msgContent;
-    [TDUtil setLabelMutableText:_contentLabel content:model.msgContent lineSpacing:0 headIndent:0];
+    NSString *showText = [model.msgContent stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+    [TDUtil setLabelMutableText:_contentLabel content:showText lineSpacing:0 headIndent:0];
     _contentLabel.sd_layout.maxHeightIs(MAXFLOAT);
     _picContainerView.pictureStringArray = model.picNamesArray;
     

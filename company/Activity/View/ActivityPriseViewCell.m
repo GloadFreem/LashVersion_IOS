@@ -23,22 +23,28 @@
     if(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
     {
         [self setup];
-        
-        return self;
     }
-    return nil;
+    return self;
 }
 
 
 -(void)setup
 {
+    UIImageView *priseImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iconfont_zan"]];
+    [self.contentView addSubview:priseImgView];
+    priseImgView.sd_layout
+    .leftSpaceToView(self.contentView, 20)
+    .topSpaceToView(self.contentView, 30)
+    .heightIs(16)
+    .widthIs(16);
+    
     _likeLabel = [MLLinkLabel new];
     _likeLabel.font = BGFont(12);
     _likeLabel.linkTextAttributes = @{NSForegroundColorAttributeName : orangeColor};
     [self.contentView addSubview:_likeLabel];
     
     _likeLabel.sd_layout
-    .leftSpaceToView(self.contentView, 20)
+    .leftSpaceToView(self.contentView, 50)
     .rightSpaceToView(self.contentView, 20)
     .topSpaceToView(self.contentView, 30)
     .autoHeightRatio(0);
@@ -60,10 +66,10 @@
 {
     _likeItemsArray = likeItemsArray;
     
-    NSTextAttachment *attach = [NSTextAttachment new];
-    attach.image = [UIImage imageNamed:@"iconfont_zan"];
-    attach.bounds = CGRectMake(0, -3, 16, 16);
-    NSAttributedString *likeIcon = [NSAttributedString attributedStringWithAttachment:attach];
+//    NSTextAttachment *attach = [NSTextAttachment new];
+//    attach.image = [UIImage imageNamed:@"iconfont_zan"];
+//    attach.bounds = CGRectMake(0, -3, 16, 16);
+    NSAttributedString *likeIcon = [[NSAttributedString alloc] init];
     
     NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithAttributedString:likeIcon];
     
@@ -72,6 +78,7 @@
         if (i > 0) {
             [attributedText appendAttributedString:[[NSAttributedString alloc] initWithString:@"，"]];
         }
+       
         [attributedText appendAttributedString:[self generateAttributedStringWithLikeItemModel:model]];
         ;
     }

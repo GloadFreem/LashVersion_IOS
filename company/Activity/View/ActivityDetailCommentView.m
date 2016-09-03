@@ -11,8 +11,14 @@
 #import "ActivityDetailCommentCellModel.h"
 
 #import "MLLinkLabel.h"
+#import "UILabel+LabelHeightAndWidth.h"
 
 @interface ActivityDetailCommentView ()<MLLinkLabelDelegate>
+{
+    UILabel *nameLabel;
+    UIImageView *imgView;
+    UIImageView *pinglunImgV;
+}
 
 @property (nonatomic, strong) NSArray *likeItemsArray;
 @property (nonatomic, strong) NSArray *commentItemsArray;
@@ -31,7 +37,6 @@
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        
         [self setupViews];
     }
     return self;
@@ -44,6 +49,22 @@
     _likeLabel.font = BGFont(12);
     _likeLabel.linkTextAttributes = @{NSForegroundColorAttributeName : orangeColor};
     [self addSubview:_likeLabel];
+    
+    imgView = [[UIImageView alloc] initWithImage:[UIImage  imageNamed:@"iconfont_zan"]];
+    imgView.frame = CGRectMake(10, 10, 16, 16);
+    [self addSubview:imgView];
+    
+    CGFloat nameLabelW = SCREENWIDTH -34 - CGRectGetMaxX(imgView.frame) - CGRectGetWidth(imgView.frame)-15;
+    nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imgView.frame)+15, CGRectGetMinY(imgView.frame), nameLabelW, 50)];
+    nameLabel.numberOfLines = 0;
+    nameLabel.font = BGFont(12);
+    nameLabel.textColor = RGBCOLOR(255, 145, 0);
+    [self addSubview:nameLabel];
+    
+    pinglunImgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_answer"]];
+//    pinglunImgV.frame = CGRectMake(CGRectGetMinX(imgView.frame), CGRectGetMaxY(nameLabel.frame)+15, 16, 16);
+    [self addSubview:pinglunImgV];
+
     
 }
 
@@ -83,23 +104,19 @@
 {
     _likeItemsArray = likeItemsArray;
     
-    NSTextAttachment *attach = [NSTextAttachment new];
-    attach.image = [UIImage imageNamed:@"iconfont_zan"];
-    attach.bounds = CGRectMake(0, -3, 16, 16);
-    NSAttributedString *likeIcon = [NSAttributedString attributedStringWithAttachment:attach];
-    
-    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithAttributedString:likeIcon];
-    
-    for (int i = 0; i < likeItemsArray.count; i++) {
-        ActivityDetailCellLikeItemModel *model = likeItemsArray[i];
-        if (i > 0) {
-            [attributedText appendAttributedString:[[NSAttributedString alloc] initWithString:@"，"]];
+    NSString *str = nil;
+    for (int i = 0; i < _likeItemsArray.count; i++) {
+        ActivityDetailCellLikeItemModel *model = _likeItemsArray[i];
+        if (i == 0) {
+            str = model.userName;
+        } else {
+            str = [NSString stringWithFormat:@"%@, %@", str, model.userName];
         }
-        [attributedText appendAttributedString:[self generateAttributedStringWithLikeItemModel:model]];
-        ;
     }
     
-    _likeLabel.attributedText = [attributedText copy];
+    nameLabel.text = str;
+    CGFloat height = [UILabel getHeightByWidth:nameLabel.width title:nameLabel.text font:nameLabel.font];
+    nameLabel.frame = CGRectMake(CGRectGetMaxX(imgView.frame)+15, CGRectGetMinY(imgView.frame), nameLabel.width, height);
 }
 
 -(NSMutableArray*)commentLabelsArray
@@ -132,7 +149,7 @@
         _likeLabel.sd_resetLayout
         .leftSpaceToView(self, margin)
         .rightSpaceToView(self, margin)
-        .topSpaceToView(lastTopView, 10)
+        .topSpaceToView(lastTopView, 20)
         .autoHeightRatio(0);
         
         _likeLabel.isAttributedContent = YES;
@@ -144,18 +161,33 @@
         .heightIs(0);
     }
     
-    for (int i = 0; i < self.commentItemsArray.count; i++) {
-        UILabel *label = (UILabel *)self.commentLabelsArray[i];
-        label.hidden = NO;
-        CGFloat topMargin = (i == 0 && likeItemsArray.count == 0) ? 10 : 5;
-        label.sd_layout
-        .leftSpaceToView(self, 8)
-        .rightSpaceToView(self, 5)
-        .topSpaceToView(lastTopView, topMargin)
-        .autoHeightRatio(0);
-        
-        label.isAttributedContent = YES;
-        lastTopView = label;
+    if (self.commentItemsArray.count == 0) {
+        pinglunImgV.frame = CGRectMake(CGRectGetMinX(imgView.frame), CGRectGetMaxY(imgView.frame)+25, 16, 16);
+    } else {
+        for (int i = 0; i < self.commentItemsArray.count; i++) {
+            
+            UILabel *label = (UILabel *)self.commentLabelsArray[i];
+            label.hidden = NO;
+            CGFloat topMargin = (i == 0 && likeItemsArray.count == 0) ? 10 : 5;
+            label.sd_layout
+            .leftSpaceToView(self, 38)
+            .rightSpaceToView(self, 5)
+            .topSpaceToView(lastTopView, topMargin)
+            .autoHeightRatio(0);
+            if (i == 0) {
+                
+                if (self.likeItemsArray.count == 0) {
+                    pinglunImgV.frame = CGRectMake(CGRectGetMinX(imgView.frame), CGRectGetMaxY(imgView.frame)+25, 16, 16);
+                    label.sd_layout.topSpaceToView(imgView, 25);
+                } else {
+                    pinglunImgV.frame = CGRectMake(CGRectGetMinX(imgView.frame), CGRectGetMaxY(nameLabel.frame)+25, 16, 16);
+                    label.sd_layout.topSpaceToView(nameLabel, 25);
+                }
+            }
+            
+            label.isAttributedContent = YES;
+            lastTopView = label;
+        }
     }
     
     [self setupAutoHeightWithBottomView:lastTopView bottomMargin:6];
@@ -185,7 +217,8 @@
         if (model.secondUserName.length) {
             text = [text stringByAppendingString:[NSString stringWithFormat:@"回复%@", model.secondUserName]];
         }
-        text = [text stringByAppendingString:[NSString stringWithFormat:@"：%@", model.commentString]];
+        NSString *comment = [model.commentString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"：%@", comment]];
         NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:text];
         [attString setAttributes:@{NSLinkAttributeName : model.firstUserId} range:[text rangeOfString:model.firstUserName]];
         

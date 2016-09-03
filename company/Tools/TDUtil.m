@@ -15,7 +15,9 @@
 #import "Reachability.h"
 #import "ASIFormDataRequest.h"
 
+
 @implementation TDUtil
+
 + (UIImage *)createImageWithColor:(UIColor *)color rect:(CGRect)rect
 {
     UIGraphicsBeginImageContext(rect.size);
@@ -1555,8 +1557,26 @@
     [data removeObjectForKey:USER_STATIC_POSITION];
     [data removeObjectForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     [data removeObjectForKey:USER_STATIC_EXT_USER_ID];
+    [data removeObjectForKey:USER_STATIC_CITY];
+    [data removeObjectForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     [data removeObjectForKey:@"nickName"];
     [data synchronize];
+    
+}
+
+//清除数据库
++(void)clearDataBase
+{
+    //数据库工具
+    DataBaseHelper *dataBase = [DataBaseHelper sharedInstance];
+    [dataBase cleanTable:BANNERTABLE];
+    [dataBase cleanTable:PROJECTTABLE];
+    [dataBase cleanTable:ROADTABLE];
+    [dataBase cleanTable:INVESTPERSONTABLE];
+    [dataBase cleanTable:INVESTORGANIZATIONTABLE];
+    [dataBase cleanTable:THINKTANKTABLE];
+    [dataBase cleanTable:CIRCLETABLE];
+    [dataBase cleanTable:ACTIVITYTABLE];
 }
 
 #pragma mark----时间差

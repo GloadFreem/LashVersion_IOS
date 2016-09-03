@@ -12,17 +12,16 @@
 #import "ActivityCommentCell.h"
 #import "ActivityPriseViewCell.h"
 #import "ActivityDetailCommentCellModel.h"
-#import "ActivityCommentListFooterView.h"
 #import "ActivityDetailCommentCellModel.h"
-
+#import "ActivityDetailCommentView.h"
+#import "LQQMonitorKeyboard.h"
 #import "RenzhengViewController.h"
 
 #define COMMENTLIST @"requestPriseListAction"
 #define kActivityDetailHeaderCellId @"ActivityDetailHeaderCell"
-@interface ActivityCommentListViewController ()<UITableViewDelegate,UITableViewDataSource,ActivityDetailFooterViewDelegate,UITextFieldDelegate>
+@interface ActivityCommentListViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 {
     NSInteger page;
-    ActivityCommentListFooterView * footerView;
 }
 
 @property (nonatomic, strong) ActionLikerModel * likersModel;
@@ -39,7 +38,7 @@
 
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
-
+@property (nonatomic, copy) NSString *selfId;
 @property (nonatomic, strong) UIView *bottomView;
 
 @end
@@ -56,7 +55,8 @@
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
-    
+    _selfId = [defaults objectForKey:USER_STATIC_USER_ID];
+
     self.automaticallyAdjustsScrollViewInsets  = NO;
     
     [self setUpNavBar];
@@ -65,6 +65,8 @@
     
     //生成请求partner
     self.actionCommentListPartner = [TDUtil encryKeyWithMD5:KEY action:COMMENTLIST];
+    
+    [self loadActionCommentData];
     
 }
 -(void)setUpNavBar
@@ -85,6 +87,7 @@
     self.view.backgroundColor = WriteColor;
     _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.delegate =self;
+    _tableView.frame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT-64);
     _tableView.dataSource =self;
     _tableView.backgroundColor = [UIColor whiteColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -101,35 +104,27 @@
     
     [self.view addSubview:_tableView];
     
-    if(!footerView)
-    {
-        footerView  = [[ActivityCommentListFooterView alloc]init];
-    }
-    footerView.backgroundColor = [UIColor whiteColor];
-    footerView.delegate = self;
-    [self.view addSubview:footerView];
+
     // 回复框
     _bottomView = [UIView new];
+    _bottomView.frame = CGRectMake(0, self.view.frame.size.height - 64-50, SCREENWIDTH, 50);
     [_bottomView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:_bottomView];
-    _bottomView.sd_layout
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .bottomEqualToView(self.view)
-    .heightIs(50);
+
     _bottomView.hidden = YES;
     
-    footerView.sd_layout
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .bottomSpaceToView(_bottomView,0)
-    .heightIs(100);
-    
-    _tableView.sd_layout
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .bottomSpaceToView(footerView,0)
-    .topEqualToView(self.view);
+    [LQQMonitorKeyboard LQQAddMonitorWithShowBack:^(NSInteger height) {
+        
+        _bottomView.frame = CGRectMake(0, self.view.frame.size.height - 50 - height, SCREENWIDTH, 50);
+        //        NSLog(@"键盘出现了 == %ld",(long)height);
+        
+    } andDismissBlock:^(NSInteger height) {
+        
+        _bottomView.frame = CGRectMake(0, self.view.frame.size.height - 50, SCREENWIDTH, 50);
+        //        NSLog(@"键盘消失了 == %ld",(long)height);
+        
+    }];
+
     
     UIView *line = [UIView new];
     line.backgroundColor = colorGray;
@@ -199,13 +194,13 @@
     
     [self loadActionCommentData];
 }
+
 /**
  *  评论列表
  */
-
 -(void)loadActionCommentData
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentListPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", (long)page),@"page", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentListPartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",STRING(@"%ld", (long)page),@"page",@"1",@"platform", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestActionCommentList:)];
 }
@@ -213,7 +208,6 @@
 -(void)requestActionCommentList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -300,7 +294,7 @@
                         commentItemModel.secondUserId = @"";
                         
                     }
-                    commentItemModel.commentString = baseModel.content;
+                    commentItemModel.commentString = [baseModel.content stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                     
                     [tempArray addObject:commentItemModel];
                 }
@@ -325,10 +319,7 @@
 
 
 #pragma mark -tableViewDataSource
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger count = 0;
@@ -348,7 +339,7 @@
         if(row==0)
         {
             CGFloat h = [self.tableView cellHeightForIndexPath:indexPath model:self.likersModel keyPath:@"model" cellClass:[ActivityPriseViewCell class] contentViewWidth:[self cellContentViewWith]];
-            return h;
+            return h+15;
         }
     }
     
@@ -391,8 +382,10 @@
     static NSString *cellId = @"ActivityCommentViewCell";
     ActivityCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
-        cell = [[ActivityCommentCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cell = [[ActivityCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
+    
+    cell.row = indexPath.row;
     
     if (row-1<self.commentCellModel.commentItemsArray.count) {
         [cell setModel:[self.commentCellModel.commentItemsArray objectAtIndex:row-1]];
@@ -401,12 +394,19 @@
     __weak typeof(self) weakSelf = self;
     
     [cell setDidClickCommentLabelBlock:^(NSString* userId,NSString * name, CGRect rectInWindow) {
-        weakSelf.textField.placeholder =[NSString stringWithFormat:@"  回复：%@",name];
-        [weakSelf.textField becomeFirstResponder];
-        [weakSelf.bottomView setHidden:NO];
-        weakSelf.isReplayingComment = YES;
-        weakSelf.commentToUser = userId;
+        
+        NSInteger num1 = [weakSelf.selfId integerValue];
+        NSInteger num2 = [userId integerValue];
+        if (num1 != num2) {
+            weakSelf.textField.placeholder =[NSString stringWithFormat:@" 回复：%@",name];
+            [weakSelf.textField becomeFirstResponder];
+            [weakSelf.bottomView setHidden:NO];
+            weakSelf.isReplayingComment = YES;
+            weakSelf.commentToUser = userId;
+        }
     }];
+    
+
     return cell;
     
 }
@@ -436,6 +436,8 @@
     [self.navigationController.navigationBar setHidden:NO];
     
     [[IQKeyboardManager sharedManager] setEnableAutoToolbar:NO];
+    [IQKeyboardManager sharedManager].enable = NO;
+    
     
 }
 
@@ -443,6 +445,7 @@
 {
     [super viewWillDisappear:animated];
     [[IQKeyboardManager sharedManager] setEnableAutoToolbar:YES];
+    [IQKeyboardManager sharedManager].enable = YES;
 }
 
 -(void)dealloc
@@ -454,9 +457,6 @@
 #pragma mark -textFiledDelegate
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField.text.length) {
-        [_textField resignFirstResponder];
-    }
     [self actionComment];
     return NO;
 }
@@ -476,38 +476,7 @@
 }
 
 #pragma footerDelegate
--(void)didClickLikeButton
-{
-    
-    if(!self.actionPrisePartner)
-    {
-        self.actionPrisePartner = [TDUtil encryKeyWithMD5:KEY action:ACTION_PRISE];
-    }
-    
-    //开始请求
-    [self actionPrise];
-}
 
--(void)didClickCommentButton
-{
-        //更新约束
-//        [self updateFrame];
-        [_bottomView setHidden:NO];
-        
-        [self.textField becomeFirstResponder];
-        //设置初始化状态
-        _textField.placeholder = @"";
-        //恢复为评论状态
-        self.commentToUser = @"0";
-    
-}
-
--(void)didClickShowAllButton
-{
-    ActivityCommentListViewController * controller  = [[ActivityCommentListViewController alloc]init];
-    controller.activityModel = self.activityModel;
-    [self.navigationController pushViewController:controller animated:YES];
-}
 
 /**
  *  活动点赞
@@ -515,7 +484,7 @@
 -(void)actionPrise
 {
 
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionPrisePartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%ld", (long)self.headerModel.flag),@"flag", nil];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionPrisePartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",STRING(@"%ld", (long)self.headerModel.flag),@"flag", nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:ACTION_PRISE postParam:dic type:0 delegate:self sel:@selector(requestPriseAction:)];
 
@@ -576,6 +545,7 @@
         NSString * content = self.textField.text;
         if([content isEqualToString:@""] ||[content isEqualToString:@"请输入评论内容"])
         {
+            [self.textField resignFirstResponder];
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入评论内容"];
             return;
         }
@@ -596,7 +566,7 @@
             _commentToUser = @"0";
         }
         
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentPartner,@"partner",STRING(@"%ld", (long)self.activityModel.actionId),@"contentId",STRING(@"%d", flag),@"flag",content,@"content",self.commentToUser,@"atUserId", nil];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentPartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",STRING(@"%d", flag),@"flag",content,@"content",self.commentToUser,@"atUserId", @"1",@"platform",nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestCommentAction:)];
 
@@ -610,6 +580,8 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshComment" object:nil];
+            
             NSDictionary * dic = [jsonDic valueForKey:@"data"];
             
             ActionComment * baseModel;
@@ -646,6 +618,13 @@
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self.view endEditing:YES];
+    [self.textField resignFirstResponder];
+    
 }
 
 -(void)updateFrame

@@ -98,18 +98,13 @@
     
     if (_height > 35) {
         
-        return _height + 16;
+        return _height + 16 + 10;
     }
     
-    return 44;
+    return 44 + 10;
     
 }
-//-(void)getTableViewHeight{
-//    _tableViewH += _height;
-//    if (_tableViewH > 300) {
-//        _tableViewHeight.constant = _tableViewH;
-//    }
-//}
+
 #pragma mark- tableViewDelegate
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -121,16 +116,14 @@
     }
     
     cell.leftButton.tag = indexPath.row;
-    cell.rightLabel.text = _dataArray[indexPath.row];
     cell.rightLabel.numberOfLines = 0;
+//    cell.rightLabel.text = _dataArray[indexPath.row];
+    [TDUtil setLabelMutableText:cell.rightLabel content:_dataArray[indexPath.row] lineSpacing:3 headIndent:0];
     
     CGFloat height = [cell.rightLabel.text commonStringHeighforLabelWidth:SCREENWIDTH - 70 withFontSize:14];
 //    NSLog(@"高度是%f",height);
     cell.rightLabelHeight.constant = height;
     _height = height;
-//    if (indexPath.row == _dataArray.count-1) {
-//        [self getTableViewHeight];
-//    }
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -187,6 +180,7 @@
     
     BOOL retC =[TDUtil checkImageExists:@"buinessLicence"];
     
+    
     //开始加载动画
     //上传文件
     self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
@@ -222,11 +216,9 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         
         if ([status integerValue] == 200) {
-//            [SVProgressHUD dismiss];
+
             self.startLoading = NO;
-//            AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-//            app.window.rootViewController = app.tabBar;
-            
+
             UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
             UINavigationController *nav = (UINavigationController*)window.rootViewController;
             JTabBarController * tabBarController;
@@ -235,20 +227,16 @@
                     tabBarController = (JTabBarController*)vc;
                 }
             }
-            
             if (!tabBarController) {
                 tabBarController = [CommentTD createViewControllers];
             }
-            
             [self.navigationController pushViewController:tabBarController animated:NO];
-            
         }else{
             self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             }
     }
-//    [activity stopAnimating];
-//    [SVProgressHUD dismiss];
+
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request
@@ -265,7 +253,7 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-//    [SVProgressHUD dismiss];
+
 }
 
 @end

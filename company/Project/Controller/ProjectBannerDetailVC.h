@@ -13,6 +13,7 @@
 @interface ProjectBannerDetailVC : RootViewController
 
 @property (nonatomic, strong) ProjectBannerListModel *model;
+@property (nonatomic, copy) NSString *titleStr;
 
 @property (nonatomic, copy) NSString *url;
 

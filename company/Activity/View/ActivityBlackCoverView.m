@@ -29,8 +29,8 @@
 }
 - (IBAction)btnClick:(UIButton *)sender {
     
-    if ([self.delegate respondsToSelector:@selector(clickBtnInView:andIndex:content:)]) {
-        [self.delegate clickBtnInView:self andIndex:sender.tag content:_textView.text];
+    if ([self.delegate respondsToSelector:@selector(clickBtnInBlackView:andIndex:content:)]) {
+        [self.delegate clickBtnInBlackView:self andIndex:sender.tag content:_textView.text];
         
         [_textView resignFirstResponder];
     }

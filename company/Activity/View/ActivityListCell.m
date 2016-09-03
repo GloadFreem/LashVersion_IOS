@@ -22,6 +22,7 @@
     UIImageView *_addressImage;
     UILabel *_addressLabel;
     UIView *_bottomView;
+    UIImageView *_expiredImage;
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -81,7 +82,10 @@
     _bottomView = [UIView new];
     _bottomView.backgroundColor = [TDUtil colorWithHexString:@"f5f5f5"];
     
-    NSArray *views = @[_photoImage, _titleLabel, _partLine, _timeImage, _timeLabel, _personImage, _personLabel, _feeLabel, _addressImage, _addressLabel];
+    _expiredImage = [UIImageView new];
+    _expiredImage.image = [UIImage imageNamed:@"activity_guoqi.png"];
+    
+    NSArray *views = @[_photoImage, _titleLabel, _partLine, _timeImage, _timeLabel, _personImage, _personLabel, _feeLabel, _addressImage, _addressLabel, _bottomView, _expiredImage];
     
     [self.contentView sd_addSubviews:views];
     
@@ -114,6 +118,7 @@
     _timeLabel.sd_layout
     .leftSpaceToView(_timeImage, 5)
     .centerYEqualToView(_timeImage)
+    .rightSpaceToView(contentView, 15)
     .heightIs(12);
     
     _personImage.sd_layout
@@ -130,7 +135,8 @@
     _feeLabel.sd_layout
     .leftSpaceToView(_personLabel, 10)
     .centerYEqualToView(_personImage)
-    .heightIs(15);
+    .heightIs(20)
+    .widthIs(40);
     
     _addressImage.sd_layout
     .leftEqualToView(_timeImage)
@@ -140,14 +146,21 @@
     
     _addressLabel.sd_layout
     .leftSpaceToView(_addressImage, 5)
+    .rightSpaceToView(contentView, 15)
     .centerYEqualToView(_addressImage)
     .heightIs(12);
+    
+    _expiredImage.sd_layout
+    .widthIs(104)
+    .heightIs(67)
+    .topSpaceToView(_partLine, 15)
+    .rightSpaceToView(contentView, 22);
     
     _bottomView.sd_layout
     .leftEqualToView(contentView)
     .rightEqualToView(contentView)
     .topSpaceToView(_addressImage, 10)
-    .heightIs(20);
+    .heightIs(10);
     
     [self setupAutoHeightWithBottomView:_bottomView bottomMargin:0];
 }
@@ -157,10 +170,15 @@
     if (model) {
         _model = model;
         
-        [_photoImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.name]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+        [_photoImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.imgUrl]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
         
         _titleLabel.text = model.name;
         
+        if (model.isExpired) {
+            [_expiredImage setHidden:NO];
+        }else{
+            [_expiredImage setHidden:YES];
+        }
         //地址
         [_addressLabel setText:_model.address];
         //人数限制
@@ -174,23 +192,10 @@
         NSString * week = [TDUtil weekOfDate:dateStr];
         //时间:HS
         NSString * time = [TDUtil dateTimeFromString:_model.startTime];
-        
         //时间
-        [_titleLabel setText:[NSString stringWithFormat:@"%@%@%@",dateStr,week,time]];
+        [_timeLabel setText:[NSString stringWithFormat:@"%@%@%@",dateStr,week,time]];
         
     }
 
 }
-
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
 @end

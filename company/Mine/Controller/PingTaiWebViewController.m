@@ -89,7 +89,6 @@
 -(void)webViewDidStartLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
-//        [SVProgressHUD showWithStatus:@"加载中..."];
         self.startLoading = YES;
     }
 }

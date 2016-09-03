@@ -231,7 +231,7 @@
 -(void)setProjectId:(NSInteger)projectId
 {
     _projectId = projectId;
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",@"0",@"page",nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",@"0",@"page",@"1",@"platform",nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_COMMENT_LIST postParam:dic type:0 delegate:self sel:@selector(requestCommentList:)];
 }
@@ -253,7 +253,7 @@
                 cellModel.flag = model.flag;
                 cellModel.iconImage = model.users.headSculpture;
                 cellModel.name = model.users.name;
-                cellModel.content = model.content;
+                cellModel.content = [model.content stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                 cellModel.time = model.commentDate;
                 [_dataArray addObject:cellModel];
 //                [_modelArray addObject:model];

@@ -21,7 +21,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="71I-y5-xsy">
                             <rect key="frame" x="20" y="120" width="335" height="245"/>
                             <subviews>
-                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="说点什么吧.." translatesAutoresizingMaskIntoConstraints="NO" id="Nlp-LG-OFq">
+                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="说点什么吧..." translatesAutoresizingMaskIntoConstraints="NO" id="Nlp-LG-OFq">
                                     <rect key="frame" x="10" y="10" width="315" height="115"/>
                                     <color key="backgroundColor" red="0.92549019607843142" green="0.92549019607843142" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
@@ -29,7 +29,7 @@
                                     </constraints>
                                     <color key="textColor" red="0.72549019609999998" green="0.72549019609999998" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                                 </textView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ACz-Si-9vL">
                                     <rect key="frame" x="10" y="135" width="315" height="60"/>

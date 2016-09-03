@@ -111,7 +111,8 @@
     [_timelabel sizeToFit];
     
 //    _contentLabel.text = model.contentStr;
-    [TDUtil setLabelMutableText:_contentLabel content:model.contentStr lineSpacing:5 headIndent:0];
+    NSString *showText = [model.contentStr stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [TDUtil setLabelMutableText:_contentLabel content:showText lineSpacing:0 headIndent:0];
     [self setupAutoHeightWithBottomView:_contentLabel bottomMargin:15*HEIGHTCONFIG];
 }
 

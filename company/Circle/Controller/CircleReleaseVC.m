@@ -13,10 +13,10 @@
 #import "PECropViewController.h"
 
 #import "UIImage+Cut.h"
+#import "SDImageCache.h"
 
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "CustomImagePickerController.h"
-
 #define textViewContent @"发布投融资相关内容"
 #define PUBLICFEEL @"requestPublicFeeling"
 #define NUMBERFORTY 40
@@ -102,7 +102,7 @@
     _textView.textColor = color47;
     _textView.textAlignment = NSTextAlignmentLeft;
     _textView.backgroundColor = [UIColor whiteColor];
-    _textView.returnKeyType = UIReturnKeyDefault;
+    _textView.returnKeyType = UIReturnKeyDone;
     _textView.keyboardType = UIKeyboardTypeDefault;
     _textView.text = textViewContent;
     _textView.scrollEnabled = YES;
@@ -139,7 +139,6 @@
             if ([view isKindOfClass:UIImageView.class]) {
                 UIImage *image = ((UIImageView*)view).image;
                 image = [image imageByCroppingSelf];
-//                image = 
                 [postArray addObject:image];
             }
         }
@@ -195,7 +194,7 @@
     
 }
 
-#pragma mark -发布内容
+#pragma mark -发布内容---废弃
 -(void)publishPhotos:(NSMutableArray*)filesArray content:(NSString*)content
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",content,@"content", nil];
@@ -735,6 +734,7 @@
         [textView resignFirstResponder];
         return NO;
     }
+//    [self publishClick:nil];
     return YES;
 }
 -(void)textViewDidBeginEditing:(UITextView *)textView
@@ -798,10 +798,16 @@
     
     [delegate.tabBar tabBarHidden:YES animated:NO];
     
+    [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
+    [IQKeyboardManager sharedManager].enable = NO;
 }
+
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
+    [IQKeyboardManager sharedManager].enable = YES;
     
 }
 

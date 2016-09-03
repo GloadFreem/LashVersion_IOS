@@ -75,7 +75,7 @@
     
     //初始化tableView高度
     if ([self.identifyType integerValue] == 3 || [self.identifyType integerValue] == 4) {
-        _tableViewHeight.constant = 510*HEIGHTCONFIG;
+        _tableViewHeight.constant = 500*HEIGHTCONFIG;
         
     }else if ([self.identifyType integerValue] == 1){
         _tableViewHeight.constant = 460*HEIGHTCONFIG;
@@ -93,6 +93,7 @@
     _tableView.scrollEnabled = NO;
     _tableView.delegate =self;
     _tableView.dataSource = self;
+    _tableView.backgroundColor = [TDUtil colorWithHexString:@"EFEFF4"];
     [_tableView registerNib:[UINib nibWithNibName:@"IdentityTableViewCell" bundle:nil] forCellReuseIdentifier:@"cellID"];
     
     _nextStup.layer.cornerRadius = 20;

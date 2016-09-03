@@ -17,6 +17,8 @@
 #import "ProjectDetailController.h"
 #import "ProjectPrepareDetailVC.h"
 
+#import "LQQMonitorKeyboard.h"
+
 #define CIRCLE_PRAISE @"requestPriseFeeling"
 #define CIRCLEDETAIL @"requestFeelingDetail"
 #define CIRCLECOMMENT @"requestCommentFeeling"
@@ -55,6 +57,7 @@
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
 
 @property (nonatomic, assign) BOOL isFirst;
+@property (nonatomic, strong) UIView *returnView;  //回复框
 
 @end
 
@@ -110,11 +113,10 @@
 }
 -(void)loadData
 {
-//    [SVProgressHUD showWithStatus:@"加载中..."];
     if (_isFirst) {
        self.startLoading = YES;
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",VERSION,@"version",nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",VERSION,@"version",PLATFORM,@"platform",nil];
     //开始请求
 //    NSLog(@"dayin数据---%@",dic);
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestCircleDetail:)];
@@ -136,7 +138,6 @@
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
-            [SVProgressHUD dismiss];
             //解析数据  将data字典转换为BaseModel
 //            NSLog(@"data字典---%@",jsonDic[@"data"]);
             
@@ -152,7 +153,7 @@
             listModel.contentText = baseModel.contentshare.desc;
             listModel.contentImage = baseModel.contentshare.image;
             listModel.url = baseModel.contentshare.content;
-            listModel.titleText = baseModel.contentshare.contenttype.name;
+            listModel.titleText = baseModel.contentshare.tag;
             listModel.feelingTypeId = baseModel.feeingtype.feelingTypeId;
             
             //回复atUserId
@@ -244,15 +245,8 @@
             }
 //            NSLog(@"dataArray的个数：---%ld",_dataArray.count);
             [_tableView reloadData];
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
             
         }else{
-            
-//            [SVProgressHUD dismiss];
-            [self.tableView.mj_footer endRefreshing];
-
-            [self.tableView.mj_header endRefreshing];
 //            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             
         }
@@ -260,6 +254,9 @@
     }else{
         self.isNetRequestError  =YES;
     }
+    [self.tableView.mj_footer endRefreshing];
+    
+    [self.tableView.mj_header endRefreshing];
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request
@@ -277,7 +274,7 @@
 -(void)loadMoreData
 {
 //    [self.tableView.mj_header beginRefreshing];
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"feelingId",[NSString stringWithFormat:@"%ld",(long)_page],@"page",PLATFORM,@"platform",nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_FEELING_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestCircleDetailMore:)];
 }
@@ -334,6 +331,8 @@
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:NO];
     
+    
+    
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     UINavigationController *nav = (UINavigationController*)window.rootViewController;
     JTabBarController * tabBarController;
@@ -356,6 +355,7 @@
     [delegate.tabBar tabBarHidden:YES animated:NO];
     
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
+    [IQKeyboardManager sharedManager].enable = NO;
     
 }
 
@@ -364,6 +364,7 @@
     [super viewWillDisappear:animated];
  
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
+    [IQKeyboardManager sharedManager].enable = YES;
     
     //更新列表点赞状态
     if (_viewController && _indexPath) {
@@ -388,8 +389,6 @@
     leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [leftback addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
-    
-    
     self.navigationItem.title = @"详情";
 }
 
@@ -400,37 +399,122 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
+//    _tableView.frame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT-64-50);
     [self.view addSubview:_tableView];
+    
+    //长安手势
+    UILongPressGestureRecognizer *longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
+    
+    longPressGr.minimumPressDuration = 1;
+    
+    longPressGr.numberOfTouchesRequired = 1;
+    
+    [_tableView addGestureRecognizer:longPressGr];
+    
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
 //    [self.tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
-   
+
+    [self createReturnView];
     
+    [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.mas_equalTo(0);
+        //        make.height.mas_equalTo(SCREENHEIGHT -50-64);
+        make.bottom.mas_equalTo(_returnView).offset(0);
+    }];
+    
+}
+
+-(void)longPressAction:(UILongPressGestureRecognizer *)gesture
+{
+    if(gesture.state == UIGestureRecognizerStateBegan)
+    {
+        CGPoint point = [gesture locationInView:self.tableView];
+        
+        NSIndexPath * indexPath = [self.tableView indexPathForRowAtPoint:point];
+        
+        if(indexPath == nil) return ;
+        
+        if (indexPath.row == 0) return;
+        
+        //add your code here
+        if (_atUserIdArray[indexPath.row]) {
+            _userId = [NSString stringWithFormat:@"%@",_atUserIdArray[indexPath.row]];
+            _index = [_atUserIdArray indexOfObject:_userId];
+        }
+        
+        if (_beCommentNameArray[indexPath.row]) {
+            _beCommentName = [NSString stringWithFormat:@"%@",_beCommentNameArray[indexPath.row]];
+            _nameIndex = [_beCommentNameArray indexOfObject:_beCommentName];
+        }
+        NSInteger num1 = [_selfId integerValue];
+        NSInteger num2 = [_userId integerValue];
+        if (num1 == num2){
+            _deleteModel = _dataArray[indexPath.row];
+            
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
+            __block CircleDetailVC* blockSelf = self;
+            
+            UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                
+            }];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [blockSelf btnCertain:nil];
+            }];
+            
+            [alertController addAction:cancleAction];
+            [alertController addAction:okAction];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+            
+            return;
+        
+        }
+    }
+}
+
+
+#pragma mark-----创建回复框
+-(void)createReturnView
+{
     // 回复框
-    UIView *view = [UIView new];
-    [view setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:view];
-    [view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.view);
-//        make.top.equalTo(_tableView.mas_bottom);
+    _returnView = [UIView new];
+//    view.frame = CGRectMake(0, self.view.frame.size.height - 64-50, SCREENWIDTH, 50);
+    [_returnView setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:_returnView];
+    [_returnView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.mas_equalTo(0);
         make.height.mas_equalTo(50);
     }];
     
-    [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.view.mas_left);
-        make.top.mas_equalTo(self.view.mas_top);
-        make.right.mas_equalTo(self.view.mas_right);
-        make.bottom.mas_equalTo(self.view.mas_bottom);
+    [LQQMonitorKeyboard LQQAddMonitorWithShowBack:^(NSInteger height) {
+        
+//        _returnView.frame = CGRectMake(0, self.view.frame.size.height - 50 - height, SCREENWIDTH, 50);
+        //        NSLog(@"键盘出现了 == %ld",(long)height);
+        [_returnView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.mas_equalTo(0);
+            make.height.mas_equalTo(50);
+            make.top.mas_equalTo(SCREENHEIGHT-height - 114);
+        }];
+    } andDismissBlock:^(NSInteger height) {
+        
+//        _returnView.frame = CGRectMake(0, self.view.frame.size.height - 50, SCREENWIDTH, 50);
+        //        NSLog(@"键盘消失了 == %ld",(long)height);
+        [_returnView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.bottom.right.mas_equalTo(0);
+            make.height.mas_equalTo(50);
+        }];
     }];
+    
     
     UIView *line = [UIView new];
     line.backgroundColor = colorGray;
-    [view addSubview:line];
+    [_returnView addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.mas_equalTo(view);
+        make.left.right.top.mas_equalTo(_returnView);
         make.height.mas_equalTo(0.5);
     }];
     //输入框
@@ -451,11 +535,11 @@
     UIView *leftView = [[UIView alloc]initWithFrame:frame];
     field.leftView = leftView;
     field.leftViewMode = UITextFieldViewModeAlways;
-    [view addSubview:field];
+    [_returnView addSubview:field];
     [field mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(view.mas_left).offset(12);
-        make.right.mas_equalTo(view.mas_right).offset(-76);
-        make.centerY.mas_equalTo(view.mas_centerY);
+        make.left.mas_equalTo(_returnView.mas_left).offset(12);
+        make.right.mas_equalTo(_returnView.mas_right).offset(-76);
+        make.centerY.mas_equalTo(_returnView.mas_centerY);
         make.height.mas_equalTo(36);
     }];
     
@@ -468,12 +552,12 @@
     answerBtn.titleLabel.font = BGFont(16);
     [answerBtn addTarget:self action:@selector(sendComment:) forControlEvents:UIControlEventTouchUpInside];
     _sendBtn = answerBtn;
-    [view addSubview:answerBtn];
+    [_returnView addSubview:answerBtn];
     [answerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(field.mas_right).offset(5);
         make.height.mas_equalTo(field.mas_height);
         make.centerY.mas_equalTo(field.mas_centerY);
-        make.right.mas_equalTo(view.mas_right).offset(-12);
+        make.right.mas_equalTo(_returnView.mas_right).offset(-12);
     }];
 }
 
@@ -502,7 +586,6 @@
 -(void)btnClick:(UIButton*)btn
 {
     if (btn.tag == 0) {
-        [SVProgressHUD dismiss];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -572,47 +655,39 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    _flag = @"2";
-    
-    if (_atUserIdArray[indexPath.row]) {
-        _userId = [NSString stringWithFormat:@"%@",_atUserIdArray[indexPath.row]];
-        _index = [_atUserIdArray indexOfObject:_userId];
-    }
-    
-    if (_beCommentNameArray[indexPath.row]) {
-        _beCommentName = [NSString stringWithFormat:@"%@",_beCommentNameArray[indexPath.row]];
-        _nameIndex = [_beCommentNameArray indexOfObject:_beCommentName];
-    }
-    if ([_selfId isEqual:_userId]) {
-            _deleteModel = _dataArray[indexPath.row];
+    if (indexPath.row != 0) {
         
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
-            __block CircleDetailVC* blockSelf = self;
+        if (_atUserIdArray[indexPath.row]) {
+            _userId = [NSString stringWithFormat:@"%@",_atUserIdArray[indexPath.row]];
+            _index = [_atUserIdArray indexOfObject:_userId];
+        }
+        
+        if (_beCommentNameArray[indexPath.row]) {
+            _beCommentName = [NSString stringWithFormat:@"%@",_beCommentNameArray[indexPath.row]];
+            _nameIndex = [_beCommentNameArray indexOfObject:_beCommentName];
+        }
+        
+        NSInteger num1 = [_selfId integerValue];
+        NSInteger num2 = [_userId integerValue];
+        if (num1 == num2) {
             
-            UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                
-            }];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [blockSelf btnCertain:nil];
-            }];
             
-            [alertController addAction:cancleAction];
-            [alertController addAction:okAction];
+        }else{
+            _flag = @"2";
             
-            [self presentViewController:alertController animated:YES completion:nil];
-            
-            return;
-    }else{
-    
-    [_textField becomeFirstResponder];
+            [_textField becomeFirstResponder];
+            _textField.placeholder = [NSString stringWithFormat:@" %@",_beCommentName];
+        }
     }
-
 }
 #pragma mark---删除评论---
 -(void)btnCertain:(id)sender
 {
+    if (_index && _nameIndex) {
         [_atUserIdArray removeObjectAtIndex:_index];
         [_beCommentNameArray removeObjectAtIndex:_nameIndex];
+    }
+    
         [_dataArray removeObject:_deleteModel];
         [self.tableView reloadData];
         
@@ -658,7 +733,13 @@
          //添加 本地数据
          CircleDetailCommentModel *detailCommentModel = [CircleDetailCommentModel new];
          detailCommentModel.iconImageStr = icon;
-         detailCommentModel.nameStr = [NSString stringWithFormat:@"%@%@",name,_beCommentName];
+
+        if ([_flag isEqualToString:@"2"]) {
+            detailCommentModel.nameStr = [NSString stringWithFormat:@"%@%@",name,_beCommentName];
+        }else{
+            detailCommentModel.nameStr = [NSString stringWithFormat:@"%@",name];
+        }
+ 
          detailCommentModel.contentStr = [NSString stringWithFormat:@"%@",self.textField.text];
          detailCommentModel.publicDate = [TDUtil CurrentDate];
          [_atUserIdArray insertObject:_selfId atIndex:_index];
@@ -666,11 +747,9 @@
          [_dataArray insertObject:detailCommentModel atIndex:1];
          
          [self.tableView reloadData];
-         
-         
-         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"contentId",[NSString stringWithFormat:@"%@",self.textField.text],@"content",[NSString stringWithFormat:@"%@",_userId],@"atUserId",_flag,@"flag",nil];
-         
-         
+
+         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.commentPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.publicContentId],@"contentId", self.textField.text,@"content",[NSString stringWithFormat:@"%@",_userId],@"atUserId",_flag,@"flag",nil];
+    
          //开始请求
           _sendBtn.enabled = NO;
          [self.httpUtil getDataFromAPIWithOps:CIRCLE_COMMENT_FEELING postParam:dic type:0 delegate:self sel:@selector(requestCircleComment:)];
@@ -685,6 +764,7 @@
     if (jsonDic!= nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            _flag = @"1";
             _textField.text = @"";
             [_textField resignFirstResponder];
             //发表成功 刷新tableView
@@ -705,6 +785,7 @@
         vc.image = model.contentImage;
         vc.titleText = model.titleText;
         vc.contentText = model.contentText;
+        vc.titleStr = model.titleText;
         [self.navigationController pushViewController:vc animated:YES];
     }
     if (model.feelingTypeId == 3) {//项目
@@ -833,8 +914,8 @@
 
 #pragma mark -textFiledDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    
-    [textField resignFirstResponder];
+
+    _textField.placeholder = @"";
     [self sendComment:nil];
     
     return NO;

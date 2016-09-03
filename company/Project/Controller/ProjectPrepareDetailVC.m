@@ -32,7 +32,7 @@
 #define PROJECTCOLLECT @"requestProjectCollect"
 #define PROJECTDETAIL @"requestProjectDetail"
 #define PROJECTSHARE @"requestProjectShare"
-@interface ProjectPrepareDetailVC ()<UIScrollViewDelegate,ProjectPrepareFooterCommentViewDelagate,CircleShareBottomViewDelegate,ProjectDetailLeftTeamViewDelegate,ShareToCircleViewDelegate>
+@interface ProjectPrepareDetailVC ()<UIScrollViewDelegate,ProjectPrepareFooterCommentViewDelagate,CircleShareBottomViewDelegate,ProjectDetailLeftTeamViewDelegate,ShareToCircleViewDelegate,UITextViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -131,7 +131,6 @@
 
 -(void)startLoadData
 {
-//    [SVProgressHUD showWithStatus:@"加载中..."];
     self.startLoading = YES;
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_projectId],@"projectId", nil];
     //开始请求
@@ -157,7 +156,6 @@
             
             [self createBottomView];
             
-//            [SVProgressHUD dismiss];
             self.startLoading = NO;
             
         }else{
@@ -580,6 +578,7 @@
     [shareView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];
+    shareView.textView.delegate = self;
     shareView.delegate = self;
     _shareCircleView = shareView;
 }
@@ -590,11 +589,14 @@
     if (index == 0) {
         [view removeFromSuperview];
     }else{
-
+        [self shareToCircle];
 //        NSLog(@"调接口");
         [_shareCircleView removeFromSuperview];
         if ([content isEqualToString:@"说点什么吧..."]) {
             content = @"";
+        }
+        if (_shareContent.length>200) {
+            _shareContent = [_shareContent substringToIndex:200];
         }
         
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.circlePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"contentId",@"7",@"type",content,@"comment",[NSString stringWithFormat:@"%ld,1",(long)self.projectId],@"content",_shareContent,@"description",_shareImage,@"image",@"金指投项目",@"tag",nil];
@@ -620,7 +622,10 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网络好像出了点问题，检查一下"];
     }
 }
-
+-(void)shareToCircle
+{
+    
+}
 #pragma mark-------ProjectPrepareFooterCommentViewDelagate--------
 -(void)didClickBtn:(NSMutableArray *)dataArray
 {
@@ -707,6 +712,31 @@
         }
 }
 
+#pragma mark -textViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    if ([text isEqualToString:@"\n"]) {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
+-(void)textViewDidBeginEditing:(UITextView *)textView
+{
+    textView.font= BGFont(18);
+    textView.textColor = color47;
+    if ([textView.text isEqualToString:@"说点什么吧..."]) {
+        textView.text = @"";
+    }
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@""]) {
+        textView.font = BGFont(15);
+        textView.text = @"说点什么吧...";
+    }
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {

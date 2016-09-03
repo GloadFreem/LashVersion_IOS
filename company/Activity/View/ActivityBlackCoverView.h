@@ -12,7 +12,7 @@
 
 @protocol ActivityBlackCoverViewDelegate <NSObject>
 
--(void)clickBtnInView:(ActivityBlackCoverView*)view andIndex:(NSInteger)index content:(NSString*)content;
+-(void)clickBtnInBlackView:(ActivityBlackCoverView*)view andIndex:(NSInteger)index content:(NSString*)content;
 
 @end
 
