@@ -25,7 +25,7 @@
 
 @property (nonatomic, strong) ActivityDetailCommentCellModel *model;
 
-@property (nonatomic, copy) void (^didClickCommentLabelBlock)(NSString *commentId,NSString * repleyName,  CGRect rectInWindow);
+@property (nonatomic, copy) void (^didClickCommentLabelBlock)(NSString *commentId,NSString * repleyName,  CGRect rectInWindow, ActivityDetailCellCommentItemModel *model);
 
 
 @end

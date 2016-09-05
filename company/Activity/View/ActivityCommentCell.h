@@ -13,5 +13,5 @@
 @property (nonatomic, assign) NSInteger row;
 
 @property (nonatomic, retain) ActivityDetailCellCommentItemModel * model;
-@property (nonatomic, copy) void (^didClickCommentLabelBlock)(NSString * userId,NSString *name, CGRect rectInWindow);
+@property (nonatomic, copy) void (^didClickCommentLabelBlock)(NSString * userId,NSString *name, CGRect rectInWindow,ActivityDetailCellCommentItemModel * model);
 @end

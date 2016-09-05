@@ -17,11 +17,14 @@
 #import "LQQMonitorKeyboard.h"
 #import "RenzhengViewController.h"
 
+#define COMMENTDELETE @"requestActionCommentDelete"
 #define COMMENTLIST @"requestPriseListAction"
 #define kActivityDetailHeaderCellId @"ActivityDetailHeaderCell"
 @interface ActivityCommentListViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 {
     NSInteger page;
+    UIButton *_answerBtn;
+
 }
 
 @property (nonatomic, strong) ActionLikerModel * likersModel;
@@ -41,6 +44,11 @@
 @property (nonatomic, copy) NSString *selfId;
 @property (nonatomic, strong) UIView *bottomView;
 
+@property (nonatomic, copy) NSString *deletePartner;
+@property (nonatomic, strong) ActivityDetailCellCommentItemModel * deleteModel;
+@property (nonatomic, strong) NSIndexPath *currentEditingIndexthPath;
+
+@property (nonatomic, strong) NSMutableArray *dataArray;
 @end
 
 @implementation ActivityCommentListViewController
@@ -52,6 +60,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
@@ -65,6 +78,7 @@
     
     //生成请求partner
     self.actionCommentListPartner = [TDUtil encryKeyWithMD5:KEY action:COMMENTLIST];
+    self.deletePartner = [TDUtil encryKeyWithMD5:KEY action:COMMENTDELETE];
     
     [self loadActionCommentData];
     
@@ -117,6 +131,11 @@
         
         _bottomView.frame = CGRectMake(0, self.view.frame.size.height - 50 - height, SCREENWIDTH, 50);
         //        NSLog(@"键盘出现了 == %ld",(long)height);
+        CGFloat h = height + 50;
+        if (_totalKeybordHeight != h) {
+            _totalKeybordHeight = h;
+            [self adjustTableViewToFitKeyboard];
+        }
         
     } andDismissBlock:^(NSInteger height) {
         
@@ -159,16 +178,16 @@
         make.height.mas_equalTo(36);
     }];
     
-    UIButton *answerBtn = [UIButton new];
-    [answerBtn setTitle:@"发表" forState:UIControlStateNormal];
-    [answerBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [answerBtn setBackgroundColor:colorBlue];
-    answerBtn.layer.cornerRadius = 3;
-    answerBtn.layer.masksToBounds = YES;
-    answerBtn.titleLabel.font = BGFont(16);
-    [answerBtn addTarget:self action:@selector(actionComment) forControlEvents:UIControlEventTouchUpInside];
-    [_bottomView addSubview:answerBtn];
-    [answerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    _answerBtn = [UIButton new];
+    [_answerBtn setTitle:@"发表" forState:UIControlStateNormal];
+    [_answerBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_answerBtn setBackgroundColor:colorBlue];
+    _answerBtn.layer.cornerRadius = 3;
+    _answerBtn.layer.masksToBounds = YES;
+    _answerBtn.titleLabel.font = BGFont(16);
+    [_answerBtn addTarget:self action:@selector(actionComment) forControlEvents:UIControlEventTouchUpInside];
+    [_bottomView addSubview:_answerBtn];
+    [_answerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(field.mas_right).offset(5);
         make.height.mas_equalTo(field.mas_height);
         make.centerY.mas_equalTo(field.mas_centerY);
@@ -209,6 +228,7 @@
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
+//    NSLog(@"-----%@",jsonString);
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
@@ -253,10 +273,10 @@
                     {
                         commentItemModel.secondUserName = [dic valueForKey:@"atUserName"];
                         commentItemModel.secondUserId = @"";
-                        
                     }
-                    commentItemModel.commentString = baseModel.content;
                     
+                    commentItemModel.commentString = baseModel.content;
+                    commentItemModel.commentId = baseModel.commentId;
                     [tempArray addObject:commentItemModel];
                 }
                 
@@ -269,6 +289,7 @@
                     self.commentCellModel.commentItemsArray  = [tempArray copy];
                 }
                 
+                _dataArray = [NSMutableArray arrayWithArray:self.commentCellModel.commentItemsArray];
             }else{
                 NSArray *dataCommentArray = [NSArray arrayWithArray:[jsonDic[@"data"] valueForKey:@"comments"]];
                 
@@ -294,16 +315,19 @@
                         commentItemModel.secondUserId = @"";
                         
                     }
-                    commentItemModel.commentString = [baseModel.content stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                     
+                    commentItemModel.commentString = baseModel.content;
+                    commentItemModel.commentId = baseModel.commentId;
                     [tempArray addObject:commentItemModel];
                 }
                 
                 NSMutableArray * array = [NSMutableArray arrayWithArray:self.commentCellModel.commentItemsArray];
                 [array addObjectsFromArray:tempArray];
+                
                 self.commentCellModel.commentItemsArray  = array;
+                
+                _dataArray = [NSMutableArray arrayWithArray:array];
             }
-            
             
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
@@ -327,8 +351,7 @@
     {
         count = 1;
     }
-    
-    return self.commentCellModel.commentItemsArray.count+count;
+    return _dataArray.count + count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -350,8 +373,9 @@
     }
     
     CGFloat h = 0;
-    if (row-1<self.commentCellModel.commentItemsArray.count) {
-        h = [self.tableView cellHeightForIndexPath:indexPath model:[self.commentCellModel.commentItemsArray objectAtIndex:index] keyPath:@"model" cellClass:[ActivityCommentCell class] contentViewWidth:[self cellContentViewWith]];
+
+    if (row-1<self.dataArray.count) {
+        h = [self.tableView cellHeightForIndexPath:indexPath model:[self.dataArray objectAtIndex:index] keyPath:@"model" cellClass:[ActivityCommentCell class] contentViewWidth:[self cellContentViewWith]];
     }
     
     return h;
@@ -387,13 +411,15 @@
     
     cell.row = indexPath.row;
     
-    if (row-1<self.commentCellModel.commentItemsArray.count) {
-        [cell setModel:[self.commentCellModel.commentItemsArray objectAtIndex:row-1]];
+    if (row-1<self.dataArray.count) {
+        [cell setModel:[self.dataArray objectAtIndex:row-1]];
+        ////// 此步设置用于实现cell的frame缓存，可以让tableview滑动更加流畅 //////
+    
     }
     
     __weak typeof(self) weakSelf = self;
     
-    [cell setDidClickCommentLabelBlock:^(NSString* userId,NSString * name, CGRect rectInWindow) {
+    [cell setDidClickCommentLabelBlock:^(NSString* userId,NSString * name, CGRect rectInWindow,ActivityDetailCellCommentItemModel * model) {
         
         NSInteger num1 = [weakSelf.selfId integerValue];
         NSInteger num2 = [userId integerValue];
@@ -403,12 +429,72 @@
             [weakSelf.bottomView setHidden:NO];
             weakSelf.isReplayingComment = YES;
             weakSelf.commentToUser = userId;
+            [weakSelf adjustTableViewToFitKeyboardWithRect:rectInWindow];
+            weakSelf.currentEditingIndexthPath = indexPath;
+        }else{//是自己的评论  则弹出删除提醒
+            weakSelf.deleteModel = model;
+            if (weakSelf.deleteModel.commentId) {
+                
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
+                __block ActivityCommentListViewController* blockSelf = self;
+                
+                UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    
+                }];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [blockSelf btnCertain:nil];
+                }];
+                
+                [alertController addAction:cancleAction];
+                [alertController addAction:okAction];
+                
+                [weakSelf presentViewController:alertController animated:YES completion:nil];
+                
+                return;
+            }
+            
         }
     }];
-    
 
     return cell;
+}
+
+#pragma mark---删除评论---
+-(void)btnCertain:(id)sender
+{
+//    NSInteger index = [_dataArray indexOfObject:_deleteModel];
+//    NSLog(@"打印第几个---%ld",index);
+    if (_deleteModel.commentId) {
+        [_dataArray removeObject:_deleteModel];
+        [self.tableView reloadData];
+    }
     
+    if (_deleteModel.commentId) {
+        //更新数据
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.deletePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_deleteModel.commentId],@"commentId", nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT_DELETE postParam:dic type:0 delegate:self sel:@selector(requestDeleteComment:)];
+    }
+}
+
+-(void)requestDeleteComment:(ASIHTTPRequest*)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status =[jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+//            NSLog(@"删除成功");
+        }
+    }
+}
+
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [_textField resignFirstResponder];
+    _textField.placeholder = nil;
 }
 
 - (CGFloat)cellContentViewWith
@@ -421,6 +507,28 @@
     return width;
 }
 
+- (void)adjustTableViewToFitKeyboard
+{
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath];
+    CGRect rect = [cell.superview convertRect:cell.frame toView:window];
+    [self adjustTableViewToFitKeyboardWithRect:rect];
+}
+
+-(void)adjustTableViewToFitKeyboardWithRect:(CGRect)rect
+{
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat delta = CGRectGetMaxY(rect) - (window.bounds.size.height - _totalKeybordHeight);
+    
+    CGPoint offset = self.tableView.contentOffset;
+    offset.y += delta;
+    if (offset.y < 0) {
+        offset.y = 0;
+    }
+    
+    [self.tableView setContentOffset:offset animated:YES];
+}
+
 #pragma mark -btnAction
 -(void)btnClick:(UIButton*)btn
 {
@@ -428,7 +536,6 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
-
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -457,6 +564,7 @@
 #pragma mark -textFiledDelegate
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    _textField.placeholder = @"";
     [self actionComment];
     return NO;
 }
@@ -565,7 +673,8 @@
         {
             _commentToUser = @"0";
         }
-        
+    
+        _answerBtn.enabled = NO;
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionCommentPartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",STRING(@"%d", flag),@"flag",content,@"content",self.commentToUser,@"atUserId", @"1",@"platform",nil];
         //开始请求
         [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT postParam:dic type:0 delegate:self sel:@selector(requestCommentAction:)];
@@ -602,47 +711,23 @@
                 
             }
             commentItemModel.commentString = baseModel.content;
-            
+
             [tempArray insertObject:commentItemModel atIndex:0];
             
-            self.commentCellModel.commentItemsArray  = [tempArray copy];
+            self.dataArray  = [NSMutableArray arrayWithArray:tempArray];
             
             //刷新视图
             [self.tableView reloadData];
             
-            //注销键盘
-//            [self resumeFrame];
             [_bottomView setHidden:YES];
             [self.textField resignFirstResponder];
             [self.textField setText:@""];
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+            self.commentToUser = @"";
+            
+        }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
-}
-
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    [self.view endEditing:YES];
-    [self.textField resignFirstResponder];
-    
-}
-
--(void)updateFrame
-{
-    _bottomView.sd_layout
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .bottomEqualToView(self.view)
-    .heightIs(50);
-    [_bottomView updateLayout];
-}
--(void)resumeFrame
-{
-    _bottomView.sd_layout
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .bottomEqualToView(self.view)
-    .heightIs(0.00000001);
-    [_bottomView updateLayout];
+    _answerBtn.enabled = YES;
 }
 @end

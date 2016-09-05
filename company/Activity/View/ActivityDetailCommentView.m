@@ -207,7 +207,7 @@
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
         CGRect rect = [tap.view.superview convertRect:tap.view.frame toView:window];
         ActivityDetailCellCommentItemModel *model = self.commentItemsArray[tap.view.tag];
-        self.didClickCommentLabelBlock(model.firstUserId, model.firstUserName, rect);
+        self.didClickCommentLabelBlock(model.firstUserId, model.firstUserName, rect, model);
     }
 }
 - (NSMutableAttributedString *)generateAttributedStringWithCommentItemModel:(ActivityDetailCellCommentItemModel *)model

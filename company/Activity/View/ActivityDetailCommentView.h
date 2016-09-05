@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class ActivityDetailCellCommentItemModel;
+
 @interface ActivityDetailCommentView : UIView
 
 
 -(void)setupWithLikeItemsArray:(NSArray*)likeItemsArray commentItemsArray:(NSArray*)commentItemsArray;
 
-@property (nonatomic, copy) void (^didClickCommentLabelBlock)(NSString *commentId,NSString * repleyName,  CGRect rectInWindow);
+@property (nonatomic, copy) void (^didClickCommentLabelBlock)(NSString *commentId,NSString * repleyName,  CGRect rectInWindow, ActivityDetailCellCommentItemModel *model);
 
 @end

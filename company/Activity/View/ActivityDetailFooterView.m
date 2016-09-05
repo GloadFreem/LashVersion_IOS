@@ -109,9 +109,9 @@
     __weak typeof(self) weakSelf = self;
     _commentView = [ActivityDetailCommentView new];
     _commentView.backgroundColor = RGBCOLOR(255, 255, 255);
-    [_commentView setDidClickCommentLabelBlock:^(NSString *commentId,NSString * repleyName,  CGRect rectInWindow) {
+    [_commentView setDidClickCommentLabelBlock:^(NSString *commentId,NSString * repleyName,  CGRect rectInWindow, ActivityDetailCellCommentItemModel *model) {
         if (weakSelf.didClickCommentLabelBlock) {
-            weakSelf.didClickCommentLabelBlock(commentId,repleyName, rectInWindow);
+            weakSelf.didClickCommentLabelBlock(commentId,repleyName, rectInWindow, model);
         }
     }];
     [self addSubview:_commentView];

@@ -38,7 +38,7 @@ static CGFloat tableViewH = 0;
 static int preFlag = 0;
 
 #define SHARETOCIRCLE @"shareContentToFeeling"
-
+#define COMMENTDELETE @"requestActionCommentDelete"
 #define SHAREACTION @"requestShareAction"
 #define COMMENTLIST @"requestPriseListAction"
 #define ATTENDACTION @"requestAttendListAction"
@@ -82,6 +82,8 @@ static int preFlag = 0;
 
 @property (nonatomic, copy) NSString *selfId;
 
+@property (nonatomic, copy) NSString *deletePartner;
+@property (nonatomic, strong) ActivityDetailCellCommentItemModel * deleteModel;
 @end
 
 @implementation ActivityDetailVC
@@ -114,6 +116,8 @@ static int preFlag = 0;
     self.actionCommentListPartner = [TDUtil encryKeyWithMD5:KEY action:COMMENTLIST];
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:SHAREACTION];
     self.circlePartner = [TDUtil encryKeyWithMD5:KEY action:SHARETOCIRCLE];
+    self.deletePartner = [TDUtil encryKeyWithMD5:KEY action:COMMENTDELETE];
+
     //初始化 控件
     [self createUI];
     //设置加载视图范围
@@ -445,7 +449,7 @@ static int preFlag = 0;
                     
                 }
                 commentItemModel.commentString = baseModel.content;
-                
+                commentItemModel.commentId = baseModel.commentId;
                 [tempArray addObject:commentItemModel];
             }
             
@@ -498,7 +502,7 @@ static int preFlag = 0;
         __weak typeof(self) weakSelf = self;
         
         footerView = [ActivityDetailFooterView new];
-        [footerView setDidClickCommentLabelBlock:^(NSString * commentId,NSString * repleyName, CGRect rectInWindow) {
+        [footerView setDidClickCommentLabelBlock:^(NSString * commentId,NSString * repleyName, CGRect rectInWindow, ActivityDetailCellCommentItemModel *model) {
             NSInteger num1 = [weakSelf.selfId integerValue];
             NSInteger num2 = [commentId integerValue];
             if (num1 != num2) {
@@ -507,6 +511,27 @@ static int preFlag = 0;
                 [weakSelf.bottomView setHidden:NO];
                 weakSelf.isReplayingComment = YES;
                 weakSelf.commentToUser = commentId;
+                [weakSelf adjustTableViewToFitKeyboardWithRect:rectInWindow];
+            }else{//点击自己  可以删除
+                weakSelf.deleteModel = model;
+                
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确定要删除吗？" preferredStyle:UIAlertControllerStyleAlert];
+                __block ActivityDetailVC* blockSelf = weakSelf;
+                
+                UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    
+                }];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [blockSelf btnCertain:nil];
+                }];
+                
+                [alertController addAction:cancleAction];
+                [alertController addAction:okAction];
+                
+                [weakSelf presentViewController:alertController animated:YES completion:nil];
+                
+                return;
+
             }
         }];
         footerView.delegate = self;
@@ -514,6 +539,66 @@ static int preFlag = 0;
     return footerView;
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [_textField resignFirstResponder];
+    _textField.placeholder = nil;
+}
+
+- (void)adjustTableViewToFitKeyboard
+{
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGRect rect = [footerView.superview convertRect:footerView.frame toView:window];
+    [self adjustTableViewToFitKeyboardWithRect:rect];
+}
+
+-(void)adjustTableViewToFitKeyboardWithRect:(CGRect)rect
+{
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat delta = CGRectGetMaxY(rect) - (window.bounds.size.height - _totalKeybordHeight);
+    
+    CGPoint offset = self.tableView.contentOffset;
+    offset.y += delta;
+    if (offset.y < 0) {
+        offset.y = 0;
+    }
+    
+    [self.tableView setContentOffset:offset animated:YES];
+}
+
+#pragma mark---删除评论---
+-(void)btnCertain:(id)sender
+{
+    //删除 评论哈
+    if (_deleteModel) {
+        NSMutableArray * tempArray = [NSMutableArray arrayWithArray:self.commentCellModel.commentItemsArray];
+        [tempArray removeObject:_deleteModel];
+        self.commentCellModel.commentItemsArray  = [tempArray copy];
+    }
+    //刷新视图
+    [self performSelector:@selector(layout:) withObject:nil afterDelay:0.1];
+    
+    
+    if (_deleteModel.commentId) {
+        //更新数据
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.deletePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_deleteModel.commentId],@"commentId", nil];
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:ACTION_COMMENT_DELETE postParam:dic type:0 delegate:self sel:@selector(requestDeleteComment:)];
+    }
+}
+
+-(void)requestDeleteComment:(ASIHTTPRequest*)request
+{
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    //        NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+    if (jsonDic !=nil) {
+        NSString *status =[jsonDic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            //            NSLog(@"删除成功");
+        }
+    }
+}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.dataArray.count) {
@@ -874,6 +959,11 @@ static int preFlag = 0;
         
         _returnView.frame = CGRectMake(0, self.view.frame.size.height - height - 50, SCREENWIDTH, 50);
         //        NSLog(@"键盘出现了 == %ld",(long)height);
+        CGFloat h = height + 50;
+        if (_totalKeybordHeight != h) {
+            _totalKeybordHeight = h;
+//            [self adjustTableViewToFitKeyboard];
+        }
         
     } andDismissBlock:^(NSInteger height) {
         
@@ -916,6 +1006,8 @@ static int preFlag = 0;
         _commentToUser = @"0";
         [self.textField setText:@""];
         [self.textField setPlaceholder:@""];
+        //调整键盘位置
+        [self adjustTableViewToFitKeyboard];
     
         [self.textField becomeFirstResponder];
 
@@ -934,7 +1026,6 @@ static int preFlag = 0;
 /** 活动点赞 */
 -(void)actionPrise
 {
-    
     int isPrise = preFlag == 1 ? 2 : 1;
     preFlag = isPrise;
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",STRING(@"%d", isPrise),@"flag", nil];
@@ -998,6 +1089,8 @@ static int preFlag = 0;
     if([content isEqualToString:@""] ||[content isEqualToString:@"请输入评论内容"])
     {
         [_textField resignFirstResponder];
+        //刷新视图
+        [self performSelector:@selector(layout:) withObject:nil afterDelay:0.1];
          [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入评论内容"];
         return;
     }
@@ -1005,6 +1098,7 @@ static int preFlag = 0;
     if(!_commentToUser)
     {
         _commentToUser = @"0";
+        
     }
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.actionDetailPartner,@"partner",STRING(@"%ld", (long)self.actionId),@"contentId",STRING(@"%d", 2),@"flag",content,@"content",STRING(@"%@", _commentToUser),@"atUserId", nil];
@@ -1049,9 +1143,11 @@ static int preFlag = 0;
             //注销键盘
             [self.textField resignFirstResponder];
             [self.textField setText:@""];
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+            self.commentToUser = @"";
             
             [self loadActionCommentData];
+        }else{
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
 }
@@ -1159,6 +1255,7 @@ static int preFlag = 0;
 #pragma mark -textFiledDelegate
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    _textField.placeholder = @"";
     [self actionComment];
     return YES;
 }

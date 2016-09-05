@@ -680,6 +680,13 @@
         }
     }
 }
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [_textField resignFirstResponder];
+    _textField.placeholder = nil;
+}
+
 #pragma mark---删除评论---
 -(void)btnCertain:(id)sender
 {
@@ -690,8 +697,7 @@
     
         [_dataArray removeObject:_deleteModel];
         [self.tableView reloadData];
-        
-        //    [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"删除成功"];
+
         
         if (_deleteModel.commentId) {
             //更新数据
@@ -778,7 +784,6 @@
 #pragma mark -cell_delegate------  点击今日头条--------
 -(void)didClickContentBtnInCell:(CircleDetailHeaderCell *)cell andModel:(CircleListModel *)model
 {
-    NSLog(@"点击详情今日头条");
     if (model.feelingTypeId == 2) {//链接
         ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
         vc.url = model.url;

@@ -36,4 +36,5 @@
 @property (nonatomic, copy) NSString *secondUserName;
 @property (nonatomic, copy) NSString *secondUserId;
 
+@property (nonatomic, assign) NSInteger commentId;
 @end

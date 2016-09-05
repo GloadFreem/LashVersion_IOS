@@ -83,9 +83,10 @@
     if (self.didClickCommentLabelBlock) {
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
         CGRect rect = [tap.view.superview convertRect:tap.view.frame toView:window];
-        self.didClickCommentLabelBlock(self.model.firstUserId,self.model.firstUserName, rect);
+        self.didClickCommentLabelBlock(self.model.firstUserId,self.model.firstUserName, rect,_model);
     }
 }
+
 - (NSMutableAttributedString *)generateAttributedStringWithCommentItemModel:(ActivityDetailCellCommentItemModel *)model
 {
     if (model.firstUserName) {

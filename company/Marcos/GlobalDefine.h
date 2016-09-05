@@ -163,8 +163,8 @@
 
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
-#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-//#define SERVICE_URL @"http://192.168.5.173:8080/jinzht/"//本地
+//#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
+#define SERVICE_URL @"http://192.168.5.173:8080/jinzht/"//本地
 
 // 如果是DEBUG模式用测试服务器地址
 #if DEBUG
@@ -386,6 +386,8 @@
 #define  ACTION_ATTEND @"requestAttendListAction.action"
 //活动评论列表
 #define  ACTION_COMMENT_LIST @"requestPriseListAction.action"
+//删除活动评论
+#define ACTION_COMMENT_DELETE @"requestActionCommentDelete.action"
 //活动点赞
 #define ACTION_PRISE @"requestPriseAction.action"
 //活动评论
