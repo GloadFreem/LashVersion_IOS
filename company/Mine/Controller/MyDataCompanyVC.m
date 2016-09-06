@@ -79,17 +79,17 @@
             [self modifyPosition];
             
         }
-        for (UIViewController *VC in self.navigationController.viewControllers)
-        {
-            if ([VC isKindOfClass:[MineViewController class]]) {
-                MineViewController *vc = (MineViewController*)VC;
-                
-                //            vc.cityId = _idArray[indexPath.row];
-                //        _city = [NSString stringWithFormat:@"%@",_idArray[indexPath.row]];
-                [vc loadAuthenData];
-                
-            }
-        }
+//        for (UIViewController *VC in self.navigationController.viewControllers)
+//        {
+//            if ([VC isKindOfClass:[MineViewController class]]) {
+//                MineViewController *vc = (MineViewController*)VC;
+//                
+//                //            vc.cityId = _idArray[indexPath.row];
+//                //        _city = [NSString stringWithFormat:@"%@",_idArray[indexPath.row]];
+//                [vc loadAuthenData];
+//                
+//            }
+//        }
         [self.navigationController popViewControllerAnimated:YES];
         
     }else{

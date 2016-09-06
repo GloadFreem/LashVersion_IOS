@@ -30,6 +30,7 @@
 @interface MineDataVC ()<UITableViewDelegate,UITableViewDataSource>
 
 {
+    NSString *_authenticStatus;
     UIImagePickerController *imagePicker;
 }
 
@@ -42,7 +43,7 @@
 
 @property (nonatomic, copy) NSString *authenticType; //身份标识
 
-@property (nonatomic, copy) NSString *icon;
+
 @property (nonatomic, copy) NSString *inviteCode;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *identifyType;
@@ -63,6 +64,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.view.backgroundColor = [UIColor whiteColor];
     //获得partner
     self.invitePartner = [TDUtil encryKeyWithMD5:KEY action:INVITECODE];
     self.changeIconPartner = [TDUtil encryKeyWithMD5:KEY action:CHANGEHEADERPIC];
@@ -70,6 +72,8 @@
     self.positionPartner = [TDUtil encryKeyWithMD5:KEY action:MODIFYPOSITION];
     self.cityPartner = [TDUtil encryKeyWithMD5:KEY action:MODIFYCITY];
     self.quickPartner  = [TDUtil encryKeyWithMD5:KEY action:AUTHENTICQUICK];
+    
+    [self readData];
     
     [self loadInviteCode];
     
@@ -80,6 +84,8 @@
     
     [self createBottomView];
 }
+
+
 
 -(void)loadInviteCode
 {
@@ -99,49 +105,53 @@
         }
     }
 }
+
+-(void)readData
+{
+    NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
+//    _icon = [data objectForKey:USER_STATIC_HEADER_PIC];
+    _authenticStatus = [data objectForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+//    _companyName = [data objectForKey:USER_STATIC_COMPANY_NAME];
+//    _position = [data objectForKey:USER_STATIC_POSITION];
+    _name = [data objectForKey:USER_STATIC_NAME];
+    _identifyType = [data objectForKey:USER_STATIC_USER_AUTHENTIC_NAME];
+//    NSLog(@"dayin身份类型---%@",_identifyType);
+    _authId = [data objectForKey:USER_STATIC_AUTHID];
+    NSString *identiyCarNo = [data objectForKey:USER_STATIC_IDNUMBER];
+    
+    if (identiyCarNo.length) {
+        NSString *qian = [identiyCarNo substringToIndex:3];
+        NSString *hou = [identiyCarNo substringFromIndex:14];
+        _identifyNum = [NSString stringWithFormat:@"%@***********%@",qian,hou];
+    }
+    
+    NSString *city = [data objectForKey:USER_STATIC_CITY];
+    NSString *province = [data objectForKey:USER_STATIC_PROVINCE];
+    if ([city isEqualToString:@"北京市"] || [city isEqualToString:@"上海市"] || [city isEqualToString:@"天津市"] || [city isEqualToString:@"重庆市"] || [city isEqualToString:@"香港"] || [city isEqualToString:@"澳门"] || [city isEqualToString:@"钓鱼岛"]) {
+        _address = [NSString stringWithFormat:@"%@",city];
+    }else{
+        _address = [NSString stringWithFormat:@"%@ | %@",province,city];
+    }
+}
+
 -(void)createLeftArray
 {
-    NSArray *authenticsArray = _authenticModel.authentics;
-    if (authenticsArray.count) {
-        ProjectAuthentics *authentics = authenticsArray[0];
-        if ([authentics.authenticstatus.name isEqualToString:@"已认证"]) {
+        if ([_authenticStatus isEqualToString:@"已认证"]) {
             _textArray = @[@"头像",@"指环码",@"实名认证信息(已认证)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
             _authenticType = @"已认证";
         }
-        if ([authentics.authenticstatus.name isEqualToString:@"认证中"]) {
+        if ([_authenticStatus isEqualToString:@"认证中"]) {
             _textArray = @[@"头像",@"指环码",@"实名认证信息(认证中)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
             _authenticType = @"认证中";
         }
-        if ([authentics.authenticstatus.name isEqualToString:@"未认证"]) {
+        if ([_authenticStatus isEqualToString:@"未认证"]) {
             _textArray = @[@"头像",@"指环码",@"实名认证信息(未认证)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
             _authenticType = @"未认证";
         }
-        if ([authentics.authenticstatus.name isEqualToString:@"认证失败"]) {
+        if ([_authenticStatus isEqualToString:@"认证失败"]) {
             _textArray = @[@"头像",@"指环码",@"实名认证信息(认证失败)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
             _authenticType = @"认证失败";
         }
-        
-        _icon = _authenticModel.headSculpture;
-        _name = authentics.name;
-        _identifyType = authentics.identiytype.name;
-        
-        if (authentics.identiyCarNo.length) {
-            NSString *qian = [authentics.identiyCarNo substringToIndex:3];
-            NSString *hou = [authentics.identiyCarNo substringFromIndex:14];
-            _identifyNum = [NSString stringWithFormat:@"%@***********%@",qian,hou];
-        }
-        _companyName = authentics.companyName;
-        _position = authentics.position;
-        
-        NSString *city = authentics.city.name;
-        NSString *province = authentics.city.province.name;
-        if ([city isEqualToString:@"北京市"] || [city isEqualToString:@"上海市"] || [city isEqualToString:@"天津市"] || [city isEqualToString:@"重庆市"] || [city isEqualToString:@"香港"] || [city isEqualToString:@"澳门"] || [city isEqualToString:@"钓鱼岛"]) {
-            _address = [NSString stringWithFormat:@"%@",province];
-        }else{
-            _address = [NSString stringWithFormat:@"%@ | %@",province,city];
-        }
-        
-    }
 }
 #pragma mark- 创建tableView
 -(void)createTableView
@@ -255,7 +265,7 @@
 }
 -(void)authenticQuick
 {
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.quickPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.authId],@"authId", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.quickPartner,@"partner",[NSString stringWithFormat:@"%@",self.authId],@"authId", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_AUTHENTIC_QUICK postParam:dic type:1 delegate:self sel:@selector(requestAuthQuick:)];
 }
@@ -274,6 +284,13 @@
 #pragma mark- 返回按钮
 -(void)leftBack:(UIButton*)btn
 {
+    //修改公司职位
+    if ([_authenticType isEqualToString:@"已认证"]) {
+        _mineVC.company.text = [NSString stringWithFormat:@"%@ | %@",_companyName,_position];
+        _mineVC.companyS = _companyName;
+        _mineVC.position = _position;
+    }
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -310,7 +327,8 @@
             if (_textArray[indexPath.row]) {
                 cell.titleLabel.text = _textArray[indexPath.row];
             }
-            [cell.iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_icon]] placeholderImage:[UIImage new]];
+//            [cell.iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_icon]] placeholderImage:[UIImage new]];
+            [cell.iconImage setImage:_iconImg];
             _iconImage = cell.iconImage;
             return cell;
         }
@@ -386,7 +404,7 @@
                     cell.rightLabel.textColor = color47;
                 }
                 
-                NSLog(@"cell row:%ld",(long)indexPath.row);
+//                NSLog(@"cell row:%ld",(long)indexPath.row);
             }
             
             
@@ -467,7 +485,7 @@
     if (indexPath.row == 1) {
         MineRingCodeVC *vc = [MineRingCodeVC new];
         vc.inviteCode = _inviteCode;
-        vc.icon = _icon;
+        vc.iconImg = _iconImage.image;
         [self.navigationController pushViewController:vc animated:YES];
         return;
     }
@@ -612,15 +630,9 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
-            for (UIViewController *VC in self.navigationController.viewControllers)
-            {
-                if ([VC isKindOfClass:[MineViewController class]]) {
-                    MineViewController *vc = (MineViewController*)VC;
-                    
-                    [vc loadAuthenData];
-                    
-                }
-            }
+           //更改上一级头像
+            [_mineVC.iconBtn setBackgroundImage:_iconImage.image forState:UIControlStateNormal];
+
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];

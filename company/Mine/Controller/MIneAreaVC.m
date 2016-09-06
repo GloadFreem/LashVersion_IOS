@@ -59,6 +59,7 @@
 -(void)createTableView
 {
     _tableView = [UITableViewCustomView new];
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     _tableView.delegate = self;
     _tableView.dataSource =self;
     [self.view addSubview:_tableView];

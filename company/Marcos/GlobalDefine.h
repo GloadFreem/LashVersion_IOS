@@ -213,11 +213,16 @@
 #define USER_STATIC_EXT_USER_ID @"user_static_ext_user_id"
 //用户认证状态
 #define USER_STATIC_USER_AUTHENTIC_STATUS @"user_static_user_authentic_status"
-//用户身份
+//用户身份type
 #define USER_STATIC_USER_AUTHENTIC_TYPE @"user_static_user_authentic_type"
+//用户身份name
+#define USER_STATIC_USER_AUTHENTIC_NAME @"user_static_user_authentic_name"
 //城市
 #define USER_STATIC_CITY @"user_static_city"
-
+//省份
+#define USER_STATIC_PROVINCE @"user_static_province"
+//authenId
+#define USER_STATIC_AUTHID @"user_static_authid"
 //#define SERVICE_URL @"http://www.jinzht.com:8000/phone/"//服务器域名地址
 //#define BUINESS_SERVER @"http://220.181.25.233:8081/member/bhawireless/" //易宝支付测试环境
 //#define BUINESE_SERVERD @"http://220.181.25.233:8081/member/bhaexter/bhaController" //直连接口

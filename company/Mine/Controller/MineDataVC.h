@@ -7,16 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AuthenticInfoBaseModel.h"
+#import "MineViewController.h"
 
 @interface MineDataVC : RootViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) AuthenticInfoBaseModel *authenticModel;
 
 @property (nonatomic, copy) NSString *companyName;
 @property (nonatomic, copy) NSString *position;
 @property (nonatomic, copy) NSString *address;
 
+@property (nonatomic, copy) NSString *icon;
+@property (nonatomic, strong) UIImage *iconImg;
+
 @property (nonatomic, assign) NSInteger identiyTypeId;
-@property (nonatomic, assign) NSInteger authId;
+
+@property (nonatomic, copy) NSString *authId;
+
+@property (nonatomic, strong) MineViewController *mineVC;
+
 @end

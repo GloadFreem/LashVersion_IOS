@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -8,11 +8,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MineViewController">
             <connections>
-                <outlet property="company" destination="HqY-hc-2ld" id="mZ4-aI-VAg"/>
-                <outlet property="iconBtn" destination="Eaf-fU-gVn" id="VZs-2M-rUx"/>
+                <outlet property="company" destination="HqY-hc-2ld" id="U36-p2-wll"/>
+                <outlet property="iconBtn" destination="Eaf-fU-gVn" id="eBQ-qB-9AW"/>
                 <outlet property="iconHeight" destination="pRn-9H-ekg" id="Wc5-z8-KKg"/>
                 <outlet property="iconWidth" destination="dy7-bm-qcb" id="7oM-NV-mRB"/>
-                <outlet property="name" destination="nTz-Tf-E7w" id="dGT-YO-XYW"/>
+                <outlet property="name" destination="nTz-Tf-E7w" id="N6r-RT-r1w"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="vipImage" destination="6bd-tw-Upq" id="sHk-El-ghc"/>
             </connections>

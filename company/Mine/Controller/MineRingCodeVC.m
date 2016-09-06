@@ -34,8 +34,8 @@
     _iconImage.layer.cornerRadius = 34;
     _iconImage.layer.masksToBounds = YES;
     
-    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_icon]] placeholderImage:[UIImage new]];
-    
+//    [_iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_icon]] placeholderImage:[UIImage new]];
+    [_iconImage setImage:_iconImg];
 }
 
 #pragma mark -设置导航栏

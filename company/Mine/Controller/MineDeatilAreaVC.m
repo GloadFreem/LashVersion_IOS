@@ -67,6 +67,7 @@
 -(void)createTableView
 {
     _tableView = [UITableViewCustomView new];
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     _tableView.delegate = self;
     _tableView.dataSource =self;
     [self.view addSubview:_tableView];
@@ -172,16 +173,8 @@
     
     for (UIViewController *VC in self.navigationController.viewControllers) {
         if ([VC isKindOfClass:[MIneAreaVC class]]) {
-            //            AreaViewController *vc = (AreaViewController*)VC;
             [VC removeFromParentViewController];
-            //            self.navigationController.viewControllers.
             
-        }
-        
-        if ([VC isKindOfClass:[MineViewController class]]) {
-            MineViewController *vc = (MineViewController*)VC;
-            
-            [vc loadAuthenData];
         }
         
         if ([VC isKindOfClass:[MineDataVC class]]) {
@@ -193,7 +186,6 @@
             [self.navigationController popToViewController:vc animated:YES];
         }
     }
-//    [self.navigationController popViewControllerAnimated:YES];
     
 }
 -(void)modifyAddress
@@ -210,18 +202,12 @@
         NSString *status = [dic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSLog(@"城市修改成功");
-            
-            [self changeModel];
         }else{
             NSLog(@"城市修改失败");
         }
     }
 }
 
--(void)changeModel
-{
-    
-}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

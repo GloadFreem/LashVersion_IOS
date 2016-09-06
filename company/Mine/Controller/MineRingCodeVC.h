@@ -13,4 +13,6 @@
 @property (nonatomic, copy) NSString *inviteCode;
 @property (nonatomic, copy) NSString *icon;
 
+@property (nonatomic, strong) UIImage *iconImg;
+
 @end

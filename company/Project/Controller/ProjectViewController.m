@@ -150,18 +150,20 @@
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 49);
     
     [self createUI];
-    //下载认证信息
-    [self loadAuthenData];
-
-    [self loadMessage];
     
-    [self loadVersion];
+    
     
     //自动登录
     if ([TDUtil checkNetworkState] != NetStatusNone)
     {
         [self isLogin];
     }
+    
+    
+    [self loadMessage];
+    
+    [self loadVersion];
+    
     
 //    [self createGoldView];
     //保存登录时间
@@ -319,7 +321,6 @@
         make.bottom.mas_equalTo(background.mas_bottom).offset(-175*HEIGHTCONFIG);
     }];
     
-    
     _todayLabel = [UILabel new];
     _todayLabel.textColor = color(255, 204, 0, 1);
     _todayLabel.font = BGFont(24);
@@ -435,6 +436,7 @@
 //            authenticModel = baseModel;
             //            NSLog(@"打印个人信息：----%@",baseModel);
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+            
             [data setValue:baseModel.headSculpture forKey:USER_STATIC_HEADER_PIC];
             [data setValue:baseModel.telephone forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
             [data setValue:[NSString stringWithFormat:@"%ld",(long)baseModel.userId] forKey:USER_STATIC_USER_ID];
@@ -443,6 +445,7 @@
             if (authenticsArray.count) {
                 ProjectAuthentics *authentics = authenticsArray[0];
                 [data setObject:authentics.city.name forKey:USER_STATIC_CITY];
+                [data setObject:authentics.city.province.name forKey:USER_STATIC_PROVINCE];
                 [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
                 [data setValue:authentics.name forKey:USER_STATIC_NAME];
                 [data setValue:authentics.identiyCarA forKey:USER_STATIC_IDPIC];
@@ -450,6 +453,8 @@
                 [data setValue:authentics.position forKey:USER_STATIC_POSITION];
                 [data setValue:authentics.authenticstatus.name forKey:USER_STATIC_USER_AUTHENTIC_STATUS];
                 [data setValue:[NSString stringWithFormat:@"%ld",(long)authentics.identiytype.identiyTypeId] forKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+                [data setValue:[NSString stringWithFormat:@"%@",authentics.identiytype.name] forKey:USER_STATIC_USER_AUTHENTIC_NAME];
+                [data setValue:[NSString stringWithFormat:@"%ld",(long)authentics.authId] forKey:USER_STATIC_AUTHID];
             }
             
             [data synchronize];
@@ -699,7 +704,7 @@
             
         }
         [_bannerModelArray addObject:listModel];
-            NSLog(@"打印数组个数---%ld",_bannerModelArray.count);
+//            NSLog(@"打印数组个数---%ld",_bannerModelArray.count);
     }
     //搭建banner
     [self setBanner];
@@ -1081,6 +1086,9 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
 //        NSLog(@"登陆状态在线");
+            //下载认证信息
+            [self loadAuthenData];
+            
         _hasLogin = YES;
         [self startLoadBannerData];
         }else{
@@ -1088,6 +1096,7 @@
             [self autoLogin];
         }
     }
+    
 }
 -(void)autoLogin
 {
@@ -1114,6 +1123,9 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status intValue] == 200) {
 //            NSLog(@"登陆成功");
+            //下载认证信息
+            [self loadAuthenData];
+            
             _isSuccess = YES;
             [self startLoadBannerData];
             

@@ -31,11 +31,7 @@
 
 @property (nonatomic,strong)UIView * bottomView;
 
-@property (weak, nonatomic) IBOutlet UIButton *iconBtn;
-
 @property (weak, nonatomic) IBOutlet UIImageView *vipImage;
-@property (weak, nonatomic) IBOutlet UILabel *name;
-@property (weak, nonatomic) IBOutlet UILabel *company;
 
 @property (nonatomic, copy) NSString *nameStr;
 @property (nonatomic, copy) NSString *companyStr;
@@ -87,12 +83,12 @@
     
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:INVITEFRIEND];
     
+    [self readData];
     self.loadingViewFrame = self.view.frame;
     self.isTransparent = YES;
     [self loadShareData];
     
 }
-
 
 -(void)loadShareData
 {
@@ -123,9 +119,6 @@
 #pragma mark -下载认证信息
 -(void)loadAuthenData
 {
-//    if (_isFirst) {
-//        self.startLoading = YES;
-//    }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
@@ -171,10 +164,8 @@
                 }
                 _authenticName = authenticsstatus.name;
                 _identiyTypeId = authentics.identiytype.identiyTypeId;
-                _authId = authentics.authId;
             }
             
-            [self setModel];
             
         }
     }else{
@@ -183,19 +174,53 @@
     }
 }
 
+-(void)readData
+{
+    [self setModel];
+}
 -(void)setModel
 {
-    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_authenticModel.headSculpture]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"] options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
+    _iconStr = [data objectForKey:USER_STATIC_HEADER_PIC];
+//    NSLog(@"dayin---%@",_iconStr);
+    NSString *authenticStatus = [data objectForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    NSString *telephone = [data objectForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+    _companyS = [data objectForKey:USER_STATIC_COMPANY_NAME];
+    _position = [data objectForKey:USER_STATIC_POSITION];
+//    NSLog(@"%@---%@",_companyS,_position);
+    NSString *name = [data objectForKey:USER_STATIC_NAME];
+    if (name) {
+        _nameStr = name;
+    }
+    
+    if ([authenticStatus isEqualToString:@"已认证"] || [authenticStatus isEqualToString:@"认证中"]) {
+        if ([authenticStatus isEqualToString:@"已认证"]) {
+            _isAuthentic = YES;
+        }else{
+            _isAuthentic = NO;
+        }
+        
+        if ( _companyS && _companyS.length && _position.length && _position) {
+            _companyStr = [NSString stringWithFormat:@"%@ | %@",_companyS,_position];
+        }else{
+            _companyStr = @"";
+        }
+        
+    }else{
+        _nameStr = telephone;
+        _isAuthentic = NO;
+    }
+    _authenticName = authenticStatus;
+    
+    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_iconStr]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"] options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [_iconBtn setBackgroundImage:image forState:UIControlStateNormal];
         }
     }];
     
-    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
     NSString *nickName = [data objectForKey:@"nickName"];
     if (_nameStr && _nameStr.length) {
         _name.text = _nameStr;
-        
     }else{
         _name.text = nickName;
     }
@@ -206,10 +231,6 @@
     }
 //    NSLog(@"%@",_nameStr);
     _company.text = _companyStr;
-    if (!_isFinish) {
-        _isFinish = YES;
-    }
-//    self.startLoading = NO;
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request
@@ -222,8 +243,7 @@
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
     NSLog(@"返回:%@",jsonString);
-//    self.startLoading =NO;
-//    _isFinish = YES;
+
     
 }
 
@@ -236,12 +256,6 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:YES];
-    //下载认证信息
-    if (_isFinish) {
-        [self loadAuthenData];
-        _isFinish = NO;
-    }
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -252,13 +266,12 @@
 
 #pragma mark -进入头像详情页面
 - (IBAction)iconDetail:(UIButton *)sender {
-    if (_isFinish) {
         MineDataVC *vc = [MineDataVC new];
-        vc.authenticModel = _authenticModel;
-        vc.identiyTypeId = _identiyTypeId;
-        vc.authId = _authId;
+        vc.mineVC = self;
+        vc.position = _position;
+        vc.companyName = _companyS;
+        vc.iconImg = _iconBtn.currentBackgroundImage;
         [self.navigationController pushViewController:vc animated:YES];
-    }
 }
 
 #pragma mark -进入各个小界面
