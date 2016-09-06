@@ -32,6 +32,7 @@
 
 @property (assign, nonatomic) id<ProjectBannerViewDelegate> delegate;
 
+@property (nonatomic, assign) NSTimeInterval animationDuration; // 定义自动滚动的时间间隔
 @property (strong, nonatomic) UIScrollView * scrollView;       //滚动视图控制器
 @property (strong, nonatomic) NSTimer * timer;                 //定时器
 @property (strong, nonatomic) UIPageControl * pageControl;     //页面控制器
@@ -48,12 +49,25 @@
 
 @property (strong, nonatomic) UIButton * selectedBtn;          //当前选中btn
 @property (assign, nonatomic) NSInteger selectedNum;           //选中标识
+
+
 @property (nonatomic, assign) NSInteger imageCount;
+//数据数组
 @property (nonatomic, strong) NSArray *modelArray;
 
 @property (nonatomic, assign) BOOL isFirst;
 
+
 -(void)relayoutWithModelArray:(NSArray*)array;                 // 加载数据
               
+/**
+ *  暂停滚动
+ */
+- (void)pauseScroll;
+
+/**
+ *  恢复滚动
+ */
+- (void)restoreTheScroll;
 
 @end

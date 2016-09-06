@@ -938,6 +938,7 @@
 		44BC57251D6D79F90085C921 /* icon_circleBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BC57231D6D79F90085C921 /* icon_circleBtn@3x.png */; };
 		44BC57281D6D803A0085C921 /* CirclePersonVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BC57271D6D803A0085C921 /* CirclePersonVC.m */; };
 		44C462791D67023400E4BDF8 /* noNetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C462781D67023400E4BDF8 /* noNetView.m */; };
+		44C549121D7E5E1B00057319 /* NSTimer+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C549111D7E5E1B00057319 /* NSTimer+Addition.m */; };
 		44CDDEB61D6833D200ACE6F5 /* NetStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44CDDEB51D6833D200ACE6F5 /* NetStatusViewController.m */; };
 		44CDDEB91D6835C900ACE6F5 /* icon_noNet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44CDDEB71D6835C900ACE6F5 /* icon_noNet@2x.png */; };
 		44CDDEBA1D6835C900ACE6F5 /* icon_noNet@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44CDDEB81D6835C900ACE6F5 /* icon_noNet@3x.png */; };
@@ -2242,6 +2243,8 @@
 		44BC57271D6D803A0085C921 /* CirclePersonVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CirclePersonVC.m; sourceTree = "<group>"; };
 		44C462771D67023400E4BDF8 /* noNetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = noNetView.h; sourceTree = "<group>"; };
 		44C462781D67023400E4BDF8 /* noNetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = noNetView.m; sourceTree = "<group>"; };
+		44C549101D7E5E1B00057319 /* NSTimer+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+Addition.h"; sourceTree = "<group>"; };
+		44C549111D7E5E1B00057319 /* NSTimer+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+Addition.m"; sourceTree = "<group>"; };
 		44CDDEB41D6833D200ACE6F5 /* NetStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetStatusViewController.h; sourceTree = "<group>"; };
 		44CDDEB51D6833D200ACE6F5 /* NetStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetStatusViewController.m; sourceTree = "<group>"; };
 		44CDDEB71D6835C900ACE6F5 /* icon_noNet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_noNet@2x.png"; sourceTree = "<group>"; };
@@ -2586,6 +2589,8 @@
 				443729EC1D3FC7EF00DED1D6 /* CSZProjectDetailLetfView.m */,
 				443729ED1D3FC7EF00DED1D6 /* GENEProgressView.h */,
 				443729EE1D3FC7EF00DED1D6 /* GENEProgressView.m */,
+				44C549101D7E5E1B00057319 /* NSTimer+Addition.h */,
+				44C549111D7E5E1B00057319 /* NSTimer+Addition.m */,
 				443729EF1D3FC7EF00DED1D6 /* ProjectBannerView.h */,
 				443729F01D3FC7EF00DED1D6 /* ProjectBannerView.m */,
 				443729F11D3FC7EF00DED1D6 /* ProjectDetailBannerView.h */,
@@ -5447,6 +5452,7 @@
 				44372A351D3FC7F000DED1D6 /* ProjectListProModel.m in Sources */,
 				44372F5B1D3FCC2100DED1D6 /* InvestThinkTankDetailVC.m in Sources */,
 				443730711D3FCC4600DED1D6 /* CircleReleaseVC.m in Sources */,
+				44C549121D7E5E1B00057319 /* NSTimer+Addition.m in Sources */,
 				443730271D3FCC3600DED1D6 /* AuthenticInfoBaseModel.m in Sources */,
 				443730371D3FCC3600DED1D6 /* BillEndCell.m in Sources */,
 				4437298B1D3FC78100DED1D6 /* RegisterViewController.m in Sources */,

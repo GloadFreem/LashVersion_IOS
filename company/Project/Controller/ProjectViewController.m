@@ -442,7 +442,6 @@
             NSArray *authenticsArray = baseModel.authentics;
             if (authenticsArray.count) {
                 ProjectAuthentics *authentics = authenticsArray[0];
-                
                 [data setObject:authentics.city.name forKey:USER_STATIC_CITY];
                 [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
                 [data setValue:authentics.name forKey:USER_STATIC_NAME];
@@ -454,7 +453,7 @@
             }
             
             [data synchronize];
-            
+
 //            if ([authentics.authenticstatus.name isEqualToString:@"已认证"]) {
 //                _isAuthentic = YES;
 //            }
@@ -674,6 +673,9 @@
 #pragma mark----------------解析banner数据-----------------
 -(void)analysisBannerData:(NSArray*)array
 {
+    if (_bannerModelArray.count) {
+        [_bannerModelArray removeAllObjects];
+    }
     NSArray *bannerModelArray = [ProjectBannerModel mj_objectArrayWithKeyValuesArray:array];
     for (NSInteger i = 0; i < bannerModelArray.count; i ++) {
         ProjectBannerModel *baseModel = bannerModelArray[i];
@@ -697,7 +699,7 @@
             
         }
         [_bannerModelArray addObject:listModel];
-        //    NSLog(@"打印数组个数---%ld",_bannerModelArray.count);
+            NSLog(@"打印数组个数---%ld",_bannerModelArray.count);
     }
     //搭建banner
     [self setBanner];
@@ -710,6 +712,7 @@
         _selectedCellNum = 20;
         _bannerView = [[ProjectBannerView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, BannerHeight)];
         [_bannerView setSelectedNum:20];
+        _bannerView.animationDuration = 4;
         _bannerView.delegate = self;
         _tableView.tableHeaderView = _bannerView;
     }

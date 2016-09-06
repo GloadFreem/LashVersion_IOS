@@ -9,13 +9,15 @@
 #import "ProjectBannerView.h"
 
 #import "MeasureTool.h"
-
+#import "NSTimer+Addition.h"
 #import "ProjectBannerModel.h"
-#define kADcount 4
-#define kImageCount 4
-#define SCROLLVIEWHEIGHT SCREENWIDTH*0.5 + 45
 
-#define kPAGEWIDTH 40
+#define kImageCount self.imageCount
+
+#define kWidth self.frame.size.width
+#define kHeight self.frame.size.height
+
+#define kPAGEWIDTH 50
 #define kPAGEHEIGHT 5
 
 #define kCOVERHEIGHT 50
@@ -41,13 +43,15 @@
     _scrollView.bounces = NO;
     _scrollView.pagingEnabled = YES;
     _scrollView.showsHorizontalScrollIndicator = NO;
+    // 设置偏移量
+    _scrollView.contentOffset = CGPointMake(kWidth, 0);
     _scrollView.delegate = self;
     [self addSubview:_scrollView];
     [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.mas_left);
         make.top.mas_equalTo(self.mas_top);
         make.right.mas_equalTo(self.mas_right);
-        make.height.mas_equalTo(SCROLLVIEWHEIGHT - 45);
+        make.height.mas_equalTo(kHeight - 45);
     }];
     
     //遮盖
@@ -177,10 +181,10 @@
     
     //页面控制器
     _pageControl = [UIPageControl new];
-    _pageControl.numberOfPages =kImageCount;
-        _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+    _pageControl. userInteractionEnabled = NO;
+
+    _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
     _pageControl.currentPageIndicatorTintColor = orangeColor;
-    
     [self addSubview:_pageControl];
     [_pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_coverView.mas_top).offset(5);
@@ -210,6 +214,7 @@
         [_rightSliderBottomView setBackgroundColor:orangeColor];
     }
 }
+
 #pragma mark- button点击事件
 -(void)buttonClick:(UIButton*)button
 {
@@ -225,35 +230,50 @@
 #pragma mark- cell刷新数据
 -(void)relayoutWithModelArray:(NSArray *)array
 {
-    NSInteger i =0;
-    for (; i<array.count; i++) {
-        ProjectBannerListModel *model =(ProjectBannerListModel*)array[i];
-        UIButton * btn = [[UIButton alloc]init];
-        [btn setAdjustsImageWhenHighlighted:NO];
-        btn.tag = i;
-        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-        btn.frame = CGRectMake(0+i*SCREENWIDTH, 0, SCREENWIDTH, SCROLLVIEWHEIGHT - 45);
-        [btn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.image]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderImageDetail"]];
-
-        [_scrollView addSubview:btn];
-        
-        if (i==0) {
-            UIButton * btn =[[UIButton alloc]init];
-            [btn setAdjustsImageWhenHighlighted:NO];
-            btn.tag = i;
-            [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-            btn.frame = CGRectMake(4*SCREENWIDTH, 0, SCREENWIDTH, SCROLLVIEWHEIGHT - 45);
-            [btn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.image]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderImageDetail"]];
-
-            [_scrollView addSubview:btn];
-            
+    for (id view in _scrollView.subviews) {
+        if ([view isKindOfClass:[UIButton class]]) {
+            [view removeFromSuperview];
         }
     }
-    _scrollView.contentSize = CGSizeMake(SCREENWIDTH * i, 0);
     
+    NSInteger i =0;
+    for (; i<_imageCount + 2; i++) {
+        ProjectBannerListModel *model;
+        UIButton * btn = [[UIButton alloc]init];
+        [btn setAdjustsImageWhenHighlighted:NO];
+        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        btn.frame = CGRectMake(0+i*kWidth, 0, kWidth, kHeight - 45);
+        
+        if (i == 0) {
+            //第一张 显示最后一张图片
+            model = (ProjectBannerListModel*)[array lastObject];
+            btn.tag = 1000;
+            [btn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.image]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderImageDetail"]];
+        }else if (i == _imageCount + 1){
+            //最后一张  显示 第一张图片
+            model = (ProjectBannerListModel*)[array firstObject];
+            btn.tag = 1100;
+            [btn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.image]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderImageDetail"]];
+        }else{
+            model = (ProjectBannerListModel*)array[i - 1];
+            btn.tag = 1000 + i;
+            [btn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.image]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderImageDetail"]];
+        }
+        
+        [_scrollView addSubview:btn];
+    }
+    _scrollView.contentSize = CGSizeMake((_imageCount + 2) * kWidth, kHeight - 45);
+    [self createTimer];
     
-    for (NSInteger i = 0; i < array.count; i ++) {
-        ProjectBannerListModel *model =(ProjectBannerListModel*)array[i];
+    for (NSInteger i = 0; i < _imageCount + 2; i ++) {
+        ProjectBannerListModel *model;
+        if (i == 0) {
+            model =(ProjectBannerListModel*)[array lastObject];
+        }else if (i == _imageCount + 1){
+            model  =(ProjectBannerListModel*)[array firstObject];
+        }else{
+            model  =(ProjectBannerListModel*)array[i - 1];
+        }
         if ([model.type isEqualToString:@"Project"]) {
             _coverView.hidden = NO;
             _firstBottomImage.hidden = NO;
@@ -285,46 +305,67 @@
         }
     }
     [self layoutSubviews];
-    [self createTimer];
-    [_timer setFireDate:[NSDate distantPast]];
 }
 
+-(void)setImageCount:(NSInteger)imageCount
+{
+    _imageCount = imageCount;
+    _pageControl.numberOfPages =imageCount;
+}
 #pragma mark- 创建Timer
 -(void)createTimer
 {
     if (_timer == nil) {
-        _timer = [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(runTimer) userInfo:nil repeats:YES];
-    }else{
-        [_timer setFireDate:[NSDate distantPast]];
+        _timer = [NSTimer scheduledTimerWithTimeInterval:_animationDuration target:self selector:@selector(autoChangeFrame:) userInfo:nil repeats:YES];
+        // 保证在主界面滑动的时候NSTimer也不暂停
+        [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    }
+}
+//自动滚动
+-(void)autoChangeFrame:(NSTimer*)timer
+{
+    // 进行纠偏(为了防止出现便宜量在屏幕一半的情况)
+    NSInteger currentPage = _scrollView.contentOffset.x/SCREENWIDTH;
+    CGPoint newOffset = CGPointMake(currentPage * kWidth + kWidth, 0);
+    [_scrollView setContentOffset:newOffset animated:YES];
+    [self changeCurrentPageAuto];
+}
+
+#pragma mark - 更改UIPageControl的当前指示页（自动滚动的时候）
+- (void)changeCurrentPageAuto
+{
+//    UIPageControl *pageControl = (UIPageControl *)[self viewWithTag:20000];
+    if (_scrollView.contentOffset.x / kWidth == _imageCount) {
+        _pageControl.currentPage = 0;
+        
+    } else if (_scrollView.contentOffset.x / kWidth == 0) {
+        _pageControl.currentPage = _imageCount - 1;
+    } else {
+        _pageControl.currentPage = _scrollView.contentOffset.x / kWidth; // 根据视图偏移的距离，更改pageControl的当前选中的页
     }
 }
 
--(void)runTimer
-{
-    int page = _scrollView.contentOffset.x/SCREENWIDTH;
-    page++;
-//    if (page == _imageCount) {
-//        _pageControl.currentPage=0;
-//    }else{
-//     _pageControl.currentPage=page;
-//    }
-    _pageControl.currentPage = page;
-   
-    [_scrollView setContentOffset:CGPointMake(page*SCREENWIDTH, 0) animated:YES];
-    
-}
 #pragma mark -scrollView 页面控制联动
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    // 首先得到当前的偏移量
+    CGPoint currentPoint = scrollView.contentOffset;
+    if (currentPoint.x <= kWidth / 2) {
+        scrollView.contentOffset = CGPointMake(_imageCount * kWidth + currentPoint.x, 0);
+    } else if (currentPoint.x > (_imageCount + 0.5) * kWidth) {
+        scrollView.contentOffset = CGPointMake(currentPoint.x - _imageCount * kWidth, 0);
+    }
+}
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [_timer pauseTimer];
+}
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    int page = scrollView.contentOffset.x/SCREENWIDTH;
-    if (page==_imageCount ) {
-        scrollView.contentOffset=CGPointZero;
-        _pageControl.currentPage=0;
-    }else{
-        _pageControl.currentPage=page;
-    }
+    [_timer resumeTimerAfterTimeInterval:_animationDuration];
+    _pageControl.currentPage = _scrollView.contentOffset.x / kWidth - 1; // 根据视图偏移的距离，更改pageControl的当前选中的页
     
     ProjectBannerListModel *model =(ProjectBannerListModel*)_modelArray[_pageControl.currentPage];
     if ([model.type isEqualToString:@"Project"]) {
@@ -358,18 +399,11 @@
         _progress.hidden = YES;
     }
     [self layoutSubviews];
-    
 }
 //结束滚动
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-    int page=_scrollView.contentOffset.x/SCREENWIDTH;
-    
-    if (page==_imageCount ) {
-        _pageControl.currentPage=0;
-        _scrollView.contentOffset=CGPointZero;
-    }
-    
+//    _pageControl.currentPage = _scrollView.contentOffset.x / kWidth - 1; // 根据视图偏移的距离，更改pageControl的当前选中的页
     ProjectBannerListModel *model =(ProjectBannerListModel*)_modelArray[_pageControl.currentPage];
     if ([model.type isEqualToString:@"Project"]) {
         _coverView.hidden = NO;
@@ -407,8 +441,33 @@
 #pragma mark -点击btn事件处理
 -(void)btnClick:(UIButton*)btn
 {
+    ProjectBannerListModel *model;
+    if (btn.tag == 1000) {
+        model = (ProjectBannerListModel*)[_modelArray lastObject];
+    }else if (btn.tag == 1100){
+        model = (ProjectBannerListModel*)[_modelArray firstObject];
+    }else{
+        model = (ProjectBannerListModel*)_modelArray[btn.tag -1 - 1000];
+    }
     if ([self.delegate respondsToSelector:@selector(clickBannerImage:)]) {
-        [self.delegate clickBannerImage:_modelArray[btn.tag]];
+        [self.delegate clickBannerImage:model];
     }
 }
+
+- (void)pauseScroll
+{
+    [_timer pauseTimer];
+}
+
+- (void)restoreTheScroll
+{
+    [_timer resumeTimerAfterTimeInterval:_animationDuration];
+}
+
+- (void)dealloc
+{
+    [_timer invalidate];
+    _timer = nil;
+}
+
 @end

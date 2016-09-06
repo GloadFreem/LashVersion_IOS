@@ -176,9 +176,6 @@
             
             [self setModel];
             
-//            if (_isFirst) {
-//                _isFirst = NO;
-//            }
         }
     }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -209,8 +206,8 @@
     }
 //    NSLog(@"%@",_nameStr);
     _company.text = _companyStr;
-    if (!_isFirst) {
-        _isFirst = YES;
+    if (!_isFinish) {
+        _isFinish = YES;
     }
 //    self.startLoading = NO;
 }
@@ -223,10 +220,10 @@
 
 -(void)requestFinished:(ASIHTTPRequest *)request
 {
-//    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    NSLog(@"返回:%@",jsonString);
 //    self.startLoading =NO;
-    _isFinish = YES;
+//    _isFinish = YES;
     
 }
 
@@ -255,7 +252,7 @@
 
 #pragma mark -进入头像详情页面
 - (IBAction)iconDetail:(UIButton *)sender {
-    if (_isFirst) {
+    if (_isFinish) {
         MineDataVC *vc = [MineDataVC new];
         vc.authenticModel = _authenticModel;
         vc.identiyTypeId = _identiyTypeId;
