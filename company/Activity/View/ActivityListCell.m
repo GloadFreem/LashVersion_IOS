@@ -131,6 +131,7 @@
     .leftSpaceToView(_personImage, 5)
     .centerYEqualToView(_personImage)
     .heightIs(12);
+    [_personLabel setSingleLineAutoResizeWithMaxWidth:100];
     
     _feeLabel.sd_layout
     .leftSpaceToView(_personLabel, 10)
@@ -183,6 +184,7 @@
         [_addressLabel setText:_model.address];
         //人数限制
         [_personLabel setText:STRING(@"%ld人", (long)_model.memberLimit)];
+        [_personLabel sizeToFit];
         //时间
         //获取时间
         NSDate *date = [TDUtil dateFromString:_model.startTime];

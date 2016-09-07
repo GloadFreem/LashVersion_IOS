@@ -163,6 +163,7 @@
     
     if (self.commentItemsArray.count == 0) {
         pinglunImgV.frame = CGRectMake(CGRectGetMinX(imgView.frame), CGRectGetMaxY(imgView.frame)+25, 16, 16);
+        [self setupAutoHeightWithBottomView:pinglunImgV bottomMargin:6];
     } else {
         for (int i = 0; i < self.commentItemsArray.count; i++) {
             
@@ -188,9 +189,11 @@
             label.isAttributedContent = YES;
             lastTopView = label;
         }
+        [self setupAutoHeightWithBottomView:lastTopView bottomMargin:6];
+
     }
     
-    [self setupAutoHeightWithBottomView:lastTopView bottomMargin:6];
+    
     
 }
 

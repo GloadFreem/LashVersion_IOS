@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UIView *partLine;
 @property (nonatomic, strong) ActivityDetailCommentView *commentView;
 @property (nonatomic, strong) UILabel *moreL;
+@property (nonatomic, strong) UIView *bottomView;
 @end
 @implementation ActivityDetailFooterView
 
@@ -125,12 +126,12 @@
     _moreL.backgroundColor = [UIColor whiteColor];
     _moreL.textAlignment = NSTextAlignmentLeft;
     [self addSubview:_moreL];
-    _moreL.sd_layout.topSpaceToView(_commentView, 0).widthIs(150).heightIs(30).leftSpaceToView(self, 58);
+    _moreL.sd_layout.topSpaceToView(_commentView, 0).widthIs(150).heightIs(25).leftSpaceToView(self, 58);
     
-    UIView *bottomView = [[UIView alloc] init];
-    bottomView.backgroundColor = RGBCOLOR(227, 227, 227);
-    [self addSubview:bottomView];
-    bottomView.sd_layout.topSpaceToView(_moreL, 0).widthIs(SCREENWIDTH).heightIs(10);
+    _bottomView = [[UIView alloc] init];
+    _bottomView.backgroundColor = RGBCOLOR(227, 227, 227);
+    [self addSubview:_bottomView];
+   
 }
 
 -(void)setModel:(ActivityDetailCommentCellModel *)model
@@ -151,13 +152,17 @@
         _commentView.sd_layout.topSpaceToView(_partLine, 13);
 //    }
     
-    if (model.commentItemsArray.count < 6) {
+    if (model.commentItemsArray.count < 5) {
         [_moreL removeFromSuperview];
+         _bottomView.sd_layout.topSpaceToView(_commentView, 0).widthIs(SCREENWIDTH).heightIs(10);
+        [self setupAutoHeightWithBottomView:_commentView bottomMargin:10];
+    } else {
+         _bottomView.sd_layout.topSpaceToView(_moreL, 0).widthIs(SCREENWIDTH).heightIs(10);
+        [self setupAutoHeightWithBottomView:_moreL bottomMargin:10];
     }
     
     [_topView layoutSubviews];
     
-    [self setupAutoHeightWithBottomView:_moreL bottomMargin:10];
     
 }
 

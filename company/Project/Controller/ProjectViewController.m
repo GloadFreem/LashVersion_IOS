@@ -159,11 +159,9 @@
         [self isLogin];
     }
     
-    
     [self loadMessage];
     
     [self loadVersion];
-    
     
 //    [self createGoldView];
     //保存登录时间
@@ -644,10 +642,6 @@
     
 }
 
-
-
-
-
 -(void)requestBannerList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
@@ -978,41 +972,47 @@
             _isForce = [dataDic[@"isForce"] boolValue];
             //利用key取到对应的版本（当前版本）
             NSString * version =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-            if (_isForce) {//强更
-                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:_contentStr delegate:self cancelButtonTitle:@"更新" otherButtonTitles:nil];
-                alertView.delegate =self;
-                alertView.tag = 20;
-                [alertView show];
-            }else{
                 NSArray *currentArray = [version componentsSeparatedByString:@"."];
 //                NSLog(@"本地----%@",currentArray);
                 NSArray *upArray = [_versionStr componentsSeparatedByString:@"."];
                 if ([currentArray[0] integerValue] < [upArray[0] integerValue]) {
+                    if (_isForce) {
+                        [self forceUpdateAlertView];
+                    }else{
                     [self alertViewShow];
+                    }
                 }else{
                     if ([upArray[1] integerValue] > [currentArray[1] integerValue]) {
-                        [self alertViewShow];
+                        if (_isForce) {
+                            [self forceUpdateAlertView];
+                        }else{
+                            [self alertViewShow];
+                        }
                     }else{
                         if ([upArray[2] integerValue] > [currentArray[2] integerValue]) {
-                            [self alertViewShow];
+                            if (_isForce) {
+                                [self forceUpdateAlertView];
+                            }else{
+                                [self alertViewShow];
+                            }
                             
                         }else{
-//                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:@"当前版本为最新版本，无需更新" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-//                            //                            alertView.delegate =self;
-//                            //                            alertView.tag = 20;
-//                            [alertView show];
                             
                         }
-                        
-                        
                     }
                 }
                 
             }
-        }
     }
 }
 
+-(void)forceUpdateAlertView
+{
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:_contentStr delegate:self cancelButtonTitle:@"更新" otherButtonTitles:nil];
+    alertView.delegate =self;
+    alertView.tag = 20;
+    [alertView show];
+}
 -(void)alertViewShow
 {
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"版本更新" message:_contentStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"更新", nil];
