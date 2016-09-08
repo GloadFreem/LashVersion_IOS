@@ -1069,7 +1069,6 @@
 -(void)requestShareToCircle:(ASIHTTPRequest*)request
 {
     
-    
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
     //        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];

@@ -54,7 +54,7 @@
     .topSpaceToView(_topView,15);
     
     _teamLabel = [UILabel new];
-    _teamLabel.text = @"公司状况";
+    _teamLabel.text = @"核心团队";
     _teamLabel.textColor = [UIColor blackColor];
     _teamLabel .textAlignment = NSTextAlignmentLeft;
     _teamLabel.font = BGFont(18);

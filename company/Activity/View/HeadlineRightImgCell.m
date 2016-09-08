@@ -29,7 +29,7 @@ const CGFloat marginleft = 13;
     HeadlineRightImgCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (cell == nil) {
         cell = [[HeadlineRightImgCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
-        cell.backgroundColor = color(239, 239, 244, 1);
+        cell.backgroundColor = [UIColor whiteColor];
     }
     return cell;
 }

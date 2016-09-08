@@ -85,12 +85,14 @@
     //2.添加到View
     [self addSubview:headerView];
     [self addSubview:teamView];
+    __weak typeof(self) weakself = self;
+    
     //3.设置属性
     [headerView setMoreButtonClickedBlock:^(Boolean flag)
     {
-        if(self.moreButtonClickedBlock)
+        if(weakself.moreButtonClickedBlock)
         {
-            self.moreButtonClickedBlock(flag);
+            weakself.moreButtonClickedBlock(flag);
         }
     }];
     
@@ -105,11 +107,13 @@
     .topSpaceToView(headerView,0)
     .leftSpaceToView(self,0)
     .rightSpaceToView(self,0)
-    .heightIs(320);
+    .heightIs(360);
     
-    [self setupAutoHeightWithBottomView:teamView bottomMargin:50];
+    [self setupAutoHeightWithBottomView:teamView bottomMargin:10];
     //立即布局
     [headerView updateLayout];
+    
+    [self layoutSubviews];
 }
 
 -(void)didClickBtnInTeamViewWithModel:(DetailTeams *)team

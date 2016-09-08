@@ -59,7 +59,7 @@
     
     _commentLabel.sd_layout
     .centerYEqualToView(view)
-    .leftSpaceToView(_commentImage,10)
+    .leftSpaceToView(_commentImage,15)
     .heightIs(18);
     [_commentLabel setSingleLineAutoResizeWithMaxWidth:100];
     
@@ -81,8 +81,8 @@
      _moreImage.sd_layout
      .centerYEqualToView(view)
      .rightSpaceToView(view,8)
-     .widthIs(10)
-     .heightIs(18);
+     .widthIs(9)
+     .heightIs(15);
     
      _moreBtn =[UIButton new];
      [_moreBtn setTitle:@"查看更多" forState:UIControlStateNormal];

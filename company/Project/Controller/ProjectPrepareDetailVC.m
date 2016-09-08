@@ -302,7 +302,8 @@
     .leftEqualToView(_scrollView)
     .rightEqualToView(_scrollView)
     .topSpaceToView(_photoView,0)
-    .autoHeightRatio(1);
+//    .autoHeightRatio(1);
+    .heightIs(365);
 
     _footerView = [ProjectPrepareFooterCommentView new];
     _footerView.projectId = _projectId;
@@ -311,9 +312,9 @@
     _footerView.sd_layout
     .leftEqualToView(_scrollView)
     .rightEqualToView(_scrollView)
-    .topSpaceToView(_teamView,-10);
+    .topSpaceToView(_teamView,0);
     
-    [_scrollView setupAutoContentSizeWithBottomView:_footerView bottomMargin:10];
+    [_scrollView setupAutoContentSizeWithBottomView:_footerView bottomMargin:0];
 }
 
 -(void)createBottomView

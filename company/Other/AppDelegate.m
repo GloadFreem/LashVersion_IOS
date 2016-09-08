@@ -269,7 +269,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:
 (NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // IOS 7 Support Required
-    NSLog(@"%@",userInfo);
+//    NSLog(@"%@",userInfo);
     NSString * type = [userInfo valueForKey:@"type"];
     UIViewController * controller;
     NSDictionary * notificationDic;
