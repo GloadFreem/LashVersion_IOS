@@ -951,6 +951,8 @@
 		44D138321D4B0217000132ED /* icon_detail_rasing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D1382C1D4B0217000132ED /* icon_detail_rasing@3x.png */; };
 		44D138331D4B0217000132ED /* icon_detail_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D1382D1D4B0217000132ED /* icon_detail_success@2x.png */; };
 		44D138341D4B0217000132ED /* icon_detail_success@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D1382E1D4B0217000132ED /* icon_detail_success@3x.png */; };
+		44D16E7C1D81378800E54873 /* icon_copy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D16E7A1D81378800E54873 /* icon_copy@2x.png */; };
+		44D16E7D1D81378800E54873 /* icon_copy@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D16E7B1D81378800E54873 /* icon_copy@3x.png */; };
 		44E804341D70258A00026AC7 /* icon_share_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E804321D70258A00026AC7 /* icon_share_circle@2x.png */; };
 		44E804351D70258A00026AC7 /* icon_share_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E804331D70258A00026AC7 /* icon_share_circle@3x.png */; };
 		44E8043B1D702EDA00026AC7 /* ShareToCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E8043A1D702EDA00026AC7 /* ShareToCircleView.m */; };
@@ -2261,6 +2263,8 @@
 		44D1382C1D4B0217000132ED /* icon_detail_rasing@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_rasing@3x.png"; sourceTree = "<group>"; };
 		44D1382D1D4B0217000132ED /* icon_detail_success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_success@2x.png"; sourceTree = "<group>"; };
 		44D1382E1D4B0217000132ED /* icon_detail_success@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_detail_success@3x.png"; sourceTree = "<group>"; };
+		44D16E7A1D81378800E54873 /* icon_copy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_copy@2x.png"; sourceTree = "<group>"; };
+		44D16E7B1D81378800E54873 /* icon_copy@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_copy@3x.png"; sourceTree = "<group>"; };
 		44E804321D70258A00026AC7 /* icon_share_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_share_circle@2x.png"; sourceTree = "<group>"; };
 		44E804331D70258A00026AC7 /* icon_share_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_share_circle@3x.png"; sourceTree = "<group>"; };
 		44E804391D702EDA00026AC7 /* ShareToCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareToCircleView.h; sourceTree = "<group>"; };
@@ -3131,6 +3135,8 @@
 		44372B911D3FCB5C00DED1D6 /* IOS圈子 */ = {
 			isa = PBXGroup;
 			children = (
+				44D16E7A1D81378800E54873 /* icon_copy@2x.png */,
+				44D16E7B1D81378800E54873 /* icon_copy@3x.png */,
 				44372B921D3FCB5C00DED1D6 /* icon_circle_add@2x.png */,
 				44372B931D3FCB5C00DED1D6 /* icon_circle_add@3x.png */,
 				44372B941D3FCB5C00DED1D6 /* icon_dianzan@2x.png */,
@@ -4789,6 +4795,7 @@
 				44372EDA1D3FCB5C00DED1D6 /* icon_raised@2x.png in Resources */,
 				44372EDF1D3FCB5C00DED1D6 /* icon_roading@3x.png in Resources */,
 				44372DE31D3FCB5C00DED1D6 /* logo_wallet@2x.png in Resources */,
+				44D16E7C1D81378800E54873 /* icon_copy@2x.png in Resources */,
 				44AC3A061D49E39D00D9C878 /* icon_success@3x.png in Resources */,
 				44372E881D3FCB5C00DED1D6 /* bill_whitebg1@3x.png in Resources */,
 				4437298C1D3FC78100DED1D6 /* RegisterViewController.xib in Resources */,
@@ -5008,6 +5015,7 @@
 				44372E751D3FCB5C00DED1D6 /* LetterUnselected@3x.png in Resources */,
 				44372F6E1D3FCC2100DED1D6 /* InvestOrganizationSecondCell.xib in Resources */,
 				4437301D1D3FCC3600DED1D6 /* MineViewController.xib in Resources */,
+				44D16E7D1D81378800E54873 /* icon_copy@3x.png in Resources */,
 				44372EE41D3FCB5C00DED1D6 /* icon_uncollect@2x.png in Resources */,
 				44372EE81D3FCB5C00DED1D6 /* iconfont-rocket@2x.png in Resources */,
 				44372EDE1D3FCB5C00DED1D6 /* icon_roading@2x.png in Resources */,

@@ -23,6 +23,7 @@ PODS:
     - SDWebImage/Core (= 3.7.6)
   - SDWebImage/Core (3.7.6)
   - SVProgressHUD (2.0.3)
+  - UMengAnalyticsSDK (3.6.7.0)
 
 DEPENDENCIES:
   - ASIHTTPRequest (~> 1.8.2)
@@ -32,6 +33,7 @@ DEPENDENCIES:
   - MJRefresh (~> 3.1.0)
   - SDWebImage (~> 3.7.6)
   - SVProgressHUD (~> 2.0.3)
+  - UMengAnalyticsSDK (~> 3.6.7.0)
 
 SPEC CHECKSUMS:
   ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
@@ -42,7 +44,8 @@ SPEC CHECKSUMS:
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9
   SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
+  UMengAnalyticsSDK: 995da0b94da156de77da7ec6666b3801f3db20a4
 
-PODFILE CHECKSUM: fb6ca8e1222ce31b309b8d5830c2141b207311ec
+PODFILE CHECKSUM: 46a1a001aec348b68607996c9ec8127c7a96109f
 
 COCOAPODS: 1.0.0

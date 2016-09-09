@@ -517,18 +517,23 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [_tableView deselectRowAtIndexPath:indexPath animated:YES];
-    //进入详情页
-    CircleListModel *listModel = _dataArray[indexPath.row];
-    if (listModel.publicContentId) {
-        CircleDetailVC *detail = [CircleDetailVC new];
-        detail.indexPath = indexPath;
-        detail.viewController = self;
-        detail.publicContentId  =listModel.publicContentId;//帖子ID
-        detail.page = 0;
-        detail.circleModel = listModel;
-        
-        [self.navigationController pushViewController:detail animated:YES];
+    
+    CircleListCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if (!cell.isShow) {
+        //进入详情页
+        CircleListModel *listModel = _dataArray[indexPath.row];
+        if (listModel.publicContentId) {
+            CircleDetailVC *detail = [CircleDetailVC new];
+            detail.indexPath = indexPath;
+            detail.viewController = self;
+            detail.publicContentId  =listModel.publicContentId;//帖子ID
+            detail.page = 0;
+            detail.circleModel = listModel;
+            
+            [self.navigationController pushViewController:detail animated:YES];
+        }
     }
+    
 }
 #pragma mark --------发布动态
 -(void)releaseBtnClick:(UIButton*)btn
@@ -752,11 +757,6 @@
         
         switch (index) {
             case 0:{
-                
-//                NSLog(@"点击分享圈子");
-           }
-                break;
-            case 1:{
                 if ([QQApiInterface isQQInstalled])
                 {
                     // QQ好友
@@ -774,7 +774,7 @@
                 
             }
                 break;
-            case 2:{
+            case 1:{
                 // 微信好友
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
@@ -785,7 +785,7 @@
                 //                NSLog(@"分享到微信");
             }
                 break;
-            case 3:{
+            case 2:{
                 // 微信朋友圈
                 arr = @[UMShareToWechatTimeline];
 //                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
@@ -796,7 +796,7 @@
                 //                NSLog(@"分享到朋友圈");
             }
                 break;
-            case 4:{
+            case 3:{
                 // 短信
                 arr = @[UMShareToSms];
                 shareContent = shareContentString;

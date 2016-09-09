@@ -39,6 +39,9 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     UIView*_secondShuView;
     UIView *_bottomLine;
     BOOL _shouldOpenContentLabel;
+    
+    UIButton *_copyBtn;
+
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -102,6 +105,18 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     if (_maxContentLabelHeight == 0) {
         _maxContentLabelHeight = _contentLabel.font.lineHeight * 3;
     }
+    _contentLabel.userInteractionEnabled = YES;
+    _copyBtn = [UIButton new];
+    [_copyBtn setImage:[UIImage imageNamed:@"icon_copy"] forState:UIControlStateNormal];
+    [_copyBtn addTarget:self action:@selector(copyBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    //添加手势
+    UILongPressGestureRecognizer *longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(contentLabelPress:)];
+    longPressGr.minimumPressDuration = 1;
+    
+//    longPressGr.numberOfTouchesRequired = 1;
+    [_contentLabel addGestureRecognizer:longPressGr];
     
     _moreBtn = [UIButton new];
     [_moreBtn setTitle:@"全文" forState:UIControlStateNormal];
@@ -145,7 +160,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _bottomLine =[UIView new];
     [_bottomLine setBackgroundColor:colorGray];
     
-    NSArray *views = @[_topView,_iconBtn, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel,_deleteBtn, _timeLabel, _contentLabel, _moreBtn, _contentView,_picContainerView, _partLine,_shareBtn,_firstShuView,_commentBtn,_secondShuView,_praiseBtn,_bottomLine];
+    NSArray *views = @[_topView,_iconBtn, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel,_deleteBtn, _timeLabel, _contentLabel,_copyBtn, _moreBtn, _contentView,_picContainerView, _partLine,_shareBtn,_firstShuView,_commentBtn,_secondShuView,_praiseBtn,_bottomLine];
     
     [self.contentView sd_addSubviews:views];
     
@@ -211,6 +226,12 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .topSpaceToView(_iconBtn,12)
     .rightSpaceToView(contentView,margin)
     .autoHeightRatio(0);
+    
+    _copyBtn.sd_layout
+    .bottomSpaceToView(_contentLabel, 5)
+    .centerXEqualToView(_contentLabel)
+    .widthIs(0)
+    .heightIs(0);
     //moreBtn的告诉在setModel里边设置
     _moreBtn.sd_layout
     .leftEqualToView(_contentLabel)
@@ -267,6 +288,8 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     .rightEqualToView(contentView)
     .bottomEqualToView(contentView)
     .heightIs(0.5);
+    
+    self.isShow = NO;
     
 }
 
@@ -352,6 +375,51 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _picContainerView.sd_layout.topSpaceToView(_contentView,picContainerTopMargin);
     
     [self setupAutoHeightWithBottomView:_shareBtn bottomMargin:5];
+}
+
+-(void)setIsShow:(BOOL)isShow
+{
+    _isShow = isShow;
+    if (_isShow) {
+        [UIView animateWithDuration:0.2 animations:^{
+            _copyBtn.sd_layout
+            .widthIs(50)
+            .heightIs(32);
+        }];
+        _contentLabel.backgroundColor = colorGray;
+    }else{
+        [UIView animateWithDuration:0.2 animations:^{
+            _copyBtn.sd_layout
+            .widthIs(0)
+            .heightIs(0);
+        }];
+        _contentLabel.backgroundColor = [UIColor whiteColor];
+    }
+}
+
+
+-(void)contentLabelPress:(UILongPressGestureRecognizer *)gesture
+{
+    self.isShow= YES;
+}
+
+-(void)copyBtnClick
+{
+    self.isShow = NO;
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = _contentLabel.text;
+    
+    UIWindow * window = [UIApplication sharedApplication].keyWindow;
+    [[DialogUtil sharedInstance]showDlg:window textOnly:@"已复制到剪切板"];
+    
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+    if (_isShow) {
+        self.isShow = NO;
+    }
 }
 
 -(void)setIndexPath:(NSIndexPath *)indexPath

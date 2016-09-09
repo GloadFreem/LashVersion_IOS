@@ -23,7 +23,7 @@
 
 @interface CircleDetailHeaderCell : UITableViewCell<CircleContentViewDelegate>
 
-
+@property (nonatomic, assign) BOOL isShow;
 @property (nonatomic, weak) id<CircleDetailHeaderCellDelegate>delegate;
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (nonatomic, strong) CircleListModel *model;

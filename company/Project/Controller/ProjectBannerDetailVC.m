@@ -34,8 +34,13 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     [self setNav];
-    _webView  =[[UIWebView alloc]initWithFrame:self.view.frame];
+    _webView  =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT-64)];
     _webView.delegate = self;
+    _webView.scrollView.bounces = NO;
+    [_webView scalesPageToFit];
+    [_webView sizeToFit];
+    _webView.backgroundColor = [UIColor whiteColor];
+    _webView.opaque = NO;
     [self.view addSubview:_webView];
     
     [self startLoadDetailData];

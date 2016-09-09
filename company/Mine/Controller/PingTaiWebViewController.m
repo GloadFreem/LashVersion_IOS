@@ -25,8 +25,13 @@
     
     [self setNav];
     
-    _webView  =[[UIWebView alloc]initWithFrame:self.view.frame];
+    _webView  =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT-64)];
     _webView.delegate =self;
+    _webView.scrollView.bounces = NO;
+    [_webView scalesPageToFit];
+    _webView.backgroundColor = [UIColor whiteColor];
+    
+    _webView.opaque = NO;
     [self.view addSubview:_webView];
     
     self.loadingViewFrame = _webView.frame;
@@ -37,7 +42,6 @@
 
 -(void)setNav
 {
-    
     UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
     leftback.size = CGSizeMake(80, 30);
@@ -98,7 +102,6 @@
     if (webView == self.webView) {
         self.startLoading = NO;
     }
-    
 }
 
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error

@@ -29,6 +29,8 @@
     
     UILabel *_praiseLabel;
     UIView *_bottomView;
+    UIButton *_copyBtn;
+    
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -77,6 +79,18 @@
     _contentLabel.font = BGFont(15);
     _contentLabel.numberOfLines = 0;
     
+    _contentLabel.userInteractionEnabled = YES;
+    _copyBtn = [UIButton new];
+    [_copyBtn setImage:[UIImage imageNamed:@"icon_copy"] forState:UIControlStateNormal];
+    [_copyBtn addTarget:self action:@selector(copyBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    
+    //添加手势
+    UILongPressGestureRecognizer *longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(contentLabelPress:)];
+    longPressGr.minimumPressDuration = 1;
+    
+    //    longPressGr.numberOfTouchesRequired = 1;
+    [_contentLabel addGestureRecognizer:longPressGr];
+    
     _contentView = [CircleContentView new];
     _contentView.delegate = self;
     
@@ -98,7 +112,7 @@
     _bottomView.backgroundColor = colorGray;
     
     
-    NSArray *views = @[_topView,_iconView, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel, _timeLabel, _contentLabel, _contentView,_picContainerView,_middleView, _praiseBtn, _praiseLabel, _bottomView];
+    NSArray *views = @[_topView,_iconView, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel, _timeLabel, _contentLabel,_copyBtn, _contentView,_picContainerView,_middleView, _praiseBtn, _praiseLabel, _bottomView];
     
     [self.contentView sd_addSubviews:views];
     
@@ -127,7 +141,7 @@
     .leftEqualToView(_nameLabel)
     .topSpaceToView(_nameLabel,8)
     .heightIs(12);
-    [_companyLabel setSingleLineAutoResizeWithMaxWidth:150];
+    [_companyLabel setSingleLineAutoResizeWithMaxWidth:180*WIDTHCONFIG];
     
     _addressLabel.sd_layout
     .leftSpaceToView(_nameLabel,10)
@@ -158,6 +172,12 @@
     .topSpaceToView(_iconView,12)
     .rightSpaceToView(contentView,margin)
     .autoHeightRatio(0);
+    
+    _copyBtn.sd_layout
+    .bottomSpaceToView(_contentLabel, 5)
+    .centerXEqualToView(_contentLabel)
+    .widthIs(0)
+    .heightIs(0);
     
     _contentView.sd_layout
     .leftSpaceToView(contentView,8)
@@ -278,6 +298,50 @@
     [self setupAutoHeightWithBottomView:_bottomView bottomMargin:0];
     [self updateLayout];
 }
+-(void)setIsShow:(BOOL)isShow
+{
+    _isShow = isShow;
+    if (_isShow) {
+        [UIView animateWithDuration:0.2 animations:^{
+            _copyBtn.sd_layout
+            .widthIs(50)
+            .heightIs(32);
+        }];
+        _contentLabel.backgroundColor = colorGray;
+    }else{
+        [UIView animateWithDuration:0.2 animations:^{
+            _copyBtn.sd_layout
+            .widthIs(0)
+            .heightIs(0);
+        }];
+        _contentLabel.backgroundColor = [UIColor whiteColor];
+    }
+}
+
+-(void)contentLabelPress:(UILongPressGestureRecognizer *)gesture
+{
+    self.isShow= YES;
+}
+
+-(void)copyBtnClick
+{
+    self.isShow = NO;
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = _contentLabel.text;
+    
+    UIWindow * window = [UIApplication sharedApplication].keyWindow;
+    [[DialogUtil sharedInstance]showDlg:window textOnly:@"已复制到剪切板"];
+    
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+    if (_isShow) {
+        self.isShow = NO;
+    }
+}
+
 
 -(void)setIndexPath:(NSIndexPath *)indexPath
 {

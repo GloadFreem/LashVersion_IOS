@@ -27,6 +27,8 @@
 
 @interface CircleListCell : UITableViewCell<CircleContentViewDelegate>
 
+@property (nonatomic, assign) BOOL isShow;;
+
 @property (nonatomic, weak) id<CircleListCellDelegate> delegate;
 
 @property (nonatomic, strong)  CircleListModel *model;

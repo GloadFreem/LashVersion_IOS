@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+
 #import "GDataXMLNode.h"
 
 #import "DataBaseHelper.h"
@@ -27,6 +28,7 @@
 #import "IQKeyboardManager.h"
 
 #import "UMSocial.h"
+#import "MobClick.h"
 
 #import "UMSocialWechatHandler.h"
 #import "UMSocialQQHandler.h"
@@ -139,6 +141,10 @@
     
     [UMSocialWechatHandler setWXAppId:@"wx33aa0167f6a81dac" appSecret:@"bc5e2b89553589bf7d9e568545793842" url:@"http://www.umeng.com/social"];
     [UMSocialQQHandler setQQWithAppId:@"1104722649" appKey:@"fvSYiMZrQvetGolT" url:@"http://www.umeng.com/social"];
+    
+    //友盟统计
+//    [MobClick startWithAppkey:UmengAppkey reportPolicy:BATCH channelId:nil];
+    
     return YES;
 }
 

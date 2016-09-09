@@ -8,4 +8,5 @@ pod 'SVProgressHUD', '~> 2.0.3'
 pod 'MJRefresh', '~> 3.1.0'
 pod 'MJExtension', '~> 3.0.10'
 pod 'FMDB', '~> 2.6.2'
+pod 'UMengAnalyticsSDK', '~> 3.6.7.0'
 end
