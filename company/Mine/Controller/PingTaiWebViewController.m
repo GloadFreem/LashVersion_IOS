@@ -7,7 +7,7 @@
 //
 
 #import "PingTaiWebViewController.h"
-
+#import "UIImage+GIF.h"
 @interface PingTaiWebViewController ()<UIWebViewDelegate>
 @property (strong, nonatomic) UIWebView * webView;
 @property (strong, nonatomic) UIView *gifView;
@@ -19,24 +19,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     [self setNav];
-    
     _webView  =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT-64)];
-    _webView.delegate =self;
+    _webView.delegate = self;
     _webView.scrollView.bounces = NO;
     [_webView scalesPageToFit];
+    [_webView sizeToFit];
     _webView.backgroundColor = [UIColor whiteColor];
-    
     _webView.opaque = NO;
     [self.view addSubview:_webView];
-    
+    //加载视图区域
     self.loadingViewFrame = _webView.frame;
     
     [self startLoadDetailData];
+    
 }
 
 
@@ -102,6 +101,7 @@
     if (webView == self.webView) {
         self.startLoading = NO;
     }
+    [_webView layoutIfNeeded];
 }
 
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error

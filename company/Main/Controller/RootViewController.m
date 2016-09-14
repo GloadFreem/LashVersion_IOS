@@ -53,7 +53,6 @@
         loadingView.isError = NO;
         loadingView.isTransparent  = YES;
     }
-    
 }
 /**
  *  设置开始加载
@@ -257,7 +256,7 @@
 
 -(void)dealloc
 {
-
+    [self.httpUtil requestDealloc];
 }
 
 /*

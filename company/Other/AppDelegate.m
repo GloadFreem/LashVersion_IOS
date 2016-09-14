@@ -143,7 +143,7 @@
     [UMSocialQQHandler setQQWithAppId:@"1104722649" appKey:@"fvSYiMZrQvetGolT" url:@"http://www.umeng.com/social"];
     
     //友盟统计
-//    [MobClick startWithAppkey:UmengAppkey reportPolicy:BATCH channelId:nil];
+    [MobClick startWithAppkey:UmengAppkey reportPolicy:BATCH channelId:nil];
     
     return YES;
 }

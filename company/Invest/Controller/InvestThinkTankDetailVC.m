@@ -434,7 +434,7 @@
         make.top.mas_equalTo(_fieldLabel.mas_bottom).offset(19);
         make.left.mas_equalTo(_firstView.mas_left).offset(18);
         make.right.mas_equalTo(_firstView.mas_right).offset(-18);
-        make.height.mas_equalTo(height1);
+        make.height.mas_equalTo(height1+20);
     }];
     //第一个透明的View
     [_firstView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -466,12 +466,12 @@
     //个人内容
     _personContent.text = authentics.introduce;
 //    NSLog(@"%@",authentics.introduce);
-    CGFloat height2 = [_personContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:13];
+    CGFloat height2 = [_personContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:12];
     [_personContent mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_personLabel.mas_bottom).offset(19);
         make.left.mas_equalTo(_secondView.mas_left).offset(18);
         make.right.mas_equalTo(_secondView.mas_right).offset(-18);
-        make.height.mas_equalTo(height2 + 10);
+        make.height.mas_equalTo(height2 + 20);
     }];
     //第二个透明的View
     [_secondView mas_makeConstraints:^(MASConstraintMaker *make) {

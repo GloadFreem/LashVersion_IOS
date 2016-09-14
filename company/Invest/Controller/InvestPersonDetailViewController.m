@@ -283,7 +283,12 @@
     _personContent.textAlignment = NSTextAlignmentLeft;
     _personContent.font = [UIFont systemFontOfSize:14];
     _personContent.numberOfLines = 0;
+
     _personContent.text = authentics.introduce;
+    if (authentics.identiytype.identiyTypeId == 3) {//投资机构
+        _personContent.text = authentics.companyIntroduce;
+    }
+    
     CGFloat height = [_personContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:14] + 20;
     [_scrollView addSubview:_personContent];
     [_personContent  mas_makeConstraints:^(MASConstraintMaker *make) {

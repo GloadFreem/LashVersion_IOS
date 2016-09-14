@@ -277,7 +277,7 @@
  *  释放空间
  */
 
-- (void)dealloc {
+- (void)requestDealloc {
     
     //在回收自身的时候，取消发出的请求，当然如果是多个request，可以都放到请求队列，一并撤销。
     [self.requestInstance cancel];

@@ -151,21 +151,12 @@
     
     [self createUI];
     
-    
-    
     //自动登录
     if ([TDUtil checkNetworkState] != NetStatusNone)
     {
         [self isLogin];
     }
-    
-    [self loadMessage];
-    
-    [self loadVersion];
-    
-//    [self createGoldView];
-    //保存登录时间
-    [self compareTime];
+
     
     //添加监听
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setLetterStatus:) name:@"setLetterStatus" object:nil];
@@ -525,7 +516,7 @@
         
         self.startLoading = NO;
     }else{
-        self.isNetRequestError = YES;
+//        self.isNetRequestError = YES;
     }
     //结束刷新
     [self.tableView.mj_header endRefreshing];
@@ -588,7 +579,7 @@
         listModel.projectId = project.projectId;
         //少一个areas数组
         listModel.areas = [project.industoryType componentsSeparatedByString:@"，"];
-        //                    NSLog(@"领域 ----%@",project.industoryType);
+        //NSLog(@"领域 ----%@",project.industoryType);
         listModel.collectionCount = project.collectionCount;
         Roadshows *roadshows = project.roadshows[0];
         listModel.financedMount = roadshows.roadshowplan.financedMount;
@@ -617,7 +608,7 @@
     if ([TDUtil checkNetworkState] != NetStatusNone)
     {
         self.startLoading = YES;
-        self.isNetRequestError = YES;
+//        self.isNetRequestError = YES;
     }
     //结束刷新
     [self.tableView.mj_header endRefreshing];
@@ -666,7 +657,7 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }else{
-        self.isNetRequestError  =YES;
+//        self.isNetRequestError  =YES;
     }
 }
 #pragma mark----------------解析banner数据-----------------
@@ -967,6 +958,7 @@
         if ([status integerValue] == 200) {
             NSDictionary *dataDic = jsonDic[@"data"];
             _versionStr = dataDic[@"versionStr"];
+//            _versionStr = @"1.2.0";
             _contentStr = dataDic[@"content"];
             _url = dataDic[@"url"];
             _isForce = [dataDic[@"isForce"] boolValue];
@@ -975,34 +967,42 @@
                 NSArray *currentArray = [version componentsSeparatedByString:@"."];
 //                NSLog(@"本地----%@",currentArray);
                 NSArray *upArray = [_versionStr componentsSeparatedByString:@"."];
-                if ([currentArray[0] integerValue] < [upArray[0] integerValue]) {
+//            NSLog(@"返回版本号----%@",upArray);
+            //比较版本号
+            if ([upArray[0] integerValue] > [currentArray[0] integerValue]) {
+                if (_isForce) {
+                    [self forceUpdateAlertView];
+                }else{
+                    [self alertViewShow];
+                }
+                return;
+            }
+            
+            if ([upArray[0] integerValue] == [currentArray[0] integerValue]) {
+                //第二位
+                if ([upArray[1] integerValue] > [currentArray[1] integerValue]) {
                     if (_isForce) {
                         [self forceUpdateAlertView];
                     }else{
-                    [self alertViewShow];
+                        [self alertViewShow];
                     }
-                }else{
-                    if ([upArray[1] integerValue] > [currentArray[1] integerValue]) {
+                    return;
+                }
+                if ([upArray[1] integerValue] == [currentArray[1] integerValue]) {
+                    //第三位
+                    if ([upArray[2] integerValue] > [currentArray[2] integerValue]) {
                         if (_isForce) {
                             [self forceUpdateAlertView];
                         }else{
                             [self alertViewShow];
                         }
-                    }else{
-                        if ([upArray[2] integerValue] > [currentArray[2] integerValue]) {
-                            if (_isForce) {
-                                [self forceUpdateAlertView];
-                            }else{
-                                [self alertViewShow];
-                            }
-                            
-                        }else{
-                            
-                        }
+                        return;
                     }
                 }
                 
             }
+            
+        }
     }
 }
 
@@ -1089,8 +1089,10 @@
             //下载认证信息
             [self loadAuthenData];
             
-        _hasLogin = YES;
-        [self startLoadBannerData];
+            _hasLogin = YES;
+            [self startLoadBannerData];
+            
+            [self loadOtherData];
         }else{
             //自动登录
             [self autoLogin];
@@ -1098,6 +1100,20 @@
     }
     
 }
+
+-(void)loadOtherData
+{
+    if (_hasLogin || _isSuccess) {
+        [self loadVersion];
+        
+        [self loadMessage];
+        
+        // [self createGoldView];
+        //保存登录时间
+        [self compareTime];
+    }
+}
+
 -(void)autoLogin
 {
     //获取缓存数据
@@ -1129,6 +1145,7 @@
             _isSuccess = YES;
             [self startLoadBannerData];
             
+            [self loadOtherData];
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             
             [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];

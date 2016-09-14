@@ -124,4 +124,11 @@
                          type:(NSInteger)type
                      delegate:(id)delegate
                           sel:(SEL)sel;
+
+/**
+ *  释放空间
+ */
+
+- (void)requestDealloc;
+
 @end
