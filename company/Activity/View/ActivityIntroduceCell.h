@@ -19,6 +19,8 @@
 @end
 
 @interface ActivityIntroduceImgCell : UITableViewCell
+
+@property (nonatomic, strong) UIImageView *imgV;
 @property (nonatomic, strong) ActionIntroduce *actionIntro;
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;

@@ -43,8 +43,6 @@
     _scrollView.bounces = NO;
     _scrollView.pagingEnabled = YES;
     _scrollView.showsHorizontalScrollIndicator = NO;
-    // 设置偏移量
-    _scrollView.contentOffset = CGPointMake(kWidth, 0);
     _scrollView.delegate = self;
     [self addSubview:_scrollView];
     [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -182,7 +180,7 @@
     //页面控制器
     _pageControl = [UIPageControl new];
     _pageControl. userInteractionEnabled = NO;
-
+    _pageControl.currentPage = 0;
     _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
     _pageControl.currentPageIndicatorTintColor = orangeColor;
     [self addSubview:_pageControl];
@@ -263,6 +261,8 @@
         [_scrollView addSubview:btn];
     }
     _scrollView.contentSize = CGSizeMake((_imageCount + 2) * kWidth, kHeight - 45);
+    // 设置偏移量
+    _scrollView.contentOffset = CGPointMake(kWidth, 0);
     [self createTimer];
     
     for (NSInteger i = 0; i < _imageCount + 2; i ++) {
@@ -325,9 +325,10 @@
 -(void)autoChangeFrame:(NSTimer*)timer
 {
     // 进行纠偏(为了防止出现便宜量在屏幕一半的情况)
-    NSInteger currentPage = _scrollView.contentOffset.x/SCREENWIDTH;
+    NSInteger currentPage = _scrollView.contentOffset.x/kWidth;
     CGPoint newOffset = CGPointMake(currentPage * kWidth + kWidth, 0);
     [_scrollView setContentOffset:newOffset animated:YES];
+//    NSLog(@"视图当前位置---%ld",currentPage);
     [self changeCurrentPageAuto];
 }
 
@@ -337,11 +338,14 @@
 //    UIPageControl *pageControl = (UIPageControl *)[self viewWithTag:20000];
     if (_scrollView.contentOffset.x / kWidth == _imageCount) {
         _pageControl.currentPage = 0;
+//        NSLog(@"最后一页");
         
     } else if (_scrollView.contentOffset.x / kWidth == 0) {
         _pageControl.currentPage = _imageCount - 1;
+//        NSLog(@"第0页");
     } else {
         _pageControl.currentPage = _scrollView.contentOffset.x / kWidth; // 根据视图偏移的距离，更改pageControl的当前选中的页
+//        NSLog(@"当前页");
     }
 }
 

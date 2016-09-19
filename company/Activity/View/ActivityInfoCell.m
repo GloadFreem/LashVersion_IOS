@@ -16,7 +16,9 @@
 @end
 
 @implementation ActivityInfoCell
-
+{
+    UIImageView *imageV;
+}
 + (instancetype)cellWithTableView:(UITableView *)tableView
 {
     static NSString *ID = @"activityInfo";
@@ -86,12 +88,24 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     ActionIntroduceFrame *actionInF = self.actionIntroFs[indexPath.row];
     ActionIntroduce *actionIntro = actionInF.actionIntro;
     if (0 == actionIntro.type) {
          return actionInF.cellHeight;
     } else {
-        return 180;
+//        return 180;
+//        return actionInF.cellHeight;
+        imageV = [UIImageView new];
+        [imageV sd_setImageWithURL:[NSURL URLWithString:actionIntro.content] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+        //        _cellHeight = 180;
+        CGFloat width = imageV.image.size.width;
+//        NSLog(@"打印宽度---%f",width);
+        CGFloat height = imageV.image.size.height;
+//        NSLog(@"打印高度---%f",height);
+        CGFloat scale = (SCREENWIDTH - 20)/width;
+        CGFloat imageHeight  = scale * height;
+        return imageHeight;
     }
 }
 

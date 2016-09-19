@@ -571,4 +571,6 @@
 
 +(int)getDateSinceFromDate:(NSString *)fromDate toDate:(NSString *)toDate;
 
+// 根据图片url获取图片尺寸
++(CGSize)getImageSizeWithURL:(id)imageURL;
 @end

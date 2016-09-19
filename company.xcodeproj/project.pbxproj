@@ -863,7 +863,6 @@
 		44871B6F1D02B37800020DD9 /* IQToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871AD31D02B37700020DD9 /* IQToolbar.m */; };
 		44871B701D02B37800020DD9 /* IQUIView+IQKeyboardToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871AD51D02B37700020DD9 /* IQUIView+IQKeyboardToolbar.m */; };
 		44871B711D02B37800020DD9 /* IQKeyboardManager.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 44871AD81D02B37700020DD9 /* IQKeyboardManager.bundle */; };
-		44871B721D02B37800020DD9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 44871ADA1D02B37700020DD9 /* Info.plist */; };
 		44871B731D02B37800020DD9 /* MASCompositeConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871ADC1D02B37700020DD9 /* MASCompositeConstraint.m */; };
 		44871B741D02B37800020DD9 /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871ADF1D02B37700020DD9 /* MASConstraint.m */; };
 		44871B751D02B37800020DD9 /* MASConstraintMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 44871AE11D02B37700020DD9 /* MASConstraintMaker.m */; };
@@ -2079,7 +2078,6 @@
 		4487187D1D02AD9900020DD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		448718801D02AD9900020DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4487188B1D02AD9900020DD9 /* companyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = companyTests.m; sourceTree = "<group>"; };
-		4487188D1D02AD9900020DD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		448718961D02AD9900020DD9 /* companyUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = companyUITests.m; sourceTree = "<group>"; };
 		448718981D02AD9900020DD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		448718A41D02AE1A00020DD9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -2123,7 +2121,6 @@
 		44871AD51D02B37700020DD9 /* IQUIView+IQKeyboardToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IQUIView+IQKeyboardToolbar.m"; sourceTree = "<group>"; };
 		44871AD61D02B37700020DD9 /* KeyboardManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardManager.h; sourceTree = "<group>"; };
 		44871AD81D02B37700020DD9 /* IQKeyboardManager.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = IQKeyboardManager.bundle; sourceTree = "<group>"; };
-		44871ADA1D02B37700020DD9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		44871ADB1D02B37700020DD9 /* MASCompositeConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASCompositeConstraint.h; sourceTree = "<group>"; };
 		44871ADC1D02B37700020DD9 /* MASCompositeConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASCompositeConstraint.m; sourceTree = "<group>"; };
 		44871ADD1D02B37700020DD9 /* MASConstraint+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MASConstraint+Private.h"; sourceTree = "<group>"; };
@@ -2276,6 +2273,7 @@
 		44EFCD1F1D5D786C00838CE0 /* UITableViewCustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCustomView.m; sourceTree = "<group>"; };
 		44EFCD211D5D79B300838CE0 /* noData@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noData@2x.png"; sourceTree = "<group>"; };
 		44EFCD221D5D79B300838CE0 /* noData@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noData@3x.png"; sourceTree = "<group>"; };
+		44F433101D8F8772005183CD /* company.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = company.entitlements; sourceTree = "<group>"; };
 		44F8098B1D59B29700756C1A /* DataBaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBaseHelper.h; sourceTree = "<group>"; };
 		44F8098C1D59B29700756C1A /* DataBaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataBaseHelper.m; sourceTree = "<group>"; };
 		44FF81E31D5C55BF004B770E /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
@@ -4262,6 +4260,7 @@
 		448718701D02AD9800020DD9 /* company */ = {
 			isa = PBXGroup;
 			children = (
+				44F433101D8F8772005183CD /* company.entitlements */,
 				4437284F1D3FC5FC00DED1D6 /* GuidePage */,
 				443728C81D3FC6DF00DED1D6 /* Main */,
 				4437293D1D3FC78100DED1D6 /* Login */,
@@ -4298,7 +4297,6 @@
 			isa = PBXGroup;
 			children = (
 				4487188B1D02AD9900020DD9 /* companyTests.m */,
-				4487188D1D02AD9900020DD9 /* Info.plist */,
 			);
 			name = companyTests;
 			path = ../../companyTests;
@@ -4437,7 +4435,6 @@
 		44871AD91D02B37700020DD9 /* Masonry */ = {
 			isa = PBXGroup;
 			children = (
-				44871ADA1D02B37700020DD9 /* Info.plist */,
 				44871ADB1D02B37700020DD9 /* MASCompositeConstraint.h */,
 				44871ADC1D02B37700020DD9 /* MASCompositeConstraint.m */,
 				44871ADD1D02B37700020DD9 /* MASConstraint+Private.h */,
@@ -4687,8 +4684,12 @@
 					4487186D1D02AD9800020DD9 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = PT9XT89LQL;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -5133,7 +5134,6 @@
 				44372F151D3FCB5C00DED1D6 /* icon_sceneMore@2x.png in Resources */,
 				44372DAE1D3FCB5C00DED1D6 /* icon_inspect@3x.png in Resources */,
 				44372EBE1D3FCB5C00DED1D6 /* jintiao30.png in Resources */,
-				44871B721D02B37800020DD9 /* Info.plist in Resources */,
 				44372E991D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@2x.png in Resources */,
 				44372ECE1D3FCB5C00DED1D6 /* icon-bottom-circle@2x.png in Resources */,
 				44372EBC1D3FCB5C00DED1D6 /* jintiao28.png in Resources */,
@@ -5848,8 +5848,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = company/company.entitlements;
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = PT9XT89LQL;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5872,6 +5874,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jinzht.pro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -5882,8 +5885,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shaanxi gold investment enterprise management consulting Co., Ltd. (PT9XT89LQL)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shaanxi gold investment enterprise management consulting Co., Ltd. (PT9XT89LQL)";
+				CODE_SIGN_ENTITLEMENTS = company/company.entitlements;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = PT9XT89LQL;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5905,7 +5910,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jinzht.pro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "001dfe14-16b0-464e-bb9e-b92bd79ab5d0";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

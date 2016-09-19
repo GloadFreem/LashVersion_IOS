@@ -516,7 +516,7 @@
         
         self.startLoading = NO;
     }else{
-//        self.isNetRequestError = YES;
+        self.isNetRequestError = YES;
     }
     //结束刷新
     [self.tableView.mj_header endRefreshing];
@@ -608,7 +608,7 @@
     if ([TDUtil checkNetworkState] != NetStatusNone)
     {
         self.startLoading = YES;
-//        self.isNetRequestError = YES;
+        self.isNetRequestError = YES;
     }
     //结束刷新
     [self.tableView.mj_header endRefreshing];
@@ -657,7 +657,7 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }else{
-//        self.isNetRequestError  =YES;
+        self.isNetRequestError  =YES;
     }
 }
 #pragma mark----------------解析banner数据-----------------

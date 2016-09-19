@@ -199,7 +199,7 @@
 //            }
         NSMutableDictionary *dic = [dict[@"data"] JSONValue];
         NSArray *dataArray =[NSArray arrayWithArray:dic[@"data"]];
-        //    NSLog(@"打印数组---%@",dataArray);
+//            NSLog(@"打印数组---%@",dataArray);
         return dataArray;
     }
     return nil;

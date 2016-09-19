@@ -48,36 +48,42 @@
         _rightBtn.hidden = YES;
         _middleBtn.hidden = NO;
         [_middleBtn setTitle:areas[0] forState:UIControlStateNormal];
-        _middleBtnWidth.constant = 60;
+        _middleBtnWidth.constant = [areas[0] length] * 20;
     }
     if (areas.count == 2) {
         _leftBtn.hidden = NO;
         _rightBtn.hidden = NO;
         _middleBtn.hidden = YES;
-        _middleBtnWidth.constant = 0.00000000001f;
+        _middleBtnWidth.constant = 0.00000001f;
         NSString *str = areas[0];
-        if (str.length > 3) {
-            _leftBtnWidth.constant = 70*WIDTHCONFIG;
-        }else{
-            _leftBtnWidth.constant = 50*WIDTHCONFIG;
-        }
+//        if (str.length > 3) {
+//            _leftBtnWidth.constant = 70*WIDTHCONFIG;
+//        }else{
+//            _leftBtnWidth.constant = 50*WIDTHCONFIG;
+//        }
         [_leftBtn setTitle:str forState:UIControlStateNormal];
+        _leftBtnWidth.constant = [str length] * 20;
         [_rightBtn setTitle:areas[1] forState:UIControlStateNormal];
+        _rightBtnWidth.constant = [areas[1] length] * 20;
+        
     }
     if (areas.count == 3) {
         _leftBtn.hidden = NO;
         _rightBtn.hidden = NO;
         _middleBtn.hidden = NO;
-        _middleBtnWidth.constant = 60;
+//        _middleBtnWidth.constant = 60;
         NSString *str = areas[0];
-        if (str.length > 3) {
-            _leftBtnWidth.constant = 70*WIDTHCONFIG;
-        }else{
-            _leftBtnWidth.constant = 50*WIDTHCONFIG;
-        }
+//        if (str.length > 3) {
+//            _leftBtnWidth.constant = 70*WIDTHCONFIG;
+//        }else{
+//            _leftBtnWidth.constant = 50*WIDTHCONFIG;
+//        }
         [_leftBtn setTitle:str forState:UIControlStateNormal];
+        _leftBtnWidth.constant = [str length] * 20;
         [_middleBtn setTitle:areas[1] forState:UIControlStateNormal];
+        _middleBtnWidth.constant = [areas[1] length] * 20;
         [_rightBtn setTitle:areas[2] forState:UIControlStateNormal];
+        _rightBtnWidth.constant = [areas[2] length] * 20;
     }
 }
 /*

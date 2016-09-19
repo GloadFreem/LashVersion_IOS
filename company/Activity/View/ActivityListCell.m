@@ -180,6 +180,9 @@
         }else{
             [_expiredImage setHidden:YES];
         }
+        if (model.type == 0) { //0:付费  1:免费
+            _feeLabel.text = @"付费";
+        }
         //地址
         [_addressLabel setText:_model.address];
         //人数限制
@@ -196,6 +199,8 @@
         NSString * time = [TDUtil dateTimeFromString:_model.startTime];
         //时间
         [_timeLabel setText:[NSString stringWithFormat:@"%@%@%@",dateStr,week,time]];
+        
+
         
     }
 

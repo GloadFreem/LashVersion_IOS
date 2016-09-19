@@ -56,7 +56,7 @@
         //收费情况
         NSString * status = @"免费";
         if(model.type==0){
-            status = @"收费";
+            status = @"付费";
         }
         [self.statusButton setTitle:status forState:UIControlStateNormal];
     }

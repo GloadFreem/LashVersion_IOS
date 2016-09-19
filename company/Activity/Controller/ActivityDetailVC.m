@@ -284,6 +284,7 @@ static int preFlag = 0;
             self.activityModel.imgUrl = baseModel.startPageImage;
             self.activityModel.startTime = baseModel.startTime;
             self.activityModel.endTime = baseModel.endTime;
+            self.activityModel.type = baseModel.type;
 //            NSLog(@"打印结束时间---%@",baseModel.endTime);
             if(![TDUtil isArrivedTime:baseModel.endTime])
             {
@@ -318,7 +319,8 @@ static int preFlag = 0;
                     }
                     tableViewH += actionIntroF.cellHeight;
                 } else {
-                    tableViewH += 180;
+//                    tableViewH += 180;
+                    tableViewH += actionIntroF.cellHeight;
                 }
                 [tempArr addObject:actionIntroF];
             }

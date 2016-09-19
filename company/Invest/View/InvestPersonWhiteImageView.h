@@ -24,6 +24,7 @@
 
 
 @property (weak, nonatomic) IBOutlet UIButton *rightBtn;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightBtnWidth;
 
 @property (nonatomic, strong) NSArray *areas;
 

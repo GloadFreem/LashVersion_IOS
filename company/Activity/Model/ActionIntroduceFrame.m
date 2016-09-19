@@ -13,12 +13,28 @@ const CGFloat intro_marginLeft = 10;
 const CGFloat margingTop = 0;
 
 @implementation ActionIntroduceFrame
+{
+    UIImageView *imageV;
+}
 - (void)setActionIntro:(ActionIntroduce *)actionIntro
 {
     _actionIntro = actionIntro;
     
     if (_actionIntro.type == 1) {
-        _cellHeight = 180;
+        imageV = [UIImageView new];
+        [imageV sd_setImageWithURL:[NSURL URLWithString:_actionIntro.content] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+//        _cellHeight = 180;
+        CGFloat width = imageV.image.size.width;
+//        NSLog(@"打印宽度---%f",width);
+        CGFloat height = imageV.image.size.height;
+//        NSLog(@"打印高度---%f",height);
+        CGFloat scale = (SCREENWIDTH - 20)/width;
+        CGFloat imageHeight  = scale * height;
+        _cellHeight = imageHeight;
+//        NSLog(@"dayin 高度---%f",imageHeight);
+//        CGSize imageSize = [TDUtil getImageSizeWithURL:_actionIntro.content];
+//        NSLog(@"打印宽度---%f",imageSize.width);
+//        NSLog(@"打印高度---%f",imageSize.height);
         return;
     }
     

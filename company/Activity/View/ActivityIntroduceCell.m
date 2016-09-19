@@ -70,9 +70,7 @@
 @end
 
 @interface ActivityIntroduceImgCell ()
-{
-    UIImageView *imgV;
-}
+
 
 @end
 
@@ -92,8 +90,8 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, SCREENWIDTH-20, 170)];
-        [self.contentView addSubview:imgV];
+        _imgV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, SCREENWIDTH-20, 170)];
+        [self.contentView addSubview:_imgV];
         
     }
     return self;
@@ -103,8 +101,12 @@
 {
     _actionIntro = actionIntro;
     // http://img4.imgtn.bdimg.com/it/u=42046925,1559346389&fm=11&gp=0.jpg
-    [imgV sd_setImageWithURL:[NSURL URLWithString:_actionIntro.content] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
-    
+    [_imgV sd_setImageWithURL:[NSURL URLWithString:_actionIntro.content] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    CGFloat width = _imgV.image.size.width;
+    CGFloat height = _imgV.image.size.height;
+    CGFloat scale = (SCREENWIDTH - 20)/width;
+    CGFloat imageHeight  = scale * height;
+    [_imgV setFrame:CGRectMake(10, 10, SCREENWIDTH-20, imageHeight)];
 }
 
 

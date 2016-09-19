@@ -26,6 +26,7 @@
 @interface CircleDetailVC ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,CircleDetailHeaderCellDelegate>
 
 {
+    CGFloat _totalKeybordHeight;
     CircleListModel *_listModel;
 }
 @property (nonatomic, copy) NSString *praisePartner;
@@ -58,6 +59,7 @@
 
 @property (nonatomic, assign) BOOL isFirst;
 @property (nonatomic, strong) UIView *returnView;  //回复框
+@property (nonatomic, strong) NSIndexPath *currentEditingIndexthPath;
 
 @end
 
@@ -499,6 +501,12 @@
             make.height.mas_equalTo(50);
             make.top.mas_equalTo(SCREENHEIGHT-height - 114);
         }];
+        CGFloat h = height + 50;
+        if (_totalKeybordHeight != h) {
+            _totalKeybordHeight = h;
+            [self adjustTableViewToFitKeyboard];
+        }
+        
     } andDismissBlock:^(NSInteger height) {
         
 //        _returnView.frame = CGRectMake(0, self.view.frame.size.height - 50, SCREENWIDTH, 50);
@@ -655,6 +663,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    CircleDetailCommentCell *clickCell = [tableView cellForRowAtIndexPath:indexPath];
+    _currentEditingIndexthPath = indexPath;
     if (indexPath.row != 0) {
         
         if (_atUserIdArray[indexPath.row]) {
@@ -674,11 +684,36 @@
             
         }else{
             _flag = @"2";
-            
             [_textField becomeFirstResponder];
             _textField.placeholder = [NSString stringWithFormat:@" %@",_beCommentName];
+            UIWindow *window = [UIApplication sharedApplication].keyWindow;
+            CGRect rect = [clickCell.superview convertRect:clickCell.frame toView:window];
+            [self adjustTableViewToFitKeyboardWithRect:rect];
+            
         }
     }
+}
+
+- (void)adjustTableViewToFitKeyboard
+{
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_currentEditingIndexthPath];
+    CGRect rect = [cell.superview convertRect:cell.frame toView:window];
+    [self adjustTableViewToFitKeyboardWithRect:rect];
+}
+
+-(void)adjustTableViewToFitKeyboardWithRect:(CGRect)rect
+{
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGFloat delta = CGRectGetMaxY(rect) - (window.bounds.size.height - _totalKeybordHeight);
+    
+    CGPoint offset = self.tableView.contentOffset;
+    offset.y += delta;
+    if (offset.y < 0) {
+        offset.y = 0;
+    }
+    
+    [self.tableView setContentOffset:offset animated:YES];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
