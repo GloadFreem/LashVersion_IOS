@@ -57,7 +57,7 @@
     leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
-    self.navigationItem.title = @"";
+    self.navigationItem.title = @"所在地";
 }
 -(void)leftBack:(UIButton*)btn
 {
@@ -66,8 +66,9 @@
 
 -(void)createTableView
 {
-    _tableView = [UITableViewCustomView new];
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    _tableView = [[UITableViewCustomView alloc]init];
+    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+
     _tableView.delegate = self;
     _tableView.dataSource =self;
     [self.view addSubview:_tableView];
@@ -150,6 +151,7 @@
     if (_dataArray.count) {
         cell.textLabel.text = _dataArray[indexPath.row];
     }
+    cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
@@ -160,7 +162,7 @@
     self.city = _dataArray[indexPath.row];
     NSString *address;
     if ([self.city isEqualToString:@"北京市"] || [self.city isEqualToString:@"上海市"] || [self.city isEqualToString:@"天津市"] || [self.city isEqualToString:@"重庆市"] || [self.city isEqualToString:@"香港"] || [self.city isEqualToString:@"澳门"] || [self.city isEqualToString:@"钓鱼岛"]) {
-        address = [NSString stringWithFormat:@"%@",self.province];
+        address = [NSString stringWithFormat:@"%@",self.city];
     
     }else{
         address = [NSString stringWithFormat:@"%@ | %@",self.province,self.city];
@@ -180,7 +182,6 @@
         if ([VC isKindOfClass:[MineDataVC class]]) {
             MineDataVC *vc = (MineDataVC*)VC;
             vc.address = address;
-            
             [vc.tableView reloadData];
             
             [self.navigationController popToViewController:vc animated:YES];
@@ -201,9 +202,13 @@
     if (dic!= nil) {
         NSString *status = [dic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            NSLog(@"城市修改成功");
+//            NSLog(@"城市修改成功");
+        NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
+        [data setObject:self.city forKey:USER_STATIC_CITY];
+        [data setObject:self.province forKey:USER_STATIC_PROVINCE];
+        [data synchronize];
         }else{
-            NSLog(@"城市修改失败");
+//            NSLog(@"城市修改失败");
         }
     }
 }
@@ -212,15 +217,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -19,7 +19,8 @@
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
 @property (nonatomic, assign) NSInteger page;
-
+@property (nonatomic, assign) BOOL isFirst;
+@property (nonatomic, strong) NSMutableArray *tempArray;
 @end
 
 @implementation MineGoldMingxiVC
@@ -28,10 +29,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     _dataArray = [NSMutableArray array];
+    _tempArray = [NSMutableArray array];
     [self setupNav];
     self.partner = [TDUtil encryKeyWithMD5:KEY action:GOLDDETAIL];
     _page = 0;
-    
+    _isFirst = YES;
     self.loadingViewFrame = self.view.frame;
     
     [self createTableView];
@@ -44,8 +46,9 @@
 -(void)startLoadData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
-    
-    self.startLoading = YES;
+    if (_isFirst) {
+        self.startLoading = YES;
+    }
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:LOGO_GOLD_DETAIL postParam:dic type:0 delegate:self sel:@selector(requestGoldDetail:)];
 }
@@ -59,32 +62,34 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
+            _isFirst = NO;
+            
             if (_page == 0) {
-                [_dataArray removeAllObjects];
+                [_tempArray removeAllObjects];
             }
             
-            NSMutableArray *tempArray = [NSMutableArray new];
+//            NSMutableArray *tempArray = [NSMutableArray new];
             
             if (jsonDic[@"data"] && [jsonDic[@"data"] count]) {
                 NSArray *modelArray = [MineGoldMingxiModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
                 
                 for (NSInteger i =0; i < modelArray.count; i ++) {
                     
-                    [tempArray addObject:modelArray[i]];
+                    [_tempArray addObject:modelArray[i]];
                 }
                 
-                if (tempArray.count > 1) {
-                    for (NSInteger i =0; i < tempArray.count - 1; i++) {
+                if (_tempArray.count > 1) {
+                    for (NSInteger i =0; i < _tempArray.count - 1; i++) {
                         if (i == 0) {
-                            MineGoldMingxiModel *model = tempArray[0];
+                            MineGoldMingxiModel *model = _tempArray[0];
                             model.isShow = YES;
                         }
-                        MineGoldMingxiModel *modelI = tempArray[i];
+                        MineGoldMingxiModel *modelI = _tempArray[i];
                         NSArray *arr1 = [modelI.tradeDate componentsSeparatedByString:@" "];
                         NSArray *arr2 = [arr1[0] componentsSeparatedByString:@"-"];
                         NSString *month1 = arr2[1];
-                        for (NSInteger j = i + 1; j < tempArray.count; j ++) {
-                            MineGoldMingxiModel *modelJ = tempArray[j];
+                        for (NSInteger j = i + 1; j < _tempArray.count; j ++) {
+                            MineGoldMingxiModel *modelJ = _tempArray[j];
                             arr1 = [modelJ.tradeDate componentsSeparatedByString:@" "];
                             arr2 = [arr1[0] componentsSeparatedByString:@"-"];
                             NSString *month2 = arr2[1];
@@ -96,26 +101,25 @@
                         }
                     }
                 }else{
-                    if (tempArray.count) {
-                        MineGoldMingxiModel *model = tempArray[0];
+                    if (_tempArray.count) {
+                        MineGoldMingxiModel *model = _tempArray[0];
                         model.isShow = YES;
                     }
                 }
-                self.dataArray = tempArray;
+                self.dataArray = _tempArray;
                 
-                [_tableView.mj_header endRefreshing];
-                [_tableView.mj_footer endRefreshing];
-
+                
             }
         
         }else{
-            [_tableView.mj_header endRefreshing];
-            [_tableView.mj_footer endRefreshing];
+            
         }
         self.startLoading = NO;
     }else{
          self.isNetRequestError = YES;
     }
+    
+    [_tableView.mj_header endRefreshing];
     [_tableView.mj_footer endRefreshing];
 }
 
@@ -188,7 +192,6 @@
 -(void)refreshHttp
 {
     _page = 0;
-    
     [self startLoadData];
     //    NSLog(@"下拉刷新");
 }

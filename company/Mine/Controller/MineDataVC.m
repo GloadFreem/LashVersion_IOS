@@ -117,6 +117,7 @@
     _identifyType = [data objectForKey:USER_STATIC_USER_AUTHENTIC_NAME];
 //    NSLog(@"dayin身份类型---%@",_identifyType);
     _authId = [data objectForKey:USER_STATIC_AUTHID];
+    _identiyTypeId = [[data objectForKey:USER_STATIC_USER_AUTHENTIC_TYPE] integerValue];
     NSString *identiyCarNo = [data objectForKey:USER_STATIC_IDNUMBER];
     
     if (identiyCarNo.length) {
@@ -132,6 +133,7 @@
     }else{
         _address = [NSString stringWithFormat:@"%@ | %@",province,city];
     }
+    
 }
 
 -(void)createLeftArray

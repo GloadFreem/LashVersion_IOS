@@ -95,8 +95,9 @@
         cell = [[[NSBundle mainBundle] loadNibNamed:@"InvistTableViewCell" owner:nil options:nil] lastObject];
     }
     cell.leftLabel.text = _dataArray[indexPath.row];
-    CGFloat width = [cell.leftLabel.text commonStringWidthForFont:17];
-    cell.leftLabelWidth.constant = width;
+//    CGFloat width = [cell.leftLabel.text commonStringWidthForFont:17];
+//    cell.leftLabelWidth.constant = width;
+    [cell.leftLabel sizeToFit];
     return cell;
 }
 

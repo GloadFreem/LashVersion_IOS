@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PhoneCerityViewController">
@@ -23,13 +24,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="navBJ.png" translatesAutoresizingMaskIntoConstraints="NO" id="347-or-1FK">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="54"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="54" id="BAr-uU-pxh"/>
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vNd-DG-fbh">
-                    <rect key="frame" x="12" y="20" width="45" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="12" id="ALR-Fz-PEX"/>
                         <constraint firstAttribute="width" constant="45" id="Sqk-hV-ki6"/>
@@ -49,13 +48,11 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="手机验证" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xwa-9T-PjQ">
-                    <rect key="frame" x="147" y="18" width="80" height="24"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入手机号码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="X3e-R6-kkm">
-                    <rect key="frame" x="37" y="74" width="300" height="45"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="300" id="ckS-uD-1Ob"/>
                         <constraint firstAttribute="height" constant="45" id="koz-tq-d3g"/>
@@ -67,7 +64,6 @@
                     </connections>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入验证码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pJr-pk-inE">
-                    <rect key="frame" x="37" y="134" width="190" height="45"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="8vz-W7-ITC"/>
                         <constraint firstAttribute="width" constant="190" id="sLO-Lx-dD3"/>
@@ -79,21 +75,19 @@
                     </connections>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gNF-eB-Bym" customClass="JKCountDownButton">
-                    <rect key="frame" x="237" y="134" width="100" height="45"/>
-                    <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="KnR-6g-fXO"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <state key="normal" title="获取验证码">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
                         <action selector="sendMessage:" destination="-1" eventType="touchUpInside" id="jJH-nU-hoI"/>
                     </connections>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入指环码（选填）" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Uvr-nP-tHd">
-                    <rect key="frame" x="37" y="194" width="300" height="45"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="300" id="Bw6-9J-qgn"/>
                         <constraint firstAttribute="height" constant="45" id="aiw-SH-SUo"/>
@@ -105,37 +99,34 @@
                     </connections>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2M-UH-AtI">
-                    <rect key="frame" x="38" y="284" width="300" height="45"/>
-                    <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="HDc-d7-qWW"/>
                         <constraint firstAttribute="width" constant="300" id="ppY-FW-KRZ"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                     <state key="normal" title="下一步">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
                         <action selector="nextStup:" destination="-1" eventType="touchUpInside" id="SRi-3e-EtB"/>
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jQF-Wq-GFu">
-                    <rect key="frame" x="88" y="359" width="200" height="1"/>
-                    <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="200" id="LM4-wx-jlC"/>
                         <constraint firstAttribute="height" constant="1" id="vrV-Ji-m4o"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MWq-iA-Odp">
-                    <rect key="frame" x="171" y="329" width="117" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="117" id="nD9-5V-4Ek"/>
                         <constraint firstAttribute="height" constant="27" id="pFO-V1-jMM"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                     <state key="normal" title="《金指投用户协议》">
-                        <color key="titleColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <variation key="default">
                         <mask key="constraints">
@@ -147,14 +138,13 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="已阅读并同意" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jhB-yd-hh2">
-                    <rect key="frame" x="88" y="329" width="83" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="83" id="2sr-IR-800"/>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="9Mo-0l-cq5"/>
                         <constraint firstAttribute="height" constant="21" id="Pd7-mT-lry"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="textColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                     <variation key="default">
                         <mask key="constraints">
@@ -163,23 +153,22 @@
                     </variation>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="24K-IJ-0XW">
-                    <rect key="frame" x="67" y="335" width="16" height="16"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="16" id="5c4-K8-7Ob"/>
                         <constraint firstAttribute="width" constant="16" id="67D-Y0-L6K"/>
                     </constraints>
                     <state key="normal" image="icon_unselectedBtn.png">
-                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <state key="selected" image="icon_selectedBtn.png">
-                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
                         <action selector="selectedBtnClick:" destination="-1" eventType="touchUpInside" id="Gaa-IR-e5S"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="xwa-9T-PjQ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="1tp-F2-d31"/>
                 <constraint firstItem="347-or-1FK" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="4g8-2E-xve"/>
@@ -216,7 +205,6 @@
                 <constraint firstItem="24K-IJ-0XW" firstAttribute="centerY" secondItem="jhB-yd-hh2" secondAttribute="centerY" id="yLk-1Q-vPA"/>
                 <constraint firstItem="Uvr-nP-tHd" firstAttribute="top" secondItem="pJr-pk-inE" secondAttribute="bottom" constant="15" id="yjZ-nL-nZt"/>
             </constraints>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="Kd5-Ww-DQT"/>

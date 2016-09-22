@@ -808,7 +808,6 @@
 		443730CD1D3FCC5600DED1D6 /* PictureContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 443730B11D3FCC5600DED1D6 /* PictureContainerView.m */; };
 		44847ADA1D6A9F9500BE572D /* iconfont_firstNews@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44847AD61D6A9F9500BE572D /* iconfont_firstNews@2x.png */; };
 		44847ADB1D6A9F9500BE572D /* iconfont_firstNews@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44847AD71D6A9F9500BE572D /* iconfont_firstNews@3x.png */; };
-		4484D17E1D19184F001F4C3A /* jpush-ios-2.1.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4484D17C1D19184F001F4C3A /* jpush-ios-2.1.8.a */; };
 		4484D1801D19189E001F4C3A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4484D17F1D19189E001F4C3A /* CFNetwork.framework */; };
 		4484D1821D1918C7001F4C3A /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4484D1811D1918C7001F4C3A /* CoreFoundation.framework */; };
 		4484D1841D1918D3001F4C3A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4484D1831D1918D3001F4C3A /* CoreTelephony.framework */; };
@@ -915,6 +914,7 @@
 		44AC3A091D4A12D100D9C878 /* icon_success_list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44AC3A071D4A12D100D9C878 /* icon_success_list@2x.png */; };
 		44AC3A0A1D4A12D100D9C878 /* icon_success_list@3x .png in Resources */ = {isa = PBXBuildFile; fileRef = 44AC3A081D4A12D100D9C878 /* icon_success_list@3x .png */; };
 		44B585661D64152300EA37E0 /* ActivityDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B585651D64152300EA37E0 /* ActivityDetailVC.m */; };
+		44B959C71D93B02D005B60FF /* jpush-ios-2.1.9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44B959C51D93B02D005B60FF /* jpush-ios-2.1.9.a */; };
 		44BBCBDF1D5B320400A97D73 /* loadingView.gif in Resources */ = {isa = PBXBuildFile; fileRef = 44BBCBDE1D5B320400A97D73 /* loadingView.gif */; };
 		44BC57011D6D330D0085C921 /* CircleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BC57001D6D330D0085C921 /* CircleContentView.m */; };
 		44BC57041D6D70B60085C921 /* project_selected @2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BC57021D6D70B60085C921 /* project_selected @2x.png */; };
@@ -2023,8 +2023,6 @@
 		443730B11D3FCC5600DED1D6 /* PictureContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureContainerView.m; sourceTree = "<group>"; };
 		44847AD61D6A9F9500BE572D /* iconfont_firstNews@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont_firstNews@2x.png"; sourceTree = "<group>"; };
 		44847AD71D6A9F9500BE572D /* iconfont_firstNews@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont_firstNews@3x.png"; sourceTree = "<group>"; };
-		4484D17C1D19184F001F4C3A /* jpush-ios-2.1.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jpush-ios-2.1.8.a"; sourceTree = "<group>"; };
-		4484D17D1D19184F001F4C3A /* JPUSHService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUSHService.h; sourceTree = "<group>"; };
 		4484D17F1D19189E001F4C3A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4484D1811D1918C7001F4C3A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		4484D1831D1918D3001F4C3A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -2217,6 +2215,8 @@
 		44AC3A071D4A12D100D9C878 /* icon_success_list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_success_list@2x.png"; sourceTree = "<group>"; };
 		44AC3A081D4A12D100D9C878 /* icon_success_list@3x .png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_success_list@3x .png"; sourceTree = "<group>"; };
 		44B585651D64152300EA37E0 /* ActivityDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityDetailVC.m; sourceTree = "<group>"; };
+		44B959C51D93B02D005B60FF /* jpush-ios-2.1.9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jpush-ios-2.1.9.a"; sourceTree = "<group>"; };
+		44B959C61D93B02D005B60FF /* JPUSHService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUSHService.h; sourceTree = "<group>"; };
 		44BBCBDE1D5B320400A97D73 /* loadingView.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loadingView.gif; sourceTree = "<group>"; };
 		44BC56FF1D6D330D0085C921 /* CircleContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleContentView.h; sourceTree = "<group>"; };
 		44BC57001D6D330D0085C921 /* CircleContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleContentView.m; sourceTree = "<group>"; };
@@ -2310,9 +2310,9 @@
 				4484D1CE1D194064001F4C3A /* libWeChatSDK.a in Frameworks */,
 				4484D1821D1918C7001F4C3A /* CoreFoundation.framework in Frameworks */,
 				4484D1801D19189E001F4C3A /* CFNetwork.framework in Frameworks */,
-				4484D17E1D19184F001F4C3A /* jpush-ios-2.1.8.a in Frameworks */,
 				2D26298F1D4C5A88D985DBDF /* Pods_company.framework in Frameworks */,
 				4484D1B11D193712001F4C3A /* libUMSocial_Sdk_5.2.1.a in Frameworks */,
+				44B959C71D93B02D005B60FF /* jpush-ios-2.1.9.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4154,8 +4154,8 @@
 		4484D17B1D19184F001F4C3A /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				4484D17C1D19184F001F4C3A /* jpush-ios-2.1.8.a */,
-				4484D17D1D19184F001F4C3A /* JPUSHService.h */,
+				44B959C51D93B02D005B60FF /* jpush-ios-2.1.9.a */,
+				44B959C61D93B02D005B60FF /* JPUSHService.h */,
 				4484D1931D1919C6001F4C3A /* PushConfig.plist */,
 			);
 			path = lib;

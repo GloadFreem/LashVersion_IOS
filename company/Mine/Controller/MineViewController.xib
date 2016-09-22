@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MineViewController">
@@ -23,13 +24,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="8uI-mg-dB6">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="250"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="250" id="coF-TY-kHY"/>
                     </constraints>
                 </imageView>
                 <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eaf-fU-gVn">
-                    <rect key="frame" x="146" y="77" width="83" height="83"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="Eaf-fU-gVn" secondAttribute="height" multiplier="1:1" id="dFl-Ox-c9Y"/>
                         <constraint firstAttribute="width" secondItem="Eaf-fU-gVn" secondAttribute="height" multiplier="1:1" id="dts-46-TSh"/>
@@ -47,25 +46,20 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nTz-Tf-E7w">
-                    <rect key="frame" x="187" y="175" width="0.0" height="18"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="18" id="zQJ-vb-swI"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HqY-hc-2ld">
-                    <rect key="frame" x="187.5" y="202" width="0.0" height="0.0"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_iconvip.png" translatesAutoresizingMaskIntoConstraints="NO" id="6bd-tw-Upq">
-                    <rect key="frame" x="206" y="137" width="20" height="20"/>
-                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_iconvip.png" translatesAutoresizingMaskIntoConstraints="NO" id="6bd-tw-Upq"/>
                 <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lh0-A9-3of">
-                    <rect key="frame" x="112" y="370" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="60" id="TN1-2V-6d0"/>
                         <constraint firstAttribute="height" constant="55" id="edF-M1-Lec"/>
@@ -74,7 +68,7 @@
                     <inset key="titleEdgeInsets" minX="-30" minY="40" maxX="0.0" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="18" minY="0.0" maxX="10" maxY="20"/>
                     <state key="normal" title="软件设置" image="logo-shezhi.png">
-                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <variation key="default">
                         <mask key="constraints">
@@ -87,7 +81,6 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ez4-zP-wdZ">
-                    <rect key="frame" x="30" y="370" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="55" id="Gqc-ii-GzY"/>
                         <constraint firstAttribute="width" constant="60" id="ld4-4I-15Y"/>
@@ -96,7 +89,7 @@
                     <inset key="titleEdgeInsets" minX="-30" minY="40" maxX="0.0" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="18" minY="0.0" maxX="10" maxY="20"/>
                     <state key="normal" title="项目中心" image="logo_project.png">
-                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <variation key="default">
                         <mask key="constraints">
@@ -109,7 +102,6 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CHj-yI-1Rg">
-                    <rect key="frame" x="165" y="584" width="45" height="45"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="7RM-zg-nkp"/>
                         <constraint firstAttribute="width" constant="45" id="nMb-5m-8JB"/>
@@ -120,7 +112,6 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wxb-yd-kRf">
-                    <rect key="frame" x="195" y="281" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="60" id="E7H-gj-Skp"/>
                         <constraint firstAttribute="height" constant="55" id="JQp-0e-011"/>
@@ -129,7 +120,7 @@
                     <inset key="titleEdgeInsets" minX="-30" minY="40" maxX="0.0" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="18" minY="0.0" maxX="10" maxY="20"/>
                     <state key="normal" title="我的活动" image="logo-huodong.png">
-                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <variation key="default">
                         <mask key="constraints">
@@ -142,7 +133,6 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rp8-op-tJC">
-                    <rect key="frame" x="277" y="281" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="55" id="NHv-aY-Rg3"/>
                         <constraint firstAttribute="width" constant="60" id="ngG-HB-WNZ"/>
@@ -151,7 +141,7 @@
                     <inset key="titleEdgeInsets" minX="-30" minY="40" maxX="0.0" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="16" minY="0.0" maxX="10" maxY="20"/>
                     <state key="normal" title="我的金条" image="logo_qian.png">
-                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <variation key="default">
                         <mask key="constraints">
@@ -164,7 +154,6 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CP1-oG-xTZ">
-                    <rect key="frame" x="112" y="281" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="60" id="AFO-Jm-sGS"/>
                         <constraint firstAttribute="height" constant="55" id="M62-SH-VIP"/>
@@ -174,7 +163,7 @@
                     <inset key="titleEdgeInsets" minX="-30" minY="40" maxX="0.0" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="18" minY="0.0" maxX="10" maxY="20"/>
                     <state key="normal" title="我的关注" image="logo-guanzhu.png">
-                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <variation key="default">
                         <mask key="constraints">
@@ -187,7 +176,6 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VdO-nX-IhK">
-                    <rect key="frame" x="30" y="281" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="60" id="RNN-Iw-v08"/>
                         <constraint firstAttribute="height" constant="55" id="YDW-uF-JWz"/>
@@ -196,7 +184,7 @@
                     <inset key="titleEdgeInsets" minX="-28" minY="40" maxX="0.0" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="18" minY="0.0" maxX="10" maxY="20"/>
                     <state key="normal" title="资金账户" image="logo_wallet.png">
-                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <variation key="default">
                         <mask key="constraints">
@@ -209,7 +197,6 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b0w-Zk-qRe">
-                    <rect key="frame" x="195" y="370" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="55" id="MBy-6a-UpR"/>
                         <constraint firstAttribute="width" constant="60" id="wHT-59-cdv"/>
@@ -218,7 +205,7 @@
                     <inset key="titleEdgeInsets" minX="-28" minY="40" maxX="0.0" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="15" minY="0.0" maxX="10" maxY="20"/>
                     <state key="normal" title="关于平台" image="logo_pingtai.png">
-                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <variation key="default">
                         <mask key="constraints">
@@ -231,7 +218,6 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xlu-EU-kCL">
-                    <rect key="frame" x="277" y="370" width="67.5" height="55"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="60" id="hBu-Cl-PKf"/>
                         <constraint firstAttribute="height" constant="55" id="rGr-XE-0M4"/>
@@ -240,7 +226,7 @@
                     <inset key="titleEdgeInsets" minX="-30" minY="40" maxX="0.0" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="16" minY="0.0" maxX="10" maxY="20"/>
                     <state key="normal" title="推荐好友" image="logo_tuijian.png">
-                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <variation key="default">
                         <mask key="constraints">
@@ -253,7 +239,7 @@
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="Wxb-yd-kRf" firstAttribute="leading" secondItem="CP1-oG-xTZ" secondAttribute="trailing" constant="15" id="1VR-G1-i1e"/>
                 <constraint firstItem="b0w-Zk-qRe" firstAttribute="centerY" secondItem="lh0-A9-3of" secondAttribute="centerY" id="4Rb-TL-Sca"/>
@@ -303,7 +289,6 @@
                 <constraint firstItem="nTz-Tf-E7w" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="zq9-ez-NuM"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="Gdl-LI-41K"/>

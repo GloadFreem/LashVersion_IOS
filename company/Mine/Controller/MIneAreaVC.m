@@ -49,7 +49,7 @@
     leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
     [leftback addTarget:self action:@selector(leftBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
-    self.navigationItem.title = @"";
+    self.navigationItem.title = @"所在地";
 }
 
 -(void)leftBack:(UIButton*)btn
@@ -58,8 +58,8 @@
 }
 -(void)createTableView
 {
-    _tableView = [UITableViewCustomView new];
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    _tableView = [[UITableViewCustomView alloc]init];
+    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _tableView.delegate = self;
     _tableView.dataSource =self;
     [self.view addSubview:_tableView];
@@ -138,13 +138,13 @@
     UITableViewCell * cell =[tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
     //如果没有就创建一个
     if (cell==nil) {
-        cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"UITableViewCell"];
+        cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UITableViewCell"];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (_dataArray.count) {
        cell.textLabel.text = _dataArray[indexPath.row];
     }
-    
+    cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }

@@ -18,7 +18,8 @@
 @property (weak, nonatomic) IBOutlet UITableViewCustomView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) NSInteger page;
-
+@property (nonatomic, assign) BOOL isFirst;
+@property (nonatomic, strong) NSMutableArray *tempArray;
 @end
 
 @implementation DealBillVC
@@ -31,9 +32,12 @@
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
+    if (!_tempArray) {
+        _tempArray = [NSMutableArray array];
+    }
     [self setupNav];
     [self createTableView];
-    
+    _isFirst = YES;
     self.loadingViewFrame = self.view.frame;
     
     _page = 0;
@@ -60,8 +64,9 @@
 -(void)loadData
 {
     NSDictionary *dic =[NSDictionary  dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
-    self.startLoading = YES;
-    
+    if (_isFirst) {
+        self.startLoading = YES;
+    }
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_TRADE_LIST postParam:dic type:0 delegate:self sel:@selector(requestTradeList:)];
 }
@@ -75,31 +80,31 @@
         if ([status integerValue] == 200) {
             
             self.startLoading = NO;
-            
+            _isFirst = NO;
             if (_page == 0) {
-                [_dataArray removeAllObjects];
+                [_tempArray removeAllObjects];
             }
-            NSMutableArray *tempArray = [NSMutableArray new];
+//            NSMutableArray *tempArray = [NSMutableArray new];
             if ( jsonDic[@"data"] && [jsonDic[@"data"] count]) {
                 NSArray *modelArray =[BillDetailCellModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
                 for (NSInteger i =0; i < modelArray.count; i ++) {
                     
-                    [tempArray addObject:modelArray[i]];
+                    [_tempArray addObject:modelArray[i]];
                 }
             }
             
-            if (tempArray.count > 1) {
-                for (NSInteger i =0; i < tempArray.count - 1; i ++) {
+            if (_tempArray.count > 1) {
+                for (NSInteger i =0; i < _tempArray.count - 1; i ++) {
                     if (i == 0) {
-                        BillDetailCellModel *model = tempArray[0];
+                        BillDetailCellModel *model = _tempArray[0];
                         model.isShow = YES;
                     }
-                    BillDetailCellModel *modelI = tempArray[i];
+                    BillDetailCellModel *modelI = _tempArray[i];
                     NSArray *arr1 = [modelI.record.tradeDate componentsSeparatedByString:@" "];
                     NSArray *arr2 = [arr1[0] componentsSeparatedByString:@"-"];
                     NSString *year1 = arr2[0];
-                    for (NSInteger j =i +1; j < tempArray.count; j ++) {
-                        BillDetailCellModel *modelJ = tempArray[j];
+                    for (NSInteger j =i +1; j < _tempArray.count; j ++) {
+                        BillDetailCellModel *modelJ = _tempArray[j];
                         arr1 = [modelJ.record.tradeDate componentsSeparatedByString:@" "];
                         arr2 = [arr1[0] componentsSeparatedByString:@"-"];
                         NSString *year2 = arr2[0];
@@ -111,12 +116,12 @@
                    }
                }
             }else{
-                if (tempArray.count) {
-                    BillDetailCellModel *model = tempArray[0];
+                if (_tempArray.count) {
+                    BillDetailCellModel *model = _tempArray[0];
                     model.isShow = YES;
                 }
             }
-            self.dataArray = tempArray;
+            self.dataArray = _tempArray;
         }
     }else{
         self.isNetRequestError = YES;

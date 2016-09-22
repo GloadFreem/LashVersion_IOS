@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InvistViewController">
             <connections>
                 <outlet property="tableView" destination="CIm-Vl-v4Q" id="VIf-Oo-5fu"/>
-                <outlet property="tableViewHeight" destination="Br3-gW-qE7" id="fQg-ct-rFK"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -18,13 +18,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="navBJ.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rol-iC-hBI">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="64" id="vJ3-Of-dXR"/>
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fie-Yl-Mb1">
-                    <rect key="frame" x="12" y="30" width="45" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="20" id="1iL-qw-HcT"/>
                         <constraint firstAttribute="height" constant="20" id="A2W-Dx-vev"/>
@@ -43,37 +41,31 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="投资领域" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lDV-nW-CKm">
-                    <rect key="frame" x="147" y="27.5" width="80" height="24"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CIm-Vl-v4Q">
-                    <rect key="frame" x="0.0" y="64" width="375" height="550"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="550" id="Br3-gW-qE7"/>
-                    </constraints>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="4j1-qP-QJo"/>
                         <outlet property="delegate" destination="-1" id="rBH-oK-K9k"/>
                     </connections>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGa-5B-y4B">
-                    <rect key="frame" x="325" y="29" width="30" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="3qn-ys-6Cu"/>
-                        <constraint firstAttribute="width" constant="30" id="e59-Uf-6tQ"/>
+                        <constraint firstAttribute="width" constant="35" id="e59-Uf-6tQ"/>
                     </constraints>
                     <state key="normal" title="确定">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
                         <action selector="certifyBtn:" destination="-1" eventType="touchUpInside" id="dGK-Tg-Uvw"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="CIm-Vl-v4Q" secondAttribute="trailing" id="2ld-Fm-kgm"/>
                 <constraint firstItem="lDV-nW-CKm" firstAttribute="centerY" secondItem="fie-Yl-Mb1" secondAttribute="centerY" id="AdT-Mz-xgu"/>
@@ -82,13 +74,13 @@
                 <constraint firstItem="lDV-nW-CKm" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="UYN-LP-Mso"/>
                 <constraint firstAttribute="trailing" secondItem="EGa-5B-y4B" secondAttribute="trailing" constant="20" id="d7q-JP-Hgg"/>
                 <constraint firstItem="CIm-Vl-v4Q" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="gNg-fT-HYP"/>
+                <constraint firstAttribute="bottom" secondItem="CIm-Vl-v4Q" secondAttribute="bottom" id="gd3-wW-d2h"/>
                 <constraint firstAttribute="trailing" secondItem="Rol-iC-hBI" secondAttribute="trailing" id="gxn-Lv-UgE"/>
                 <constraint firstItem="Rol-iC-hBI" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="j6E-Vj-nFe"/>
                 <constraint firstItem="CIm-Vl-v4Q" firstAttribute="top" secondItem="Rol-iC-hBI" secondAttribute="bottom" id="liV-I3-C7h"/>
                 <constraint firstItem="fie-Yl-Mb1" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="30" id="niD-MB-4Lu"/>
                 <constraint firstItem="Rol-iC-hBI" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="vuN-H6-i78"/>
             </constraints>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <point key="canvasLocation" x="15.5" y="103.5"/>
         </view>
     </objects>

@@ -126,6 +126,8 @@
                                               categories:nil];
     }
     
+    
+    
     [JPUSHService setupWithOption:launchOptions appKey:@"cc3fdb255d49497c5fd3d402"
                           channel:@"Publish channel"
                  apsForProduction:@"1"];
@@ -272,43 +274,108 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // Required,For systems with less than or equal to iOS6
     [JPUSHService handleRemoteNotification:userInfo];
 }
+-(void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(nonnull NSError *)error
+{
+    NSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
+
+}
+
+
+
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:
 (NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // IOS 7 Support Required
 //    NSLog(@"%@",userInfo);
+    NSLog(@"接收到通知");
     NSString * type = [userInfo valueForKey:@"type"];
     UIViewController * controller;
     NSDictionary * notificationDic;
-    if ([type isEqualToString:@"web"]) {
-        controller = [[PingTaiWebViewController alloc]init];
-        ((PingTaiWebViewController*)controller).url = [userInfo valueForKey:@"content"];
+    //前台运行
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+        UIViewController *currentViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
         
-        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
         
-    }else if ([type isEqualToString:@"project"]) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您有新的消息，是否查看？" preferredStyle:UIAlertControllerStyleAlert];
         
-        controller = [[ProjectDetailController alloc]init];
-        ((ProjectDetailController*)controller).projectId = [[userInfo valueForKey:@"content"] integerValue];
+        UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UIViewController * controller;
+            NSDictionary * notificationDic;
+            if ([type isEqualToString:@"web"]) {
+                controller = [[PingTaiWebViewController alloc]init];
+                ((PingTaiWebViewController*)controller).url = [userInfo valueForKey:@"content"];
+                
+                notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
+                
+            }else if ([type isEqualToString:@"project"]) {
+                
+                controller = [[ProjectDetailController alloc]init];
+                ((ProjectDetailController*)controller).projectId = [[userInfo valueForKey:@"content"] integerValue];
+                
+                notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+                
+            }else if ([type isEqualToString:@"action"]) {
+                ActivityViewModel * model = [[ActivityViewModel alloc]init];
+                model.actionId = [[userInfo valueForKey:@"content"] integerValue];
+                controller = [[ActivityDetailVC alloc]init];
+                ((ActivityDetailVC*)controller).activityModel = model;
+                notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+            }else{
+                controller = [[ProjectLetterViewController alloc]init];
+                notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"setLetterStatus" object:nil];
+                
+            }
+            
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
+            [JPUSHService handleRemoteNotification:userInfo];
+            completionHandler(UIBackgroundFetchResultNewData);
+        }];
         
-        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+        [alertController addAction:cancleAction];
+        [alertController addAction:okAction];
         
-    }else if ([type isEqualToString:@"action"]) {
-        ActivityViewModel * model = [[ActivityViewModel alloc]init];
-        model.actionId = [[userInfo valueForKey:@"content"] integerValue];
-        controller = [[ActivityDetailVC alloc]init];
-        ((ActivityDetailVC*)controller).activityModel = model;
-        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+        [currentViewController presentViewController:alertController animated:YES completion:nil];
+        NSLog(@"前台运行");
     }else{
-        controller = [[ProjectLetterViewController alloc]init];
-        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"setLetterStatus" object:nil];
         
+        if ([type isEqualToString:@"web"]) {
+            controller = [[PingTaiWebViewController alloc]init];
+            ((PingTaiWebViewController*)controller).url = [userInfo valueForKey:@"content"];
+            
+            notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
+            
+        }else if ([type isEqualToString:@"project"]) {
+            
+            controller = [[ProjectDetailController alloc]init];
+            ((ProjectDetailController*)controller).projectId = [[userInfo valueForKey:@"content"] integerValue];
+            
+            notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+            
+        }else if ([type isEqualToString:@"action"]) {
+            ActivityViewModel * model = [[ActivityViewModel alloc]init];
+            model.actionId = [[userInfo valueForKey:@"content"] integerValue];
+            controller = [[ActivityDetailVC alloc]init];
+            ((ActivityDetailVC*)controller).activityModel = model;
+            notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+        }else{
+            controller = [[ProjectLetterViewController alloc]init];
+            notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"setLetterStatus" object:nil];
+            
+        }
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
+        [JPUSHService handleRemoteNotification:userInfo];
+        completionHandler(UIBackgroundFetchResultNewData);
+        NSLog(@"后台运行");
     }
     
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
-    [JPUSHService handleRemoteNotification:userInfo];
-    completionHandler(UIBackgroundFetchResultNewData);
 }
+
 
 #pragma mark ---------友盟
 

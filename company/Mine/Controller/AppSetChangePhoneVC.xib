@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AppSetChangePhoneVC">
@@ -22,7 +23,6 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入新手机号码" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5v-Oz-4ks">
-                    <rect key="frame" x="43.5" y="45" width="288" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="288" id="VeW-z2-448"/>
                         <constraint firstAttribute="height" constant="44" id="weB-Gk-zJc"/>
@@ -34,21 +34,19 @@
                     </connections>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="etS-Nk-voY" customClass="JKCountDownButton">
-                    <rect key="frame" x="225.5" y="104" width="106" height="44"/>
-                    <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="Fmu-nN-97o"/>
                         <constraint firstAttribute="width" constant="106" id="doa-qn-vhT"/>
                     </constraints>
                     <state key="normal" title="获取验证码">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
                         <action selector="getCertainCode:" destination="-1" eventType="touchUpInside" id="xmM-Kd-oDj"/>
                     </connections>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入验证码" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ZyY-MM-bQc">
-                    <rect key="frame" x="43.5" y="104" width="182" height="44"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
                     <connections>
@@ -56,22 +54,20 @@
                     </connections>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YDz-ms-25y">
-                    <rect key="frame" x="43" y="311" width="288" height="44"/>
-                    <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="1" green="0.4432308506" blue="0.22156729850000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="288" id="kCq-6G-UCq"/>
                         <constraint firstAttribute="height" constant="44" id="v3o-Eo-aY3"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                     <state key="normal" title="确认">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
                         <action selector="certainBtnClick:" destination="-1" eventType="touchUpInside" id="eDE-7c-WTd"/>
                     </connections>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入身份证号码" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ung-1x-lB9">
-                    <rect key="frame" x="43" y="163" width="288" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="288" id="Vyt-L0-EqN"/>
                         <constraint firstAttribute="height" constant="44" id="W4z-dt-Fl9"/>
@@ -83,7 +79,6 @@
                     </connections>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入密码" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="uOE-4I-Nby">
-                    <rect key="frame" x="43" y="222" width="288" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="288" id="053-9b-hsL"/>
                         <constraint firstAttribute="height" constant="44" id="bUb-lV-BU1"/>
@@ -95,7 +90,7 @@
                     </connections>
                 </textField>
             </subviews>
-            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="etS-Nk-voY" firstAttribute="top" secondItem="r5v-Oz-4ks" secondAttribute="bottom" constant="15" id="38G-5B-FJI"/>
                 <constraint firstItem="ZyY-MM-bQc" firstAttribute="leading" secondItem="r5v-Oz-4ks" secondAttribute="leading" id="3Ln-pv-hjv"/>
@@ -117,7 +112,6 @@
                 <constraint firstItem="r5v-Oz-4ks" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="45" id="v8B-kR-NUk"/>
                 <constraint firstItem="ung-1x-lB9" firstAttribute="height" secondItem="r5v-Oz-4ks" secondAttribute="height" id="vVg-l0-Jri"/>
             </constraints>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="3kC-pn-ymB"/>

@@ -198,6 +198,7 @@
 //                }
 //            }
         NSMutableDictionary *dic = [dict[@"data"] JSONValue];
+//        NSLog(@"打印字典---%@,打印表明---%@",dic,tableName);
         NSArray *dataArray =[NSArray arrayWithArray:dic[@"data"]];
 //            NSLog(@"打印数组---%@",dataArray);
         return dataArray;

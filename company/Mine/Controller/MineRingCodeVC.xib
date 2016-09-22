@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MineRingCodeVC">
@@ -20,40 +21,31 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="navBJ.png" translatesAutoresizingMaskIntoConstraints="NO" id="9PV-SZ-sor">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="navBJ.png" translatesAutoresizingMaskIntoConstraints="NO" id="9PV-SZ-sor"/>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aiq-y6-hiG">
-                    <rect key="frame" x="59.5" y="67" width="256" height="358"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_ringbg.png" translatesAutoresizingMaskIntoConstraints="NO" id="34d-Lv-eUS">
-                            <rect key="frame" x="0.0" y="0.0" width="256" height="358"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="358" id="frY-yD-Sd1"/>
                                 <constraint firstAttribute="width" constant="256" id="x7B-gd-Flz"/>
                             </constraints>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholderIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="jHO-Li-3mp">
-                            <rect key="frame" x="93.5" y="17" width="68" height="68"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="68" id="CS1-dw-EMN"/>
                                 <constraint firstAttribute="width" constant="68" id="hdL-0o-PRY"/>
                             </constraints>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20160504" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ASy-ZQ-rLB">
-                            <rect key="frame" x="71" y="101" width="113.5" height="24"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="24" id="o7A-5f-Ith"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_scancode.png" translatesAutoresizingMaskIntoConstraints="NO" id="AEB-Aj-XMN">
-                            <rect key="frame" x="43" y="165" width="170" height="170"/>
-                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_scancode.png" translatesAutoresizingMaskIntoConstraints="NO" id="AEB-Aj-XMN"/>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zCL-Zn-2g2">
-                            <rect key="frame" x="192.5" y="95.5" width="35" height="35"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="35" id="449-m2-mBN"/>
                                 <constraint firstAttribute="width" constant="35" id="OrK-4E-20H"/>
@@ -65,7 +57,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.23921568627450979" green="0.27058823529411763" blue="0.30980392156862746" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.23921568627450979" green="0.27058823529411763" blue="0.30980392156862746" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="34d-Lv-eUS" firstAttribute="centerY" secondItem="Aiq-y6-hiG" secondAttribute="centerY" id="B48-yw-73R"/>
                         <constraint firstItem="jHO-Li-3mp" firstAttribute="centerX" secondItem="Aiq-y6-hiG" secondAttribute="centerX" id="BDW-BR-gar"/>
@@ -82,7 +74,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="9PV-SZ-sor" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="1I6-mC-f8t"/>
                 <constraint firstItem="Aiq-y6-hiG" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="36" id="854-AB-k16"/>
@@ -95,7 +87,6 @@
                 <constraint firstAttribute="bottom" secondItem="9PV-SZ-sor" secondAttribute="bottom" id="vpX-n0-yTl"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="854-AB-k16"/>
