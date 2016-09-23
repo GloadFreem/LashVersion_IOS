@@ -915,6 +915,7 @@
 		44AC3A0A1D4A12D100D9C878 /* icon_success_list@3x .png in Resources */ = {isa = PBXBuildFile; fileRef = 44AC3A081D4A12D100D9C878 /* icon_success_list@3x .png */; };
 		44B585661D64152300EA37E0 /* ActivityDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B585651D64152300EA37E0 /* ActivityDetailVC.m */; };
 		44B959C71D93B02D005B60FF /* jpush-ios-2.1.9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44B959C51D93B02D005B60FF /* jpush-ios-2.1.9.a */; };
+		44B959C91D93B236005B60FF /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44B959C81D93B236005B60FF /* UserNotifications.framework */; };
 		44BBCBDF1D5B320400A97D73 /* loadingView.gif in Resources */ = {isa = PBXBuildFile; fileRef = 44BBCBDE1D5B320400A97D73 /* loadingView.gif */; };
 		44BC57011D6D330D0085C921 /* CircleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BC57001D6D330D0085C921 /* CircleContentView.m */; };
 		44BC57041D6D70B60085C921 /* project_selected @2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BC57021D6D70B60085C921 /* project_selected @2x.png */; };
@@ -2217,6 +2218,7 @@
 		44B585651D64152300EA37E0 /* ActivityDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityDetailVC.m; sourceTree = "<group>"; };
 		44B959C51D93B02D005B60FF /* jpush-ios-2.1.9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jpush-ios-2.1.9.a"; sourceTree = "<group>"; };
 		44B959C61D93B02D005B60FF /* JPUSHService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUSHService.h; sourceTree = "<group>"; };
+		44B959C81D93B236005B60FF /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		44BBCBDE1D5B320400A97D73 /* loadingView.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loadingView.gif; sourceTree = "<group>"; };
 		44BC56FF1D6D330D0085C921 /* CircleContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleContentView.h; sourceTree = "<group>"; };
 		44BC57001D6D330D0085C921 /* CircleContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleContentView.m; sourceTree = "<group>"; };
@@ -2293,6 +2295,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44B959C91D93B236005B60FF /* UserNotifications.framework in Frameworks */,
 				4484D1C01D19381D001F4C3A /* libstdc++.tbd in Frameworks */,
 				4484D1BE1D19380A001F4C3A /* libsqlite3.tbd in Frameworks */,
 				4484D1BC1D1937F5001F4C3A /* libiconv.tbd in Frameworks */,
@@ -2342,6 +2345,7 @@
 		27E2DC7EC04EA90E74328CC5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				44B959C81D93B236005B60FF /* UserNotifications.framework */,
 				4484D1BF1D19381D001F4C3A /* libstdc++.tbd */,
 				4484D1BD1D19380A001F4C3A /* libsqlite3.tbd */,
 				4484D1BB1D1937F5001F4C3A /* libiconv.tbd */,

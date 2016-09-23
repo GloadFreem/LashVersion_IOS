@@ -24,7 +24,10 @@
 #import "ActivityViewModel.h"
 #import "GuidePageViewController.h"
 
+//#import "JPUSHService.h"
 #import "JPUSHService.h"
+#import <UserNotifications/UserNotifications.h>
+
 #import "IQKeyboardManager.h"
 
 #import "UMSocial.h"
@@ -111,28 +114,32 @@
     manager.enableAutoToolbar = YES;
     
 #pragma mark --------- 激光推送
-    [UIApplication sharedApplication].applicationIconBadgeNumber =0;
-    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
-        //       categories
+    //Required
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 10.0) {
+        JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
+        entity.types = UNAuthorizationOptionAlert|UNAuthorizationOptionBadge|UNAuthorizationOptionSound;
+        [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
+    }
+    else if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+        //可以添加自定义categories
         [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |
                                                           UIUserNotificationTypeSound |
                                                           UIUserNotificationTypeAlert)
                                               categories:nil];
-    }else {
-        //categories    nil
+    }
+    else {
+        //categories 必须为nil
         [JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
                                                 UIRemoteNotificationTypeSound |
                                                 UIRemoteNotificationTypeAlert)
                                               categories:nil];
     }
-    
-    
-    
+
     [JPUSHService setupWithOption:launchOptions appKey:@"cc3fdb255d49497c5fd3d402"
                           channel:@"Publish channel"
-                 apsForProduction:@"1"];
-    
-    
+                 apsForProduction:@"0"
+            advertisingIdentifier:nil];
+
     //向微信注册
     [WXApi registerApp:@"wx33aa0167f6a81dac" withDescription:@"jinzht"];
     
@@ -263,34 +270,64 @@
 }
 
 #pragma mark -push
-
+//注册APNs成功并上报DeviceToken
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     /// Required -    DeviceToken
     [JPUSHService registerDeviceToken:deviceToken];
 }
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:
-(NSDictionary *)userInfo {
-    // Required,For systems with less than or equal to iOS6
-    [JPUSHService handleRemoteNotification:userInfo];
-}
+
+//实现注册APNs失败接口（可选
 -(void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(nonnull NSError *)error
 {
     NSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
 
 }
 
+// iOS 10 Support
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
+    // Required
+    NSDictionary * userInfo = notification.request.content.userInfo;
+    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        [JPUSHService handleRemoteNotification:userInfo];
+    }
+    NSLog(@"系统要求执行第一个方法");
+//    [self notification:userInfo];
+    completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
+}
 
+// iOS 10 Support
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+    // Required
+    NSDictionary * userInfo = response.notification.request.content.userInfo;
+    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        [JPUSHService handleRemoteNotification:userInfo];
+    }
+    NSLog(@"系统要求执行第二个方法");
+    //前台运行
+//    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+//        
+//        [self notification:userInfo];
+//        NSLog(@"前台运行");
+//    }else{
+//        [self notification:userInfo];
+//        NSLog(@"后台运行");
+//    }
+    [self notification:userInfo];
+    completionHandler();  // 系统要求执行这个方法
+}
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:
+(NSDictionary *)userInfo {
+    // Required,For systems with less than or equal to iOS6
+    [JPUSHService handleRemoteNotification:userInfo];
+}
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:
 (NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // IOS 7 Support Required
 //    NSLog(@"%@",userInfo);
     NSLog(@"接收到通知");
-    NSString * type = [userInfo valueForKey:@"type"];
-    UIViewController * controller;
-    NSDictionary * notificationDic;
     //前台运行
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
         UIViewController *currentViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -301,38 +338,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
         UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             
         }];
+        __block AppDelegate*blockSelf = self;
+        
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            UIViewController * controller;
-            NSDictionary * notificationDic;
-            if ([type isEqualToString:@"web"]) {
-                controller = [[PingTaiWebViewController alloc]init];
-                ((PingTaiWebViewController*)controller).url = [userInfo valueForKey:@"content"];
-                
-                notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
-                
-            }else if ([type isEqualToString:@"project"]) {
-                
-                controller = [[ProjectDetailController alloc]init];
-                ((ProjectDetailController*)controller).projectId = [[userInfo valueForKey:@"content"] integerValue];
-                
-                notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
-                
-            }else if ([type isEqualToString:@"action"]) {
-                ActivityViewModel * model = [[ActivityViewModel alloc]init];
-                model.actionId = [[userInfo valueForKey:@"content"] integerValue];
-                controller = [[ActivityDetailVC alloc]init];
-                ((ActivityDetailVC*)controller).activityModel = model;
-                notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
-            }else{
-                controller = [[ProjectLetterViewController alloc]init];
-                notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
-                [[NSNotificationCenter defaultCenter]postNotificationName:@"setLetterStatus" object:nil];
-                
-            }
             
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
-            [JPUSHService handleRemoteNotification:userInfo];
-            completionHandler(UIBackgroundFetchResultNewData);
+            [blockSelf notification:userInfo];
         }];
         
         [alertController addAction:cancleAction];
@@ -341,41 +351,47 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
         [currentViewController presentViewController:alertController animated:YES completion:nil];
         NSLog(@"前台运行");
     }else{
-        
-        if ([type isEqualToString:@"web"]) {
-            controller = [[PingTaiWebViewController alloc]init];
-            ((PingTaiWebViewController*)controller).url = [userInfo valueForKey:@"content"];
-            
-            notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
-            
-        }else if ([type isEqualToString:@"project"]) {
-            
-            controller = [[ProjectDetailController alloc]init];
-            ((ProjectDetailController*)controller).projectId = [[userInfo valueForKey:@"content"] integerValue];
-            
-            notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
-            
-        }else if ([type isEqualToString:@"action"]) {
-            ActivityViewModel * model = [[ActivityViewModel alloc]init];
-            model.actionId = [[userInfo valueForKey:@"content"] integerValue];
-            controller = [[ActivityDetailVC alloc]init];
-            ((ActivityDetailVC*)controller).activityModel = model;
-            notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
-        }else{
-            controller = [[ProjectLetterViewController alloc]init];
-            notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"setLetterStatus" object:nil];
-            
-        }
-        
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
-        [JPUSHService handleRemoteNotification:userInfo];
-        completionHandler(UIBackgroundFetchResultNewData);
+        [self notification:userInfo];
         NSLog(@"后台运行");
     }
+    completionHandler(UIBackgroundFetchResultNewData);
     
 }
-
+-(void)notification:(NSDictionary*)userInfo
+{
+    NSString * type = [userInfo valueForKey:@"type"];
+    UIViewController * controller;
+    NSDictionary * notificationDic;
+    if ([type isEqualToString:@"web"]) {
+        controller = [[PingTaiWebViewController alloc]init];
+        ((PingTaiWebViewController*)controller).url = [userInfo valueForKey:@"content"];
+        
+        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
+        
+    }else if ([type isEqualToString:@"project"]) {
+        
+        controller = [[ProjectDetailController alloc]init];
+        ((ProjectDetailController*)controller).projectId = [[userInfo valueForKey:@"content"] integerValue];
+        
+        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+        
+    }else if ([type isEqualToString:@"action"]) {
+        ActivityViewModel * model = [[ActivityViewModel alloc]init];
+        model.actionId = [[userInfo valueForKey:@"content"] integerValue];
+        controller = [[ActivityDetailVC alloc]init];
+        ((ActivityDetailVC*)controller).activityModel = model;
+        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+    }else{
+        controller = [[ProjectLetterViewController alloc]init];
+        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"setLetterStatus" object:nil];
+        
+    }
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
+    [JPUSHService handleRemoteNotification:userInfo];
+    [UIApplication sharedApplication].applicationIconBadgeNumber =0;
+}
 
 #pragma mark ---------友盟
 
