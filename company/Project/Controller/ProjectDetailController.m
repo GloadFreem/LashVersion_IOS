@@ -74,6 +74,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *collectBtn;
 
+@property (weak, nonatomic) IBOutlet UIView *navView;
+
 @property (nonatomic,strong) CSZProjectDetailLetfView * leftView;
 @property (nonatomic,strong) UIScrollView *titleScrollView;     //切换按钮
 @property (nonatomic,strong) NSArray *titleArray;               // 切换按钮数组
@@ -129,6 +131,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+//    [self.view bringSubviewToFront:_navView];
     // Do any additional setup after loading the view from its nib.
     //获得内容partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:REQUESTDETAIL];
@@ -458,7 +461,7 @@
             }
         }];
         
-        [_heightArray addObject:[NSNumber numberWithFloat:_leftView.height]];
+        [_heightArray addObject:[NSNumber numberWithFloat:_leftView.height + 44]];
         
         //实例化认投底部按钮视图
         //实例化底部按钮视图
@@ -810,7 +813,7 @@
 
 -(void)updateLayoutNotification
 {
-    _subViewScrollView.height = _leftView.height;
+    _subViewScrollView.height = _leftView.height + 44;
     [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
 }
 
@@ -1216,27 +1219,25 @@
         
         _footer.frame = CGRectMake(0, self.view.frame.size.height - 50 - height, SCREENWIDTH, 50);
         //        NSLog(@"键盘出现了 == %ld",(long)height);
+//        _scrollView.frame = CGRectMake(0, 64 - height, SCREENWIDTH, SCREENHEIGHT - 64);
         
     } andDismissBlock:^(NSInteger height) {
         
         _footer.frame = CGRectMake(0, self.view.frame.size.height - 50, SCREENWIDTH, 50);
         //        NSLog(@"键盘消失了 == %ld",(long)height);
-        
+//        _scrollView.frame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64);
     }];
 }
 
 
--(void)viewDidAppear:(BOOL)animated
+-(void)viewDidDisappear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
-    
+    [super viewDidDisappear:animated];
+    self.navigationController.navigationBar.hidden = NO;
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    self.navigationController.navigationBar.hidden = NO;
-    
     
     [IQKeyboardManager sharedManager].enable = YES;
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];

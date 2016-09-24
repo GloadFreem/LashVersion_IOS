@@ -59,17 +59,20 @@
 
 
 
-@property (nonatomic, strong) UITableView *investOrganizationTableView; //投资机构视图
+@property (nonatomic, strong) UITableViewCustomView *investOrganizationTableView; //投资机构视图
 @property (nonatomic, strong) NSMutableArray *investOrganizationArray; //投资机构模型数组
 
-@property (nonatomic, strong) UITableView *thinkTankTableView; //智囊团视图
+@property (nonatomic, strong) UITableViewCustomView *thinkTankTableView; //智囊团视图
 
 @property (nonatomic, assign) NSInteger tableViewSelected; //当前显示tableView
 
 @property (nonatomic, copy) NSString *identyType;  //身份类型
 @property (nonatomic, assign) NSInteger page;  //当前页
+@property (nonatomic, assign) NSInteger lastInvestPage;
 @property (nonatomic, assign) NSInteger investPage;
+@property (nonatomic, assign) NSInteger lastOrganizationPage;
 @property (nonatomic, assign) NSInteger organizationPage;
+@property (nonatomic ,assign) NSInteger lastTankPage;
 @property (nonatomic, assign) NSInteger tankPage;
 
 
@@ -84,6 +87,11 @@
 @property (nonatomic, assign) BOOL isFirst;
 @property (nonatomic, assign) BOOL isSecond;
 @property (nonatomic, assign) BOOL isThird;
+
+@property (nonatomic, strong) NSMutableArray *tempInvestPersonArr;
+@property (nonatomic, strong) NSMutableArray *tempInvestOrganizationArr;
+@property (nonatomic, strong) NSMutableArray *tempInvestOrganizationSecondArr;
+@property (nonatomic, strong) NSMutableArray *tempThinkTankArr;
 
 @end
 
@@ -117,18 +125,41 @@
     
     //默认请求投资人列表
     _tableViewSelected =1;
+    _page = 0;
     _investPage = 0;
     _organizationPage  = 0;
     _tankPage = 0;
+    _lastInvestPage = 0;
+    _lastOrganizationPage = 0;
+    _lastTankPage = 0;
     
     _identyType = @"2";
     
     //初始化模型数组
-    _investPersonArray = [NSMutableArray array];
-    _investOrganizationArray = [NSMutableArray array];
-    _thinkTankArray = [NSMutableArray array];
-    _investOrganizationSecondArray = [NSMutableArray array];
-    
+    if (!_investPersonArray) {
+        _investPersonArray = [NSMutableArray array];
+    }
+    if (!_investOrganizationArray) {
+        _investOrganizationArray = [NSMutableArray array];
+    }
+    if (!_thinkTankArray) {
+        _thinkTankArray = [NSMutableArray array];
+    }
+    if (!_investOrganizationSecondArray) {
+        _investOrganizationSecondArray = [NSMutableArray array];
+    }
+    if (!_tempInvestPersonArr) {
+        _tempInvestPersonArr = [NSMutableArray array];
+    }
+    if (!_tempInvestOrganizationArr) {
+        _tempInvestOrganizationArr = [NSMutableArray array];
+    }
+    if (!_tempInvestOrganizationSecondArr) {
+        _tempInvestOrganizationSecondArr = [NSMutableArray array];
+    }
+    if (!_tempThinkTankArr) {
+        _tempThinkTankArr = [NSMutableArray array];
+    }
     _titleArray = @[@" 投资人",@" 投资机构",@" 智囊团"];
     _imageArray = @[@"touziren-icon",@"iconfont-jigouT",@"iconfont-danaoT"];
     _lineColor = orangeColor;
@@ -144,7 +175,7 @@
     NSArray *investPersonArray = [self getDataFromBaseTable:INVESTPERSONTABLE];
     if (investPersonArray.count) {
         [self analysisInvestPersonData:investPersonArray];
-        [self.tableView reloadData];
+//        [self.tableView reloadData];
         _isFirst = YES;
         
         id  data = [self getOrgazinationDataFromBaseTable:INVESTORGANIZATIONTABLE];
@@ -229,7 +260,7 @@
                     NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
                     
                     if (_page == 0) {
-                        [_investPersonArray removeAllObjects];
+                        [_tempInvestPersonArr removeAllObjects];
                         [self saveDataToBaseTable:INVESTPERSONTABLE data:dictM];
                         _isFirst = YES;
                     }
@@ -241,8 +272,8 @@
                 if (_tableViewSelected == 2) {
                     
                     if (_page == 0) {
-                        [_investOrganizationArray removeAllObjects];
-                        [_investOrganizationSecondArray removeAllObjects];
+                        [_tempInvestOrganizationArr removeAllObjects];
+                        [_tempInvestOrganizationSecondArr removeAllObjects];
                         [self saveDataToBaseTable:INVESTORGANIZATIONTABLE data:dictM];
                         _isSecond = YES;
                     }
@@ -254,14 +285,14 @@
                 if (_tableViewSelected == 3) {
                     NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
                     if (_page == 0) {
-                        [_thinkTankArray removeAllObjects];
+                        [_tempThinkTankArr removeAllObjects];
                         [self saveDataToBaseTable:THINKTANKTABLE data:dictM];
                         _isThird = YES;
                     }
                     [self analysisThinkTankData:dataArray];
                 }
                 
-                [self.tableView reloadData];
+//                [self.tableView reloadData];
             }
             
         }else{
@@ -286,6 +317,7 @@
         InvestBaseModel *baseModel = investBaseModelArray[i];
         listModel.headSculpture =baseModel.user.headSculpture;
         listModel.name = baseModel.user.name;
+//        NSLog(@"打印名字---%@",listModel.name);
         listModel.areas = baseModel.areas;
         listModel.userId = [NSString stringWithFormat:@"%ld",(long)baseModel.user.userId];
         listModel.collectCount = baseModel.collectCount;
@@ -302,7 +334,24 @@
         }else{
             listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
         }
-        [_investPersonArray addObject:listModel];
+//        for (InvestListModel *model in _tempInvestPersonArr) {
+//            if (![model.userId isEqualToString:listModel.userId]) {
+//                
+//            }
+//        }
+        [_tempInvestPersonArr addObject:listModel];
+    }
+    self.investPersonArray = _tempInvestPersonArr;
+//    NSLog(@"打印当前页---%ld",(long)_page);
+    [_investPersonTableView reloadData];
+}
+-(void)setInvestPersonArray:(NSMutableArray *)investPersonArray
+{
+    self->_investPersonArray = investPersonArray;
+    if (_investPersonArray.count > 0) {
+        _investPersonTableView.isNone = NO;
+    }else{
+        _investPersonTableView.isNone = YES;
     }
 }
 -(void)analysisInvestOrganizationData:(id)data
@@ -318,8 +367,10 @@
         model.content = foundation.content;
         model.foundationId = foundation.foundationId;
         model.url = foundation.url;
-        [_investOrganizationArray addObject:model];
+        [_tempInvestOrganizationArr addObject:model];
     }
+    self.investOrganizationArray = _tempInvestOrganizationArr;
+    
     NSArray *secondArray = [NSArray arrayWithArray:baseModel.investors];
     for (NSInteger i = 0; i < secondArray.count; i ++) {
         InvestListModel *model =[InvestListModel new];
@@ -341,8 +392,25 @@
             model.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
         }
         model.userId = [NSString stringWithFormat:@"%ld",(long)investor.user.userId];
-        [_investOrganizationSecondArray addObject:model];
+        [_tempInvestOrganizationSecondArr addObject:model];
     }
+    self.investOrganizationSecondArray = _tempInvestOrganizationSecondArr;
+    [_investOrganizationTableView reloadData];
+}
+
+-(void)setInvestOrganizationArray:(NSMutableArray *)investOrganizationArray
+{
+    self->_investOrganizationArray = investOrganizationArray;
+}
+-(void)setInvestOrganizationSecondArray:(NSMutableArray *)investOrganizationSecondArray
+{
+    self->_investOrganizationSecondArray = investOrganizationSecondArray;
+    if (_investOrganizationArray.count > 0 || _investOrganizationSecondArray.count > 0) {
+        _investOrganizationTableView.isNone = NO;
+    }else{
+        _investOrganizationTableView.isNone = YES;
+    }
+    
 }
 
 -(void)analysisThinkTankData:(NSArray*)array
@@ -369,10 +437,20 @@
             listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
         }
         listModel.introduce = authentics.introduce;
-        [_thinkTankArray addObject:listModel];
+        [_tempThinkTankArr addObject:listModel];
+    }
+    self.thinkTankArray = _tempThinkTankArr;
+    [_thinkTankTableView reloadData];
+}
+-(void)setThinkTankArray:(NSMutableArray *)thinkTankArray
+{
+    self->_thinkTankArray = thinkTankArray;
+    if (_thinkTankArray.count > 0) {
+        _thinkTankTableView.isNone = NO;
+    }else{
+        _thinkTankTableView.isNone = YES;
     }
 }
-
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     if ([TDUtil checkNetworkState] != NetStatusNone)
@@ -448,7 +526,7 @@
 - (UIScrollView *)subViewScrollView{
     
     if (!self.tableView) {
-        self.tableView = [[UITableView alloc]init];
+        self.tableView = [[UITableViewCustomView alloc]init];
     }
     
     if (!_subViewScrollView) {
@@ -465,14 +543,14 @@
         _subViewScrollView.directionalLockEnabled = YES;
         
         //添加tableView
-        _investPersonTableView = [[UITableView alloc]init];
+        _investPersonTableView = [[UITableViewCustomView alloc]init];
         [self createTableView:_investPersonTableView index:0];
         self.tableView = _investPersonTableView;
         
-        _investOrganizationTableView = [[UITableView alloc]init];
+        _investOrganizationTableView = [[UITableViewCustomView alloc]init];
         [self createTableView:_investOrganizationTableView index:1];
         
-        _thinkTankTableView = [[UITableView alloc]init];
+        _thinkTankTableView = [[UITableViewCustomView alloc]init];
         [self createTableView:_thinkTankTableView index:2];
     }
     
@@ -808,16 +886,27 @@
 -(void)nextPage
 {
     if (_tableViewSelected == 1) {
+        _lastInvestPage = _investPage;
         _investPage ++;
+        if (_lastInvestPage != _investPage) {
+            [self startLoadData];
+        }
     }
+    
     if (_tableViewSelected == 2) {
+        _lastOrganizationPage = _organizationPage;
         _organizationPage ++;
+        if (_lastOrganizationPage != _organizationPage) {
+            [self startLoadData];
+        }
     }
     if (_tableViewSelected == 3) {
+        _lastTankPage = _tankPage;
         _tankPage ++;
+        if (_lastTankPage != _tankPage) {
+            [self startLoadData];
+        }
     }
-    [self startLoadData];
-    //    NSLog(@"回到顶部");
 }
 
 -(void)refreshHttp

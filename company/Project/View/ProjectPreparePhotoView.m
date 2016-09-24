@@ -111,8 +111,7 @@ CGFloat ___maxContentLabelHeight = 0; //根据具体font来定
 -(void)setModel:(ProjectDetailLeftHeaderModel *)model
 {
     _model = model;
-    _shouldOpen = NO;
-    
+//    _shouldOpen = NO;
     _projectLabel.text = model.projectStr;
 //    _contentLabel.text = model.content;
     [TDUtil setLabelMutableText:_contentLabel content:model.content lineSpacing:5 headIndent:0];
@@ -188,13 +187,12 @@ CGFloat ___maxContentLabelHeight = 0; //根据具体font来定
 {
     _shouldOpen = !_shouldOpen;
     [_model setIsOpen:_shouldOpen];
+//    if(self.moreButtonClickedBlock)
+//    {
+//        NSLog(@"点击是否打开---%d",_shouldOpen);
+//        self.moreButtonClickedBlock(_shouldOpen);
+//    }
     [self setModel:_model];
-    
-    if(self.moreButtonClickedBlock)
-    {
-        self.moreButtonClickedBlock(_shouldOpen);
-    }
-    
 //    //发送通知
 //    [self performSelector:@selector(updateLayoutnotification) withObject:nil afterDelay:0.01];
 }

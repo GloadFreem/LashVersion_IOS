@@ -277,12 +277,11 @@
     _photoView.model = headerModel;
     
     //3.设置属性
-//    if (_photoView.moreButtonClickedBlock) {
-//        [_photoView setMoreButtonClickedBlock:^(Boolean flag) {
-//            _photoView.model.isOpen = !_photoView.model.isOpen;
-//            
-//        }];
-//    }
+//    __block ProjectPreparePhotoView *blockPhotoView = _photoView;
+//    [_photoView setMoreButtonClickedBlock:^(Boolean flag) {
+//        blockPhotoView.model.isOpen = flag;
+//        NSLog(@"改变属性");
+//    }];
     
     [_scrollView addSubview:_photoView];
     

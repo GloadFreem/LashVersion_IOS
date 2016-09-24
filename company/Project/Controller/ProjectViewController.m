@@ -506,12 +506,12 @@
             
             [self.tableView reloadData];
             //结束刷新
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
+//            [self.tableView.mj_header endRefreshing];
+//            [self.tableView.mj_footer endRefreshing];
         }else{
             //结束刷新
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+//            [self.tableView.mj_header endRefreshing];
+//            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
         
         self.startLoading = NO;

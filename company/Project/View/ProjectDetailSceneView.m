@@ -109,6 +109,7 @@
                 }
             }
             _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
+//            [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
            [_timer setFireDate:[NSDate distantPast]];
             
         }else{
@@ -229,7 +230,7 @@
                 [array insertObject:cellModel atIndex:0];
 
             }
-             self.dataArray = array;
+             self.dataArray = [NSMutableArray arrayWithArray:array];
             
             if (_dataArray.count > 1) {
                 [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_dataArray.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];

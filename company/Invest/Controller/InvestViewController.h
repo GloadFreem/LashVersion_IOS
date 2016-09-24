@@ -27,9 +27,9 @@ typedef enum{
 @property (nonatomic, strong) OrganizationSecondModel *organizationModel;
 
 
-@property (nonatomic, strong) UITableView *tableView; //当前biao
+@property (nonatomic, strong) UITableViewCustomView *tableView; //当前biao
 
-@property (nonatomic,strong) UITableView *investPersonTableView; //投资人视图
+@property (nonatomic,strong) UITableViewCustomView *investPersonTableView; //投资人视图
 @property (nonatomic, strong) NSMutableArray *investPersonArray; //投资人模型数组
 
 @property (nonatomic, strong) NSMutableArray *investOrganizationSecondArray; //第二个数组

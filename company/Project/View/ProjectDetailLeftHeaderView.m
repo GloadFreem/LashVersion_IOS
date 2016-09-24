@@ -309,8 +309,7 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
 -(void)setModel:(ProjectDetailLeftHeaderModel *)model
 {
     _model = model;
-    
-    _shouldOpen = NO;
+//    _shouldOpen = NO;
     _projectLabel.text = model.projectStr;
     _goalNumber.text = model.goalStr;
     [_goalNumber sizeToFit];
