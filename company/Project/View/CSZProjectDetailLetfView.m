@@ -63,8 +63,49 @@
 //        [teamView.teamModelArray addObject:teamModelArray[i]];
 //    }
     
-    teamView.teamModelArray = [NSMutableArray arrayWithArray:model.project.teams];
-    teamView.extrModelArray = [NSMutableArray arrayWithArray:model.extr];
+    if (model.project.teams.count <= 0 && model.extr.count <= 0) {
+        teamView.sd_layout.heightIs(0);
+        teamView.imageHeight = 0;
+        teamView.scrollHeightFirst = 0;
+        teamView.scrollHeightSecond = 0;
+        teamView.topHeight = 0;
+        teamView.midHeight = 0;
+        teamView.botHeight = 0;
+    }
+    if (model.project.teams.count <= 0 && model.extr.count > 0) {
+        teamView.sd_layout.heightIs(360 - 130);
+        teamView.imageHeight = 20;
+        teamView.scrollHeightSecond = 130;
+        teamView.scrollHeightFirst = 0;
+        teamView.extrModelArray = [NSMutableArray arrayWithArray:model.extr];
+        teamView.topHeight = 10;
+        teamView.midHeight = 0;
+        teamView.botHeight = 10;
+    }
+    if (model.project.teams.count > 0 && model.extr.count <= 0) {
+        teamView.sd_layout.heightIs(360 - 130);
+        teamView.imageHeight = 20;
+        teamView.scrollHeightFirst = 130;
+        teamView.scrollHeightSecond = 0;
+        teamView.teamModelArray = [NSMutableArray arrayWithArray:model.project.teams];
+        teamView.topHeight = 10;
+        teamView.midHeight = 0;
+        teamView.botHeight = 10;
+    }
+    if (model.project.teams.count > 0 && model.extr.count > 0) {
+        teamView.sd_layout.heightIs(360);
+        teamView.scrollHeightFirst = 130;
+        teamView.scrollHeightSecond = 130;
+        teamView.imageHeight = 20;
+        teamView.extrModelArray = [NSMutableArray arrayWithArray:model.extr];
+        teamView.teamModelArray = [NSMutableArray arrayWithArray:model.project.teams];
+        teamView.topHeight = 10;
+        teamView.midHeight = 10;
+        teamView.botHeight = 10;
+    }
+
+//    teamView.teamModelArray = [NSMutableArray arrayWithArray:model.project.teams];
+//    teamView.extrModelArray = [NSMutableArray arrayWithArray:model.extr];
 //    NSArray *extrArray = [NSArray arrayWithArray:model.extr];
 //    for (NSInteger i = 0; i < extrArray.count; i ++) {
 //        [teamView.extrModelArray addObject:extrArray[i]];
@@ -106,8 +147,8 @@
     teamView.sd_layout
     .topSpaceToView(headerView,0)
     .leftSpaceToView(self,0)
-    .rightSpaceToView(self,0)
-    .heightIs(360);
+    .rightSpaceToView(self,0);
+//    .heightIs(360);
     
     [self setupAutoHeightWithBottomView:teamView bottomMargin:10];
     //立即布局

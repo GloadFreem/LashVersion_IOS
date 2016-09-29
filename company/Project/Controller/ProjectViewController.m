@@ -423,12 +423,24 @@
             
             AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
 //            authenticModel = baseModel;
-            //            NSLog(@"打印个人信息：----%@",baseModel);
+//            NSLog(@"打印个人信息：----%@",baseModel);
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             
             [data setValue:baseModel.headSculpture forKey:USER_STATIC_HEADER_PIC];
             [data setValue:baseModel.telephone forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
             [data setValue:[NSString stringWithFormat:@"%ld",(long)baseModel.userId] forKey:USER_STATIC_USER_ID];
+            
+            NSMutableString *areaStr = [[NSMutableString alloc]init];
+            if (baseModel.areas.count) {
+                for (NSInteger i = 0; i < baseModel.areas.count; i++) {
+                    if (i!= baseModel.areas.count - 1) {
+                        [areaStr appendFormat:@"%@ | ",baseModel.areas[i]];
+                    }else{
+                        [areaStr appendFormat:@"%@",baseModel.areas[i]];
+                    }
+                }
+            }
+            [data setValue:areaStr forKey:USER_STATIC_INVEST_AREAS];
             
             NSArray *authenticsArray = baseModel.authentics;
             if (authenticsArray.count) {
@@ -444,6 +456,8 @@
                 [data setValue:[NSString stringWithFormat:@"%ld",(long)authentics.identiytype.identiyTypeId] forKey:USER_STATIC_USER_AUTHENTIC_TYPE];
                 [data setValue:[NSString stringWithFormat:@"%@",authentics.identiytype.name] forKey:USER_STATIC_USER_AUTHENTIC_NAME];
                 [data setValue:[NSString stringWithFormat:@"%ld",(long)authentics.authId] forKey:USER_STATIC_AUTHID];
+                [data setValue:authentics.introduce forKey:USER_STATIC_INTRODUCE];
+                [data setValue:authentics.companyIntroduce forKey:USER_STATIC_COMPANYINTRODUCE];
             }
             
             [data synchronize];
@@ -643,11 +657,12 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             //保存数据
-            NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
-            dictM[@"data"] = jsonString;
-            [self saveDataToBaseTable:BANNERTABLE data:dictM];
             
-            
+            if ([jsonDic[@"data"] isKindOfClass:[NSArray class]]) {
+                NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
+                dictM[@"data"] = jsonString;
+                [self saveDataToBaseTable:BANNERTABLE data:dictM];
+            }
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
             //解析banner数据
             [self analysisBannerData:dataArray];
@@ -1166,7 +1181,9 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;
-    [self.navigationController.navigationBar setHidden:NO];
+    
+//    [self.navigationController.navigationBar setHidden:NO];
+    self.navigationController.navigationBar.hidden = NO;
     
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     UINavigationController *nav = (UINavigationController*)window.rootViewController;

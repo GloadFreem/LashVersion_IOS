@@ -39,8 +39,8 @@
     _topView.sd_layout
     .leftEqualToView(self.contentView)
     .topEqualToView(self.contentView)
-    .rightEqualToView(self.contentView)
-    .heightIs(10);
+    .rightEqualToView(self.contentView);
+//    .heightIs(10);
     
     UIImage *teamImage = [UIImage imageNamed:@"friends"];
     _teamImage = [[UIImageView alloc]initWithImage:teamImage];
@@ -49,7 +49,7 @@
     
     _teamImage.sd_layout
     .widthIs(20)
-    .heightIs(20)
+//    .heightIs(self.imageHeight)
     .leftSpaceToView(self.contentView,13)
     .topSpaceToView(_topView,15);
     
@@ -84,8 +84,8 @@
     _scrollView1.sd_layout
     .leftSpaceToView(self.contentView,10)
     .rightSpaceToView(self.contentView,10)
-    .topSpaceToView(_partLine,10)
-    .heightIs(120);
+    .topSpaceToView(_partLine,0);
+//    .heightIs(self.scrollHeightFirst);
     
     _bottomView1 = [UIView new];
     _bottomView1.backgroundColor = colorGray;
@@ -94,8 +94,8 @@
     _bottomView1.sd_layout
     .leftEqualToView(self.contentView)
     .topSpaceToView(_scrollView1,15)
-    .rightEqualToView(self.contentView)
-    .heightIs(10);
+    .rightEqualToView(self.contentView);
+//    .heightIs(10);
     
     _scrollView2 = [UIScrollView new];
     _scrollView2.delegate = self;
@@ -104,8 +104,8 @@
     _scrollView2.sd_layout
     .leftSpaceToView(self.contentView,10)
     .rightSpaceToView(self.contentView,10)
-    .topSpaceToView(_bottomView1,10)
-    .heightIs(120);
+    .topSpaceToView(_bottomView1,0);
+//    .heightIs(self.scrollHeightSecond);
     
     if ([self.authenticName isEqualToString:@"已认证"]) {
 
@@ -134,10 +134,41 @@
     _bottomView2.sd_layout
     .leftEqualToView(self.contentView)
     .topSpaceToView(_scrollView2,15)
-    .rightEqualToView(self.contentView)
-    .heightIs(10);
+    .rightEqualToView(self.contentView);
+//    .heightIs(10);
     
     [self setupAutoHeightWithBottomView:_bottomView2 bottomMargin:10];
+}
+
+-(void)setScrollHeightFirst:(CGFloat)scrollHeightFirst
+{
+    _scrollHeightFirst = scrollHeightFirst;
+    _scrollView1.sd_layout.heightIs(scrollHeightFirst);
+}
+-(void)setScrollHeightSecond:(CGFloat)scrollHeightSecond
+{
+    _scrollHeightSecond = scrollHeightSecond;
+    _scrollView2.sd_layout.heightIs(scrollHeightSecond);
+}
+-(void)setImageHeight:(CGFloat)imageHeight
+{
+    _imageHeight = imageHeight;
+    _teamImage.sd_layout.heightIs(imageHeight);
+}
+-(void)setTopHeight:(CGFloat)topHeight
+{
+    _topHeight = topHeight;
+    _topView.sd_layout.heightIs(topHeight);
+}
+-(void)setMidHeight:(CGFloat)midHeight
+{
+    _midHeight = midHeight;
+    _bottomView1.sd_layout.heightIs(midHeight);
+}
+-(void)setBotHeight:(CGFloat)botHeight
+{
+    _botHeight = botHeight;
+    _bottomView2.sd_layout.heightIs(botHeight);
 }
 
 -(void)setTeamModelArray:(NSMutableArray *)teamModelArray

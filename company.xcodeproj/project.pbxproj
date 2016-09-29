@@ -806,6 +806,9 @@
 		443730CB1D3FCC5600DED1D6 /* ActivityDetailListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 443730AD1D3FCC5600DED1D6 /* ActivityDetailListCell.xib */; };
 		443730CC1D3FCC5600DED1D6 /* ActivityPriseViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 443730AF1D3FCC5600DED1D6 /* ActivityPriseViewCell.m */; };
 		443730CD1D3FCC5600DED1D6 /* PictureContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 443730B11D3FCC5600DED1D6 /* PictureContainerView.m */; };
+		445EE0261D98BA9600B96803 /* UISlider+_touch.m in Sources */ = {isa = PBXBuildFile; fileRef = 445EE0251D98BA9600B96803 /* UISlider+_touch.m */; };
+		445EE0291D9A1F9000B96803 /* ActivityContentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 445EE0281D9A1F9000B96803 /* ActivityContentCell.m */; };
+		445EE02C1D9B70A700B96803 /* MineModifyDataVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 445EE02B1D9B70A700B96803 /* MineModifyDataVC.m */; };
 		44847ADA1D6A9F9500BE572D /* iconfont_firstNews@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44847AD61D6A9F9500BE572D /* iconfont_firstNews@2x.png */; };
 		44847ADB1D6A9F9500BE572D /* iconfont_firstNews@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44847AD71D6A9F9500BE572D /* iconfont_firstNews@3x.png */; };
 		4484D1801D19189E001F4C3A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4484D17F1D19189E001F4C3A /* CFNetwork.framework */; };
@@ -2022,6 +2025,12 @@
 		443730AF1D3FCC5600DED1D6 /* ActivityPriseViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityPriseViewCell.m; sourceTree = "<group>"; };
 		443730B01D3FCC5600DED1D6 /* PictureContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureContainerView.h; sourceTree = "<group>"; };
 		443730B11D3FCC5600DED1D6 /* PictureContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureContainerView.m; sourceTree = "<group>"; };
+		445EE0241D98BA9600B96803 /* UISlider+_touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UISlider+_touch.h"; sourceTree = "<group>"; };
+		445EE0251D98BA9600B96803 /* UISlider+_touch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UISlider+_touch.m"; sourceTree = "<group>"; };
+		445EE0271D9A1F9000B96803 /* ActivityContentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityContentCell.h; sourceTree = "<group>"; };
+		445EE0281D9A1F9000B96803 /* ActivityContentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityContentCell.m; sourceTree = "<group>"; };
+		445EE02A1D9B70A700B96803 /* MineModifyDataVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineModifyDataVC.h; sourceTree = "<group>"; };
+		445EE02B1D9B70A700B96803 /* MineModifyDataVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineModifyDataVC.m; sourceTree = "<group>"; };
 		44847AD61D6A9F9500BE572D /* iconfont_firstNews@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont_firstNews@2x.png"; sourceTree = "<group>"; };
 		44847AD71D6A9F9500BE572D /* iconfont_firstNews@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont_firstNews@3x.png"; sourceTree = "<group>"; };
 		4484D17F1D19189E001F4C3A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -3860,6 +3869,8 @@
 				44372F8D1D3FCC3600DED1D6 /* MineCardVC.m */,
 				44372F8E1D3FCC3600DED1D6 /* MineDataVC.h */,
 				44372F8F1D3FCC3600DED1D6 /* MineDataVC.m */,
+				445EE02A1D9B70A700B96803 /* MineModifyDataVC.h */,
+				445EE02B1D9B70A700B96803 /* MineModifyDataVC.m */,
 				44372F881D3FCC3600DED1D6 /* MIneAreaVC.h */,
 				44372F891D3FCC3600DED1D6 /* MIneAreaVC.m */,
 				44372F901D3FCC3600DED1D6 /* MineDeatilAreaVC.h */,
@@ -4112,6 +4123,8 @@
 			children = (
 				24D4BCDB1D719883001E181F /* ActivityBottomView.h */,
 				24D4BCDC1D719883001E181F /* ActivityBottomView.m */,
+				445EE0271D9A1F9000B96803 /* ActivityContentCell.h */,
+				445EE0281D9A1F9000B96803 /* ActivityContentCell.m */,
 				24D4BCDD1D719883001E181F /* ActivityInfoCell.h */,
 				24D4BCDE1D719883001E181F /* ActivityInfoCell.m */,
 				24D4BCDF1D719883001E181F /* ActivityInfoCell.xib */,
@@ -4339,6 +4352,8 @@
 				44871AAE1D02B35D00020DD9 /* UIBarButtonItem+LYJ.m */,
 				44871AAF1D02B35D00020DD9 /* UIView+Extension.h */,
 				44871AB01D02B35D00020DD9 /* UIView+Extension.m */,
+				445EE0241D98BA9600B96803 /* UISlider+_touch.h */,
+				445EE0251D98BA9600B96803 /* UISlider+_touch.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -5441,6 +5456,7 @@
 				443730381D3FCC3600DED1D6 /* MineAlertView.m in Sources */,
 				24D4BD101D7198DA001E181F /* AFNetworkReachabilityManager.m in Sources */,
 				44372A4D1D3FC7F000DED1D6 /* ProjectPrepareFooterCommentView.m in Sources */,
+				445EE02C1D9B70A700B96803 /* MineModifyDataVC.m in Sources */,
 				44871AB31D02B35D00020DD9 /* UIView+Extension.m in Sources */,
 				44871AB21D02B35D00020DD9 /* UIBarButtonItem+LYJ.m in Sources */,
 				443730CD1D3FCC5600DED1D6 /* PictureContainerView.m in Sources */,
@@ -5552,6 +5568,7 @@
 				44CDEA451D5572DD0063BAA4 /* DACircularProgressView.m in Sources */,
 				443729911D3FC78100DED1D6 /* Renzheng3ViewController.m in Sources */,
 				44871B8B1D02B37800020DD9 /* MLLabel.m in Sources */,
+				445EE0291D9A1F9000B96803 /* ActivityContentCell.m in Sources */,
 				44372ADB1D3FC96400DED1D6 /* MWZoomingScrollView.m in Sources */,
 				443730481D3FCC3600DED1D6 /* MineProjectCommitRecordCell.m in Sources */,
 				44FF81E51D5C55BF004B770E /* LoadingView.m in Sources */,
@@ -5583,6 +5600,7 @@
 				443729831D3FC78100DED1D6 /* InvistTableViewCell.m in Sources */,
 				44372F711D3FCC2100DED1D6 /* InvestPersonWhiteImageView.m in Sources */,
 				4437302B1D3FCC3600DED1D6 /* MineCollectionInvestorBaseModel.m in Sources */,
+				445EE0261D98BA9600B96803 /* UISlider+_touch.m in Sources */,
 				44372ADD1D3FC96400DED1D6 /* UIImage+MWPhotoBrowser.m in Sources */,
 				443729871D3FC78100DED1D6 /* LoginRegistViewController.m in Sources */,
 				443730221D3FCC3600DED1D6 /* PingTaiVC.m in Sources */,

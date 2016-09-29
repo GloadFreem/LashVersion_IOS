@@ -284,12 +284,19 @@
     _personContent.font = [UIFont systemFontOfSize:14];
     _personContent.numberOfLines = 0;
 
-    _personContent.text = authentics.introduce;
+    NSString *string =  authentics.introduce;
+//    _personContent.text = authentics.introduce;
     if (authentics.identiytype.identiyTypeId == 3) {//投资机构
-        _personContent.text = authentics.companyIntroduce;
+        string = authentics.companyIntroduce;
     }
+//    UIColor *color = [UIColor whiteColor];
+//    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+//    [paragraphStyle setLineSpacing:5];
+//    NSAttributedString *atrString = [[NSAttributedString alloc] initWithString:string attributes:@{NSForegroundColorAttributeName : color, NSParagraphStyleAttributeName: paragraphStyle}];
     
-    CGFloat height = [_personContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:14] + 20;
+//    _personContent.attributedText = string;
+    _personContent.text = string;
+    CGFloat height = [string commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:14] + 20;
     [_scrollView addSubview:_personContent];
     [_personContent  mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_personLabel.mas_bottom).offset(10);
@@ -297,6 +304,7 @@
         make.right.mas_equalTo(_mengBanView.mas_right).offset(-18);
         make.height.mas_equalTo(height);
     }];
+//    _personContent.isAttributedContent = YES;
     //蒙版约束
     [_mengBanView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_scrollView.mas_left).offset(18);

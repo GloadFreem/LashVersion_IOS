@@ -10,7 +10,8 @@
 #import "InvistTableViewCell.h"
 #import "NSString+Addition.h"
 #import "RenzhengViewController.h"
-
+#import "MineDataVC.h"
+#define UPDATEUSERINFO @"requestUpdateUserInfoAction"
 #define INVESTFIELD @"getIndustoryAreaListAuthentic"
 @interface InvistViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -20,6 +21,10 @@
 @property (nonatomic, strong) NSMutableArray *statusArray; //状态数组
 @property (nonatomic, strong) NSMutableArray *dataSelected; //选中字段数组
 @property (nonatomic, strong) NSMutableArray *idSelected; //选中id数组
+
+@property (nonatomic, copy) NSString *updatePartner;
+
+@property (nonatomic, copy) NSString *investField;
 @end
 
 @implementation InvistViewController
@@ -44,6 +49,7 @@
     }
     NSString * string = [AES encrypt:INVESTFIELD password:KEY];
     self.partner = [TDUtil encryptMD5String:string];
+    self.updatePartner = [TDUtil encryKeyWithMD5:KEY action:UPDATEUSERINFO];
     
     [self createData];
 }
@@ -192,6 +198,20 @@
         
     }
     
+    if (_isMine) {
+        _investField = [NSString stringWithFormat:@"%@",investField];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.updatePartner,@"partner",@"",@"userIntroduce",@"",@"companyIntroduce",idString,@"areas",nil];
+        [self.httpUtil getDataFromAPIWithOps:REQUEST_UPDATE_USERINFO postParam:dic type:1 delegate:self sel:@selector(requestInfo:)];
+        
+        for (UIViewController *VC in self.navigationController.viewControllers) {
+            if ([VC isKindOfClass:[MineDataVC class]]) {
+                MineDataVC *vc = (MineDataVC*)VC;
+                vc.areas = self.investField;
+                [vc.tableView reloadData];
+            }
+        }
+        
+    }else{
     for (UIViewController *VC in self.navigationController.viewControllers) {
         
         if ([VC isKindOfClass:[RenzhengViewController class]]) {
@@ -203,9 +223,39 @@
             [vc refreshData];
         }
     }
-    
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
+-(void)requestInfo:(ASIHTTPRequest *)request
+{
+    NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
+    //    NSLog(@"返回:%@",jsonString);
+    NSMutableDictionary* dic = [jsonString JSONValue];
+    if (dic!= nil) {
+        NSString *status = [dic valueForKey:@"status"];
+        if ([status integerValue] == 200) {
+            //            NSLog(@"城市修改成功");
+            NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
+            [data setObject:self.investField forKey:USER_STATIC_INVEST_AREAS];
+            [data synchronize];
+        }else{
+            //            NSLog(@"城市修改失败");
+        }
+    }
+}
 
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (_isMine) {
+        self.navigationController.navigationBar.hidden = YES;
+    }
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (_isMine) {
+        self.navigationController.navigationBar.hidden = YES;
+    }
+}
 @end

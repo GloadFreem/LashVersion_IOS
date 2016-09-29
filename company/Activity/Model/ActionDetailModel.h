@@ -36,6 +36,8 @@
 @property (nonatomic, strong) NSArray *actionintroduces;
 @end
 
+
+
 @interface Actionimages : NSObject
 
 @property (nonatomic, assign) NSInteger imgId;
@@ -43,4 +45,15 @@
 @property (nonatomic, copy) NSString *url;
 
 @end
+
+
+//@interface Actionintroduces : NSObject
+///** 序号 */
+//@property (nonatomic, assign) NSInteger introduceId;
+///** 类型：0为文字，1为图片 */
+//@property (nonatomic, assign) NSInteger type;
+///** 文字内容或图片链接 */
+//@property (nonatomic, copy) NSString *content;
+//
+//@end
 

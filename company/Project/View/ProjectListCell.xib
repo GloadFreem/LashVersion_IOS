@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -198,7 +198,7 @@
                     <constraint firstAttribute="trailing" secondItem="g7e-Xg-q1I" secondAttribute="trailing" constant="12" id="V7S-Eg-TjW"/>
                     <constraint firstItem="8gH-ix-a3e" firstAttribute="centerX" secondItem="Y18-Lg-bSZ" secondAttribute="centerX" id="VNc-BZ-s4k"/>
                     <constraint firstAttribute="trailing" secondItem="Bqv-lC-0Xv" secondAttribute="trailing" id="W50-Gs-164"/>
-                    <constraint firstItem="Y0O-0s-J4B" firstAttribute="top" secondItem="ZIT-N5-lLB" secondAttribute="bottom" constant="16" id="Zfp-F1-1lY"/>
+                    <constraint firstItem="Y0O-0s-J4B" firstAttribute="top" secondItem="ZIT-N5-lLB" secondAttribute="bottom" constant="12" id="Zfp-F1-1lY"/>
                     <constraint firstItem="pc8-Ya-fwZ" firstAttribute="height" secondItem="bU5-RN-dS5" secondAttribute="height" id="bEW-A6-e0G"/>
                     <constraint firstItem="789-Ln-3XR" firstAttribute="bottom" secondItem="6CK-Nw-hHd" secondAttribute="bottom" constant="-1" id="beZ-A6-DQl"/>
                     <constraint firstItem="1Vi-1c-6wJ" firstAttribute="top" secondItem="k4M-u7-XKh" secondAttribute="bottom" constant="5" id="dCO-NE-0eg"/>
@@ -208,7 +208,7 @@
                     <constraint firstItem="1fV-ou-A1s" firstAttribute="centerX" secondItem="WYM-nO-xRF" secondAttribute="centerX" id="feR-eq-gnL"/>
                     <constraint firstItem="789-Ln-3XR" firstAttribute="leading" secondItem="6CK-Nw-hHd" secondAttribute="trailing" constant="12" id="fur-EW-0ls"/>
                     <constraint firstItem="k4M-u7-XKh" firstAttribute="leading" secondItem="1oK-9U-Xox" secondAttribute="leading" id="g7S-Td-WBg"/>
-                    <constraint firstItem="pgG-O6-yju" firstAttribute="leading" secondItem="1oK-9U-Xox" secondAttribute="trailing" constant="10" id="jPX-1H-bFp"/>
+                    <constraint firstItem="pgG-O6-yju" firstAttribute="leading" secondItem="1oK-9U-Xox" secondAttribute="trailing" id="jPX-1H-bFp"/>
                     <constraint firstItem="ZIT-N5-lLB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="l2J-ni-pdO"/>
                     <constraint firstItem="SIc-fv-CtM" firstAttribute="leading" secondItem="m0Q-Op-iFl" secondAttribute="trailing" constant="5" id="lya-n7-4ll"/>
                     <constraint firstItem="SIc-fv-CtM" firstAttribute="centerY" secondItem="1Vi-1c-6wJ" secondAttribute="centerY" id="nsJ-SM-MFX"/>
@@ -225,11 +225,11 @@
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
-                        <exclude reference="VNc-BZ-s4k"/>
-                        <exclude reference="Oql-kc-KhN"/>
-                        <exclude reference="A5n-4e-jaH"/>
-                        <exclude reference="NVd-Ml-GlE"/>
                         <exclude reference="feR-eq-gnL"/>
+                        <exclude reference="VNc-BZ-s4k"/>
+                        <exclude reference="A5n-4e-jaH"/>
+                        <exclude reference="Oql-kc-KhN"/>
+                        <exclude reference="NVd-Ml-GlE"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>

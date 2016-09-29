@@ -19,5 +19,4 @@
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 
-
 @end

@@ -14,7 +14,8 @@
 #import "MineRingCodeVC.h"
 #import "PlatformIdentityVC.h"
 #import "MyDataCompanyVC.h"
-
+#import "MineModifyDataVC.h"
+#import "InvistViewController.h"
 #import "RenzhengViewController.h"
 
 #import "MineViewController.h"
@@ -32,6 +33,7 @@
 {
     NSString *_authenticStatus;
     UIImagePickerController *imagePicker;
+    NSString *_fieldStr;
 }
 
 @property (nonatomic, strong) NSArray *textArray;    //
@@ -79,10 +81,10 @@
     
     _textArray = [NSArray array];
     [self createLeftArray];
-
+//    [self createBottomView];
     [self createTableView];
     
-    [self createBottomView];
+    
 }
 
 
@@ -118,6 +120,10 @@
 //    NSLog(@"dayin身份类型---%@",_identifyType);
     _authId = [data objectForKey:USER_STATIC_AUTHID];
     _identiyTypeId = [[data objectForKey:USER_STATIC_USER_AUTHENTIC_TYPE] integerValue];
+    _introduce = [data objectForKey:USER_STATIC_INTRODUCE];
+    _companyIntroduce = [data objectForKey:USER_STATIC_COMPANYINTRODUCE];
+    _areas = [data objectForKey:USER_STATIC_INVEST_AREAS];
+    
     NSString *identiyCarNo = [data objectForKey:USER_STATIC_IDNUMBER];
     
     if (identiyCarNo.length) {
@@ -138,41 +144,52 @@
 
 -(void)createLeftArray
 {
+    NSString *fieldStr = @"机构介绍";
+    if (_identiyTypeId == 4) {
+        fieldStr = @"服务领域";
+    }
+    _fieldStr = fieldStr;
         if ([_authenticStatus isEqualToString:@"已认证"]) {
-            _textArray = @[@"头像",@"指环码",@"实名认证信息(已认证)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
+            _textArray = @[@"头像",@"指环码",@"实名认证信息(已认证)",@"姓名",@"平台身份",@"身份证号码",@"个人简介",@"",@"公司",@"职位",@"所在地",@"投资领域",fieldStr];
             _authenticType = @"已认证";
         }
         if ([_authenticStatus isEqualToString:@"认证中"]) {
-            _textArray = @[@"头像",@"指环码",@"实名认证信息(认证中)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
+            _textArray = @[@"头像",@"指环码",@"实名认证信息(认证中)",@"姓名",@"平台身份",@"身份证号码",@"个人简介",@"",@"公司",@"职位",@"所在地",@"投资领域",fieldStr];
             _authenticType = @"认证中";
         }
         if ([_authenticStatus isEqualToString:@"未认证"]) {
-            _textArray = @[@"头像",@"指环码",@"实名认证信息(未认证)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
+            _textArray = @[@"头像",@"指环码",@"实名认证信息(未认证)",@"姓名",@"平台身份",@"身份证号码",@"个人简介",@"",@"公司",@"职位",@"所在地",@"投资领域",fieldStr];
             _authenticType = @"未认证";
         }
         if ([_authenticStatus isEqualToString:@"认证失败"]) {
-            _textArray = @[@"头像",@"指环码",@"实名认证信息(认证失败)",@"姓名",@"平台身份",@"身份证号码",@"",@"公司",@"职位",@"所在地"];
+            _textArray = @[@"头像",@"指环码",@"实名认证信息(认证失败)",@"姓名",@"平台身份",@"身份证号码",@"个人简介",@"",@"公司",@"职位",@"所在地",@"投资领域",fieldStr];
             _authenticType = @"认证失败";
         }
 }
 #pragma mark- 创建tableView
 -(void)createTableView
 {
-    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _tableView  = [UITableView new];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.scrollEnabled = NO;
+    _tableView.scrollEnabled = YES;
+    _tableView.bounces = NO;
     [self.view addSubview:_tableView];
     
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.view.mas_left);
         make.top.mas_equalTo(self.view.mas_top);
         make.right.mas_equalTo(self.view.mas_right);
-        make.height.mas_equalTo(450*HEIGHTCONFIG);
+//        make.height.mas_equalTo(450*HEIGHTCONFIG);
+        make.bottom.mas_equalTo(self.view.mas_bottom);
     }];
-    
+//    if ([_authenticType isEqualToString:@"已认证"]) {
+//        
+//    }else{
+    _tableView.tableFooterView = [self createBottomView];
+//    }
 }
 
 #pragma mark -设置导航栏
@@ -187,63 +204,68 @@
     self.navigationItem.title = @"我的资料";
 }
 #pragma mark -初始化底部视图
--(void)createBottomView
+-(UIView*)createBottomView
 {
-    //上边label
-    _bottomLabel = [UILabel new];
-    [_bottomLabel setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
-//    _bottomLabel.numberOfLines = 0;
-    _bottomLabel.font = BGFont(13);
-    _bottomLabel.textColor = color(74, 74, 74, 1);
-    
-    if ([_authenticType isEqualToString:@"未认证"]) {
-        _bottomLabel.text = @"温馨提示:\r\n       实名认证用户可以获得更多的权限，只有实名认证用户才可以参与平台股权投融资";
+    if (!_bottomView) {
+        _bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 120*HEIGHTCONFIG)];
+        _bottomView.backgroundColor  = [UIColor groupTableViewBackgroundColor];
+        //上边label
+        _bottomLabel = [UILabel new];
+        [_bottomLabel setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        //    _bottomLabel.numberOfLines = 0;
+        _bottomLabel.font = BGFont(13);
+        _bottomLabel.textColor = color(74, 74, 74, 1);
+        
+        if ([_authenticType isEqualToString:@"未认证"]) {
+            _bottomLabel.text = @"温馨提示:\r\n       实名认证用户可以获得更多的权限，只有实名认证用户才可以参与平台股权投融资";
+        }
+        if ([_authenticType isEqualToString:@"认证中"]) {
+            _bottomLabel.text = @"温馨提示:\r\n       1.实名认证用户可以获得更多的权限，只有实名认证用户才可以参与平台股权投融资\r\n       2.将于两个工作日内进行审核";
+        }
+        
+        if ([_authenticType isEqualToString:@"认证失败"]) {
+            _bottomLabel.text = @"温馨提示:\r\n       您的认证信息未通过审核，具体原因请查看短信或系统通知";
+        }
+        
+        [_bottomView addSubview:_bottomLabel];
+        
+        _bottomLabel.sd_layout
+        .leftSpaceToView(_bottomView,8*WIDTHCONFIG)
+        .rightSpaceToView(_bottomView,10*WIDTHCONFIG)
+        .topSpaceToView(_bottomView,10*HEIGHTCONFIG)
+        .autoHeightRatio(0);
+        
+        //底部button
+        _bottomBtn = [UIButton new];
+        _bottomBtn.layer.cornerRadius = 3;
+        _bottomBtn.layer.masksToBounds = YES;
+        _bottomBtn.backgroundColor = orangeColor;
+        [_bottomBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _bottomBtn.titleLabel.font = BGFont(17);
+        [_bottomBtn addTarget:self action:@selector(bottomBtnClick) forControlEvents:UIControlEventTouchUpInside];
+        [_bottomView addSubview:_bottomBtn];
+        
+        [_bottomBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.mas_equalTo(_bottomView.mas_centerX);
+            make.bottom.mas_equalTo(_bottomView.mas_bottom).offset(-5*HEIGHTCONFIG);
+            make.height.mas_equalTo(35*HEIGHTCONFIG);
+            make.width.mas_equalTo(288*WIDTHCONFIG);
+        }];
+        
+        if ([_authenticType isEqualToString:@"已认证"]) {
+            [_bottomBtn setHidden:YES];
+        }
+        if ([_authenticType isEqualToString:@"未认证"]) {
+            [_bottomBtn setTitle:@"立即认证" forState:UIControlStateNormal];
+        }
+        if ([_authenticType isEqualToString:@"认证中"]) {
+            [_bottomBtn setTitle:@"催一催" forState:UIControlStateNormal];
+        }
+        if ([_authenticType isEqualToString:@"认证失败"]) {
+            [_bottomBtn setTitle:@"重新认证" forState:UIControlStateNormal];
+        }
     }
-    if ([_authenticType isEqualToString:@"认证中"]) {
-        _bottomLabel.text = @"温馨提示:\r\n       1.实名认证用户可以获得更多的权限，只有实名认证用户才可以参与平台股权投融资\r\n       2.将于两个工作日内进行审核";
-    }
-    
-    if ([_authenticType isEqualToString:@"认证失败"]) {
-        _bottomLabel.text = @"温馨提示:\r\n       您的认证信息未通过审核，具体原因请查看短信或系统通知";
-    }
-    
-    [self.view addSubview:_bottomLabel];
-    
-    _bottomLabel.sd_layout
-    .leftSpaceToView(self.view,10*WIDTHCONFIG)
-    .rightSpaceToView(self.view,10*WIDTHCONFIG)
-    .topSpaceToView(_tableView,10*HEIGHTCONFIG)
-    .autoHeightRatio(0);
-    
-    //底部button
-    _bottomBtn = [UIButton new];
-    _bottomBtn.layer.cornerRadius = 3;
-    _bottomBtn.layer.masksToBounds = YES;
-    _bottomBtn.backgroundColor = orangeColor;
-    [_bottomBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    _bottomBtn.titleLabel.font = BGFont(17);
-    [_bottomBtn addTarget:self action:@selector(bottomBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_bottomBtn];
-    
-    [_bottomBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(self.view.mas_centerX);
-        make.bottom.mas_equalTo(self.view.mas_bottom).offset(-10*HEIGHTCONFIG);
-        make.height.mas_equalTo(35*HEIGHTCONFIG);
-        make.width.mas_equalTo(288*WIDTHCONFIG);
-    }];
-    
-    if ([_authenticType isEqualToString:@"已认证"]) {
-        [_bottomBtn setHidden:YES];
-    }
-    if ([_authenticType isEqualToString:@"未认证"]) {
-        [_bottomBtn setTitle:@"立即认证" forState:UIControlStateNormal];
-    }
-    if ([_authenticType isEqualToString:@"认证中"]) {
-        [_bottomBtn setTitle:@"催一催" forState:UIControlStateNormal];
-    }
-    if ([_authenticType isEqualToString:@"认证失败"]) {
-        [_bottomBtn setTitle:@"重新认证" forState:UIControlStateNormal];
-    }
+    return _bottomView;
 }
 #pragma mark-----------------底部执行按钮-------------------
 -(void)bottomBtnClick
@@ -299,22 +321,47 @@
 #pragma mark -tableViewDatasource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return _textArray.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
         return 98*HEIGHTCONFIG;
-    }
-
-    if (indexPath.row == 6) {
+    }else if (indexPath.row == 7) {
         return 9*HEIGHTCONFIG;
-    }
-    if (indexPath.row == 2) {
+    }else if (indexPath.row == 2) {
         return 35*HEIGHTCONFIG;
-    }
+    }else if (indexPath.row == 6 || indexPath.row == 11 || indexPath.row == 12) {
+        if (_identiyTypeId == 1) {
+            return 0.0000001;
+        }
+        if (_identiyTypeId == 2) {
+            if (indexPath.row == 12) {
+                return 0.0000001;
+            }else{
+                return 44*HEIGHTCONFIG;
+            }
+        }
+        if (_identiyTypeId == 3) {
+            if (indexPath.row == 6) {
+                return 0.0000001;
+            }else{
+                return 44*HEIGHTCONFIG;
+            }
+        }
+        if (_identiyTypeId == 4) {
+            if (indexPath.row == 11) {
+                return 0.0000001;
+                
+            }else{
+                return 44*HEIGHTCONFIG;
+            }
+        }
+    }else{
     return 44*HEIGHTCONFIG;
+    }
+    return 0;
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -334,14 +381,15 @@
             _iconImage = cell.iconImage;
             return cell;
         }
-        if (indexPath.row == 1 || indexPath.row == 4 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9) {
+        if (indexPath.row == 1 || indexPath.row == 4 || indexPath.row == 6 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 10 || indexPath.row == 11 || indexPath.row == 12) {
             static NSString *cellId = @"MyDataArrowCell";
             MyDataArrowCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
             if (!cell) {
                 cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
-            }
+                
+         }
             
-            if (indexPath.row == 1 || indexPath.row == 9) {
+            if (indexPath.row == 1 || indexPath.row == 6 || indexPath.row == 12) {
                 cell.bottomLine.hidden = YES;
             }
             if (_textArray[indexPath.row]) {
@@ -357,42 +405,118 @@
                 cell.rightLabel.textColor = color47;
             }
             if ([_authenticType isEqualToString:@"认证失败"]) {
-                if (indexPath.row == 7) {
+                if (indexPath.row == 6) {
+                    
                     cell.rightLabel.text = @"";
+                    if (_identiyTypeId == 1 || _identiyTypeId == 3) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                    }
                 }
                 if (indexPath.row == 8) {
                     cell.rightLabel.text = @"";
                 }
                 if (indexPath.row == 9) {
                     cell.rightLabel.text = @"";
+                }
+                if (indexPath.row == 10) {
+                    cell.rightLabel.text = @"";
+                }
+                if (indexPath.row == 11) {
+                    cell.rightLabel.text = @"";
+                    if (_identiyTypeId == 1 || _identiyTypeId == 4) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                    }
+                }
+                if (indexPath.row == 12) {
+                    cell.rightLabel.text = @"";
+                    if (_identiyTypeId == 1 || _identiyTypeId == 2) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                    }
                 }
             }
             if ([_authenticType isEqualToString:@"认证中"]) {
-                if (indexPath.row == 7) {
+                if (indexPath.row == 6) {
                     cell.rightLabel.text = @"认证中";
+                    if (_identiyTypeId == 1 || _identiyTypeId == 3) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                        cell.rightLabel.text = @"";
+                    }
+                    
                 }
                 if (indexPath.row == 8) {
                     cell.rightLabel.text = @"认证中";
                 }
                 if (indexPath.row == 9) {
                     cell.rightLabel.text = @"认证中";
+                }
+                if (indexPath.row == 10) {
+                    cell.rightLabel.text = @"认证中";
+                }
+                if (indexPath.row == 11) {
+                    cell.rightLabel.text = @"认证中";
+                    if (_identiyTypeId == 1 || _identiyTypeId == 4) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                        cell.rightLabel.text = @"";
+                    }
+                }
+                if (indexPath.row == 12) {
+                    cell.rightLabel.text = @"认证中";
+                    if (_identiyTypeId == 1 || _identiyTypeId == 2 ) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                        cell.rightLabel.text = @"";
+                    }
                 }
             }
             if ([_authenticType isEqualToString:@"已认证"]) {
-                if (indexPath.row == 7) {
-                    cell.rightLabel.text = _companyName;
+                if (indexPath.row == 6) {
+                    cell.rightLabel.text = _introduce;
+                    if (_identiyTypeId == 1 || _identiyTypeId == 3) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                        cell.rightLabel.text = @"";
+                    }
                 }
                 if (indexPath.row == 8) {
-                    cell.rightLabel.text = _position;
+                    cell.rightLabel.text = _companyName;
                 }
                 if (indexPath.row == 9) {
+                    cell.rightLabel.text = _position;
+                }
+                if (indexPath.row == 10) {
                     cell.rightLabel.text = _address;
+                }
+                if (indexPath.row == 11) {
+                    cell.rightLabel.text = _areas;
+                    if (_identiyTypeId == 1 || _identiyTypeId == 4) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                        cell.rightLabel.text = @"";
+                    }
+                }
+                if (indexPath.row == 12) {
+                    cell.rightLabel.text = _companyIntroduce;
+                    if (_identiyTypeId == 1 || _identiyTypeId == 2) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                        cell.rightLabel.text = @"";
+                    }
                 }
             }
             if ([_authenticType isEqualToString:@"未认证"]) {
                 cell.rightLabel.textColor = [UIColor redColor];
-                if (indexPath.row == 7) {
+                if (indexPath.row == 6) {
                     cell.rightLabel.text = @"未认证";
+                    if (_identiyTypeId == 1 || _identiyTypeId == 3) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                        cell.rightLabel.text = @"";
+                    }
                 }
                 if (indexPath.row == 8) {
                     cell.rightLabel.text = @"未认证";
@@ -400,20 +524,65 @@
                 if (indexPath.row == 9) {
                     cell.rightLabel.text = @"未认证";
                 }
-                
+                if (indexPath.row == 10) {
+                    cell.rightLabel.text = @"未认证";
+                }
+                if (indexPath.row == 11) {
+                    cell.rightLabel.text = @"未认证";
+                    if (_identiyTypeId == 1 || _identiyTypeId == 4) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                        cell.rightLabel.text = @"";
+                    }
+                }
+                if (indexPath.row == 12) {
+                    cell.rightLabel.text = @"未认证";
+                    if (_identiyTypeId == 1 || _identiyTypeId == 2) {
+                        cell.leftLabel.text = @"";
+                        cell.rightArrow.hidden = YES;
+                        cell.rightLabel.text = @"";
+                    }
+                }
                 if(indexPath.row == 1 || indexPath.row==4)
                 {
                     cell.rightLabel.textColor = color47;
                 }
                 
+                
+//                if (_identiyTypeId == 1) {
+//                    if (indexPath.row == 6 || indexPath.row == 11 || indexPath.row == 12) {
+//                        cell.leftLabel.textColor = [UIColor clearColor];
+//                        cell.rightLabel.textColor = [UIColor clearColor];
+//                        cell.rightArrow.hidden = YES;
+//                    }
+//                }
+//                if (_identiyTypeId == 2) {
+//                    if (indexPath.row == 12) {
+//                        cell.leftLabel.textColor = [UIColor clearColor];
+//                        cell.rightLabel.textColor = [UIColor clearColor];
+//                        cell.rightArrow.hidden = YES;
+//                    }
+//                }
+//                if (_identiyTypeId == 3) {
+//                    if (indexPath.row == 6) {
+//                        cell.leftLabel.textColor = [UIColor clearColor];
+//                        cell.rightLabel.textColor = [UIColor clearColor];
+//                        cell.rightArrow.hidden = YES;
+//                    }
+//                }
+//                if (_identiyTypeId == 4) {
+//                    if (indexPath.row == 11) {
+//                        cell.leftLabel.textColor = [UIColor clearColor];
+//                        cell.rightLabel.textColor = [UIColor clearColor];
+//                        cell.rightArrow.hidden = YES;
+//                    }
+//                }
+                
 //                NSLog(@"cell row:%ld",(long)indexPath.row);
             }
-            
-            
-            
             return cell;
         }
-        if (indexPath.row == 2 || indexPath.row == 6) {
+        if (indexPath.row == 2 || indexPath.row == 7) {
             static NSString *cellId =@"MyDataHeaderCell";
             MyDataHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
             if (!cell) {
@@ -431,9 +600,9 @@
         if (!cell) {
             cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
         }
-        if (indexPath.row == 5) {
-            cell.bottomLine.hidden = YES;
-        }
+//        if (indexPath.row == 7) {
+//            cell.bottomLine.hidden = YES;
+//        }
         if (_textArray[indexPath.row]) {
         cell.leftLabel.text = _textArray[indexPath.row];
         }
@@ -500,25 +669,57 @@
     }
     
     if ([_authenticType isEqualToString:@"已认证"]) {
+        if (indexPath.row == 6) {
+            MineModifyDataVC *vc = [MineModifyDataVC new];
+            vc.titleText = @"个人简介";
+            vc.dataVC = self;
+            vc.placorText = _introduce;
+            if ([_introduce isEqualToString:@""]) {
+                vc.placorText = @"写一写个人简介";
+            }
+            [self.navigationController pushViewController:vc animated:YES];
+        }
         
-        if (indexPath.row == 8) {
+        if (indexPath.row == 9) {
             MyDataCompanyVC *vc = [MyDataCompanyVC new];
             vc.titleName = @"职位";
             vc.datavc = self;
             vc.placorText = _position;
             [self.navigationController  pushViewController:vc animated:YES];
         }
-        if (indexPath.row == 7) {
+        if (indexPath.row == 8) {
             MyDataCompanyVC *vc = [MyDataCompanyVC new];
             vc.titleName = @"公司";
             vc.placorText = _companyName;
             vc.datavc = self;
             [self.navigationController  pushViewController:vc animated:YES];
         }
-        if (indexPath.row == 9) {
+        if (indexPath.row == 10) {
             MIneAreaVC *vc = [MIneAreaVC new];
             [self.navigationController pushViewController:vc animated:YES];
             
+        }
+        if (indexPath.row == 11) {//投资领域
+            InvistViewController *vc = [InvistViewController new];
+            vc.isMine = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        
+        if (indexPath.row == 12) {//机构简介  服务领域
+            MineModifyDataVC *vc = [MineModifyDataVC new];
+            vc.titleText = _fieldStr;
+            vc.dataVC = self;
+            vc.placorText = _companyIntroduce;
+            
+            if ([_companyIntroduce isEqualToString:@""]) {
+                if ([_fieldStr isEqualToString:@"机构介绍"]) {
+                    vc.placorText = @"写一写机构介绍";
+                }
+                if ([_fieldStr isEqualToString:@"服务领域"]) {
+                    vc.placorText = @"写一写服务领域";
+                }
+            }
+            [self.navigationController pushViewController:vc animated:YES];
         }
     }
     

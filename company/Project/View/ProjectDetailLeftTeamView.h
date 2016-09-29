@@ -36,4 +36,11 @@
 @property (nonatomic, strong) ProjectDetailLeftTeamModel *model;
 @property (nonatomic, strong) NSMutableArray *teamModelArray;
 
+@property (nonatomic, assign) CGFloat topHeight;
+@property (nonatomic, assign) CGFloat midHeight;
+@property (nonatomic, assign) CGFloat botHeight;
+@property (nonatomic, assign) CGFloat imageHeight;
+@property (nonatomic, assign) CGFloat scrollHeightFirst;
+@property (nonatomic, assign) CGFloat scrollHeightSecond;
+
 @end

@@ -12,7 +12,9 @@
 @synthesize description;
 
 + (NSDictionary *)objectClassInArray{
-    return @{@"actionimages" : [Actionimages class]};
+    return @{@"actionimages" : [Actionimages class]
+//             @"actionintroduces" : @"Actionintroduces"
+             };
 }
 
 +(NSDictionary*)mj_replacedKeyFromPropertyName
@@ -26,5 +28,7 @@
 
 @end
 
-
+//@implementation Actionintroduces
+//
+//@end
 

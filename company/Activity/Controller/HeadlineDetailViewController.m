@@ -27,6 +27,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self setValue];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     [Encapsulation returnWithViewController:self img:@"leftBack"];
     [Encapsulation rightBarButtonWithViewController:self imgName:@"write-share"];
@@ -43,7 +46,13 @@
     //加载视图区域
     self.loadingViewFrame = _webView.frame;
 }
-
+-(void)setValue
+{
+    _shareurl = self.url;
+    _shareImage = self.image;
+    _shareTitle = self.titleText;
+    _shareContent = self.contentText;
+}
 
 -(void)webViewDidStartLoad:(UIWebView *)webView
 {

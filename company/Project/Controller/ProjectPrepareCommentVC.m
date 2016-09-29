@@ -133,21 +133,22 @@
         if (_dataArray.count > 1) {
             [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
             
-            //结束刷新
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
+            
             
         }else{
             self.startLoading = NO;
             
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         //结束刷新
-        [self.tableView.mj_header endRefreshing];
-        [self.tableView.mj_footer endRefreshingWithNoMoreData];
+//        [self.tableView.mj_header endRefreshing];
+//        [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
     }else{
         self.isNetRequestError = YES;
     }
+    //结束刷新
+    [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request

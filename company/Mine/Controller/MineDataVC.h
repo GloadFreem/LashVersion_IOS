@@ -11,11 +11,14 @@
 
 @interface MineDataVC : RootViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UIView *bottomView;
 
 @property (nonatomic, copy) NSString *companyName;
 @property (nonatomic, copy) NSString *position;
 @property (nonatomic, copy) NSString *address;
-
+@property (nonatomic, copy) NSString *introduce;
+@property (nonatomic, copy) NSString *companyIntroduce;
+@property (nonatomic, copy) NSString *areas;
 @property (nonatomic, copy) NSString *icon;
 @property (nonatomic, strong) UIImage *iconImg;
 

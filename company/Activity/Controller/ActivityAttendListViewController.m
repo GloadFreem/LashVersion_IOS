@@ -24,7 +24,7 @@
 
 @interface ActivityAttendListViewController ()<UITableViewDelegate,UITableViewDataSource,ActivityDetailFooterViewDelegate,UITextFieldDelegate>
 @property (nonatomic, copy) NSString * actionAttendPartner;
-@property (nonatomic, copy) UITableView * tableView;
+@property (nonatomic, copy) UITableViewCustomView * tableView;
 @property (nonatomic, strong) NSMutableArray *dataAttendSource;
 
 
@@ -68,7 +68,7 @@
 #pragma mark -初始化控件
 -(void)createUI
 {
-    _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
+    _tableView = [[UITableViewCustomView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
@@ -148,7 +148,11 @@
                 //替换模型
                 [self.dataAttendSource addObject:baseModel];
             }
-            
+            if (self.dataAttendSource.count) {
+                self.tableView.isNone = NO;
+            }else{
+                self.tableView.isNone = YES;
+            }
             [self.tableView reloadData];
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];

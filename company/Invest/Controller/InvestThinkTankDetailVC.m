@@ -429,12 +429,12 @@
     //领域内容
     _fieldContent.text = authentics.companyIntroduce;
     
-    CGFloat height1 = [_fieldContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:12];
+    CGFloat height1 = [_fieldContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:14];
     [_fieldContent mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_fieldLabel.mas_bottom).offset(19);
         make.left.mas_equalTo(_firstView.mas_left).offset(18);
         make.right.mas_equalTo(_firstView.mas_right).offset(-18);
-        make.height.mas_equalTo(height1+20);
+        make.height.mas_equalTo(height1);
     }];
     //第一个透明的View
     [_firstView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -466,12 +466,12 @@
     //个人内容
     _personContent.text = authentics.introduce;
 //    NSLog(@"%@",authentics.introduce);
-    CGFloat height2 = [_personContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:12];
+    CGFloat height2 = [_personContent.text commonStringHeighforLabelWidth:SCREENWIDTH-72 withFontSize:14];
     [_personContent mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_personLabel.mas_bottom).offset(19);
         make.left.mas_equalTo(_secondView.mas_left).offset(18);
         make.right.mas_equalTo(_secondView.mas_right).offset(-18);
-        make.height.mas_equalTo(height2 + 20);
+        make.height.mas_equalTo(height2);
     }];
     //第二个透明的View
     [_secondView mas_makeConstraints:^(MASConstraintMaker *make) {

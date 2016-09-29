@@ -11,6 +11,7 @@
 #import "MyAVAudioPlayer.h"
 #import "HttpUtils.h"
 #import "DialogUtil.h"
+#import "UISlider+_touch.h"
 
 #import "ProjectDetailBannerView.h"
 

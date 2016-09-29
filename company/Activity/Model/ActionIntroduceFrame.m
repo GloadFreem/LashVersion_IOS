@@ -23,20 +23,31 @@ const CGFloat margingTop = 0;
     if (_actionIntro.type == 1) {
         imageV = [UIImageView new];
         [imageV sd_setImageWithURL:[NSURL URLWithString:_actionIntro.content] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
-//        _cellHeight = 180;
+        [imageV setContentMode:UIViewContentModeScaleAspectFit];
+//        [imageV sd_setImageWithURL:[NSURL URLWithString:_actionIntro.content] placeholderImage:[UIImage imageNamed:@"placeholderImage"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//            CGFloat width = imageV.image.size.width;
+//            NSLog(@"打印宽度---%f",width);
+//            CGFloat height = imageV.image.size.height;
+//            //        NSLog(@"打印高度---%f",height);
+//            CGFloat scale = (SCREENWIDTH - 20)/width;
+//            CGFloat imageHeight  = scale * height;
+//            _cellHeight = imageHeight + 20;
+//        }];
         CGFloat width = imageV.image.size.width;
 //        NSLog(@"打印宽度---%f",width);
         CGFloat height = imageV.image.size.height;
 //        NSLog(@"打印高度---%f",height);
         CGFloat scale = (SCREENWIDTH - 20)/width;
         CGFloat imageHeight  = scale * height;
-        _cellHeight = imageHeight;
+        _cellHeight = imageHeight + 20;
+//        _cellHeight = 180;
 //        NSLog(@"dayin 高度---%f",imageHeight);
 //        CGSize imageSize = [TDUtil getImageSizeWithURL:_actionIntro.content];
-//        NSLog(@"打印宽度---%f",imageSize.width);
-//        NSLog(@"打印高度---%f",imageSize.height);
-        return;
-    }
+//        NSLog(@"第二种方法打印宽度---%lf，高度---%f",imageSize.width,imageSize.height);
+//        NSLog(@"打印宽度---%lf",imageSize.width);
+//        NSLog(@"打印高度---%f",_cellHeight);
+//        return;
+    }else{
     
 //    CGSize size = [_actionIntro.content sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(SCREENWIDTH-marginLeft*2, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
     
@@ -59,10 +70,14 @@ const CGFloat margingTop = 0;
     NSDictionary *dic = @{NSFontAttributeName:[UIFont systemFontOfSize:13], NSParagraphStyleAttributeName:paraStyle, NSKernAttributeName:@1.5f};
     
     CGSize size = [_actionIntro.content boundingRectWithSize:CGSizeMake(SCREENWIDTH-intro_marginLeft*2, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil].size;
+        
       _contextLF = CGRectMake(intro_marginLeft, margingTop, SCREENWIDTH-intro_marginLeft*2, size.height);
     
     
     // cell的高度
-    _cellHeight = CGRectGetMaxY(_contextLF);
+//    _cellHeight = CGRectGetMaxY(_contextLF);
+        _cellHeight = size.height;
+//        NSLog(@"打印高度---%f",_cellHeight);
+    }
 }
 @end

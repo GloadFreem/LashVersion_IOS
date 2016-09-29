@@ -10,4 +10,6 @@
 
 @interface InvistViewController : RootViewController
 
+@property (nonatomic, assign) BOOL isMine;
+
 @end

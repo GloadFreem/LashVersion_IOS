@@ -33,16 +33,23 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 20)];
+        UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 10)];
         topView.backgroundColor = RGBCOLOR(224, 224, 224);
         [self.contentView addSubview:topView];
         
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 20, SCREENWIDTH, 100) style:UITableViewStylePlain];
+//        _tableView = [UITableView new];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 10, SCREENWIDTH, 100) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.scrollEnabled = NO;
         _tableView.backgroundColor = [UIColor whiteColor];
         [self.contentView addSubview:_tableView];
+//        _tableView.sd_layout
+//        .leftEqualToView(self.contentView)
+//        .topSpaceToView(self.contentView,10)
+//        .rightEqualToView(self.contentView)
+//        .bottomEqualToView(self.contentView);
+        
         _tableView.userInteractionEnabled = NO;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         
@@ -80,6 +87,12 @@
 {
     _tableViewH = tableViewH;
     _tableView.frame = CGRectMake(0, 10, SCREENWIDTH, _tableViewH);
+    NSLog(@"高度是---%lf",_tableViewH);
+//    _tableView.sd_layout.heightIs(_tableViewH);
+//    [self layoutSubviews];
+
+//    [self setupAutoHeightWithBottomView:_tableView bottomMargin:0];
+    [self updateLayout];
     [_tableView reloadData];
 
 }
@@ -98,14 +111,15 @@
 //        return actionInF.cellHeight;
         imageV = [UIImageView new];
         [imageV sd_setImageWithURL:[NSURL URLWithString:actionIntro.content] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
-        //        _cellHeight = 180;
+//        //        _cellHeight = 180;
         CGFloat width = imageV.image.size.width;
 //        NSLog(@"打印宽度---%f",width);
         CGFloat height = imageV.image.size.height;
 //        NSLog(@"打印高度---%f",height);
         CGFloat scale = (SCREENWIDTH - 20)/width;
         CGFloat imageHeight  = scale * height;
-        return imageHeight;
+        return imageHeight + 20;
+//        return actionInF.cellHeight;
     }
 }
 
@@ -120,10 +134,14 @@
     if (0 == actionIntroF.actionIntro.type) {
         ActivityIntroduceCell *cell = [ActivityIntroduceCell cellWithTableView:tableView];
         cell.actionIntroF = _actionIntroFs[indexPath.row];
+//        cell.backgroundColor = [UIColor redColor];
+        [cell layoutIfNeeded];
         return cell;
-    } else {
+    }else{
         ActivityIntroduceImgCell *cell = [ActivityIntroduceImgCell cellWithTableView:tableView];
         cell.actionIntro = actionIntroF.actionIntro;
+//        cell.backgroundColor = [UIColor greenColor];
+        [cell layoutIfNeeded];
         return cell;
     }
 }

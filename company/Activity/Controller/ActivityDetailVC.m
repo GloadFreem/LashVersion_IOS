@@ -91,6 +91,7 @@ static int preFlag = 0;
     CGFloat _totalKeybordHeight;
     //底部点赞评论
     ActivityDetailFooterView *footerView;
+    ActionDetailModel *_baseModel;
     
 }
 - (void)viewDidLoad {
@@ -269,13 +270,14 @@ static int preFlag = 0;
 -(void)requestActionDetailList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             //解析
             ActionDetailModel * baseModel =[ActionDetailModel mj_objectWithKeyValues:jsonDic[@"data"]];
+            _baseModel = baseModel;
             
             self.activityModel = [ActivityViewModel new];
             self.activityModel.attended = baseModel.attended;
@@ -304,15 +306,12 @@ static int preFlag = 0;
             model.content = baseModel.desc;
             model.actionId = baseModel.actionId;
 
-            ActionIntroduceFrame *actionIntroF = [[ActionIntroduceFrame alloc] init];
-            actionIntroF.tableViewH = 0;
             
             NSMutableArray *tempArr = [NSMutableArray array];
             for (NSDictionary *dic in baseModel.actionintroduces) {
                 ActionIntroduce *actionIntro = [ActionIntroduce ActionIntroducesWithDic:dic];
                 ActionIntroduceFrame *actionIntroF = [[ActionIntroduceFrame alloc] init];
                 actionIntroF.actionIntro = actionIntro;
-                
                 if (actionIntro.type == 0) {
                     if (_firstContext.length == 0) {
                         _firstContext = actionIntro.content;
@@ -322,10 +321,15 @@ static int preFlag = 0;
 //                    tableViewH += 180;
                     tableViewH += actionIntroF.cellHeight;
                 }
+//                NSLog(@"滴啊用次数---%lf",actionIntroF.cellHeight);
                 [tempArr addObject:actionIntroF];
             }
+            
+            NSLog(@"个数---%lu",(unsigned long)baseModel.actionintroduces.count);
             tableViewH+=40;
+            
             model.actionIntroduceFrames = tempArr;
+            
             
             NSArray * array = baseModel.actionimages;
             NSMutableArray* imageArray = [NSMutableArray new];
@@ -621,7 +625,7 @@ static int preFlag = 0;
         }
         if (indexPath.row == 1) {
 //            return 1500;
-            return tableViewH+10+30;
+            return tableViewH + 10;
         }
         if (indexPath.row == 2) {
             return 48;
@@ -683,7 +687,10 @@ static int preFlag = 0;
             ActivityDetailHeaderModel *headerModel = _dataArray[0];
             cell.actionIntroFs = headerModel.actionIntroduceFrames;
             cell.tableViewH = tableViewH;
+//            cell.backgroundColor = [UIColor magentaColor];
+//            [cell updateLayout];
             return cell;
+    
         }
         
         if (indexPath.row == 2) {

@@ -74,10 +74,13 @@
     }
     
     //初始化tableView高度
-    if ([self.identifyType integerValue] == 3 || [self.identifyType integerValue] == 4) {
+    if ([self.identifyType integerValue] == 3  ) {
         _tableViewHeight.constant = 500*HEIGHTCONFIG;
         
-    }else if ([self.identifyType integerValue] == 1){
+    }else if ([self.identifyType integerValue] == 4){
+        _tableViewHeight.constant = 456*HEIGHTCONFIG;
+    }
+    else if ([self.identifyType integerValue] == 1){
         _tableViewHeight.constant = 460*HEIGHTCONFIG;
     }
     else{
@@ -146,8 +149,8 @@
         _textFieldArr  = [[NSMutableArray alloc]initWithObjects:@"请输入身份证号码",@"请输入真实姓名",@"请输入公司名称",@"请选择公司所在地",@"请输入职位",@"请选择投资领域", nil];
     }
     if ([self.identifyType integerValue] == 4) {
-        _leftLableArr = [NSArray arrayWithObjects:@"身份证号码",@"真实姓名",@"公司名称",@"公司所在地",@"担任职位",@"服务领域" ,nil];
-        _textFieldArr  = [[NSMutableArray alloc]initWithObjects:@"请输入身份证号码",@"请输入真实姓名",@"请输入公司名称(选填)",@"请选择公司所在地",@"请输入职位(选填)", @"请选择服务领域",nil];
+        _leftLableArr = [NSArray arrayWithObjects:@"身份证号码",@"真实姓名",@"公司名称",@"公司所在地",@"担任职位" ,nil];
+        _textFieldArr  = [[NSMutableArray alloc]initWithObjects:@"请输入身份证号码",@"请输入真实姓名",@"请输入公司名称(选填)",@"请选择公司所在地",@"请输入职位(选填)",nil];
     }
     
     for (NSInteger i=0; i<_leftLableArr.count; i++) {
@@ -285,12 +288,14 @@
             AreaViewController * area = [AreaViewController new];
             [self.navigationController pushViewController:area animated:YES];
         }
-        
-        if (indexPath.row == 5) {
-//            NSLog(@"投资机构选择投资领域");
-            InvistViewController *invest = [InvistViewController new];
-            [self.navigationController pushViewController:invest animated:YES];
+        if ([self.identifyType integerValue] == 3) {
+            if (indexPath.row == 5) {
+                //            NSLog(@"投资机构选择投资领域");
+                InvistViewController *invest = [InvistViewController new];
+                [self.navigationController pushViewController:invest animated:YES];
+            }
         }
+        
     }
     
 }
@@ -311,7 +316,9 @@
     //投资机构  智囊团
     if ([self.identifyType integerValue] == 3 || [self.identifyType integerValue] == 4) {
         self.dataArray[3] = self.companyAddress;
-        self.dataArray[5] = self.investField;
+        if ([self.identifyType integerValue] == 3) {
+            self.dataArray[5] = self.investField;
+        }
     }
     
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:1];
@@ -496,10 +503,10 @@
 //            return;
 //        }
         //检验服务领域
-        if ([_dataArray[5] isEqualToString:@""]) {
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请选择服务领域"];
-            return;
-        }
+//        if ([_dataArray[5] isEqualToString:@""]) {
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请选择服务领域"];
+//            return;
+//        }
         //进入营业执照页面
         Renzheng2ViewController *regist = [Renzheng2ViewController new];
         regist.identifyType = self.identifyType;
@@ -507,7 +514,7 @@
         [regist.nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
         [_dataDic setObject:_dataArray[2] forKey:@"companyName"];
         [_dataDic setObject:_dataArray[4] forKey:@"position"];
-        [_dataDic setObject:self.areaId forKey:@"areaId"];
+//        [_dataDic setObject:self.areaId forKey:@"areaId"];
         //字典赋值
         regist.dicData = [NSMutableDictionary dictionaryWithDictionary:_dataDic];
         

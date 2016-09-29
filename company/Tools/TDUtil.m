@@ -1563,6 +1563,9 @@
     [data removeObjectForKey:USER_STATIC_PROVINCE];
     [data removeObjectForKey:USER_STATIC_USER_AUTHENTIC_NAME];
     [data removeObjectForKey:USER_STATIC_AUTHID];
+    [data removeObjectForKey:USER_STATIC_INVEST_AREAS];
+    [data removeObjectForKey:USER_STATIC_INTRODUCE];
+    [data removeObjectForKey:USER_STATIC_COMPANYINTRODUCE];
     [data synchronize];
     
 }
@@ -1668,14 +1671,18 @@
     CGSize size = CGSizeZero;
     if([pathExtendsion isEqualToString:@"png"]){
         size =  [self getPNGImageSizeWithRequest:request];
+//        NSLog(@"png");
     }
-    else if([pathExtendsion isEqual:@"gif"])
+    if([pathExtendsion isEqual:@"gif"])
     {
         size =  [self getGIFImageSizeWithRequest:request];
+//        NSLog(@"gif");
     }
-    else{
+    if([pathExtendsion isEqual:@"jpg"]){
         size = [self getJPGImageSizeWithRequest:request];
+//        NSLog(@"jpg");
     }
+    
     if(CGSizeEqualToSize(CGSizeZero, size))                    // 如果获取文件头信息失败,发送异步请求请求原图
     {
         NSData* data = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:URL] returningResponse:nil error:nil];

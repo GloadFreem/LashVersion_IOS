@@ -291,8 +291,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
     }
-//    NSLog(@"系统要求执行第一个方法");
-//    [self notification:userInfo];
+    if (([UIApplication sharedApplication].applicationState == UIApplicationStateActive)) {
+        [self notification:userInfo];
+//        NSLog(@"前台运行");
+        return;
+    }
     completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
 }
 
@@ -304,10 +307,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
         [JPUSHService handleRemoteNotification:userInfo];
     }
 //    NSLog(@"系统要求执行第二个方法");
-    //前台运行
+//    //前台运行
 //    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
 //        
 //        [self notification:userInfo];
+//        
 //        NSLog(@"前台运行");
 //    }else{
 //        [self notification:userInfo];

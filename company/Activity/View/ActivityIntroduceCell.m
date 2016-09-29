@@ -102,6 +102,7 @@
     _actionIntro = actionIntro;
     // http://img4.imgtn.bdimg.com/it/u=42046925,1559346389&fm=11&gp=0.jpg
     [_imgV sd_setImageWithURL:[NSURL URLWithString:_actionIntro.content] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    [_imgV setContentMode:UIViewContentModeScaleAspectFit];
     CGFloat width = _imgV.image.size.width;
     CGFloat height = _imgV.image.size.height;
     CGFloat scale = (SCREENWIDTH - 20)/width;

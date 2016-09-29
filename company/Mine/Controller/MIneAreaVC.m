@@ -59,7 +59,7 @@
 -(void)createTableView
 {
     _tableView = [[UITableViewCustomView alloc]init];
-    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+//    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _tableView.delegate = self;
     _tableView.dataSource =self;
     [self.view addSubview:_tableView];
@@ -99,6 +99,7 @@
                 self.tableView.isNone = YES;
             }else{
                 self.tableView.isNone = NO;
+                self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
             }
 //            NSLog(@"数据下载成功");
             [_tableView reloadData];
@@ -144,7 +145,7 @@
     if (_dataArray.count) {
        cell.textLabel.text = _dataArray[indexPath.row];
     }
-    cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
+//    cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }

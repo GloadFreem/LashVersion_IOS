@@ -437,6 +437,7 @@
         
         _subViewScrollView = [[UIScrollView alloc]init];
         _subViewScrollView.bounces = NO;
+        _subViewScrollView.scrollEnabled = NO;
         _subViewScrollView.showsHorizontalScrollIndicator = NO;
         _subViewScrollView.showsVerticalScrollIndicator = NO;
         _subViewScrollView.contentSize = CGSizeMake(SCREENWIDTH*_titleArray.count, 0);
@@ -755,6 +756,8 @@
     [_scrollView layoutSubviews];
     
 }
+
+/*
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     
     if (scrollView == _subViewScrollView) {
@@ -810,6 +813,7 @@
     //更新布局
     [_scrollView layoutSubviews];
 }
+*/
 
 -(void)updateLayoutNotification
 {
@@ -886,12 +890,13 @@
     [self.navigationController pushViewController:renzheng animated:YES];
     
 }
+#pragma mark----------------------------返回按钮-------------------------
 - (IBAction)leftBack:(UIButton *)sender {
     if (!_isCollect) {
         [_attentionVC.projectArray removeObject:_listModel];
         [_tableView reloadData];
     }
-    
+    [scene removeObserverAndNotification];
     //销毁计时器通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];
     [self.navigationController popViewControllerAnimated:YES];
@@ -1185,6 +1190,7 @@
     [super viewWillAppear:animated];
 //    self.navigationController.navigationBar.translucent=NO;
     self.navigationController.navigationBar.hidden = YES;
+//    [self.navigationController setNavigationBarHidden:YES];
     
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     UINavigationController *nav = (UINavigationController*)window.rootViewController;
@@ -1243,10 +1249,10 @@
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
 }
 
--(void)dealloc
-{
-    [scene removeObserverAndNotification];
-}
+//-(void)dealloc
+//{
+//    [scene removeObserverAndNotification];
+//}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

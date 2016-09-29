@@ -12,6 +12,7 @@
 @class ProjectAuthentics,ProjectIdentiytype,ProjectAuthenticstatus,ProjectAuthenticCity,ProjectAuthenticProvince;
 @interface AuthenticInfoBaseModel : NSObject
 
+@property (nonatomic, strong) NSArray *areas;
 
 @property (nonatomic, copy) NSString *telephone;
 
@@ -51,6 +52,10 @@
 @property (nonatomic, copy) NSString *name;
 
 @property (nonatomic, copy) NSString *identiyCarNo;
+
+@property (nonatomic, copy) NSString *companyIntroduce;
+
+@property (nonatomic, copy) NSString *industoryArea;
 
 @end
 

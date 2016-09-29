@@ -163,12 +163,12 @@
 
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
-#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-//#define SERVICE_URL @"http://192.168.5.111:8080/jinzht/"//本地
+//#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
+#define SERVICE_URL @"http://192.168.5.155:8080/jinzht/"//本地
 
 // 如果是DEBUG模式用测试服务器地址
 #if DEBUG
-#define JZT_URL(url) [@"http://192.168.5.173:8080/jinzht/" stringByAppendingString:url]
+#define JZT_URL(url) [@"http://192.168.5.155:8080/jinzht/" stringByAppendingString:url]
 #else
 #define JZT_URL(url) [@"http://www.jinzht.com:8080/jinzht/" stringByAppendingString:url]
 #endif
@@ -203,6 +203,12 @@
 #define USER_STATIC_NICKNAME @"user_static_nickname"
 //头像
 #define USER_STATIC_HEADER_PIC @"user_static_header_pic"
+//投资领域
+#define USER_STATIC_INVEST_AREAS @"user_static_invest_areas"
+//个人简介
+#define USER_STATIC_INTRODUCE @"user_static_introduce"
+//公司介绍
+#define USER_STATIC_COMPANYINTRODUCE @"user_static_companyintroduce"
 //背景
 #define USER_STATIC_CYCLE_BG @"user_static_cycle_bg"
 //背景url
@@ -420,6 +426,8 @@
 #define REQUEST_MODIFY_POSITION @"requestModifyPosition.action"
 //修改所在地
 #define REQUEST_MODIFY_CITY @"requestModifyCity.action"
+//个人介绍更新
+#define REQUEST_UPDATE_USERINFO @"requestUpdateUserInfoAction.action"
 //催一催
 #define REQUEST_AUTHENTIC_QUICK @"requestAuthenticQuick.action"
 

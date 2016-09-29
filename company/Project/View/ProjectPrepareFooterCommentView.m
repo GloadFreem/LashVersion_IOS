@@ -13,6 +13,7 @@
 {
     NSString *commentPartner;
     NSMutableArray *_modelArray;
+    UIView *_topView;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -35,30 +36,30 @@
 
 -(void)createUI
 {
-     UIView *view = [UIView new];
-     view.frame = CGRectMake(0, 0, SCREENWIDTH, 50);
-     view.backgroundColor = [UIColor whiteColor];
-     [self addSubview:view];
+     _topView = [UIView new];
+     _topView.frame = CGRectMake(0, 0, SCREENWIDTH, 50);
+     _topView.backgroundColor = [UIColor whiteColor];
+     [self addSubview:_topView];
      
      _commentImage= [UIImageView new];
      _commentImage.image = [UIImage imageNamed:@"comments"];
      _commentImage.contentMode = UIViewContentModeScaleAspectFill;
      _commentImage.size = _commentImage.image.size;
-     [view addSubview:_commentImage];
+     [_topView addSubview:_commentImage];
     
     _commentImage.sd_layout
-    .centerYEqualToView(view)
-    .leftSpaceToView(view,16);
+    .centerYEqualToView(_topView)
+    .leftSpaceToView(_topView,16);
     
      _commentLabel = [UILabel new];
      _commentLabel.text = @"在线交流";
      _commentLabel.textColor = [UIColor blackColor];
      _commentLabel.font = BGFont(18);
      _commentLabel.textAlignment = NSTextAlignmentLeft;
-     [view addSubview:_commentLabel];
+     [_topView addSubview:_commentLabel];
     
     _commentLabel.sd_layout
-    .centerYEqualToView(view)
+    .centerYEqualToView(_topView)
     .leftSpaceToView(_commentImage,15)
     .heightIs(18);
     [_commentLabel setSingleLineAutoResizeWithMaxWidth:100];
@@ -69,7 +70,7 @@
      _commentNumber.font = BGFont(14);
      //设置文字信息
      
-     [view addSubview:_commentNumber];
+     [_topView addSubview:_commentNumber];
     _commentNumber.sd_layout
     .bottomEqualToView(_commentLabel)
     .leftSpaceToView(_commentLabel,1)
@@ -77,10 +78,10 @@
     
      _moreImage = [UIImageView new];
      _moreImage.image = [UIImage imageNamed:@"youjiantou@2x.png"];
-     [view addSubview:_moreImage];
+     [_topView addSubview:_moreImage];
      _moreImage.sd_layout
-     .centerYEqualToView(view)
-     .rightSpaceToView(view,8)
+     .centerYEqualToView(_topView)
+     .rightSpaceToView(_topView,8)
      .widthIs(9)
      .heightIs(15);
     
@@ -89,22 +90,22 @@
      [_moreBtn setTitleColor:orangeColor forState:UIControlStateNormal];
      [_moreBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
      _moreBtn.titleLabel.font = BGFont(14);
-     [view addSubview:_moreBtn];
+     [_topView addSubview:_moreBtn];
     
     _moreBtn.sd_layout
-    .centerYEqualToView(view)
+    .centerYEqualToView(_topView)
     .rightSpaceToView(_moreImage,5)
     .heightIs(15)
     .widthIs(64);
     
     _firstLine = [UIView new];
     _firstLine.backgroundColor  = [UIColor darkGrayColor];
-    [view addSubview:_firstLine];
+    [_topView addSubview:_firstLine];
     _firstLine.sd_layout
-    .leftEqualToView(view)
-    .rightEqualToView(view)
+    .leftEqualToView(_topView)
+    .rightEqualToView(_topView)
     .heightIs(0.5)
-    .bottomEqualToView(view);
+    .bottomEqualToView(_topView);
     
     _firstIcon = [UIImageView new];
     _firstIcon.contentMode = UIViewContentModeScaleAspectFill;
@@ -161,13 +162,13 @@
     
     _firstIcon.sd_layout
     .leftSpaceToView(self,17*WIDTHCONFIG)
-    .topSpaceToView(view,25)
+    .topSpaceToView(_topView,25)
     .widthIs(33)
     .heightIs(33);
     
     _firstName.sd_layout
     .leftSpaceToView(_firstIcon,10*WIDTHCONFIG)
-    .topSpaceToView(view,23)
+    .topSpaceToView(_topView,23)
     .heightIs(14);
     [_firstName setSingleLineAutoResizeWithMaxWidth:100];
     
@@ -290,6 +291,42 @@
             }
             
         }
+    }else{
+        _firstIcon.sd_layout
+        .leftSpaceToView(self,17*WIDTHCONFIG)
+        .topSpaceToView(_topView,0)
+        .widthIs(33)
+        .heightIs(0);
+        
+        _firstName.sd_layout
+        .leftSpaceToView(_firstIcon,10*WIDTHCONFIG)
+        .topSpaceToView(_topView,0)
+        .heightIs(0);
+        [_firstName setSingleLineAutoResizeWithMaxWidth:100];
+        
+        _firstTime.sd_layout
+        .leftEqualToView(_firstName)
+        .topSpaceToView(_firstName,0)
+        .heightIs(0);
+        [_firstTime setSingleLineAutoResizeWithMaxWidth:150];
+        
+        _firstContent.sd_layout
+        .leftEqualToView(_firstName)
+        .topSpaceToView(_firstTime,11)
+        .rightSpaceToView(self,10)
+        .autoHeightRatio(0);
+        
+        _secondLine.sd_layout
+        .leftSpaceToView(self,10)
+        .rightSpaceToView(self,10)
+        .heightIs(0)
+        .topSpaceToView(_firstContent,0);
+        
+        _commentBtn.sd_layout
+        .centerXEqualToView(self)
+        .topSpaceToView(_secondContent,0)
+        .widthIs(80*WIDTHCONFIG)
+        .heightIs(35);
     }
 
 }

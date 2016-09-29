@@ -292,18 +292,74 @@
     
     _teamView = [ProjectDetailLeftTeamView new];
     _teamView.delegate = self;
-    _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];;
-    _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
+//    if (_baseModel.project.teams.count) {
+//        _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];
+//        _teamView.scrollHeightFirst = 130;
+//
+//    }else{
+//        _teamView.scrollHeightFirst = 0;
+//
+//    }
+//    
+//    if (_baseModel.extr.count) {
+//        _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
+//        _teamView.scrollHeightSecond = 130;
+//
+//    }else{
+//        _teamView.scrollHeightSecond = 0;
+//
+//    }
+
     _teamView.authenticName = _authenticName;
     [_scrollView addSubview:_teamView];
     
     _teamView.sd_layout
     .leftEqualToView(_scrollView)
     .rightEqualToView(_scrollView)
-    .topSpaceToView(_photoView,0)
-//    .autoHeightRatio(1);
-    .heightIs(365);
-
+    .topSpaceToView(_photoView,0);
+//    .autoHeightRatio(0);
+//    .heightIs(365);
+    if (_baseModel.project.teams.count <= 0 && _baseModel.extr.count <= 0) {
+        _teamView.sd_layout.heightIs(0);
+        _teamView.imageHeight = 0;
+        _teamView.scrollHeightFirst = 0;
+        _teamView.scrollHeightSecond = 0;
+        _teamView.topHeight = 0;
+        _teamView.midHeight = 0;
+        _teamView.botHeight = 0;
+    }
+    if (_baseModel.project.teams.count <= 0 && _baseModel.extr.count > 0) {
+        _teamView.sd_layout.heightIs(365 - 130);
+        _teamView.imageHeight = 20;
+        _teamView.scrollHeightSecond = 130;
+        _teamView.scrollHeightFirst = 0;
+        _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
+        _teamView.topHeight = 10;
+        _teamView.midHeight = 0;
+        _teamView.botHeight = 10;
+    }
+    if (_baseModel.project.teams.count > 0 && _baseModel.extr.count <= 0) {
+        _teamView.sd_layout.heightIs(365 - 130);
+        _teamView.imageHeight = 20;
+        _teamView.scrollHeightFirst = 130;
+        _teamView.scrollHeightSecond = 0;
+        _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];
+        _teamView.topHeight = 10;
+        _teamView.midHeight = 0;
+        _teamView.botHeight = 10;
+    }
+    if (_baseModel.project.teams.count > 0 && _baseModel.extr.count > 0) {
+        _teamView.sd_layout.heightIs(365);
+        _teamView.scrollHeightFirst = 130;
+        _teamView.scrollHeightSecond = 130;
+        _teamView.imageHeight = 20;
+        _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
+        _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];
+        _teamView.topHeight = 10;
+        _teamView.midHeight = 10;
+        _teamView.botHeight = 10;
+    }
+    
     _footerView = [ProjectPrepareFooterCommentView new];
     _footerView.projectId = _projectId;
     _footerView.delagate =self;

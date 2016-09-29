@@ -67,7 +67,7 @@
 -(void)createTableView
 {
     _tableView = [[UITableViewCustomView alloc]init];
-    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+//    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 
     _tableView.delegate = self;
     _tableView.dataSource =self;
@@ -106,6 +106,7 @@
                 self.tableView.isNone = YES;
             }else{
                 self.tableView.isNone = NO;
+                self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
             }
             [_tableView reloadData];
         }else{
@@ -151,7 +152,7 @@
     if (_dataArray.count) {
         cell.textLabel.text = _dataArray[indexPath.row];
     }
-    cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
+//    cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }

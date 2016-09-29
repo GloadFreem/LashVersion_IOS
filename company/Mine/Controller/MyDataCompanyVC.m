@@ -77,7 +77,6 @@
             _datavc.position = self.textField.text;
             [_datavc.tableView reloadData];
             [self modifyPosition];
-            
         }
 //        for (UIViewController *VC in self.navigationController.viewControllers)
 //        {

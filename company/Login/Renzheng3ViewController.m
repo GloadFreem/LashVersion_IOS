@@ -13,12 +13,14 @@
 
 {
     UIActivityIndicatorView *activity;
+    NSString *_textPlaceholder;
 }
 
 @property (weak, nonatomic) IBOutlet UITextView *companyTextView;
 
 
 @property (weak, nonatomic) IBOutlet UITextView *personTextView;
+@property (weak, nonatomic) IBOutlet UILabel *companyTitle;
 
 //公司介绍输入框视图高度
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topViewHeight;
@@ -46,11 +48,16 @@
     }else if ([self.identifyType integerValue] == 3){
         self.titleLabel.text = @"(3/4)";
         [self.nextBtn setTitle:@"下一页" forState:UIControlStateNormal];
+        _companyTitle.text = @"机构介绍(可选)";
+        _textPlaceholder = @"写一写机构介绍";
+        _companyTextView.text = _textPlaceholder;
     }else if ([self.identifyType integerValue] == 4){
         self.titleLabel.text = @"(3/3)";
+        _companyTitle.text = @"服务领域(可选)";
+        _textPlaceholder = @"写一写服务领域";
+        _companyTextView.text = _textPlaceholder;
         [self.nextBtn setTitle:@"完成" forState:UIControlStateNormal];
     }
-    
     [self createUI];
 }
 #pragma mark- 改变button布局
@@ -196,7 +203,7 @@
 {
     if (textView.tag == 0) {
         if ([textView.text isEqualToString:@""]) {
-            textView.text = @"写一写公司介绍";
+            textView.text = _textPlaceholder;
             textView.textColor = color74;
             self.companyTextView.text = @"";
         }else{
@@ -204,7 +211,7 @@
         }
     }else{
         if ([textView.text isEqualToString:@""]) {
-            textView.text = @"写一写个人介绍";
+            textView.text = @"写一写个人简介";
             textView.textColor = color74;
             self.personTextView.text = @"";
         }else{

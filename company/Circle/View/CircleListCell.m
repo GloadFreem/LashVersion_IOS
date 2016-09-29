@@ -79,7 +79,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     _companyLabel = [UILabel new];
     _companyLabel.font = BGFont(12);
-    _addressLabel.textColor = color74;
+    _companyLabel.textColor = color(74, 74, 74, 1);
     
     _shuView = [UIView new];
     _shuView.backgroundColor = color74;
@@ -193,7 +193,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     _companyLabel.sd_layout
     .leftEqualToView(_nameLabel)
-    .topSpaceToView(_nameLabel,5)
+    .topSpaceToView(_nameLabel,3)
     .heightIs(12);
     [_companyLabel setSingleLineAutoResizeWithMaxWidth:180];
     
@@ -205,7 +205,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     _positionLabel.sd_layout
     .leftSpaceToView(_shuView,5)
-    .bottomEqualToView(_companyLabel)
+    .centerYEqualToView(_companyLabel)
     .heightIs(12);
     [_positionLabel setSingleLineAutoResizeWithMaxWidth:80];
     
@@ -217,7 +217,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     
     _timeLabel.sd_layout
     .rightSpaceToView(contentView,margin)
-    .bottomEqualToView(_companyLabel)
+    .topSpaceToView(_nameLabel,5)
     .heightIs(12);
     [_timeLabel setSingleLineAutoResizeWithMaxWidth:80];
     

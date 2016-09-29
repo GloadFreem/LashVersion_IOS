@@ -323,8 +323,9 @@
     _slider.continuous = YES;
     [_slider setUserInteractionEnabled:YES];
     [_slider addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged];
+    [_slider addTapGestureWithTarget:self action:@selector(valueChanged)];
     
-    [_slider setThumbImage:[UIImage imageNamed:@"icon_slider_point"] forState:UIControlStateNormal];
+    [_slider setThumbImage:[UIImage imageNamed:@"icon_slider_point@3x"] forState:UIControlStateNormal];
     [headerView addSubview:_slider];
     [_slider mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(startBtn.mas_right).offset(20);
@@ -536,7 +537,7 @@
     _playTimeObserver = nil;
     
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
-    
+    [self stop];
 //    _player.player = nil;
 }
 
