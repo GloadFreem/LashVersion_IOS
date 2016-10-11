@@ -339,7 +339,15 @@
 //                
 //            }
 //        }
-        [_tempInvestPersonArr addObject:listModel];
+        BOOL has = NO;
+        for (InvestListModel *model in _tempInvestPersonArr) {
+            if ([model.userId isEqualToString:listModel.userId]) {
+                has = YES;
+            }
+        }
+        if (!has) {
+            [_tempInvestPersonArr addObject:listModel];
+        }
     }
     self.investPersonArray = _tempInvestPersonArr;
 //    NSLog(@"打印当前页---%ld",(long)_page);
@@ -392,7 +400,18 @@
             model.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
         }
         model.userId = [NSString stringWithFormat:@"%ld",(long)investor.user.userId];
-        [_tempInvestOrganizationSecondArr addObject:model];
+        
+        BOOL has = NO;
+        for (InvestListModel *listModel in _tempInvestPersonArr) {
+            if ([model.userId isEqualToString:listModel.userId]) {
+                has = YES;
+            }
+        }
+        if (!has) {
+            [_tempInvestOrganizationSecondArr addObject:model];
+        }
+        
+//        [_tempInvestOrganizationSecondArr addObject:model];
     }
     self.investOrganizationSecondArray = _tempInvestOrganizationSecondArr;
     [_investOrganizationTableView reloadData];
@@ -437,7 +456,16 @@
             listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province.name,city.name];
         }
         listModel.introduce = authentics.introduce;
-        [_tempThinkTankArr addObject:listModel];
+        BOOL has = NO;
+        for (InvestListModel *model in _tempInvestPersonArr) {
+            if ([model.userId isEqualToString:listModel.userId]) {
+                has = YES;
+            }
+        }
+        if (!has) {
+            [_tempThinkTankArr addObject:listModel];
+        }
+//        [_tempThinkTankArr addObject:listModel];
     }
     self.thinkTankArray = _tempThinkTankArr;
     [_thinkTankTableView reloadData];

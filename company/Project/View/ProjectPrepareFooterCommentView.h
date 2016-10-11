@@ -33,6 +33,8 @@
 
 @property (nonatomic, assign) NSInteger projectId;
 
+@property (nonatomic, strong) UIView *topLine;
+
 @property (nonatomic, strong) UIImageView *commentImage;
 @property (nonatomic, strong) UILabel *commentLabel;
 @property (nonatomic, strong) UILabel *commentNumber;

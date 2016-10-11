@@ -475,7 +475,9 @@
 {
     if (btn.tag == 0) {
         if (!_isCollect) {
+            NSInteger index = [_attentionVC.projectArray indexOfObject:_model];
             [_attentionVC.projectArray removeObject:_model];
+            [_attentionVC.statusArray removeObjectAtIndex:index];
             [_tableView reloadData];
         }
         [self.navigationController popViewControllerAnimated:YES];

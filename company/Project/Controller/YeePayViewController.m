@@ -436,7 +436,7 @@
         [_webView stringByEvaluatingJavaScriptFromString:@"submit();"];
     }else{
         NSString * string =  [webView stringByEvaluatingJavaScriptFromString:@"document.body.innerHTML"];
-        NSLog(@"返回内容:%@",string);
+//        NSLog(@"返回内容:%@",string);
         [self.webView.scrollView setContentSize:CGSizeMake(WIDTH(self.webView.scrollView), self.webView.scrollView.contentSize.height + 80)];
     }
 //    self.startLoading =NO;
@@ -444,7 +444,7 @@
 
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    NSLog(@"%@",error);
+//    NSLog(@"%@",error);
 //    self.isNetRequestError = YES;
 }
 

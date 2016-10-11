@@ -28,9 +28,11 @@
 
 @property (nonatomic, copy) NSString *type;  //分享类型
 
+
 @property (nonatomic, strong) MineAttentionVC *attentionVC;
 @property (nonatomic, strong) MineCollectionListModel *collectModel;
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, assign) BOOL isMine;
 
 @property (nonatomic, copy) NSString *titleStr;
 

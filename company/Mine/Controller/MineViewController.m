@@ -187,6 +187,7 @@
     NSString *telephone = [data objectForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
     _companyS = [data objectForKey:USER_STATIC_COMPANY_NAME];
     _position = [data objectForKey:USER_STATIC_POSITION];
+    _identiyTypeId = [[data objectForKey:USER_STATIC_USER_AUTHENTIC_TYPE] integerValue];
 //    NSLog(@"%@---%@",_companyS,_position);
     NSString *name = [data objectForKey:USER_STATIC_NAME];
     if (name) {
@@ -317,7 +318,7 @@
                 MineProjectViewController *vc = [MineProjectViewController new];
                 vc.type = _identiyTypeId - 1;
                 [self.navigationController pushViewController:vc animated:YES];
-//                NSLog(@"项目方");
+                NSLog(@"项目方");
                 return;
                 
             }
@@ -327,7 +328,7 @@
                 vc.type = _identiyTypeId -1 ;
                 [self.navigationController  pushViewController:vc animated:YES];
                 
-//                NSLog(@"投资人");
+                NSLog(@"投资人");
                 return;
             }
             if (_identiyTypeId == 3) {//投资机构
@@ -336,14 +337,14 @@
                 vc.type = _identiyTypeId -1 ;
                 [self.navigationController pushViewController:vc animated:YES];
                 
-//                NSLog(@"投机机构");
+                NSLog(@"投机机构");
                 return;
             }
             if (_identiyTypeId == 4) {//智囊团
                 MineThinkTankViewController *vc = [MineThinkTankViewController new];
                 vc.type = _identiyTypeId -1;
                 [self.navigationController pushViewController:vc animated:YES];
-//                NSLog(@"智囊团");
+                NSLog(@"智囊团");
                 return;
             }
             

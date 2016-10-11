@@ -15,6 +15,8 @@
 
 @property (nonatomic, assign) NSInteger projectId;
 
+@property (nonatomic, assign) BOOL isMine;
+
 @property (nonatomic, strong) MineAttentionVC *attentionVC;
 
 @property (nonatomic, strong) ProjectListProModel *model;

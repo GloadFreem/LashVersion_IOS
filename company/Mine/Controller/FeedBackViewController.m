@@ -19,10 +19,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     // Do any additional setup after loading the view.
     self.partner = [TDUtil encryKeyWithMD5:KEY action:FEEDBACK];
     
-    self.view.backgroundColor = [UIColor whiteColor];
     [self setupNav];
     [self createTextView];
 }
@@ -39,7 +39,11 @@
     self.navigationItem.title = @"意见反馈";
     
     UIButton *commitBtn = [UIButton new];
-    commitBtn.frame = CGRectMake(0, 0, 50, 30);
+    commitBtn.frame = CGRectMake(0, 0, 35, 20);
+    commitBtn.layer.cornerRadius = 3;
+    commitBtn.layer.masksToBounds = YES;
+    commitBtn.layer.borderWidth = 0.5;
+    commitBtn.layer.borderColor = [UIColor whiteColor].CGColor;
     [commitBtn setTitle:@"提交" forState:UIControlStateNormal];
     [commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     commitBtn.titleLabel.font = BGFont(15);
@@ -146,6 +150,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO];
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
     [IQKeyboardManager sharedManager].enable = NO;
 }

@@ -16,7 +16,7 @@
 #import "ProjectBannerDetailVC.h"
 #import "ProjectDetailController.h"
 #import "ProjectPrepareDetailVC.h"
-
+#import "ActivityDetailVC.h"
 #import "LQQMonitorKeyboard.h"
 
 #define CIRCLE_PRAISE @"requestPriseFeeling"
@@ -822,8 +822,8 @@
         ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
         vc.url = model.url;
         vc.image = model.contentImage;
-        vc.titleText = model.titleText;
-        vc.contentText = model.contentText;
+        vc.titleText = model.contentText;
+        vc.contentText = model.titleText;
         vc.titleStr = model.titleText;
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -844,7 +844,10 @@
         }
     }
     if (model.feelingTypeId == 4) {//活动
-        
+        NSArray *array = [model.url componentsSeparatedByString:@","];
+        ActivityDetailVC *vc =[ActivityDetailVC new];
+        vc.actionId = [array[0] integerValue];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 #pragma mark -cell_delegate------  点赞按钮事件处理  -----------

@@ -78,14 +78,14 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _addressLabel.textColor = color74;
     
     _companyLabel = [UILabel new];
-    _companyLabel.font = BGFont(12);
+    _companyLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:12];;
     _companyLabel.textColor = color(74, 74, 74, 1);
     
     _shuView = [UIView new];
     _shuView.backgroundColor = color74;
     
     _positionLabel = [UILabel new];
-    _positionLabel.font = BGFont(12);
+    _positionLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:12];;
     _positionLabel.textColor = color74;
     
     _deleteBtn = [UIButton new];

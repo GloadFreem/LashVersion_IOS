@@ -40,7 +40,16 @@
      _topView.frame = CGRectMake(0, 0, SCREENWIDTH, 50);
      _topView.backgroundColor = [UIColor whiteColor];
      [self addSubview:_topView];
-     
+    
+    _topLine = [UIView new];
+    _topLine.backgroundColor = colorGray;
+    [_topView addSubview:_topLine];
+    _topLine.sd_layout
+    .leftEqualToView(_topView)
+    .topEqualToView(_topView)
+    .rightEqualToView(_topView)
+    .heightIs(0.5);
+    
      _commentImage= [UIImageView new];
      _commentImage.image = [UIImage imageNamed:@"comments"];
      _commentImage.contentMode = UIViewContentModeScaleAspectFill;

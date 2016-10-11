@@ -57,7 +57,7 @@
     self.goldWidth.constant = 284*WIDTHCONFIG;
     self.goldheight.constant = 175*WIDTHCONFIG;
     
-    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
+    self.loadingViewFrame = self.view.frame;
     self.isTransparent = YES;
     _isFirst = YES;
     

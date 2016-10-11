@@ -422,7 +422,15 @@
                 [_viewController.tableView reloadData];
             
         }
-        
+        if (_isMine) {
+            if (!_collected) {
+                
+                NSInteger index = [_attentionVC.investArray indexOfObject:_attentionVC.selectedListModel];
+                [_attentionVC.investArray removeObject:_attentionVC.selectedListModel];
+                [_attentionVC.identifyArray removeObjectAtIndex:index];
+                [_attentionVC.investTableView reloadData];
+            }
+        }
         [self.navigationController popViewControllerAnimated:YES];
     }
     
@@ -430,7 +438,7 @@
 #pragma mark ----------------------  圈子按钮  -----------------------
 -(void)circleBtnClick:(UIButton*)btn
 {
-    NSLog(@"投资人圈子入口");
+//    NSLog(@"投资人圈子入口");
     CirclePersonVC *vc = [CirclePersonVC new];
     vc.titleStr = [NSString stringWithFormat:@"%@的话题",_model.user.name];
     vc.userId = self.investorId;

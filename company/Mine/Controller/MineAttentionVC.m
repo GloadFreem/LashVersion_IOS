@@ -14,14 +14,10 @@
 #import "MineAttentionInvestOrganizationCell.h"
 #import "MineAttentionInvestThinkTankCell.h"
 
-#import "ProjectListProModel.h"
-#import "MineCollectionProjectModel.h"
-
-
 #import "MineCollectionInvestModel.h"
 
 #import "MineCollectionInvestorBaseModel.h"
-#import "MineCollectionListModel.h"
+
 
 #import "ProjectPrepareDetailVC.h"
 #import "ProjectDetailController.h"
@@ -39,9 +35,9 @@
 @property (nonatomic, strong) UIButton *investBtn;    //
 
 @property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) UITableViewCustomView *projectTableView;  //项目视图
+
 @property (nonatomic, assign) NSInteger selectedTableView;  //选择要加载的视图
-@property (nonatomic, strong) UITableViewCustomView *investTableView;  //投资视图
+
 
 @property (nonatomic, copy) NSString *identyType;  //身份类型
 @property (nonatomic, assign) NSInteger page;  //当前页
@@ -51,11 +47,10 @@
 
 @property (nonatomic, copy) NSString *investorCollectPartner;
 
-@property (nonatomic, strong) NSMutableArray *identifyArray;
-@property (nonatomic, strong) NSMutableArray *statusArray;
-
 @property (nonatomic, assign) BOOL isFirst;
 @property (nonatomic, assign) BOOL isSecond;
+
+
 @end
 
 @implementation MineAttentionVC
@@ -535,13 +530,14 @@
             return;
         }
         ProjectListProModel *model = _projectArray[indexPath.row];
+        _selectedProjectModel = model;
         if ([_statusArray[indexPath.row] isEqualToString:@"预选项目"]) {
             ProjectPrepareDetailVC *vc = [ProjectPrepareDetailVC new];
             vc.attentionVC = self;
             vc.projectId = model.projectId;
             vc.model = model;
             vc.tableView = _projectTableView;
-            
+            vc.isMine = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }else{
             ProjectDetailController *vc = [ProjectDetailController new];
@@ -549,7 +545,7 @@
             vc.projectId = model.projectId;
             vc.listModel = model;
             vc.tableView = _projectTableView;
-
+            vc.isMine = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
     }
@@ -559,15 +555,12 @@
             return;
         }
         MineCollectionListModel *model = _investArray[indexPath.row];
+        _selectedListModel = model;
         if ([_identifyArray[indexPath.row] isEqualToString:@"个人投资者"]) {
             InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
             vc.attentionVC =self;
-//            vc.titleText = @"个人 · 简介";
             vc.selectedNum = 1;
-//            vc.collected = model.collected;
-//            vc.titleStr = @"投资人详情";
-//            vc.collectModel = model;
-//            vc.investorCollectPartner = self.investorCollectPartner;
+            vc.isMine = YES;
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             [self.navigationController pushViewController:vc animated:YES];
         }
@@ -575,12 +568,8 @@
         if ([_identifyArray[indexPath.row] isEqualToString:@"机构投资者"]) {
             InvestPersonDetailViewController *vc = [InvestPersonDetailViewController new];
             vc.attentionVC =self;
-//            vc.titleText = @"机构 · 简介";
             vc.selectedNum = 2;
-//            vc.collected = model.collected;
-//            vc.titleStr = @"投资机构详情";
-//            vc.collectModel = model;
-//            vc.investorCollectPartner = self.investorCollectPartner;
+            vc.isMine = YES;
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             [self.navigationController pushViewController:vc animated:YES];
             
@@ -590,9 +579,7 @@
             InvestThinkTankDetailVC *vc = [InvestThinkTankDetailVC new];
             vc.investorId = [NSString stringWithFormat:@"%ld",(long)model.userId];
             vc.attentionVC =self;
-//            vc.collectModel = model;
-//            vc.collected = model.collected;
-//            vc.investorCollectPartner = self.investorCollectPartner;
+            vc.isMine = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
     }

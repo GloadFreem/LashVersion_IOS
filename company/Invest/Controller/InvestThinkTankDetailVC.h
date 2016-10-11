@@ -28,6 +28,7 @@
 @property (nonatomic, strong) MineAttentionVC *attentionVC;
 @property (nonatomic, strong) MineCollectionListModel *collectModel;
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, assign) BOOL isMine;
 
 @property (nonatomic, assign) BOOL isCircle;
 

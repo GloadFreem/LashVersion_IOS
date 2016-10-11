@@ -63,6 +63,8 @@
     
     [self createTableView];
     
+    self.navigationController.navigationBar.translucent=NO;
+    [self.navigationController.navigationBar setHidden:NO];
 }
 
 -(void)startLoadData

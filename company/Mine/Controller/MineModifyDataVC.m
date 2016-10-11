@@ -120,6 +120,7 @@
 {
     if ([self.textView.text isEqualToString:@""] || [self.textView.text isEqualToString:self.placorText]) {
         
+        return;
     }else{
         if ([self.titleText isEqualToString:@"个人简介"]) {
             

@@ -61,6 +61,9 @@
     
     [self createTableView];
     
+    self.navigationController.navigationBar.translucent=NO;
+    [self.navigationController.navigationBar setHidden:NO];
+    
     self.loadingViewFrame = self.view.frame;
     
     [self startLoadData];

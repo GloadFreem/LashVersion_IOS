@@ -50,7 +50,8 @@
     [self setNav];
     [self setup];
     //设置加载视图范围
-    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64);
+//    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64);
+    self.loadingViewFrame = self.view.frame;
 }
 
 -(void)setNav
@@ -199,7 +200,7 @@
         if (_textField.text.length) {
             
             if ( [TDUtil isPureInt:_textField.text] || [TDUtil isPureFloat:_textField.text]) {
-                if ([_textField.text floatValue] < _limitAmount) {
+                if ([_textField.text floatValue] * 10000 < _limitAmount) {
                     [[DialogUtil sharedInstance]showDlg:self.view textOnly:[NSString stringWithFormat:@"投资金额不能少于%f",_limitAmount]];
                     return;
                 }
@@ -231,6 +232,7 @@
 -(void)isCheckUserConfirmed
 {
     self.startLoading = YES;
+    self.isTransparent = YES;
     
     NSString * str = [TDUtil generateUserPlatformNo];
     NSMutableDictionary * dic = [NSMutableDictionary new];
@@ -483,6 +485,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationController.navigationBar.hidden = NO;
     _isClick = NO;
 }
 -(void)viewWillDisappear:(BOOL)animated

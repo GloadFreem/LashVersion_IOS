@@ -32,6 +32,8 @@ typedef enum{
 @property (assign, nonatomic) CGFloat memberHeight;
 @property (assign, nonatomic) CGFloat sceneHeight;
 
+@property (nonatomic, assign) BOOL isMine;
+
 @property (nonatomic, strong) MineAttentionVC *attentionVC;
 
 @property (nonatomic, strong) ProjectListProModel *listModel;

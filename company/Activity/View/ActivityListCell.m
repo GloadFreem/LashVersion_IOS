@@ -95,7 +95,7 @@
     .leftSpaceToView(contentView, 8)
     .rightSpaceToView(contentView, 8)
     .topSpaceToView(contentView, 10)
-    .heightIs(158);
+    .heightIs(175);
     
     _titleLabel.sd_layout
     .leftEqualToView(_photoImage)
@@ -172,6 +172,7 @@
         _model = model;
         
         [_photoImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.imgUrl]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+//        _photoImage.contentMode = UIViewContentModeScaleAspectFill;
         
         _titleLabel.text = model.name;
         

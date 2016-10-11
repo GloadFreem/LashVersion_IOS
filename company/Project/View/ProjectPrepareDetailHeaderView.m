@@ -61,19 +61,19 @@
     .centerXEqualToView(self)
     .topSpaceToView(_icon,15)
     .heightIs(18);
-    [_projectName setSingleLineAutoResizeWithMaxWidth:150];
+    [_projectName setSingleLineAutoResizeWithMaxWidth:250];
     
     _companyName.sd_layout
     .centerXEqualToView(self)
     .topSpaceToView(_projectName,10)
     .heightIs(15);
-    [_companyName setSingleLineAutoResizeWithMaxWidth:200];
+    [_companyName setSingleLineAutoResizeWithMaxWidth:250];
     
     _address.sd_layout
     .centerXEqualToView(self)
     .topSpaceToView(_companyName,10)
     .heightIs(15);
-    [_address setSingleLineAutoResizeWithMaxWidth:150];
+    [_address setSingleLineAutoResizeWithMaxWidth:250];
     
     [self setupAutoHeightWithBottomView:_address bottomMargin:17];
     

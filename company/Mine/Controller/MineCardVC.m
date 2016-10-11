@@ -96,7 +96,7 @@
     .leftEqualToView(_bandName)
     .topSpaceToView(_cardImage,120)
     .heightIs(25);
-    [_cardNum setSingleLineAutoResizeWithMaxWidth:200];
+    [_cardNum setSingleLineAutoResizeWithMaxWidth:250];
     
     _desc = [UILabel new];
     _desc.textColor = color74;

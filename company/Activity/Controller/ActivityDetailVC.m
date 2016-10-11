@@ -270,7 +270,7 @@ static int preFlag = 0;
 -(void)requestActionDetailList:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -325,7 +325,7 @@ static int preFlag = 0;
                 [tempArr addObject:actionIntroF];
             }
             
-            NSLog(@"个数---%lu",(unsigned long)baseModel.actionintroduces.count);
+//            NSLog(@"个数---%lu",(unsigned long)baseModel.actionintroduces.count);
             tableViewH+=40;
             
             model.actionIntroduceFrames = tempArr;

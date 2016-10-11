@@ -27,6 +27,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    
     self.partner = [TDUtil encryKeyWithMD5:KEY action:COMMITRECORD];
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -35,12 +37,12 @@
     [self setupNav];
     [self createTableView];
     
+    self.navigationController.navigationBar.translucent=NO;
+    [self.navigationController.navigationBar setHidden:NO];
+    
     self.loadingViewFrame = self.view.frame;
     
     [self startLoadData];
-    
-    
-   
 }
 -(void)startLoadData
 {

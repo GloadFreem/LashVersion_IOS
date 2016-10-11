@@ -513,6 +513,16 @@
 {
     //返回按钮处理
     if (btn.tag == 0) {
+        if (_isMine) {
+            if (!_model.collected) {
+                
+                NSInteger index = [_attentionVC.investArray indexOfObject:_attentionVC.selectedListModel];
+                [_attentionVC.investArray removeObject:_attentionVC.selectedListModel];
+                [_attentionVC.identifyArray removeObjectAtIndex:index];
+                
+                [_attentionVC.investTableView reloadData];
+            }
+        }
         //获得当前点击的模型在数组的位置
         NSInteger index = [_viewController.thinkTankArray indexOfObject:_viewController.investModel];
         //改变当前模型的状态属性
@@ -535,7 +545,7 @@
 #pragma mark----------------------------------圈子入口-------------------------------------
 -(void)circleBtnClick:(UIButton*)btn
 {
-    NSLog(@"智囊团点击圈子入口");
+//    NSLog(@"智囊团点击圈子入口");
     CirclePersonVC *vc = [CirclePersonVC new];
     vc.titleStr = [NSString stringWithFormat:@"%@的话题",_model.user.name];
     vc.userId = self.investorId;
@@ -589,9 +599,9 @@
             }
             _attentionCount = [NSString stringWithFormat:@"%ld",(long)count];
             
-            NSLog(@"关注成功");
+//            NSLog(@"关注成功");
         }else{
-            NSLog(@"关注失败");
+//            NSLog(@"关注失败");
         }
     }
     _attationBtn.enabled = YES;

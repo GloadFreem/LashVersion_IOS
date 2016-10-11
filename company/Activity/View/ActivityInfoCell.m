@@ -87,7 +87,7 @@
 {
     _tableViewH = tableViewH;
     _tableView.frame = CGRectMake(0, 10, SCREENWIDTH, _tableViewH);
-    NSLog(@"高度是---%lf",_tableViewH);
+//    NSLog(@"高度是---%lf",_tableViewH);
 //    _tableView.sd_layout.heightIs(_tableViewH);
 //    [self layoutSubviews];
 

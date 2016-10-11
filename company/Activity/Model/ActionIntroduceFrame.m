@@ -23,7 +23,7 @@ const CGFloat margingTop = 0;
     if (_actionIntro.type == 1) {
         imageV = [UIImageView new];
         [imageV sd_setImageWithURL:[NSURL URLWithString:_actionIntro.content] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
-        [imageV setContentMode:UIViewContentModeScaleAspectFit];
+        [imageV setContentMode:UIViewContentModeScaleAspectFill];
 //        [imageV sd_setImageWithURL:[NSURL URLWithString:_actionIntro.content] placeholderImage:[UIImage imageNamed:@"placeholderImage"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
 //            CGFloat width = imageV.image.size.width;
 //            NSLog(@"打印宽度---%f",width);

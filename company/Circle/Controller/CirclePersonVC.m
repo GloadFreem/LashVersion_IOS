@@ -331,7 +331,7 @@
 #pragma mark-----------------点击头像----------------
 -(void)didClickIconBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"进入个人中心");
+//    NSLog(@"进入个人中心");
 }
 #pragma mark-----------------点击contentBtn---------
 -(void)didClickContentBtnInCell:(CircleListCell *)cell andModel:(CircleListModel *)model andIndexPath:(NSIndexPath *)indexPath

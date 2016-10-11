@@ -40,6 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
@@ -62,11 +63,14 @@
     
     self.loadingViewFrame = self.view.frame;
     
+    [self setupNav];
+    
     [self createTableView];
     
     [self startLoadData];
     
-    [self setupNav];
+    self.navigationController.navigationBar.translucent=NO;
+    [self.navigationController.navigationBar setHidden:NO];
     
     
 }
@@ -83,7 +87,7 @@
 -(void)requestList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];

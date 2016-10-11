@@ -137,9 +137,9 @@
 
     [JPUSHService setupWithOption:launchOptions appKey:@"cc3fdb255d49497c5fd3d402"
                           channel:@"Publish channel"
-                 apsForProduction:@"0"
+                 apsForProduction:@"1"
             advertisingIdentifier:nil];
-
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     //向微信注册
     [WXApi registerApp:@"wx33aa0167f6a81dac" withDescription:@"jinzht"];
     
@@ -306,17 +306,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
     }
-//    NSLog(@"系统要求执行第二个方法");
-//    //前台运行
-//    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-//        
-//        [self notification:userInfo];
-//        
-//        NSLog(@"前台运行");
-//    }else{
-//        [self notification:userInfo];
-//        NSLog(@"后台运行");
-//    }
     [self notification:userInfo];
     completionHandler();  // 系统要求执行这个方法
 }
@@ -330,34 +319,13 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:
 (NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // IOS 7 Support Required
-//    NSLog(@"%@",userInfo);
-    NSLog(@"接收到通知");
     //前台运行
-    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-        UIViewController *currentViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-        
-        
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您有新的消息，是否查看？" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            
-        }];
-        __block AppDelegate*blockSelf = self;
-        
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            
-            [blockSelf notification:userInfo];
-        }];
-        
-        [alertController addAction:cancleAction];
-        [alertController addAction:okAction];
-        
-        [currentViewController presentViewController:alertController animated:YES completion:nil];
-        NSLog(@"前台运行");
-    }else{
-        [self notification:userInfo];
-        NSLog(@"后台运行");
-    }
+//    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+//        [self notification:userInfo];
+//    }else{
+//        [self notification:userInfo];
+//    }
+    [self notification:userInfo];
     completionHandler(UIBackgroundFetchResultNewData);
     
 }

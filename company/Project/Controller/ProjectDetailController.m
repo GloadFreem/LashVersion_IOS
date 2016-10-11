@@ -893,7 +893,9 @@
 #pragma mark----------------------------返回按钮-------------------------
 - (IBAction)leftBack:(UIButton *)sender {
     if (!_isCollect) {
+        NSInteger index = [_attentionVC.projectArray indexOfObject:_listModel];
         [_attentionVC.projectArray removeObject:_listModel];
+        [_attentionVC.statusArray removeObjectAtIndex:index];
         [_tableView reloadData];
     }
     [scene removeObserverAndNotification];

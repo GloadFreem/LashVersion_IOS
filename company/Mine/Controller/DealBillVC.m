@@ -38,8 +38,7 @@
     [self setupNav];
     [self createTableView];
     _isFirst = YES;
-    self.loadingViewFrame = self.view.frame;
-    
+    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT-64);
     _page = 0;
     [self loadData];
     
@@ -65,6 +64,7 @@
 {
     NSDictionary *dic =[NSDictionary  dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     if (_isFirst) {
+        
         self.startLoading = YES;
     }
     //开始请求
