@@ -12,6 +12,8 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    [super awakeFromNib];
+    
     _iconImage.layer.cornerRadius = 30;
     _iconImage.layer.masksToBounds = YES;
     _iconImage.layer.borderWidth = 0.5;
