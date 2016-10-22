@@ -179,6 +179,7 @@ typedef void (^SpaceToSuperView)(UIEdgeInsets insets);
 
 /** 主动刷新布局（如果你需要设置完布局代码就获得view的frame请调用此方法） */
 - (void)updateLayout;
+
 - (void)clearAutoHeigtSettings;
 - (void)clearAutoWidthSettings;
 

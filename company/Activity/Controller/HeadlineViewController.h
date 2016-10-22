@@ -10,4 +10,6 @@
 
 @interface HeadlineViewController : RootViewController
 
+@property (nonatomic, strong) UISearchBar *searchBar;
+
 @end

@@ -234,6 +234,9 @@
 {
     ShareToCircleView *shareView =[[[NSBundle mainBundle] loadNibNamed:@"ShareToCircleView" owner:nil options:nil] lastObject];
     shareView.backgroundColor = [UIColor clearColor];
+    if (self.isActivity) {
+        _titleStr = _titleText;
+    }
     [shareView instancetationShareToCircleViewWithimage:_image title:_titleStr content:_contentText];
     shareView.tag = 1000;
     [[UIApplication sharedApplication].windows[0] addSubview:shareView];

@@ -329,7 +329,7 @@
     CGFloat centerButtonX = (self.frame.size.width - centerButtonWH)*0.5;
     
     if (_showCenter) {
-        self.centerButton.frame = CGRectMake(centerButtonX, self.frame.size.height - centerButtonWH, centerButtonWH+10, centerButtonWH);
+        self.centerButton.frame = CGRectMake(centerButtonX - 5, self.frame.size.height - centerButtonWH, centerButtonWH+10, centerButtonWH);
         buttonWidth = (self.frame.size.width- centerButtonWH - 20)/count;
     }
     
@@ -340,7 +340,7 @@
         if (_showCenter && button.tag == count/2) {
             buttonX += centerButtonWH + 20;
         }
-        button.frame = CGRectMake(buttonX, 0.5, buttonWidth, buttonHeight);
+        button.frame = CGRectMake(buttonX, 0.5, buttonWidth+0.5, buttonHeight);
         buttonX += buttonWidth;
     }
     

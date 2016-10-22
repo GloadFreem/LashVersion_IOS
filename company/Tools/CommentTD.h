@@ -14,7 +14,8 @@
 #import "ActivityViewController.h"
 #import "MineViewController.h"
 #import "MyNavViewController.h"
-
+#import "DiscoverViewController.h"
+#import "TankViewController.h"
 @interface CommentTD : NSObject
 
 //创建框架结构

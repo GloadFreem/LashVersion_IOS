@@ -41,6 +41,11 @@
                     delegate:(id)delegate
                          sel:(SEL)sel;
 
+- (void)getThinkDataFromAPIWithOps:(NSString*)urlStr
+                         postParam:(NSDictionary*)postDic
+                              type:(NSInteger)type
+                          delegate:(id)delegate
+                               sel:(SEL)sel;
 /**
  *
  *  用于进行易宝定制返回代理方法

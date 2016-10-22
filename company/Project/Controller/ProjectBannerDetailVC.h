@@ -21,4 +21,6 @@
 @property (nonatomic, copy) NSString *titleText;
 @property (nonatomic, copy) NSString *contentText;
 
+@property (nonatomic, assign) BOOL isActivity;
+
 @end

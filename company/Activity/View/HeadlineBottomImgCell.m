@@ -9,7 +9,7 @@
 #import "HeadlineBottomImgCell.h"
 #import "Headline.h"
 
-const CGFloat marginLeft = 13;
+const CGFloat marginLeft = 17;
 
 @interface HeadlineBottomImgCell ()
 /** 标题 */
@@ -39,8 +39,9 @@ const CGFloat marginLeft = 13;
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        _titleL = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 15, SCREENWIDTH-marginLeft*2, 30)];
+        _titleL = [[UILabel alloc] initWithFrame:CGRectMake(marginLeft, 10, SCREENWIDTH-marginLeft*2, 30)];
         _titleL.font = [UIFont systemFontOfSize:17];
+        _titleL.numberOfLines = 0;
         _titleL.textColor = RGBCOLOR(0, 0, 0);
         [self.contentView addSubview:_titleL];
         

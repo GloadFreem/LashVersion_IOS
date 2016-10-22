@@ -536,6 +536,7 @@
     field.textColor = [UIColor blackColor];
     field.font = BGFont(14);
     field.returnKeyType = UIReturnKeySend;
+    
     _textField = field;
     CGRect frame = [field frame];
     frame.size.width = 15.0f;

@@ -126,7 +126,7 @@
     
     
     //设置 加载视图界面
-    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 49);
+    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
     
     _isFirst = YES;
     _page = 0;
@@ -211,12 +211,25 @@
     releaseBtn.size = releaseBtn.currentBackgroundImage.size;
     [releaseBtn addTarget:self action:@selector(releaseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:releaseBtn] ;
+    
+    UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.tag = 0;
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
+    [leftback addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback];
+    
     self.navigationItem.title = @"圈子";
+}
+-(void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark -创建tableView
 -(void)createTableView
 {
-    _tableView  = [UITableViewCustomView new];
+    _tableView  = [[UITableViewCustomView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 15)];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -226,17 +239,9 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
     _tableView.mj_header.automaticallyChangeAlpha = YES;
-//    [self.tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
 
     [self.view addSubview:_tableView];
-    
-    [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.view.mas_left);
-        make.top.mas_equalTo(self.view.mas_top);
-        make.right.mas_equalTo(self.view.mas_right);
-        make.bottom.mas_equalTo(self.view.mas_bottom);
-    }];
 }
 
 -(UIView*)headerView
@@ -912,21 +917,21 @@
     for (UIViewController *vc in nav.viewControllers) {
         if ([vc isKindOfClass:JTabBarController.class]) {
             tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
+            [tabBarController tabBarHidden:YES animated:NO];
         }
     }
     
     for (UIViewController *vc in self.navigationController.viewControllers) {
         if ([vc isKindOfClass:JTabBarController.class]) {
             tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
+            [tabBarController tabBarHidden:YES animated:NO];
         }
     }
     
     //不隐藏tabbar
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     
-    [delegate.tabBar tabBarHidden:NO animated:NO];
+    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     [self.navigationController.navigationBar setHidden:NO];

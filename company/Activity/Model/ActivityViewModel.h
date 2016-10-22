@@ -18,6 +18,8 @@
 
 @property (nonatomic, assign) NSInteger memberLimit;
 
+@property (nonatomic, copy) NSString *url;
+
 @property (nonatomic, assign) NSInteger actionId;
 
 @property (nonatomic, copy) NSString *desc;

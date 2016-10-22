@@ -11,6 +11,7 @@
 #import "GDataXMLNode.h"
 
 #import "DataBaseHelper.h"
+#import "DiscoverViewController.h"
 
 #import "ProjectViewController.h"
 #import "InvestViewController.h"
@@ -39,6 +40,7 @@
 #import "ProjectDetailController.h"
 #import "ProjectLetterViewController.h"
 #import "ActivityDetailVC.h"
+#import "TankViewController.h"
 #define DENGLU @"loginUser"
 #define LOGINUSER @"isLoginUser"
 #define UmengAppkey @"55c7684de0f55a0d0d0042a8"
@@ -242,20 +244,20 @@
 
 #pragma mark - 创建主界面框架
 -(void)createViewControllers{
-    NSMutableArray * unSelectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project.png"],[UIImage imageNamed:@"invest.png"],[UIImage imageNamed:@"Circle.png"],[UIImage imageNamed:@"activity.png"],nil];
+    NSMutableArray * unSelectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project.png"],[UIImage imageNamed:@"discover_tab.png"],[UIImage imageNamed:@"activity.png"],[UIImage imageNamed:@"thinktank_tab.png"],nil];
     
-    NSMutableArray * selectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project_selected .png"],[UIImage imageNamed:@"invest_selected.png"],[UIImage imageNamed:@"Circle_selected.png"], [UIImage imageNamed:@"activity_selected.png"],nil];
+    NSMutableArray * selectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project_selected .png"],[UIImage imageNamed:@"discover_tab_sel.png"],[UIImage imageNamed:@"activity_selected.png"], [UIImage imageNamed:@"thinktank_tab_sel.png"],nil];
     
-    NSMutableArray * titles = [[NSMutableArray alloc]initWithObjects:@"项目",@"投资人",@"圈子",@"活动", nil];
+    NSMutableArray * titles = [[NSMutableArray alloc]initWithObjects:@"项目",@"发现",@"活动",@"智库", nil];
     
     ProjectViewController * project = [[ProjectViewController alloc]init];
     MyNavViewController * navProject = [[MyNavViewController alloc]initWithRootViewController:project];
+
+    DiscoverViewController * discover = [[DiscoverViewController alloc]init];
+    MyNavViewController *navDiscover = [[MyNavViewController alloc]initWithRootViewController:discover];
     
-    InvestViewController * invest = [[InvestViewController alloc]init];
-    MyNavViewController * navInvest = [[MyNavViewController alloc]initWithRootViewController:invest];
-    
-    CircleViewController * circle =[[CircleViewController alloc]init];
-    MyNavViewController * navCircle =[[MyNavViewController alloc]initWithRootViewController:circle];
+    TankViewController * tank =[[TankViewController alloc]init];
+    MyNavViewController * navTank =[[MyNavViewController alloc]initWithRootViewController:tank];
     
     ActivityViewController * activity = [[ActivityViewController alloc]init];
     MyNavViewController * navActivity = [[MyNavViewController alloc]initWithRootViewController:activity];
@@ -263,7 +265,7 @@
     self.tabBar = [[JTabBarController alloc]initWithTabBarSelectedImages:selectedArray normalImages:unSelectedArray titles:titles];
     self.tabBar.showCenterItem = YES;
     self.tabBar.centerItemImage = [UIImage imageNamed:@"mine.png"];
-    self.tabBar.viewControllers = @[navProject,navInvest,navCircle,navActivity];
+    self.tabBar.viewControllers = @[navProject,navDiscover,navActivity,navTank];
     self.tabBar.textColor = orangeColor;
     MyNavViewController *navMine = [[MyNavViewController alloc]initWithRootViewController:[[MineViewController alloc]init]];
     self.tabBar.centerViewController = navMine;

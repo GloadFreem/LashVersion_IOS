@@ -12,6 +12,27 @@
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 
+#define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+#define SCREEN_FRAME [UIScreen mainScreen].bounds
+
+#define ZERO_COORDINATE                  0.0f
+#define STATUS_BAR_HEIGHT               20.0f
+#define BAR_ITEM_WIDTH_HEIGHT           30.0f
+#define NAVIGATION_BAR_HEIGHT           44.0f
+#define TAB_TAB_HEIGHT                  49.0f
+#define TABLE_VIEW_ROW_HEIGHT           NAVIGATION_BAR_HEIGHT
+
+#define NSUD                            [NSUserDefaults standardUserDefaults]
+#define VIEWCONTROLLER_INDEX_DICT       @"VIEWCONTROLLER_INDEX_DICT"
+#define SELECTED_CHANNEL_NAMES          @"SELECTED_CHANNEL_NAMES"
+
+#define GLOBALCOLOR(r,g,b,a) [UIColor colorWithRed:r/255.f green:g/255.f blue:b/255.f alpha:1]
+#define NavTabbarColor                  GLOBALCOLOR(54,54,54,1)
+// 弱引用
+#define LYJWeakSelf __weak typeof(self) weakSelf = self;
+
+
 #import "RootViewController.h"
 #import "CommentTD.h"
 #import "JTabBarController.h"
@@ -56,6 +77,7 @@
 //网络请求
 #import "AES.h"
 #import "NSString+MD5.h"
+
 
 #import "UConstants.h"
 #import "Reachability.h"

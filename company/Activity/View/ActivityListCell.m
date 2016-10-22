@@ -201,7 +201,6 @@
         //时间
         [_timeLabel setText:[NSString stringWithFormat:@"%@%@%@",dateStr,week,time]];
         
-
         
     }
 

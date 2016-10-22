@@ -12,6 +12,8 @@
 #import "ActivityDetailVC.h"
 #import "ActivityViewModel.h"
 #import "ActivityBlackCoverView.h"
+#import "ProjectBannerDetailVC.h"
+#import "PingTaiWebViewController.h"
 
 #import "RenzhengViewController.h"
 #import "HeaderView.h"
@@ -203,10 +205,10 @@
         make.bottom.mas_equalTo(self.view.mas_bottom);
     }];
     
-    HeaderView *headerView = [[HeaderView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 70 )];
-    _tableView.tableHeaderView = headerView;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toHeadline)];
-    [headerView addGestureRecognizer:tap];
+//    HeaderView *headerView = [[HeaderView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 70 )];
+//    _tableView.tableHeaderView = headerView;
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toHeadline)];
+//    [headerView addGestureRecognizer:tap];
 }
 
 - (void)toHeadline
@@ -262,16 +264,24 @@
 {
     //反选
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    ActivityDetailVC * vc = [ActivityDetailVC new];
+//    ActivityDetailVC * vc = [ActivityDetailVC new];
+//    ActivityViewModel * model = [_dataSourceArray objectAtIndex:indexPath.row];
+//    vc.actionId = model.actionId;
+//    vc.viewController = self;
+//    if(![TDUtil isArrivedTime:model.endTime])
+//    {
+//        vc.isExpired = YES;
+//    }
+//    [self.navigationController pushViewController:vc animated:YES];
+    ProjectBannerDetailVC *web = [[ProjectBannerDetailVC alloc]init];
     ActivityViewModel * model = [_dataSourceArray objectAtIndex:indexPath.row];
-    vc.actionId = model.actionId;
-    vc.viewController = self;
-    if(![TDUtil isArrivedTime:model.endTime])
-    {
-        vc.isExpired = YES;
-    }
-    [self.navigationController pushViewController:vc animated:YES];
-    
+    web.url = model.url;
+    web.titleStr = @"活动详情";
+    web.contentText = @"金指投活动";
+    web.titleText = model.name;
+    web.image = model.imgUrl;
+    web.isActivity = YES;
+    [self.navigationController pushViewController:web animated:YES];
 }
 
 
@@ -280,6 +290,7 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:NO];
+    [self.navigationController setNavigationBarHidden:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;
