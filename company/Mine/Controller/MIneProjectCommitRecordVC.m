@@ -210,7 +210,7 @@
     
     self.navigationController.navigationBar.translucent=NO;
     [self.navigationController.navigationBar setHidden:NO];
-    
+    [self.navigationController setNavigationBarHidden:NO];
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     UINavigationController *nav = (UINavigationController*)window.rootViewController;
     JTabBarController * tabBarController;

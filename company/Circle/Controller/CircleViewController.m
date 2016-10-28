@@ -190,7 +190,7 @@
 {
     NSString* jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
     
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary * dic =[jsonString JSONValue];
     if (dic!=nil) {
         NSString* status = [dic valueForKey:@"status"];

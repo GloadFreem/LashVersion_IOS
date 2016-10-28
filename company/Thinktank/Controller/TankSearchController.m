@@ -48,6 +48,7 @@
     [self setupNav];
     [self setupSearchView];
     
+    
 //    [self becomeActive];
 }
 
@@ -66,6 +67,8 @@
     //    [self.tableView.mj_header beginRefreshing];
     tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
     _tableView = tableView;
+    self.loadingViewFrame = tableView.frame;
+    
 }
 -(void)refreshHttp
 {
@@ -98,7 +101,8 @@
 -(void)setupSearchView
 {
     _searchView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 44)];
-    self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH - 50, 44)];
+    _searchView.backgroundColor = [TDUtil colorWithHexString:@"bfc0c5"];
+    self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(8, 0, SCREENWIDTH - 50, 44)];
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"搜索";
     [self.searchBar becomeFirstResponder];
@@ -126,6 +130,13 @@
 {
     _isActive = isActive;
 }
+
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    if (searchBar == self.searchBar) {
+        self.tableView.isNone = NO;
+    }
+}
 #pragma mark---  取消按钮点击
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
@@ -141,32 +152,36 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    if (searchBar == self.searchBar) {
-//        NSLog(@"开始搜索");
         if (self.searchBar == searchBar) {
+            self.searchBar.text = [self.searchBar.text stringByReplacingOccurrencesOfString:@" " withString:@""];
             if (searchBar.text.length && ![searchBar.text isEqualToString:@""]) {
                 [self.searchBar resignFirstResponder];
+//                self.searchBar.placeholder = self.searchBar.text;
+//                self.searchBar.text = @"";
                 [self startSearch];
             }
         }
-        
-    }
 }
 
 -(void)startSearch
 {
+    if (_page == 0) {
+        
+        self.startLoading = YES;
+    }
+    
     //http://192.168.5.182:8080/MyProject/messageSystem/requestSearchThinkTank.action?key=jinzht_server_security&partner=sdfwefwf&page=0&keyWord=10
     NSDictionary *para = @{@"key":KEY,@"partner":@"",@"page":STRING(@"%ld", (long)_page),@"keyWord":self.searchBar.text};
     NSString *str;
     if (self.index == 1) {
-        str = @"http://192.168.5.182:8080/MyProject/messageSystem/requestSearchThinkTank.action";
+        str = JZT_URL(REQUEST_SEARCH_THINKTANK);
     }
     if (self.index == 2) {
         str = JZT_URL(@"requestSearchConsultList.action");
         para = @{@"key":KEY,@"partner":@"",@"page":STRING(@"%ld", (long)_page),@"keyWord":self.searchBar.text,@"version":@"1"};
     }
     if (self.index == 3) {
-        str = [SERVICE_THINK_URL stringByAppendingString:@"requestSearchViewPointList.action"];
+        str = JZT_URL(REQUEST_SEARCH_POINT);
     }
     
     // 初始化Manager
@@ -177,23 +192,25 @@
         NSDictionary *dic = responseObject;
 //                NSLog(@"请求成功====%@", dic);
         if ([dic[@"status"] intValue]== 200) {
-            if (self.page == 0) {
+            if (weakSelf.page == 0) {
                 [_tempArray removeAllObjects];
+                weakSelf.startLoading = NO;
             }
             NSArray *dataArray = [NSArray arrayWithArray:dic[@"data"]];
-            if (self.index == 1) {
+            if (weakSelf.index == 1) {
                 [self analysisFastNewsListData:dataArray];
             }
-            if (self.index == 2) {
+            if (weakSelf.index == 2) {
                 [self analysisHeaderListData:dataArray];
             }
-            if (self.index == 3) {
+            if (weakSelf.index == 3) {
                 [self analysisPointListData:dataArray];
             }
             
-            if (_isFirst) {
-                _isFirst = NO;
+            if (weakSelf.isFirst) {
+                weakSelf.isFirst = NO;
             }
+            
             [_tableView.mj_header endRefreshing];
             [_tableView.mj_footer endRefreshing];
         }
@@ -201,17 +218,16 @@
             [_tableView.mj_footer endRefreshingWithNoMoreData];
         }
         
-        weakSelf.startLoading = NO;
+            weakSelf.startLoading = NO;
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         weakSelf.isNetRequestError  =YES;
-        //        NSLog(@"错误信息%@", error);
+        
         [_tableView.mj_header endRefreshing];
         [_tableView.mj_footer endRefreshing];
     }];
-    
-    
 }
+
 #pragma mark---原创
 -(void)analysisPointListData:(NSArray *)dataArray
 {
@@ -522,7 +538,7 @@
     if (self.index == 1) {
         ProjectBannerDetailVC *webDetail = [[ProjectBannerDetailVC alloc]init];
         TankModel *model = self.dataArray[indexPath.row];
-        NSString *url = [NSString stringWithFormat:@"%@?id=%@",@"http://192.168.5.182:8080/MyProject/messageSystem/requestThinkTankDetail.action",model.ID];
+        NSString *url = [NSString stringWithFormat:@"%@?id=%@",JZT_URL(REQUEST_THINKTANK_DETAIL),model.ID];
         webDetail.url = url;
         webDetail.titleStr = @"7x24快讯";
         webDetail.titleText = model.title;
@@ -545,7 +561,7 @@
     if (self.index == 3) {
         ProjectBannerDetailVC *webDetail = [[ProjectBannerDetailVC alloc]init];
         TankPointModel *model= self.dataArray[indexPath.row];
-        NSString *url = [NSString stringWithFormat:@"http://192.168.5.182:8080/MyProject/messageSystem/requestViewPointDetail.action?infoId=%ld",(long)model.infoId];
+        NSString *url = [NSString stringWithFormat:@"%@?infoId=%ld",JZT_URL(REQUEST_POINT_DETAIL),(long)model.infoId];
         //    NSLog(@"网址---%@",url);
         webDetail.url = url;
         webDetail.titleStr = model.oringl;

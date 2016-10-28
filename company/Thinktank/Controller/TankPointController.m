@@ -16,6 +16,8 @@
 #import "ProjectBannerDetailVC.h"
 #import "TankSearchController.h"
 
+#define REQUESTLIST @"requestViewPointList"
+
 @interface TankPointController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
 @property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic, strong) NSMutableArray *searchResults;
@@ -100,7 +102,7 @@
     
     NSDictionary *para = @{@"key":@"jinzht_server_security", @"partner":@"requestViewPointList",@"page":STRING(@"%ld", (long)_page)};
     
-    NSString *str = @"http://192.168.5.182:8080/MyProject/messageSystem/requestViewPointList.action";
+//    NSString *str = @"http://192.168.5.176:8080/MyProject/messageSystem/requestViewPointList.action";
     /*
 http://192.168.5.182:8080/MyProject/messageSystem/requestSearchThinkTank.action?key=jinzht_server_security&partner=sdfwefwf&page=0&keyWord=10
     
@@ -116,7 +118,7 @@ http://192.168.5.182:8080/MyProject/messageSystem/requestViewPointDetail.action?
     __weak typeof(self) weakSelf = self;
     AFHTTPRequestOperationManager *netManager = [AFHTTPRequestOperationManager manager];
     netManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain",@"text/json",@"application/json",@"text/javascript",@"text/html",nil];
-    [netManager POST:str parameters:para success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [netManager POST:JZT_URL(REQUEST_POINT_LIST) parameters:para success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *dic = responseObject;
 //        NSLog(@"请求成功====%@", dic);
         if ([dic[@"status"] intValue]== 200) {
@@ -181,7 +183,7 @@ http://192.168.5.182:8080/MyProject/messageSystem/requestViewPointDetail.action?
     }
     _page = 0;
     _isFirst = YES;
-//    self.listPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTLIST];
+    self.listPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTLIST];
 //    self.searchPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTSEARCH];
     [self createTableView];
     self.loadingViewFrame = self.tableView.frame;
@@ -300,12 +302,13 @@ http://192.168.5.182:8080/MyProject/messageSystem/requestViewPointDetail.action?
     
     ProjectBannerDetailVC *webDetail = [[ProjectBannerDetailVC alloc]init];
     TankPointModel *model= self.dataSourceArray[indexPath.row];
-    NSString *url = [NSString stringWithFormat:@"http://192.168.5.182:8080/MyProject/messageSystem/requestViewPointDetail.action?infoId=%ld",(long)model.infoId];
+    NSString *url = [NSString stringWithFormat:@"%@?infoId=%ld",JZT_URL(REQUEST_POINT_DETAIL),(long)model.infoId];
 //    NSLog(@"网址---%@",url);
     webDetail.url = url;
     webDetail.titleStr = model.oringl;
     webDetail.titleText = model.title;
     webDetail.contentText = model.oringl;
+    webDetail.isPoint = YES;
     if (model.originalImgs.count) {
         webDetail.image = model.originalImgs[0][@"url"];
     }

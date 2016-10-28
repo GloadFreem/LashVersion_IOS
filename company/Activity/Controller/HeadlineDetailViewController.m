@@ -37,8 +37,10 @@
     
     self.circlePartner = [TDUtil encryKeyWithMD5:KEY action:SHARETOCIRCLE];
     
-    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];
+    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
+//    _webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
     _webView.delegate = self;
+    _webView.scalesPageToFit = YES; //设置大小适配页面
     _webView.backgroundColor = [UIColor whiteColor];
     _webView.opaque = NO; // 将webView设置为不透明
     [self.view addSubview:_webView];
@@ -86,6 +88,7 @@
 // 返回上一vc
 - (void)backHome:(UIViewController *)mySelf
 {
+    [self.webView stopLoading];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

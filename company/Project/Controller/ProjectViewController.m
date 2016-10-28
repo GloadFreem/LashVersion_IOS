@@ -619,6 +619,10 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
+//    NSLog(@"报错---%@",request);
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    NSLog(@"报错返回:%@",jsonString);
+    
     if ([TDUtil checkNetworkState] != NetStatusNone)
     {
         self.startLoading = YES;
@@ -1147,7 +1151,7 @@
 -(void)requestLogin:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {

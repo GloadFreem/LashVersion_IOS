@@ -208,7 +208,7 @@
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.right.mas_equalTo(0);
 //        make.height.mas_equalTo(SCREENHEIGHT -50-64);
-        make.bottom.mas_equalTo(_footer).offset(0);
+        make.bottom.mas_equalTo(self.view.mas_bottom).offset(-50);
     }];
 }
 

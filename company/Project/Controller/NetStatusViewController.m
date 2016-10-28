@@ -58,7 +58,7 @@
     .leftSpaceToView(contentView,20)
     .topSpaceToView(contentView,25)
     .heightIs(20);
-    [_firstTitleLabel setSingleLineAutoResizeWithMaxWidth:300*WIDTHCONFIG];
+    [_firstTitleLabel setSingleLineAutoResizeWithMaxWidth:320*WIDTHCONFIG];
     
     _subTitleLabel = [UILabel new];
     _subTitleLabel.textColor = color47;

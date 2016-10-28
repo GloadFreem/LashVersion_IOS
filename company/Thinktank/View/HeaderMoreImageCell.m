@@ -116,19 +116,24 @@
     if (pointModel) {
         _pointModel = pointModel;
         _titleLabel.text = pointModel.title;
+        
         [_titleLabel sizeToFit];
+        _titleLabel.sd_layout.maxHeightIs(50);
         
         _typeLabel.text = [NSString stringWithFormat:@" %@ ",pointModel.oringl];
 //        [_typeLabel sizeToFit];
         
         if ([pointModel.oringl isEqualToString:@"观点"]) {
             _typeLabel.layer.borderColor = [TDUtil colorWithHexString:@"5bc934"].CGColor;
+            _typeLabel.textColor = [TDUtil colorWithHexString:@"5bc934"];
         }
         if ([pointModel.oringl isEqualToString:@"分析"]) {
             _typeLabel.layer.borderColor = [TDUtil colorWithHexString:@"2083ff"].CGColor;
+            _typeLabel.textColor = [TDUtil colorWithHexString:@"2083ff"];
         }
         if ([pointModel.oringl isEqualToString:@"报告"]) {
             _typeLabel.layer.borderColor = [TDUtil colorWithHexString:@"ea8888"].CGColor;
+            _typeLabel.textColor = [TDUtil colorWithHexString:@"ea8888"];
         }
 
         _timeLabel.text = [TDUtil getDateCha:pointModel.publicDate];
@@ -161,16 +166,20 @@
         _headerModel = headerModel;
         _titleLabel.text = headerModel.title;
         [_titleLabel sizeToFit];
+        _titleLabel.sd_layout.maxHeightIs(50);
         
         _typeLabel.text = [NSString stringWithFormat:@" %@ ",headerModel.contenttype.name];
         if ([headerModel.contenttype.name isEqualToString:@"投资建议"]) {
             _typeLabel.layer.borderColor = [TDUtil colorWithHexString:@"5bc934"].CGColor;
+            _typeLabel.textColor = [TDUtil colorWithHexString:@"5bc934"];
         }
         if ([headerModel.contenttype.name isEqualToString:@"投资学院"]) {
             _typeLabel.layer.borderColor = [TDUtil colorWithHexString:@"2083ff"].CGColor;
+            _typeLabel.textColor = [TDUtil colorWithHexString:@"2083ff"];
         }
-        if ([headerModel.contenttype.name isEqualToString:@"今日投条"]) {
+        if ([headerModel.contenttype.name isEqualToString:@"金日投条"]) {
             _typeLabel.layer.borderColor = [TDUtil colorWithHexString:@"ea8888"].CGColor;
+            _typeLabel.textColor = [TDUtil colorWithHexString:@"ea8888"];
         }
         
         _timeLabel.text = [TDUtil getDateCha:headerModel.createDate];

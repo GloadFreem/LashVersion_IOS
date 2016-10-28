@@ -14,4 +14,5 @@
 
 @property (nonatomic, strong) ActivityViewModel *model;
 
+
 @end

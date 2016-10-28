@@ -74,6 +74,7 @@
 
 -(void)leftBack
 {
+    [self.webView stopLoading];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -121,6 +122,7 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:NO];
+    [self.navigationController setNavigationBarHidden:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;

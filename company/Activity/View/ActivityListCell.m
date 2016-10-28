@@ -80,7 +80,7 @@
     _addressLabel.textAlignment = NSTextAlignmentLeft;
     
     _bottomView = [UIView new];
-    _bottomView.backgroundColor = [TDUtil colorWithHexString:@"f5f5f5"];
+    _bottomView.backgroundColor = [TDUtil colorWithHexString:@"e6e6e6"];
     
     _expiredImage = [UIImageView new];
     _expiredImage.image = [UIImage imageNamed:@"activity_guoqi.png"];
@@ -107,7 +107,7 @@
     .leftEqualToView(contentView)
     .rightEqualToView(contentView)
     .topSpaceToView(_titleLabel, 10)
-    .heightIs(1);
+    .heightIs(0.5);
     
     _timeImage.sd_layout
     .leftSpaceToView(contentView, 15)
@@ -178,8 +178,10 @@
         
         if (model.isExpired) {
             [_expiredImage setHidden:NO];
+//            NSLog(@"内部过期");
         }else{
             [_expiredImage setHidden:YES];
+//            NSLog(@"内部未过期");
         }
         if (model.type == 0) { //0:付费  1:免费
             _feeLabel.text = @"付费";

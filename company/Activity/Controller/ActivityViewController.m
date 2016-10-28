@@ -245,7 +245,10 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 175+120+10;
+//    return 175+120+10;
+    ActivityViewModel *model = [_dataSourceArray objectAtIndex:indexPath.row];
+    
+    return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ActivityListCell class] contentViewWidth:[self cellContentViewWith]];
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -255,10 +258,29 @@
     if (!cell) {
         cell = [[ActivityListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
-    cell.model = [_dataSourceArray objectAtIndex:indexPath.row];
-    cell.model.isExpired = NO;
+    
+    ActivityViewModel *model = [_dataSourceArray objectAtIndex:indexPath.row];
+//    if ([TDUtil isArrivedTime:model.endTime]) {
+//        model.isExpired = NO;
+//    }else{
+//        model.isExpired = YES;
+//    }
+    model.isExpired = NO;
+    cell.model = model;
     return cell;
 }
+
+- (CGFloat)cellContentViewWith
+{
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    
+    // 适配ios7
+    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait && [[UIDevice currentDevice].systemVersion floatValue] < 8) {
+        width = [UIScreen mainScreen].bounds.size.height;
+    }
+    return width;
+}
+
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

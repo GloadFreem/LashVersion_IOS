@@ -38,5 +38,5 @@
 -(void)saveDataToBaseTable:(NSString*)tableName data:(NSDictionary*)dic;
 
 -(id)getOrgazinationDataFromBaseTable:(NSString*)tableName;
-
+-(void)cancleRequest;
 @end

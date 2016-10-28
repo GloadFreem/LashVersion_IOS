@@ -36,6 +36,7 @@
 {
     _titleLabel = [UILabel new];
     _titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    _titleLabel.numberOfLines = 0;
     _titleLabel.textColor = [TDUtil colorWithHexString:@"323232"];
     
     _timeLabel = [UILabel new];
@@ -115,8 +116,9 @@
     if (model) {
         _model = model;
         _titleLabel.text = model.title;
-        [_titleLabel sizeToFit];
         
+        [_titleLabel sizeToFit];
+        _titleLabel.sd_layout.maxHeightIs(50);
         NSString *str;
         if (model.oringl.length > 0) {
             str = [model.oringl stringByAppendingString:@" · "];

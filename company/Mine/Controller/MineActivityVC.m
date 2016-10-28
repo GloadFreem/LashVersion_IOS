@@ -16,6 +16,8 @@
 
 #import "MineActivityListModel.h"
 
+#import "ProjectBannerDetailVC.h"
+
 #define LOGOACTIVITY @"requestMineAction"
 
 @interface MineActivityVC ()<UITableViewDelegate,UITableViewDataSource>
@@ -109,7 +111,7 @@
 -(void)requestInvestList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (_page == 0) {
@@ -167,8 +169,21 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 175 + 120;
+    ActivityViewModel *model = [_dataArray objectAtIndex:indexPath.row];
+    return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ActivityListCell class] contentViewWidth:[self cellContentViewWith]];
 }
+
+- (CGFloat)cellContentViewWith
+{
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    
+    // 适配ios7
+    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait && [[UIDevice currentDevice].systemVersion floatValue] < 8) {
+        width = [UIScreen mainScreen].bounds.size.height;
+    }
+    return width;
+}
+
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -177,14 +192,13 @@
     if (!cell) {
         cell = [[ActivityListCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
     }
-    if (_dataArray.count) {
-        cell.model = _dataArray[indexPath.row];
-        if ([TDUtil isArrivedTime:cell.model.endTime]) {
-            cell.model.isExpired = YES;
+    ActivityViewModel *model = [_dataArray objectAtIndex:indexPath.row];
+        if ([TDUtil isArrivedTime:model.endTime]) {
+            model.isExpired = NO;
         }else{
-            cell.model.isExpired = NO;
+            model.isExpired = YES;
         }
-    }
+    cell.model = model;
     return cell;
 }
 
@@ -192,12 +206,21 @@
 {
     //反选
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    ActivityDetailVC * vc = [ActivityDetailVC new];
-    
+//    ActivityDetailVC * vc = [ActivityDetailVC new];
+//    
+//    ActivityViewModel * model = [_dataArray objectAtIndex:indexPath.row];
+//    vc.actionId = model.actionId;
+//    
+//    [self.navigationController pushViewController:vc animated:YES];
+    ProjectBannerDetailVC *web = [[ProjectBannerDetailVC alloc]init];
     ActivityViewModel * model = [_dataArray objectAtIndex:indexPath.row];
-    vc.actionId = model.actionId;
-    
-    [self.navigationController pushViewController:vc animated:YES];
+    web.url = model.url;
+    web.titleStr = @"活动详情";
+    web.contentText = @"金指投活动";
+    web.titleText = model.name;
+    web.image = model.imgUrl;
+    web.isActivity = YES;
+    [self.navigationController pushViewController:web animated:YES];
 }
 
 #pragma mark -btnAction

@@ -87,7 +87,7 @@
 -(void)requestList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-        NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -475,7 +475,7 @@
     
     self.navigationController.navigationBar.translucent=NO;
     [self.navigationController.navigationBar setHidden:NO];
-    
+    [self.navigationController setNavigationBarHidden:NO];
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     UINavigationController *nav = (UINavigationController*)window.rootViewController;
     JTabBarController * tabBarController;

@@ -97,13 +97,11 @@
 //    NSDictionary *dic = @{@"key":@"jinzht_server_security",@"partner":self.listPartner,@"page":@"0"};
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.listPartner,@"partner",STRING(@"%ld", (long)_page),@"page", nil];
 
-    NSString *url = @"http://192.168.5.182:8080/MyProject/messageSystem/requestThinkTankList.action";
-    _url = url;
     // 初始化Manager
     __weak typeof(self) weakSelf = self;
     AFHTTPRequestOperationManager *netManager = [AFHTTPRequestOperationManager manager];
     netManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain",@"text/json",@"application/json",@"text/javascript",@"text/html",nil];
-    [netManager POST:url parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [netManager POST:JZT_URL(REQUEST_THINKTANK_LIST) parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *dic = responseObject;
 //        NSLog(@"请求成功====%@", dic);
         if ([dic[@"status"] intValue]== 200) {
@@ -119,7 +117,7 @@
         _isFirst = NO;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         weakSelf.isNetRequestError  =YES;
-//        NSLog(@"错误信息%@", error);
+        NSLog(@"错误信息%@", error);
     }];
     
 
@@ -282,11 +280,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     ProjectBannerDetailVC *webDetail = [[ProjectBannerDetailVC alloc]init];
     TankModel *model = self.dataSourceArray[indexPath.row];
-    NSString *url = [NSString stringWithFormat:@"%@?id=%@",@"http://192.168.5.182:8080/MyProject/messageSystem/requestThinkTankDetail.action",model.ID];
+    NSString *url = [NSString stringWithFormat:@"%@?id=%@",JZT_URL(REQUEST_THINKTANK_DETAIL),model.ID];
     webDetail.url = url;
     webDetail.titleStr = @"7x24快讯";
     webDetail.titleText = model.title;
     webDetail.contentText = model.oringl;
+    webDetail.isFast = YES;
     if (model.images.count) {
         webDetail.image = model.images[0];
     }

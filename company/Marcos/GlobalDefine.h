@@ -165,7 +165,7 @@
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
 #define SERVICE_URL @"http://192.168.5.176:8080/jinzht/"//本地
-#define SERVICE_THINK_URL @"http://192.168.5.182:8080/MyProject/messageSystem/"
+#define SERVICE_THINK_URL @"http://192.168.5.176:8080/MyProject/messageSystem/"
 
 // 如果是DEBUG模式用测试服务器地址
 #if DEBUG
@@ -414,10 +414,12 @@
 
 #pragma mark --------------------------智库快讯------------------------------------------
 #define REQUEST_THINKTANK_LIST @"requestThinkTankList.action"
+#define REQUEST_THINKTANK_DETAIL @"requestThinkTankDetail.action"
 #define REQUEST_SEARCH_THINKTANK @"requestSearchThinkTank.action"
 
 #pragma mark --------------------------原创内容------------------------------------------
 #define REQUEST_POINT_LIST @"requestViewPointList.action"
+#define REQUEST_POINT_DETAIL @"requestViewPointDetail.action"
 #define REQUEST_SEARCH_POINT @"requestSearchViewPointList.action"
 #pragma mark----------------------------------------------------------------------------
 #pragma mark --------------------------LOGO菜单接口------------------------------------------

@@ -296,14 +296,14 @@
 {
     if (searchBar == self.searchBar) {
         self.searchBar.showsCancelButton = YES;
-        NSLog(@"开始编辑");
+//        NSLog(@"开始编辑");
     }
 }
 #pragma mark--- 结束编辑
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
 {
     if (searchBar == self.searchBar) {
-        NSLog(@"结束编辑");
+//        NSLog(@"结束编辑");
     }
 }
 #pragma mark---  取消按钮点击
@@ -320,7 +320,7 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     if (searchBar == self.searchBar) {
-        NSLog(@"开始搜索");
+//        NSLog(@"开始搜索");
         [self.searchBar resignFirstResponder];
         [self searchBarShouldBeginEditing:self.searchBar];
     }

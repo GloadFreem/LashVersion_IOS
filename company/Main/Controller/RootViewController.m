@@ -255,7 +255,7 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)dealloc
+-(void)cancleRequest
 {
     [self.httpUtil requestDealloc];
 }

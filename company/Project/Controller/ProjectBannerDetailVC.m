@@ -34,7 +34,8 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     [self setNav];
-    _webView  =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT-64)];
+    _webView  =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
+//    _webView  =[[UIWebView alloc]initWithFrame:self.view.bounds];
     _webView.delegate = self;
     _webView.scrollView.bounces = NO;
     [_webView scalesPageToFit];
@@ -89,6 +90,7 @@
 
 -(void)leftBack
 {
+    [self.webView stopLoading];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -235,7 +237,16 @@
     ShareToCircleView *shareView =[[[NSBundle mainBundle] loadNibNamed:@"ShareToCircleView" owner:nil options:nil] lastObject];
     shareView.backgroundColor = [UIColor clearColor];
     if (self.isActivity) {
-        _titleStr = _titleText;
+        _titleStr = _contentText;
+        _contentText = _titleText;
+        
+    }
+    if (self.isPoint) {
+        _titleStr = _contentText;
+        _contentText = _titleText;
+    }
+    if (self.isFast) {
+        _contentText = _titleText;
     }
     [shareView instancetationShareToCircleViewWithimage:_image title:_titleStr content:_contentText];
     shareView.tag = 1000;
