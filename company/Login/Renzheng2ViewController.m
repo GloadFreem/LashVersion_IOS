@@ -8,7 +8,7 @@
 
 #import "Renzheng2ViewController.h"
 #import "Renzheng3ViewController.h"
-
+#import "LoadingBlackView.h"
 @interface Renzheng2ViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextFieldDelegate>
 
 {
@@ -20,6 +20,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (nonatomic, assign) BOOL isSelectedImage;  //是否选择营业执照
+@property (nonatomic, strong) LoadingBlackView *loadingBlackView;
 
 @end
 
@@ -104,14 +105,14 @@
         return;
     }
     //数据字典设置营业执照号码  key   partner
-    [_dicData setObject:self.textField.text forKey:@"buinessLicenceNo"];
+    [_dicData setObject:[NSString stringWithFormat:@"%@",self.textField.text] forKey:@"buinessLicenceNo"];
     
     
 #pragma mark -项目方身份界面  提交数据 进入首页
     if ([self.identifyType integerValue] == 1) {
         //设置数据字典
         
-        [_dicData setObject:self.identifyType forKey:@"identiyTypeId"];
+        [_dicData setObject:[NSString stringWithFormat:@"%@",self.identifyType] forKey:@"identiyTypeId"];
         
 //        NSLog(@"打印数据%@",_dicData);
         //读取图片加到图片字典 并请求数据
@@ -128,9 +129,11 @@
 
             //上传文件
             self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
-            self.isTransparent = YES;
+            [self addBlackView];
             self.startLoading = YES;
-            
+            self.isTransparent = YES;
+            self.isBlack = YES;
+//            NSLog(@"打印字典---%@",_dicData);
             [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
 
         }
@@ -145,6 +148,23 @@
     }
     
 }
+-(void)addBlackView
+{
+    _loadingBlackView = [[LoadingBlackView alloc]initWithFrame:self.loadingViewFrame];
+    [self.view addSubview:_loadingBlackView];
+    
+}
+-(void)closeBlackView
+{
+    [_loadingBlackView removeFromSuperview];
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[LoadingBlackView class]]) {
+            [view removeFromSuperview];
+        }
+    }
+    //        NSLog(@"yichu");
+}
+
 #pragma mark -项目方注册身份方法
 //注册身份
 -(void)requestSetIdentifyType:(ASIHTTPRequest *)request
@@ -157,6 +177,7 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         
         if ([status integerValue] == 200) {
+            [self closeBlackView];
             self.startLoading = NO;
 
             //进入应用
@@ -176,6 +197,7 @@
             [self.navigationController pushViewController:tabBarController animated:NO];
             
         }else{
+            [self closeBlackView];
             self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
@@ -184,6 +206,9 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
+//    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+//    NSLog(@"返回:%@",jsonString);
+    [self closeBlackView];
     self.startLoading = NO;
 }
 

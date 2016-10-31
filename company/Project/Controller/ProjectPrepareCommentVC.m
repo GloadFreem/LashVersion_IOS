@@ -80,6 +80,7 @@
 
 -(void)leftback
 {
+    [self.httpUtil requestDealloc];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

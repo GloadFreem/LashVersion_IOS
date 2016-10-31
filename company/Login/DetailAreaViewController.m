@@ -118,7 +118,6 @@
                 RenzhengViewController *vc = (RenzhengViewController*)VC;
                 vc.companyAddress = address;
                 vc.cityId = _idArray[indexPath.row];
-                
                 [vc refreshData];
            
         }
@@ -129,7 +128,11 @@
 }
 
 
-
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self cancleRequest];
+}
 
 //让当前控制器对应的状态栏是白色
 -(UIStatusBarStyle)preferredStatusBarStyle{

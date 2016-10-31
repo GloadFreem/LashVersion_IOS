@@ -610,6 +610,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:[UIButton new]];
     [self.navigationController.navigationBar setHidden:YES];
     
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];

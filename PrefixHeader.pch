@@ -77,7 +77,7 @@
 //网络请求
 #import "AES.h"
 #import "NSString+MD5.h"
-
+#import "EUNetWorkTool.h"
 
 #import "UConstants.h"
 #import "Reachability.h"

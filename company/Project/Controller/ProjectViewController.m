@@ -519,6 +519,7 @@
             }
             
             [self.tableView reloadData];
+
             //结束刷新
 //            [self.tableView.mj_header endRefreshing];
 //            [self.tableView.mj_footer endRefreshing];
@@ -870,7 +871,7 @@
             cell.model = _projectModelArray[indexPath.row];
         }
         return cell;
-    }
+    }else{
     
         static NSString * cellId =@"ProjectNoRoadCell";
         ProjectNoRoadCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
@@ -884,6 +885,8 @@
        [cell.statusImage setHidden:YES];
        cell.selectionStyle = UITableViewCellSelectionStyleNone;
        return cell;
+    }
+    return nil;
 }
 
 #pragma mark -tableView的点击事件
@@ -919,11 +922,18 @@
         [self startLoadData];
     }else{
         [_tableView reloadData];
+//        [_tableView beginUpdates];
+//        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+//        [_tableView endUpdates];
     }
     if (_selectedCellNum == 21 && !_roadModelArray.count) {
         [self startLoadData];
     }else{
+        
         [_tableView reloadData];
+//        [_tableView beginUpdates];
+//        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+//        [_tableView endUpdates];
     }
     
     //tableView开始更新
@@ -1237,6 +1247,7 @@
             [tabBarController tabBarHidden:NO animated:NO];
         }
     }
+    
     //不隐藏tabbar
     AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
     

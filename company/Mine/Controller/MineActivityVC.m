@@ -24,8 +24,9 @@
 
 @property (nonatomic, strong) UITableViewCustomView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
-
+@property (nonatomic, strong) NSMutableArray *tempArray;
 @property (nonatomic, assign) NSInteger page;
+@property (nonatomic, assign) BOOL isFirst;
 
 @end
 
@@ -37,6 +38,10 @@
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
+    if (!_tempArray) {
+        _tempArray =[NSMutableArray array];
+    }
+    _isFirst = YES;
     self.partner = [TDUtil encryKeyWithMD5:KEY action:LOGOACTIVITY];
     _page = 0;
     self.loadingViewFrame = self.view.frame;
@@ -102,8 +107,9 @@
 {
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
-    self.startLoading = YES;
-    
+    if (_isFirst) {
+        self.startLoading = YES;
+    }
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:LOGO_ACTIVITY_LIST postParam:dic type:0 delegate:self sel:@selector(requestInvestList:)];
 }
@@ -111,24 +117,25 @@
 -(void)requestInvestList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (_page == 0) {
-        [_dataArray removeAllObjects];
+        [_tempArray removeAllObjects];
     }
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
+            _isFirst = NO;
             self.startLoading = NO;
-            NSMutableArray *tempArray = [NSMutableArray new];
+//            NSMutableArray *tempArray = [NSMutableArray new];
             NSArray *modelArray = [ActivityViewModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
             for (NSInteger i =0; i < modelArray.count; i ++) {
                 ActivityViewModel *model = modelArray[i];
-                [tempArray addObject:model];
+                [_tempArray addObject:model];
             }
-            self.dataArray = tempArray;
+            self.dataArray = _tempArray;
         }else{
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }

@@ -27,7 +27,12 @@
         if (!view) {
             view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH(self), HEIGHT(self))];
             view.tag = 100001;
-            emptyImgView = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH(self)/2-75, HEIGHT(self)/2-140, 150, 115)];
+            CGFloat height = HEIGHT(self)/2-140;
+//            NSLog(@"打印---%f",height);
+            if (height < 0) {
+                height = 25.0*HEIGHTCONFIG;
+            }
+            emptyImgView = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH(self)/2-75, height, 150, 115)];
             emptyImgView.image = [UIImage imageNamed:@"noData"];
             emptyImgView.contentMode = UIViewContentModeScaleAspectFill;
             [view addSubview:emptyImgView];

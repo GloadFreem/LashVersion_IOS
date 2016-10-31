@@ -19,7 +19,7 @@
         _imageView.centerX = self.centerX;
         _imageView.centerY = self.centerY - 50;
         
-        UIImage *image = [UIImage sd_animatedGIFNamed:@"loadingView"];
+        UIImage *image = [UIImage sd_animatedGIFNamed:@"loadingView1"];
         _imageView.image = image;
         
         [self addSubview:_imageView];
@@ -36,6 +36,15 @@
         self.backgroundColor = ClearColor;
     }else{
         self.backgroundColor = [UIColor whiteColor];
+    }
+}
+
+#pragma mark--- 设置黑色透明背景
+-(void)setIsBlack:(BOOL)isBlack
+{
+    self->_isBlack = isBlack;
+    if (self.isBlack) {
+        _imageView.image = [UIImage sd_animatedGIFNamed:@"loadingView"];
     }
 }
 #pragma mark----是否请求报错
@@ -79,7 +88,7 @@
         _imageView.centerX = self.centerX;
         _imageView.centerY = self.centerY - 50;
         
-        UIImage *image = [UIImage sd_animatedGIFNamed:@"loadingView"];
+        UIImage *image = [UIImage sd_animatedGIFNamed:@"loadingView1"];
         _imageView.image = image;
         [self addSubview:_imageView];
     }

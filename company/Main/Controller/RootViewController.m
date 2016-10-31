@@ -12,6 +12,7 @@
 {
     LoadingView *loadingView;
     DataBaseHelper *_dataBase;
+    LoadingBlackView *loadingBlackView;
 }
 @end
 
@@ -76,12 +77,16 @@
                 [loadingView setFrame:self.loadingViewFrame];
             }
         }
-        
         self.isNetRequestError  =NO;
         loadingView.isTransparent  = NO;
+        
+//        [self addBlackView];
         [LoadingUtil show:loadingView];
+        
     }else{
+//        [self closeBlackView];
         [LoadingUtil close:loadingView];
+        
     }
     
 }
@@ -99,6 +104,12 @@
     
 }
 
+//设置黑色背景
+-(void)setIsBlack:(BOOL)isBlack
+{
+    self->_isBlack = isBlack;
+    loadingView.isBlack = isBlack;
+}
 /**
  *  设置加载视图内容大小
  *
@@ -123,7 +134,6 @@
     if ([TDUtil isValidString:self.content]) {
         loadingView.content  = self.content;
     }
-    
 }
 
 

@@ -212,7 +212,6 @@
         if ([self.identifyType integerValue] ==1)
         {
             //项目方
-            
             if (indexPath.row == 0) {
                 cell.inputTextField.keyboardType = UIKeyboardTypeDefault;
             }
@@ -221,7 +220,6 @@
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.inputTextField.userInteractionEnabled = NO;
             }
-            
         }else if ([self.identifyType integerValue] ==2){
             //投资人
             
@@ -305,6 +303,7 @@
     //项目方
     if ([self.identifyType integerValue] == 1) {
         self.dataArray[3] = self.companyAddress;
+//        NSLog(@"打印地址--%@",self.companyAddress);
         
     }
     //投资人
@@ -390,9 +389,9 @@
     }
 #pragma mark ---------项目方身份界面--------------------
     //设置身份证和名字信息  所在地
-    [_dataDic setObject:_dataArray[0] forKey:@"identiyCarNo"];
-    [_dataDic setObject:_dataArray[1] forKey:@"name"];
-    [_dataDic setObject:self.cityId forKey:@"cityId"];
+    [_dataDic setObject:[NSString stringWithFormat:@"%@",_dataArray[0]] forKey:@"identiyCarNo"];
+    [_dataDic setObject:[NSString stringWithFormat:@"%@",_dataArray[1]] forKey:@"name"];
+    [_dataDic setObject:[NSString stringWithFormat:@"%@",self.cityId] forKey:@"cityId"];
     [_dataDic setObject:KEY forKey:@"key"];
     [_dataDic setObject:self.partner forKey:@"partner"];
     
@@ -417,6 +416,8 @@
         Renzheng2ViewController * regist = [Renzheng2ViewController new];
         regist.identifyType = self.identifyType;
         
+        [_dataDic setObject:[NSString stringWithFormat:@"%@",_dataArray[3]] forKey:@"companyAddress"];
+        
         [_dataDic setObject:_dataArray[2] forKey:@"companyName"];
         
         [_dataDic setObject:_dataArray[4] forKey:@"position"];
@@ -438,11 +439,12 @@
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请选择投资领域"];
             return;
         }
+        
         //进入个人介绍页面
         Renzheng3ViewController * regist = [Renzheng3ViewController new];
         regist.identifyType = self.identifyType;
-        
-        [_dataDic setObject:self.areaId forKey:@"areaId"];
+        [_dataDic setObject:_dataArray[2] forKey:@"companyAddress"];
+        [_dataDic setObject:_dataArray[3] forKey:@"areaId"];
         //字典赋值
         regist.dicData = [NSMutableDictionary dictionaryWithDictionary:_dataDic];
         
@@ -475,10 +477,10 @@
         //进入营业执照页面
         Renzheng2ViewController *regist = [Renzheng2ViewController new];
         regist.identifyType = self.identifyType;
-        
+        [_dataDic setObject:_dataArray[3] forKey:@"companyAddress"];
         [_dataDic setObject:_dataArray[2] forKey:@"companyName"];
         [_dataDic setObject:_dataArray[4] forKey:@"position"];
-        [_dataDic setObject:self.areaId forKey:@"areaId"];
+        [_dataDic setObject:_dataArray[5] forKey:@"areaId"];
         //字典赋值
         regist.dicData = [NSMutableDictionary dictionaryWithDictionary:_dataDic];
         
@@ -487,26 +489,13 @@
     
 #pragma mark ---------智囊团身份界面--------------------
     if ([self.identifyType integerValue] ==4){
-        //检验公司名称
-//        if([_dataArray[2] isEqualToString:@""]){
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入公司名称"];
-//            return;
-//        }
+
         //检验公司所在地
         if([_dataArray[3] isEqualToString:@""]){
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请选择公司所在地"];
             return;
         }
-        //检验担任职位
-//        if([_dataArray[4] isEqualToString:@""]){
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入担任职位"];
-//            return;
-//        }
-        //检验服务领域
-//        if ([_dataArray[5] isEqualToString:@""]) {
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请选择服务领域"];
-//            return;
-//        }
+
         //进入营业执照页面
         Renzheng2ViewController *regist = [Renzheng2ViewController new];
         regist.identifyType = self.identifyType;
@@ -514,7 +503,8 @@
         [regist.nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
         [_dataDic setObject:_dataArray[2] forKey:@"companyName"];
         [_dataDic setObject:_dataArray[4] forKey:@"position"];
-//        [_dataDic setObject:self.areaId forKey:@"areaId"];
+        [_dataDic setObject:_dataArray[3] forKey:@"companyAddress"];
+//        [_dataDic setObject:@"" forKey:@"areaId"];
         //字典赋值
         regist.dicData = [NSMutableDictionary dictionaryWithDictionary:_dataDic];
         

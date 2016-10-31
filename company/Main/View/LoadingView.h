@@ -21,6 +21,6 @@
 @property (nonatomic, copy) NSString *content;
 @property (nonatomic, assign) BOOL isTransparent;
 @property (nonatomic, assign) id<LoadingViewDelegate> delegate;
-
+@property (nonatomic, assign) BOOL isBlack;
 
 @end

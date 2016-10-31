@@ -10,6 +10,8 @@
 #import "RegistNameTableViewCell.h"
 #import "JTabBarController.h"
 #import "AppDelegate.h"
+#import "LoadingBlackView.h"
+
 #define PROTOCOL @"getProtocolAuthentic"
 @interface Renzheng4ViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -26,7 +28,7 @@
 
 @property (nonatomic, strong) NSMutableArray *dataSelected;
 @property (nonatomic, strong) NSMutableArray *statusArray;
-
+@property (nonatomic, strong) LoadingBlackView *loadingBlackView;
 @end
 
 @implementation Renzheng4ViewController
@@ -184,9 +186,12 @@
     //开始加载动画
     //上传文件
     self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
+    [self addBlackView];
     self.startLoading = YES;
-    self.isTransparent  = YES;
+    self.isTransparent = YES;
+    self.isBlack  = YES;
     
+//    NSLog(@"打印字典---%@",_dicData);
     if ([self.identifyType integerValue] == 2) {//投资人
         //加到上传文件字典
         if (retA && retB) {
@@ -206,6 +211,23 @@
     }
 }
 
+-(void)addBlackView
+{
+    _loadingBlackView = [[LoadingBlackView alloc]initWithFrame:self.loadingViewFrame];
+    [self.view addSubview:_loadingBlackView];
+    
+}
+-(void)closeBlackView
+{
+    [_loadingBlackView removeFromSuperview];
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[LoadingBlackView class]]) {
+            [view removeFromSuperview];
+        }
+    }
+    //        NSLog(@"yichu");
+}
+
 -(void)requestSetIdentifyType:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
@@ -216,7 +238,7 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         
         if ([status integerValue] == 200) {
-
+            [self closeBlackView];
             self.startLoading = NO;
 
             UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
@@ -232,6 +254,7 @@
             }
             [self.navigationController pushViewController:tabBarController animated:NO];
         }else{
+            [self closeBlackView];
             self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             }
@@ -241,6 +264,7 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
+    [self closeBlackView];
     self.startLoading = NO;
 }
 
@@ -249,7 +273,11 @@
     return UIStatusBarStyleLightContent;
 }
 
-
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self cancleRequest];
+}
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];

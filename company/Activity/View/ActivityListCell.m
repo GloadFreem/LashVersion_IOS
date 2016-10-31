@@ -80,7 +80,7 @@
     _addressLabel.textAlignment = NSTextAlignmentLeft;
     
     _bottomView = [UIView new];
-    _bottomView.backgroundColor = [TDUtil colorWithHexString:@"e6e6e6"];
+    _bottomView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     _expiredImage = [UIImageView new];
     _expiredImage.image = [UIImage imageNamed:@"activity_guoqi.png"];

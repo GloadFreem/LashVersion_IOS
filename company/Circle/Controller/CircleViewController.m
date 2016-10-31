@@ -86,6 +86,7 @@
 @property (nonatomic, strong) NSMutableArray *tempArray;
 @property (nonatomic, assign) BOOL haveData;   //是否有离线数据
 
+@property (nonatomic, assign) BOOL hasHeader;
 @end
 
 @implementation CircleViewController
@@ -126,8 +127,10 @@
     
     
     //设置 加载视图界面
-    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
+//    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
+    self.loadingViewFrame = self.view.frame;
     
+    _hasHeader = YES;
     _isFirst = YES;
     _page = 0;
     [self setupNav];
@@ -190,7 +193,7 @@
 {
     NSString* jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
     
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary * dic =[jsonString JSONValue];
     if (dic!=nil) {
         NSString* status = [dic valueForKey:@"status"];
@@ -230,10 +233,10 @@
 -(void)createTableView
 {
     _tableView  = [[UITableViewCustomView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 15)];
+    _tableView.backgroundColor =[UIColor groupTableViewBackgroundColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.tableHeaderView = self.headerView;
     
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
@@ -248,10 +251,10 @@
 {
     if (!_headerView) {
         _headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 70)];
-//        _headerView.backgroundColor = [UIColor whiteColor];
+        _headerView.backgroundColor = [UIColor whiteColor];
         
         UIView *topView = [UIView new];
-        [topView setBackgroundColor:colorGray];
+        [topView setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
         [_headerView addSubview:topView];
         
         topView.sd_layout
@@ -458,6 +461,10 @@
         self.tableView.isNone = YES;
     }else{
         self.tableView.isNone = NO;
+    }
+    if (_hasHeader) {
+        _tableView.tableHeaderView = self.headerView;
+        _hasHeader = NO;
     }
     [self.tableView reloadData];
 }

@@ -9,7 +9,7 @@
 #import "ProjectBannerDetailVC.h"
 #import "CircleShareBottomView.h"
 #import "ShareToCircleView.h"
-
+#import "LoadingBlackView.h"
 #define SHARETOCIRCLE @"shareContentToFeeling"
 
 @interface ProjectBannerDetailVC ()<UIWebViewDelegate,CircleShareBottomViewDelegate,ShareToCircleViewDelegate,UITextViewDelegate>
@@ -21,6 +21,7 @@
 @property (nonatomic, strong) ShareToCircleView *shareCircleView;
 @property (nonatomic, copy) NSString *circlePartner;
 
+@property (nonatomic, strong) LoadingBlackView *loadingBlackView;
 @end
 
 @implementation ProjectBannerDetailVC
@@ -34,8 +35,8 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     [self setNav];
-    _webView  =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
-//    _webView  =[[UIWebView alloc]initWithFrame:self.view.bounds];
+//    _webView  =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
+    _webView  =[[UIWebView alloc]initWithFrame:self.view.bounds];
     _webView.delegate = self;
     _webView.scrollView.bounces = NO;
     [_webView scalesPageToFit];
@@ -45,8 +46,7 @@
     [self.view addSubview:_webView];
     
     [self startLoadDetailData];
-    //加载视图区域
-    self.loadingViewFrame = _webView.frame;
+    
 }
 
 -(void)setNav
@@ -298,6 +298,7 @@
 
 -(void)startLoadDetailData
 {
+    
     if (![_url hasPrefix:@"http://"]) {
         NSString * url =[NSString stringWithFormat:@"http://%@",_url];
         [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
@@ -306,24 +307,51 @@
     }
 }
 
+-(void)addBlackView
+{
+        _loadingBlackView = [[LoadingBlackView alloc]initWithFrame:self.loadingViewFrame];
+        [self.view addSubview:_loadingBlackView];
+    
+}
+-(void)closeBlackView
+{
+    [_loadingBlackView removeFromSuperview];
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[LoadingBlackView class]]) {
+            [view removeFromSuperview];
+        }
+    }
+    
+//        NSLog(@"yichu");
+}
+
 -(void)webViewDidStartLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
+        //加载视图区域
+        self.loadingViewFrame = _webView.frame;
+        [self addBlackView];
         self.startLoading = YES;
+        self.isTransparent = YES;
+        self.isBlack = YES;
     }
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
+        [self closeBlackView];
         self.startLoading = NO;
+        [self.webView.scrollView setContentOffset:CGPointZero];
+        
     }
 }
 
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     if (webView == self.webView) {
-        self.startLoading = YES;
+        [self closeBlackView];
+        self.startLoading = NO;
         self.isNetRequestError = YES;
     }
 }

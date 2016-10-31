@@ -9,6 +9,7 @@
 #import "Renzheng3ViewController.h"
 #import "Renzheng4ViewController.h"
 #import "Renzheng2ViewController.h"
+#import "LoadingBlackView.h"
 @interface Renzheng3ViewController ()<UITextViewDelegate>
 
 {
@@ -29,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *companyTextViewHeight;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeight;
+@property (nonatomic, strong) LoadingBlackView *loadingBlackView;
 @end
 
 @implementation Renzheng3ViewController
@@ -112,29 +114,48 @@
             //开始加载动画
             //上传文件
             self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
-            
+            [self addBlackView];
             self.startLoading = YES;
-            self.isTransparent  = YES;
-            
+            self.isTransparent = YES;
+            self.isBlack = YES;
+//            NSLog(@"dayin-%@",_dicData);
             [self.httpUtil getDataFromAPIWithOps:AUTHENTICATE postParam:_dicData files:fileDic type:0 delegate:self sel:@selector(requestSetIdentifyType:)];
 
         }
     }
 }
+
+-(void)addBlackView
+{
+    _loadingBlackView = [[LoadingBlackView alloc]initWithFrame:self.loadingViewFrame];
+    [self.view addSubview:_loadingBlackView];
     
+}
+-(void)closeBlackView
+{
+    
+    [_loadingBlackView removeFromSuperview];
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[LoadingBlackView class]]) {
+            [view removeFromSuperview];
+        }
+    }
+    //        NSLog(@"yichu");
+}
+
 #pragma mark -智囊团注册身份方法
 
 -(void)requestSetIdentifyType:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         
         if ([status integerValue] == 200) {
-
+            [self closeBlackView];
             self.startLoading = NO;
             //进入项目首页
             UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
@@ -152,6 +173,7 @@
             
             [self.navigationController pushViewController:tabBarController animated:NO];
         }else{
+            [self closeBlackView];
             self.startLoading = NO;
             [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
             
@@ -163,6 +185,7 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
+    [self closeBlackView];
     self.startLoading = NO;
 }
 

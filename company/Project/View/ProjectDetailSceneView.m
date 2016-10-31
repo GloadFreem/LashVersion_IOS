@@ -505,8 +505,8 @@
         self.tableView.isNone = YES;
     }else{
         self.tableView.isNone = NO;
-        [self.tableView reloadData];
     }
+    [self.tableView reloadData];
 }
 
 
@@ -538,6 +538,7 @@
     
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     [self stop];
+    [self stopTimer];
 //    _player.player = nil;
 }
 
@@ -608,6 +609,7 @@
 
 -(void)stopTimer{
     
+    [self.httpUtil requestDealloc];
     [_timer setFireDate:[NSDate distantFuture]];
     [_timer invalidate];
     _timer = nil;

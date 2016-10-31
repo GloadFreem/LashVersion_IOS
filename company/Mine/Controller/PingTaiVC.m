@@ -180,7 +180,7 @@
         vc.url = _lawerurl;
         vc.titleStr = @"免责声明";
     }
-    if (vc.url) {
+    if (vc.url.length) {
         [self.navigationController  pushViewController:vc animated:YES];
     }
     

@@ -526,6 +526,7 @@
         scene.delegate = self;
         scene.authenticName = self.authenticName;
         scene.bannerView = bannerView;
+        [_heightArray addObject:[NSNumber numberWithFloat:scene.height]];
         [_subViewScrollView addSubview:scene];
         
         _subViewScrollView.y = POS_Y(_titleScrollView);
@@ -899,8 +900,9 @@
         [_tableView reloadData];
     }
     [scene removeObserverAndNotification];
+    [self cancleRequest];
     //销毁计时器通知
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark -分享
@@ -1191,6 +1193,8 @@
 {
     [super viewWillAppear:animated];
 //    self.navigationController.navigationBar.translucent=NO;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:[UIButton new]];
+    
     self.navigationController.navigationBar.hidden = YES;
 //    [self.navigationController setNavigationBarHidden:YES];
     
@@ -1236,7 +1240,6 @@
 //        _scrollView.frame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64);
     }];
 }
-
 
 -(void)viewDidDisappear:(BOOL)animated
 {

@@ -178,8 +178,8 @@
                           sel:(SEL)sel
 {
     
-    NSURL* url = [NSURL URLWithString:[SERVICE_THINK_URL stringByAppendingString:urlStr]];
-    NSLog(@"请求地址:%@",url);
+    NSURL* url = [NSURL URLWithString:[SERVICE_URL stringByAppendingString:urlStr]];
+//    NSLog(@"请求地址:%@",url);
     
     self.requestInstance=[ASIFormDataRequest requestWithURL:url];
     [self.requestInstance setTimeOutSeconds:5];

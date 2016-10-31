@@ -12,7 +12,7 @@
 #import "LoadingView.h"
 #import "LoadingUtil.h"
 #import "UITableViewCustomView.h"
-
+#import "LoadingBlackView.h"
 @interface RootViewController : UIViewController<LoadingViewDelegate>
 
 @property (nonatomic, copy) NSString *partner;
@@ -25,7 +25,7 @@
 @property(assign,nonatomic)BOOL isNetRequestError; //是否请求出错
 @property(assign,nonatomic)CGRect loadingViewFrame; //自定义加载视图大小
 @property(retain,nonatomic)NSMutableDictionary* dataDic; //字典数据
-
+@property (assign, nonatomic) BOOL isBlack;   //黑色透明背景
 
 
 - (void) refresh;  //刷新

@@ -102,18 +102,6 @@
     
     NSDictionary *para = @{@"key":@"jinzht_server_security", @"partner":@"requestViewPointList",@"page":STRING(@"%ld", (long)_page)};
     
-//    NSString *str = @"http://192.168.5.176:8080/MyProject/messageSystem/requestViewPointList.action";
-    /*
-http://192.168.5.182:8080/MyProject/messageSystem/requestSearchThinkTank.action?key=jinzht_server_security&partner=sdfwefwf&page=0&keyWord=10
-    
-http://192.168.5.182:8080/MyProject/messageSystem/requestThinkTankDetail.action?id=216
-    
-http://192.168.5.182:8080/MyProject/messageSystem/requestThinkTankList.action?key=jinzht_server_security&partner=sdfwefwf&page=0
-    
-http://192.168.5.182:8080/MyProject/messageSystem/requestViewPointList.action?key=jinzht_server_security&partner=requestViewPointList&page=0
-    
-http://192.168.5.182:8080/MyProject/messageSystem/requestViewPointDetail.action?infoId=2
-    */
     // 初始化Manager
     __weak typeof(self) weakSelf = self;
     AFHTTPRequestOperationManager *netManager = [AFHTTPRequestOperationManager manager];

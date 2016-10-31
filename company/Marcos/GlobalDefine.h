@@ -163,9 +163,9 @@
 
 //服务器域名地址
 //#define SERVICE_URL @"http://www.jinzht.com:8088/jinzht/"//服务器域名地址
-//#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
-#define SERVICE_URL @"http://192.168.5.176:8080/jinzht/"//本地
-#define SERVICE_THINK_URL @"http://192.168.5.176:8080/MyProject/messageSystem/"
+#define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"//服务器域名地址
+//#define SERVICE_URL @"http://192.168.5.176:8080/jinzht/"//本地
+//#define SERVICE_THINK_URL @"http://192.168.5.176:8080/MyProject/messageSystem/"
 
 // 如果是DEBUG模式用测试服务器地址
 #if DEBUG

@@ -396,7 +396,7 @@
 -(void)createTableView
 {
     _tableView  = [UITableView new];
-    _tableView.backgroundColor = colorGray;
+    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;

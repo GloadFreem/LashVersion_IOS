@@ -61,7 +61,7 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     _shouldOpenContentLabel = NO;
     
     _topView = [UIView new];
-    [_topView setBackgroundColor:colorGray];
+    [_topView setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
     
     _iconBtn = [UIButton new];
 //    _iconBtn = [UIImageView new];

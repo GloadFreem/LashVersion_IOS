@@ -519,7 +519,7 @@
     [super viewWillAppear:animated];
     
 //    NSLog(@"zhuangtai--%@----zhi---%@",_authenticName,_identiyTypeId);
-
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:[UIButton new]];
     self.navigationController.navigationBar.hidden = YES;
     
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];

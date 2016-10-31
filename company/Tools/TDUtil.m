@@ -360,7 +360,7 @@
     | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
     //对比时间差
     NSDateComponents *dateCom = [calendar components:unit fromDate:nowDate toDate:expireDate options:0];
-    NSLog(@"打印时间%ld",(long)dateCom.second);
+//    NSLog(@"打印时间%ld",(long)dateCom.second);
     if (dateCom.second > 0) {
 //        NSLog(@"未过期");
         return true;//未过期

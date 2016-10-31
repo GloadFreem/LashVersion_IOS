@@ -9,7 +9,10 @@
 #import "HeadlineDetailViewController.h"
 #import "CircleShareBottomView.h"
 #import "ShareToCircleView.h"
+#import "LoadingBlackView.h"
+
 #define SHARETOCIRCLE @"shareContentToFeeling"
+
 
 @interface HeadlineDetailViewController () <CircleShareBottomViewDelegate,UIWebViewDelegate,ShareToCircleViewDelegate>
 @property (nonatomic,strong) UIView * shareView;
@@ -20,6 +23,9 @@
 @property (nonatomic, strong) ShareToCircleView *shareCircleView;
 @property (nonatomic, copy) NSString *circlePartner;
 @property (strong, nonatomic) UIWebView * webView;
+@property (nonatomic, strong) LoadingBlackView *loadingBlackView;
+
+
 @end
 
 @implementation HeadlineDetailViewController
@@ -37,16 +43,16 @@
     
     self.circlePartner = [TDUtil encryKeyWithMD5:KEY action:SHARETOCIRCLE];
     
-    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
-//    _webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+//    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
+    _webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
     _webView.delegate = self;
     _webView.scalesPageToFit = YES; //设置大小适配页面
+    [_webView sizeToFit];
     _webView.backgroundColor = [UIColor whiteColor];
     _webView.opaque = NO; // 将webView设置为不透明
     [self.view addSubview:_webView];
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_url]]];
-    //加载视图区域
-    self.loadingViewFrame = _webView.frame;
+    
 }
 -(void)setValue
 {
@@ -55,20 +61,42 @@
     _shareTitle = self.titleText;
     _shareContent = self.contentText;
 }
-
+-(void)addBlackView
+{
+    _loadingBlackView = [[LoadingBlackView alloc]initWithFrame:self.loadingViewFrame];
+    [self.view addSubview:_loadingBlackView];
+    
+}
+-(void)closeBlackView
+{
+    [_loadingBlackView removeFromSuperview];
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[LoadingBlackView class]]) {
+            [view removeFromSuperview];
+        }
+    }
+    //        NSLog(@"yichu");
+    
+    
+}
 -(void)webViewDidStartLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
-
+        //加载视图区域
+        self.loadingViewFrame = _webView.frame;
+        [self addBlackView];
         self.startLoading = YES;
+        self.isTransparent = YES;
+        self.isBlack = YES;
     }
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
-
+        [self closeBlackView];
         self.startLoading = NO;
+        [self.webView.scrollView setContentOffset:CGPointZero];
     }
     
 }
@@ -76,8 +104,8 @@
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     if (webView == self.webView) {
-
-        self.startLoading = YES;
+        [self closeBlackView];
+        self.startLoading = NO;
         self.isNetRequestError = YES;
     }
 }

@@ -8,10 +8,13 @@
 
 #import "PingTaiWebViewController.h"
 #import "UIImage+GIF.h"
+#import "LoadingBlackView.h"
+
 @interface PingTaiWebViewController ()<UIWebViewDelegate>
 @property (strong, nonatomic) UIWebView * webView;
 @property (strong, nonatomic) UIView *gifView;
 @property (strong, nonatomic) UIImageView *gifImageView;
+@property (nonatomic, strong) LoadingBlackView *loadingBlackView;
 @end
 
 @implementation PingTaiWebViewController
@@ -24,6 +27,7 @@
     
     [self setNav];
     _webView  =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT-64)];
+//    _webView = [[UIWebView alloc]initWithFrame:self.view.bounds];
     _webView.delegate = self;
     _webView.scrollView.bounces = NO;
     [_webView scalesPageToFit];
@@ -31,8 +35,7 @@
     _webView.backgroundColor = [UIColor whiteColor];
     _webView.opaque = NO;
     [self.view addSubview:_webView];
-    //加载视图区域
-    self.loadingViewFrame = _webView.frame;
+    
     
     [self startLoadDetailData];
     
@@ -88,12 +91,32 @@
     }
     
 }
-
+-(void)addBlackView
+{
+    _loadingBlackView = [[LoadingBlackView alloc]initWithFrame:self.loadingViewFrame];
+    [self.view addSubview:_loadingBlackView];
+    
+}
+-(void)closeBlackView
+{
+    [_loadingBlackView removeFromSuperview];
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[LoadingBlackView class]]) {
+            [view removeFromSuperview];
+        }
+    }
+    //        NSLog(@"yichu");
+}
 
 -(void)webViewDidStartLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
+        //加载视图区域
+        self.loadingViewFrame = _webView.frame;
+        [self addBlackView];
         self.startLoading = YES;
+        self.isTransparent = YES;
+        self.isBlack = YES;
     }
 }
 
@@ -101,6 +124,8 @@
 {
     if (webView == self.webView) {
         self.startLoading = NO;
+        [self closeBlackView];
+        [self.webView.scrollView setContentOffset:CGPointZero];
     }
     [_webView layoutIfNeeded];
 }
@@ -108,7 +133,8 @@
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     if (webView == self.webView) {
-        self.startLoading = YES;
+        [self closeBlackView];
+        self.startLoading = NO;
         self.isNetRequestError = YES;
     }
 }

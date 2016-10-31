@@ -97,7 +97,7 @@
     _picContainerView = [PictureContainerView new];
     
     _middleView = [UIView new];
-    _middleView.backgroundColor = colorGray;
+    _middleView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     _praiseBtn = [UIButton new];
 //    [_praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
@@ -109,7 +109,7 @@
     _praiseLabel.numberOfLines = 0;
     
     _bottomView = [UIView new];
-    _bottomView.backgroundColor = colorGray;
+    _bottomView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     
     NSArray *views = @[_topView,_iconView, _nameLabel, _addressLabel, _companyLabel, _shuView, _positionLabel, _timeLabel, _contentLabel,_copyBtn, _contentView,_picContainerView,_middleView, _praiseBtn, _praiseLabel, _bottomView];

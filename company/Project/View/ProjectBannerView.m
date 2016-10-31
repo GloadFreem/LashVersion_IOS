@@ -63,6 +63,7 @@
         make.bottom.mas_equalTo(_scrollView.mas_bottom);
         make.height.mas_equalTo(kCOVERHEIGHT);
     }];
+    _coverView.hidden = YES;
     
     //圆圈
     UIImage * bottom = [UIImage imageNamed:@"icon-bottom-circle"];
@@ -78,6 +79,8 @@
         make.width.height.mas_equalTo(46);
         make.bottom.mas_equalTo(_scrollView.mas_bottom).offset(-10);
     }];
+    _firstBottomImage.hidden = YES;
+    
     //进度条
     _progress = [[GENEProgressView alloc]initWithLineColor:orangeColor loopColor:[UIColor clearColor]];
     _progress.backgroundColor = [UIColor clearColor];
@@ -87,6 +90,7 @@
         make.centerY.mas_equalTo(_firstBottomImage.mas_centerY);
         make.width.height.mas_equalTo(48);
     }];
+    _progress.hidden = YES;
     
     //firstLabel
     _firstLabel = [UILabel new];
@@ -185,7 +189,7 @@
     _pageControl.currentPageIndicatorTintColor = orangeColor;
     [self addSubview:_pageControl];
     [_pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_coverView.mas_top).offset(5);
+        make.bottom.mas_equalTo(self.mas_bottom).offset(-55);
         make.right.mas_equalTo(_coverView.mas_right).offset(-18);
         make.width.mas_equalTo(kPAGEWIDTH);
         make.height.mas_equalTo(kPAGEHEIGHT);
@@ -298,6 +302,8 @@
         }else{
             _coverView.hidden = YES;
             _firstBottomImage.hidden = YES;
+            _progress.title = @"";
+            _progress.contentText = @"";
 //            _pageControl.hidden = YES;
             _firstLabel.hidden = YES;
             _secondLabel.hidden = YES;
@@ -398,6 +404,8 @@
         _coverView.hidden = YES;
         _firstBottomImage.hidden = YES;
         //        _pageControl.hidden = YES;
+        _progress.title = @"";
+        _progress.contentText = @"";
         _firstLabel.hidden = YES;
         _secondLabel.hidden = YES;
         _progress.hidden = YES;
@@ -435,6 +443,8 @@
         _coverView.hidden = YES;
         _firstBottomImage.hidden = YES;
 //        _pageControl.hidden = YES;
+        _progress.title = @"";
+        _progress.contentText = @"";
         _firstLabel.hidden = YES;
         _secondLabel.hidden = YES;
         _progress.hidden = YES;

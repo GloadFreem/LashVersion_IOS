@@ -480,6 +480,9 @@
             [_attentionVC.statusArray removeObjectAtIndex:index];
             [_tableView reloadData];
         }
+        
+        [self.httpUtil requestDealloc];
+        
         [self.navigationController popViewControllerAnimated:YES];
     }
     if (btn.tag == 1) {
@@ -800,6 +803,7 @@
 {
     [super viewWillAppear:animated];
     
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:[UIButton new]];
     self.navigationController.navigationBar.hidden = YES;
     
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];

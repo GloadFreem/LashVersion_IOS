@@ -254,6 +254,8 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self cancleRequest];
+    
     if (_isMine) {
         self.navigationController.navigationBar.hidden = YES;
     }

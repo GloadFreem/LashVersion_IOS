@@ -186,7 +186,7 @@
 -(void)createTableView
 {
     _tableView = [[UITableViewCustomView alloc]init];
-    _tableView.backgroundColor = color(239, 239, 244, 1);
+    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _tableView.delegate =self;
     _tableView.dataSource =self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
