@@ -24,4 +24,5 @@
 @property (nonatomic, assign) BOOL isActivity;
 @property (nonatomic, assign) BOOL isPoint;
 @property (nonatomic, assign) BOOL isFast;
+@property (nonatomic, assign) BOOL isCircle;
 @end

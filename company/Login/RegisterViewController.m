@@ -42,7 +42,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    _certifyBtn.layer.cornerRadius = 5;
+    _certifyBtn.layer.cornerRadius = 2;
     _certifyBtn.layer.masksToBounds = YES;
     _selectedBtn.selected = YES;
     
@@ -230,7 +230,6 @@
             [self.sendMsgBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
         }
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-        
     }
 }
 
@@ -242,7 +241,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 //让当前控制器对应的状态栏是白色

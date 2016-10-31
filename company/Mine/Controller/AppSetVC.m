@@ -249,4 +249,8 @@
     [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:@"缓存已清除"];
 }
 
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 @end

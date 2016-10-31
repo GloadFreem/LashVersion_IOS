@@ -85,7 +85,7 @@
     _iconBtn.layer.cornerRadius = 52;
     _iconBtn.layer.masksToBounds = YES;
     _iconBtn.layer.borderWidth = 4;
-    _iconBtn.layer.borderColor = color(190, 178, 176, 1).CGColor;
+    _iconBtn.layer.borderColor = [TDUtil colorWithHexString:@"afb7bd"].CGColor;
 }
 //登录
 - (IBAction)loginClick:(UIButton *)sender {
@@ -125,7 +125,7 @@
 //        NSString *regId = @"141fe1da9ead0e753f8";
         
         NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",_password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
-        NSLog(@"------%@",dic);
+//        NSLog(@"------%@",dic);
         //加载动画
         //加载动画控件
         if (!activity) {
@@ -160,7 +160,7 @@
 -(void)requestLogin:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -217,8 +217,8 @@
  */
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-//    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+    NSLog(@"返回:%@",jsonString);
     self.startLoading =NO;
     [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"网络请求错误"];
     [activity stopAnimating];

@@ -318,4 +318,8 @@
     [self.navigationController.navigationBar addSubview:statusBar];
 }
 
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 @end

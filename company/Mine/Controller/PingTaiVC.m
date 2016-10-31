@@ -205,6 +205,10 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO];
 }
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 /*
 #pragma mark - Navigation
 

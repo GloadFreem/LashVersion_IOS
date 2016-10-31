@@ -652,4 +652,8 @@
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 @end

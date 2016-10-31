@@ -18,7 +18,7 @@
 
 #define REQUESTLIST @"requestViewPointList"
 
-@interface TankPointController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
+@interface TankPointController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic, strong) NSMutableArray *searchResults;
 
@@ -53,7 +53,6 @@
     _tableView = tableView;
     
     self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 44)];
-//    self.searchBar.delegate = self;
     self.searchBar.placeholder = @"搜索";
     UIButton *searchBtn = [[UIButton alloc]initWithFrame:self.searchBar.frame];
     [searchBtn addTarget:self action:@selector(searchView) forControlEvents:UIControlEventTouchUpInside];
@@ -61,15 +60,6 @@
     [self.searchBar addSubview:searchBtn];
     
     self.tableView.tableHeaderView = self.searchBar;
-    
-//    TankSearchResultController *result = [[TankSearchResultController alloc]init];
-//    result.view.frame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT);
-//    self.searchController = [[UISearchController alloc]initWithSearchResultsController:result];
-//    self.searchController.searchBar.frame= CGRectMake(0, 0, SCREENWIDTH, 44);
-//    self.searchController.searchBar.placeholder = @"搜索";
-//    self.searchController.searchBar.delegate = self;
-//    self.tableView.tableHeaderView = self.searchController.searchBar;
-//    self.definesPresentationContext = YES;
     
 }
 
@@ -104,11 +94,9 @@
     
     // 初始化Manager
     __weak typeof(self) weakSelf = self;
-    AFHTTPRequestOperationManager *netManager = [AFHTTPRequestOperationManager manager];
-    netManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain",@"text/json",@"application/json",@"text/javascript",@"text/html",nil];
-    [netManager POST:JZT_URL(REQUEST_POINT_LIST) parameters:para success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_POINT_LIST) parameters:para progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = responseObject;
-//        NSLog(@"请求成功====%@", dic);
+        //        NSLog(@"请求成功====%@", dic);
         if ([dic[@"status"] intValue]== 200) {
             if (self.page == 0) {
                 [_tempArray removeAllObjects];
@@ -122,11 +110,11 @@
             
         }
         weakSelf.startLoading = NO;
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        NSLog(@"错误信息%@", error.localizedDescription);
         weakSelf.isNetRequestError  =YES;
-//        NSLog(@"错误信息%@", error);
     }];
+
     [_tableView.mj_header endRefreshing];
     [_tableView.mj_footer endRefreshing];
 }
@@ -308,24 +296,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    [self.searchBar resignFirstResponder];
-}
-
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
-{
-    if (searchBar == self.searchBar) {
-        NSLog(@"结束编辑");
-    }
-}
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    if (searchBar == self.searchBar) {
-        NSLog(@"开始搜索");
-    }
 }
 
 @end

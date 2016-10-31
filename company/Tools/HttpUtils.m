@@ -312,7 +312,7 @@
     //在回收自身的时候，取消发出的请求，当然如果是多个request，可以都放到请求队列，一并撤销。
     [self.requestInstance cancel];
     [self.requestInstance setDelegate:nil];
-    NSLog(@"回收请求");
+//    NSLog(@"回收请求");
 }
 
 @end

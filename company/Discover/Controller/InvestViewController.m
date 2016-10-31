@@ -1310,6 +1310,10 @@
     
 }
 
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

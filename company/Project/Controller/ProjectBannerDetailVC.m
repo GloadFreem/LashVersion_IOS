@@ -248,6 +248,9 @@
     if (self.isFast) {
         _contentText = _titleText;
     }
+    if (self.isCircle) {
+        _titleStr = _contentText;
+    }
     [shareView instancetationShareToCircleViewWithimage:_image title:_titleStr content:_contentText];
     shareView.tag = 1000;
     [[UIApplication sharedApplication].windows[0] addSubview:shareView];

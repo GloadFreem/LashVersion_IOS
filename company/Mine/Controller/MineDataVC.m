@@ -850,4 +850,9 @@
     [self.navigationController.navigationBar setHidden:NO];
     
 }
+
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 @end

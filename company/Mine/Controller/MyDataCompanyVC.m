@@ -144,5 +144,8 @@
     NSLog(@"结束编辑");
 }
 
-
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 @end

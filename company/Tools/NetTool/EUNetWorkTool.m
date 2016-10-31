@@ -63,6 +63,7 @@ static EUNetWorkTool *_manager;
 
 -(void)cancleRequest
 {
-    [_manager invalidateSessionCancelingTasks:YES];
+//    [_manager invalidateSessionCancelingTasks:YES];
+//    [_manager.session finishTasksAndInvalidate];
 }
 @end

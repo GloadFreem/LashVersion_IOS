@@ -374,4 +374,8 @@
     [super viewDidDisappear:animated];
 }
 
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 @end

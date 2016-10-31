@@ -493,4 +493,9 @@
     [super viewWillDisappear:animated];
     self.startLoading = NO;
 }
+
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 @end

@@ -274,4 +274,8 @@
 {
     
 }
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 @end

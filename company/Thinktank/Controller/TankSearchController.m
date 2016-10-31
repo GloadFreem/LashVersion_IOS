@@ -186,11 +186,10 @@
     
     // 初始化Manager
     __weak typeof(self) weakSelf = self;
-    AFHTTPRequestOperationManager *netManager = [AFHTTPRequestOperationManager manager];
-    netManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain",@"text/json",@"application/json",@"text/javascript",@"text/html",nil];
-    [netManager POST:str parameters:para success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    [[EUNetWorkTool shareTool] POST:str parameters:para progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = responseObject;
-//                NSLog(@"请求成功====%@", dic);
+//                        NSLog(@"请求成功====%@", dic);
         if ([dic[@"status"] intValue]== 200) {
             if (weakSelf.page == 0) {
                 [_tempArray removeAllObjects];
@@ -218,14 +217,16 @@
             [_tableView.mj_footer endRefreshingWithNoMoreData];
         }
         
-            weakSelf.startLoading = NO;
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        weakSelf.startLoading = NO;
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        NSLog(@"错误信息%@", error.localizedDescription);
         weakSelf.isNetRequestError  =YES;
         
         [_tableView.mj_header endRefreshing];
         [_tableView.mj_footer endRefreshing];
     }];
+    
 }
 
 #pragma mark---原创

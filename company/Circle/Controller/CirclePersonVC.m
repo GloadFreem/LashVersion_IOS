@@ -15,7 +15,6 @@
 #import "ProjectBannerDetailVC.h"
 #import "ProjectDetailController.h"
 #import "ProjectPrepareDetailVC.h"
-#import "ActivityDetailVC.h"
 
 #define CIRCLE_CONTENT @"requestFeelingList"
 #define CIRCLE_PRAISE @"requestPriseFeeling"
@@ -344,6 +343,7 @@
         vc.titleText = model.titleText;
         vc.contentText = model.contentText;
         vc.titleStr = model.titleText;
+        vc.isCircle = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
     if (model.feelingTypeId == 3) {//项目
@@ -361,12 +361,6 @@
                 [self.navigationController pushViewController:detail animated:YES];
             }
         }
-    }
-    if (model.feelingTypeId == 4) {//活动
-        NSArray *array = [model.url componentsSeparatedByString:@","];
-        ActivityDetailVC *vc =[ActivityDetailVC new];
-        vc.actionId = [array[0] integerValue];
-        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
@@ -680,6 +674,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 /*
 #pragma mark - Navigation
 

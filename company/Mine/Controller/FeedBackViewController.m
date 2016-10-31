@@ -161,6 +161,11 @@
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
     [IQKeyboardManager sharedManager].enable = YES;
 }
+
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 /*
 #pragma mark - Navigation
 

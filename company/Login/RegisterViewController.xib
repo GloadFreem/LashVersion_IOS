@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -23,17 +23,22 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoginBg.png" translatesAutoresizingMaskIntoConstraints="NO" id="aMy-rc-y5Y"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newLoginBg.png" translatesAutoresizingMaskIntoConstraints="NO" id="aMy-rc-y5Y"/>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconfont-denglu-(2).png" translatesAutoresizingMaskIntoConstraints="NO" id="hqn-Ul-poh">
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="HlO-HT-pM0"/>
                         <constraint firstAttribute="width" constant="19" id="fBK-CJ-rCF"/>
                     </constraints>
                 </imageView>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入验证码" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="DTc-4Z-8f5">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  请输入验证码" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="DTc-4Z-8f5">
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                 </textField>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="注册账号" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qSI-z8-ldC">
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -86,11 +91,17 @@
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="voJ-8g-7P0" customClass="JKCountDownButton">
                     <color key="backgroundColor" red="1" green="0.44323085058038214" blue="0.22156729845260037" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="90" id="jTb-P3-ctU"/>
+                        <constraint firstAttribute="width" constant="110" id="98D-qL-hVq"/>
+                        <constraint firstAttribute="height" constant="25" id="Rmf-oW-zXO"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <state key="normal" title="获取验证码">
@@ -122,6 +133,11 @@
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入指环码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ea5-Ia-vOh">
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                 </textField>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(选填)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FXS-Ce-hK0">
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -130,8 +146,8 @@
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o1O-lz-SPt">
                     <constraints>
-                        <constraint firstAttribute="height" constant="43" id="j3P-FC-Ct6"/>
-                        <constraint firstAttribute="width" constant="259" id="pB3-ia-VCj"/>
+                        <constraint firstAttribute="height" constant="40" id="j3P-FC-Ct6"/>
+                        <constraint firstAttribute="width" constant="260" id="pB3-ia-VCj"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                     <state key="normal" title="下一步" backgroundImage="icon_loginbg.png">
@@ -217,7 +233,6 @@
                 <constraint firstItem="voJ-8g-7P0" firstAttribute="trailing" secondItem="aPs-bL-QX3" secondAttribute="trailing" id="BPz-oN-g7P"/>
                 <constraint firstItem="aPs-bL-QX3" firstAttribute="leading" secondItem="S8c-XG-mBf" secondAttribute="leading" id="CHw-NK-Ye0"/>
                 <constraint firstItem="FXS-Ce-hK0" firstAttribute="leading" secondItem="ea5-Ia-vOh" secondAttribute="trailing" constant="50" id="Cll-Ug-MIK"/>
-                <constraint firstItem="voJ-8g-7P0" firstAttribute="leading" secondItem="DTc-4Z-8f5" secondAttribute="trailing" constant="-90" id="Dsh-hP-vVj"/>
                 <constraint firstItem="if9-zT-8Hv" firstAttribute="leading" secondItem="N6a-8V-fAX" secondAttribute="leading" id="H5E-9o-tCI"/>
                 <constraint firstItem="wHy-hs-yPX" firstAttribute="leading" secondItem="hqn-Ul-poh" secondAttribute="leading" id="HMc-MO-tDl"/>
                 <constraint firstItem="yOY-qV-Kjd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="HRq-Md-YJf"/>
@@ -230,7 +245,7 @@
                 <constraint firstItem="aMy-rc-y5Y" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Ox9-c1-fbq"/>
                 <constraint firstItem="voJ-8g-7P0" firstAttribute="centerY" secondItem="DTc-4Z-8f5" secondAttribute="centerY" id="PS4-X7-8jw"/>
                 <constraint firstItem="Hcv-Jb-NLV" firstAttribute="top" secondItem="o1O-lz-SPt" secondAttribute="bottom" constant="15" id="PYE-Hj-egr"/>
-                <constraint firstItem="voJ-8g-7P0" firstAttribute="leading" secondItem="DTc-4Z-8f5" secondAttribute="trailing" constant="10" id="QEX-QO-xd6"/>
+                <constraint firstItem="voJ-8g-7P0" firstAttribute="leading" secondItem="DTc-4Z-8f5" secondAttribute="trailing" constant="5" id="QEX-QO-xd6"/>
                 <constraint firstItem="aPs-bL-QX3" firstAttribute="trailing" secondItem="DTc-4Z-8f5" secondAttribute="trailing" id="RkU-yJ-Dmn"/>
                 <constraint firstItem="hqn-Ul-poh" firstAttribute="centerY" secondItem="TID-qv-MkS" secondAttribute="centerY" id="S3Z-li-anE"/>
                 <constraint firstItem="if9-zT-8Hv" firstAttribute="top" secondItem="FXS-Ce-hK0" secondAttribute="bottom" constant="10" id="TvL-5J-Zsk"/>
@@ -260,9 +275,8 @@
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
             <variation key="default">
                 <mask key="constraints">
-                    <exclude reference="p7B-ir-HJP"/>
                     <exclude reference="RkU-yJ-Dmn"/>
-                    <exclude reference="Dsh-hP-vVj"/>
+                    <exclude reference="p7B-ir-HJP"/>
                 </mask>
             </variation>
             <point key="canvasLocation" x="215.5" y="73.5"/>
@@ -271,11 +285,11 @@
     <resources>
         <image name="Bar-code.png" width="16" height="14"/>
         <image name="Left-arrow-button.png" width="30" height="30"/>
-        <image name="LoginBg.png" width="375" height="667"/>
         <image name="New-message.png" width="19" height="13"/>
         <image name="icon_loginbg.png" width="260" height="40"/>
         <image name="icon_selectedBtn.png" width="15" height="15"/>
         <image name="icon_unselectedBtn.png" width="15" height="15"/>
         <image name="iconfont-denglu-(2).png" width="19" height="21"/>
+        <image name="newLoginBg.png" width="375" height="667"/>
     </resources>
 </document>

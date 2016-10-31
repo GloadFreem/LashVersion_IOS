@@ -66,8 +66,8 @@
     self.goldGetPartner = [TDUtil encryKeyWithMD5:KEY action:GOLDGETRULE];
     self.goldUsepartner = [TDUtil encryKeyWithMD5:KEY action:GOLDUSERULE];
     [self startLoadData];
-    [self loadGetRule];
-    [self loadUseRule];
+//    [self loadGetRule];
+//    [self loadUseRule];
     [self loadCode];
     
 }
@@ -76,7 +76,22 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_GOLD_INVITE_FRIEND postParam:dic type:0 delegate:self sel:@selector(requestInviteCode:)];
+//    [self.httpUtil getDataFromAPIWithOps:REQUEST_GOLD_INVITE_FRIEND postParam:dic type:0 delegate:self sel:@selector(requestInviteCode:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_GOLD_INVITE_FRIEND) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary  *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSDictionary *data = [NSDictionary dictionaryWithDictionary:dic[@"data"]];
+            _shareUrl = data[@"url"];
+            _shareImage = data[@"image"];
+            _shareTitle = data[@"title"];
+            _shareContent = data[@"content"];
+        }else{
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        self.startLoading = YES;
+        self.isNetRequestError = YES;
+    }];
+    
 }
 -(void)requestInviteCode:(ASIHTTPRequest *)request
 {
@@ -145,7 +160,22 @@
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:LOGO_GOLD_ACCOUNT postParam:dic type:0 delegate:self sel:@selector(requestGoldInfo:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(LOGO_GOLD_ACCOUNT) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic =responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:dic[@"data"]];
+            
+            _count = [dataDic valueForKey:@"count"];
+            [self setModel];
+        }else{
+        
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        self.startLoading = YES;
+        self.isNetRequestError = YES;
+    }];
+    
+//    [self.httpUtil getDataFromAPIWithOps:LOGO_GOLD_ACCOUNT postParam:dic type:0 delegate:self sel:@selector(requestGoldInfo:)];
     
 }
 
@@ -370,6 +400,12 @@
 {
     [super viewWillDisappear: animated];
     [self.navigationController.navigationBar setHidden:NO];
+}
+
+-(void)dealloc
+{
+//    [[EUNetWorkTool shareTool] cancleRequest];
+//    [self cancleRequest];
 }
 
 @end

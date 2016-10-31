@@ -264,6 +264,7 @@
     [_scrollView addSubview:self.titleScrollView];          //添加点击按钮
     [_scrollView addSubview:self.subViewScrollView];        //添加最下边scrollview
     
+    [_subViewScrollView setupAutoContentSizeWithBottomView:scene bottomMargin:0];
     [_scrollView setupAutoContentSizeWithBottomView:_subViewScrollView bottomMargin:0];
     [_scrollView setupAutoHeightWithBottomView:_subViewScrollView bottomMargin:0];
     
@@ -1254,10 +1255,11 @@
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
 }
 
-//-(void)dealloc
-//{
-//    [scene removeObserverAndNotification];
-//}
+-(void)dealloc
+{
+    [member.httpUtil requestDealloc];
+    [self cancleRequest];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

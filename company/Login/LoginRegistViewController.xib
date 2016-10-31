@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -23,17 +23,8 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoginBg.png" translatesAutoresizingMaskIntoConstraints="NO" id="W2j-nt-NsK">
-                    <constraints>
-                        <constraint firstAttribute="height" constant="30" id="DwT-nt-SCj"/>
-                    </constraints>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="DwT-nt-SCj"/>
-                        </mask>
-                    </variation>
-                </imageView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5i-Xr-Im9">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newLoginBg.png" translatesAutoresizingMaskIntoConstraints="NO" id="W2j-nt-NsK"/>
+                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5i-Xr-Im9">
                     <constraints>
                         <constraint firstAttribute="width" constant="104" id="0pY-iT-wer"/>
                         <constraint firstAttribute="height" constant="104" id="AS8-HO-I7V"/>
@@ -68,6 +59,11 @@
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="qLT-9s-2Cp"/>
@@ -85,6 +81,11 @@
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="rh9-Ha-PEB"/>
@@ -164,11 +165,13 @@
                 <constraint firstItem="CyI-hF-mcH" firstAttribute="top" secondItem="MsS-6p-zOl" secondAttribute="bottom" constant="10" id="5nk-k0-o3d"/>
                 <constraint firstItem="Tlr-g1-FlF" firstAttribute="top" secondItem="Nvr-oX-nX0" secondAttribute="bottom" constant="14" id="609-nG-TEL"/>
                 <constraint firstItem="DBC-J2-ZAN" firstAttribute="leading" secondItem="K8C-OO-9r2" secondAttribute="leading" id="6vB-8v-qdf"/>
+                <constraint firstItem="W2j-nt-NsK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="84X-mH-bk2"/>
                 <constraint firstItem="CyI-hF-mcH" firstAttribute="leading" secondItem="kc2-uR-QPt" secondAttribute="leading" id="C0C-Hn-rgW"/>
                 <constraint firstItem="DBC-J2-ZAN" firstAttribute="top" secondItem="CyI-hF-mcH" secondAttribute="bottom" constant="54" id="CGu-OV-42C"/>
                 <constraint firstItem="Tlr-g1-FlF" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="DqP-0q-jdr"/>
                 <constraint firstItem="DBC-J2-ZAN" firstAttribute="top" secondItem="K8C-OO-9r2" secondAttribute="bottom" constant="10" id="JuQ-Kf-Nsm"/>
                 <constraint firstItem="RuV-JE-xgA" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Lmo-aU-SgX"/>
+                <constraint firstAttribute="bottom" secondItem="W2j-nt-NsK" secondAttribute="bottom" id="M5w-um-hxA"/>
                 <constraint firstItem="W2j-nt-NsK" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Mo9-L6-Dbz"/>
                 <constraint firstItem="K8C-OO-9r2" firstAttribute="centerY" secondItem="IY2-N2-446" secondAttribute="centerY" id="NRi-od-Hxl"/>
                 <constraint firstItem="CyI-hF-mcH" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="NX0-6X-GN1"/>
@@ -187,6 +190,7 @@
                 <constraint firstItem="e5i-Xr-Im9" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="55" id="jdg-Hr-o96"/>
                 <constraint firstItem="W2j-nt-NsK" firstAttribute="centerX" secondItem="cHC-gc-bGE" secondAttribute="centerX" id="jse-ni-Xts"/>
                 <constraint firstItem="SI7-N4-3lJ" firstAttribute="baseline" secondItem="DBC-J2-ZAN" secondAttribute="baseline" id="ldj-ML-wl5"/>
+                <constraint firstAttribute="trailing" secondItem="W2j-nt-NsK" secondAttribute="trailing" id="nhT-aQ-nB0"/>
                 <constraint firstItem="cHC-gc-bGE" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="o6E-Re-Jdh"/>
                 <constraint firstItem="SI7-N4-3lJ" firstAttribute="leading" secondItem="DBC-J2-ZAN" secondAttribute="leading" id="owx-QB-Ifq"/>
                 <constraint firstItem="MsS-6p-zOl" firstAttribute="leading" secondItem="kc2-uR-QPt" secondAttribute="trailing" constant="18" id="uWh-Lb-xIp"/>
@@ -205,12 +209,12 @@
         </view>
     </objects>
     <resources>
-        <image name="LoginBg.png" width="375" height="667"/>
         <image name="icon_btnBluebg.png" width="259" height="40"/>
         <image name="icon_loginbg.png" width="260" height="40"/>
         <image name="iconfont-denglu-(1).png" width="16" height="20"/>
         <image name="iconfont-denglu-(2).png" width="19" height="21"/>
         <image name="iconfont-disanfangweixin.png" width="42" height="42"/>
+        <image name="newLoginBg.png" width="375" height="667"/>
         <image name="金指投logo.png" width="106" height="106"/>
     </resources>
 </document>

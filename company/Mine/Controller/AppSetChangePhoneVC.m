@@ -181,4 +181,8 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 @end

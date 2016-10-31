@@ -9,7 +9,6 @@
 #import "ActivityViewController.h"
 //#import "ActivityCell.h"
 #import "ActivityListCell.h"
-#import "ActivityDetailVC.h"
 #import "ActivityViewModel.h"
 #import "ActivityBlackCoverView.h"
 #import "ProjectBannerDetailVC.h"

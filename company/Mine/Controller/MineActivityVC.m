@@ -10,8 +10,6 @@
 
 #import "ActivityListCell.h"
 
-#import "ActivityDetailVC.h"
-
 #import "ActivityViewModel.h"
 
 #import "MineActivityListModel.h"
@@ -213,12 +211,7 @@
 {
     //反选
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    ActivityDetailVC * vc = [ActivityDetailVC new];
-//    
-//    ActivityViewModel * model = [_dataArray objectAtIndex:indexPath.row];
-//    vc.actionId = model.actionId;
-//    
-//    [self.navigationController pushViewController:vc animated:YES];
+
     ProjectBannerDetailVC *web = [[ProjectBannerDetailVC alloc]init];
     ActivityViewModel * model = [_dataArray objectAtIndex:indexPath.row];
     web.url = model.url;
@@ -234,5 +227,10 @@
 -(void)btnClick:(UIButton*)btn
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)dealloc
+{
+    [self cancleRequest];
 }
 @end

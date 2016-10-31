@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>AFNetworking.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>ASIHTTPRequest.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -52,6 +57,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>1C3436CEA5C3D39764C5F54374794ECB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>214C276EA78FDA7D96E208BEF2772169</key>
 		<dict>
 			<key>primary</key>
@@ -67,12 +77,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5A1968000596CC4EC2F208287B2107D3</key>
+		<key>6847254D016329D4A531D34ED2B6DF81</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6847254D016329D4A531D34ED2B6DF81</key>
+		<key>6BC52975C9A8FEB54CC1F2C29BD93B1C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,17 +92,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A70DE73290CF974B58F9BCA042625A3E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>C6537C63AD44CBC089EDFE8BB15F8929</key>
+		<key>85956B5268FD191954533DE18C7B080C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>E7FF33B5DFF643A2ACA9ADC4A3CFF8E4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F388BE882794EB8AEF625FDB162B1C79</key>
 		<dict>
 			<key>primary</key>
 			<true/>

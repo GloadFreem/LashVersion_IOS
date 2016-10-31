@@ -483,6 +483,7 @@
 {
     _dataArray = nil;
     _deleteArray = nil;
+    [self cancleRequest];
     
 }
 /*

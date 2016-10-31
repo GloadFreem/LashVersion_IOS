@@ -180,10 +180,105 @@
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",_identyType,@"type",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
     
-    
-    
+    [[EUNetWorkTool shareTool] POST:JZT_URL(LOGO_ATTENTION_LIST) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            if (_page == 0) {
+                if (_selectedTableView == 0) {
+                    [_temProjectArray removeAllObjects];
+                }
+                if (_selectedTableView == 1) {
+                    [_temInvestArray removeAllObjects];
+                    [_identifyArray removeAllObjects];
+                }
+            }
+            self.startLoading = NO;
+            
+            //项目
+            if (_selectedTableView == 0) {
+                NSArray *dataArray = [MineCollectionProjectModel mj_objectArrayWithKeyValuesArray:dic[@"data"]];
+                //                NSMutableArray *tempArray = [NSMutableArray new];
+                for (NSInteger i = 0; i < dataArray.count; i ++) {
+                    ProjectListProModel *listModel = [ProjectListProModel new];
+                    MineCollectionProjectModel *baseModel = dataArray[i];
+                    listModel.startPageImage = baseModel.startPageImage;
+                    listModel.abbrevName = baseModel.abbrevName;
+                    listModel.address = baseModel.address;
+                    listModel.fullName = baseModel.fullName;
+                    listModel.status = baseModel.financestatus.name;
+                    listModel.projectId  = baseModel.projectId;
+                    
+                    listModel.areas = [baseModel.industoryType componentsSeparatedByString:@"，"];
+                    listModel.collectionCount = baseModel.collectionCount;
+                    MineRoadshows *roadshows = baseModel.roadshows[0];
+                    listModel.financeTotal = roadshows.roadshowplan.financeTotal;
+                    listModel.financedMount = roadshows.roadshowplan.financedMount;
+                    listModel.endDate = roadshows.roadshowplan.endDate;
+                    
+                    [_statusArray addObject:baseModel.financestatus.name];
+                    [_temProjectArray addObject:listModel];
+                }
+                self.projectArray = _temProjectArray;
+                if (_isFirst) {
+                    _isFirst = NO;
+                }
+            }
+            //            NSLog(@"数组个数---%ld",_projectArray.count);
+            //投资
+            if (_selectedTableView == 1) {
+                NSArray *dataArray = [MineCollectionInvestModel mj_objectArrayWithKeyValuesArray:dic[@"data"]];
+                //                NSMutableArray *tempArray = [NSMutableArray new];
+                for (NSInteger i =0; i < dataArray.count; i ++) {
+                    MineCollectionInvestModel *baseModel = dataArray[i];
+                    MineCollectionListModel *listModel = [MineCollectionListModel new];
+                    listModel.headSculpture = baseModel.usersByUserCollectedId.headSculpture;
+                    //                    listModel.name = baseModel.usersByUserId.name;
+                    MAuthentics *authentics = baseModel.usersByUserCollectedId.authentics[0];
+                    listModel.name = authentics.name;
+                    listModel.position = authentics.position;
+                    listModel.identiyTypeId = authentics.identiytype.name;
+                    listModel.companyName = authentics.companyName;
+                    NSString *city = authentics.city.name;
+                    NSString *province = authentics.city.province.name;
+                    if ([city isEqualToString:@"北京市"] || [city isEqualToString:@"上海市"] || [city isEqualToString:@"天津市"] || [city isEqualToString:@"重庆市"] || [city isEqualToString:@"香港"] || [city isEqualToString:@"澳门"] || [city isEqualToString:@"钓鱼岛"]) {
+                        listModel.companyAddress = [NSString stringWithFormat:@"%@",province];
+                    }else{
+                        listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province,city];
+                    }
+                    
+                    //                    listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province,city];
+                    listModel.areas = [authentics.industoryArea componentsSeparatedByString:@"，"];
+                    listModel.introduce = authentics.introduce;
+                    listModel.userId = baseModel.usersByUserCollectedId.userId;
+                    //
+                    //身份
+                    if (authentics.identiytype.name) {
+                        [_identifyArray addObject:authentics.identiytype.name];
+                    }
+                    [_temInvestArray addObject:listModel];
+                }
+                self.investArray = _temInvestArray;
+                if (_isSecond) {
+                    _isSecond = NO;
+                }
+            }
+            
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+        }else{
+            //结束刷新
+            self.startLoading = NO;
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        self.startLoading = YES;
+        self.isNetRequestError = YES;
+    }];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:LOGO_ATTENTION_LIST postParam:dic type:0 delegate:self sel:@selector(requestInvestList:)];
+//    [self.httpUtil getDataFromAPIWithOps:LOGO_ATTENTION_LIST postParam:dic type:0 delegate:self sel:@selector(requestInvestList:)];
 }
 
 -(void)requestInvestList:(ASIHTTPRequest *)request
@@ -637,6 +732,7 @@
     [super viewWillAppear:animated];
     
     self.navigationController.navigationBar.translucent=NO;
+    self.navigationController.navigationBar.hidden = NO;
     [self.navigationController.navigationBar setHidden:NO];
     
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
@@ -667,5 +763,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dealloc
+{
+    [[EUNetWorkTool shareTool] cancleRequest];
+    [self cancleRequest];
+}
 
 @end

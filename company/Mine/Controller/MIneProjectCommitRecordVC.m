@@ -235,6 +235,10 @@
     
 }
 
+-(void)dealloc
+{
+    [self cancleRequest];
+}
 /*
 #pragma mark - Navigation
 

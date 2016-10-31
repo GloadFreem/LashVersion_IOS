@@ -39,7 +39,6 @@
 #import "PingTaiWebViewController.h"
 #import "ProjectDetailController.h"
 #import "ProjectLetterViewController.h"
-#import "ActivityDetailVC.h"
 #import "TankViewController.h"
 #define DENGLU @"loginUser"
 #define LOGINUSER @"isLoginUser"
@@ -139,7 +138,7 @@
 
     [JPUSHService setupWithOption:launchOptions appKey:@"cc3fdb255d49497c5fd3d402"
                           channel:@"Publish channel"
-                 apsForProduction:@"1"
+                 apsForProduction:1
             advertisingIdentifier:nil];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     //向微信注册
@@ -350,11 +349,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
         notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
         
     }else if ([type isEqualToString:@"action"]) {
-        ActivityViewModel * model = [[ActivityViewModel alloc]init];
-        model.actionId = [[userInfo valueForKey:@"content"] integerValue];
-        controller = [[ActivityDetailVC alloc]init];
-        ((ActivityDetailVC*)controller).activityModel = model;
-        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+//        ActivityViewModel * model = [[ActivityViewModel alloc]init];
+//        model.actionId = [[userInfo valueForKey:@"content"] integerValue];
+//        controller = [[ActivityDetailVC alloc]init];
+//        ((ActivityDetailVC*)controller).activityModel = model;
+//        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
     }else{
         controller = [[ProjectLetterViewController alloc]init];
         notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];

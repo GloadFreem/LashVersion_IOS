@@ -28,8 +28,6 @@
 #import "ProjectPrepareDetailVC.h"
 #import "ProjectDetailController.h"
 
-#import "ActivityDetailVC.h"
-
 #define DELETELIST @"requestPublicContentDelete"
 #define AUTHENINFO @"authenticInfoUser"
 #define CIRCLE_CONTENT @"requestFeelingList"
@@ -607,6 +605,7 @@
         vc.titleText = model.contentText;
         vc.contentText = model.titleText;
         vc.titleStr = model.titleText;
+        vc.isCircle = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
     if (model.feelingTypeId == 3) {//项目
@@ -625,12 +624,7 @@
             }
         }
     }
-    if (model.feelingTypeId == 4) {//活动
-        NSArray *array = [model.url componentsSeparatedByString:@","];
-        ActivityDetailVC *vc =[ActivityDetailVC new];
-        vc.actionId = [array[0] integerValue];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
+
 }
 
 #pragma mark------------------删除按钮----------------------
@@ -959,13 +953,11 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"publish" object:nil];
-
 }
 
 -(void)dealloc
 {
+    [self cancleRequest];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"publish" object:nil];
 }
 

@@ -478,6 +478,7 @@
     [_timer setFireDate:[NSDate distantFuture]];
     [_timer invalidate];
     _timer = nil;
+    [self cancleRequest];
 }
 /*
 #pragma mark - Navigation

@@ -16,7 +16,7 @@
 #import "HeaderRightImageCell.h"
 #import "TankSearchController.h"
 
-@interface HeadlineViewController () <UITableViewDelegate, UITableViewDataSource,UISearchBarDelegate>
+@interface HeadlineViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UISearchController *searchController;
 
 @property (nonatomic, strong) NSMutableArray *searchResults;
@@ -227,29 +227,26 @@
                                 @"partner": partner,
                                 @"page":[NSString stringWithFormat:@"%ld", (long)_nextPage],
                                 @"version":@"1"};
-    // 初始化Manager
-    AFHTTPRequestOperationManager *netManager = [AFHTTPRequestOperationManager manager];
-    netManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain",@"text/json",@"application/json",@"text/javascript",@"text/html",nil];
     __weak typeof(self) weakSelf = self;
-    [netManager POST:JZT_URL(@"requestConsultList.action") parameters:paramsDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[EUNetWorkTool shareTool] POST:JZT_URL(@"requestConsultList.action") parameters:paramsDic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = responseObject;
-//        NSLog(@"今日投条请求成功====%@", dic);
+//                NSLog(@"今日投条请求成功====%@", dic);
         if ([dic[@"status"] intValue]== 200) {
-                        if (self.nextPage == 0) {
-                            [_tempArray removeAllObjects];
-                        }
-                        NSArray *dataArray = [NSArray arrayWithArray:dic[@"data"]];
+            if (self.nextPage == 0) {
+                [_tempArray removeAllObjects];
+            }
+            NSArray *dataArray = [NSArray arrayWithArray:dic[@"data"]];
             
-                       [self analysisThinkTankListData:dataArray];
-                        if (_isFirst) {
-                            _isFirst = NO;
-                        }
-                    } else {
-                        
-                    }
-                    weakSelf.startLoading = NO;
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+            [self analysisThinkTankListData:dataArray];
+            if (_isFirst) {
+                _isFirst = NO;
+            }
+        } else {
+            
+        }
+        weakSelf.startLoading = NO;
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        NSLog(@"打印错误%@",error.localizedDescription);
         weakSelf.isNetRequestError  =YES;
     }];
     
@@ -280,53 +277,4 @@
     [self.tableView reloadData];
 }
 
-#pragma mark--- 是否开始编辑
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
-{
-//    if (searchBar == self.searchBar) {
-//        if ([searchBar.text isEqualToString:@"\n"]) {
-//            [self.searchBar resignFirstResponder];
-//            return NO;
-//        }
-//    }
-    return YES;
-}
-#pragma mark--- 开始编辑
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
-{
-    if (searchBar == self.searchBar) {
-        self.searchBar.showsCancelButton = YES;
-//        NSLog(@"开始编辑");
-    }
-}
-#pragma mark--- 结束编辑
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
-{
-    if (searchBar == self.searchBar) {
-//        NSLog(@"结束编辑");
-    }
-}
-#pragma mark---  取消按钮点击
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-    if (searchBar == self.searchBar) {
-        [self.searchBar resignFirstResponder];
-        self.searchBar.text = @"";
-        self.searchBar.showsCancelButton = NO;
-        
-    }
-}
-#pragma mark--- 搜索按钮点击
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    if (searchBar == self.searchBar) {
-//        NSLog(@"开始搜索");
-        [self.searchBar resignFirstResponder];
-        [self searchBarShouldBeginEditing:self.searchBar];
-    }
-}
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    [self.searchBar resignFirstResponder];
-}
 @end

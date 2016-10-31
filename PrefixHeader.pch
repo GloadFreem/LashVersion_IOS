@@ -92,7 +92,6 @@
 //FMDB
 #import "FMDB.h"
 #import "Encapsulation.h"
-#import "AFNetworking.h"
 #import "TDUtil.h"
 
 #endif /* PrefixHeader_pch */
