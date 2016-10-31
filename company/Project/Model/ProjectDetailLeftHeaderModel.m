@@ -40,8 +40,7 @@ extern CGFloat __maxContentLabelHeight;
 {
     if (!_shouldShowMoreButton) {
         _isOpen = NO;
-    }
-    else{
+    }else{
         _isOpen = isOpen;
     }
 }

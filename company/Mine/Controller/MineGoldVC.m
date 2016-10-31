@@ -66,8 +66,8 @@
     self.goldGetPartner = [TDUtil encryKeyWithMD5:KEY action:GOLDGETRULE];
     self.goldUsepartner = [TDUtil encryKeyWithMD5:KEY action:GOLDUSERULE];
     [self startLoadData];
-//    [self loadGetRule];
-//    [self loadUseRule];
+    [self loadGetRule];
+    [self loadUseRule];
     [self loadCode];
     
 }
@@ -405,7 +405,7 @@
 -(void)dealloc
 {
 //    [[EUNetWorkTool shareTool] cancleRequest];
-//    [self cancleRequest];
+    [self cancleRequest];
 }
 
 @end

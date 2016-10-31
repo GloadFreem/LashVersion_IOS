@@ -297,6 +297,7 @@
     ProjectBannerDetailVC *web = [[ProjectBannerDetailVC alloc]init];
     ActivityViewModel * model = [_dataSourceArray objectAtIndex:indexPath.row];
     web.url = model.url;
+//    NSLog(@"打印地址---%@",model.url);
     web.titleStr = @"活动详情";
     web.contentText = @"金指投活动";
     web.titleText = model.name;

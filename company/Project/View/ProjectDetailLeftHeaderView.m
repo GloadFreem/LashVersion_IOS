@@ -308,8 +308,8 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
 
 -(void)setModel:(ProjectDetailLeftHeaderModel *)model
 {
+//    NSLog(@"布局");
     _model = model;
-//    _shouldOpen = NO;
     _projectLabel.text = model.projectStr;
     _goalNumber.text = model.goalStr;
     [_goalNumber sizeToFit];
@@ -420,6 +420,7 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     _shouldOpen = !_shouldOpen;
     [_model setIsOpen:_shouldOpen];
     [self setModel:_model];
+//    [self layoutSubviews];
     
     if(self.moreButtonClickedBlock)
     {

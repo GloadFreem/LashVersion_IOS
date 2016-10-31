@@ -346,7 +346,6 @@
         [self closeBlackView];
         self.startLoading = NO;
         [self.webView.scrollView setContentOffset:CGPointZero];
-        
     }
 }
 
@@ -426,6 +425,14 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+//    NSLog(@"哈哈");
 }
 
+-(void)dealloc
+{    
+    self.webView.delegate = nil;
+    self.webView = nil;
+    [self.webView removeFromSuperview];
+}
 @end

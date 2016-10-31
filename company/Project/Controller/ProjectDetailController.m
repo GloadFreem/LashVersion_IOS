@@ -264,13 +264,19 @@
     [_scrollView addSubview:self.titleScrollView];          //添加点击按钮
     [_scrollView addSubview:self.subViewScrollView];        //添加最下边scrollview
     
-    [_subViewScrollView setupAutoContentSizeWithBottomView:scene bottomMargin:0];
     [_scrollView setupAutoContentSizeWithBottomView:_subViewScrollView bottomMargin:0];
     [_scrollView setupAutoHeightWithBottomView:_subViewScrollView bottomMargin:0];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateLayoutNotification) name:@"updateLayout" object:nil];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updataLayoutLeftNoti) name:@"updateLeft" object:nil];
 }
 
+-(void)updataLayoutLeftNoti
+{
+    _subViewScrollView.height = _leftView.height + 44;
+    [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
+}
 
 -(void)createBannerView:(NSArray*)arr
 {
@@ -459,7 +465,7 @@
         [_leftView setMoreButtonClickedBlock:^(Boolean flag) {
             if (!flag) {
 //                NSLog(@"取消");
-                [wself.scrollView setContentOffset:CGPointMake(0, wself.scrollView.contentOffset.y-1) animated:YES];
+                [wself.scrollView setContentOffset:CGPointMake(0, wself.scrollView.contentOffset.y - 1) animated:YES];
             }
         }];
         
@@ -819,6 +825,7 @@
 
 -(void)updateLayoutNotification
 {
+//    NSLog(@"更新约束");
     _subViewScrollView.height = _leftView.height + 44;
     [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
 }
@@ -1226,7 +1233,7 @@
     [IQKeyboardManager sharedManager].enable = NO;
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
     
-    [self performSelector:@selector(updateLayoutNotification) withObject:nil afterDelay:0.5];
+//    [self performSelector:@selector(updateLayoutNotification) withObject:nil afterDelay:0.5];
     
     [LQQMonitorKeyboard LQQAddMonitorWithShowBack:^(NSInteger height) {
         
@@ -1257,6 +1264,7 @@
 
 -(void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [member.httpUtil requestDealloc];
     [self cancleRequest];
 }
