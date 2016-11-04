@@ -310,13 +310,13 @@
     if ([self.identifyType integerValue] == 2) {
         self.dataArray[2] = self.companyAddress;
         
-        self.dataArray[3] = self.investField;
+        self.dataArray[3] = self.areaId;
     }
     //投资机构  智囊团
     if ([self.identifyType integerValue] == 3 || [self.identifyType integerValue] == 4) {
         self.dataArray[3] = self.companyAddress;
         if ([self.identifyType integerValue] == 3) {
-            self.dataArray[5] = self.investField;
+            self.dataArray[5] = self.areaId;
         }
     }
     

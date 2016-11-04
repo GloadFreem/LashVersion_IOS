@@ -36,7 +36,8 @@
 
 #import "UMSocialWechatHandler.h"
 #import "UMSocialQQHandler.h"
-#import "PingTaiWebViewController.h"
+//#import "PingTaiWebViewController.h"
+#import "ProjectBannerDetailVC.h"
 #import "ProjectDetailController.h"
 #import "ProjectLetterViewController.h"
 #import "TankViewController.h"
@@ -140,6 +141,7 @@
                           channel:@"Publish channel"
                  apsForProduction:1
             advertisingIdentifier:nil];
+    
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     //向微信注册
     [WXApi registerApp:@"wx33aa0167f6a81dac" withDescription:@"jinzht"];
@@ -335,9 +337,10 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSString * type = [userInfo valueForKey:@"type"];
     UIViewController * controller;
     NSDictionary * notificationDic;
+    
     if ([type isEqualToString:@"web"]) {
-        controller = [[PingTaiWebViewController alloc]init];
-        ((PingTaiWebViewController*)controller).url = [userInfo valueForKey:@"content"];
+        controller = [[ProjectBannerDetailVC alloc]init];
+        ((ProjectBannerDetailVC*)controller).url = [userInfo valueForKey:@"content"];
         
         notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
         
@@ -358,7 +361,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
         controller = [[ProjectLetterViewController alloc]init];
         notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"setLetterStatus" object:nil];
-        
     }
     
     [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];

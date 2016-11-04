@@ -414,13 +414,13 @@
 -(void)requestAuthenInfo:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
+//        NSLog(@"个人数据返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            
+//            NSLog(@"打印字典---%@",dataDic);
             AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
 //            authenticModel = baseModel;
 //            NSLog(@"打印个人信息：----%@",baseModel);

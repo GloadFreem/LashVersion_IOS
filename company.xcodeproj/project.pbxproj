@@ -286,28 +286,6 @@
 		44372D641D3FCB5C00DED1D6 /* icon_releaseAdd@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B331D3FCB5C00DED1D6 /* icon_releaseAdd@3x.png */; };
 		44372D651D3FCB5C00DED1D6 /* icon_releaseBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B341D3FCB5C00DED1D6 /* icon_releaseBtn@2x.png */; };
 		44372D661D3FCB5C00DED1D6 /* icon_releaseBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B351D3FCB5C00DED1D6 /* icon_releaseBtn@3x.png */; };
-		44372D671D3FCB5C00DED1D6 /* invest_failed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B371D3FCB5C00DED1D6 /* invest_failed@2x.png */; };
-		44372D681D3FCB5C00DED1D6 /* invest_failed@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B381D3FCB5C00DED1D6 /* invest_failed@3x.png */; };
-		44372D691D3FCB5C00DED1D6 /* invest_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B391D3FCB5C00DED1D6 /* invest_icon@2x.png */; };
-		44372D6A1D3FCB5C00DED1D6 /* invest_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B3A1D3FCB5C00DED1D6 /* invest_icon@3x.png */; };
-		44372D6B1D3FCB5C00DED1D6 /* invest_investperson@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B3B1D3FCB5C00DED1D6 /* invest_investperson@2x.png */; };
-		44372D6C1D3FCB5C00DED1D6 /* invest_investperson@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B3C1D3FCB5C00DED1D6 /* invest_investperson@3x.png */; };
-		44372D6D1D3FCB5C00DED1D6 /* invest_noroad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B3D1D3FCB5C00DED1D6 /* invest_noroad@2x.png */; };
-		44372D6E1D3FCB5C00DED1D6 /* invest_noroad@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B3E1D3FCB5C00DED1D6 /* invest_noroad@3x.png */; };
-		44372D6F1D3FCB5C00DED1D6 /* invest_organization@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B3F1D3FCB5C00DED1D6 /* invest_organization@2x.png */; };
-		44372D701D3FCB5C00DED1D6 /* invest_organization@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B401D3FCB5C00DED1D6 /* invest_organization@3x.png */; };
-		44372D711D3FCB5C00DED1D6 /* invest_point@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B411D3FCB5C00DED1D6 /* invest_point@2x.png */; };
-		44372D721D3FCB5C00DED1D6 /* invest_point@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B421D3FCB5C00DED1D6 /* invest_point@3x.png */; };
-		44372D731D3FCB5C00DED1D6 /* invest_raisefund@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B431D3FCB5C00DED1D6 /* invest_raisefund@2x.png */; };
-		44372D741D3FCB5C00DED1D6 /* invest_raisefund@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B441D3FCB5C00DED1D6 /* invest_raisefund@3x.png */; };
-		44372D751D3FCB5C00DED1D6 /* invest_raiseing3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B451D3FCB5C00DED1D6 /* invest_raiseing3x.png */; };
-		44372D761D3FCB5C00DED1D6 /* invest_raiseing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B461D3FCB5C00DED1D6 /* invest_raiseing@2x.png */; };
-		44372D771D3FCB5C00DED1D6 /* invest_roading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B471D3FCB5C00DED1D6 /* invest_roading@2x.png */; };
-		44372D781D3FCB5C00DED1D6 /* invest_roading@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B481D3FCB5C00DED1D6 /* invest_roading@3x.png */; };
-		44372D791D3FCB5C00DED1D6 /* invest_thinkTank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B491D3FCB5C00DED1D6 /* invest_thinkTank@2x.png */; };
-		44372D7A1D3FCB5C00DED1D6 /* invest_thinkTank@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B4A1D3FCB5C00DED1D6 /* invest_thinkTank@3x.png */; };
-		44372D7B1D3FCB5C00DED1D6 /* invest_yuxuan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B4B1D3FCB5C00DED1D6 /* invest_yuxuan@2x.png */; };
-		44372D7C1D3FCB5C00DED1D6 /* invest_yuxuan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B4C1D3FCB5C00DED1D6 /* invest_yuxuan@3x.png */; };
 		44372D7D1D3FCB5C00DED1D6 /* icon_add2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B4E1D3FCB5C00DED1D6 /* icon_add2x.png */; };
 		44372D7E1D3FCB5C00DED1D6 /* icon_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B4F1D3FCB5C00DED1D6 /* icon_add@3x.png */; };
 		44372D7F1D3FCB5C00DED1D6 /* icon_certify@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372B501D3FCB5C00DED1D6 /* icon_certify@2x.png */; };
@@ -382,8 +360,6 @@
 		44372DC61D3FCB5C00DED1D6 /* icon_name_select@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372BA21D3FCB5C00DED1D6 /* icon_name_select@3x.png */; };
 		44372DC71D3FCB5C00DED1D6 /* icon_name_unselect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372BA31D3FCB5C00DED1D6 /* icon_name_unselect@2x.png */; };
 		44372DC81D3FCB5C00DED1D6 /* icon_name_unselect@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372BA41D3FCB5C00DED1D6 /* icon_name_unselect@3x.png */; };
-		44372DC91D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372BA51D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@2x.png */; };
-		44372DCA1D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372BA61D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@3x.png */; };
 		44372DCB1D3FCB5C00DED1D6 /* activity_guoqi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372BA81D3FCB5C00DED1D6 /* activity_guoqi@2x.png */; };
 		44372DCC1D3FCB5C00DED1D6 /* activity_guoqi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372BA91D3FCB5C00DED1D6 /* activity_guoqi@3x.png */; };
 		44372DCD1D3FCB5C00DED1D6 /* logo-guanzhu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44372BAB1D3FCB5C00DED1D6 /* logo-guanzhu@2x.png */; };
@@ -1446,28 +1422,6 @@
 		44372B331D3FCB5C00DED1D6 /* icon_releaseAdd@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_releaseAdd@3x.png"; sourceTree = "<group>"; };
 		44372B341D3FCB5C00DED1D6 /* icon_releaseBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_releaseBtn@2x.png"; sourceTree = "<group>"; };
 		44372B351D3FCB5C00DED1D6 /* icon_releaseBtn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_releaseBtn@3x.png"; sourceTree = "<group>"; };
-		44372B371D3FCB5C00DED1D6 /* invest_failed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_failed@2x.png"; sourceTree = "<group>"; };
-		44372B381D3FCB5C00DED1D6 /* invest_failed@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_failed@3x.png"; sourceTree = "<group>"; };
-		44372B391D3FCB5C00DED1D6 /* invest_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_icon@2x.png"; sourceTree = "<group>"; };
-		44372B3A1D3FCB5C00DED1D6 /* invest_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_icon@3x.png"; sourceTree = "<group>"; };
-		44372B3B1D3FCB5C00DED1D6 /* invest_investperson@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_investperson@2x.png"; sourceTree = "<group>"; };
-		44372B3C1D3FCB5C00DED1D6 /* invest_investperson@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_investperson@3x.png"; sourceTree = "<group>"; };
-		44372B3D1D3FCB5C00DED1D6 /* invest_noroad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_noroad@2x.png"; sourceTree = "<group>"; };
-		44372B3E1D3FCB5C00DED1D6 /* invest_noroad@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_noroad@3x.png"; sourceTree = "<group>"; };
-		44372B3F1D3FCB5C00DED1D6 /* invest_organization@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_organization@2x.png"; sourceTree = "<group>"; };
-		44372B401D3FCB5C00DED1D6 /* invest_organization@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_organization@3x.png"; sourceTree = "<group>"; };
-		44372B411D3FCB5C00DED1D6 /* invest_point@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_point@2x.png"; sourceTree = "<group>"; };
-		44372B421D3FCB5C00DED1D6 /* invest_point@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_point@3x.png"; sourceTree = "<group>"; };
-		44372B431D3FCB5C00DED1D6 /* invest_raisefund@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_raisefund@2x.png"; sourceTree = "<group>"; };
-		44372B441D3FCB5C00DED1D6 /* invest_raisefund@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_raisefund@3x.png"; sourceTree = "<group>"; };
-		44372B451D3FCB5C00DED1D6 /* invest_raiseing3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = invest_raiseing3x.png; sourceTree = "<group>"; };
-		44372B461D3FCB5C00DED1D6 /* invest_raiseing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_raiseing@2x.png"; sourceTree = "<group>"; };
-		44372B471D3FCB5C00DED1D6 /* invest_roading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_roading@2x.png"; sourceTree = "<group>"; };
-		44372B481D3FCB5C00DED1D6 /* invest_roading@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_roading@3x.png"; sourceTree = "<group>"; };
-		44372B491D3FCB5C00DED1D6 /* invest_thinkTank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_thinkTank@2x.png"; sourceTree = "<group>"; };
-		44372B4A1D3FCB5C00DED1D6 /* invest_thinkTank@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_thinkTank@3x.png"; sourceTree = "<group>"; };
-		44372B4B1D3FCB5C00DED1D6 /* invest_yuxuan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_yuxuan@2x.png"; sourceTree = "<group>"; };
-		44372B4C1D3FCB5C00DED1D6 /* invest_yuxuan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invest_yuxuan@3x.png"; sourceTree = "<group>"; };
 		44372B4E1D3FCB5C00DED1D6 /* icon_add2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_add2x.png; sourceTree = "<group>"; };
 		44372B4F1D3FCB5C00DED1D6 /* icon_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_add@3x.png"; sourceTree = "<group>"; };
 		44372B501D3FCB5C00DED1D6 /* icon_certify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_certify@2x.png"; sourceTree = "<group>"; };
@@ -1542,8 +1496,6 @@
 		44372BA21D3FCB5C00DED1D6 /* icon_name_select@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_name_select@3x.png"; sourceTree = "<group>"; };
 		44372BA31D3FCB5C00DED1D6 /* icon_name_unselect@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_name_unselect@2x.png"; sourceTree = "<group>"; };
 		44372BA41D3FCB5C00DED1D6 /* icon_name_unselect@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_name_unselect@3x.png"; sourceTree = "<group>"; };
-		44372BA51D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "圆角矩形-3-拷贝@2x.png"; sourceTree = "<group>"; };
-		44372BA61D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "圆角矩形-3-拷贝@3x.png"; sourceTree = "<group>"; };
 		44372BA81D3FCB5C00DED1D6 /* activity_guoqi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "activity_guoqi@2x.png"; sourceTree = "<group>"; };
 		44372BA91D3FCB5C00DED1D6 /* activity_guoqi@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "activity_guoqi@3x.png"; sourceTree = "<group>"; };
 		44372BAB1D3FCB5C00DED1D6 /* logo-guanzhu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-guanzhu@2x.png"; sourceTree = "<group>"; };
@@ -3024,7 +2976,6 @@
 				44372B231D3FCB5C00DED1D6 /* IOS-关于平台 */,
 				44372B261D3FCB5C00DED1D6 /* IOS-分享到 */,
 				44372B311D3FCB5C00DED1D6 /* IOS-发布圈子话题 */,
-				44372B361D3FCB5C00DED1D6 /* IOS-我的关注 */,
 				44372B4D1D3FCB5C00DED1D6 /* IOS-我的资料-未认证 */,
 				44372B611D3FCB5C00DED1D6 /* IOS-设置 */,
 				44372B661D3FCB5C00DED1D6 /* IOS—我的金条 */,
@@ -3165,35 +3116,6 @@
 				44372B351D3FCB5C00DED1D6 /* icon_releaseBtn@3x.png */,
 			);
 			path = "IOS-发布圈子话题";
-			sourceTree = "<group>";
-		};
-		44372B361D3FCB5C00DED1D6 /* IOS-我的关注 */ = {
-			isa = PBXGroup;
-			children = (
-				44372B371D3FCB5C00DED1D6 /* invest_failed@2x.png */,
-				44372B381D3FCB5C00DED1D6 /* invest_failed@3x.png */,
-				44372B391D3FCB5C00DED1D6 /* invest_icon@2x.png */,
-				44372B3A1D3FCB5C00DED1D6 /* invest_icon@3x.png */,
-				44372B3B1D3FCB5C00DED1D6 /* invest_investperson@2x.png */,
-				44372B3C1D3FCB5C00DED1D6 /* invest_investperson@3x.png */,
-				44372B3D1D3FCB5C00DED1D6 /* invest_noroad@2x.png */,
-				44372B3E1D3FCB5C00DED1D6 /* invest_noroad@3x.png */,
-				44372B3F1D3FCB5C00DED1D6 /* invest_organization@2x.png */,
-				44372B401D3FCB5C00DED1D6 /* invest_organization@3x.png */,
-				44372B411D3FCB5C00DED1D6 /* invest_point@2x.png */,
-				44372B421D3FCB5C00DED1D6 /* invest_point@3x.png */,
-				44372B431D3FCB5C00DED1D6 /* invest_raisefund@2x.png */,
-				44372B441D3FCB5C00DED1D6 /* invest_raisefund@3x.png */,
-				44372B451D3FCB5C00DED1D6 /* invest_raiseing3x.png */,
-				44372B461D3FCB5C00DED1D6 /* invest_raiseing@2x.png */,
-				44372B471D3FCB5C00DED1D6 /* invest_roading@2x.png */,
-				44372B481D3FCB5C00DED1D6 /* invest_roading@3x.png */,
-				44372B491D3FCB5C00DED1D6 /* invest_thinkTank@2x.png */,
-				44372B4A1D3FCB5C00DED1D6 /* invest_thinkTank@3x.png */,
-				44372B4B1D3FCB5C00DED1D6 /* invest_yuxuan@2x.png */,
-				44372B4C1D3FCB5C00DED1D6 /* invest_yuxuan@3x.png */,
-			);
-			path = "IOS-我的关注";
 			sourceTree = "<group>";
 		};
 		44372B4D1D3FCB5C00DED1D6 /* IOS-我的资料-未认证 */ = {
@@ -3358,8 +3280,6 @@
 				44372BA21D3FCB5C00DED1D6 /* icon_name_select@3x.png */,
 				44372BA31D3FCB5C00DED1D6 /* icon_name_unselect@2x.png */,
 				44372BA41D3FCB5C00DED1D6 /* icon_name_unselect@3x.png */,
-				44372BA51D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@2x.png */,
-				44372BA61D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@3x.png */,
 			);
 			path = "ios实名认证标注切图";
 			sourceTree = "<group>";
@@ -5024,7 +4944,6 @@
 				44372DBE1D3FCB5C00DED1D6 /* iconfont_dianzan@3x.png in Resources */,
 				44372DFF1D3FCB5C00DED1D6 /* Contents.json in Resources */,
 				44372E101D3FCB5C00DED1D6 /* icon-guanzhubg@2x.png in Resources */,
-				44372DCA1D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@3x.png in Resources */,
 				44372D2D1D3FCB5C00DED1D6 /* iconfont-ren@2x.png in Resources */,
 				4437299C1D3FC78100DED1D6 /* EditTableViewCell.xib in Resources */,
 				44372D8F1D3FCB5C00DED1D6 /* icon_open@2x.png in Resources */,
@@ -5085,7 +5004,6 @@
 				443729981D3FC78100DED1D6 /* ResetPassWordViewController.xib in Resources */,
 				44372DF71D3FCB5C00DED1D6 /* dock_bg@2x.png in Resources */,
 				44372E8C1D3FCB5C00DED1D6 /* icon_alert_success@3x.png in Resources */,
-				44372D771D3FCB5C00DED1D6 /* invest_roading@2x.png in Resources */,
 				44372D7D1D3FCB5C00DED1D6 /* icon_add2x.png in Resources */,
 				44372ED11D3FCB5C00DED1D6 /* icon_collect@3x.png in Resources */,
 				44372D571D3FCB5C00DED1D6 /* pingtai_logo@2x.png in Resources */,
@@ -5099,7 +5017,6 @@
 				44372EB41D3FCB5C00DED1D6 /* jintiao20.png in Resources */,
 				44BAF76E1DB1C6600025D049 /* discover_tab_sel@3x.png in Resources */,
 				44372E771D3FCB5C00DED1D6 /* message@3x.png in Resources */,
-				44372D741D3FCB5C00DED1D6 /* invest_raisefund@3x.png in Resources */,
 				443730C51D3FCC5600DED1D6 /* ActivityDetailExerciseCell.xib in Resources */,
 				443729861D3FC78100DED1D6 /* InvistViewController.xib in Resources */,
 				44372A4A1D3FC7F000DED1D6 /* ProjectNoRoadCell.xib in Resources */,
@@ -5107,12 +5024,10 @@
 				44372EDC1D3FCB5C00DED1D6 /* icon_raising@2x.png in Resources */,
 				44BC57191D6D71240085C921 /* Circle@3x.png in Resources */,
 				4484D1B31D193712001F4C3A /* UMSCommentInputController.xib in Resources */,
-				44372D6B1D3FCB5C00DED1D6 /* invest_investperson@2x.png in Resources */,
 				44BC57141D6D71110085C921 /* Circle_selected@2x.png in Resources */,
 				44372D991D3FCB5C00DED1D6 /* mine_gold_mingxi@2x.png in Resources */,
 				44BAF7741DB1C6600025D049 /* thinktank_tab@3x.png in Resources */,
 				44BC570D1D6D70ED0085C921 /* invest_selected@3x.png in Resources */,
-				44372D6D1D3FCB5C00DED1D6 /* invest_noroad@2x.png in Resources */,
 				44372E4A1D3FCB5C00DED1D6 /* iconfont-dingwei@2x.png in Resources */,
 				44372E011D3FCB5C00DED1D6 /* Contents.json in Resources */,
 				44871B7F1D02B37800020DD9 /* MLEmoji_Expression.bundle in Resources */,
@@ -5124,7 +5039,6 @@
 				44372EE61D3FCB5C00DED1D6 /* iconfont-jine@2x.png in Resources */,
 				44372D861D3FCB5C00DED1D6 /* right_clear@3x.png in Resources */,
 				44372E511D3FCB5C00DED1D6 /* iconfont-zan@3x.png in Resources */,
-				44372D681D3FCB5C00DED1D6 /* invest_failed@3x.png in Resources */,
 				44372EE51D3FCB5C00DED1D6 /* icon_uncollect@3x.png in Resources */,
 				443730BE1D3FCC5600DED1D6 /* ActivityBlackCoverView.xib in Resources */,
 				44BC57111D6D70FF0085C921 /* invest@3x.png in Resources */,
@@ -5147,7 +5061,6 @@
 				44372F231D3FCB5C00DED1D6 /* iconfont-guanzhu@2x.png in Resources */,
 				44372E7B1D3FCB5C00DED1D6 /* bill-card@2x.png in Resources */,
 				44372E3E1D3FCB5C00DED1D6 /* icon_acticity_more@2x.png in Resources */,
-				44372D721D3FCB5C00DED1D6 /* invest_point@3x.png in Resources */,
 				44372E611D3FCB5C00DED1D6 /* iconfont-denglu-(2)@3x.png in Resources */,
 				44372E821D3FCB5C00DED1D6 /* bill_calendar@3x.png in Resources */,
 				44372E7C1D3FCB5C00DED1D6 /* bill-card@3x.png in Resources */,
@@ -5166,7 +5079,6 @@
 				44372E351D3FCB5C00DED1D6 /* iconfont-danaoT@3x.png in Resources */,
 				443729921D3FC78100DED1D6 /* Renzheng3ViewController.xib in Resources */,
 				44372E7D1D3FCB5C00DED1D6 /* bill-chongzhi@2x.png in Resources */,
-				44372D701D3FCB5C00DED1D6 /* invest_organization@3x.png in Resources */,
 				44372DCB1D3FCB5C00DED1D6 /* activity_guoqi@2x.png in Resources */,
 				44372A461D3FC7F000DED1D6 /* ProjectLetterCell.xib in Resources */,
 				44372EC11D3FCB5C00DED1D6 /* jintiao33.png in Resources */,
@@ -5177,7 +5089,6 @@
 				443730351D3FCC3600DED1D6 /* AppSetSwitchCell.xib in Resources */,
 				44372E6B1D3FCB5C00DED1D6 /* icon_letterUnselected@3x.png in Resources */,
 				44372EA61D3FCB5C00DED1D6 /* jintiao06.png in Resources */,
-				44372D7B1D3FCB5C00DED1D6 /* invest_yuxuan@2x.png in Resources */,
 				44372D4B1D3FCB5C00DED1D6 /* Bar-code@2x.png in Resources */,
 				44372E681D3FCB5C00DED1D6 /* icon_letterSelected@2x.png in Resources */,
 				443729941D3FC78100DED1D6 /* Renzheng4ViewController.xib in Resources */,
@@ -5188,7 +5099,6 @@
 				44372EEF1D3FCB5C00DED1D6 /* Loop@3x.png in Resources */,
 				44372E3A1D3FCB5C00DED1D6 /* thinkTank_person_Info@2x.png in Resources */,
 				44A7B20F1D588EB200181EA5 /* iconfont_person@3x.png in Resources */,
-				44372D6E1D3FCB5C00DED1D6 /* invest_noroad@3x.png in Resources */,
 				44BC57091D6D70D90085C921 /* project@3x.png in Resources */,
 				44372D4A1D3FCB5C00DED1D6 /* regist_btn_ok_nor.png in Resources */,
 				44372E6E1D3FCB5C00DED1D6 /* letterArrow@2x.png in Resources */,
@@ -5199,11 +5109,9 @@
 				44372D5D1D3FCB5C00DED1D6 /* icon_share_friend@3x.png in Resources */,
 				44372F181D3FCB5C00DED1D6 /* icon_slider_point@3x.png in Resources */,
 				44372D9B1D3FCB5C00DED1D6 /* mine_gold_point3x.png in Resources */,
-				44372D6A1D3FCB5C00DED1D6 /* invest_icon@3x.png in Resources */,
 				44372D2E1D3FCB5C00DED1D6 /* iconfont-ren@3x.png in Resources */,
 				448718A51D02AE1A00020DD9 /* Images.xcassets in Resources */,
 				44372DF11D3FCB5C00DED1D6 /* Contents.json in Resources */,
-				44372D781D3FCB5C00DED1D6 /* invest_roading@3x.png in Resources */,
 				442E36091DB4AF7F00A6E1FE /* InvestCommitProjectReasonCell.xib in Resources */,
 				4484D1B91D193712001F4C3A /* UMSShareListController.xib in Resources */,
 				24377E1D1D732AB800C119C8 /* iconfont-news@3x.png in Resources */,
@@ -5222,7 +5130,6 @@
 				44372DAB1D3FCB5C00DED1D6 /* icon_ignore@2x.png in Resources */,
 				44372EC71D3FCB5C00DED1D6 /* Bar-chart@3x.png in Resources */,
 				44372D231D3FCB5C00DED1D6 /* icon_go@2x.png in Resources */,
-				44372D731D3FCB5C00DED1D6 /* invest_raisefund@2x.png in Resources */,
 				44372EAE1D3FCB5C00DED1D6 /* jintiao14.png in Resources */,
 				44372DE01D3FCB5C00DED1D6 /* logo_qian@3x.png in Resources */,
 				44372DFC1D3FCB5C00DED1D6 /* Contents.json in Resources */,
@@ -5234,8 +5141,6 @@
 				44372EEE1D3FCB5C00DED1D6 /* Loop@2x.png in Resources */,
 				44372DCF1D3FCB5C00DED1D6 /* logo-huodong@2x.png in Resources */,
 				442E36071DB4AF7F00A6E1FE /* InvestCommitProjectPersonCell.xib in Resources */,
-				44372D761D3FCB5C00DED1D6 /* invest_raiseing@2x.png in Resources */,
-				44372D691D3FCB5C00DED1D6 /* invest_icon@2x.png in Resources */,
 				4484D1B71D193712001F4C3A /* UMSLoginViewController.xib in Resources */,
 				44372E1D1D3FCB5C00DED1D6 /* touziren-field@3x.png in Resources */,
 				44372F1D1D3FCB5C00DED1D6 /* 椭圆-10@2x.png in Resources */,
@@ -5251,10 +5156,8 @@
 				44372DB01D3FCB5C00DED1D6 /* icon_look@3x.png in Resources */,
 				44372EBB1D3FCB5C00DED1D6 /* jintiao27.png in Resources */,
 				4484D1B61D193712001F4C3A /* UMShareEditViewControlleriPad.xib in Resources */,
-				44372D751D3FCB5C00DED1D6 /* invest_raiseing3x.png in Resources */,
 				44372E441D3FCB5C00DED1D6 /* icon_rightArrow@2x.png in Resources */,
 				44372D601D3FCB5C00DED1D6 /* icon_share_qq@3x.png in Resources */,
-				44372D671D3FCB5C00DED1D6 /* invest_failed@2x.png in Resources */,
 				44372DBA1D3FCB5C00DED1D6 /* icon_dianzan@3x.png in Resources */,
 				44372D961D3FCB5C00DED1D6 /* mine_gold_invite@3x.png in Resources */,
 				44372E701D3FCB5C00DED1D6 /* letterIconPoint2x.png in Resources */,
@@ -5265,7 +5168,6 @@
 				44372DD61D3FCB5C00DED1D6 /* logo_close@3x.png in Resources */,
 				4437304E1D3FCC3600DED1D6 /* MyDataHeaderCell.xib in Resources */,
 				44BAF7711DB1C6600025D049 /* thinktank_tab_sel@2x.png in Resources */,
-				44372D711D3FCB5C00DED1D6 /* invest_point@2x.png in Resources */,
 				443730091D3FCC3600DED1D6 /* DealBillVC.xib in Resources */,
 				4487187E1D02AD9900020DD9 /* Assets.xcassets in Resources */,
 				44372E711D3FCB5C00DED1D6 /* letterIconPoint@3x.png in Resources */,
@@ -5296,7 +5198,6 @@
 				44372DF41D3FCB5C00DED1D6 /* Contents.json in Resources */,
 				44372F0E1D3FCB5C00DED1D6 /* iconfont-youjian@3x.png in Resources */,
 				44372E7A1D3FCB5C00DED1D6 /* Bar-code@2x.png in Resources */,
-				44372D7A1D3FCB5C00DED1D6 /* invest_thinkTank@3x.png in Resources */,
 				44A7B20E1D588EB200181EA5 /* iconfont_person@2x.png in Resources */,
 				44372DE41D3FCB5C00DED1D6 /* logo_wallet@3x.png in Resources */,
 				44372DB41D3FCB5C00DED1D6 /* icon_commit@3x.png in Resources */,
@@ -5314,10 +5215,8 @@
 				44372D8D1D3FCB5C00DED1D6 /* icon_close@2x.png in Resources */,
 				44372D2B1D3FCB5C00DED1D6 /* iconfont-message@2x.png in Resources */,
 				44372D661D3FCB5C00DED1D6 /* icon_releaseBtn@3x.png in Resources */,
-				44372D791D3FCB5C00DED1D6 /* invest_thinkTank@2x.png in Resources */,
 				44BAF76D1DB1C6600025D049 /* discover_tab_sel@2x.png in Resources */,
 				44372D911D3FCB5C00DED1D6 /* mine_gold@2x.png in Resources */,
-				44372D7C1D3FCB5C00DED1D6 /* invest_yuxuan@3x.png in Resources */,
 				44372DA81D3FCB5C00DED1D6 /* icon_right@3x.png in Resources */,
 				44BC57051D6D70B60085C921 /* project_selected @3x.png in Resources */,
 				4484D1B41D193712001F4C3A /* UMSCommentInputControlleriPad.xib in Resources */,
@@ -5386,7 +5285,6 @@
 				44E804341D70258A00026AC7 /* icon_share_circle@2x.png in Resources */,
 				44372E731D3FCB5C00DED1D6 /* LetterSelected@3x.png in Resources */,
 				44372DC21D3FCB5C00DED1D6 /* iconfont_share@3x.png in Resources */,
-				44372D6C1D3FCB5C00DED1D6 /* invest_investperson@3x.png in Resources */,
 				44372E901D3FCB5C00DED1D6 /* icon_card_bg@3x.png in Resources */,
 				44372EBD1D3FCB5C00DED1D6 /* jintiao29.png in Resources */,
 				44372EFA1D3FCB5C00DED1D6 /* paySuccessBG@3x.png in Resources */,
@@ -5431,7 +5329,6 @@
 				44372E811D3FCB5C00DED1D6 /* bill_calendar@2x.png in Resources */,
 				44372EE71D3FCB5C00DED1D6 /* iconfont-jine@3x.png in Resources */,
 				44372EE31D3FCB5C00DED1D6 /* icon_statusbg@3x.png in Resources */,
-				44372D6F1D3FCB5C00DED1D6 /* invest_organization@2x.png in Resources */,
 				442E360D1DB4AF7F00A6E1FE /* InvestOrganizationSecondCell.xib in Resources */,
 				44372E911D3FCB5C00DED1D6 /* icon_jieCard@2x.png in Resources */,
 				44372EC41D3FCB5C00DED1D6 /* ...............................................................@2x.png in Resources */,
@@ -5465,7 +5362,6 @@
 				44372E621D3FCB5C00DED1D6 /* iconfont-disanfangweixin@2x.png in Resources */,
 				4437304C1D3FCC3600DED1D6 /* MyDataArrowCell.xib in Resources */,
 				4484D1B81D193712001F4C3A /* UMSnsAccountViewController.xib in Resources */,
-				44372DC91D3FCB5C00DED1D6 /* 圆角矩形-3-拷贝@2x.png in Resources */,
 				44372DB61D3FCB5C00DED1D6 /* icon_projectDetail@3x.png in Resources */,
 				44BAF7731DB1C6600025D049 /* thinktank_tab@2x.png in Resources */,
 				44372ED81D3FCB5C00DED1D6 /* icon_noroad@2x.png in Resources */,
