@@ -195,7 +195,6 @@
             [investField appendFormat:@"%@",_dataSelected[i]];
             [idString appendFormat:@"%@,",_idSelected[i]];
         }
-        
     }
     
     if (_isMine) {
@@ -210,7 +209,6 @@
                 [vc.tableView reloadData];
             }
         }
-        
     }else{
     for (UIViewController *VC in self.navigationController.viewControllers) {
         

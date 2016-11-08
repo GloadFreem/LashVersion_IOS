@@ -213,11 +213,18 @@
     }
     _authenticName = authenticStatus;
     
-    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_iconStr]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"] options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (image) {
-            [_iconBtn setBackgroundImage:image forState:UIControlStateNormal];
-        }
-    }];
+    
+    
+    UIImage *image = [TDUtil loadContent:@"iconImage"];
+    if (image) {
+        [_iconBtn setBackgroundImage:image forState:UIControlStateNormal];
+    }else{
+        [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",_iconStr]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"] options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (image) {
+                [_iconBtn setBackgroundImage:image forState:UIControlStateNormal];
+            }
+        }];
+    }
     
     NSString *nickName = [data objectForKey:@"nickName"];
     if (_nameStr && _nameStr.length) {

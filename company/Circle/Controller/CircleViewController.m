@@ -264,7 +264,15 @@
         UIImageView *iconImage = [UIImageView new];
         iconImage.layer.cornerRadius = 20;
         iconImage.layer.masksToBounds = YES;
+        
+        
+        
+        UIImage *image = [TDUtil loadContent:@"iconImage"];
+        if (image) {
+            iconImage.image = image;
+        }else{
         [iconImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.selfIconStr]] placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
+        }
         
         [_headerView addSubview:iconImage];
         
@@ -912,27 +920,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    //不隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     [self.navigationController.navigationBar setHidden:NO];

@@ -1205,29 +1205,6 @@
     
     self.navigationController.navigationBar.hidden = YES;
 //    [self.navigationController setNavigationBarHidden:YES];
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
-    
-    
      [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     [IQKeyboardManager sharedManager].enable = NO;

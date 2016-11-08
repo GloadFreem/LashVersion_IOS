@@ -43,8 +43,8 @@
     
     self.circlePartner = [TDUtil encryKeyWithMD5:KEY action:SHARETOCIRCLE];
     
-//    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
-    _webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
+//    _webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
     _webView.delegate = self;
     _webView.scalesPageToFit = YES; //设置大小适配页面
     [_webView sizeToFit];
@@ -315,27 +315,6 @@
     [self.navigationController.navigationBar setHidden:NO];
     
     [[IQKeyboardManager sharedManager] setEnableAutoToolbar:NO];
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
     
 }
 

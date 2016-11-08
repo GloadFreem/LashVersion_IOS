@@ -13,6 +13,13 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    UIView *line = [UIView new];
+    line.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    [self.contentView addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.bottom.right.mas_equalTo(0);
+        make.height.mas_equalTo(0.5);
+    }];
 }
 
 

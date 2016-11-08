@@ -211,27 +211,6 @@
     self.navigationController.navigationBar.translucent=NO;
     [self.navigationController.navigationBar setHidden:NO];
     [self.navigationController setNavigationBarHidden:NO];
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    //不隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
     
 }
 
@@ -239,14 +218,6 @@
 {
     [self cancleRequest];
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

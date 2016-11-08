@@ -17,6 +17,7 @@
 #import "ActivityViewController.h"
 #import "MineViewController.h"
 #import "CircleViewController.h"
+#import "JTabBarController.h"
 
 #define WELOGINUSER @"wechatLoginUser"
 #define DENGLU @"loginUser"
@@ -160,7 +161,7 @@
 -(void)requestLogin:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -179,18 +180,14 @@
                 [self.navigationController pushViewController:perfert animated:YES];
             }else{
                 //进入应用
-                JTabBarController * tabBarController;
-                for (UIViewController *vc in self.navigationController.childViewControllers) {
-                    if ([vc isKindOfClass:JTabBarController.class]) {
-                        tabBarController = (JTabBarController*)vc;
-                    }
-                }
+                AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
                 
-                if (!tabBarController) {
-                    tabBarController = [CommentTD createViewControllers];
-                }
-                
-                [self.navigationController pushViewController:tabBarController animated:NO];
+                JTabBarController * tabBarController = [[JTabBarController alloc]init];
+                tabBarController.delegate = delegate;
+//                tabBarController.selectedItem = 0;
+                delegate.tabBar = tabBarController;
+//                delegate.nav = [[UINavigationController alloc]initWithRootViewController:delegate.tabBar];
+                delegate.window.rootViewController = delegate.tabBar;
                 
                 NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
                 
@@ -199,6 +196,9 @@
                 
                 [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
                 [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
+                
+//                [self removeFromParentViewController];
+            
             }
             
         }else{
@@ -296,24 +296,21 @@
                 perfert.wxIcon = _wePic;
                 [self.navigationController pushViewController:perfert animated:YES];
             }else{
-               //进入应用
-                JTabBarController * tabBarController;
-                for (UIViewController *vc in self.navigationController.childViewControllers) {
-                    if ([vc isKindOfClass:JTabBarController.class]) {
-                        tabBarController = (JTabBarController*)vc;
-                    }
-                }
+                //进入应用
+                AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
                 
-                if (!tabBarController) {
-                    tabBarController = [CommentTD createViewControllers];
-                }
-               
-                [self.navigationController pushViewController:tabBarController animated:NO];
+                JTabBarController * tabBarController = [[JTabBarController alloc]init];
+                tabBarController.delegate = delegate;
+                delegate.tabBar = tabBarController;
+//                delegate.nav = [[UINavigationController alloc]initWithRootViewController:delegate.tabBar];
+                delegate.window.rootViewController = delegate.tabBar;
                 
                 NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
                 
                 [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
                 [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
+                
+//                [self removeFromParentViewController];
             }
             
         }else{
@@ -328,28 +325,6 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated

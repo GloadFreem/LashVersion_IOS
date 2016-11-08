@@ -310,7 +310,17 @@
 {
     //修改公司职位
     if ([_authenticType isEqualToString:@"已认证"]) {
-        _mineVC.company.text = [NSString stringWithFormat:@"%@ | %@",_companyName,_position];
+        NSString *company;
+        if (_companyName.length && !_position.length) {
+            company = [NSString stringWithFormat:@"%@",_companyName];
+        }
+        if (_position.length && !_companyName.length) {
+            company = [NSString stringWithFormat:@"%@",_position];
+        }
+        if (_companyName.length && _position.length) {
+            company = [NSString stringWithFormat:@"%@ | %@",_companyName,_position];
+        }
+        _mineVC.company.text = company;
         _mineVC.companyS = _companyName;
         _mineVC.position = _position;
     }
@@ -738,7 +748,6 @@
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    
     __block MineDataVC* blockSelf = self;
     // Create the actions.
     UIAlertAction *takePhotoAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -835,7 +844,8 @@
             
            //更改上一级头像
             [_mineVC.iconBtn setBackgroundImage:_iconImage.image forState:UIControlStateNormal];
-
+            //头像保存到本地
+            
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];

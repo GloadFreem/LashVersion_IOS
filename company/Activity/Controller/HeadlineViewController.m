@@ -79,6 +79,7 @@
     TankSearchController *searchVC = [[TankSearchController alloc]init];
     searchVC.index = 2;
     searchVC.isActive = YES;
+    searchVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:searchVC animated:YES];
     
 }
@@ -206,6 +207,7 @@
     headlineDetailVc.image = model.image;
     headlineDetailVc.titleText = model.title;
     headlineDetailVc.contentText = model.contenttype.name;
+    headlineDetailVc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:headlineDetailVc animated:YES];
 }
 
@@ -230,28 +232,36 @@
     __weak typeof(self) weakSelf = self;
     [[EUNetWorkTool shareTool] POST:JZT_URL(@"requestConsultList.action") parameters:paramsDic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = responseObject;
+        
 //                NSLog(@"今日投条请求成功====%@", dic);
         if ([dic[@"status"] intValue]== 200) {
+            
+            [_tableView.mj_header endRefreshing];
+            [_tableView.mj_footer endRefreshing];
+            
             if (self.nextPage == 0) {
                 [_tempArray removeAllObjects];
             }
             NSArray *dataArray = [NSArray arrayWithArray:dic[@"data"]];
             
             [self analysisThinkTankListData:dataArray];
-            if (_isFirst) {
-                _isFirst = NO;
-            }
-        } else {
             
+        } else {
+            [_tableView.mj_header endRefreshing];
+            [_tableView.mj_footer endRefreshing];
         }
         weakSelf.startLoading = NO;
+        if (_isFirst) {
+            _isFirst = NO;
+        }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 //        NSLog(@"打印错误%@",error.localizedDescription);
+        [_tableView.mj_header endRefreshing];
+        [_tableView.mj_footer endRefreshing];
         weakSelf.isNetRequestError  =YES;
     }];
     
-    [_tableView.mj_header endRefreshing];
-    [_tableView.mj_footer endRefreshing];
+    
 }
 
 -(void)analysisThinkTankListData:(NSArray *)dataArray

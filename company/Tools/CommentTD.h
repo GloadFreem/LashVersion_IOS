@@ -19,6 +19,6 @@
 @interface CommentTD : NSObject
 
 //创建框架结构
-+(JTabBarController*)createViewControllers;
+//+(JTabBarController*)createViewControllers;
 
 @end

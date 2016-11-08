@@ -203,25 +203,7 @@
         make.right.mas_equalTo(self.view.mas_right);
         make.bottom.mas_equalTo(self.view.mas_bottom);
     }];
-    
-//    HeaderView *headerView = [[HeaderView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 70 )];
-//    _tableView.tableHeaderView = headerView;
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toHeadline)];
-//    [headerView addGestureRecognizer:tap];
-}
 
-- (void)toHeadline
-{
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    [self.navigationController pushViewController:[[HeadlineViewController alloc] init] animated:YES];
 }
 
 -(void)refreshHttp
@@ -244,7 +226,6 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    return 175+120+10;
     ActivityViewModel *model = [_dataSourceArray objectAtIndex:indexPath.row];
     
     return [_tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[ActivityListCell class] contentViewWidth:[self cellContentViewWith]];
@@ -285,15 +266,7 @@
 {
     //反选
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    ActivityDetailVC * vc = [ActivityDetailVC new];
-//    ActivityViewModel * model = [_dataSourceArray objectAtIndex:indexPath.row];
-//    vc.actionId = model.actionId;
-//    vc.viewController = self;
-//    if(![TDUtil isArrivedTime:model.endTime])
-//    {
-//        vc.isExpired = YES;
-//    }
-//    [self.navigationController pushViewController:vc animated:YES];
+    
     ProjectBannerDetailVC *web = [[ProjectBannerDetailVC alloc]init];
     ActivityViewModel * model = [_dataSourceArray objectAtIndex:indexPath.row];
     web.url = model.url;
@@ -303,6 +276,7 @@
     web.titleText = model.name;
     web.image = model.imgUrl;
     web.isActivity = YES;
+    web.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:web animated:YES];
 }
 
@@ -311,33 +285,13 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = NO;
     [self.navigationController.navigationBar setHidden:NO];
     [self.navigationController setNavigationBarHidden:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    //不隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
+
 }
 -(void)viewDidAppear:(BOOL)animated
 {

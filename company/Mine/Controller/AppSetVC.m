@@ -130,13 +130,10 @@
             AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
             delegate.nav = [[UINavigationController alloc]initWithRootViewController:login];
             
-            [keyWindow setRootViewController:delegate.nav];
+            keyWindow.rootViewController = delegate.nav;
             
-//            [self.navigationController pushViewController:login animated:NO];
             _dataArray = nil;
             [self removeFromParentViewController];
-            
-//            [self performSelector:@selector(coloseViewNotification) withObject:nil afterDelay:2];
             
         }
     }

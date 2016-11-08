@@ -10,10 +10,11 @@
 #import "JTabBarController.h"
 #import "HttpUtils.h"
 #import "DataBaseHelper.h"
-
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+#import "MyNavViewController.h"
+@interface AppDelegate : UIResponder <UIApplicationDelegate,UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, strong) MyNavViewController *myNav;
 @property (strong, nonatomic) UINavigationController * nav;
 @property (nonatomic, strong) JTabBarController * tabBar;
 @property (nonatomic, copy) NSString *partner;
@@ -24,7 +25,7 @@
 @property (nonatomic, weak) Reachability  *hostReach;
 @property (nonatomic, assign) BOOL netEnable;
 
--(void)createViewControllers;
+@property (nonatomic, assign) BOOL isActivity;
 
 @end
 

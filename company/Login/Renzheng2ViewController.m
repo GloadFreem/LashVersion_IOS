@@ -63,19 +63,10 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
-    
-    //    if (textField.tag == 1) {
-    //        UITextField *field = (UITextField*)[self.view viewWithTag:0];
-    //        if (field.text.length !=18) {
-    //            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请检查身份证位数"];
-    //            return;
-    //        }
-    //    }
+
     if (![textField.text isEqualToString:@""]) {
         
         textField.text = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-//        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-//        textField.text = [textField.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
         
         self.textField.text = textField.text;
     }else{
@@ -146,7 +137,6 @@
         
         [self.navigationController pushViewController:regist animated:YES];
     }
-    
 }
 -(void)addBlackView
 {
@@ -181,20 +171,13 @@
             self.startLoading = NO;
 
             //进入应用
-            UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-            UINavigationController *nav = (UINavigationController*)window.rootViewController;
-            JTabBarController * tabBarController;
-            for (UIViewController *vc in nav.childViewControllers) {
-                if ([vc isKindOfClass:JTabBarController.class]) {
-                    tabBarController = (JTabBarController*)vc;
-                }
-            }
+            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             
-            if (!tabBarController) {
-                tabBarController = [CommentTD createViewControllers];
-            }
-            
-            [self.navigationController pushViewController:tabBarController animated:NO];
+            JTabBarController * tabBarController = [[JTabBarController alloc]init];
+            tabBarController.delegate = delegate;
+            delegate.tabBar = tabBarController;
+//            delegate.nav = [[UINavigationController alloc]initWithRootViewController:delegate.tabBar];
+            delegate.window.rootViewController = delegate.tabBar;
             
         }else{
             [self closeBlackView];
@@ -283,6 +266,8 @@
     
     //压缩图片
     image = [TDUtil drawInRectImage:image size:CGSizeMake(1128, 800)];
+    NSData * imageData = UIImageJPEGRepresentation(image, 0.8);
+    image = [UIImage imageWithData:imageData];
     
         //保存图片
         BOOL ret = [TDUtil saveContent:image fileName:@"buinessLicence"];

@@ -1565,6 +1565,7 @@
     [data removeObjectForKey:USER_STATIC_CITY];
     [data removeObjectForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
     [data removeObjectForKey:@"nickName"];
+    [data removeObjectForKey:@"iconImage"];
     [data removeObjectForKey:USER_STATIC_PROVINCE];
     [data removeObjectForKey:USER_STATIC_USER_AUTHENTIC_NAME];
     [data removeObjectForKey:USER_STATIC_AUTHID];

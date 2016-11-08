@@ -97,10 +97,12 @@
 {
     if (btn.tag == 1) {
         CircleViewController *circle = [[CircleViewController alloc]init];
+        circle.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:circle animated:YES];
     }
     if (btn.tag == 2) {
         InvestViewController *invest = [[InvestViewController alloc]init];
+        invest.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:invest animated:YES];
     }
 }
@@ -192,43 +194,14 @@
 {
     [super viewWillAppear:animated];
     
+    self.tabBarController.tabBar.hidden = NO;
+    
     [self.navigationController.navigationBar setHidden:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;
     
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    //不隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
-    
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

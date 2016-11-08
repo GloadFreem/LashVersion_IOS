@@ -46,7 +46,7 @@
 #define UmengAppkey @"55c7684de0f55a0d0d0042a8"
 
 
-@interface AppDelegate ()
+@interface AppDelegate ()<JPUSHRegisterDelegate>
 {
     BOOL isSuccess;
     BOOL isLogin;
@@ -57,12 +57,28 @@
 
 @implementation AppDelegate
 
+static NSString * const JPUSHAPPKEY = @"cc3fdb255d49497c5fd3d402"; // 极光appKey
+static NSString * const channel = @"Publish channel"; // 固定的
+
+#ifdef DEBUG // 开发
+
+static BOOL const isProduction = FALSE; // 极光FALSE为开发环境
+
+#else // 生产
+
+static BOOL const isProduction = TRUE; // 极光TRUE为生产环境
+
+#endif
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     _window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = [UIColor whiteColor];
-    [self createViewControllers];
+//    _myNav = [[MyNavViewController alloc] init];
+    _tabBar = [[JTabBarController alloc] init];
+    _tabBar.delegate = self;
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     //创建数据库
     [self createTable];
@@ -91,18 +107,20 @@
         
         if (phoneNumber && password)
         {
-            self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
-            [self.nav setNavigationBarHidden:YES];
-            [_window setRootViewController:self.nav];
+//            self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
+//            [self.nav setNavigationBarHidden:YES];
+//            self.nav.navigationBar.hidden = YES;
+            [_window setRootViewController:_tabBar];
         }else{
             LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
-        
             self.nav = [[UINavigationController alloc]initWithRootViewController:login];
+//            [self.nav setNavigationBarHidden:YES];
             [_window setRootViewController:self.nav];
         }
     }else{
         GuidePageViewController *vc = [GuidePageViewController new];
         self.nav = [[UINavigationController alloc]initWithRootViewController:vc];
+//        [self.nav setNavigationBarHidden:YES];
         [_window setRootViewController:self.nav];
     }
 
@@ -116,11 +134,13 @@
     manager.enableAutoToolbar = YES;
     
 #pragma mark --------- 激光推送
+    LYJWeakSelf;
     //Required
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 10.0) {
         JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
         entity.types = UNAuthorizationOptionAlert|UNAuthorizationOptionBadge|UNAuthorizationOptionSound;
-        [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
+
+        [JPUSHService registerForRemoteNotificationConfig:entity delegate:weakSelf];
     }
     else if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
         //可以添加自定义categories
@@ -129,7 +149,7 @@
                                                           UIUserNotificationTypeAlert)
                                               categories:nil];
     }
-    else {
+    else {//8.0以下不支持app
         //categories 必须为nil
         [JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
                                                 UIRemoteNotificationTypeSound |
@@ -137,10 +157,32 @@
                                               categories:nil];
     }
 
-    [JPUSHService setupWithOption:launchOptions appKey:@"cc3fdb255d49497c5fd3d402"
-                          channel:@"Publish channel"
-                 apsForProduction:1
+    [JPUSHService setupWithOption:launchOptions appKey:JPUSHAPPKEY
+                          channel:channel
+                 apsForProduction:isProduction
             advertisingIdentifier:nil];
+    
+    //2.1.9版本新增获取registration id block接口。
+    [JPUSHService registrationIDCompletionHandler:^(int resCode, NSString *registrationID) {
+        if(resCode == 0)
+        {
+            // iOS10获取registrationID放到这里了, 可以存到缓存里, 用来标识用户单独发送推送
+            NSLog(@"registrationID获取成功：%@",registrationID);
+            [[NSUserDefaults standardUserDefaults] setObject:registrationID forKey:@"registrationID"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        else
+        {
+            NSLog(@"registrationID获取失败，code：%d",resCode);
+        }
+    }];
+    
+//    // apn 内容获取：
+//    NSDictionary *remoteNotification = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+//    NSLog(@"打印字段---%@",remoteNotification);
+//    if (remoteNotification != nil) {
+//        [self notification:remoteNotification];
+//    }
     
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     //向微信注册
@@ -160,30 +202,6 @@
     return YES;
 }
 
--(void) onResp:(BaseResp*)resp
-{
-//    NSString *strMsg = [NSString stringWithFormat:@"errcode:%d", resp.errCode];
-//    NSString *strTitle;
-    
-//    if([resp isKindOfClass:[SendMessageToWXResp class]])
-//    {
-//        strTitle = [NSString stringWithFormat:@"金指投温馨提示"];
-//        if(resp.errCode==-2){
-//            strMsg=@"分享已取消";
-//        }else if(resp.errCode==0){
-//            strMsg=@"分享成功";
-//        }
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-//        [alert show];
-//    }else{
-        SendAuthResp *aresp = (SendAuthResp *)resp;
-        if (aresp.errCode== 0) {
-            NSString *code = aresp.code;
-            NSDictionary *dic = @{@"code":code};
-            NSLog(@"%@",dic);
-        }
-//    }
-}
 
 - (void)updateInterfaceWithReachability:(Reachability *)reachability
 {
@@ -213,66 +231,7 @@
     
 }
 
-
-//-(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
-//{
-//    NSLog(@"%@",url.host);
-//    //return [WXApi handleOpenURL:url delegate:self];
-//    return [TencentOAuth HandleOpenURL:url] ||
-//    [WXApi handleOpenURL:url delegate:self] ;
-//}
-
-//-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-//{
-//    NSLog(@"%@",url.host);
-//    if ([sourceApplication isEqualToString:@"com.apple.mobilesafari"] || [sourceApplication isEqualToString:@"com.apple.MobileSMS"]) {
-//        if ([url.host containsString:@"project"] || [url.host containsString:@"projectId"] || [url.host containsString:@"projectDetail"]) {
-//            NSArray *array = [[NSString stringWithFormat:@"%@",url] componentsSeparatedByString:@"/"]; //从字符A中分隔成2个元素的数组
-//            id obj = array[array.count-2];
-//            if ((NSInteger)obj) {
-//                NSInteger index = [obj integerValue];
-//                [self loadProjectDetail:index];
-//            }
-//        }else{
-//            NSString * urlStr = [[NSString stringWithFormat:@"%@",url] stringByReplacingOccurrencesOfString:@"jinzht://" withString:@""];
-//            [self loadWebViewDetail:[NSURL URLWithString:urlStr]];
-//        }
-//        return true;
-//    }else{
-//        return [TencentOAuth HandleOpenURL:url] || [WXApi handleOpenURL:url delegate:self];
-//    }
-//}
-
-#pragma mark - 创建主界面框架
--(void)createViewControllers{
-    NSMutableArray * unSelectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project.png"],[UIImage imageNamed:@"discover_tab.png"],[UIImage imageNamed:@"activity.png"],[UIImage imageNamed:@"thinktank_tab.png"],nil];
-    
-    NSMutableArray * selectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project_selected .png"],[UIImage imageNamed:@"discover_tab_sel.png"],[UIImage imageNamed:@"activity_selected.png"], [UIImage imageNamed:@"thinktank_tab_sel.png"],nil];
-    
-    NSMutableArray * titles = [[NSMutableArray alloc]initWithObjects:@"项目",@"发现",@"活动",@"智库", nil];
-    
-    ProjectViewController * project = [[ProjectViewController alloc]init];
-    MyNavViewController * navProject = [[MyNavViewController alloc]initWithRootViewController:project];
-
-    DiscoverViewController * discover = [[DiscoverViewController alloc]init];
-    MyNavViewController *navDiscover = [[MyNavViewController alloc]initWithRootViewController:discover];
-    
-    TankViewController * tank =[[TankViewController alloc]init];
-    MyNavViewController * navTank =[[MyNavViewController alloc]initWithRootViewController:tank];
-    
-    ActivityViewController * activity = [[ActivityViewController alloc]init];
-    MyNavViewController * navActivity = [[MyNavViewController alloc]initWithRootViewController:activity];
-    
-    self.tabBar = [[JTabBarController alloc]initWithTabBarSelectedImages:selectedArray normalImages:unSelectedArray titles:titles];
-    self.tabBar.showCenterItem = YES;
-    self.tabBar.centerItemImage = [UIImage imageNamed:@"mine.png"];
-    self.tabBar.viewControllers = @[navProject,navDiscover,navActivity,navTank];
-    self.tabBar.textColor = orangeColor;
-    MyNavViewController *navMine = [[MyNavViewController alloc]initWithRootViewController:[[MineViewController alloc]init]];
-    self.tabBar.centerViewController = navMine;
-}
-
-#pragma mark -push
+#pragma mark- JPUSHRegisterDelegate
 //注册APNs成功并上报DeviceToken
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -283,22 +242,38 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 //实现注册APNs失败接口（可选
 -(void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(nonnull NSError *)error
 {
+    //Optional
     NSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
-
 }
+
+
 
 // iOS 10 Support
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
     // Required
     NSDictionary * userInfo = notification.request.content.userInfo;
+    NSLog(@"ioS10推送---%@",userInfo);
     if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
+        
+    }else{
+        NSLog(@"本地通知");
     }
+    
     if (([UIApplication sharedApplication].applicationState == UIApplicationStateActive)) {
+        _isActivity = YES;
         [self notification:userInfo];
-//        NSLog(@"前台运行");
-        return;
+        NSLog(@"前台运行");
+        //            return;
     }
+    
+    if (([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)) {
+        NSLog(@"后台运行");
+    }
+    if (([UIApplication sharedApplication].applicationState == UIApplicationStateInactive)) {
+        NSLog(@"未运行");
+    }
+    
     completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
 }
 
@@ -306,8 +281,19 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
     // Required
     NSDictionary * userInfo = response.notification.request.content.userInfo;
+    NSLog(@"ioS10推送222---%@",userInfo);
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
+        
+//        NSString *message = [NSString stringWithFormat:@"did%@", [userInfo[@"aps"] objectForKey:@"alert"]];
+//        NSLog(@"iOS10程序关闭后通过点击推送进入程序弹出的通知: %@", message);
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:message delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil, nil];
+//        [alert show];
+        
+        [self notification:userInfo];
+        
+    }else{
+        NSLog(@"本地通知");
     }
     [self notification:userInfo];
     completionHandler();  // 系统要求执行这个方法
@@ -332,6 +318,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     completionHandler(UIBackgroundFetchResultNewData);
     
 }
+
 -(void)notification:(NSDictionary*)userInfo
 {
     NSString * type = [userInfo valueForKey:@"type"];
@@ -341,8 +328,25 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     if ([type isEqualToString:@"web"]) {
         controller = [[ProjectBannerDetailVC alloc]init];
         ((ProjectBannerDetailVC*)controller).url = [userInfo valueForKey:@"content"];
-        
+        ((ProjectBannerDetailVC*)controller).titleStr = [userInfo valueForKey:@"title"];
+        ((ProjectBannerDetailVC*)controller).contentText = [userInfo valueForKey:@"share_content"];
+        ((ProjectBannerDetailVC*)controller).image = [userInfo valueForKey:@"share_img_url"];
+        ((ProjectBannerDetailVC*)controller).titleText = [userInfo valueForKey:@"title"];
         notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
+        ((ProjectBannerDetailVC*)controller).isPush = YES;
+        controller.hidesBottomBarWhenPushed = YES;
+//        UIViewController *vc = [self getPresentedViewController];
+//        
+        if (!_myNav) {
+            _myNav = [_tabBar childViewControllers][0];
+        }
+//
+//        if (vc) {
+//            _nav = (MyNavViewController *)vc;
+//        }
+//        
+        [_myNav pushViewController:controller animated:YES];
+//        _window.rootViewController = controller;
         
     }else if ([type isEqualToString:@"project"]) {
         
@@ -352,11 +356,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
         notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
         
     }else if ([type isEqualToString:@"action"]) {
-//        ActivityViewModel * model = [[ActivityViewModel alloc]init];
-//        model.actionId = [[userInfo valueForKey:@"content"] integerValue];
-//        controller = [[ActivityDetailVC alloc]init];
-//        ((ActivityDetailVC*)controller).activityModel = model;
-//        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+
     }else{
         controller = [[ProjectLetterViewController alloc]init];
         notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
@@ -366,6 +366,28 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
     [JPUSHService handleRemoteNotification:userInfo];
     [UIApplication sharedApplication].applicationIconBadgeNumber =0;
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    //    NSLog(@"选择器");
+    //    [self getPresentedViewController];
+    _myNav =(MyNavViewController *) viewController;
+//    NSLog(@"打印选择控制器---%@",[viewController class]);
+}
+-(BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
+{
+    
+    if ([tabBarController.childViewControllers indexOfObject:viewController] == tabBarController.childViewControllers.count - 3) {
+        MineViewController *mine = [[MineViewController alloc]init];
+        MyNavViewController *navVc = [[MyNavViewController alloc]initWithRootViewController:mine];
+        //选择显示界面
+        [tabBarController presentViewController:navVc animated:YES completion:nil];
+        _myNav = navVc;
+//        NSLog(@"推出的控制器---%@",[navVc class]);
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark ---------友盟
@@ -437,10 +459,13 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [application setApplicationIconBadgeNumber:0];
+    NSLog(@"进入后台");
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [application setApplicationIconBadgeNumber:0];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

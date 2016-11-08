@@ -104,9 +104,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
     
     if (!_bannerModelArray) {
         _bannerModelArray = [NSMutableArray array];
@@ -495,6 +492,9 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
             
             NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
@@ -520,22 +520,17 @@
             
             [self.tableView reloadData];
 
-            //结束刷新
-//            [self.tableView.mj_header endRefreshing];
-//            [self.tableView.mj_footer endRefreshing];
+
         }else{
             //结束刷新
-//            [self.tableView.mj_header endRefreshing];
-//            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
         
         self.startLoading = NO;
     }else{
         self.isNetRequestError = YES;
     }
-    //结束刷新
-    [self.tableView.mj_header endRefreshing];
-    [self.tableView.mj_footer endRefreshing];
 }
 #pragma mark-----解析项目列表路演------
 -(void)analysisProjectListData:(NSArray*)array
@@ -787,6 +782,7 @@
 {
 //    NSLog(@"没有网络事件处理");
     NetStatusViewController *netStatus =[NetStatusViewController new];
+    netStatus.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:netStatus animated:YES];
 }
 
@@ -823,14 +819,14 @@
         [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
         
         ProjectLetterViewController *letter = [ProjectLetterViewController new];
-        
+        letter.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:letter animated:YES];
         
     }
     if (button.tag == 1) {
         
         UpProjectViewController *up = [UpProjectViewController new];
-        
+        up.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:up animated:YES];
     }
 }
@@ -901,7 +897,7 @@
         ProjectDetailController * detail = [[ProjectDetailController alloc]init];
         model = _projectModelArray[indexPath.row];
         detail.projectId = model.projectId;
-        
+        detail.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:detail animated:YES];
     }else{
         
@@ -909,7 +905,7 @@
         model = _roadModelArray[indexPath.row];
         
         detail.projectId = model.projectId;
-        
+        detail.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:detail animated:YES];
     }
 }
@@ -949,12 +945,12 @@
             ProjectPrepareDetailVC *detail = [ProjectPrepareDetailVC new];
             
             detail.projectId = model.projectId;
-            
+            detail.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:detail animated:YES];
         }else{
             ProjectDetailController * detail = [[ProjectDetailController alloc]init];
             detail.projectId = model.projectId;
-            
+            detail.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:detail animated:YES];
         }
         
@@ -966,6 +962,7 @@
     vc.image = model.image;
     vc.titleText = model.name;
     vc.contentText = model.desc;
+    vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -1182,6 +1179,9 @@
             
         }else{
             LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+            
+            login.hidesBottomBarWhenPushed = YES;
+            
             [self.navigationController pushViewController:login animated:NO];
         }
         
@@ -1193,36 +1193,17 @@
 {
     [super viewWillAppear:animated];
     
+    self.tabBarController.tabBar.hidden = NO;
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;
     
-//    [self.navigationController.navigationBar setHidden:NO];
     self.navigationController.navigationBar.hidden = NO;
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    //不隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
-    
-    
+//    
+    [self.navigationController setNavigationBarHidden:NO];
+
 }
+
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -1230,28 +1211,6 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;
     [self.navigationController.navigationBar setHidden:NO];
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:NO animated:NO];
-        }
-    }
-    
-    //不隐藏tabbar
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:NO animated:NO];
     
     if (!self.bannerModelArray.count) {
         [self loadOffLineData];

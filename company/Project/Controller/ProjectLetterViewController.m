@@ -21,7 +21,7 @@
 
 @property (nonatomic, strong) UITableViewCustomView *tableView; //列表
 @property (nonatomic, strong) NSMutableArray *dataArray;    //数据
-
+@property (nonatomic, strong) NSMutableArray *tempArray;
 @property (nonatomic, strong) NSMutableArray *deleteArray;
 
 @property (nonatomic, strong) UIView *bottomView;   //底部视图
@@ -50,11 +50,16 @@
     if (!_deleteArray) {
         _deleteArray = [NSMutableArray array];
     }
+    if (!_tempArray) {
+        _tempArray = [NSMutableArray array];
+    }
     self.view.backgroundColor = [UIColor whiteColor];
     //获得partner
     self.messagePartner = [TDUtil encryKeyWithMD5:KEY action:INNERMESSAGE];
     self.deletePartner = [TDUtil encryKeyWithMD5:KEY action:DELETEMESSAGE];
     self.readPartner = [TDUtil encryKeyWithMD5:KEY action:READMESSAGE];
+    
+    self.loadingViewFrame = self.view.frame;
     
     _page = 0;
     [self setAutomaticallyAdjustsScrollViewInsets:NO];
@@ -70,7 +75,7 @@
 -(void)startLoadData
 {
     NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.messagePartner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
-    self.startLoading = YES;
+//    self.startLoading = YES;
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_INNER_MESSAGE postParam:dic type:0 delegate:self sel:@selector(requestMessageList:)];
 }
@@ -82,26 +87,26 @@
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            self.startLoading = NO;
+//            self.startLoading = NO;
             
             if (_page == 0) {
-                [_dataArray removeAllObjects];
+                [_tempArray removeAllObjects];
                 [_deleteArray removeAllObjects];
             }
-            NSMutableArray *tempArray = [NSMutableArray new];
+//            NSMutableArray *tempArray = [NSMutableArray new];
             NSArray *modelArray = [LetterBaseModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
             for (NSInteger i = 0; i < modelArray.count; i ++) {
                 LetterBaseModel *baseModel = modelArray[i];
-                [tempArray addObject:baseModel];
+                [_tempArray addObject:baseModel];
             }
-            self.dataArray = tempArray;
+            self.dataArray = _tempArray;
         
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
         }else{
             //结束刷新
-            self.startLoading = NO;
+//            self.startLoading = NO;
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
 //            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -113,7 +118,7 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    self.startLoading = YES;
+//    self.startLoading = YES;
     self.isNetRequestError = YES;
 }
 
@@ -144,7 +149,7 @@
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
 //    _tableView.mj_header.automaticallyChangeAlpha = YES;
-//    [_tableView.mj_header beginRefreshing];
+    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
    
     [self.view addSubview:_tableView];
@@ -162,7 +167,6 @@
 {
     _page ++;
     [self startLoadData];
-    //    NSLog(@"回到顶部");
 }
 
 -(void)refreshHttp
@@ -197,25 +201,26 @@
     [operateBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:operateBtn];
     _operateBtn = operateBtn;
-//    标题视图
-    UIView *titleView = [UIView new];
-//    [titleView setBackgroundColor:[UIColor greenColor]];
-    titleView.frame = CGRectMake(0, 0, 80, 25);
+////    标题视图
+//    UIView *titleView = [UIView new];
+////    [titleView setBackgroundColor:[UIColor greenColor]];
+//    titleView.frame = CGRectMake(0, 0, 80, 25);
+//    
+//    UILabel *label = [UILabel new];
+//    label.text = @"站内信";
+//    label.font = BGFont(20);
+//    
+////    label.backgroundColor = [UIColor orangeColor];
+//    label.textColor  = [UIColor whiteColor];
+//    label.textAlignment = NSTextAlignmentCenter;
+//    [titleView addSubview:label];
+//    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.mas_equalTo(titleView);
+//        make.centerY.mas_equalTo(titleView);
+//    }];
     
-    UILabel *label = [UILabel new];
-    label.text = @"站内信";
-    label.font = BGFont(20);
-    
-//    label.backgroundColor = [UIColor orangeColor];
-    label.textColor  = [UIColor whiteColor];
-    label.textAlignment = NSTextAlignmentCenter;
-    [titleView addSubview:label];
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(titleView);
-        make.centerY.mas_equalTo(titleView);
-    }];
-    
-    self.navigationItem.titleView = titleView;
+//    self.navigationItem.titleView = titleView;
+    self.navigationItem.title = @"站内信";
 }
 #pragma mark -底部视图设置
 -(void)setupBottomView
@@ -446,27 +451,6 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:NO];
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
     
 }
 -(void)viewWillDisappear:(BOOL)animated

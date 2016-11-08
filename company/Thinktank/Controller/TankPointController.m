@@ -68,6 +68,7 @@
     TankSearchController *searchVC = [[TankSearchController alloc]init];
     searchVC.index = 3;
     searchVC.isActive = YES;
+    searchVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:searchVC animated:YES];
     
 }
@@ -82,7 +83,6 @@
     _page ++;
     [self loadListData];
 }
-
 
 -(void)loadListData
 {
@@ -288,6 +288,7 @@
     if (model.originalImgs.count) {
         webDetail.image = model.originalImgs[0][@"url"];
     }
+    webDetail.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:webDetail animated:YES];
 }
 

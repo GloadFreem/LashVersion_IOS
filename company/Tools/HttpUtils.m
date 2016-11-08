@@ -63,7 +63,7 @@
 //    NSLog(@"上传文件:%@",url);
     
     self.requestInstance=[ASIFormDataRequest requestWithURL:url];
-    [self.requestInstance setTimeOutSeconds:15];
+    [self.requestInstance setTimeOutSeconds:10];
 //    [self.requestInstance setPersistentConnectionTimeoutSeconds:30];
 //    [self.requestInstance setNumberOfTimesToRetryOnTimeout:2];
     [self.requestInstance setPostFormat:ASIMultipartFormDataPostFormat];

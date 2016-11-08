@@ -148,7 +148,7 @@
 -(void)requestSetIdentifyType:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
+//    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (jsonDic!=nil) {
@@ -157,21 +157,15 @@
         if ([status integerValue] == 200) {
             [self closeBlackView];
             self.startLoading = NO;
-            //进入项目首页
-            UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-            UINavigationController *nav = (UINavigationController*)window.rootViewController;
-            JTabBarController * tabBarController;
-            for (UIViewController *vc in nav.childViewControllers) {
-                if ([vc isKindOfClass:JTabBarController.class]) {
-                    tabBarController = (JTabBarController*)vc;
-                }
-            }
+            //进入应用
+            //进入应用
+            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             
-            if (!tabBarController) {
-                tabBarController = [CommentTD createViewControllers];
-            }
-            
-            [self.navigationController pushViewController:tabBarController animated:NO];
+            JTabBarController * tabBarController = [[JTabBarController alloc]init];
+            tabBarController.delegate = delegate;
+            delegate.tabBar = tabBarController;
+//            delegate.nav = [[UINavigationController alloc]initWithRootViewController:delegate.tabBar];
+            delegate.window.rootViewController = delegate.tabBar;
         }else{
             [self closeBlackView];
             self.startLoading = NO;

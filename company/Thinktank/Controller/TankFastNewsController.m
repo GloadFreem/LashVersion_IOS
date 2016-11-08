@@ -73,6 +73,7 @@
     TankSearchController *searchVC = [[TankSearchController alloc]init];
     searchVC.index = 1;
     searchVC.isActive = YES;
+    searchVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:searchVC animated:YES];
     
 }
@@ -104,6 +105,10 @@
         NSDictionary *dic = responseObject;
 //                NSLog(@"请求成功====%@", dic);
         if ([dic[@"status"] intValue]== 200) {
+            
+            [_tableView.mj_header endRefreshing];
+            [_tableView.mj_footer endRefreshing];
+            
             if (self.page == 0) {
                 [_tempArray removeAllObjects];
             }
@@ -116,11 +121,10 @@
         _isFirst = NO;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 //        NSLog(@"错误信息%@", error.localizedDescription);
+        [_tableView.mj_header endRefreshing];
+        [_tableView.mj_footer endRefreshing];
         weakSelf.isNetRequestError  =YES;
     }];
-
-    [_tableView.mj_header endRefreshing];
-    [_tableView.mj_footer endRefreshing];
     
 }
 -(void)refresh
@@ -286,6 +290,7 @@
     if (model.images.count) {
         webDetail.image = model.images[0];
     }
+    webDetail.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:webDetail animated:YES];
 }
 

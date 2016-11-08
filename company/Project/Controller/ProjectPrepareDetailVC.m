@@ -63,8 +63,6 @@
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
 
-
-
 @end
 
 @implementation ProjectPrepareDetailVC
@@ -240,193 +238,173 @@
 
 -(void)createScrollView
 {
-    _scrollView = [UIScrollView new];
-    _scrollView.bounces = NO;
-    _scrollView.delegate = self;
-    
-    [self.view addSubview:_scrollView];
-    _scrollView.sd_layout
-    .leftEqualToView(self.view)
-    .topSpaceToView(self.view,64)
-    .rightEqualToView(self.view)
-    .bottomSpaceToView(self.view,50);
-    
-    _headerView = [ProjectPrepareDetailHeaderView new];
-    _headerView.model= _baseModel;
-    [_scrollView addSubview:_headerView];
-    _headerView.sd_layout
-    .leftEqualToView(_scrollView)
-    .topEqualToView(_scrollView)
-    .rightEqualToView(_scrollView);
-    
-    //创建照片容器
-    _photoView = [ProjectPreparePhotoView new];
-    
-    ProjectDetailLeftHeaderModel *headerModel = [ProjectDetailLeftHeaderModel new];
-    headerModel.projectStr = _baseModel.project.abbrevName;
-    headerModel.content = _baseModel.project.desc;
-    headerModel.projectIcon = _baseModel.project.startPageImage;
-    
-    NSMutableArray *photoArr = [NSMutableArray array];
-    NSArray *picArray = [NSArray arrayWithArray:_baseModel.project.projectimageses];
-    for (NSInteger i = 0; i < picArray.count; i ++) {
-        DetailProjectimageses *image = picArray[i];
-        [photoArr addObject:image.imageUrl];
+    if (!_scrollView) {
+        _scrollView = [UIScrollView new];
+        _scrollView.bounces = NO;
+        _scrollView.delegate = self;
+        
+        [self.view addSubview:_scrollView];
+        _scrollView.sd_layout
+        .leftEqualToView(self.view)
+        .topSpaceToView(self.view,64)
+        .rightEqualToView(self.view)
+        .bottomSpaceToView(self.view,50);
+        
+        _headerView = [ProjectPrepareDetailHeaderView new];
+        _headerView.model= _baseModel;
+        [_scrollView addSubview:_headerView];
+        _headerView.sd_layout
+        .leftEqualToView(_scrollView)
+        .topEqualToView(_scrollView)
+        .rightEqualToView(_scrollView);
+        
+        //创建照片容器
+        _photoView = [ProjectPreparePhotoView new];
+        
+        ProjectDetailLeftHeaderModel *headerModel = [ProjectDetailLeftHeaderModel new];
+        headerModel.projectStr = _baseModel.project.abbrevName;
+        headerModel.content = _baseModel.project.desc;
+        headerModel.projectIcon = _baseModel.project.startPageImage;
+        
+        NSMutableArray *photoArr = [NSMutableArray array];
+        NSArray *picArray = [NSArray arrayWithArray:_baseModel.project.projectimageses];
+        for (NSInteger i = 0; i < picArray.count; i ++) {
+            DetailProjectimageses *image = picArray[i];
+            [photoArr addObject:image.imageUrl];
+        }
+        headerModel.pictureArray = [NSArray arrayWithArray:photoArr];
+        _photoView.model = headerModel;
+        
+        [_scrollView addSubview:_photoView];
+        
+        _photoView.sd_layout
+        .leftEqualToView(_scrollView)
+        .rightEqualToView(_scrollView)
+        .topSpaceToView(_headerView,0);
+        
+        _teamView = [ProjectDetailLeftTeamView new];
+        _teamView.delegate = self;
+        
+        _teamView.authenticName = _authenticName;
+        [_scrollView addSubview:_teamView];
+        
+        _teamView.sd_layout
+        .leftEqualToView(_scrollView)
+        .rightEqualToView(_scrollView)
+        .topSpaceToView(_photoView,0);
+        //    .autoHeightRatio(0);
+        //    .heightIs(365);
+        if (_baseModel.project.teams.count <= 0 && _baseModel.extr.count <= 0) {
+            _teamView.sd_layout.heightIs(0);
+            _teamView.imageHeight = 0;
+            _teamView.scrollHeightFirst = 0;
+            _teamView.scrollHeightSecond = 0;
+            _teamView.topHeight = 0;
+            _teamView.midHeight = 0;
+            _teamView.botHeight = 0;
+        }
+        if (_baseModel.project.teams.count <= 0 && _baseModel.extr.count > 0) {
+            _teamView.sd_layout.heightIs(365 - 130);
+            _teamView.imageHeight = 20;
+            _teamView.scrollHeightSecond = 130;
+            _teamView.scrollHeightFirst = 0;
+            _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
+            _teamView.topHeight = 10;
+            _teamView.midHeight = 0;
+            _teamView.botHeight = 10;
+        }
+        if (_baseModel.project.teams.count > 0 && _baseModel.extr.count <= 0) {
+            _teamView.sd_layout.heightIs(365 - 130);
+            _teamView.imageHeight = 20;
+            _teamView.scrollHeightFirst = 130;
+            _teamView.scrollHeightSecond = 0;
+            _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];
+            _teamView.topHeight = 10;
+            _teamView.midHeight = 0;
+            _teamView.botHeight = 10;
+        }
+        if (_baseModel.project.teams.count > 0 && _baseModel.extr.count > 0) {
+            _teamView.sd_layout.heightIs(365);
+            _teamView.scrollHeightFirst = 130;
+            _teamView.scrollHeightSecond = 130;
+            _teamView.imageHeight = 20;
+            _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
+            _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];
+            _teamView.topHeight = 10;
+            _teamView.midHeight = 10;
+            _teamView.botHeight = 10;
+        }
+        
+        _footerView = [ProjectPrepareFooterCommentView new];
+        _footerView.projectId = _projectId;
+        _footerView.delagate =self;
+        [_scrollView addSubview:_footerView];
+        _footerView.sd_layout
+        .leftEqualToView(_scrollView)
+        .rightEqualToView(_scrollView)
+        .topSpaceToView(_teamView,0);
+        
+        [_scrollView setupAutoContentSizeWithBottomView:_footerView bottomMargin:0];
     }
-    headerModel.pictureArray = [NSArray arrayWithArray:photoArr];
-    _photoView.model = headerModel;
-    
-    //3.设置属性
-//    __block ProjectPreparePhotoView *blockPhotoView = _photoView;
-//    [_photoView setMoreButtonClickedBlock:^(Boolean flag) {
-//        blockPhotoView.model.isOpen = flag;
-//        NSLog(@"改变属性");
-//    }];
-    
-    [_scrollView addSubview:_photoView];
-    
-    _photoView.sd_layout
-    .leftEqualToView(_scrollView)
-    .rightEqualToView(_scrollView)
-    .topSpaceToView(_headerView,0);
-    
-    _teamView = [ProjectDetailLeftTeamView new];
-    _teamView.delegate = self;
-//    if (_baseModel.project.teams.count) {
-//        _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];
-//        _teamView.scrollHeightFirst = 130;
-//
-//    }else{
-//        _teamView.scrollHeightFirst = 0;
-//
-//    }
-//    
-//    if (_baseModel.extr.count) {
-//        _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
-//        _teamView.scrollHeightSecond = 130;
-//
-//    }else{
-//        _teamView.scrollHeightSecond = 0;
-//
-//    }
-
-    _teamView.authenticName = _authenticName;
-    [_scrollView addSubview:_teamView];
-    
-    _teamView.sd_layout
-    .leftEqualToView(_scrollView)
-    .rightEqualToView(_scrollView)
-    .topSpaceToView(_photoView,0);
-//    .autoHeightRatio(0);
-//    .heightIs(365);
-    if (_baseModel.project.teams.count <= 0 && _baseModel.extr.count <= 0) {
-        _teamView.sd_layout.heightIs(0);
-        _teamView.imageHeight = 0;
-        _teamView.scrollHeightFirst = 0;
-        _teamView.scrollHeightSecond = 0;
-        _teamView.topHeight = 0;
-        _teamView.midHeight = 0;
-        _teamView.botHeight = 0;
-    }
-    if (_baseModel.project.teams.count <= 0 && _baseModel.extr.count > 0) {
-        _teamView.sd_layout.heightIs(365 - 130);
-        _teamView.imageHeight = 20;
-        _teamView.scrollHeightSecond = 130;
-        _teamView.scrollHeightFirst = 0;
-        _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
-        _teamView.topHeight = 10;
-        _teamView.midHeight = 0;
-        _teamView.botHeight = 10;
-    }
-    if (_baseModel.project.teams.count > 0 && _baseModel.extr.count <= 0) {
-        _teamView.sd_layout.heightIs(365 - 130);
-        _teamView.imageHeight = 20;
-        _teamView.scrollHeightFirst = 130;
-        _teamView.scrollHeightSecond = 0;
-        _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];
-        _teamView.topHeight = 10;
-        _teamView.midHeight = 0;
-        _teamView.botHeight = 10;
-    }
-    if (_baseModel.project.teams.count > 0 && _baseModel.extr.count > 0) {
-        _teamView.sd_layout.heightIs(365);
-        _teamView.scrollHeightFirst = 130;
-        _teamView.scrollHeightSecond = 130;
-        _teamView.imageHeight = 20;
-        _teamView.extrModelArray = [NSMutableArray arrayWithArray:_baseModel.extr];
-        _teamView.teamModelArray = [NSMutableArray arrayWithArray:_baseModel.project.teams];
-        _teamView.topHeight = 10;
-        _teamView.midHeight = 10;
-        _teamView.botHeight = 10;
-    }
-    
-    _footerView = [ProjectPrepareFooterCommentView new];
-    _footerView.projectId = _projectId;
-    _footerView.delagate =self;
-    [_scrollView addSubview:_footerView];
-    _footerView.sd_layout
-    .leftEqualToView(_scrollView)
-    .rightEqualToView(_scrollView)
-    .topSpaceToView(_teamView,0);
-    
-    [_scrollView setupAutoContentSizeWithBottomView:_footerView bottomMargin:0];
 }
 
 -(void)createBottomView
 {
-    UIView *bottomView = [UIView new];
-    [bottomView setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:bottomView];
-    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.mas_equalTo(0);
-        make.height.mas_equalTo(50);
-    }];
-    
-    UIView *line = [UIView new];;
-    line.backgroundColor = GrayColor;
-    [bottomView addSubview:line];
-    [line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.right.mas_equalTo(0);
-        make.height.mas_equalTo(0.5);
-    }];
-    
-    UIButton *kefuBtn = [UIButton new];
-    [kefuBtn setBackgroundImage:[UIImage imageNamed:@"icon_kefu"] forState:UIControlStateNormal];
-    [kefuBtn setTag:2];
-    [kefuBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    kefuBtn.size = kefuBtn.currentBackgroundImage.size;
-    [bottomView addSubview:kefuBtn];
-    [kefuBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(8);
-        make.top.mas_equalTo(5);
-        make.bottom.mas_equalTo(-5);
-    }];
-    
-    _collectBtn = [UIButton new];
-    _collectBtn.layer.cornerRadius = 20;
-    _collectBtn.layer.masksToBounds = YES;
-    [_collectBtn setBackgroundColor:orangeColor];
-    [_collectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    if (_isCollect) {
-        [_collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+    if (!_bottomView) {
+        UIView *bottomView = [UIView new];
+        [bottomView setBackgroundColor:[UIColor whiteColor]];
+        [self.view addSubview:bottomView];
+        [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.bottom.mas_equalTo(0);
+            make.height.mas_equalTo(50);
+        }];
         
-    }else{
-        [_collectBtn setImage:[UIImage imageNamed:@"icon_uncollect"] forState:UIControlStateNormal];
+        UIView *line = [UIView new];;
+        line.backgroundColor = GrayColor;
+        [bottomView addSubview:line];
+        [line mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.top.right.mas_equalTo(0);
+            make.height.mas_equalTo(0.5);
+        }];
+        
+        UIButton *kefuBtn = [UIButton new];
+        [kefuBtn setBackgroundImage:[UIImage imageNamed:@"icon_kefu"] forState:UIControlStateNormal];
+        [kefuBtn setTag:2];
+        [kefuBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        kefuBtn.size = kefuBtn.currentBackgroundImage.size;
+        [bottomView addSubview:kefuBtn];
+        [kefuBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(8);
+            make.top.mas_equalTo(5);
+            make.bottom.mas_equalTo(-5);
+        }];
+        
+        _collectBtn = [UIButton new];
+        _collectBtn.layer.cornerRadius = 20;
+        _collectBtn.layer.masksToBounds = YES;
+        [_collectBtn setBackgroundColor:orangeColor];
+        [_collectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        if (_isCollect) {
+            [_collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+            
+        }else{
+            [_collectBtn setImage:[UIImage imageNamed:@"icon_uncollect"] forState:UIControlStateNormal];
+        }
+        if (_collectCount == 0) {
+            [_collectBtn setTitle:[NSString stringWithFormat:@" 关注"] forState:UIControlStateNormal];
+        }else{
+            [_collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",(long)_collectCount] forState:UIControlStateNormal];
+        }
+        [_collectBtn addTarget:self action:@selector(collectClick:) forControlEvents:UIControlEventTouchUpInside];
+        [bottomView addSubview:_collectBtn];
+        [_collectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(5);
+            make.left.mas_equalTo(kefuBtn.mas_right).offset(45);
+            make.bottom.mas_equalTo(-5);
+            make.right.mas_equalTo(-8);
+        }];
+        _bottomView = bottomView;
     }
-    if (_collectCount == 0) {
-    [_collectBtn setTitle:[NSString stringWithFormat:@" 关注"] forState:UIControlStateNormal];
-    }else{
-    [_collectBtn setTitle:[NSString stringWithFormat:@" 关注(%ld)",(long)_collectCount] forState:UIControlStateNormal];
-    }
-    [_collectBtn addTarget:self action:@selector(collectClick:) forControlEvents:UIControlEventTouchUpInside];
-    [bottomView addSubview:_collectBtn];
-    [_collectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(5);
-        make.left.mas_equalTo(kefuBtn.mas_right).offset(45);
-        make.bottom.mas_equalTo(-5);
-        make.right.mas_equalTo(-8);
-    }];
-    
 }
 #pragma mark---------------------------------- 关注--------------------------------------
 -(void)collectClick:(UIButton*)btn
@@ -759,6 +737,20 @@
 -(void)didClickBtnInTeamExrViewWithModel:(DetailExtr *)extr
 {
 
+//        if (![_identiyTypeId isEqualToString:@"1"]) {
+//            if (extr.url.length) {
+//                PingTaiWebViewController *vc = [PingTaiWebViewController new];
+//                vc.url = extr.url;
+//                vc.titleStr = extr.content;
+//                [self.navigationController pushViewController:vc animated:YES];
+//            }
+//        }else{
+//        
+//            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的身份为项目方，不能查看其他项目方的资料" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//            [alertView show];
+//        }
+    if ([_authenticName isEqualToString:@"已认证"])
+    {
         if (![_identiyTypeId isEqualToString:@"1"]) {
             if (extr.url.length) {
                 PingTaiWebViewController *vc = [PingTaiWebViewController new];
@@ -767,10 +759,19 @@
                 [self.navigationController pushViewController:vc animated:YES];
             }
         }else{
-        
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的身份为项目方，不能查看其他项目方的资料" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的身份为项目方，不能查看其他项目方的资料!" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [alertView show];
         }
+    }
+    if ([_authenticName isEqualToString:@"认证中"]) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
+    if ([_authenticName isEqualToString:@"未认证"] || [_authenticName isEqualToString:@"认证失败"]){
+        [self presentAlertView];
+    }
+    
 }
 
 #pragma mark -textViewDelegate
@@ -805,27 +806,7 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:[UIButton new]];
     self.navigationController.navigationBar.hidden = YES;
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
+
 }
 
 -(void)viewWillDisappear:(BOOL)animated

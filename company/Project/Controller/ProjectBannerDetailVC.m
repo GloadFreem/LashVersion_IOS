@@ -35,8 +35,8 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     [self setNav];
-//    _webView  =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
-    _webView  =[[UIWebView alloc]initWithFrame:self.view.bounds];
+    _webView  =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
+//    _webView  =[[UIWebView alloc]initWithFrame:self.view.bounds];
     _webView.delegate = self;
     _webView.scrollView.bounces = NO;
     [_webView scalesPageToFit];
@@ -90,6 +90,16 @@
 
 -(void)leftBack
 {
+    if (_isPush) {
+        //进入应用
+//        AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//        delegate.window.rootViewController = delegate.tabBar;
+        
+    }else{
+    [self.webView stopLoading];
+    [self.navigationController popViewControllerAnimated:YES];
+    }
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
     [self.webView stopLoading];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -393,29 +403,8 @@
 {
     [super viewWillAppear:animated];
 //    [self createLoadingView];    //创建加载动画
-    
+    [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController.navigationBar setHidden:NO];
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    UINavigationController *nav = (UINavigationController*)window.rootViewController;
-    JTabBarController * tabBarController;
-    for (UIViewController *vc in nav.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:JTabBarController.class]) {
-            tabBarController = (JTabBarController*)vc;
-            [tabBarController tabBarHidden:YES animated:NO];
-        }
-    }
-    
-    AppDelegate * delegate =(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    [delegate.tabBar tabBarHidden:YES animated:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;
@@ -425,7 +414,6 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
 //    NSLog(@"哈哈");
 }
 

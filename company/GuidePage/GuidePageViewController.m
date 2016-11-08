@@ -115,10 +115,6 @@
     NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
     [data setValue:@"true" forKey:@"isStart"];
     LoginRegistViewController *login = [LoginRegistViewController new];
-    
-//    进入主界面
-//                AppDelegate * app =(AppDelegate* )[[UIApplication sharedApplication] delegate];
-//                app.window.rootViewController = login;
     [self.navigationController pushViewController:login animated:YES];
 }
 
