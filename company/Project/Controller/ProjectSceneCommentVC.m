@@ -63,11 +63,11 @@
     
 }
 
--(void)loadDataRegular
-{
-    _page = 0;
-    [self startLoadData];
-}
+//-(void)loadDataRegular
+//{
+//    _page = 0;
+//    [self startLoadData];
+//}
 
 -(void)setNav
 {
@@ -102,7 +102,7 @@
 -(void)requestCommentList:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
+    NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     
     if (_page == 0) {
@@ -229,9 +229,6 @@
         make.height.mas_equalTo(50);
     }];
     [LQQMonitorKeyboard LQQAddMonitorWithShowBack:^(NSInteger height) {
-        
-//        _footer.frame = CGRectMake(0, self.view.frame.size.height - 50 - height, SCREENWIDTH, 50);
-        //        NSLog(@"键盘出现了 == %ld",(long)height);
         [_footer mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.right.mas_equalTo(0);
             make.height.mas_equalTo(50);
@@ -239,9 +236,6 @@
         }];
         
     } andDismissBlock:^(NSInteger height) {
-        
-//        _footer.frame = CGRectMake(0, self.view.frame.size.height - 50, SCREENWIDTH, 50);
-        //        NSLog(@"键盘消失了 == %ld",(long)height);
         [_footer mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.bottom.right.mas_equalTo(0);
             make.height.mas_equalTo(50);
@@ -455,8 +449,13 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:NO];
-    _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
+    
+//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//        _timer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
+//        [_timer fire];
+//        [[NSRunLoop currentRunLoop] run];
+//    });
+    
     
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
     [IQKeyboardManager sharedManager].enable = NO;
@@ -468,16 +467,16 @@
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
     [IQKeyboardManager sharedManager].enable = YES;
     
-    [_timer setFireDate:[NSDate distantFuture]];
-    [_timer invalidate];
-    _timer = nil;
+//    [_timer setFireDate:[NSDate distantFuture]];
+//    [_timer invalidate];
+//    _timer = nil;
 }
 
 
 -(void)dealloc{
-    [_timer setFireDate:[NSDate distantFuture]];
-    [_timer invalidate];
-    _timer = nil;
+//    [_timer setFireDate:[NSDate distantFuture]];
+//    [_timer invalidate];
+//    _timer = nil;
     [self cancleRequest];
 }
 /*

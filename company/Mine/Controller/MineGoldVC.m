@@ -345,7 +345,7 @@
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
                 
-                NSLog(@"分享到微信");
+//                NSLog(@"分享到微信");
             }
                 break;
             case 2:{
@@ -383,11 +383,11 @@
         }
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
-        NSLog(@"微信开始响应");
+//        NSLog(@"微信开始响应");
         [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
                     
-                NSLog(@"相映成功");
+//                NSLog(@"相映成功");
             }
         }];
     }

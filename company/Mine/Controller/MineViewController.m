@@ -94,14 +94,17 @@
     
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:INVITEFRIEND];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadInvestFriend) name:@"hasLogin" object:nil];
+    
     [self readData];
     self.loadingViewFrame = self.view.frame;
     self.isTransparent = YES;
-    
-    [self loadShareData];
-    
 }
 
+-(void)loadInvestFriend
+{
+    [self loadShareData];
+}
 -(void)setupBtns
 {
     //数据
@@ -174,7 +177,7 @@
 -(void)requestShareData:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -613,6 +616,7 @@
 }
 -(void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self cancleRequest];
 }
 @end

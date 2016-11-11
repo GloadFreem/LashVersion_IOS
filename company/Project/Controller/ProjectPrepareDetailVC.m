@@ -92,7 +92,7 @@
     self.servicePartner = [TDUtil encryKeyWithMD5:KEY action:CUSTOMSERVICE];
     
     //设置加载视图大小
-    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT-64);
+    self.loadingViewFrame = self.view.bounds;
     
     [self startLoadData];
     
@@ -421,6 +421,7 @@
         [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestProjectCollect:)];
     
 }
+
 -(void)requestProjectCollect:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];

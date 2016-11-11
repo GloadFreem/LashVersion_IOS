@@ -49,7 +49,6 @@
     [self setNav];
     [self setup];
     //设置加载视图范围
-//    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64);
     self.loadingViewFrame = self.view.bounds;
 }
 
@@ -326,7 +325,8 @@
     __block ProjectDetailInvestVC* blockSelf = self;
     
     UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"放弃" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        [blockSelf.navigationController popViewControllerAnimated:YES];
+//        [blockSelf.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }];
     
     [cancleAction setValue:color(71, 71, 71, 1) forKey:@"_titleTextColor"];
@@ -363,7 +363,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.hidden = NO;
     _isClick = NO;
 }
 -(void)viewWillDisappear:(BOOL)animated

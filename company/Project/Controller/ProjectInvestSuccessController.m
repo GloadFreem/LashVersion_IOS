@@ -86,10 +86,10 @@
         if ([VC isKindOfClass:[ProjectDetailInvestVC class]]) {
             [VC removeFromParentViewController];
         }
-    }
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    
+        if ([VC isKindOfClass:[ProjectDetailController class]]) {
+            [self.navigationController popToViewController:VC animated:YES];
+        }
+    }    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

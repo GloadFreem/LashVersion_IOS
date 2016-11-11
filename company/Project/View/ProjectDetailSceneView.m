@@ -108,9 +108,9 @@
                     _isFirst = NO;
                 }
             }
-            _timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
+//            _timer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(loadDataRegular) userInfo:nil repeats:YES];
 //            [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
-           [_timer setFireDate:[NSDate distantPast]];
+//           [_timer setFireDate:[NSDate distantPast]];
             
         }else{
 //            [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:[jsonDic valueForKey:@"message"]];
@@ -138,11 +138,11 @@
     }
     return timeStr;
 }
--(void)loadDataRegular
-{
-//    _page = 0;
-    [self startLoadComment];
-}
+//-(void)loadDataRegular
+//{
+////    _page = 0;
+//    [self startLoadComment];
+//}
 
 
 -(void)startLoadPPT
@@ -610,9 +610,9 @@
 -(void)stopTimer{
     
     [self.httpUtil requestDealloc];
-    [_timer setFireDate:[NSDate distantFuture]];
-    [_timer invalidate];
-    _timer = nil;
+//    [_timer setFireDate:[NSDate distantFuture]];
+//    [_timer invalidate];
+//    _timer = nil;
 }
 
 @end

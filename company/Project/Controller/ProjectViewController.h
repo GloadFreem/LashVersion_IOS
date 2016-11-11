@@ -14,4 +14,8 @@
 @property (nonatomic, copy) NSString *loginPartner;
 @property (nonatomic, strong) noNetView *netView;
 
+//登录状态
+@property (nonatomic, assign)BOOL hasLogin;
+@property (nonatomic, assign) BOOL isSuccess;
+
 @end

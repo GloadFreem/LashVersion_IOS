@@ -36,6 +36,7 @@
 
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+@property (nonatomic, copy) NSString *selfId;
 
 @property (nonatomic, assign) BOOL isFirst;
 @property (nonatomic, assign) BOOL haveData;   //是否有离线数据
@@ -50,7 +51,7 @@
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
-    
+    _selfId = [defaults objectForKey:USER_STATIC_USER_ID];
     _isFirst = YES;
     
     if (!_tempArray) {
@@ -269,7 +270,7 @@
     
     ProjectBannerDetailVC *web = [[ProjectBannerDetailVC alloc]init];
     ActivityViewModel * model = [_dataSourceArray objectAtIndex:indexPath.row];
-    web.url = model.url;
+    web.url = [NSString stringWithFormat:@"%@&userId=%@",model.url,_selfId];
 //    NSLog(@"打印地址---%@",model.url);
     web.titleStr = @"活动详情";
     web.contentText = @"金指投活动";

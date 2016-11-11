@@ -71,7 +71,7 @@
 @property (nonatomic, copy) NSString *type;
 
 @property (nonatomic, copy) NSString *hasMessagePartner;
-@property (nonatomic, assign) bool hasMessage;
+@property (nonatomic, assign) BOOL hasMessage;
 @property (nonatomic, strong) UIButton *letterBtn;
 
 //版本更新
@@ -92,10 +92,6 @@
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, assign) NSInteger second;
 @property (nonatomic, assign) NSInteger secondLeave;
-
-//登录状态
-@property (nonatomic, assign)BOOL hasLogin;
-@property (nonatomic, assign) BOOL isSuccess;
 
 @property (nonatomic, assign) BOOL haveData;   //是否有离线数据
 
@@ -355,7 +351,6 @@
         make.height.mas_equalTo(38);
         make.bottom.mas_equalTo(_tomorrowLabel.mas_top).offset(-16);
     }];
-    
 }
 
 -(void)startTimer
@@ -423,7 +418,7 @@
         NSString *status =[jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSDictionary *data = jsonDic[@"data"];
-            _hasMessage = [data[@"flag"] boolValue];
+            _hasMessage = data[@"flag"];
             
         }else{
         
@@ -1232,7 +1227,6 @@
             
             _isSuccess = YES;
             [self startLoadBannerData];
-            
             [self loadOtherData];
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             
@@ -1282,6 +1276,9 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    if (_hasLogin || _isSuccess) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"hasLogin" object:nil];
+    }
 }
 
 -(void)dealloc

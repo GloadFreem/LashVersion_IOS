@@ -72,9 +72,7 @@
 }
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
-@property (weak, nonatomic) IBOutlet UIButton *collectBtn;
-
-@property (weak, nonatomic) IBOutlet UIView *navView;
+@property (strong, nonatomic)  UIButton *collectBtn;
 
 @property (nonatomic,strong) CSZProjectDetailLetfView * leftView;
 @property (nonatomic,strong) UIScrollView *titleScrollView;     //切换按钮
@@ -133,6 +131,7 @@
     
 //    [self.view bringSubviewToFront:_navView];
     // Do any additional setup after loading the view from its nib.
+    [self setNav];
     //获得内容partner
     self.partner = [TDUtil encryKeyWithMD5:KEY action:REQUESTDETAIL];
     _scenePartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTSCENECOMMENT];
@@ -147,14 +146,13 @@
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     //设置加载视图范围
-    self.loadingViewFrame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64);
+    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
     //下载认证信息
-    [self loadAuthenData];
+    [self readAuthenData];
+//    [self loadAuthenData];
     
     //下载详情数据
     [self startLoadData];
-    [self loadShareData];
-    
     
     _heightArray = [NSMutableArray array];                  //子视图高度数组
     
@@ -165,7 +163,87 @@
     //下载客服电话
     [self loadServicePhone];
     
+    [self loadShareData];
+    
 }
+#pragma mark---导航栏
+-(void)setNav
+{
+    UIButton * leftback = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftback setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
+    leftback.size = CGSizeMake(80, 30);
+    leftback.imageEdgeInsets = UIEdgeInsetsMake(0, -60, 0, 0);
+    [leftback addTarget:self action:@selector(leftBack) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftback] ;
+    UIButton *shareBtn = [UIButton new];
+    [shareBtn setImage:[UIImage imageNamed:@"icon_share_btn"] forState:UIControlStateNormal];
+    [shareBtn addTarget:self action:@selector(shareBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    shareBtn.size = CGSizeMake(35, 35);
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
+    
+//    self.navigationItem.title = self.titleStr;
+}
+
+-(void)addCollectBtn
+{
+    UIButton *collectBtn = [UIButton new];
+    if (_isCollect) {
+        [collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+    }else{
+        [collectBtn setImage:[UIImage imageNamed:@"icon_uncollect"] forState:UIControlStateNormal];
+    }
+    [collectBtn addTarget:self action:@selector(collect) forControlEvents:UIControlEventTouchUpInside];
+    collectBtn.frame = CGRectMake(SCREENWIDTH - 100, 7, 30, 30);
+    [self.navigationController.navigationBar addSubview:collectBtn];
+    _collectBtn = collectBtn;
+//    NSLog(@"加一次");
+}
+
+#pragma mark---返回按钮
+-(void)leftBack
+{
+    if (!_isCollect) {
+        NSInteger index = [_attentionVC.projectArray indexOfObject:_listModel];
+        [_attentionVC.projectArray removeObject:_listModel];
+        [_attentionVC.statusArray removeObjectAtIndex:index];
+        [_tableView reloadData];
+    }
+    [scene removeObserverAndNotification];
+    [self cancleRequest];
+    //销毁计时器通知
+    //    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+#pragma mark---分享按钮
+-(void)shareBtnClick
+{
+    [self startShare];
+}
+
+#pragma mark---读取认证信息
+-(void)readAuthenData
+{
+    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+    _authenticName = [data objectForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+    _identiyTypeId = [data objectForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+    
+}
+#pragma mark--- 收藏
+-(void)collect
+{
+    _isCollect = !_isCollect;
+    NSString *flag;
+    if (_isCollect) {
+        flag = @"1";
+    }else{
+        flag = @"2";
+    }
+    
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",flag,@"flag", nil];
+    //开始请求
+    [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestProjectCollect:)];
+}
+
 -(void)loadServicePhone
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.servicePartner,@"partner",nil];
@@ -219,7 +297,6 @@
                 _authenticName = authentics.authenticstatus.name;
                 _identiyTypeId = [NSString stringWithFormat:@"%ld",(long)authentics.identiytype.identiyTypeId];
             }
-            
         }
     }
 }
@@ -404,38 +481,41 @@
         _titleScrollView.contentSize = CGSizeMake(SCREENWIDTH*_titleArray.count/3, 0);
         _titleScrollView.scrollEnabled = YES;
         _titleScrollView.showsHorizontalScrollIndicator = YES;
+        
+        for (int i = 0; i<_titleArray.count; i++) {
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+            [button setFrame:CGRectMake(SCREENWIDTH/3*i, 0, SCREENWIDTH/3, 40)];
+            [button setTitle:_titleArray[i] forState:UIControlStateNormal];
+            [button.titleLabel setFont:titleFont];
+            button.tag = i+10;
+            //默认选中现场界面
+            i==0 ? [button setTitleColor:selectTitleColor forState:UIControlStateNormal] : [button setTitleColor: unselectTitleColor forState:UIControlStateNormal];
+            
+            [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [_titleScrollView addSubview:button];
+            [_btArray addObject:button];
+        }
+        
+        _lineView = [[UIView alloc] initWithFrame:CGRectZero];
+        [_lineView setBackgroundColor:self.lineColor ? _lineColor : defaultLineColor];
+        //默认停留现场界面
+        if (self.type == 0) {
+            
+            _lineView.frame = CGRectMake(0*SCREENWIDTH/3, CGRectGetHeight(_titleScrollView.frame)-2, SCREENWIDTH/3, 2.1);
+            [_titleScrollView addSubview:_lineView];
+            
+        }else{
+            
+            //        _lineView.frame = CGRectMake(0, 0, 80, CGRectGetMaxX(_titleScrollView.frame));
+            //        [_titleScrollView insertSubview:_lineView atIndex:0];
+        }
+        
+
+        
     }
     
-    for (int i = 0; i<_titleArray.count; i++) {
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [button setFrame:CGRectMake(SCREENWIDTH/3*i, 0, SCREENWIDTH/3, 40)];
-        [button setTitle:_titleArray[i] forState:UIControlStateNormal];
-        [button.titleLabel setFont:titleFont];
-        button.tag = i+10;
-        //默认选中现场界面
-        i==0 ? [button setTitleColor:selectTitleColor forState:UIControlStateNormal] : [button setTitleColor: unselectTitleColor forState:UIControlStateNormal];
-        
-        [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-        [_titleScrollView addSubview:button];
-        [_btArray addObject:button];
-    }
-    
-    _lineView = [[UIView alloc] initWithFrame:CGRectZero];
-    [_lineView setBackgroundColor:self.lineColor ? _lineColor : defaultLineColor];
-    //默认停留现场界面
-    if (self.type == 0) {
-        
-        _lineView.frame = CGRectMake(0*SCREENWIDTH/3, CGRectGetHeight(_titleScrollView.frame)-2, SCREENWIDTH/3, 2.1);
-        [_titleScrollView addSubview:_lineView];
-        
-    }else{
-        
-//        _lineView.frame = CGRectMake(0, 0, 80, CGRectGetMaxX(_titleScrollView.frame));
-//        [_titleScrollView insertSubview:_lineView atIndex:0];
-    }
-    
-    return _titleScrollView;
+        return _titleScrollView;
 }
 
 #pragma mark -  初始化内部scrollView布局
@@ -472,15 +552,13 @@
         
         [_heightArray addObject:[NSNumber numberWithFloat:_leftView.height + 44]];
         
-        //实例化认投底部按钮视图
         //实例化底部按钮视图
         _bottomView = [UIView new];
         [_bottomView setBackgroundColor:[UIColor whiteColor]];
         [self.view addSubview:_bottomView];
         [_bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.mas_equalTo(0);
+            make.left.right.bottom.mas_equalTo(0);
             make.height.mas_equalTo(50);
-            make.top.mas_equalTo(SCREENHEIGHT - 50);
         }];
         
         UIView *line = [UIView new];;
@@ -518,8 +596,6 @@
             make.height.mas_equalTo(_kefuBtn.mas_height);
         }];
 
-        
-        
         //实例化成员分页面
         member = [ProjectDetailMemberView instancetationProjectDetailMemberView];
         member.projectId = self.projectId;
@@ -543,6 +619,11 @@
         
         //加底部回复框
         [self.view addSubview:self.footer];
+        [self.footer mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.bottom.mas_equalTo(0);
+            make.height.mas_equalTo(50);
+        }];
+        
         
     }
     
@@ -559,9 +640,6 @@
     if (!_footer) {
         _footer =[[UIView alloc]init];
         _footer.backgroundColor = [UIColor whiteColor];
-        _footer.frame = CGRectMake(0, SCREENHEIGHT-50, SCREENWIDTH, 50);
-        _footer.hidden = YES;
-        
         
         _textField = [[UITextField alloc]init];
         _textField.layer.cornerRadius = 2;
@@ -733,7 +811,6 @@
             [_textField resignFirstResponder];
             _subViewScrollView.height = _leftView.height + 44;
             [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
-//            NSLog(@"点击了第%ld个",sender.tag-10);
         }
             break;
         case 11:
@@ -743,7 +820,6 @@
             [_textField resignFirstResponder];
             _subViewScrollView.height = member.height;
             [_subViewScrollView setupAutoContentSizeWithBottomView:member bottomMargin:0];
-//            NSLog(@"点击了第%ld个",sender.tag-10);
         }
             break;
         case 12:
@@ -752,7 +828,6 @@
             [_footer setHidden:NO];
             _subViewScrollView.height = scene.height;
             [_subViewScrollView setupAutoContentSizeWithBottomView:scene bottomMargin:0];
-//            NSLog(@"点击了第%ld个",sender.tag-10);
         }
             break;
         default:
@@ -826,7 +901,6 @@
 
 -(void)updateLayoutNotification
 {
-//    NSLog(@"更新约束");
     _subViewScrollView.height = _leftView.height + 44;
     [_subViewScrollView setupAutoContentSizeWithBottomView:_leftView bottomMargin:0];
 }
@@ -835,10 +909,8 @@
 -(void)btnClick:(UIButton*)btn
 {
     if (btn.tag == 0) {
-//        NSLog(@"拨打电话");
         NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
         NSString *tel = [data objectForKey:@"servicePhone"];
-//        NSLog(@"电话---%@",tel);
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",tel]]];
 }
 #pragma mark -----------------------进入投资界面---------------------
@@ -847,12 +919,6 @@
             ProjectDetailInvestVC *vc = [ProjectDetailInvestVC new];
             vc.limitAmount = _limitAmount;
             vc.projectId = self.projectId;
-//            vc.borrowerUserNumber = _borrowerUserNumber;
-//            vc.authenticModel = authenticModel;
-//            vc.abbrevName = _abbrevName;
-//            vc.fullName = _fullName;
-//            vc.profit = _profit;
-//            vc.startPageImage = _startPageImage;
             [self.navigationController pushViewController:vc animated:YES];
         }
         if ([_authenticName isEqualToString:@"认证中"]) {
@@ -899,26 +965,6 @@
     RenzhengViewController  * renzheng = [RenzhengViewController new];
     renzheng.identifyType = self.identiyTypeId;
     [self.navigationController pushViewController:renzheng animated:YES];
-    
-}
-#pragma mark----------------------------返回按钮-------------------------
-- (IBAction)leftBack:(UIButton *)sender {
-    if (!_isCollect) {
-        NSInteger index = [_attentionVC.projectArray indexOfObject:_listModel];
-        [_attentionVC.projectArray removeObject:_listModel];
-        [_attentionVC.statusArray removeObjectAtIndex:index];
-        [_tableView reloadData];
-    }
-    [scene removeObserverAndNotification];
-    [self cancleRequest];
-    //销毁计时器通知
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopTimer" object:nil userInfo:nil];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-#pragma mark -分享
-- (IBAction)shareBtn:(UIButton *)sender {
-    
-    [self startShare];
     
 }
 #pragma mark ------------------------------开始分享---------------------------------
@@ -1119,22 +1165,6 @@
     
 }
 
-#pragma mark ------------------------------收藏----------------------------
-- (IBAction)collectBtn:(UIButton *)sender {
-    
-        _isCollect = !_isCollect;
-        NSString *flag;
-        if (_isCollect) {
-            flag = @"1";
-        }else{
-            flag = @"2";
-        }
-        
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.collectPartner,@"partner",[NSString stringWithFormat:@"%ld",(long)self.projectId],@"projectId",flag,@"flag", nil];
-        //开始请求
-        [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_COLLECT postParam:dic type:0 delegate:self sel:@selector(requestProjectCollect:)];
-    
-}
 
 -(void)requestProjectCollect:(ASIHTTPRequest*)request
 {
@@ -1202,12 +1232,12 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    self.navigationController.navigationBar.translucent=NO;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:[UIButton new]];
     
-    self.navigationController.navigationBar.hidden = YES;
-//    [self.navigationController setNavigationBarHidden:YES];
-     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    if (!_collectBtn) {
+        [self addCollectBtn];
+    }
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     [IQKeyboardManager sharedManager].enable = NO;
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
@@ -1231,11 +1261,16 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    self.navigationController.navigationBar.hidden = NO;
 }
+
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    if (_collectBtn) {
+        [_collectBtn removeFromSuperview];
+        _collectBtn = nil;
+    }
     
     [IQKeyboardManager sharedManager].enable = YES;
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:YES];
