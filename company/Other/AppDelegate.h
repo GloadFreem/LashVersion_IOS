@@ -27,5 +27,7 @@
 
 @property (nonatomic, assign) BOOL isActivity;
 
+@property (nonatomic, assign) BOOL isLaunchedByNotification;
+
 @end
 

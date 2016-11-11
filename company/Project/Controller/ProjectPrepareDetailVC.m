@@ -34,6 +34,8 @@
 #define PROJECTSHARE @"requestProjectShare"
 @interface ProjectPrepareDetailVC ()<UIScrollViewDelegate,ProjectPrepareFooterCommentViewDelagate,CircleShareBottomViewDelegate,ProjectDetailLeftTeamViewDelegate,ShareToCircleViewDelegate,UITextViewDelegate>
 
+@property (nonatomic, strong) UIView *navBar;
+
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
@@ -94,7 +96,7 @@
     
     [self startLoadData];
     
-    [self setupNav];
+//    [self setupNav];
     
     [self loadShareData];
     //下载客服电话
@@ -199,14 +201,10 @@
 
 -(void)setupNav
 {
-    UIView *navView = [UIView new];
+    UIView *navView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, SCREENWIDTH, 66)];
     [navView setBackgroundColor:color(61, 153, 130, 1)];
-    [self.view addSubview:navView];
-    navView.sd_layout
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .heightIs(64)
-    .topEqualToView(self.view);
+    [self.navigationController.navigationBar addSubview:navView];
+    _navBar = navView;
     
     UIButton *leftBtn = [UIButton new];
     [leftBtn setImage:[UIImage imageNamed:@"leftBack"] forState:UIControlStateNormal];
@@ -246,7 +244,7 @@
         [self.view addSubview:_scrollView];
         _scrollView.sd_layout
         .leftEqualToView(self.view)
-        .topSpaceToView(self.view,64)
+        .topSpaceToView(self.view, -2)
         .rightEqualToView(self.view)
         .bottomSpaceToView(self.view,50);
         
@@ -371,12 +369,13 @@
         [kefuBtn setBackgroundImage:[UIImage imageNamed:@"icon_kefu"] forState:UIControlStateNormal];
         [kefuBtn setTag:2];
         [kefuBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-        kefuBtn.size = kefuBtn.currentBackgroundImage.size;
+//        kefuBtn.size = kefuBtn.currentBackgroundImage.size;
         [bottomView addSubview:kefuBtn];
         [kefuBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(8);
             make.top.mas_equalTo(5);
             make.bottom.mas_equalTo(-5);
+            make.width.mas_equalTo(95*WIDTHCONFIG);
         }];
         
         _collectBtn = [UIButton new];
@@ -805,21 +804,21 @@
     [super viewWillAppear:animated];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:[UIButton new]];
-    self.navigationController.navigationBar.hidden = YES;
-
+//    self.navigationController.navigationBar.hidden = YES;
+    if (!_navBar) {
+        [self setupNav];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+    if (_navBar) {
+        [_navBar removeFromSuperview];
+        _navBar = nil;
+    }
 }
 
--(void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    self.navigationController.navigationBar.hidden = NO;
-}
 
 -(void)dealloc
 {

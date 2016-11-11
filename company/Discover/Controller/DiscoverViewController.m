@@ -9,17 +9,69 @@
 #import "DiscoverViewController.h"
 #import "InvestViewController.h"
 #import "CircleViewController.h"
+#import "SDCycleScrollView.h"
+#import "ProjectBannerModel.h"
+#import "ProjectBannerListModel.h"
 
-@interface DiscoverViewController ()
+@interface DiscoverViewController ()<SDCycleScrollViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIView *circleEnter;
 @property (nonatomic, strong) UIView *investEnter;
+@property (nonatomic, strong) SDCycleScrollView *bannerView;
+@property (nonatomic, strong) NSMutableArray *bannerUrlArray;
+@property (nonatomic, strong) NSMutableArray *bannerModelArray;
 
 @end
 
 @implementation DiscoverViewController
 
+-(NSMutableArray *)bannerUrlArray
+{
+    if (!_bannerUrlArray) {
+        
+        NSMutableArray *bannerUrlArray = [NSMutableArray array];
+        _bannerUrlArray = bannerUrlArray;
+    }
+    return _bannerUrlArray;
+}
+
+-(NSMutableArray *)bannerModelArray
+{
+    if (_bannerModelArray) {
+        NSMutableArray *bannerModelArray = [NSMutableArray array];
+        _bannerModelArray = bannerModelArray;
+    }
+    return _bannerModelArray;
+}
+
+-(SDCycleScrollView *)bannerView
+{
+    if (!_bannerView) {
+        
+        SDCycleScrollView *bannerView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 200, SCREENWIDTH, 150) imageURLStringsGroup:_bannerUrlArray];
+        bannerView.delegate = self;
+        bannerView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
+        bannerView.showPageControl = YES;
+        bannerView.bannerImageViewContentMode = UIViewContentModeScaleToFill;
+        bannerView.placeholderImage = [UIImage imageNamed:@"placeholderImageDetail"];
+        bannerView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
+        bannerView.currentPageDotColor = orangeColor;
+        bannerView.pageDotColor = [UIColor whiteColor];
+//        bannerView.pageControlDotSize = CGSizeMake(5, 5);
+        bannerView.autoScrollTimeInterval = 3;
+        bannerView.infiniteLoop = YES;
+        bannerView.autoScroll = YES;
+        _bannerView = bannerView;
+    }
+    return _bannerView;
+}
+
+/** 点击图片回调 */
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
+{
+    NSLog(@"点击了第%ld张图片",index);
+}
 -(UIScrollView *)scrollView
 {
     if (!_scrollView) {
@@ -171,9 +223,50 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //先从数据库加载 没有数据  则进行数据请求
+//    NSArray *bannerArray = [self getDataFromBaseTable:BANNERTABLE];
+//    if (bannerArray.count) {
+//        [self analysisBannerData:bannerArray];
+//    }
+//    NSLog(@"打印个数%@",_bannerUrlArray);
     [self createUI];
 }
-
+#pragma mark----------------解析banner数据-----------------
+-(void)analysisBannerData:(NSArray*)array
+{
+    if (_bannerModelArray.count) {
+        [_bannerModelArray removeAllObjects];
+    }
+    NSArray *bannerModelArray = [ProjectBannerModel mj_objectArrayWithKeyValuesArray:array];
+    for (NSInteger i = 0; i < bannerModelArray.count; i ++) {
+        ProjectBannerModel *baseModel = bannerModelArray[i];
+        ProjectBannerListModel *listModel = [ProjectBannerListModel new];
+        listModel.type = baseModel.type;
+        listModel.image = baseModel.body.image;
+        listModel.url = baseModel.body.url;
+        listModel.desc = baseModel.body.desc;
+        listModel.bannerId = baseModel.body.bannerId;
+        listModel.name = baseModel.body.name;
+        if ([baseModel.type isEqualToString:@"Project"]) {
+            listModel.industoryType = baseModel.extr.industoryType;
+            listModel.status = baseModel.extr.financestatus.name;
+            listModel.projectId = baseModel.extr.projectId;
+            if (baseModel.extr.roadshows.count) {
+                BannerRoadshows *roadshows = baseModel.extr.roadshows[0];
+                BannerRoadshowplan *roadshowplan = roadshows.roadshowplan;
+                listModel.financedMount = roadshowplan.financedMount;
+                listModel.financeTotal = roadshowplan.financeTotal;
+            }
+            
+        }
+//        NSLog(@"打印图片---%@",listModel.image);
+        [self.bannerUrlArray addObject:listModel.image];
+        [self.bannerModelArray addObject:listModel];
+        //            NSLog(@"打印数组个数---%ld",_bannerModelArray.count);
+    }
+    //搭建banner
+//    [self setBanner];
+}
 
 -(void)createUI
 {
@@ -182,6 +275,7 @@
     
     [_scrollView addSubview:self.circleEnter];
     [_scrollView addSubview:self.investEnter];
+//    [_scrollView addSubview:self.bannerView];
     
 }
 - (void)didReceiveMemoryWarning {

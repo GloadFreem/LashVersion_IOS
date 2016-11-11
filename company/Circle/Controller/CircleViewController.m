@@ -177,7 +177,6 @@
     
     [self performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 
-  
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",content,@"content", nil];
     [self.httpUtil getDataFromAPIWithOps:CIRCLE_PUBLIC_FEELING postParam:dict files:uploadFiles postName:@"images" type:0 delegate:self sel:@selector(requestPublishContent:)];
     
@@ -520,6 +519,7 @@
             [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         }];
     }
+    
     cell.delegate = self;
     if (self.dataArray.count) {
         cell.model = self.dataArray[indexPath.row];
@@ -687,6 +687,7 @@
         if (model.publicContentId) {
           
             if (_currentIndexPath == cell.indexPath) {
+//                NSLog(@"直接分享");
                 [self startShare];
             }else{
             
@@ -715,6 +716,7 @@
             _contentText = dataDic[@"content"];
             _shareTitle = dataDic[@"title"];
             //开始分享
+//            NSLog(@"请求数据分享");
             [self startShare];
         }
         

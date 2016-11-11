@@ -13,6 +13,8 @@
 #import "ZMProgressView.h"
 #import "ProjectBannerListModel.h"
 #import "GENEProgressView.h"
+#import "SDCycleScrollView.h"
+
 @class ProjectBannerView;
 @protocol ProjectBannerViewDelegate <NSObject>
 
@@ -49,6 +51,10 @@
 
 @property (strong, nonatomic) UIButton * selectedBtn;          //当前选中btn
 @property (assign, nonatomic) NSInteger selectedNum;           //选中标识
+
+//@property (nonatomic, strong) SDCycleScrollView *bannerView;
+@property (nonatomic, strong) NSMutableArray *bannerUrlArray;    //图片链接数组
+@property (nonatomic, strong) NSMutableArray *bannerModelArray;  //模型数组
 
 
 @property (nonatomic, assign) NSInteger imageCount;

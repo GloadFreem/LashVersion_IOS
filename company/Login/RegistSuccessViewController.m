@@ -33,8 +33,8 @@
         btn.layer.cornerRadius = 20;
         btn.layer.masksToBounds = YES;
     }
-    _shiyongBtn.layer.borderColor = [[UIColor whiteColor] CGColor];
-    _shiyongBtn.layer.borderWidth = 1;
+//    _shiyongBtn.layer.borderColor = [[UIColor whiteColor] CGColor];
+//    _shiyongBtn.layer.borderWidth = 1;
     
     self.ringLabel.text = self.inviteCode;
 //    NSLog(@"指环码%@",self.inviteCode);

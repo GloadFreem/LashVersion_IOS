@@ -11,7 +11,7 @@
 #define FEEDBACK @"requestFeedBack"
 #define CONTENT @"您遇到了什么问题  来吐槽吧"
 @interface FeedBackViewController ()<UITextViewDelegate>
-
+@property (nonatomic, strong) UIAlertView *alert;
 @property (nonatomic, strong) UITextView *textView;
 @end
 
@@ -63,6 +63,8 @@
         return;
     }else{
         //发布内容
+//        _textView.text = nil;
+        [_textView resignFirstResponder];
         [self feedBack];
     }
 }
@@ -83,14 +85,31 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] ==200) {
             
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-            [self performSelector:@selector(leftBack) withObject:nil afterDelay:2];
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"感谢您的宝贵意见"];
+            
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"金指投非常感谢您反馈的宝贵意见" delegate:nil  cancelButtonTitle:nil otherButtonTitles:nil, nil, nil];
+//            
+//            [alert show];
+//            _alert = alert;
+//            
+//            NSTimer *timer;
+//            
+//            timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(hideAlert) userInfo:nil repeats:NO];
+            
+        [self performSelector:@selector(leftBack) withObject:nil afterDelay:3];
             
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
     
+}
+
+-(void)hideAlert
+{
+    [_alert dismissWithClickedButtonIndex:0 animated:NO];
+    _alert = nil;
+    [self performSelector:@selector(leftBack) withObject:nil afterDelay:2];
 }
 -(void)createTextView
 {

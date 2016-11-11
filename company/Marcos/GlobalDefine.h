@@ -169,8 +169,8 @@
 
 // 如果是DEBUG模式用测试服务器地址
 #if DEBUG
-#define JZT_URL(url) [@"http://192.168.10.145:8080/jinzht/" stringByAppendingString:url]
-#define SERVICE_URL @"http://192.168.10.145:8080/jinzht/"
+#define JZT_URL(url) [@"http://192.168.10.166:8080/jinzht/" stringByAppendingString:url]
+#define SERVICE_URL @"http://192.168.10.166:8080/jinzht/"
 #else
 #define JZT_URL(url) [@"http://www.jinzht.com:8080/jinzht/" stringByAppendingString:url]
 #define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"

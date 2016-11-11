@@ -134,6 +134,8 @@ static BOOL const isProduction = TRUE; // 极光TRUE为生产环境
     manager.enableAutoToolbar = YES;
     
 #pragma mark --------- 激光推送
+    
+    
     LYJWeakSelf;
     //Required
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 10.0) {
@@ -156,7 +158,7 @@ static BOOL const isProduction = TRUE; // 极光TRUE为生产环境
                                                 UIRemoteNotificationTypeAlert)
                                               categories:nil];
     }
-
+    
     [JPUSHService setupWithOption:launchOptions appKey:JPUSHAPPKEY
                           channel:channel
                  apsForProduction:isProduction
@@ -167,22 +169,22 @@ static BOOL const isProduction = TRUE; // 极光TRUE为生产环境
         if(resCode == 0)
         {
             // iOS10获取registrationID放到这里了, 可以存到缓存里, 用来标识用户单独发送推送
-            NSLog(@"registrationID获取成功：%@",registrationID);
+//            NSLog(@"registrationID获取成功：%@",registrationID);
             [[NSUserDefaults standardUserDefaults] setObject:registrationID forKey:@"registrationID"];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
         else
         {
-            NSLog(@"registrationID获取失败，code：%d",resCode);
+//            NSLog(@"registrationID获取失败，code：%d",resCode);
         }
     }];
     
-//    // apn 内容获取：
-//    NSDictionary *remoteNotification = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+    // apn 内容获取：
+    NSDictionary *remoteNotification = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
 //    NSLog(@"打印字段---%@",remoteNotification);
-//    if (remoteNotification != nil) {
-//        [self notification:remoteNotification];
-//    }
+    if (remoteNotification != nil) {
+        _isLaunchedByNotification = YES;
+    }
     
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     //向微信注册
@@ -252,69 +254,74 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
     // Required
     NSDictionary * userInfo = notification.request.content.userInfo;
-    NSLog(@"ioS10推送---%@",userInfo);
+//    NSLog(@"ioS10推送---%@",userInfo);
     if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
+
+        if (([UIApplication sharedApplication].applicationState == UIApplicationStateActive)) {
+            _isActivity = YES;
+            [self notification:userInfo];
+        }
         
     }else{
-        NSLog(@"本地通知");
+//        NSLog(@"本地通知");
     }
-    
-    if (([UIApplication sharedApplication].applicationState == UIApplicationStateActive)) {
-        _isActivity = YES;
-        [self notification:userInfo];
-        NSLog(@"前台运行");
-        //            return;
-    }
-    
-    if (([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)) {
-        NSLog(@"后台运行");
-    }
-    if (([UIApplication sharedApplication].applicationState == UIApplicationStateInactive)) {
-        NSLog(@"未运行");
-    }
-    
-    completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
+    completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
 }
 
-// iOS 10 Support
+// iOS 10 Support---后台执行方法
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
     // Required
     NSDictionary * userInfo = response.notification.request.content.userInfo;
-    NSLog(@"ioS10推送222---%@",userInfo);
+//    NSLog(@"ioS10推送222---%@",userInfo);
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
         
-//        NSString *message = [NSString stringWithFormat:@"did%@", [userInfo[@"aps"] objectForKey:@"alert"]];
-//        NSLog(@"iOS10程序关闭后通过点击推送进入程序弹出的通知: %@", message);
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:message delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil, nil];
-//        [alert show];
-        
-        [self notification:userInfo];
+//        NSLog(@"第二个方法");
+        if (_isLaunchedByNotification) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self notification:userInfo];
+            });
+            
+        }else{
+            
+            [self notification:userInfo];
+        }
         
     }else{
-        NSLog(@"本地通知");
+//        NSLog(@"本地通知");
     }
-    [self notification:userInfo];
-    completionHandler();  // 系统要求执行这个方法
+    
+    completionHandler(UNNotificationPresentationOptionAlert|UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound);  // 系统要求执行这个方法
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:
 (NSDictionary *)userInfo {
     // Required,For systems with less than or equal to iOS6
+
+    if (([UIApplication sharedApplication].applicationState == UIApplicationStateActive)) {
+        _isActivity = YES;
+        [self notification:userInfo];
+    }
+    
     [JPUSHService handleRemoteNotification:userInfo];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:
 (NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // IOS 7 Support Required
-    //前台运行
-//    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-//        [self notification:userInfo];
-//    }else{
-//        [self notification:userInfo];
-//    }
-    [self notification:userInfo];
+
+    [JPUSHService handleRemoteNotification:userInfo];
+    
+    if (_isLaunchedByNotification) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self notification:userInfo];
+        });
+        
+    }else{
+//        NSLog(@"后台运行");
+        [self notification:userInfo];
+    }
     completionHandler(UIBackgroundFetchResultNewData);
     
 }
@@ -323,54 +330,49 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 {
     NSString * type = [userInfo valueForKey:@"type"];
     UIViewController * controller;
-    NSDictionary * notificationDic;
+//    NSDictionary * notificationDic;
+    
+    if (!_myNav) {
+        _myNav = [_tabBar childViewControllers][0];
+    }
     
     if ([type isEqualToString:@"web"]) {
         controller = [[ProjectBannerDetailVC alloc]init];
         ((ProjectBannerDetailVC*)controller).url = [userInfo valueForKey:@"content"];
-        ((ProjectBannerDetailVC*)controller).titleStr = [userInfo valueForKey:@"title"];
+        ((ProjectBannerDetailVC*)controller).titleStr = [userInfo valueForKey:@"share_title"];
         ((ProjectBannerDetailVC*)controller).contentText = [userInfo valueForKey:@"share_content"];
         ((ProjectBannerDetailVC*)controller).image = [userInfo valueForKey:@"share_img_url"];
-        ((ProjectBannerDetailVC*)controller).titleText = [userInfo valueForKey:@"title"];
-        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
+        ((ProjectBannerDetailVC*)controller).titleText = [userInfo valueForKey:@"share_title"];
+//        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",@"消息推送",@"title", nil];
         ((ProjectBannerDetailVC*)controller).isPush = YES;
         controller.hidesBottomBarWhenPushed = YES;
-//        UIViewController *vc = [self getPresentedViewController];
-//        
-        if (!_myNav) {
-            _myNav = [_tabBar childViewControllers][0];
-        }
-//
-//        if (vc) {
-//            _nav = (MyNavViewController *)vc;
-//        }
-//        
+        //http://b.hiphotos.baidu.com/image/pic/item/908fa0ec08fa513d17b6a2ea386d55fbb2fbd9e2.jpg
         [_myNav pushViewController:controller animated:YES];
-//        _window.rootViewController = controller;
         
     }else if ([type isEqualToString:@"project"]) {
         
         controller = [[ProjectDetailController alloc]init];
         ((ProjectDetailController*)controller).projectId = [[userInfo valueForKey:@"content"] integerValue];
-        
-        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
-        
+        controller.hidesBottomBarWhenPushed = YES;
+//        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+        [_nav pushViewController:controller animated:YES];
     }else if ([type isEqualToString:@"action"]) {
 
     }else{
         controller = [[ProjectLetterViewController alloc]init];
-        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"setLetterStatus" object:nil];
+        controller.hidesBottomBarWhenPushed = YES;
+        [_nav pushViewController:controller animated:YES];
+//        notificationDic = [NSDictionary dictionaryWithObjectsAndKeys:controller,@"controller",[userInfo valueForKey:@"ext"],@"title", nil];
+//        [[NSNotificationCenter defaultCenter]postNotificationName:@"setLetterStatus" object:nil];
     }
     
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
+//    [[NSNotificationCenter defaultCenter]postNotificationName:@"pushController" object:nil userInfo:notificationDic];
     [JPUSHService handleRemoteNotification:userInfo];
     [UIApplication sharedApplication].applicationIconBadgeNumber =0;
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
-    //    NSLog(@"选择器");
     //    [self getPresentedViewController];
     _myNav =(MyNavViewController *) viewController;
 //    NSLog(@"打印选择控制器---%@",[viewController class]);

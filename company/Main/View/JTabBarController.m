@@ -40,7 +40,8 @@
     [self.tabBar setBackgroundImage:[UIImage imageNamed:@"dock_bg"]];
 //    [self.tabBar setBackgroundColor:[UIColor clearColor]];
     [self.tabBar setBarStyle:UIBarStyleBlackOpaque];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushController:) name:@"pushController" object:nil];
+    
+//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushController:) name:@"pushController" object:nil];
 }
 
 //初始化自控制器
@@ -104,7 +105,7 @@
     if (topVC.presentedViewController) {
         topVC = topVC.presentedViewController;
     }
-    NSLog(@"打印当前控制器---%@",[topVC class]);
+//    NSLog(@"打印当前控制器---%@",[topVC class]);
     return topVC;
 }
 
@@ -116,7 +117,7 @@
     controller.title = [dic valueForKey:@"title"];
 //    [self.navigationController pushViewController:controller animated:YES];
     [_myNav pushViewController:controller animated:YES];
-    NSLog(@"推送来了没");
+//    NSLog(@"推送来了没");
 }
 
 

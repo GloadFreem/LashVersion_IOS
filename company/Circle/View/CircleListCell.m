@@ -302,8 +302,13 @@ CGFloat _maxContentLabelHeight = 0; //根据具体font而定
     }else{
         [_praiseBtn setImage:[UIImage imageNamed:@"icon_dianzan"] forState:UIControlStateNormal];
     }
+    UIImage *image = [TDUtil loadContent:@"iconImage"];
+    if (image) {
+        [_iconBtn setBackgroundImage:image forState:UIControlStateNormal];
+    }else{
+        [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconNameStr]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
+    }
 //    NSLog(@"图片地址---%@",model.iconNameStr);
-    [_iconBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.iconNameStr]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"placeholderIcon"]];
     _nameLabel.text = model.nameStr;
     //防止单行文本label在重用时宽度计算不准的问题
     [_nameLabel sizeToFit];

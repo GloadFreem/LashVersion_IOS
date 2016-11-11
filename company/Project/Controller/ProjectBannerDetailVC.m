@@ -99,9 +99,18 @@
     [self.webView stopLoading];
     [self.navigationController popViewControllerAnimated:YES];
     }
+    
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
     [self.webView stopLoading];
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (delegate.isLaunchedByNotification) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"comeBack" object:nil];
+    }
+    
     [self.navigationController popViewControllerAnimated:YES];
+    
+    
+    
 }
 
 -(void)shareBtnClick
@@ -227,6 +236,7 @@
         }
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
+        NSLog(@"分享的图片呢---%@",shareImage);
         
         [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
@@ -312,37 +322,44 @@
 -(void)startLoadDetailData
 {
     
-    if (![_url hasPrefix:@"http://"]) {
-        NSString * url =[NSString stringWithFormat:@"http://%@",_url];
-        [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
-    }else{
+//    if ([_url hasPrefix:@"http://"] || [_url hasPrefix:@"https://"]) {
+//        NSString * url =[NSString stringWithFormat:@"http://%@",_url];
+//        [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+//    }else{
+//        [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_url]]];
+//    }
+    if ([_url hasPrefix:@"http://"] || [_url hasPrefix:@"https://"]) {
         [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_url]]];
     }
 }
 
 -(void)addBlackView
 {
+    if (!_loadingBlackView) {
         _loadingBlackView = [[LoadingBlackView alloc]initWithFrame:self.loadingViewFrame];
         [self.view addSubview:_loadingBlackView];
-    
+    }
 }
 -(void)closeBlackView
 {
-    [_loadingBlackView removeFromSuperview];
-    for (UIView *view in self.view.subviews) {
-        if ([view isKindOfClass:[LoadingBlackView class]]) {
-            [view removeFromSuperview];
+    if (_loadingBlackView) {
+        [_loadingBlackView removeFromSuperview];
+        _loadingBlackView = nil;
+        for (UIView *view in self.view.subviews) {
+            if ([view isKindOfClass:[LoadingBlackView class]]) {
+                [view removeFromSuperview];
+                
+            }
         }
     }
-    
-//        NSLog(@"yichu");
 }
 
 -(void)webViewDidStartLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
         //加载视图区域
-        self.loadingViewFrame = _webView.frame;
+//        NSLog(@"开始加载");
+        self.loadingViewFrame = self.view.bounds;
         [self addBlackView];
         self.startLoading = YES;
         self.isTransparent = YES;
@@ -353,6 +370,7 @@
 -(void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (webView == self.webView) {
+//        NSLog(@"结束加载");
         [self closeBlackView];
         self.startLoading = NO;
         [self.webView.scrollView setContentOffset:CGPointZero];
@@ -362,6 +380,7 @@
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     if (webView == self.webView) {
+//        NSLog(@"加载失败");
         [self closeBlackView];
         self.startLoading = NO;
         self.isNetRequestError = YES;
@@ -408,6 +427,8 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     self.navigationController.navigationBar.translucent=NO;
+    
+    
     
 }
 #pragma mark -视图即将消失

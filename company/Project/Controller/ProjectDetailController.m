@@ -240,6 +240,7 @@
         if ([status integerValue] == 200) {
             if (jsonDic[@"data"]) {
                 NSDictionary *dic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
+//                NSLog(@"打印分项数据---%@",dic);
                 _shareurl  = dic[@"url"];
                 _shareImage = dic[@"image"];
                 _shareContent = dic[@"content"];
@@ -413,7 +414,7 @@
         [button.titleLabel setFont:titleFont];
         button.tag = i+10;
         //默认选中现场界面
-        i==2 ? [button setTitleColor:selectTitleColor forState:UIControlStateNormal] : [button setTitleColor: unselectTitleColor forState:UIControlStateNormal];
+        i==0 ? [button setTitleColor:selectTitleColor forState:UIControlStateNormal] : [button setTitleColor: unselectTitleColor forState:UIControlStateNormal];
         
         [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
         [_titleScrollView addSubview:button];
@@ -425,7 +426,7 @@
     //默认停留现场界面
     if (self.type == 0) {
         
-        _lineView.frame = CGRectMake(2*SCREENWIDTH/3, CGRectGetHeight(_titleScrollView.frame)-2, SCREENWIDTH/3, 2.1);
+        _lineView.frame = CGRectMake(0*SCREENWIDTH/3, CGRectGetHeight(_titleScrollView.frame)-2, SCREENWIDTH/3, 2.1);
         [_titleScrollView addSubview:_lineView];
         
     }else{
@@ -537,7 +538,7 @@
         [_subViewScrollView addSubview:scene];
         
         _subViewScrollView.y = POS_Y(_titleScrollView);
-        _subViewScrollView.height = scene.height;
+        _subViewScrollView.height = _leftView.height + 44 + 44 + 44;
         _subViewScrollView.width = SCREENWIDTH;
         
         //加底部回复框
@@ -545,9 +546,9 @@
         
     }
     
-    [_footer setHidden:NO];
-    [_bottomView setHidden:YES];
-    _subViewScrollView.contentOffset=CGPointMake(SCREENWIDTH*2, 0);
+    [_footer setHidden:YES];
+    [_bottomView setHidden:NO];
+    _subViewScrollView.contentOffset=CGPointMake(SCREENWIDTH*0, 0);
     
     return _subViewScrollView;
 }
@@ -846,12 +847,12 @@
             ProjectDetailInvestVC *vc = [ProjectDetailInvestVC new];
             vc.limitAmount = _limitAmount;
             vc.projectId = self.projectId;
-            vc.borrowerUserNumber = _borrowerUserNumber;
-            vc.authenticModel = authenticModel;
-            vc.abbrevName = _abbrevName;
-            vc.fullName = _fullName;
-            vc.profit = _profit;
-            vc.startPageImage = _startPageImage;
+//            vc.borrowerUserNumber = _borrowerUserNumber;
+//            vc.authenticModel = authenticModel;
+//            vc.abbrevName = _abbrevName;
+//            vc.fullName = _fullName;
+//            vc.profit = _profit;
+//            vc.startPageImage = _startPageImage;
             [self.navigationController pushViewController:vc animated:YES];
         }
         if ([_authenticName isEqualToString:@"认证中"]) {
@@ -880,6 +881,7 @@
     UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
+
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [blockSelf btnCertain:nil];
     }];

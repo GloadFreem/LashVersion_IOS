@@ -36,24 +36,29 @@
      
 }
 
-//- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
-//{
-//    if (self.pushing == YES) {
-//        NSLog(@"被拦截");
-//        return;
-//    } else {
-//        NSLog(@"push");
-//        self.pushing = YES;
-//    }
-//    
-//    [super pushViewController:viewController animated:animated];
-//}
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (self.pushing == YES) {
+        NSLog(@"被拦截");
+        return;
+    } else {
+        NSLog(@"push");
+        self.pushing = YES;
+    }
+    
+    [super pushViewController:viewController animated:animated];
+}
 
 
 #pragma mark - UINavigationControllerDelegate
 -(void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     self.pushing = NO;
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 @end

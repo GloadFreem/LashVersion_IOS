@@ -7,16 +7,14 @@
 //
 
 #import "MineViewController.h"
-#import "MoneyAccountVC.h"
 #import "MineAttentionVC.h"
 #import "MineActivityVC.h"
 #import "MineGoldVC.h"
 #import "AppSetVC.h"
 #import "PingTaiVC.h"
 #import "MineDataVC.h"
-#import "YeePayViewController.h"
 #import "AuthenticInfoBaseModel.h"
-
+#import "LYJVerticalBtn.h"
 #import "CircleShareBottomView.h"
 #define INVITEFRIEND @"requestInviteFriends"
 
@@ -30,6 +28,9 @@
 @interface MineViewController ()<CircleShareBottomViewDelegate>
 
 @property (nonatomic,strong)UIView * bottomView;
+
+/** 按钮 */
+@property (nonatomic, strong) NSMutableArray *buttons;
 
 @property (weak, nonatomic) IBOutlet UIImageView *vipImage;
 
@@ -64,8 +65,18 @@
 
 @implementation MineViewController
 
+- (NSMutableArray *)buttons
+{
+    if (!_buttons) {
+        _buttons = [NSMutableArray array];
+    }
+    return _buttons;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setupBtns];
     
     _isFinish = YES;
     _iconWidth.constant =_iconHeight.constant= 83 *WIDTHCONFIG ;
@@ -86,10 +97,74 @@
     [self readData];
     self.loadingViewFrame = self.view.frame;
     self.isTransparent = YES;
+    
     [self loadShareData];
     
 }
 
+-(void)setupBtns
+{
+    //数据
+    NSArray *images = @[@"logo_project",@"logo_collect",@"logo_activity",@"logo_gold",@"logo_set",@"logo_platform",@"logo_recomend",@"logo_recomend"];
+    NSArray *titles = @[@"项目中心",@"我的关注",@"我的活动",@"我的金条",@"软件设置",@"关于平台",@"推荐好友",@"推荐好友"];
+    // 一些参数
+    NSUInteger count = titles.count;
+    int maxColsCount = 4; // 一行的列数
+    //    NSUInteger rowsCount = (count + maxColsCount - 1) / maxColsCount;
+    // 按钮尺寸
+    CGFloat buttonW = (SCREEN_WIDTH - 43) / maxColsCount;
+    CGFloat buttonH = buttonW * 0.95;
+    CGFloat buttonStartY = 250;
+    
+    for (int i = 0; i < count; i++) {
+        
+        if (i != 7) {
+            // 创建、添加
+            LYJVerticalBtn *button = [LYJVerticalBtn buttonWithType:UIButtonTypeCustom];
+            button.width = -1; // 按钮的尺寸为0，还是能看见文字缩成一个点，设置按钮的尺寸为负数，那么就看不见文字了
+            [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+            button.tag = i;
+            [self.buttons addObject:button];
+            [self.view addSubview:button];
+            //        [button setBackgroundColor:[UIColor redColor]];
+            // 内容
+            [button setImage:[UIImage imageNamed:images[i]] forState:UIControlStateNormal];
+            [button setTitle:titles[i] forState:UIControlStateNormal];
+            [button setTitleColor:[TDUtil colorWithHexString:@"474747"] forState:UIControlStateNormal];
+//            [button.titleLabel setFont:[UIFont fontWithName:@"PingFangSC-Medium" size:13]];
+            [button.titleLabel setFont:BGFont(13)];
+            
+            // frame
+            CGFloat buttonX = (i % maxColsCount) * buttonW + 21.5;
+            CGFloat buttonY = buttonStartY + (i / maxColsCount) * (buttonH +20 );
+            button.frame = CGRectMake(buttonX, buttonY + 35, buttonW, buttonH);
+        }
+        
+        // 动画
+//        POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPViewFrame];
+//        anim.fromValue = [NSValue valueWithCGRect:CGRectMake(buttonX, buttonY - SCREEN_HEIGHT, buttonW, buttonH)];
+//        anim.toValue = [NSValue valueWithCGRect:CGRectMake(buttonX, buttonY + 25, buttonW, buttonH)];
+//        anim.springSpeed = XMGSpringFactor;
+//        anim.springBounciness = XMGSpringFactor;
+//        // CACurrentMediaTime()获得的是当前时间
+//        anim.beginTime = CACurrentMediaTime() + [self.times[i] doubleValue];
+//        [button pop_addAnimation:anim forKey:nil];
+        
+    }
+    
+    UIButton *btn = [UIButton new];
+//        btn.backgroundColor = [UIColor greenColor];
+    [btn setImage:[UIImage imageNamed:@"logo_close"] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(dismiss:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
+    [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(self.view.mas_centerX);
+        //        make.centerY.mas_equalTo(self.view.mas_centerY);
+        make.bottom.mas_equalTo(self.view.mas_bottom).offset(-20);
+        make.size.mas_equalTo(CGSizeMake(50, 50));
+    }];
+
+}
 -(void)loadShareData
 {
     NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"3",@"type", nil];
@@ -105,7 +180,6 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             NSDictionary *dataDic = jsonDic[@"data"];
-            
             _shareUrl = dataDic[@"url"];
             _shareImage = dataDic[@"image"];
             _contentText = dataDic[@"content"];
@@ -283,43 +357,10 @@
 }
 
 #pragma mark -进入各个小界面
-- (IBAction)btnClick:(UIButton *)sender {
+- (void)buttonClick:(UIButton *)sender {
     
     switch (sender.tag) {
         case 0:
-        {
-            if ([_authenticName isEqualToString:@"已认证"]) {
-                //先检查是否是易宝用户---非易宝账号则去实名认证---是易宝账号则进入资金页面
-                [self isCheckUserConfirmed];
-            }
-            if ([_authenticName isEqualToString:@"认证中"]) {
-                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您的信息正在认证中，认证通过即可享受此项服务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                [alertView show];
-            }
-            if ([_authenticName isEqualToString:@"未认证"] || [_authenticName isEqualToString:@"认证失败"]){
-                [self presentAlertView];
-            }
-        }
-            break;
-        case 1:
-        {
-            MineAttentionVC *vc = [MineAttentionVC new];
-            [self.navigationController  pushViewController:vc animated:YES];
-        }
-            break;
-        case 2:
-        {
-            MineActivityVC *vc =[MineActivityVC new];
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 3:
-        {
-            MineGoldVC *vc = [MineGoldVC new];
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 4:
         {
             if (_identiyTypeId == 1) {//项目方
                 MineProjectViewController *vc = [MineProjectViewController new];
@@ -354,25 +395,48 @@
                 NSLog(@"智囊团");
                 return;
             }
-            
         }
             break;
-        case 5:
+        case 1:
+        {
+            MineAttentionVC *vc = [MineAttentionVC new];
+            [self.navigationController  pushViewController:vc animated:YES];
+        }
+            break;
+        case 2:
+        {
+            MineActivityVC *vc =[MineActivityVC new];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 3:
+        {
+            MineGoldVC *vc = [MineGoldVC new];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 4:
         {
             AppSetVC *vc =[AppSetVC new];
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
-        case 6:
+        case 5:
         {
             PingTaiVC *vc = [PingTaiVC new];
-                             
+            
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
-        case 7:
-        {//邀请好友
+        case 6:
+        {
+            //邀请好友
             [self startShare];
+        }
+            break;
+        case 7:
+        {
+            
         }
             break;
         default:
@@ -542,120 +606,8 @@
     }
 }
 
-
-#pragma mark ----------认证是否是易宝用户-------------
--(void)isCheckUserConfirmed
-{
-    NSString * str = [TDUtil generateUserPlatformNo];
-    
-    NSMutableDictionary * dic = [NSMutableDictionary new];
-    [dic setObject:str forKey:@"platformUserNo"];
-    
-    NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
-    _request = signString;
-    
-    [self sign:signString sel:@selector(requestCheckUserSign:) type:1];
-    
-}
-
--(void)requestCheckUserSign:(ASIHTTPRequest *)request{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
-    if(jsonDic!=nil)
-    {
-        NSString* status = [jsonDic valueForKey:@"status"];
-        if ([status intValue] == 200) {
-            NSDictionary * data = [jsonDic valueForKey:@"data"];
-            NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:_request,@"req",[data valueForKey:@"sign"],@"sign",ACCOUNT_INFO,@"service", nil];
-            [self.httpUtil getDataFromYeePayAPIWithOps:@"" postParam:dic type:0 delegate:self sel:@selector(requestCheckUser:)];
-        }
-    }
-}
-
-
--(void)requestCheckUser:(ASIHTTPRequest *)request{
-    NSString *xmlString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",xmlString);
-    NSDictionary * xmlDic = [TDUtil convertXMLStringElementToDictory:xmlString];
-    
-//    NSLog(@"%@",xmlDic);
-    
-    if ([DICVFK(xmlDic, @"code") intValue]==101) {
-        [self goConfirm];
-    }else if([DICVFK(xmlDic, @"code") intValue]==1)
-    {
-    //进入资金界面
-        MoneyAccountVC *vc = [MoneyAccountVC new];
-    
-        [self.navigationController pushViewController:vc animated:YES];
-        
-    }else{
-        self.isNetRequestError = YES;
-    }
-}
-
-#pragma mark ----------------易宝用户认证--------------------
--(void)goConfirm
-{
-    NSUserDefaults * data = [NSUserDefaults standardUserDefaults];
-    NSString * str = [TDUtil generateUserPlatformNo];
-    
-    NSMutableDictionary * dic = [NSMutableDictionary new];
-    [dic setObject:str forKey:@"platformUserNo"];
-    [dic setObject:[TDUtil generateTradeNo] forKey:@"requestNo"];
-    [dic setObject:@"G2_IDCARD" forKey:@"idCardType"];
-    [dic setObject:@"ios://verify:" forKey:@"callbackUrl"];
-    
-    [dic setObject:[data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE]forKey:@"mobile"];
-    [dic setObject:[data valueForKey:USER_STATIC_NAME] forKey:@"realName"];
-    [dic setObject:[data valueForKey:USER_STATIC_IDNUMBER] forKey:@"idCardNo"];
-    
-    [dic setObject:notifyUrl forKey:@"notifyUrl"];
-    //    [dic setObject:[data valueForKey:USER_STATIC_NICKNAME] forKey:@"nickName"];
-    
-    
-    NSString * signString = [TDUtil convertDictoryToYeePayXMLString:dic];
-    _request = signString;
-    [self sign:signString sel:@selector(requestSign:) type:0];
-    
-}
-
--(void)requestSign:(ASIHTTPRequest *)request{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
-    if(jsonDic!=nil)
-    {
-        NSString* code = [jsonDic valueForKey:@"code"];
-        if ([code intValue] == 0) {
-            NSDictionary * data = [jsonDic valueForKey:@"data"];
-            NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:_request,@"req",[data valueForKey:@"sign"],@"sign", nil];
-            YeePayViewController * controller = [[YeePayViewController alloc]init];
-            controller.title = @"实名认证";
-            controller.PostPramDic = dic;
-            controller.center = @"0";
-            //            controller.dic = self.dic;
-            controller.state = PayStatusConfirm;
-            //            [controller.dic setValue:STRING(@"%d", currentSelect) forKey:@"currentSelect"];
-            controller.url = [NSURL URLWithString:STRING_3(@"%@%@",BUINESS_SERVER,YeePayToRegister,nil)];
-            [self.navigationController pushViewController:controller animated:YES];
-            self.startLoading = NO;
-            return;
-        }
-        self.isNetRequestError = YES;
-    }
-}
-
--(void)sign:(NSString*)signString sel:(SEL)sel type:(int)type
-{
-    [self.httpUtil getDataFromAPIWithOps:YEEPAYSIGNVERIFY postParam:[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.signPartner,@"partner",signString,@"req",@"sign",@"method",@"",@"sign",STRING(@"%d", type),@"type",nil] type:0 delegate:self sel:sel];
-}
-
 #pragma mark -退出logo界面
-- (IBAction)closeView:(UIButton *)sender {
+- (void)dismiss:(UIButton *)sender {
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

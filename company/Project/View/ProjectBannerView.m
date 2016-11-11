@@ -12,6 +12,8 @@
 #import "NSTimer+Addition.h"
 #import "ProjectBannerModel.h"
 
+
+
 #define kImageCount self.imageCount
 
 #define kWidth self.frame.size.width
@@ -24,6 +26,38 @@
 #define kLeftSpace 10
 
 @implementation ProjectBannerView
+
+-(NSMutableArray *)bannerUrlArray
+{
+    if (!_bannerUrlArray) {
+        
+        NSMutableArray *bannerUrlArray = [NSMutableArray array];
+        _bannerUrlArray = bannerUrlArray;
+    }
+    return _bannerUrlArray;
+}
+
+//-(SDCycleScrollView *)bannerView
+//{
+//    if (!_bannerView) {
+//        
+//        SDCycleScrollView *bannerView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREENWIDTH, kHeight - 45) imageURLStringsGroup:_bannerUrlArray];
+//        bannerView.delegate = self;
+//        bannerView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
+//        bannerView.showPageControl = YES;
+//        bannerView.bannerImageViewContentMode = UIViewContentModeScaleToFill;
+//        bannerView.placeholderImage = [UIImage imageNamed:@"placeholderImageDetail"];
+//        bannerView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
+//        bannerView.currentPageDotColor = orangeColor;
+//        bannerView.pageDotColor = [UIColor whiteColor];
+//        //        bannerView.pageControlDotSize = CGSizeMake(5, 5);
+//        bannerView.autoScrollTimeInterval = 4;
+//        bannerView.infiniteLoop = YES;
+//        bannerView.autoScroll = YES;
+//        _bannerView = bannerView;
+//    }
+//    return _bannerView;
+//}
 
 -(instancetype)initWithFrame:(CGRect)frame
 {
@@ -51,6 +85,7 @@
         make.right.mas_equalTo(self.mas_right);
         make.height.mas_equalTo(kHeight - 45);
     }];
+//    [self addSubview:self.bannerView];
     
     //遮盖
     _coverView = [UIView new];
@@ -229,6 +264,50 @@
     }
 }
 
+//-(void)setBannerUrlArray:(NSMutableArray *)bannerUrlArray
+//{
+//    if (bannerUrlArray.count) {
+//        _bannerUrlArray = bannerUrlArray;
+//    }
+//}
+
+//-(void)setBannerModelArray:(NSMutableArray *)bannerModelArray
+//{
+//    NSLog(@"个数---%ld",bannerModelArray.count);
+//    if (bannerModelArray.count) {
+//        _bannerModelArray = bannerModelArray;
+////        ProjectBannerListModel *model;
+//        if (self.bannerUrlArray.count) {
+//            [self.bannerUrlArray removeAllObjects];
+//        }
+//        for (ProjectBannerListModel *model in bannerModelArray) {
+//            [self.bannerUrlArray addObject:model.image];
+////            NSLog(@"打印数据---%@",model.image);
+//        }
+//    _bannerView.imageURLStringsGroup = self.bannerUrlArray;
+//    }
+//}
+
+///** 点击图片回调 */
+//- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
+//{
+//    NSLog(@"点击");
+//    if (_bannerModelArray.count) {
+//        ProjectBannerListModel *model = _bannerModelArray[index];
+//        
+//        if ([self.delegate respondsToSelector:@selector(clickBannerImage:)]) {
+//            [self.delegate clickBannerImage:model];
+//        }
+//    }
+//    
+//}
+//
+///** 图片滚动回调 */
+//- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didScrollToIndex:(NSInteger)index
+//{
+////    NSLog(@"滚动");
+//}
+
 #pragma mark- cell刷新数据
 -(void)relayoutWithModelArray:(NSArray *)array
 {
@@ -355,7 +434,7 @@
     }
 }
 
-#pragma mark -scrollView 页面控制联动
+//#pragma mark -scrollView 页面控制联动
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     // 首先得到当前的偏移量

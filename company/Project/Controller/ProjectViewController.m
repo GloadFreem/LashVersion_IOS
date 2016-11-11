@@ -65,11 +65,13 @@
 
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, assign) NSInteger projectPage;
+@property (nonatomic, assign) NSInteger lastProjectPage;
 @property (nonatomic, assign) NSInteger roadPage;
+@property (nonatomic, assign) NSInteger lastRoadPage;
 @property (nonatomic, copy) NSString *type;
 
 @property (nonatomic, copy) NSString *hasMessagePartner;
-@property (nonatomic, assign) BOOL hasMessage;
+@property (nonatomic, assign) bool hasMessage;
 @property (nonatomic, strong) UIButton *letterBtn;
 
 //版本更新
@@ -126,7 +128,9 @@
     _selectedCellNum = 20;
     _page = 0;
     _projectPage = 0;
+    _lastProjectPage = 0;
     _roadPage = 0;
+    _lastRoadPage = 0;
     _type = @"0";
     
     _second = 0;
@@ -156,6 +160,9 @@
 
     
     //添加监听
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadGold) name:@"comeBack" object:nil];
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setLetterStatus:) name:@"setLetterStatus" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netNotEnable) name:@"netNotEnable" object:nil];
@@ -188,15 +195,38 @@
 }
 -(void)compareTime
 {
-    NSString *currentTime = [TDUtil CurrentDay];
-    NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-    NSString *firstDate = [data objectForKey:@"firstLogin"];
-    if ([currentTime isEqualToString:firstDate]) {
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (delegate.isLaunchedByNotification) {
         
     }else{
-        [self loadGoldCount];
+        
+        NSString *currentTime = [TDUtil CurrentDay];
+        NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+        NSString *firstDate = [data objectForKey:@"firstLogin"];
+        if ([currentTime isEqualToString:firstDate]) {
+            
+        }else{
+            [self loadGoldCount];
+        }
     }
 }
+
+-(void)loadGold
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *currentTime = [TDUtil CurrentDay];
+        NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+        NSString *firstDate = [data objectForKey:@"firstLogin"];
+        if ([currentTime isEqualToString:firstDate]) {
+            
+        }else{
+            [self loadGoldCount];
+        }
+    });
+    
+}
+
 -(void)loadGoldCount
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.goldPartner,@"partner", nil];
@@ -333,8 +363,8 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(setTime) userInfo:nil repeats:YES];
         [timer fire];
-        //        timer.fireDate = [NSDate distantPast];
         [[NSRunLoop currentRunLoop] run];
+//        [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
         
     });
 }
@@ -348,6 +378,7 @@
         [_tomorrowLabel removeFromSuperview];
         [_certainBtn removeFromSuperview];
         [_timeLabel removeFromSuperview];
+        
     }
 }
 
@@ -477,8 +508,14 @@
         _page = _roadPage;
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page",[NSString stringWithFormat:@"%@",_type],@"type", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_LIST postParam:dic type:0 delegate:self sel:@selector(requestProjectList:)];
+//    if (self.tableView.mj_header.isRefreshing || self.tableView.mj_footer.isRefreshing) {
+//        NSLog(@"正在刷新");
+//        
+//    }else{
+        //开始请求
+        [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_LIST postParam:dic type:0 delegate:self sel:@selector(requestProjectList:)];
+//    }
+    
 }
 
 -(void)requestProjectList:(ASIHTTPRequest *)request
@@ -529,6 +566,9 @@
         
         self.startLoading = NO;
     }else{
+        //结束刷新
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
         self.isNetRequestError = YES;
     }
 }
@@ -556,7 +596,19 @@
             listModel.financeTotal = roadshows.roadshowplan.financeTotal;
             listModel.endDate = roadshows.roadshowplan.endDate;
         }
-        
+//        for (ProjectListProModel *model in _tempProArray) {
+//            if (model) {
+//                if (project.projectId == model.projectId) {
+//                    NSLog(@"相等");
+//                }else{
+//                    NSLog(@"不等");
+//                    [_tempProArray addObject:listModel];
+//                }
+//            }else{
+//                [_tempProArray addObject:listModel];
+//            }
+//            
+//        }
         [_tempProArray addObject:listModel];
     }
     self.projectModelArray = _tempProArray;
@@ -595,7 +647,18 @@
         listModel.financedMount = roadshows.roadshowplan.financedMount;
         listModel.financeTotal = roadshows.roadshowplan.financeTotal;
         listModel.endDate = roadshows.roadshowplan.endDate;
-        
+//        for (ProjectListProModel *model in _tempRoadArray) {
+//            if (model) {
+//                if (project.projectId == model.projectId) {
+//                    
+//                }else{
+//                    [_tempRoadArray addObject:listModel];
+//                }
+//            }else{
+//                 [_tempRoadArray addObject:listModel];
+//            }
+//            
+//        }
         [_tempRoadArray addObject:listModel];
     }
     self.roadModelArray = _tempRoadArray;
@@ -663,9 +726,13 @@
                 dictM[@"data"] = jsonString;
                 [self saveDataToBaseTable:BANNERTABLE data:dictM];
             }
-            NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
-            //解析banner数据
-            [self analysisBannerData:dataArray];
+            if (jsonDic[@"data"]) {
+                NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
+                if (dataArray.count) {
+                    //解析banner数据
+                    [self analysisBannerData:dataArray];
+                }
+            }
             
             [self startLoadData];
         }else{
@@ -725,6 +792,7 @@
 
 -(void)setBanner
 {
+//    _bannerView.bannerModelArray = [NSMutableArray arrayWithArray:_bannerModelArray];
     _bannerView.modelArray = _bannerModelArray;
     _bannerView.imageCount = _bannerModelArray.count;
     [_bannerView relayoutWithModelArray:_bannerModelArray];
@@ -789,26 +857,30 @@
 #pragma mark -刷新控件
 -(void)nextPage
 {
-    if (_selectedCellNum == 20) {
-        _projectPage ++;
-    }else{
-        _roadPage ++;
-    }
-    
-    [self startLoadData];
-    //    NSLog(@"回到顶部");
+        if (_selectedCellNum == 20) {
+            _lastProjectPage = _projectPage;
+            _projectPage ++;
+            if (_lastProjectPage != _projectPage) {
+                [self startLoadData];
+            }
+        }else{
+            _lastRoadPage = _roadPage;
+            _roadPage ++;
+            if (_lastRoadPage != _roadPage) {
+                [self startLoadData];
+            }
+        }
 }
 
 -(void)refreshHttp
 {
-    if (_selectedCellNum == 20) {
-        _projectPage = 0;
-    }else{
-        _roadPage = 0;
-    }
-    
-    [self startLoadData];
-    //    NSLog(@"下拉刷新");
+        if (_selectedCellNum == 20) {
+            _projectPage = 0;
+        }else{
+            _roadPage = 0;
+        }
+        
+        [self startLoadData];
 }
 
 #pragma mark- navigationBar --------- button的点击事件--------------
@@ -918,24 +990,14 @@
         [self startLoadData];
     }else{
         [_tableView reloadData];
-//        [_tableView beginUpdates];
-//        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-//        [_tableView endUpdates];
     }
     if (_selectedCellNum == 21 && !_roadModelArray.count) {
         [self startLoadData];
     }else{
         
         [_tableView reloadData];
-//        [_tableView beginUpdates];
-//        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-//        [_tableView endUpdates];
     }
     
-    //tableView开始更新
-//    [_tableView beginUpdates];
-//    [_tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-//    [_tableView endUpdates];
 }
 
 -(void)clickBannerImage:(ProjectBannerListModel *)model
@@ -1226,6 +1288,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"netEnable" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"netNotEnable" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

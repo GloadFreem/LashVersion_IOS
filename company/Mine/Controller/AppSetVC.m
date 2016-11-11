@@ -241,10 +241,17 @@
         
     }
 }
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setHidden:NO];
+    [self.navigationController setNavigationBarHidden:NO];
+}
 -(void)cleanDone
 {
     [[DialogUtil sharedInstance]showDlg:[UIApplication sharedApplication].windows[0] textOnly:@"缓存已清除"];
 }
+
 
 -(void)dealloc
 {

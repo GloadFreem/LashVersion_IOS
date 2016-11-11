@@ -65,10 +65,12 @@
     self.codePartner = [TDUtil encryKeyWithMD5:KEY action:INVITEFRIEND];
     self.goldGetPartner = [TDUtil encryKeyWithMD5:KEY action:GOLDGETRULE];
     self.goldUsepartner = [TDUtil encryKeyWithMD5:KEY action:GOLDUSERULE];
+    [self loadCode];
+    
     [self startLoadData];
     [self loadGetRule];
     [self loadUseRule];
-    [self loadCode];
+    
     
 }
 #pragma maker-------邀请码
@@ -81,10 +83,12 @@
         NSDictionary  *dic = responseObject;
         if ([dic[@"status"] integerValue] == 200) {
             NSDictionary *data = [NSDictionary dictionaryWithDictionary:dic[@"data"]];
+//            NSLog(@"打印数据---%@",data);
             _shareUrl = data[@"url"];
             _shareImage = data[@"image"];
             _shareTitle = data[@"title"];
             _shareContent = data[@"content"];
+            
         }else{
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -238,7 +242,13 @@
         case 1:
         {//邀请码
             //开始分享
+            // 创建
+//            NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(startShare) object:nil];
+//            
+//            // 启动
+//            [thread start];
             [self startShare];
+            
         }
             break;
         case 2:
@@ -333,19 +343,15 @@
                 // 微信好友
                 arr = @[UMShareToWechatSession];
                 [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareTitle;
-                [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareTitle;
                 
-                //                NSLog(@"分享到微信");
+                NSLog(@"分享到微信");
             }
                 break;
             case 2:{
                 // 微信朋友圈
                 arr = @[UMShareToWechatTimeline];
-                [UMSocialData defaultData].extConfig.wechatSessionData.url = _shareUrl;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.url = _shareUrl;
-                [UMSocialData defaultData].extConfig.wechatSessionData.title = _shareContent;
                 [UMSocialData defaultData].extConfig.wechatTimelineData.title = _shareContent;
                 
                 //                NSLog(@"分享到朋友圈");
@@ -370,21 +376,18 @@
         {
             return;
         }
+        
         if ([[arr objectAtIndex:0] isEqualToString:UMShareToSms]) {
             shareImage = nil;
             shareContentString = [NSString stringWithFormat:@"%@:%@\n%@",_shareTitle,_shareContent,_shareUrl];
         }
         UMSocialUrlResource *urlResource = [[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:
                                             shareImage];
+        NSLog(@"微信开始响应");
         [[UMSocialDataService defaultDataService] postSNSWithTypes:arr content:shareContentString image:nil location:nil urlResource:urlResource presentedController:self completion:^(UMSocialResponseEntity *response){
             if (response.responseCode == UMSResponseCodeSuccess) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
                     
-                    [self performSelector:@selector(dismissBG) withObject:nil/*可传任意类型参数*/ afterDelay:1.0];
-                    
-                    
-                });
+                NSLog(@"相映成功");
             }
         }];
     }
