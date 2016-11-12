@@ -8,6 +8,9 @@
 
 #import "RootViewController.h"
 
+#define LOGINUSER @"isLoginUser"
+#define DENGLU @"loginUser"
+
 @interface RootViewController ()
 {
     LoadingView *loadingView;
@@ -151,7 +154,6 @@
         //设置状态码
         [self setCode:code];
     }
-    
 }
 
 
@@ -173,7 +175,63 @@
 
 //==============================网络请求处理开始==============================//
 
+-(void)isOnline
+{
+    NSString *partner = [TDUtil encryKeyWithMD5:KEY action:LOGINUSER];
+    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",partner,@"partner", nil];
+    
+    LYJWeakSelf;
+    //开始请求
+    [[EUNetWorkTool shareTool] POST:JZT_URL(ISLOGINUSER) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+//        NSLog(@"打印在线数据---%@",responseObject);
+        if ([dic[@"status"] intValue]== 200){
+            weakSelf.online = YES;
+            weakSelf.loginFailed = NO;
+            NSLog(@"在线呢");
+        }else{
+            weakSelf.online = NO;
+            [self isAutoLogin];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            weakSelf.online = NO;
+            [self isAutoLogin];
+        NSLog(@"在线错误---%@",error.localizedDescription);
+    }];
+    
+}
 
+-(void)isAutoLogin
+{
+    //获取缓存数据
+    NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
+    NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+    NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
+    //激光推送Id
+    NSString *regId = [JPUSHService registrationID];
+    
+    NSString * string = [AES encrypt:DENGLU password:KEY];
+    NSString *partner = [TDUtil encryptMD5String:string];
+    NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
+    LYJWeakSelf;
+    [[EUNetWorkTool shareTool] POST:JZT_URL(USER_LOGIN) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSLog(@"打印登录数据---%@",responseObject);
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] intValue]== 200){
+            weakSelf.loginSucess = YES;
+            weakSelf.loginFailed = NO;
+            NSLog(@"登陆成功");
+        }else{
+            weakSelf.loginFailed = YES;
+            weakSelf.loginSucess = NO;
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"登录错误---%@",error.localizedDescription);
+        weakSelf.loginSucess = NO;
+        weakSelf.loginFailed = YES;
+    }];
+    
+}
 
 -(void)requestFinished:(ASIHTTPRequest *)request
 {

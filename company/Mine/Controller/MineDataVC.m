@@ -77,17 +77,18 @@
     
     [self readData];
     
-    [self loadInviteCode];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCode) name:@"hasLogin" object:nil];
     
     _textArray = [NSArray array];
     [self createLeftArray];
 //    [self createBottomView];
     [self createTableView];
-    
-    
 }
 
-
+-(void)loadCode
+{
+    [self loadInviteCode];
+}
 
 -(void)loadInviteCode
 {
@@ -98,12 +99,23 @@
 -(void)requestInviteCode:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             _inviteCode = [jsonDic valueForKey:@"data"];
+            NSIndexPath *tmpIndexpath=[NSIndexPath indexPathForRow:1 inSection:0];
+            [self.tableView beginUpdates];
+            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:tmpIndexpath, nil] withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView endUpdates];
+            
+            if (_inviteCode.length) {
+                NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
+                [data setObject:_inviteCode forKey:@"inviteCode"];
+                [data synchronize];
+            }
+            
         }
     }
 }
@@ -123,6 +135,10 @@
     _introduce = [data objectForKey:USER_STATIC_INTRODUCE];
     _companyIntroduce = [data objectForKey:USER_STATIC_COMPANYINTRODUCE];
     _areas = [data objectForKey:USER_STATIC_INVEST_AREAS];
+    _inviteCode = [data objectForKey:@"inviteCode"];
+    if (!_inviteCode.length) {
+        [self loadCode];
+    }
     
     NSString *identiyCarNo = [data objectForKey:USER_STATIC_IDNUMBER];
     
@@ -857,6 +873,7 @@
 {
     [super viewWillAppear:animated];
     [self setupNav];
+//    [self loadCode];
     [self.navigationController.navigationBar setHidden:NO];
     
 }

@@ -27,6 +27,12 @@
 @property(retain,nonatomic)NSMutableDictionary* dataDic; //字典数据
 @property (assign, nonatomic) BOOL isBlack;   //黑色透明背景
 
+@property (nonatomic, assign) BOOL online;
+@property (nonatomic, assign) BOOL loginSucess;
+@property (nonatomic, assign) BOOL loginFailed;
+
+-(void)isOnline;
+-(void)isAutoLogin;
 
 - (void) refresh;  //刷新
 - (void) resetLoadingView; //重置加载视图
@@ -39,4 +45,6 @@
 
 -(id)getOrgazinationDataFromBaseTable:(NSString*)tableName;
 -(void)cancleRequest;
+
+
 @end

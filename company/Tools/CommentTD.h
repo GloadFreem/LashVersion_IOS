@@ -7,18 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "JTabBarController.h"
-#import "ProjectViewController.h"
-#import "InvestViewController.h"
-#import "CircleViewController.h"
-#import "ActivityViewController.h"
-#import "MineViewController.h"
-#import "MyNavViewController.h"
-#import "DiscoverViewController.h"
-#import "TankViewController.h"
+
 @interface CommentTD : NSObject
 
-//创建框架结构
-//+(JTabBarController*)createViewControllers;
+@property (nonatomic, assign) BOOL online;
+@property (nonatomic, assign) BOOL loginSucess;
+/**
+ *    判断是否在线
+ */
++(BOOL)isOnline;
+
+/**
+ *    自动登录
+ */
++(BOOL)autoLogin;
 
 @end

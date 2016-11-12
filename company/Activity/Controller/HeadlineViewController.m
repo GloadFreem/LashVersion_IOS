@@ -71,7 +71,10 @@
     self.nextPage = 0;
     self.isUpLoading = NO;
     _isFirst = YES;
-    [self loadHeadlineData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadHeadlineData];
+    });
+    
 }
 
 -(void)searchView

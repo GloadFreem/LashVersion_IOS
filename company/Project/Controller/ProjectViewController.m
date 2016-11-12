@@ -102,7 +102,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     if (!_bannerModelArray) {
         _bannerModelArray = [NSMutableArray array];
     }
@@ -146,15 +145,21 @@
     //设置 加载视图界面
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 49);
     
+    [self setNav];
+    
     [self createUI];
     
     //自动登录
     if ([TDUtil checkNetworkState] != NetStatusNone)
     {
         [self isLogin];
+//        [self isOnline];
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            
+//        });
+        
     }
 
-    
     //添加监听
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadGold) name:@"comeBack" object:nil];
@@ -163,6 +168,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netNotEnable) name:@"netNotEnable" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netEnable) name:@"netEnable" object:nil];
+    
 }
 
 -(void)netEnable
@@ -196,7 +202,6 @@
     if (delegate.isLaunchedByNotification) {
         
     }else{
-        
         NSString *currentTime = [TDUtil CurrentDay];
         NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
         NSString *firstDate = [data objectForKey:@"firstLogin"];
@@ -220,7 +225,6 @@
             [self loadGoldCount];
         }
     });
-    
 }
 
 -(void)loadGoldCount
@@ -419,6 +423,11 @@
         if ([status integerValue] == 200) {
             NSDictionary *data = jsonDic[@"data"];
             _hasMessage = data[@"flag"];
+            if (_hasMessage) {//message_new@2x
+                [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
+            }else{
+                [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+            }
             
         }else{
         
@@ -564,7 +573,7 @@
         //结束刷新
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
-        self.isNetRequestError = YES;
+//        self.isNetRequestError = YES;
     }
 }
 #pragma mark-----解析项目列表路演------
@@ -734,7 +743,7 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }else{
-        self.isNetRequestError  =YES;
+//        self.isNetRequestError  =YES;
     }
 }
 #pragma mark----------------解析banner数据-----------------
@@ -796,8 +805,8 @@
 #pragma mark-------------------站内信通知信息----------------------
 -(void)setLetterStatus:(NSNotification*)notification
 {
-    UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    letterBtn.tag = 0;
+//    UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    letterBtn.tag = 0;
     if (notification) {
         _hasMessage = YES;
     }
@@ -805,17 +814,26 @@
     //通过判断返回数据状态来决定背景图片
     //    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
     if (_hasMessage) {//message_new@2x
-        [letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
-    }else{
-        [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+        [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
     }
     
+//    letterBtn.size = letterBtn.currentBackgroundImage.size;
+//    [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
+//    _letterBtn = letterBtn;
+}
+
+-(void)setNav
+{
+    UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    letterBtn.tag = 0;
+    //通过判断返回数据状态来决定背景图片
+    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
     letterBtn.size = letterBtn.currentBackgroundImage.size;
     [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
     _letterBtn = letterBtn;
 }
-
 -(void)createUI
 {
 
@@ -1171,8 +1189,8 @@
 //        NSLog(@"登陆状态在线");
             //下载认证信息
             [self loadAuthenData];
-            
             _hasLogin = YES;
+            self.online = YES;
             [self startLoadBannerData];
             
             [self loadOtherData];
@@ -1180,20 +1198,32 @@
             //自动登录
             [self autoLogin];
         }
+    }else{
+        [self autoLogin];
     }
-    
 }
 
 -(void)loadOtherData
 {
     if (_hasLogin || _isSuccess) {
-        [self loadVersion];
-        
-        [self loadMessage];
-        
-        // [self createGoldView];
+
         //保存登录时间
         [self compareTime];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self loadVersion];
+        });
+        
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self loadMessage];
+        });
+        
+        
+        
+        
+        
+        // [self createGoldView];
+        
     }
 }
 
@@ -1224,8 +1254,9 @@
 //            NSLog(@"登陆成功");
             //下载认证信息
             [self loadAuthenData];
-            
             _isSuccess = YES;
+            self.loginSucess = YES;
+            NSLog(@"登陆成功%@",self.loginSucess ? @"1" : @"0");
             [self startLoadBannerData];
             [self loadOtherData];
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
@@ -1236,9 +1267,12 @@
         }else{
             LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
             
-            login.hidesBottomBarWhenPushed = YES;
+            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             
-            [self.navigationController pushViewController:login animated:NO];
+            delegate.nav = [[UINavigationController alloc] initWithRootViewController:login];
+            
+            delegate.window.rootViewController = delegate.nav;
+            
         }
         
     }

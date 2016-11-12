@@ -338,7 +338,9 @@ CGFloat __maxContentLabelHeight = 0; //根据具体font来定
     if (isFirst) {
         _progress.animatable = YES;
         CGFloat finalCount = model.financedMount;
-        CGFloat percent = finalCount / model.financeTotal * 100;
+//        NSLog(@"详情已融金额--%ld,融资总额--%ld",(long)model.financedMount,(long)model.financeTotal);
+        CGFloat finalTotal = model.financeTotal;
+        CGFloat percent = finalCount / finalTotal * 100;
         _progress.percent = percent;
         _progress.title = @"已融资";
         _progress.percentUnit = @"%";

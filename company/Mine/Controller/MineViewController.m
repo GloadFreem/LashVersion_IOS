@@ -25,6 +25,7 @@
 #import "MineInvestViewController.h"
 #import "MineProjectViewController.h"
 #import "MineThinkTankViewController.h"
+#import "LoginRegistViewController.h"
 @interface MineViewController ()<CircleShareBottomViewDelegate>
 
 @property (nonatomic,strong)UIView * bottomView;
@@ -60,6 +61,8 @@
 
 @property (nonatomic, assign) BOOL isFirst;
 @property (nonatomic, assign) BOOL isFinish;
+
+@property (nonatomic, assign) BOOL isSucess;
 
 @end
 
@@ -103,6 +106,7 @@
 
 -(void)loadInvestFriend
 {
+    self.isSucess = YES;
     [self loadShareData];
 }
 -(void)setupBtns
@@ -174,10 +178,11 @@
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:REQUEST_INVITE_FRIEND postParam:dic type:0 delegate:self sel:@selector(requestShareData:)];
 }
+
 -(void)requestShareData:(ASIHTTPRequest*)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-        NSLog(@"返回:%@",jsonString);
+//        NSLog(@"返回:%@",jsonString);
     NSMutableDictionary* jsonDic = [jsonString JSONValue];
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
@@ -328,8 +333,6 @@
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
     NSLog(@"返回:%@",jsonString);
-
-    
 }
 
 -(void)refresh
@@ -351,12 +354,54 @@
 
 #pragma mark -进入头像详情页面
 - (IBAction)iconDetail:(UIButton *)sender {
+    if (self.isSucess) {
         MineDataVC *vc = [MineDataVC new];
         vc.mineVC = self;
         vc.position = _position;
         vc.companyName = _companyS;
         vc.iconImg = _iconBtn.currentBackgroundImage;
         [self.navigationController pushViewController:vc animated:YES];
+        
+    }else{
+        //登录
+        [self isOnline];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (self.loginFailed) {//登录失败,进入登陆界面
+                
+                JTabBarController * tabBarController;
+                LoginRegistViewController * login;
+                for (UIViewController *vc in self.navigationController.viewControllers) {
+                    if ([vc isKindOfClass:LoginRegistViewController.class]) {
+                        login = (LoginRegistViewController*)vc;
+                    }else{
+                        if ([vc isKindOfClass:AppSetVC.class]) {
+                            
+                        }else{
+                            
+                            if ([vc isKindOfClass:JTabBarController.class]) {
+                                tabBarController = (JTabBarController*)vc;
+                            }else{
+                                [vc removeFromParentViewController];
+                            }
+                        }
+                    }
+                }
+                
+                if(!login)
+                {
+                    login = [[LoginRegistViewController alloc]init];
+                }
+                
+                UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
+                
+                AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                delegate.nav = [[UINavigationController alloc]initWithRootViewController:login];
+                
+                keyWindow.rootViewController = delegate.nav;
+            }
+        });
+    }
+    
 }
 
 #pragma mark -进入各个小界面

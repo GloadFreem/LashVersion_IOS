@@ -79,7 +79,9 @@
         label.text = [NSString stringWithFormat:@"%@  ",model.areas[i]];
     }
     CGFloat finalCount = model.financedMount;
-    CGFloat percent = finalCount / model.financeTotal * 100;
+//    NSLog(@"已融金额--%ld,融资总额--%ld",(long)model.financedMount,(long)model.financeTotal);
+    CGFloat finalTotal = model.financeTotal;
+    CGFloat percent = finalCount / finalTotal * 100;
     _progressView.percent = percent;
     _progressView.title = @"已融资";
     _progressView.percentUnit = @"%";

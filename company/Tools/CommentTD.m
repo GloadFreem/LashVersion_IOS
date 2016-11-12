@@ -8,37 +8,59 @@
 
 #import "CommentTD.h"
 
+#define LOGINUSER @"isLoginUser"
+#define DENGLU @"loginUser"
+
 @implementation CommentTD
 
 
-//+(JTabBarController*)createViewControllers{
-//    NSMutableArray * unSelectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project.png"],[UIImage imageNamed:@"discover_tab.png"],[UIImage imageNamed:@"activity.png"],[UIImage imageNamed:@"thinktank_tab.png"],nil];
-//    
-//    NSMutableArray * selectedArray = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"project_selected .png"],[UIImage imageNamed:@"discover_tab_sel.png"],[UIImage imageNamed:@"activity_selected.png"], [UIImage imageNamed:@"thinktank_tab_sel.png"],nil];
-//    
-//    NSMutableArray * titles = [[NSMutableArray alloc]initWithObjects:@"项目",@"发现",@"活动",@"智库", nil];
-//    
-//    ProjectViewController * project = [[ProjectViewController alloc]init];
-//    MyNavViewController * navProject = [[MyNavViewController alloc]initWithRootViewController:project];
-//    
-//    DiscoverViewController * discover = [[DiscoverViewController alloc]init];
-//    MyNavViewController *navDiscover = [[MyNavViewController alloc]initWithRootViewController:discover];
-//    
-//    TankViewController * tank =[[TankViewController alloc]init];
-//    MyNavViewController * navTank =[[MyNavViewController alloc]initWithRootViewController:tank];
-//    
-//    ActivityViewController * activityVC = [[ActivityViewController alloc]init];
-//    MyNavViewController * navActivity = [[MyNavViewController alloc]initWithRootViewController:activityVC];
-//    
-//    JTabBarController *tabBar = [[JTabBarController alloc]initWithTabBarSelectedImages:selectedArray normalImages:unSelectedArray titles:titles];
-//    tabBar.showCenterItem = YES;
-//    tabBar.centerItemImage = [UIImage imageNamed:@"mine.png"];
-//    tabBar.viewControllers = @[navProject,navDiscover,navActivity,navTank];
-//    tabBar.textColor = orangeColor;
-//    MyNavViewController *navMine = [[MyNavViewController alloc]initWithRootViewController:[[MineViewController alloc]init]];
-//    tabBar.centerViewController = navMine;
-//    
-//    return tabBar;
+-(BOOL)isOnline
+{
+    NSString *partner = [TDUtil encryKeyWithMD5:KEY action:LOGINUSER];
+    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",partner,@"partner", nil];
+    
+//    LYJWeakSelf;
+    //开始请求
+    [[EUNetWorkTool shareTool] POST:JZT_URL(ISLOGINUSER) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] intValue]== 200){
+//            weakSelf.isOnline = YES;
+//            return;
+        }else{
+//            weakSelf.isOnline = NO;
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        weakSelf.isOnline = NO;
+    }];
+//    if (_isOnline) {
+//        return YES;
+//    }
+    return NO;
+}
 
-//}
+-(BOOL)autoLogin
+{
+    //获取缓存数据
+    NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
+    NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+    NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
+    //激光推送Id
+    NSString *regId = [JPUSHService registrationID];
+    
+    NSString * string = [AES encrypt:DENGLU password:KEY];
+    NSString *partner = [TDUtil encryptMD5String:string];
+    NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
+    LYJWeakSelf;
+    [[EUNetWorkTool shareTool] POST:JZT_URL(USER_LOGIN) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if ([dic[@"status"] intValue]== 200){
+            weakSelf.loginSucess = YES;
+        }else{
+            weakSelf.loginSucess = NO;
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            weakSelf.loginSucess = NO;
+    }];
+    
+    return NO;
+}
 @end
