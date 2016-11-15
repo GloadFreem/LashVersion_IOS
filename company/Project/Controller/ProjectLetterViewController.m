@@ -104,12 +104,18 @@
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
-        }else{
+        }else if ([status integerValue] == 401){
             //结束刷新
-//            self.startLoading = NO;
+            [self isAutoLogin];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (self.loginSucess) {
+                    self.loginSucess = NO;
+                    [self startLoadData];
+                }
+            });
+        }else if ([status integerValue] == 201){
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }else{
         self.isNetRequestError = YES;
@@ -120,6 +126,8 @@
 {
 //    self.startLoading = YES;
     self.isNetRequestError = YES;
+    [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
 }
 
 -(void)refresh
@@ -456,7 +464,6 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear: animated];
-    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

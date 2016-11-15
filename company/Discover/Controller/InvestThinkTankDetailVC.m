@@ -116,6 +116,7 @@
 //    NSLog(@"----%@",self.investorId);
 //    NSLog(@"----- 数量%@",self.attentionCount);
     
+    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.investorId,@"investorId",VERSION,@"version", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:INVEST_LIST_DETAIL postParam:dic type:1 delegate:self sel:@selector(requestInvestDetail:)];

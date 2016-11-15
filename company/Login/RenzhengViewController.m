@@ -287,14 +287,16 @@
     //投资人
     if ([self.identifyType integerValue] == 2) {
         self.dataArray[2] = self.companyAddress;
+        if (self.areaId.length) {
+            self.dataArray[3] = self.investField;
+        }
         
-        self.dataArray[3] = self.areaId;
     }
     //投资机构  智囊团
     if ([self.identifyType integerValue] == 3 || [self.identifyType integerValue] == 4) {
         self.dataArray[3] = self.companyAddress;
         if ([self.identifyType integerValue] == 3) {
-            self.dataArray[5] = self.areaId;
+            self.dataArray[5] = self.investField;
         }
     }
     
@@ -422,7 +424,7 @@
         Renzheng3ViewController * regist = [Renzheng3ViewController new];
         regist.identifyType = self.identifyType;
         [_dataDic setObject:_dataArray[2] forKey:@"companyAddress"];
-        [_dataDic setObject:_dataArray[3] forKey:@"areaId"];
+        [_dataDic setObject:self.areaId forKey:@"areaId"];
         //字典赋值
         regist.dicData = [NSMutableDictionary dictionaryWithDictionary:_dataDic];
         
@@ -458,7 +460,7 @@
         [_dataDic setObject:_dataArray[3] forKey:@"companyAddress"];
         [_dataDic setObject:_dataArray[2] forKey:@"companyName"];
         [_dataDic setObject:_dataArray[4] forKey:@"position"];
-        [_dataDic setObject:_dataArray[5] forKey:@"areaId"];
+        [_dataDic setObject:self.areaId forKey:@"areaId"];
         //字典赋值
         regist.dicData = [NSMutableDictionary dictionaryWithDictionary:_dataDic];
         

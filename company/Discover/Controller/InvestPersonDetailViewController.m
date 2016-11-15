@@ -78,37 +78,38 @@
     
 }
 
--(void)startLoadShare
-{
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",self.investorId,@"investorId",self.type,@"type", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_SHARE_INVESTOR postParam:dic type:0 delegate:self sel:@selector(requestShareContent:)];
-}
--(void)requestShareContent:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic !=nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *data = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            _shareUrl = data[@"url"];
-            _shareImage = data[@"image"];
-            _shareContent = data[@"content"];
-            
-        }else{
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-        }
-    }
-}
+//-(void)startLoadShare
+//{
+//    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",self.investorId,@"investorId",self.type,@"type", nil];
+//    //开始请求
+//    [self.httpUtil getDataFromAPIWithOps:REQUEST_SHARE_INVESTOR postParam:dic type:0 delegate:self sel:@selector(requestShareContent:)];
+//}
+//-(void)requestShareContent:(ASIHTTPRequest *)request
+//{
+//    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+////        NSLog(@"返回:%@",jsonString);
+//    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+//    if (jsonDic !=nil) {
+//        NSString *status = [jsonDic valueForKey:@"status"];
+//        if ([status integerValue] == 200) {
+//            NSDictionary *data = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
+//            _shareUrl = data[@"url"];
+//            _shareImage = data[@"image"];
+//            _shareContent = data[@"content"];
+//            
+//        }else{
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+//        }
+//    }
+//}
 
 -(void)startLoadData
 {
 //    NSLog(@"----%@",self.investorId);
 //    NSLog(@"----- 数量%@",self.attentionCount);
-    
-    self.startLoading = YES;
+//    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
+//    self.startLoading = YES;
+//    self.isTransparent = YES;
     
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.investorId,@"investorId", VERSION,@"version",nil];
     //开始请求
@@ -123,7 +124,7 @@
     if (jsonDic !=nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
-            
+//            self.startLoading = NO;
             InvestDetailModel *detailModel =[InvestDetailModel mj_objectWithKeyValues:jsonDic[@"data"]];
             self.collected = detailModel.collected;
             self.attentionCount = [NSString stringWithFormat:@"%ld",(long)detailModel.collectCount];
@@ -132,6 +133,7 @@
 
     
         }else{
+//            self.startLoading = NO;
           [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }

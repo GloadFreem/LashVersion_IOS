@@ -261,10 +261,9 @@
 //        NSLog(@"打印错误%@",error.localizedDescription);
         [_tableView.mj_header endRefreshing];
         [_tableView.mj_footer endRefreshing];
+//        weakSelf.startLoading = NO;
         weakSelf.isNetRequestError  =YES;
     }];
-    
-    
 }
 
 -(void)analysisThinkTankListData:(NSArray *)dataArray

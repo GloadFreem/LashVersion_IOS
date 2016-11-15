@@ -143,7 +143,13 @@
     [title drawAtPoint:CGPointMake(titleX, titleY)];
 
     //
-    NSMutableAttributedString* precentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.f%@",self.desValue,self.percentUnit]];
+    NSMutableAttributedString* precentStr;
+    if(_percent-_desValue>=1)
+    {
+        precentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.1f%@",_desValue,self.percentUnit]];
+    }else{
+        precentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.1f%@",_percent,self.percentUnit]];
+    }
     NSRange precentRange = NSMakeRange(0, precentStr.string.length);
     
     [precentStr addAttribute:NSFontAttributeName
@@ -159,7 +165,7 @@
                                                   context:nil];
     
     CGFloat precentX = _circleCenter.x - precentRect.size.width * 0.5;
-    CGFloat precentY = _circleCenter.y ;
+    CGFloat precentY = _circleCenter.y - 5 ;
     
     [precentStr drawAtPoint:CGPointMake(precentX, precentY)];
 }
@@ -190,7 +196,7 @@
         
         self.value ++;
         _desValue = _value;
-        _angle = self.value /100 * 360;
+        _angle = self.value /100.0 * 360;
         
         [self setNeedsDisplay];
     }

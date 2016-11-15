@@ -59,7 +59,6 @@
     
     //进入应用
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
     JTabBarController * tabBarController = [[JTabBarController alloc]init];
     tabBarController.delegate = delegate;
     delegate.tabBar = tabBarController;

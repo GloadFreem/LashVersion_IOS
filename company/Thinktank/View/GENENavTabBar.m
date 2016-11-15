@@ -33,7 +33,7 @@
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor colorWithRed:54/255.0 green:54/255.0 blue:54/255.0 alpha:1];
+        self.backgroundColor = [TDUtil colorWithHexString:@"3e3e3e"];
         [self viewConfig];
     }
     return self;

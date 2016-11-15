@@ -799,8 +799,8 @@
         ProjectBannerDetailVC *vc = [ProjectBannerDetailVC new];
         vc.url = model.url;
         vc.image = model.contentImage;
-        vc.titleText = model.contentText;
-        vc.contentText = model.titleText;
+        vc.titleText = model.titleText;
+        vc.contentText = model.contentText;
         vc.titleStr = model.titleText;
         vc.isCircle = YES;
         [self.navigationController pushViewController:vc animated:YES];

@@ -64,6 +64,7 @@
 
 @property (nonatomic, copy) NSString *authenticName;  //认证信息
 @property (nonatomic, copy) NSString *identiyTypeId;  //身份类型
+@property (nonatomic, assign) BOOL isSucess;
 
 @end
 
@@ -71,7 +72,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadLogin) name:@"hasLogin" object:nil];
     NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
     _authenticName = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_STATUS];
     _identiyTypeId = [defaults valueForKey:USER_STATIC_USER_AUTHENTIC_TYPE];
@@ -98,11 +99,20 @@
     
 //    [self setupNav];
     
-    [self loadShareData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadShareData];
+    });
+    
     //下载客服电话
-    [self loadServicePhone];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadServicePhone];
+    });
+    
 }
-
+-(void)loadLogin
+{
+    self.isSucess = YES;
+}
 -(void)loadServicePhone
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.servicePartner,@"partner",nil];
@@ -158,8 +168,16 @@
             
             self.startLoading = NO;
             
+        }else if ([status integerValue] == 401){
+            [self isAutoLogin];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (self.loginSucess) {
+                    self.loginSucess = NO;
+                    [self startLoadData];
+                }
+            });
         }else{
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }else{
         self.isNetRequestError = YES;
@@ -804,6 +822,9 @@
 {
     [super viewWillAppear:animated];
     
+    [self.navigationController.navigationBar setHidden:NO];
+    [self.navigationController setNavigationBarHidden:NO];
+    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:[UIButton new]];
 //    self.navigationController.navigationBar.hidden = YES;
     if (!_navBar) {
@@ -811,6 +832,15 @@
     }
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    if (!self.isSucess) {
+//        self.isSucess = NO;
+//        [self isAutoLogin];
+//        //        NSLog(@"再次登录");
+//    }
+}
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];

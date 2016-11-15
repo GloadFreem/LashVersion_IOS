@@ -101,24 +101,24 @@
         if ([status integerValue] == 200) {
             [TDUtil clearMemory];
             
-            JTabBarController * tabBarController;
+//            JTabBarController * tabBarController;
             LoginRegistViewController * login;
-            for (UIViewController *vc in self.navigationController.viewControllers) {
-                if ([vc isKindOfClass:LoginRegistViewController.class]) {
-                    login = (LoginRegistViewController*)vc;
-                }else{
-                    if ([vc isKindOfClass:AppSetVC.class]) {
-                        
-                    }else{
-                       
-                        if ([vc isKindOfClass:JTabBarController.class]) {
-                            tabBarController = (JTabBarController*)vc;
-                        }else{
-                        [vc removeFromParentViewController];
-                        }
-                    }
-                }
-            }
+//            for (UIViewController *vc in self.navigationController.viewControllers) {
+//                if ([vc isKindOfClass:LoginRegistViewController.class]) {
+//                    login = (LoginRegistViewController*)vc;
+//                }else{
+//                    if ([vc isKindOfClass:AppSetVC.class]) {
+//                        
+//                    }else{
+//                       
+//                        if ([vc isKindOfClass:JTabBarController.class]) {
+//                            tabBarController = (JTabBarController*)vc;
+//                        }else{
+//                        [vc removeFromParentViewController];
+//                        }
+//                    }
+//                }
+//            }
             
             if(!login)
             {
@@ -133,7 +133,7 @@
             keyWindow.rootViewController = delegate.nav;
             
             _dataArray = nil;
-            [self removeFromParentViewController];
+//            [self removeFromParentViewController];
             
         }
     }

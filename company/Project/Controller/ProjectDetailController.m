@@ -121,14 +121,14 @@
 
 @property (nonatomic, copy) NSString *servicePartner;
 @property (nonatomic, copy) NSString *servicePhone;
-
+@property (nonatomic, assign) BOOL isSucess;
 @end
 
 @implementation ProjectDetailController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadLogin) name:@"hasLogin" object:nil];
 //    [self.view bringSubviewToFront:_navView];
     // Do any additional setup after loading the view from its nib.
     [self setNav];
@@ -149,7 +149,6 @@
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
     //下载认证信息
     [self readAuthenData];
-//    [self loadAuthenData];
     
     //下载详情数据
     [self startLoadData];
@@ -161,10 +160,19 @@
     _scrollView.autoresizingMask = UIViewAutoresizingNone;
     
     //下载客服电话
-    [self loadServicePhone];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadServicePhone];
+    });
     
-    [self loadShareData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadShareData];
+    });
     
+    
+}
+-(void)loadLogin
+{
+    self.isSucess = YES;
 }
 #pragma mark---导航栏
 -(void)setNav
@@ -269,37 +277,6 @@
     }
 }
 
-
-#pragma mark -下载认证信息
--(void)loadAuthenData
-{
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:1 delegate:self sel:@selector(requestAuthenInfo:)];
-}
-
--(void)requestAuthenInfo:(ASIHTTPRequest*)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            
-            AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
-            authenticModel = baseModel;
-            
-            NSArray *authenticsArray = baseModel.authentics;
-            if (authenticsArray.count) {
-                ProjectAuthentics *authentics = authenticsArray[0];
-                _authenticName = authentics.authenticstatus.name;
-                _identiyTypeId = [NSString stringWithFormat:@"%ld",(long)authentics.identiytype.identiyTypeId];
-            }
-        }
-    }
-}
 
 -(void)loadShareData
 {
@@ -415,8 +392,16 @@
                 
                 [self loadSceneData];
             }
-        }else{
-        self.isNetRequestError  =YES;
+        }else if ([status integerValue] == 401){
+//        self.isNetRequestError  =YES;
+            [self isAutoLogin];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (self.loginSucess) {
+                    self.loginSucess = NO;
+                    [self startLoadData];
+                    
+                }
+            });
         }
     }else{
         self.isNetRequestError  =YES;
@@ -573,6 +558,7 @@
         [_kefuBtn setBackgroundImage:[UIImage imageNamed:@"icon_kefu"] forState:UIControlStateNormal];
         [_kefuBtn setBackgroundImage:[UIImage imageNamed:@"icon_kefu"] forState:UIControlStateHighlighted];
         [_kefuBtn setTag:0];
+//        _kefuBtn.enabled = NO;
         [_kefuBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomView addSubview:_kefuBtn];
         [_kefuBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -587,6 +573,7 @@
         [_investBtn setBackgroundImage:[UIImage imageNamed:@"iconfont-rocket"] forState:UIControlStateNormal];
         [_investBtn setBackgroundImage:[UIImage imageNamed:@"iconfont-rocket"] forState:UIControlStateHighlighted];
         [_investBtn setTag:1];
+//        _investBtn.enabled = NO;
         [_investBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomView addSubview:_investBtn];
         [_investBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -1239,6 +1226,9 @@
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
+    [self.navigationController.navigationBar setHidden:NO];
+    [self.navigationController setNavigationBarHidden:NO];
+    
     [IQKeyboardManager sharedManager].enable = NO;
     [[IQKeyboardManager sharedManager]setEnableAutoToolbar:NO];
     
@@ -1257,7 +1247,15 @@
 //        _scrollView.frame = CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64);
     }];
 }
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    if (self.isPush) {
+//        self.isPush = NO;
+//        [self isAutoLogin];
+////        NSLog(@"再次登录");
+//    }
+}
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];

@@ -7,7 +7,7 @@
 //
 
 #import "RootViewController.h"
-
+#import "LoginRegistViewController.h"
 #define LOGINUSER @"isLoginUser"
 #define DENGLU @"loginUser"
 
@@ -188,7 +188,7 @@
         if ([dic[@"status"] intValue]== 200){
             weakSelf.online = YES;
             weakSelf.loginFailed = NO;
-            NSLog(@"在线呢");
+//            NSLog(@"在线呢");
         }else{
             weakSelf.online = NO;
             [self isAutoLogin];
@@ -196,7 +196,7 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             weakSelf.online = NO;
             [self isAutoLogin];
-        NSLog(@"在线错误---%@",error.localizedDescription);
+//        NSLog(@"在线错误---%@",error.localizedDescription);
     }];
     
 }
@@ -220,15 +220,32 @@
         if ([dic[@"status"] intValue]== 200){
             weakSelf.loginSucess = YES;
             weakSelf.loginFailed = NO;
-            NSLog(@"登陆成功");
+//            NSLog(@"登陆成功");
         }else{
             weakSelf.loginFailed = YES;
             weakSelf.loginSucess = NO;
+            
+            //进入登陆界面
+            LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+            
+            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            
+            delegate.nav = [[UINavigationController alloc] initWithRootViewController:login];
+            
+            delegate.window.rootViewController = delegate.nav;
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"登录错误---%@",error.localizedDescription);
+//        NSLog(@"登录错误---%@",error.localizedDescription);
         weakSelf.loginSucess = NO;
         weakSelf.loginFailed = YES;
+        //进入登录界面
+        LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+        
+        AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        delegate.nav = [[UINavigationController alloc] initWithRootViewController:login];
+        
+        delegate.window.rootViewController = delegate.nav;
     }];
     
 }

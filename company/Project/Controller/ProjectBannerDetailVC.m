@@ -96,8 +96,8 @@
 //        delegate.window.rootViewController = delegate.tabBar;
         
     }else{
-    [self.webView stopLoading];
-    [self.navigationController popViewControllerAnimated:YES];
+//    [self.webView stopLoading];
+//    [self.navigationController popViewControllerAnimated:YES];
     }
     
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
@@ -259,7 +259,6 @@
     if (self.isActivity) {
         _titleStr = _contentText;
         _contentText = _titleText;
-        
     }
     if (self.isPoint) {
         _titleStr = _contentText;
@@ -269,7 +268,7 @@
         _contentText = _titleText;
     }
     if (self.isCircle) {
-        _titleStr = _contentText;
+        
     }
     [shareView instancetationShareToCircleViewWithimage:_image title:_titleStr content:_contentText];
     shareView.tag = 1000;

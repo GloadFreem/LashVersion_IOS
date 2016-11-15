@@ -115,10 +115,13 @@
             NSArray *dataArray = [NSArray arrayWithArray:dic[@"data"]];
             [self analysisThinkTankListData:dataArray];
         } else {
-            
+            [_tableView.mj_header endRefreshing];
+            [_tableView.mj_footer endRefreshing];
         }
         weakSelf.startLoading = NO;
-        _isFirst = NO;
+        if (_isFirst) {
+            _isFirst = NO;
+        }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 //        NSLog(@"错误信息%@", error.localizedDescription);
         [_tableView.mj_header endRefreshing];

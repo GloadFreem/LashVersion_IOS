@@ -65,11 +65,21 @@
     self.codePartner = [TDUtil encryKeyWithMD5:KEY action:INVITEFRIEND];
     self.goldGetPartner = [TDUtil encryKeyWithMD5:KEY action:GOLDGETRULE];
     self.goldUsepartner = [TDUtil encryKeyWithMD5:KEY action:GOLDUSERULE];
-    [self loadCode];
     
     [self startLoadData];
-    [self loadGetRule];
-    [self loadUseRule];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadCode];
+    });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadGetRule];
+    });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadUseRule];
+    });
+    
     
     
 }
@@ -83,7 +93,7 @@
         NSDictionary  *dic = responseObject;
         if ([dic[@"status"] integerValue] == 200) {
             NSDictionary *data = [NSDictionary dictionaryWithDictionary:dic[@"data"]];
-//            NSLog(@"打印数据---%@",data);
+//            NSLog(@"打印数据---%@",data.description);
             _shareUrl = data[@"url"];
             _shareImage = data[@"image"];
             _shareTitle = data[@"title"];
@@ -97,28 +107,22 @@
     }];
     
 }
--(void)requestInviteCode:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status =[jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *data = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            _shareUrl = data[@"url"];
-            _shareImage = data[@"image"];
-            _shareTitle = data[@"title"];
-            _shareContent = data[@"content"];
-        }
-    }
-}
+
 #pragma mark-------使用规则
 -(void)loadUseRule
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_GOLD_USE_RULE postParam:dic type:0 delegate:self sel:@selector(requestUseRule:)];
+//    [self.httpUtil getDataFromAPIWithOps:REQUEST_GOLD_USE_RULE postParam:dic type:0 delegate:self sel:@selector(requestUseRule:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_GOLD_USE_RULE) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSDictionary *data = [NSDictionary dictionaryWithDictionary:dic[@"data"]];
+            _useUrl = data[@"url"];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 -(void)requestUseRule:(ASIHTTPRequest *)request
 {
@@ -138,7 +142,16 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_GOLD_GET_RULE postParam:dic type:0 delegate:self sel:@selector(requestGetRule:)];
+//    [self.httpUtil getDataFromAPIWithOps:REQUEST_GOLD_GET_RULE postParam:dic type:0 delegate:self sel:@selector(requestGetRule:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_GOLD_GET_RULE) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSDictionary *data = [NSDictionary dictionaryWithDictionary:dic[@"data"]];
+            _getUrl = data[@"url"];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 -(void)requestGetRule:(ASIHTTPRequest *)request
 {
@@ -407,7 +420,7 @@
 
 -(void)dealloc
 {
-//    [[EUNetWorkTool shareTool] cancleRequest];
+    [[EUNetWorkTool shareTool] cancleRequest];
     [self cancleRequest];
 }
 

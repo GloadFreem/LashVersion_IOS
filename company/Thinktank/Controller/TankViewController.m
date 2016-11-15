@@ -39,15 +39,15 @@ static void *RecordLastClickKey = @"RecordLastClickKey";
 
 - (void)viewConfig
 {
-    _navTabBarColor = _navTabBarColor ? _navTabBarColor : NavTabbarColor;
+//    _navTabBarColor = _navTabBarColor ? _navTabBarColor : NavTabbarColor;
     UIView *statusView = [[UIView alloc] initWithFrame:CGRectMake(ZERO_COORDINATE, ZERO_COORDINATE, SCREEN_WIDTH, STATUS_BAR_HEIGHT)];
-    statusView.backgroundColor = NavTabbarColor;
+    statusView.backgroundColor = [TDUtil colorWithHexString:@"3e454f"];
     [self.view addSubview:statusView];
     
     _navTabBar = [[GENENavTabBar alloc] initWithFrame:CGRectMake(ZERO_COORDINATE, STATUS_BAR_HEIGHT, SCREEN_WIDTH, NAVIGATION_BAR_HEIGHT)];
     
     _navTabBar.delegate = self;
-    _navTabBar.backgroundColor = _navTabBarColor;
+    _navTabBar.backgroundColor = [TDUtil colorWithHexString:@"3e454f"];
     _navTabBar.lineColor = orangeColor;
     
     _mainView = [[UIScrollView alloc] initWithFrame:CGRectMake(ZERO_COORDINATE, _navTabBar.frame.origin.y + _navTabBar.frame.size.height, SCREEN_WIDTH, SCREEN_HEIGHT - _navTabBar.frame.origin.y - _navTabBar.frame.size.height)];

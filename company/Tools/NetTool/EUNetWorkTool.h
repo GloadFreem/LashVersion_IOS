@@ -6,7 +6,8 @@
 //  Copyright © 2016年 Eugene. All rights reserved.
 //
 
-#import <AFNetworking/AFNetworking.h>
+//#import <AFNetworking/AFNetworking.h>
+#import "AFNetworking.h"
 
 typedef NS_ENUM(NSUInteger, NetworkStates) {
     NetworkStatesNone, // 没有网络

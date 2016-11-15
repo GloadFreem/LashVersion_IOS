@@ -981,6 +981,7 @@
         
         ProjectDetailController * detail = [[ProjectDetailController alloc]init];
         model = _projectModelArray[indexPath.row];
+        detail.isPush = YES;
         detail.projectId = model.projectId;
         detail.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:detail animated:YES];
@@ -999,18 +1000,32 @@
 {
     _selectedCellNum  = tagValue;//将传过来的tag赋值给_selectedCellNum来决定显示cell的类型
     
-    if (_selectedCellNum == 20 && !_projectModelArray.count) {
-        [self startLoadData];
-    }else{
-        [_tableView reloadData];
-    }
-    if (_selectedCellNum == 21 && !_roadModelArray.count) {
-        [self startLoadData];
-    }else{
-        
-        [_tableView reloadData];
+//    if (_selectedCellNum == 20 && !_projectModelArray.count) {
+//        [self startLoadData];
+//    }else{
+//        [_tableView reloadData];
+//    }
+//    if (_selectedCellNum == 21 && !_roadModelArray.count) {
+//        [self startLoadData];
+//    }else{
+//        [_tableView reloadData];
+//    }
+    
+    if (_selectedCellNum == 20) {
+        if (!_projectModelArray.count) {
+            [self startLoadData];
+        }else{
+            [_tableView reloadData];
+        }
     }
     
+    if (_selectedCellNum == 21) {
+        if (!_roadModelArray.count) {
+            [self startLoadData];
+        }else{
+            [_tableView reloadData];
+        }
+    }
 }
 
 -(void)clickBannerImage:(ProjectBannerListModel *)model
@@ -1059,7 +1074,7 @@
         if ([status integerValue] == 200) {
             NSDictionary *dataDic = jsonDic[@"data"];
             _versionStr = dataDic[@"versionStr"];
-//            _versionStr = @"1.2.0";
+//            _versionStr = @"4.0.0";
             _contentStr = dataDic[@"content"];
             _url = dataDic[@"url"];
             _isForce = [dataDic[@"isForce"] boolValue];
@@ -1256,7 +1271,7 @@
             [self loadAuthenData];
             _isSuccess = YES;
             self.loginSucess = YES;
-            NSLog(@"登陆成功%@",self.loginSucess ? @"1" : @"0");
+//            NSLog(@"登陆成功%@",self.loginSucess ? @"1" : @"0");
             [self startLoadBannerData];
             [self loadOtherData];
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
@@ -1272,7 +1287,6 @@
             delegate.nav = [[UINavigationController alloc] initWithRootViewController:login];
             
             delegate.window.rootViewController = delegate.nav;
-            
         }
         
     }

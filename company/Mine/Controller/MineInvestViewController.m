@@ -57,7 +57,7 @@
         _investStatusArray = [NSMutableArray array];
     }
     _page = 0;
-    
+    _isFirst = YES;
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTCENTER];
     self.ignorePartner = [TDUtil encryKeyWithMD5:KEY action:IGNOREPROJECT];
     
@@ -78,8 +78,10 @@
 -(void)startLoadData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_type],@"type",[NSString stringWithFormat:@"%ld",(long)_page],@"page", nil];
+    if (_isFirst) {
+        self.startLoading = YES;
+    }
     
-    self.startLoading = YES;
     //    开始请求
     [self.httpUtil getDataFromAPIWithOps:LOGO_PROJECT_CENTER postParam:dic type:0 delegate:self sel:@selector(requestList:)];
 }
@@ -94,7 +96,9 @@
         if ([status integerValue] == 200) {
             
             self.startLoading = NO;
-            
+            if (_isFirst) {
+                _isFirst = NO;
+            }
             if (_page == 0) {
                 [_investStatusArray removeAllObjects];
                 [_investArray removeAllObjects];
@@ -129,8 +133,6 @@
                 }
             }
             
-            
-            
             NSArray *investArray = [MineLogoProjectBaseModel mj_objectArrayWithKeyValuesArray:dataDic[@"invest"]];
             //            NSLog(@"打印投资个数---%ld",(unsigned long)investArray.count);
             
@@ -156,7 +158,9 @@
                     //                    NSLog(@"加入数组陈宫");
                 }
             }
-            // NSLog(@"数组个数-----%ld",(unsigned long)_investArray.count);
+            
+//            NSLog(@"打印收到个数---%ld",(unsigned long)_committArray.count);
+//            NSLog(@"数组个数-----%ld",(unsigned long)_investArray.count);
             
             if (_committArray.count <= 0 && _investArray.count <= 0) {
                 self.tableView.isNone = YES;
@@ -210,7 +214,7 @@
     _tableView.dataSource = self;
     //    _tableView.bounces = NO;
     [self.view addSubview:_tableView];
-    _tableView.backgroundColor = colorGray;
+    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
     //自动改变透明度
@@ -240,7 +244,6 @@
 -(void)refreshHttp
 {
     _page = 0;
-    
     [self startLoadData];
     //    NSLog(@"下拉刷新");
 }
@@ -261,20 +264,22 @@
         if (_committArray.count) {
             return 40;
         }else{
-            return 0.00000000001f;
+            return 0.00000001f;
         }
     }
     
     if (_investArray.count) {
         return 40;
     }
-    return 0.0000000001f;
+    return 0.0000001f;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
         UIView *commentView = [UIView new];
-        commentView.backgroundColor = colorGray;
+        commentView.layer.borderColor = [UIColor groupTableViewBackgroundColor].CGColor;
+        commentView.layer.borderWidth = 0.5;
+        commentView.backgroundColor = [UIColor groupTableViewBackgroundColor];
         commentView.frame = CGRectMake(0, 0, SCREENWIDTH, 40);
         UILabel *title = [UILabel new];
         title.text = @"我认投的项目";
@@ -284,14 +289,21 @@
         [commentView addSubview:title];
         [title mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(10);
-            make.bottom.mas_equalTo(commentView.mas_bottom);
-            make.top.mas_equalTo(20);
+            make.bottom.mas_equalTo(commentView.mas_bottom).offset(-7);
+//            make.centerY.mas_equalTo(commentView.mas_centerY);
+            make.top.mas_equalTo(15);
         }];
         return commentView;
     }
     
     UIView *investView = [UIView new];
-    investView.backgroundColor = colorGray;
+//    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 10)];
+//    topView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+//    [investView addSubview:topView];
+    
+    investView.layer.borderColor = [UIColor groupTableViewBackgroundColor].CGColor;
+    investView.layer.borderWidth = 0.5;
+    investView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     investView.frame = CGRectMake(0, 0, SCREENWIDTH, 40);
     UILabel *title = [UILabel new];
     title.text = @"我收到的项目";
@@ -301,8 +313,9 @@
     [investView addSubview:title];
     [title mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(10);
-        make.bottom.mas_equalTo(investView.mas_bottom);
-        make.top.mas_equalTo(20);
+        make.bottom.mas_equalTo(investView.mas_bottom).offset(-7);
+        make.top.mas_equalTo(15);
+//        make.centerY.mas_equalTo(investView.mas_centerY).offset(5);
     }];
     return investView;
 }

@@ -34,6 +34,16 @@
     _rightBtn.layer.borderWidth = 0.5;
     _rightBtn.layer.borderColor = colorBlue.CGColor;
     
+    UIImageView *imagePoint = [UIImageView new];
+    imagePoint.image = [UIImage imageNamed:@"image-point.png"];
+    imagePoint.size = imagePoint.image.size;
+    imagePoint.x = _pointLabel.x;
+    imagePoint.y = _pointLabel.y + 4;
+    [self.contentView addSubview:imagePoint];
+    _pointLabel.hidden = YES;
+//    [imagePoint mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.right.mas_equalTo(self.contentView.mas_right).offset(-20);
+//    }];
 }
 
 -(void)setModel:(ProjectListProModel *)model

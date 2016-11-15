@@ -299,8 +299,16 @@
             
             
         
-        }else{
+        }else if ([status integerValue] == 401){
+            [self isAutoLogin];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (self.loginSucess) {
+                    self.loginSucess = NO;
+                    [self gotoInvest];
+                }
+            });
             
+        }else{
             [self closeBlackView];
             self.startLoading = NO;
             [self showAlertView:[jsonDic valueForKey:@"message"]];

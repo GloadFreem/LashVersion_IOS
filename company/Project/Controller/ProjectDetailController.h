@@ -40,4 +40,6 @@ typedef enum{
 
 @property (nonatomic, strong) UITableView *tableView;
 
+@property (nonatomic, assign) BOOL isPush;
+
 @end

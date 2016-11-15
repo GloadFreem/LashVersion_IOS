@@ -63,6 +63,8 @@ static EUNetWorkTool *_manager;
 
 -(void)cancleRequest
 {
+    [_manager.operationQueue cancelAllOperations];
+//    NSLog(@"取消请求");
 //    [_manager invalidateSessionCancelingTasks:YES];
 //    [_manager.session finishTasksAndInvalidate];
 }

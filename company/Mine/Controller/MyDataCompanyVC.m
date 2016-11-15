@@ -117,6 +117,13 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
 //            NSLog(@"修改成功");
+            NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
+            if ([self.titleName isEqualToString:@"公司"]) {
+                [data setObject:self.textField.text forKey:USER_STATIC_COMPANY_NAME];
+            }
+            if ([self.titleName isEqualToString:@"职位"]) {
+                [data setObject:self.textField.text forKey:USER_STATIC_POSITION];
+            }
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }else{
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
@@ -132,7 +139,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
     
-    NSLog(@"开始编辑");
+//    NSLog(@"开始编辑");
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -141,7 +148,7 @@
         
         self.textField.text = textField.text;
     }
-    NSLog(@"结束编辑");
+//    NSLog(@"结束编辑");
 }
 
 -(void)dealloc

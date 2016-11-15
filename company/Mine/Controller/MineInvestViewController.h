@@ -12,4 +12,5 @@
 @interface MineInvestViewController : RootViewController
 
 @property (nonatomic, assign) NSInteger type;
+@property (nonatomic, assign) BOOL isFirst;
 @end

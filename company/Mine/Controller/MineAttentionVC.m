@@ -375,7 +375,7 @@
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
-        }else{
+        }else {
             //结束刷新
             self.startLoading = NO;
             [self.tableView.mj_header endRefreshing];
@@ -743,7 +743,7 @@
 
 -(void)dealloc
 {
-    [[EUNetWorkTool shareTool] cancleRequest];
+//    [[EUNetWorkTool shareTool] cancleRequest];
     [self cancleRequest];
 }
 

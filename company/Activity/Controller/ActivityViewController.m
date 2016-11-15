@@ -116,6 +116,9 @@
     if (jsonDic != nil) {
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
             
             NSArray *dataArray = [NSArray arrayWithArray:jsonDic[@"data"]];
             NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
@@ -129,16 +132,23 @@
             //解析数据
             [self analysisActivityListData:dataArray];
 
+        }else if ([status integerValue] == 201){
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }else{
-
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
         }
         self.startLoading = NO;
     }else{
+        //结束刷新
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
          self.isNetRequestError  =YES;
     }
-    //结束刷新
-    [self.tableView.mj_header endRefreshing];
-    [self.tableView.mj_footer endRefreshing];
+    
 }
 
 -(void)analysisActivityListData:(NSArray*)array

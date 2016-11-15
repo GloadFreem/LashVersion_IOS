@@ -107,7 +107,9 @@
 -(void)loadInvestFriend
 {
     self.isSucess = YES;
-    [self loadShareData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadShareData];
+    });
 }
 -(void)setupBtns
 {
@@ -192,8 +194,8 @@
             _shareImage = dataDic[@"image"];
             _contentText = dataDic[@"content"];
             _shareTitle = dataDic[@"title"];
-        }else{
-        
+        }else if ([status integerValue] == 401){
+            [self isAutoLogin];
         }
     }
     
@@ -344,6 +346,16 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:YES];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+//    if (!self.isSucess) {
+//        self.isSucess = NO;
+//        [self isAutoLogin];
+////        NSLog(@"再次登录");
+//    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -354,7 +366,7 @@
 
 #pragma mark -进入头像详情页面
 - (IBAction)iconDetail:(UIButton *)sender {
-    if (self.isSucess) {
+//    if (self.isSucess) {
         MineDataVC *vc = [MineDataVC new];
         vc.mineVC = self;
         vc.position = _position;
@@ -362,45 +374,45 @@
         vc.iconImg = _iconBtn.currentBackgroundImage;
         [self.navigationController pushViewController:vc animated:YES];
         
-    }else{
-        //登录
-        [self isOnline];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (self.loginFailed) {//登录失败,进入登陆界面
-                
-                JTabBarController * tabBarController;
-                LoginRegistViewController * login;
-                for (UIViewController *vc in self.navigationController.viewControllers) {
-                    if ([vc isKindOfClass:LoginRegistViewController.class]) {
-                        login = (LoginRegistViewController*)vc;
-                    }else{
-                        if ([vc isKindOfClass:AppSetVC.class]) {
-                            
-                        }else{
-                            
-                            if ([vc isKindOfClass:JTabBarController.class]) {
-                                tabBarController = (JTabBarController*)vc;
-                            }else{
-                                [vc removeFromParentViewController];
-                            }
-                        }
-                    }
-                }
-                
-                if(!login)
-                {
-                    login = [[LoginRegistViewController alloc]init];
-                }
-                
-                UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
-                
-                AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-                delegate.nav = [[UINavigationController alloc]initWithRootViewController:login];
-                
-                keyWindow.rootViewController = delegate.nav;
-            }
-        });
-    }
+//    }else{
+//        //登录
+//        [self isAutoLogin];
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            if (self.loginFailed) {//登录失败,进入登陆界面
+//                
+//                JTabBarController * tabBarController;
+//                LoginRegistViewController * login;
+//                for (UIViewController *vc in self.navigationController.viewControllers) {
+//                    if ([vc isKindOfClass:LoginRegistViewController.class]) {
+//                        login = (LoginRegistViewController*)vc;
+//                    }else{
+//                        if ([vc isKindOfClass:AppSetVC.class]) {
+//                            
+//                        }else{
+//                            
+//                            if ([vc isKindOfClass:JTabBarController.class]) {
+//                                tabBarController = (JTabBarController*)vc;
+//                            }else{
+//                                [vc removeFromParentViewController];
+//                            }
+//                        }
+//                    }
+//                }
+//                
+//                if(!login)
+//                {
+//                    login = [[LoginRegistViewController alloc]init];
+//                }
+//                
+//                UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
+//                
+//                AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+//                delegate.nav = [[UINavigationController alloc]initWithRootViewController:login];
+//                
+//                keyWindow.rootViewController = delegate.nav;
+//            }
+//        });
+//    }
     
 }
 

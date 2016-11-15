@@ -18,7 +18,21 @@
     
     self.delegate = self;
     //1.设置当有导航栏自动添加64的高度的属性为NO
-    self.automaticallyAdjustsScrollViewInsets = NO;
+//    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    //实现全屏滑动返回
+    
+//    id target = self.interactivePopGestureRecognizer.delegate;
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wundeclared-selector"
+//    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:target action:@selector(handleNavigationTransition:)];
+//#pragma clang diagnostic pop
+//    [self.view addGestureRecognizer:pan];
+//    
+//    // 取消边缘滑动手势
+//    self.interactivePopGestureRecognizer.enabled = NO;
+//    
+//    pan.delegate = self;
 
 }
 #pragma mark -使用时只调用一次 设置一些全局变量
@@ -36,13 +50,32 @@
      
 }
 
+#pragma mark ---- <UIGestureRecognizerDelegate>
+
+
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+//{
+//    // 判断下当前是不是在根控制器
+//    return self.childViewControllers.count > 1;
+//}
+
+#pragma mark ---- <非根控制器隐藏底部tabbar>
+//- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
+//    if (self.viewControllers.count > 0) {
+//        
+//        viewController.hidesBottomBarWhenPushed = YES;
+//    }
+//    [super pushViewController:viewController animated:animated];
+//    
+//}
+
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     if (self.pushing == YES) {
-        NSLog(@"被拦截");
+//        NSLog(@"被拦截");
         return;
     } else {
-        NSLog(@"push");
+//        NSLog(@"push");
         self.pushing = YES;
     }
     
