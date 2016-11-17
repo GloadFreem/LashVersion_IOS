@@ -248,6 +248,7 @@
     if (_isMine) {
         self.navigationController.navigationBar.hidden = YES;
     }
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:[UIImageView new]];
 }
 -(void)viewWillDisappear:(BOOL)animated
 {

@@ -12,6 +12,13 @@
 #import "HeadlineViewController.h"
 #import "TankFastNewsController.h"
 #import "TankPointController.h"
+#import "NetStatusViewController.h"
+#import "AuthenticInfoBaseModel.h"
+
+#define DENGLU @"loginUser"
+#define LOGINUSER @"isLoginUser"
+#define AUTHENINFO @"authenticInfoUser"
+
 @interface TankViewController ()<UIScrollViewDelegate,GENENavTabBarDelegate>
 
 @property (nonatomic, strong) NSMutableArray *titles;
@@ -21,7 +28,8 @@
 @property (nonatomic, assign) NSInteger currentIndex;
 @property (nonatomic, strong) NSMutableArray *totalTitles;
 @property (nonatomic, assign) NSString *recordLastClickTitle;
-
+@property (nonatomic, copy) NSString *loginPartner;
+@property (nonatomic, copy) NSString *authenPartner;
 @end
 
 static void *RecordLastClickKey = @"RecordLastClickKey";
@@ -31,11 +39,155 @@ static void *RecordLastClickKey = @"RecordLastClickKey";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netNotEnable) name:@"netNotEnable" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netEnable) name:@"netEnable" object:nil];
+    
     self.view.backgroundColor = [UIColor whiteColor];
+    //获得认证partner
+    self.authenPartner = [TDUtil encryKeyWithMD5:KEY action:AUTHENINFO];
+    
     [self viewConfig];
     [self initConfig];
+    _netView  = [noNetView new];
+    _netView.frame = CGRectMake(0, 0, SCREENWIDTH, 40);
+    _netView.delegate = self;
+    
+    //自动登录
+    if ([TDUtil checkNetworkState] != NetStatusNone)
+    {
+        [self isLogin];
+    }else{
+        [self.view addSubview:_netView];
+    }
+}
+
+-(void)netEnable
+{
+    //    [self isLogin];
+    if (_netView) {
+        [_netView removeFromSuperview];
+    }
+    if (!self.online  && !self.loginSucess) {
+        [self isAutoLogin];
+    }
+}
+
+-(void)netNotEnable
+{
+    [self.view addSubview:_netView];
+}
+
+#pragma mark-------------没有网络点击事件处理--------------
+-(void)didClickBtnInView
+{
+    NetStatusViewController *netStatus =[NetStatusViewController new];
+    netStatus.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:netStatus animated:YES];
+}
+
+#pragma mark-------------------------自动登录-----------------------
+-(void)isLogin
+{
+    _loginPartner = [TDUtil encryKeyWithMD5:KEY action:LOGINUSER];
+    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.loginPartner,@"partner", nil];
+    //开始请求
+//    [self.httpUtil getDataFromAPIWithOps:ISLOGINUSER postParam:dic type:0 delegate:self sel:@selector(requestIsLogin:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(ISLOGINUSER) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSLog(@"登陆状态在线");
+            //下载认证信息
+            [self loadAuthenData];
+            
+            [self loadOtherData];
+        }else if ([dic[@"status"] integerValue] == 401){
+            //自动登录
+            [self isAutoLogin];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (self.loginSucess ) {
+                    [self loadAuthenData];
+                    [self loadOtherData];
+                }
+            });
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self isAutoLogin];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (self.loginSucess ) {
+                [self loadAuthenData];
+                [self loadOtherData];
+            }
+        });
+    }];
     
 }
+
+#pragma mark -------------------下载认证信息--------------------------
+-(void)loadAuthenData
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
+    //开始请求
+//    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(AUTHENTIC_INFO) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:dic[@"data"]];
+//                        NSLog(@"打印字典---%@",dataDic);
+            AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
+            //            authenticModel = baseModel;
+            //            NSLog(@"打印个人信息：----%@",baseModel);
+            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+            
+            [data setValue:baseModel.headSculpture forKey:USER_STATIC_HEADER_PIC];
+            [data setValue:baseModel.telephone forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+            [data setValue:[NSString stringWithFormat:@"%ld",(long)baseModel.userId] forKey:USER_STATIC_USER_ID];
+            
+            NSMutableString *areaStr = [[NSMutableString alloc]init];
+            if (baseModel.areas.count) {
+                for (NSInteger i = 0; i < baseModel.areas.count; i++) {
+                    if (i!= baseModel.areas.count - 1) {
+                        [areaStr appendFormat:@"%@ | ",baseModel.areas[i]];
+                    }else{
+                        [areaStr appendFormat:@"%@",baseModel.areas[i]];
+                    }
+                }
+            }
+            [data setValue:areaStr forKey:USER_STATIC_INVEST_AREAS];
+            
+            NSArray *authenticsArray = baseModel.authentics;
+            if (authenticsArray.count) {
+                ProjectAuthentics *authentics = authenticsArray[0];
+                [data setObject:authentics.city.name forKey:USER_STATIC_CITY];
+                [data setObject:authentics.city.province.name forKey:USER_STATIC_PROVINCE];
+                [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
+                [data setValue:authentics.name forKey:USER_STATIC_NAME];
+                [data setValue:authentics.identiyCarA forKey:USER_STATIC_IDPIC];
+                [data setValue:authentics.identiyCarNo forKey:USER_STATIC_IDNUMBER];
+                [data setValue:authentics.position forKey:USER_STATIC_POSITION];
+                [data setValue:authentics.authenticstatus.name forKey:USER_STATIC_USER_AUTHENTIC_STATUS];
+                [data setValue:[NSString stringWithFormat:@"%ld",(long)authentics.identiytype.identiyTypeId] forKey:USER_STATIC_USER_AUTHENTIC_TYPE];
+                [data setValue:[NSString stringWithFormat:@"%@",authentics.identiytype.name] forKey:USER_STATIC_USER_AUTHENTIC_NAME];
+                [data setValue:[NSString stringWithFormat:@"%ld",(long)authentics.authId] forKey:USER_STATIC_AUTHID];
+                [data setValue:authentics.introduce forKey:USER_STATIC_INTRODUCE];
+                [data setValue:authentics.companyIntroduce forKey:USER_STATIC_COMPANYINTRODUCE];
+            }
+//            NSLog(@"认证信息下载成功");
+            [data synchronize];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+}
+
+-(void)loadOtherData
+{
+    if (self.online || self.loginSucess) {
+        NSLog(@"下载其他数据");
+    }
+}
+
+
 
 - (void)viewConfig
 {
@@ -204,6 +356,9 @@ static void *RecordLastClickKey = @"RecordLastClickKey";
 {
     [super viewWillDisappear:animated];
     self.navigationController.navigationBarHidden = NO;
+    if (self.online || self.loginSucess) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"hasLogin" object:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -211,5 +366,9 @@ static void *RecordLastClickKey = @"RecordLastClickKey";
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end

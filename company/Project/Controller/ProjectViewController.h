@@ -7,12 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "noNetView.h"
 
-@interface ProjectViewController : RootViewController<noNetViewDelegate>
 
-@property (nonatomic, copy) NSString *loginPartner;
-@property (nonatomic, strong) noNetView *netView;
+@interface ProjectViewController : RootViewController
 
 //登录状态
 @property (nonatomic, assign)BOOL hasLogin;

@@ -23,6 +23,7 @@
 
 @property (nonatomic, copy) NSString *addressPartner;
 
+@property (nonatomic, copy) NSString *address;
 @end
 
 @implementation MineDeatilAreaVC
@@ -83,18 +84,9 @@
     
     self.startLoading = YES;
     
-    [self.httpUtil getDataFromAPIWithOps:CITY_LIST postParam:dic type:0 delegate:self sel:@selector(requestCity:)];
-}
-
--(void)requestCity:(ASIHTTPRequest *)request
-{
-    NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* dic = [jsonString JSONValue];
-    if (dic != nil) {
-        NSString *status = [dic objectForKey:@"status"];
-        if ([status integerValue] == 200)  {
-            
+    [[EUNetWorkTool shareTool] POST:JZT_URL(CITY_LIST) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
             self.startLoading = NO;
             
             NSArray *dataArray = [NSArray arrayWithArray:dic[@"data"]];
@@ -111,17 +103,12 @@
             [_tableView reloadData];
         }else{
             self.startLoading = NO;
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic objectForKey:@"message"]];
         }
-    }else{
-        self.isNetRequestError = YES;
-    }
-    
-}
-
--(void)requestFailed:(ASIHTTPRequest *)request
-{
-    self.startLoading = YES;
-    self.isNetRequestError = YES;
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           self.startLoading = YES;
+           self.isNetRequestError = YES;
+    }];
 }
 
 -(void)refresh
@@ -169,49 +156,45 @@
         address = [NSString stringWithFormat:@"%@ | %@",self.province,self.city];
         
     }
+    _address = address;
     _cityId = [NSString stringWithFormat:@"%@",_idArray[indexPath.row]];
     
     
     [self modifyAddress];
     
-    for (UIViewController *VC in self.navigationController.viewControllers) {
-        if ([VC isKindOfClass:[MIneAreaVC class]]) {
-            [VC removeFromParentViewController];
-            
-        }
-        
-        if ([VC isKindOfClass:[MineDataVC class]]) {
-            MineDataVC *vc = (MineDataVC*)VC;
-            vc.address = address;
-            [vc.tableView reloadData];
-            
-            [self.navigationController popToViewController:vc animated:YES];
-        }
-    }
-    
 }
 -(void)modifyAddress
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.addressPartner,@"partner",_cityId,@"cityId", nil];
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_MODIFY_CITY postParam:dic type:1 delegate:self sel:@selector(requestAddress:)];
-}
--(void)requestAddress:(ASIHTTPRequest *)request
-{
-    NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* dic = [jsonString JSONValue];
-    if (dic!= nil) {
-        NSString *status = [dic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-//            NSLog(@"城市修改成功");
-        NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
-        [data setObject:self.city forKey:USER_STATIC_CITY];
-        [data setObject:self.province forKey:USER_STATIC_PROVINCE];
-        [data synchronize];
+//    [self.httpUtil getDataFromAPIWithOps:REQUEST_MODIFY_CITY postParam:dic type:1 delegate:self sel:@selector(requestAddress:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_MODIFY_CITY) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
+            [data setObject:self.city forKey:USER_STATIC_CITY];
+            [data setObject:self.province forKey:USER_STATIC_PROVINCE];
+            [data synchronize];
+//            NSLog(@"修改成功");
+            for (UIViewController *VC in self.navigationController.viewControllers) {
+                if ([VC isKindOfClass:[MIneAreaVC class]]) {
+                    [VC removeFromParentViewController];
+                    
+                }
+                
+                if ([VC isKindOfClass:[MineDataVC class]]) {
+                    MineDataVC *vc = (MineDataVC*)VC;
+                    vc.address = _address;
+                    [vc.tableView reloadData];
+                    
+                    [self.navigationController popToViewController:vc animated:YES];
+                }
+            }
         }else{
-//            NSLog(@"城市修改失败");
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic objectForKey:@"message"]];
         }
-    }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:error.localizedDescription];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

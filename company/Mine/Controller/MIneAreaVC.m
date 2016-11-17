@@ -74,19 +74,9 @@
     NSDictionary *dic= [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner", nil];
     
     self.startLoading = YES;
-    
-    [self.httpUtil getDataFromAPIWithOps:PROVINCE_LIST postParam:dic type:0 delegate:self sel:@selector(requestProvice:)];
-}
-
--(void)requestProvice:(ASIHTTPRequest *)request
-{
-    NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* dic = [jsonString JSONValue];
-    if (dic!=nil) {
-        NSString *status = [dic objectForKey:@"status"];
-        if ([status integerValue] == 200) {
-            
+    [[EUNetWorkTool shareTool] POST:JZT_URL(PROVINCE_LIST) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
             self.startLoading = NO;
             
             NSArray *dataArray = [[NSArray alloc]initWithArray:dic[@"data"]];
@@ -101,21 +91,18 @@
                 self.tableView.isNone = NO;
                 self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
             }
-//            NSLog(@"数据下载成功");
+            //            NSLog(@"数据下载成功");
             [_tableView reloadData];
         }else{
             self.startLoading = NO;
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic objectForKey:@"message"]];
         }
-    }else{
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        self.startLoading = YES;
         self.isNetRequestError = YES;
-    }
+    }];
 }
 
--(void)requestFailed:(ASIHTTPRequest *)request
-{
-    self.startLoading = YES;
-    self.isNetRequestError = YES;
-}
 
 -(void)refresh
 {

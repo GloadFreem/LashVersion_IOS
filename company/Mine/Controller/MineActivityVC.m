@@ -109,47 +109,47 @@
         self.startLoading = YES;
     }
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:LOGO_ACTIVITY_LIST postParam:dic type:0 delegate:self sel:@selector(requestInvestList:)];
-}
-
--(void)requestInvestList:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
-    if (_page == 0) {
-        [_tempArray removeAllObjects];
-    }
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            
+//    [self.httpUtil getDataFromAPIWithOps:LOGO_ACTIVITY_LIST postParam:dic type:0 delegate:self sel:@selector(requestInvestList:)];
+    [[EUNetWorkTool shareTool]POST:JZT_URL(LOGO_ACTIVITY_LIST) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue]== 200) {
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+            if (_page == 0) {
+                [_tempArray removeAllObjects];
+            }
             _isFirst = NO;
             self.startLoading = NO;
-//            NSMutableArray *tempArray = [NSMutableArray new];
-            NSArray *modelArray = [ActivityViewModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
+            //            NSMutableArray *tempArray = [NSMutableArray new];
+            NSArray *modelArray = [ActivityViewModel mj_objectArrayWithKeyValuesArray:dic[@"data"]];
             for (NSInteger i =0; i < modelArray.count; i ++) {
                 ActivityViewModel *model = modelArray[i];
                 [_tempArray addObject:model];
             }
             self.dataArray = _tempArray;
+        }else if ([dic[@"status"] integerValue] == 201){
+            self.startLoading = NO;
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }else{
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+            self.startLoading = NO;
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];
         }
-    }else{
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        //结束刷新
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+        
+        self.startLoading = YES;
         self.isNetRequestError = YES;
-    }
-    //结束刷新
-    [self.tableView.mj_header endRefreshing];
-    [self.tableView.mj_footer endRefreshing];
+    } ];
 }
 
--(void)requestFailed:(ASIHTTPRequest *)request
-{
-    self.startLoading = YES;
-    self.isNetRequestError = YES;
-}
 
 -(void)refresh
 {

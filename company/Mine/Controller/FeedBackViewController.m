@@ -73,44 +73,45 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",_textView.text,@"content", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUESTFEEDBACK postParam:dic type:0 delegate:self sel:@selector(requestFeedBack:)];
-    
-}
--(void)requestFeedBack:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] ==200) {
-            
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"感谢您的宝贵意见"];
-            
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"金指投非常感谢您反馈的宝贵意见" delegate:nil  cancelButtonTitle:nil otherButtonTitles:nil, nil, nil];
-//            
-//            [alert show];
-//            _alert = alert;
-//            
-//            NSTimer *timer;
-//            
-//            timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(hideAlert) userInfo:nil repeats:NO];
-            
-        [self performSelector:@selector(leftBack) withObject:nil afterDelay:3];
-            
+//    [self.httpUtil getDataFromAPIWithOps:REQUESTFEEDBACK postParam:dic type:0 delegate:self sel:@selector(requestFeedBack:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUESTFEEDBACK) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"感谢您的宝贵意见"];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self leftBack];
+            });
         }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];
         }
-    }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
     
 }
+//-(void)requestFeedBack:(ASIHTTPRequest *)request
+//{
+//    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+//    //    NSLog(@"返回:%@",jsonString);
+//    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+//    if (jsonDic != nil) {
+//        NSString *status = [jsonDic valueForKey:@"status"];
+//        if ([status integerValue] ==200) {
+//            
+//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"感谢您的宝贵意见"];
+//            
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                [self leftBack];
+//            });
+////        [self performSelector:@selector(leftBack) withObject:nil afterDelay:3];
+//            
+//        }else{
+//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+//        }
+//    }
+//    
+//}
 
--(void)hideAlert
-{
-    [_alert dismissWithClickedButtonIndex:0 animated:NO];
-    _alert = nil;
-    [self performSelector:@selector(leftBack) withObject:nil afterDelay:2];
-}
 -(void)createTextView
 {
     _textView = [UITextView new];
@@ -185,14 +186,5 @@
 {
     [self cancleRequest];
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

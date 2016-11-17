@@ -78,18 +78,8 @@
             [_datavc.tableView reloadData];
             [self modifyPosition];
         }
-//        for (UIViewController *VC in self.navigationController.viewControllers)
-//        {
-//            if ([VC isKindOfClass:[MineViewController class]]) {
-//                MineViewController *vc = (MineViewController*)VC;
-//                
-//                //            vc.cityId = _idArray[indexPath.row];
-//                //        _city = [NSString stringWithFormat:@"%@",_idArray[indexPath.row]];
-//                [vc loadAuthenData];
-//                
-//            }
-//        }
-        [self.navigationController popViewControllerAnimated:YES];
+        
+//        [self.navigationController popViewControllerAnimated:YES];
         
     }else{
     [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入正确信息"];
@@ -100,36 +90,37 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.positionPartner,@"partner",self.textField.text,@"position", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_MODIFY_POSITION postParam:dic type:0 delegate:self sel:@selector(requestModifyCompany:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_MODIFY_POSITION) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
+            [data setObject:self.textField.text forKey:USER_STATIC_POSITION];
+            [self.navigationController popViewControllerAnimated:YES];
+        }else{
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic objectForKey:@"message"]];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 -(void)modifyCompany
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",self.textField.text,@"name", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_MODIFY_COMPANY postParam:dic type:0 delegate:self sel:@selector(requestModifyCompany:)];
-}
--(void)requestModifyCompany:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-//            NSLog(@"修改成功");
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_MODIFY_COMPANY) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
             NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
-            if ([self.titleName isEqualToString:@"公司"]) {
-                [data setObject:self.textField.text forKey:USER_STATIC_COMPANY_NAME];
-            }
-            if ([self.titleName isEqualToString:@"职位"]) {
-                [data setObject:self.textField.text forKey:USER_STATIC_POSITION];
-            }
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+            [data setObject:self.textField.text forKey:USER_STATIC_COMPANY_NAME];
+            [self.navigationController popViewControllerAnimated:YES];
         }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic objectForKey:@"message"]];
         }
-    }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
+
 #pragma mark -textFiledDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];

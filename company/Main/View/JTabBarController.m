@@ -47,13 +47,16 @@
 //初始化自控制器
 -(void)initChildViewControllers
 {
+    [self setupController:[[TankViewController alloc]init] image:@"thinktank_tab.png" selectedImage:@"thinktank_tab_sel.png" title:@"智库"];
+    
     [self setupController:[[ProjectViewController alloc]init] image:@"project.png" selectedImage:@"project_selected.png" title:@"项目"];
-    [self setupController:[[DiscoverViewController alloc]init] image:@"discover_tab.png" selectedImage:@"discover_tab_sel.png" title:@"发现"];
     
     [self setupController:[[UIViewController alloc]init] image:@"tabBar_mine" selectedImage:@"tabBar_mine" title:@""];
     
+    [self setupController:[[DiscoverViewController alloc]init] image:@"discover_tab.png" selectedImage:@"discover_tab_sel.png" title:@"发现"];
+    
     [self setupController:[[ActivityViewController alloc]init] image:@"activity.png" selectedImage:@"activity_selected.png" title:@"活动"];
-    [self setupController:[[TankViewController alloc]init] image:@"thinktank_tab.png" selectedImage:@"thinktank_tab_sel.png" title:@"智库"];
+    
 }
 
 //设置控制器

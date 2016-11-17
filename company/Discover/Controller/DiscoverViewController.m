@@ -12,7 +12,9 @@
 #import "SDCycleScrollView.h"
 #import "ProjectBannerModel.h"
 #import "ProjectBannerListModel.h"
+#import "ProjectLetterViewController.h"
 
+#define HASMESSAGE @"requestHasMessageInfo"
 @interface DiscoverViewController ()<SDCycleScrollViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -21,6 +23,9 @@
 @property (nonatomic, strong) SDCycleScrollView *bannerView;
 @property (nonatomic, strong) NSMutableArray *bannerUrlArray;
 @property (nonatomic, strong) NSMutableArray *bannerModelArray;
+@property (nonatomic, assign) BOOL hasMessage;
+@property (nonatomic, strong) UIButton *letterBtn;
+@property (nonatomic, copy) NSString *hasMessagePartner;
 
 @end
 
@@ -70,7 +75,7 @@
 /** 点击图片回调 */
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
 {
-    NSLog(@"点击了第%ld张图片",index);
+//    NSLog(@"点击了第%ld张图片(long)",index);
 }
 -(UIScrollView *)scrollView
 {
@@ -223,6 +228,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setLetterStatus:) name:@"setLetterStatus" object:nil];
+    //站内信
+    self.hasMessagePartner = [TDUtil encryKeyWithMD5:KEY action:HASMESSAGE];
     //先从数据库加载 没有数据  则进行数据请求
 //    NSArray *bannerArray = [self getDataFromBaseTable:BANNERTABLE];
 //    if (bannerArray.count) {
@@ -268,9 +276,63 @@
 //    [self setBanner];
 }
 
+-(void)setNav
+{
+    UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    letterBtn.tag = 0;
+    //通过判断返回数据状态来决定背景图片
+    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+    letterBtn.size = letterBtn.currentBackgroundImage.size;
+    [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
+    _letterBtn = letterBtn;
+}
+
+-(void)buttonCilck:(UIButton *)button
+{
+    if (button.tag == 0) {
+        //改变已读
+        [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+        
+        ProjectLetterViewController *letter = [ProjectLetterViewController new];
+        letter.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:letter animated:YES];
+        
+    }
+}
+#pragma mark-------------------站内信通知信息----------------------
+-(void)setLetterStatus:(NSNotification*)notification
+{
+    //    UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    //    letterBtn.tag = 0;
+    if (notification) {
+        _hasMessage = YES;
+        NSLog(@"通知设置的");
+    }
+    
+    //通过判断返回数据状态来决定背景图片
+    //    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
+    if (_hasMessage) {//message_new@2x
+        [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
+    }
+    
+    //    letterBtn.size = letterBtn.currentBackgroundImage.size;
+    //    [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
+    //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
+    //    _letterBtn = letterBtn;
+}
+
 -(void)createUI
 {
     self.navigationItem.title = @"发现";
+    [self setNav];
+    //设置站内信状态
+    [self setLetterStatus:nil];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadMessage];
+    });
+    
     [self.view addSubview:self.scrollView];
     
     [_scrollView addSubview:self.circleEnter];
@@ -278,6 +340,30 @@
 //    [_scrollView addSubview:self.bannerView];
     
 }
+
+#pragma mark--------------------是否站内信未读--------------------
+-(void)loadMessage
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.hasMessagePartner,@"partner", nil];
+
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_HASMESSAGE_INFO) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+//        NSLog(@"%@",dic);
+        if ([dic[@"status"] integerValue] == 200) {
+            NSMutableDictionary *data = [NSMutableDictionary dictionaryWithDictionary:dic[@"data"]];
+            _hasMessage = [[data objectForKey:@"flag"] boolValue];
+            if (_hasMessage) {//message_new@2x
+                [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
+//                NSLog(@"下载数据有新的");
+            }
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    
+}
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

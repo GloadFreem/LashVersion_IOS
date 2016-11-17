@@ -67,28 +67,12 @@
     self.goldUsepartner = [TDUtil encryKeyWithMD5:KEY action:GOLDUSERULE];
     
     [self startLoadData];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self loadCode];
-    });
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self loadGetRule];
-    });
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self loadUseRule];
-    });
-    
-    
-    
 }
 #pragma maker-------邀请码
 -(void)loadCode
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",nil];
     //开始请求
-//    [self.httpUtil getDataFromAPIWithOps:REQUEST_GOLD_INVITE_FRIEND postParam:dic type:0 delegate:self sel:@selector(requestInviteCode:)];
     [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_GOLD_INVITE_FRIEND) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary  *dic = responseObject;
         if ([dic[@"status"] integerValue] == 200) {
@@ -98,8 +82,10 @@
             _shareImage = data[@"image"];
             _shareTitle = data[@"title"];
             _shareContent = data[@"content"];
+            [self startShare];
             
         }else{
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         self.startLoading = YES;
@@ -113,60 +99,40 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",nil];
     //开始请求
-//    [self.httpUtil getDataFromAPIWithOps:REQUEST_GOLD_USE_RULE postParam:dic type:0 delegate:self sel:@selector(requestUseRule:)];
     [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_GOLD_USE_RULE) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = responseObject;
         if ([dic[@"status"] integerValue] == 200) {
             NSDictionary *data = [NSDictionary dictionaryWithDictionary:dic[@"data"]];
             _useUrl = data[@"url"];
+            PingTaiWebViewController *vc = [PingTaiWebViewController new];
+            vc.url = _useUrl;
+            vc.titleStr = @"金条使用规则";
+            [self.navigationController pushViewController:vc animated:YES];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
 }
--(void)requestUseRule:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status =[jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *data = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            _useUrl = data[@"url"];
-        }
-    }
-}
+
 #pragma mark-------积累规则
 -(void)loadGetRule
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",nil];
     //开始请求
-//    [self.httpUtil getDataFromAPIWithOps:REQUEST_GOLD_GET_RULE postParam:dic type:0 delegate:self sel:@selector(requestGetRule:)];
     [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_GOLD_GET_RULE) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = responseObject;
         if ([dic[@"status"] integerValue] == 200) {
             NSDictionary *data = [NSDictionary dictionaryWithDictionary:dic[@"data"]];
             _getUrl = data[@"url"];
+            PingTaiWebViewController *vc = [PingTaiWebViewController new];
+            vc.url = _getUrl;
+            vc.titleStr = @"金条积累规则";
+            [self.navigationController pushViewController:vc animated:YES];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
 }
--(void)requestGetRule:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status =[jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *data = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            _getUrl = data[@"url"];
-        }
-    }
-}
-
 -(void)startLoadData
 {
     if (_isFirst) {
@@ -192,29 +158,6 @@
         self.isNetRequestError = YES;
     }];
     
-//    [self.httpUtil getDataFromAPIWithOps:LOGO_GOLD_ACCOUNT postParam:dic type:0 delegate:self sel:@selector(requestGoldInfo:)];
-    
-}
-
--(void)requestGoldInfo:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
-    if (jsonDic !=nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            
-            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            
-            _count = [dataDic valueForKey:@"count"];
-            [self setModel];
-            
-        }else{
-            self.isNetRequestError = YES;
-        }
-    }
 }
 
 -(void)setModel
@@ -255,29 +198,17 @@
         case 1:
         {//邀请码
             //开始分享
-            // 创建
-//            NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(startShare) object:nil];
-//            
-//            // 启动
-//            [thread start];
-            [self startShare];
-            
+            [self loadCode];
         }
             break;
         case 2:
         {//积累
-            PingTaiWebViewController *vc = [PingTaiWebViewController new];
-            vc.url = _getUrl;
-            vc.titleStr = @"金条积累规则";
-            [self.navigationController pushViewController:vc animated:YES];
+            [self loadGetRule];
         }
             break;
         case 3:
         {//使用
-            PingTaiWebViewController *vc = [PingTaiWebViewController new];
-            vc.url = _useUrl;
-            vc.titleStr = @"金条使用规则";
-            [self.navigationController pushViewController:vc animated:YES];
+            [self loadUseRule];
         }
             break;
             

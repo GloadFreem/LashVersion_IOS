@@ -262,129 +262,26 @@
                     _isSecond = NO;
                 }
             }
-            
             //结束刷新
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
-        }else{
+        }else if([dic[@"status"] integerValue] == 201){
             //结束刷新
             self.startLoading = NO;
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
         
+        }else{
+            self.startLoading = NO;
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         self.startLoading = YES;
         self.isNetRequestError = YES;
     }];
-    //开始请求
-//    [self.httpUtil getDataFromAPIWithOps:LOGO_ATTENTION_LIST postParam:dic type:0 delegate:self sel:@selector(requestInvestList:)];
-}
-
--(void)requestInvestList:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    //如果刷新到顶部  移除原来数组数据
-    if (_page == 0) {
-        if (_selectedTableView == 0) {
-            [_temProjectArray removeAllObjects];
-        }
-        if (_selectedTableView == 1) {
-            [_temInvestArray removeAllObjects];
-            [_identifyArray removeAllObjects];
-        }
-    }
-    
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            
-            self.startLoading = NO;
-            
-            //项目
-            if (_selectedTableView == 0) {
-                NSArray *dataArray = [MineCollectionProjectModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
-//                NSMutableArray *tempArray = [NSMutableArray new];
-                for (NSInteger i = 0; i < dataArray.count; i ++) {
-                    ProjectListProModel *listModel = [ProjectListProModel new];
-                    MineCollectionProjectModel *baseModel = dataArray[i];
-                    listModel.startPageImage = baseModel.startPageImage;
-                    listModel.abbrevName = baseModel.abbrevName;
-                    listModel.address = baseModel.address;
-                    listModel.fullName = baseModel.fullName;
-                    listModel.status = baseModel.financestatus.name;
-                    listModel.projectId  = baseModel.projectId;
-                  
-                    listModel.areas = [baseModel.industoryType componentsSeparatedByString:@"，"];
-                    listModel.collectionCount = baseModel.collectionCount;
-                    MineRoadshows *roadshows = baseModel.roadshows[0];
-                    listModel.financeTotal = roadshows.roadshowplan.financeTotal;
-                    listModel.financedMount = roadshows.roadshowplan.financedMount;
-                    listModel.endDate = roadshows.roadshowplan.endDate;
-                    
-                    [_statusArray addObject:baseModel.financestatus.name];
-                    [_temProjectArray addObject:listModel];
-                }
-                self.projectArray = _temProjectArray;
-                if (_isFirst) {
-                    _isFirst = NO;
-                }
-            }
-//            NSLog(@"数组个数---%ld",_projectArray.count);
-            //投资
-            if (_selectedTableView == 1) {
-                NSArray *dataArray = [MineCollectionInvestModel mj_objectArrayWithKeyValuesArray:jsonDic[@"data"]];
-//                NSMutableArray *tempArray = [NSMutableArray new];
-                for (NSInteger i =0; i < dataArray.count; i ++) {
-                    MineCollectionInvestModel *baseModel = dataArray[i];
-                    MineCollectionListModel *listModel = [MineCollectionListModel new];
-                    listModel.headSculpture = baseModel.usersByUserCollectedId.headSculpture;
-//                    listModel.name = baseModel.usersByUserId.name;
-                    MAuthentics *authentics = baseModel.usersByUserCollectedId.authentics[0];
-                    listModel.name = authentics.name;
-                    listModel.position = authentics.position;
-                    listModel.identiyTypeId = authentics.identiytype.name;
-                    listModel.companyName = authentics.companyName;
-                    NSString *city = authentics.city.name;
-                    NSString *province = authentics.city.province.name;
-                    if ([city isEqualToString:@"北京市"] || [city isEqualToString:@"上海市"] || [city isEqualToString:@"天津市"] || [city isEqualToString:@"重庆市"] || [city isEqualToString:@"香港"] || [city isEqualToString:@"澳门"] || [city isEqualToString:@"钓鱼岛"]) {
-                        listModel.companyAddress = [NSString stringWithFormat:@"%@",province];
-                    }else{
-                        listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province,city];
-                    }
-                    
-//                    listModel.companyAddress = [NSString stringWithFormat:@"%@ | %@",province,city];
-                    listModel.areas = [authentics.industoryArea componentsSeparatedByString:@"，"];
-                    listModel.introduce = authentics.introduce;
-                    listModel.userId = baseModel.usersByUserCollectedId.userId;
-//
-                    //身份
-                    if (authentics.identiytype.name) {
-                        [_identifyArray addObject:authentics.identiytype.name];
-                    }
-                    [_temInvestArray addObject:listModel];
-                }
-                self.investArray = _temInvestArray;
-                if (_isSecond) {
-                    _isSecond = NO;
-                }
-            }
-            
-            //结束刷新
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
-        }else {
-            //结束刷新
-            self.startLoading = NO;
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
-//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-        }
-    }else{
-        self.isNetRequestError = YES;
-    }
 }
 
 -(void)setProjectArray:(NSMutableArray *)projectArray
@@ -475,27 +372,6 @@
             [self startLoadData];
         }
         
-        switch (index) {
-            case 0:
-            {
-                
-                
-            }
-                break;
-            case 1:
-            {
-                
-            }
-                break;
-            case 2:
-            {
-                
-                
-            }
-                break;
-            default:
-                break;
-        }
     }
 }
 

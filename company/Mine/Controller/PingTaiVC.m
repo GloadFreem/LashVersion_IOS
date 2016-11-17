@@ -31,15 +31,6 @@
 
 @implementation PingTaiVC
 
--(id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder]) {
-        
-    }
-    
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -60,83 +51,92 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.platformPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUESTPLATFORMINTRODUCE postParam:dic type:1 delegate:self sel:@selector(requestPlatform:)];
-    
-}
--(void)requestPlatform:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *dic = [jsonDic valueForKey:@"data"];
-            _paltformUrl = dic[@"url"];
+//    [self.httpUtil getDataFromAPIWithOps:REQUESTPLATFORMINTRODUCE postParam:dic type:1 delegate:self sel:@selector(requestPlatform:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUESTPLATFORMINTRODUCE) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSDictionary *dicM = [dic valueForKey:@"data"];
+            _paltformUrl = dicM[@"url"];
+            PingTaiWebViewController *vc = [PingTaiWebViewController new];
+            vc.url = _paltformUrl;
+            vc.titleStr = @"平台介绍";
+            if (vc.url.length) {
+                [self.navigationController  pushViewController:vc animated:YES];
+            }
         }
-    }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    
 }
 
 -(void)loadUserIntroduce
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.userIntroducePartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUESTUSERGUIDE postParam:dic type:1 delegate:self sel:@selector(requestUser:)];
+//    [self.httpUtil getDataFromAPIWithOps:REQUESTUSERGUIDE postParam:dic type:1 delegate:self sel:@selector(requestUser:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUESTUSERGUIDE) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSDictionary *dicM = [dic valueForKey:@"data"];
+            _userUrl = dicM[@"url"];
+            PingTaiWebViewController *vc = [PingTaiWebViewController new];
+            vc.url = _userUrl;
+            vc.titleStr = @"新手指南";
+            if (vc.url.length) {
+                [self.navigationController  pushViewController:vc animated:YES];
+            }
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 
--(void)requestUser:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *dic = [jsonDic valueForKey:@"data"];
-            _userUrl = dic[@"url"];
-        }
-    }
-}
 
 -(void)loadProtocol
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.protocolPartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUESTUSERPROTOCOL postParam:dic type:1 delegate:self sel:@selector(requestProtocol:)];
-}
--(void)requestProtocol:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *dic = [jsonDic valueForKey:@"data"];
-            _protocolUrl = dic[@"url"];
+//    [self.httpUtil getDataFromAPIWithOps:REQUESTUSERPROTOCOL postParam:dic type:1 delegate:self sel:@selector(requestProtocol:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUESTUSERPROTOCOL) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSDictionary *dicM = [dic valueForKey:@"data"];
+            _protocolUrl = dicM[@"url"];
+            PingTaiWebViewController *vc = [PingTaiWebViewController new];
+            vc.url = _protocolUrl;
+            vc.titleStr = @"用户协议";
+            if (vc.url.length) {
+                [self.navigationController  pushViewController:vc animated:YES];
+            }
         }
-    }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
+
 -(void)loadLawer
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.lawerpartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUESTLAWERINTRODUCE postParam:dic type:1 delegate:self sel:@selector(requestLawer:)];
+//    [self.httpUtil getDataFromAPIWithOps:REQUESTLAWERINTRODUCE postParam:dic type:1 delegate:self sel:@selector(requestLawer:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUESTLAWERINTRODUCE) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSDictionary *dicM = [dic valueForKey:@"data"];
+            _lawerurl = dicM[@"url"];
+            PingTaiWebViewController *vc = [PingTaiWebViewController new];
+            vc.url = _lawerurl;
+            vc.titleStr = @"免责声明";
+            if (vc.url.length) {
+                [self.navigationController  pushViewController:vc animated:YES];
+            }
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 
--(void)requestLawer:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *dic = [jsonDic valueForKey:@"data"];
-            _lawerurl = dic[@"url"];
-        }
-    }
-}
 
 
 
@@ -158,36 +158,35 @@
 }
 - (IBAction)btnClick:(UIButton *)sender {
     
-    PingTaiWebViewController *vc = [PingTaiWebViewController new];
-    if (sender.tag == 0) {
-        [self loadPlatform];
-        
-        vc.url = _paltformUrl;
-        vc.titleStr = @"平台介绍";
-    }
-    if (sender.tag == 1) {
-        [self loadUserIntroduce];
-        vc.url = _userUrl;
-        vc.titleStr = @"新手指南";
-    }
-    if (sender.tag == 2) {
-        [self loadProtocol];
-        vc.url = _protocolUrl;
-        vc.titleStr = @"用户协议";
-    }
-    if (sender.tag == 3) {
-        [self loadLawer];
-        vc.url = _lawerurl;
-        vc.titleStr = @"免责声明";
-    }
-    if (vc.url.length) {
-        [self.navigationController  pushViewController:vc animated:YES];
+    switch (sender.tag) {
+        case 0:{
+            [self loadPlatform];
+
+        }
+            break;
+        case 1:{
+            [self loadUserIntroduce];
+
+        }
+            break;
+        case 2:{
+            [self loadProtocol];
+
+        }
+            break;
+        case 3:{
+            [self loadLawer];
+        }
+            break;
+        case 4:{
+            FeedBackViewController *vc = [FeedBackViewController new];
+            [self.navigationController  pushViewController:vc animated:YES];
+        }
+            break;
+        default:
+            break;
     }
     
-    if (sender.tag == 4) {
-        FeedBackViewController *vc = [FeedBackViewController new];
-        [self.navigationController  pushViewController:vc animated:YES];
-    }
 }
 
 

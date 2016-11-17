@@ -353,6 +353,8 @@
     if (circleArray.count) {
         [self analysisCircleListData:circleArray];
         _haveData = YES;
+        [self.tableView.mj_header beginRefreshing];
+        [self loadData];
     }else{
         if ([TDUtil checkNetworkState] != NetStatusNone)
         {

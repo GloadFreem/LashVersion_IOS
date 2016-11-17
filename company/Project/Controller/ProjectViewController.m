@@ -23,7 +23,7 @@
 #import "ProjectBannerModel.h"
 #import "ProjectBannerListModel.h"
 #import "ProjectBannerDetailVC.h"
-#import "AuthenticInfoBaseModel.h"
+
 #import "ProjectListProBaseModel.h"
 #import "ProjectListProModel.h"
 
@@ -31,14 +31,12 @@
 #import "ProjectPrepareDetailVC.h"
 
 
-#define HASMESSAGE @"requestHasMessageInfo"
-#define AUTHENINFO @"authenticInfoUser"
+
+
 #define PROJECTLIST @"requestProjectList"
 #define BANNERSYSTEM @"bannerSystem"
 #define VERSIONINFO @"versionInfoSystem"
 #define GOLDCOUNT @"requestUserGoldGetInfo"
-#define LOGINUSER @"isLoginUser"
-#define DENGLU @"loginUser"
 
 #define BannerHeight  SCREENWIDTH * 0.5 + 45
 @interface ProjectViewController ()<UITableViewDataSource,UITableViewDelegate,ProjectBannerViewDelegate>
@@ -53,7 +51,6 @@
 
 @property (weak, nonatomic) IBOutlet UITableViewCustomView *tableView;
 
-@property (nonatomic, copy) NSString *authenPartner;
 @property (nonatomic, assign) NSInteger selectedCellNum;//选择显示cell的类型
 
 @property (nonatomic, copy) NSString *bannerPartner; 
@@ -69,10 +66,6 @@
 @property (nonatomic, assign) NSInteger roadPage;
 @property (nonatomic, assign) NSInteger lastRoadPage;
 @property (nonatomic, copy) NSString *type;
-
-@property (nonatomic, copy) NSString *hasMessagePartner;
-@property (nonatomic, assign) BOOL hasMessage;
-@property (nonatomic, strong) UIButton *letterBtn;
 
 //版本更新
 @property (nonatomic, copy) NSString *versionStr;
@@ -133,10 +126,7 @@
     //获得partner
     self.bannerPartner = [TDUtil encryKeyWithMD5:KEY action:BANNERSYSTEM];
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTLIST];
-    //获得认证partner
-    self.authenPartner = [TDUtil encryKeyWithMD5:KEY action:AUTHENINFO];
-    //站内信
-    self.hasMessagePartner = [TDUtil encryKeyWithMD5:KEY action:HASMESSAGE];
+    
     //版本更新
     self.versionPartner = [TDUtil encryKeyWithMD5:KEY action:VERSIONINFO];
     //金条
@@ -145,48 +135,17 @@
     //设置 加载视图界面
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 49);
     
-    [self setNav];
+//    [self setNav];
     
     [self createUI];
     
-    //自动登录
-    if ([TDUtil checkNetworkState] != NetStatusNone)
-    {
-        [self isLogin];
-//        [self isOnline];
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            
-//        });
-        
-    }
-
     //添加监听
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadGold) name:@"comeBack" object:nil];
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setLetterStatus:) name:@"setLetterStatus" object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netNotEnable) name:@"netNotEnable" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netEnable) name:@"netEnable" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadGold) name:@"comeBack" object:nil];
+//    
+
     
 }
-
--(void)netEnable
-{
-//    [self isLogin];
-    if (_netView) {
-        [_netView removeFromSuperview];
-    }
-    if (!_hasLogin && !_isSuccess) {
-        [self autoLogin];
-    }
-}
-
--(void)netNotEnable
-{
-    [self.view addSubview:_netView];
-}
-
 
 -(void)saveDate
 {
@@ -405,101 +364,6 @@
 }
 
 
-#pragma mark--------------------是否站内信未读--------------------
--(void)loadMessage
-{
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.hasMessagePartner,@"partner", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_HASMESSAGE_INFO postParam:dic type:1 delegate:self sel:@selector(requestMessageInfo:)];
-    
-}
--(void)requestMessageInfo:(ASIHTTPRequest*)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic !=nil) {
-        NSString *status =[jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *data = jsonDic[@"data"];
-            _hasMessage = data[@"flag"];
-            if (_hasMessage) {//message_new@2x
-                [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
-            }else{
-                [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
-            }
-            
-        }else{
-        
-        }
-    }
-}
-
-#pragma mark -------------------下载认证信息--------------------------
--(void)loadAuthenData
-{
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
-}
-
--(void)requestAuthenInfo:(ASIHTTPRequest*)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"个人数据返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-//            NSLog(@"打印字典---%@",dataDic);
-            AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
-//            authenticModel = baseModel;
-//            NSLog(@"打印个人信息：----%@",baseModel);
-            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-            
-            [data setValue:baseModel.headSculpture forKey:USER_STATIC_HEADER_PIC];
-            [data setValue:baseModel.telephone forKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
-            [data setValue:[NSString stringWithFormat:@"%ld",(long)baseModel.userId] forKey:USER_STATIC_USER_ID];
-            
-            NSMutableString *areaStr = [[NSMutableString alloc]init];
-            if (baseModel.areas.count) {
-                for (NSInteger i = 0; i < baseModel.areas.count; i++) {
-                    if (i!= baseModel.areas.count - 1) {
-                        [areaStr appendFormat:@"%@ | ",baseModel.areas[i]];
-                    }else{
-                        [areaStr appendFormat:@"%@",baseModel.areas[i]];
-                    }
-                }
-            }
-            [data setValue:areaStr forKey:USER_STATIC_INVEST_AREAS];
-            
-            NSArray *authenticsArray = baseModel.authentics;
-            if (authenticsArray.count) {
-                ProjectAuthentics *authentics = authenticsArray[0];
-                [data setObject:authentics.city.name forKey:USER_STATIC_CITY];
-                [data setObject:authentics.city.province.name forKey:USER_STATIC_PROVINCE];
-                [data setValue:authentics.companyName forKey:USER_STATIC_COMPANY_NAME];
-                [data setValue:authentics.name forKey:USER_STATIC_NAME];
-                [data setValue:authentics.identiyCarA forKey:USER_STATIC_IDPIC];
-                [data setValue:authentics.identiyCarNo forKey:USER_STATIC_IDNUMBER];
-                [data setValue:authentics.position forKey:USER_STATIC_POSITION];
-                [data setValue:authentics.authenticstatus.name forKey:USER_STATIC_USER_AUTHENTIC_STATUS];
-                [data setValue:[NSString stringWithFormat:@"%ld",(long)authentics.identiytype.identiyTypeId] forKey:USER_STATIC_USER_AUTHENTIC_TYPE];
-                [data setValue:[NSString stringWithFormat:@"%@",authentics.identiytype.name] forKey:USER_STATIC_USER_AUTHENTIC_NAME];
-                [data setValue:[NSString stringWithFormat:@"%ld",(long)authentics.authId] forKey:USER_STATIC_AUTHID];
-                [data setValue:authentics.introduce forKey:USER_STATIC_INTRODUCE];
-                [data setValue:authentics.companyIntroduce forKey:USER_STATIC_COMPANYINTRODUCE];
-            }
-            
-            [data synchronize];
-
-//            if ([authentics.authenticstatus.name isEqualToString:@"已认证"]) {
-//                _isAuthentic = YES;
-//            }
-        }
-    }
-}
 
 #pragma mark---------------------------请求表格数据---------------------------
 -(void)startLoadData
@@ -802,54 +666,12 @@
     [_bannerView relayoutWithModelArray:_bannerModelArray];
 }
 
-#pragma mark-------------------站内信通知信息----------------------
--(void)setLetterStatus:(NSNotification*)notification
-{
-//    UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    letterBtn.tag = 0;
-    if (notification) {
-        _hasMessage = YES;
-    }
-    
-    //通过判断返回数据状态来决定背景图片
-    //    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
-    if (_hasMessage) {//message_new@2x
-        [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
-    }
-    
-//    letterBtn.size = letterBtn.currentBackgroundImage.size;
-//    [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
-//    _letterBtn = letterBtn;
-}
 
--(void)setNav
-{
-    UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    letterBtn.tag = 0;
-    //通过判断返回数据状态来决定背景图片
-    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
-    letterBtn.size = letterBtn.currentBackgroundImage.size;
-    [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
-    _letterBtn = letterBtn;
-}
 -(void)createUI
 {
 
     [self createBanner];
     self.navigationItem.title = @"项目";
-    
-     _netView  = [noNetView new];
-     _netView.frame = CGRectMake(0, 0, SCREENWIDTH, 40);
-    _netView.delegate = self;
-     if ([TDUtil checkNetworkState] == NetStatusNone)
-     {
-         [self.view addSubview:_netView];
-     }
-    
-    //设置站内信状态
-    [self setLetterStatus:nil];
 
     //设置刷新控件
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshHttp)];
@@ -857,14 +679,6 @@
     _tableView.mj_header.automaticallyChangeAlpha = YES;
 //    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
-}
-#pragma mark-------------没有网络点击事件处理--------------
--(void)didClickBtnInView
-{
-//    NSLog(@"没有网络事件处理");
-    NetStatusViewController *netStatus =[NetStatusViewController new];
-    netStatus.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:netStatus animated:YES];
 }
 
 #pragma mark -刷新控件
@@ -899,15 +713,6 @@
 #pragma mark- navigationBar --------- button的点击事件--------------
 -(void)buttonCilck:(UIButton*)button
 {
-    if (button.tag == 0) {
-        //改变已读
-        [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
-        
-        ProjectLetterViewController *letter = [ProjectLetterViewController new];
-        letter.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:letter animated:YES];
-        
-    }
     if (button.tag == 1) {
         
         UpProjectViewController *up = [UpProjectViewController new];
@@ -1183,41 +988,6 @@
 }
 
 
-#pragma mark-------------------------自动登录-----------------------
--(void)isLogin
-{
-    _loginPartner = [TDUtil encryKeyWithMD5:KEY action:LOGINUSER];
-    NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.loginPartner,@"partner", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:ISLOGINUSER postParam:dic type:0 delegate:self sel:@selector(requestIsLogin:)];
-    
-}
--(void)requestIsLogin:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
-    if (jsonDic!=nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status intValue] == 200) {
-//        NSLog(@"登陆状态在线");
-            //下载认证信息
-            [self loadAuthenData];
-            _hasLogin = YES;
-            self.online = YES;
-            [self startLoadBannerData];
-            
-            [self loadOtherData];
-        }else{
-            //自动登录
-            [self autoLogin];
-        }
-    }else{
-        [self autoLogin];
-    }
-}
-
 -(void)loadOtherData
 {
     if (_hasLogin || _isSuccess) {
@@ -1228,69 +998,58 @@
             [self loadVersion];
         });
         
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self loadMessage];
-        });
-        
-        
-        
-        
-        
-        // [self createGoldView];
-        
     }
 }
 
--(void)autoLogin
-{
-    //获取缓存数据
-    NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
-    NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
-    NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
-    //激光推送Id
-    NSString *regId = [JPUSHService registrationID];
-    
-    NSString * string = [AES encrypt:DENGLU password:KEY];
-    self.partner = [TDUtil encryptMD5String:string];
-    NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:0 delegate:self sel:@selector(requestLogin:)];
-}
--(void)requestLogin:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    
-    if (jsonDic!=nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status intValue] == 200) {
-//            NSLog(@"登陆成功");
-            //下载认证信息
-            [self loadAuthenData];
-            _isSuccess = YES;
-            self.loginSucess = YES;
-//            NSLog(@"登陆成功%@",self.loginSucess ? @"1" : @"0");
-            [self startLoadBannerData];
-            [self loadOtherData];
-            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
-            
-            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
-            [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
-            
-        }else{
-            LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
-            
-            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            
-            delegate.nav = [[UINavigationController alloc] initWithRootViewController:login];
-            
-            delegate.window.rootViewController = delegate.nav;
-        }
-        
-    }
-}
+//-(void)autoLogin
+//{
+//    //获取缓存数据
+//    NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
+//    NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
+//    NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
+//    //激光推送Id
+//    NSString *regId = [JPUSHService registrationID];
+//    
+//    NSString * string = [AES encrypt:DENGLU password:KEY];
+//    self.partner = [TDUtil encryptMD5String:string];
+//    NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
+//    //开始请求
+//    [self.httpUtil getDataFromAPIWithOps:USER_LOGIN postParam:dic type:0 delegate:self sel:@selector(requestLogin:)];
+//}
+//-(void)requestLogin:(ASIHTTPRequest *)request
+//{
+//    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
+////        NSLog(@"返回:%@",jsonString);
+//    NSMutableDictionary* jsonDic = [jsonString JSONValue];
+//    
+//    if (jsonDic!=nil) {
+//        NSString *status = [jsonDic valueForKey:@"status"];
+//        if ([status intValue] == 200) {
+////            NSLog(@"登陆成功");
+//            //下载认证信息
+//            [self loadAuthenData];
+//            _isSuccess = YES;
+//            self.loginSucess = YES;
+////            NSLog(@"登陆成功%@",self.loginSucess ? @"1" : @"0");
+//            [self startLoadBannerData];
+//            [self loadOtherData];
+//            NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+//            
+//            [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
+//            [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
+//            
+//        }else{
+//            LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+//            
+//            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//            
+//            delegate.nav = [[UINavigationController alloc] initWithRootViewController:login];
+//            
+//            delegate.window.rootViewController = delegate.nav;
+//        }
+//        
+//    }
+//}
 
 #pragma mark -视图即将显示
 -(void)viewWillAppear:(BOOL)animated
@@ -1324,15 +1083,11 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (_hasLogin || _isSuccess) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"hasLogin" object:nil];
-    }
+    
 }
 
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"netEnable" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"netNotEnable" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

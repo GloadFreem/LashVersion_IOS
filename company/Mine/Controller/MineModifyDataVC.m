@@ -119,7 +119,7 @@
 -(void)certainClick:(UIButton*)btn
 {
     if ([self.textView.text isEqualToString:@""] || [self.textView.text isEqualToString:self.placorText]) {
-        
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"请输入正确信息"];
         return;
     }else{
         if ([self.titleText isEqualToString:@"个人简介"]) {
@@ -137,54 +137,45 @@
         }
 
     }
-    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 -(void)modifyCompanyIntroduce
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.updatePartner,@"partner",@"",@"userIntroduce",self.textView.text,@"companyIntroduce",@"",@"areas",nil];
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_UPDATE_USERINFO postParam:dic type:1 delegate:self sel:@selector(requestModifyCompanyIntroduce:)];
-}
--(void)requestModifyCompanyIntroduce:(ASIHTTPRequest *)request
-{
-    NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* dic = [jsonString JSONValue];
-    if (dic!= nil) {
-        NSString *status = [dic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            //            NSLog(@"城市修改成功");
+
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_UPDATE_USERINFO) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
             NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
             [data setObject:self.textView.text forKey:USER_STATIC_COMPANYINTRODUCE];
             [data synchronize];
-        }else{
-            //            NSLog(@"城市修改失败");
         }
-    }
+        [self.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
+
 -(void)modifyIntroduce
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.updatePartner,@"partner",self.textView.text,@"userIntroduce",@"",@"companyIntroduce",@"",@"areas",nil];
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_UPDATE_USERINFO postParam:dic type:1 delegate:self sel:@selector(requestModifyIntroduce:)];
-}
 
--(void)requestModifyIntroduce:(ASIHTTPRequest *)request
-{
-    NSString* jsonString =[TDUtil convertGBKDataToUTF8String:request.responseData];
-    //    NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* dic = [jsonString JSONValue];
-    if (dic!= nil) {
-        NSString *status = [dic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            //            NSLog(@"城市修改成功");
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_UPDATE_USERINFO) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+//            NSLog(@"个人修改成功");
             NSUserDefaults *data = [NSUserDefaults standardUserDefaults];
             [data setObject:self.textView.text forKey:USER_STATIC_INTRODUCE];
             [data synchronize];
-        }else{
-            //            NSLog(@"城市修改失败");
         }
-    }
+        [self.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    
 }
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -206,15 +197,5 @@
 {
     [self cancleRequest];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -17,7 +17,5 @@
 @property (nonatomic, copy) NSString *companyS;
 @property (nonatomic, copy) NSString *position;
 @property (nonatomic, copy) NSString *iconStr;
--(void)loadAuthenData;
-
 
 @end

@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "noNetView.h"
 @class GENENavTabBar;
 
-@interface TankViewController : UIViewController
+@interface TankViewController : RootViewController<noNetViewDelegate>
+
+@property (nonatomic, strong) noNetView *netView;
 
 @property (nonatomic, assign)   BOOL        scrollAnimation;            // Default value: NO
 @property (nonatomic, assign)   BOOL        mainViewBounces;            // Default value: NO

@@ -220,7 +220,7 @@
         if ([dic[@"status"] intValue]== 200){
             weakSelf.loginSucess = YES;
             weakSelf.loginFailed = NO;
-//            NSLog(@"登陆成功");
+            NSLog(@"登陆成功");
         }else{
             weakSelf.loginFailed = YES;
             weakSelf.loginSucess = NO;

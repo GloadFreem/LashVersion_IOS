@@ -106,6 +106,40 @@
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:ACTION_LIST postParam:dic type:0 delegate:self sel:@selector(requestActionList:)];
     
+//    [[EUNetWorkTool shareTool] POST:JZT_URL(ACTION_LIST) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSDictionary *dic = responseObject;
+//        if ([dic[@"status"] integerValue] == 200) {
+//            //结束刷新
+//            [self.tableView.mj_header endRefreshing];
+//            [self.tableView.mj_footer endRefreshing];
+//            NSArray *dataArray = [NSArray arrayWithArray:dic[@"data"]];
+//            NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
+//            dictM[@"data"] = responseObject;
+//            if (_page == 0) {
+//                [_tempArray removeAllObjects];
+//                [self saveDataToBaseTable:ACTIVITYTABLE data:dictM];
+//                _haveData = YES;
+//            }
+//            
+//            //解析数据
+//            [self analysisActivityListData:dataArray];
+//        }else if ([dic[@"status"] integerValue] == 201){
+//            //结束刷新
+//            [self.tableView.mj_header endRefreshing];
+//            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+//        }else{
+//            //结束刷新
+//            [self.tableView.mj_header endRefreshing];
+//            [self.tableView.mj_footer endRefreshing];
+//        }
+//        self.startLoading = NO;
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        //结束刷新
+//        [self.tableView.mj_header endRefreshing];
+//        [self.tableView.mj_footer endRefreshing];
+//        self.isNetRequestError  =YES;
+//    }];
+//    
 }
 
 -(void)requestActionList:(ASIHTTPRequest*)request

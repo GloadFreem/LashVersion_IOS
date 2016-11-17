@@ -77,8 +77,6 @@
     
     [self readData];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCode) name:@"hasLogin" object:nil];
-    
     _textArray = [NSArray array];
     [self createLeftArray];
 //    [self createBottomView];
@@ -94,17 +92,10 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.invitePartner,@"partner", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUESTINVITECODE postParam:dic type:1 delegate:self sel:@selector(requestInviteCode:)];
-}
--(void)requestInviteCode:(ASIHTTPRequest*)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            _inviteCode = [jsonDic valueForKey:@"data"];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUESTINVITECODE) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            _inviteCode = [dic valueForKey:@"data"];
             NSIndexPath *tmpIndexpath=[NSIndexPath indexPathForRow:1 inSection:0];
             [self.tableView beginUpdates];
             [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:tmpIndexpath, nil] withRowAnimation:UITableViewRowAnimationNone];
@@ -115,9 +106,12 @@
                 [data setObject:_inviteCode forKey:@"inviteCode"];
                 [data synchronize];
             }
-            
+        }else if ([dic[@"status"] integerValue] == 401){
+            [self isAutoLogin];
         }
-    }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 
 -(void)readData
@@ -873,7 +867,6 @@
 {
     [super viewWillAppear:animated];
     [self setupNav];
-//    [self loadCode];
     [self.navigationController.navigationBar setHidden:NO];
     
 }

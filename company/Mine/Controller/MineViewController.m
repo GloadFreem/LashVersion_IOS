@@ -88,16 +88,11 @@
     _iconBtn.layer.borderWidth = 2;
     _iconBtn.layer.borderColor = [UIColor whiteColor].CGColor;
     
-//    _iconBtn.translatesAutoresizingMaskIntoConstraints = YES;
-    
-    // Do any additional setup after loading the view from its nib.
     self.signPartner = [TDUtil encryKeyWithMD5:KEY action:SIGNVERIFY];
     //获得认证partner
     self.authenPartner = [TDUtil encryKeyWithMD5:KEY action:AUTHENINFO];
     
     self.sharePartner = [TDUtil encryKeyWithMD5:KEY action:INVITEFRIEND];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadInvestFriend) name:@"hasLogin" object:nil];
     
     [self readData];
     self.loadingViewFrame = self.view.frame;
@@ -107,9 +102,6 @@
 -(void)loadInvestFriend
 {
     self.isSucess = YES;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self loadShareData];
-    });
 }
 -(void)setupBtns
 {
@@ -178,85 +170,24 @@
 {
     NSDictionary *dic =[NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.sharePartner,@"partner",@"3",@"type", nil];
     //开始请求
-    [self.httpUtil getDataFromAPIWithOps:REQUEST_INVITE_FRIEND postParam:dic type:0 delegate:self sel:@selector(requestShareData:)];
-}
-
--(void)requestShareData:(ASIHTTPRequest*)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic !=nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            NSDictionary *dataDic = jsonDic[@"data"];
+//    [self.httpUtil getDataFromAPIWithOps:REQUEST_INVITE_FRIEND postParam:dic type:0 delegate:self sel:@selector(requestShareData:)];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_INVITE_FRIEND) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSDictionary *dataDic = dic[@"data"];
             _shareUrl = dataDic[@"url"];
             _shareImage = dataDic[@"image"];
             _contentText = dataDic[@"content"];
             _shareTitle = dataDic[@"title"];
-        }else if ([status integerValue] == 401){
+            [self startShare];
+        }else if ([dic[@"status"] integerValue] == 401){
             [self isAutoLogin];
         }
-    }
-    
-}
-#pragma mark -下载认证信息
--(void)loadAuthenData
-{
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.authenPartner,@"partner", nil];
-    //开始请求
-    [self.httpUtil getDataFromAPIWithOps:AUTHENTIC_INFO postParam:dic type:0 delegate:self sel:@selector(requestAuthenInfo:)];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 
--(void)requestAuthenInfo:(ASIHTTPRequest*)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
-            
-            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:jsonDic[@"data"]];
-            
-            AuthenticInfoBaseModel *baseModel = [AuthenticInfoBaseModel mj_objectWithKeyValues:dataDic];
-            _authenticModel = baseModel;
-            
-            NSArray *authenticsArray = baseModel.authentics;
-            if (authenticsArray.count) {
-                ProjectAuthentics *authentics = authenticsArray[0];
-                
-                _nameStr = authentics.name;
-                
-                ProjectAuthenticstatus *authenticsstatus = authentics.authenticstatus;
-                
-                if ([authenticsstatus.name isEqualToString:@"已认证"] || [authenticsstatus.name isEqualToString:@"认证中"]) {
-                    if ([authenticsstatus.name isEqualToString:@"已认证"]) {
-                        _isAuthentic = YES;
-                    }else{
-                        _isAuthentic = NO;
-                    }
-                    
-                    if (authentics.companyName && authentics.companyName.length && authentics.position && authentics.position.length) {
-                        _companyStr = [NSString stringWithFormat:@"%@ | %@",authentics.companyName,authentics.position];
-                    }else{
-                        _companyStr = @"";
-                    }
-                }else{
-                    _nameStr = baseModel.telephone;
-                    _isAuthentic = NO;
-                }
-                _authenticName = authenticsstatus.name;
-                _identiyTypeId = authentics.identiytype.identiyTypeId;
-            }
-            
-            
-        }
-    }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-//        self.isNetRequestError = YES;
-    }
-}
 
 -(void)readData
 {
@@ -325,37 +256,11 @@
     _company.text = _companyStr;
 }
 
--(void)requestFailed:(ASIHTTPRequest *)request
-{
-//    self.startLoading = YES;
-//    self.isNetRequestError = YES;
-}
-
--(void)requestFinished:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-    NSLog(@"返回:%@",jsonString);
-}
-
--(void)refresh
-{
-    [self loadAuthenData];
-}
-
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:YES];
     
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-//    if (!self.isSucess) {
-//        self.isSucess = NO;
-//        [self isAutoLogin];
-////        NSLog(@"再次登录");
-//    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -366,54 +271,13 @@
 
 #pragma mark -进入头像详情页面
 - (IBAction)iconDetail:(UIButton *)sender {
-//    if (self.isSucess) {
+
         MineDataVC *vc = [MineDataVC new];
         vc.mineVC = self;
         vc.position = _position;
         vc.companyName = _companyS;
         vc.iconImg = _iconBtn.currentBackgroundImage;
         [self.navigationController pushViewController:vc animated:YES];
-        
-//    }else{
-//        //登录
-//        [self isAutoLogin];
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            if (self.loginFailed) {//登录失败,进入登陆界面
-//                
-//                JTabBarController * tabBarController;
-//                LoginRegistViewController * login;
-//                for (UIViewController *vc in self.navigationController.viewControllers) {
-//                    if ([vc isKindOfClass:LoginRegistViewController.class]) {
-//                        login = (LoginRegistViewController*)vc;
-//                    }else{
-//                        if ([vc isKindOfClass:AppSetVC.class]) {
-//                            
-//                        }else{
-//                            
-//                            if ([vc isKindOfClass:JTabBarController.class]) {
-//                                tabBarController = (JTabBarController*)vc;
-//                            }else{
-//                                [vc removeFromParentViewController];
-//                            }
-//                        }
-//                    }
-//                }
-//                
-//                if(!login)
-//                {
-//                    login = [[LoginRegistViewController alloc]init];
-//                }
-//                
-//                UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
-//                
-//                AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-//                delegate.nav = [[UINavigationController alloc]initWithRootViewController:login];
-//                
-//                keyWindow.rootViewController = delegate.nav;
-//            }
-//        });
-//    }
-    
 }
 
 #pragma mark -进入各个小界面
@@ -426,7 +290,7 @@
                 MineProjectViewController *vc = [MineProjectViewController new];
                 vc.type = _identiyTypeId - 1;
                 [self.navigationController pushViewController:vc animated:YES];
-                NSLog(@"项目方");
+//                NSLog(@"项目方");
                 return;
                 
             }
@@ -436,7 +300,7 @@
                 vc.type = _identiyTypeId -1 ;
                 [self.navigationController  pushViewController:vc animated:YES];
                 
-                NSLog(@"投资人");
+//                NSLog(@"投资人");
                 return;
             }
             if (_identiyTypeId == 3) {//投资机构
@@ -445,14 +309,14 @@
                 vc.type = _identiyTypeId -1 ;
                 [self.navigationController pushViewController:vc animated:YES];
                 
-                NSLog(@"投机机构");
+//                NSLog(@"投机机构");
                 return;
             }
             if (_identiyTypeId == 4) {//智囊团
                 MineThinkTankViewController *vc = [MineThinkTankViewController new];
                 vc.type = _identiyTypeId -1;
                 [self.navigationController pushViewController:vc animated:YES];
-                NSLog(@"智囊团");
+//                NSLog(@"智囊团");
                 return;
             }
         }
@@ -491,7 +355,8 @@
         case 6:
         {
             //邀请好友
-            [self startShare];
+            [self loadShareData];
+            
         }
             break;
         case 7:
@@ -673,7 +538,6 @@
 }
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self cancleRequest];
+
 }
 @end

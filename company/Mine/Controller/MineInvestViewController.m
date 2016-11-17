@@ -32,6 +32,8 @@
 
 @property (nonatomic, copy) NSString *ignorePartner;
 
+@property (nonatomic, strong) UILabel *receiveTitle;
+@property (nonatomic, strong) UILabel *investLabel;
 
 @end
 
@@ -83,17 +85,9 @@
     }
     
     //    开始请求
-    [self.httpUtil getDataFromAPIWithOps:LOGO_PROJECT_CENTER postParam:dic type:0 delegate:self sel:@selector(requestList:)];
-}
-
--(void)requestList:(ASIHTTPRequest *)request
-{
-    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//        NSLog(@"返回:%@",jsonString);
-    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-    if (jsonDic != nil) {
-        NSString *status = [jsonDic valueForKey:@"status"];
-        if ([status integerValue] == 200) {
+    [[EUNetWorkTool shareTool] POST:JZT_URL(LOGO_PROJECT_CENTER) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
             
             self.startLoading = NO;
             if (_isFirst) {
@@ -105,7 +99,7 @@
                 [_committArray removeAllObjects];
                 [_commmitStatusArray removeAllObjects];
             }
-            NSDictionary *dataDic = jsonDic[@"data"];
+            NSDictionary *dataDic = dic[@"data"];
             
             
             NSArray *commentArray = [MineLogoProjectBaseModel mj_objectArrayWithKeyValuesArray:dataDic[@"commit"]];
@@ -155,12 +149,11 @@
                     listModel.endDate = roadshows.roadshowplan.endDate;
                     [_investStatusArray addObject:baseModel.financestatus.name];
                     [_investArray addObject:listModel];
-                    //                    NSLog(@"加入数组陈宫");
                 }
             }
             
-//            NSLog(@"打印收到个数---%ld",(unsigned long)_committArray.count);
-//            NSLog(@"数组个数-----%ld",(unsigned long)_investArray.count);
+//                        NSLog(@"打印收到个数---%ld",(unsigned long)_committArray.count);
+//                        NSLog(@"数组个数-----%ld",(unsigned long)_investArray.count);
             
             if (_committArray.count <= 0 && _investArray.count <= 0) {
                 self.tableView.isNone = YES;
@@ -172,21 +165,21 @@
             [_tableView.mj_header endRefreshing];
             [_tableView.mj_footer endRefreshing];
             
+        }else if ([dic[@"status"] integerValue] == 201){
+            self.startLoading = NO;
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }else{
-            [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-            
-            [_tableView.mj_header endRefreshing];
-            [_tableView.mj_footer endRefreshing];
+            self.startLoading = NO;
+            //结束刷新
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
         }
-    }else{
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        self.startLoading = YES;
         self.isNetRequestError = YES;
-    }
-}
-
--(void)requestFailed:(ASIHTTPRequest *)request
-{
-    self.startLoading = YES;
-    self.isNetRequestError = YES;
+    }];
 }
 
 -(void)refresh
@@ -221,7 +214,6 @@
     _tableView.mj_header.automaticallyChangeAlpha = YES;
 //    [_tableView.mj_header beginRefreshing];
     _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
-    //    tableView.mj_footer.hidden = YES;
     _tableView.mj_footer.automaticallyHidden = NO;
     _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
@@ -238,14 +230,12 @@
 {
     _page ++;
     [self startLoadData];
-    //    NSLog(@"回到顶部");
 }
 
 -(void)refreshHttp
 {
     _page = 0;
     [self startLoadData];
-    //    NSLog(@"下拉刷新");
 }
 
 -(void)leftBack:(UIButton*)btn
@@ -260,18 +250,19 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 1) {
-        if (_committArray.count) {
+    if (section == 0) {
+        if (_investArray.count > 0) {
             return 40;
         }else{
-            return 0.00000001f;
+            return 0.0000001f;
         }
     }
     
-    if (_investArray.count) {
+    if (_committArray.count > 0) {
         return 40;
+    }else{
+        return 0.0000001f;
     }
-    return 0.0000001f;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -282,40 +273,40 @@
         commentView.backgroundColor = [UIColor groupTableViewBackgroundColor];
         commentView.frame = CGRectMake(0, 0, SCREENWIDTH, 40);
         UILabel *title = [UILabel new];
-        title.text = @"我认投的项目";
-        title.font = BGFont(18);
+        if (_investArray.count) {
+            title.text = @"我认投的项目";
+            title.font = BGFont(18);
+        }
         title.textColor = color74;
         title.textAlignment = NSTextAlignmentLeft;
         [commentView addSubview:title];
+        _investLabel = title;
         [title mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(10);
-            make.bottom.mas_equalTo(commentView.mas_bottom).offset(-7);
-//            make.centerY.mas_equalTo(commentView.mas_centerY);
-            make.top.mas_equalTo(15);
+            make.top.mas_equalTo(commentView.mas_top).offset(15);
         }];
         return commentView;
     }
     
     UIView *investView = [UIView new];
-//    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, 10)];
-//    topView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-//    [investView addSubview:topView];
     
     investView.layer.borderColor = [UIColor groupTableViewBackgroundColor].CGColor;
     investView.layer.borderWidth = 0.5;
     investView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     investView.frame = CGRectMake(0, 0, SCREENWIDTH, 40);
     UILabel *title = [UILabel new];
-    title.text = @"我收到的项目";
-    title.font = BGFont(18);
+    if (_committArray.count) {
+        title.text = @"我收到的项目";
+        title.font = BGFont(18);
+    }
+    
     title.textColor = color74;
     title.textAlignment = NSTextAlignmentLeft;
     [investView addSubview:title];
+    _receiveTitle = title;
     [title mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(10);
-        make.bottom.mas_equalTo(investView.mas_bottom).offset(-7);
-        make.top.mas_equalTo(15);
-//        make.centerY.mas_equalTo(investView.mas_centerY).offset(5);
+        make.top.mas_equalTo(investView.mas_top).offset(15);
     }];
     return investView;
 }
@@ -495,10 +486,10 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)dealloc
-{
-    [self cancleRequest];
-}
+//-(void)dealloc
+//{
+//    [self cancleRequest];
+//}
 /*
 #pragma mark - Navigation
 
