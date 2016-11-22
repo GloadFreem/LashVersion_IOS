@@ -27,8 +27,19 @@
 		24D4BD171D7198FE001E181F /* Encapsulation.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D4BD161D7198FE001E181F /* Encapsulation.m */; };
 		2D26298F1D4C5A88D985DBDF /* Pods_company.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AB72B1372C8348B3F810BE /* Pods_company.framework */; };
 		440146A51D61BD0000332532 /* MineGoldBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 440146A41D61BD0000332532 /* MineGoldBtn.m */; };
+		440189131DE287D300CD4FA9 /* ProjectTagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 440189121DE287D300CD4FA9 /* ProjectTagCell.m */; };
+		440189201DE28D4B00CD4FA9 /* UITableView+FDIndexPathHeightCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 440189171DE28D4B00CD4FA9 /* UITableView+FDIndexPathHeightCache.m */; };
+		440189211DE28D4B00CD4FA9 /* UITableView+FDKeyedHeightCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 440189191DE28D4B00CD4FA9 /* UITableView+FDKeyedHeightCache.m */; };
+		440189221DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4401891B1DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCell.m */; };
+		440189231DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCellDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4401891D1DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCellDebug.m */; };
+		440189241DE28D4B00CD4FA9 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 4401891E1DE28D4B00CD4FA9 /* LICENSE */; };
+		440189251DE28D4C00CD4FA9 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 4401891F1DE28D4B00CD4FA9 /* README.md */; };
 		4406563E1D73E11600FA8187 /* iconfont_activityArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4406563C1D73E11600FA8187 /* iconfont_activityArrow@2x.png */; };
 		4406563F1D73E11600FA8187 /* iconfont_activityArrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4406563D1D73E11600FA8187 /* iconfont_activityArrow@3x.png */; };
+		440BAA981DDEA39600819722 /* ProjectSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 440BAA971DDEA39600819722 /* ProjectSearchController.m */; };
+		440BAAA01DDFFF9300819722 /* SKTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 440BAA9B1DDFFF9300819722 /* SKTag.m */; };
+		440BAAA11DDFFF9300819722 /* SKTagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 440BAA9D1DDFFF9300819722 /* SKTagButton.m */; };
+		440BAAA21DDFFF9300819722 /* SKTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 440BAA9F1DDFFF9300819722 /* SKTagView.m */; };
 		442519AA1DD015C500242B0D /* tabBar_mine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 442519A81DD015C500242B0D /* tabBar_mine@2x.png */; };
 		442519AB1DD015C500242B0D /* tabBar_mine@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 442519A91DD015C500242B0D /* tabBar_mine@3x.png */; };
 		442E35F81DB4AF7E00A6E1FE /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442E35C71DB4AF7E00A6E1FE /* DiscoverViewController.m */; };
@@ -1028,8 +1039,28 @@
 		24D4BD161D7198FE001E181F /* Encapsulation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encapsulation.m; sourceTree = "<group>"; };
 		440146A31D61BD0000332532 /* MineGoldBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineGoldBtn.h; sourceTree = "<group>"; };
 		440146A41D61BD0000332532 /* MineGoldBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineGoldBtn.m; sourceTree = "<group>"; };
+		440189111DE287D300CD4FA9 /* ProjectTagCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectTagCell.h; sourceTree = "<group>"; };
+		440189121DE287D300CD4FA9 /* ProjectTagCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectTagCell.m; sourceTree = "<group>"; };
+		440189161DE28D4B00CD4FA9 /* UITableView+FDIndexPathHeightCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+FDIndexPathHeightCache.h"; sourceTree = "<group>"; };
+		440189171DE28D4B00CD4FA9 /* UITableView+FDIndexPathHeightCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+FDIndexPathHeightCache.m"; sourceTree = "<group>"; };
+		440189181DE28D4B00CD4FA9 /* UITableView+FDKeyedHeightCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+FDKeyedHeightCache.h"; sourceTree = "<group>"; };
+		440189191DE28D4B00CD4FA9 /* UITableView+FDKeyedHeightCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+FDKeyedHeightCache.m"; sourceTree = "<group>"; };
+		4401891A1DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+FDTemplateLayoutCell.h"; sourceTree = "<group>"; };
+		4401891B1DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+FDTemplateLayoutCell.m"; sourceTree = "<group>"; };
+		4401891C1DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCellDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+FDTemplateLayoutCellDebug.h"; sourceTree = "<group>"; };
+		4401891D1DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCellDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+FDTemplateLayoutCellDebug.m"; sourceTree = "<group>"; };
+		4401891E1DE28D4B00CD4FA9 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		4401891F1DE28D4B00CD4FA9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4406563C1D73E11600FA8187 /* iconfont_activityArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont_activityArrow@2x.png"; sourceTree = "<group>"; };
 		4406563D1D73E11600FA8187 /* iconfont_activityArrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont_activityArrow@3x.png"; sourceTree = "<group>"; };
+		440BAA961DDEA39600819722 /* ProjectSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSearchController.h; sourceTree = "<group>"; };
+		440BAA971DDEA39600819722 /* ProjectSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSearchController.m; sourceTree = "<group>"; };
+		440BAA9A1DDFFF9300819722 /* SKTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKTag.h; sourceTree = "<group>"; };
+		440BAA9B1DDFFF9300819722 /* SKTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKTag.m; sourceTree = "<group>"; };
+		440BAA9C1DDFFF9300819722 /* SKTagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKTagButton.h; sourceTree = "<group>"; };
+		440BAA9D1DDFFF9300819722 /* SKTagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKTagButton.m; sourceTree = "<group>"; };
+		440BAA9E1DDFFF9300819722 /* SKTagView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKTagView.h; sourceTree = "<group>"; };
+		440BAA9F1DDFFF9300819722 /* SKTagView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKTagView.m; sourceTree = "<group>"; };
 		442519A81DD015C500242B0D /* tabBar_mine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabBar_mine@2x.png"; sourceTree = "<group>"; };
 		442519A91DD015C500242B0D /* tabBar_mine@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabBar_mine@3x.png"; sourceTree = "<group>"; };
 		442E35C61DB4AF7E00A6E1FE /* DiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverViewController.h; sourceTree = "<group>"; };
@@ -2395,6 +2426,44 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		440189141DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCell */ = {
+			isa = PBXGroup;
+			children = (
+				440189151DE28D4B00CD4FA9 /* Classes */,
+				4401891E1DE28D4B00CD4FA9 /* LICENSE */,
+				4401891F1DE28D4B00CD4FA9 /* README.md */,
+			);
+			path = "UITableView+FDTemplateLayoutCell";
+			sourceTree = "<group>";
+		};
+		440189151DE28D4B00CD4FA9 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				440189161DE28D4B00CD4FA9 /* UITableView+FDIndexPathHeightCache.h */,
+				440189171DE28D4B00CD4FA9 /* UITableView+FDIndexPathHeightCache.m */,
+				440189181DE28D4B00CD4FA9 /* UITableView+FDKeyedHeightCache.h */,
+				440189191DE28D4B00CD4FA9 /* UITableView+FDKeyedHeightCache.m */,
+				4401891A1DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCell.h */,
+				4401891B1DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCell.m */,
+				4401891C1DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCellDebug.h */,
+				4401891D1DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCellDebug.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		440BAA991DDFFF9300819722 /* TagView */ = {
+			isa = PBXGroup;
+			children = (
+				440BAA9A1DDFFF9300819722 /* SKTag.h */,
+				440BAA9B1DDFFF9300819722 /* SKTag.m */,
+				440BAA9C1DDFFF9300819722 /* SKTagButton.h */,
+				440BAA9D1DDFFF9300819722 /* SKTagButton.m */,
+				440BAA9E1DDFFF9300819722 /* SKTagView.h */,
+				440BAA9F1DDFFF9300819722 /* SKTagView.m */,
+			);
+			path = TagView;
+			sourceTree = "<group>";
+		};
 		442E35C41DB4AF7E00A6E1FE /* Discover */ = {
 			isa = PBXGroup;
 			children = (
@@ -2699,6 +2768,8 @@
 				443729BB1D3FC7EF00DED1D6 /* ProjectViewController.h */,
 				443729BC1D3FC7EF00DED1D6 /* ProjectViewController.m */,
 				443729BD1D3FC7EF00DED1D6 /* ProjectViewController.xib */,
+				440BAA961DDEA39600819722 /* ProjectSearchController.h */,
+				440BAA971DDEA39600819722 /* ProjectSearchController.m */,
 				443729AC1D3FC7EF00DED1D6 /* ProjectBannerDetailVC.h */,
 				443729AD1D3FC7EF00DED1D6 /* ProjectBannerDetailVC.m */,
 				443729AE1D3FC7EF00DED1D6 /* ProjectDetailController.h */,
@@ -2777,6 +2848,8 @@
 			children = (
 				443729EB1D3FC7EF00DED1D6 /* CSZProjectDetailLetfView.h */,
 				443729EC1D3FC7EF00DED1D6 /* CSZProjectDetailLetfView.m */,
+				440189111DE287D300CD4FA9 /* ProjectTagCell.h */,
+				440189121DE287D300CD4FA9 /* ProjectTagCell.m */,
 				443729ED1D3FC7EF00DED1D6 /* GENEProgressView.h */,
 				443729EE1D3FC7EF00DED1D6 /* GENEProgressView.m */,
 				44C549101D7E5E1B00057319 /* NSTimer+Addition.h */,
@@ -4435,6 +4508,8 @@
 		44871AB41D02B37700020DD9 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				440189141DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCell */,
+				440BAA991DDFFF9300819722 /* TagView */,
 				442E36771DB74EF600A6E1FE /* SDAutoLayout */,
 				4484D1CF1D194091001F4C3A /* TencentOpenAPI */,
 				4484D1951D193712001F4C3A /* UMSocial_Sdk_5.2.1 */,
@@ -5239,6 +5314,7 @@
 				24D4BCEA1D719883001E181F /* ActivityInfoCell.xib in Resources */,
 				44A7B20C1D588EB200181EA5 /* iconfont_leftTime@2x.png in Resources */,
 				44372F051D3FCB5C00DED1D6 /* iconfont-dianhua@2x.png in Resources */,
+				440189241DE28D4B00CD4FA9 /* LICENSE in Resources */,
 				44372DB01D3FCB5C00DED1D6 /* icon_look@3x.png in Resources */,
 				44372EBB1D3FCB5C00DED1D6 /* jintiao27.png in Resources */,
 				4484D1B61D193712001F4C3A /* UMShareEditViewControlleriPad.xib in Resources */,
@@ -5557,11 +5633,13 @@
 				44372AC41D3FC96400DED1D6 /* PECropView.m in Sources */,
 				44372A1D1D3FC7EF00DED1D6 /* ProjectDetailInvestVC.m in Sources */,
 				44372A2E1D3FC7EF00DED1D6 /* ProjectDetailLeftFooterModel.m in Sources */,
+				440BAA981DDEA39600819722 /* ProjectSearchController.m in Sources */,
 				442E360C1DB4AF7F00A6E1FE /* InvestOrganizationSecondCell.m in Sources */,
 				443730C41D3FCC5600DED1D6 /* ActivityDetailExerciseCell.m in Sources */,
 				4437302D1D3FCC3600DED1D6 /* MineCollectionProjectModel.m in Sources */,
 				443730151D3FCC3600DED1D6 /* MineInvestViewController.m in Sources */,
 				44871B8E1D02B37800020DD9 /* README.md in Sources */,
+				440189131DE287D300CD4FA9 /* ProjectTagCell.m in Sources */,
 				4437304F1D3FCC3600DED1D6 /* MyDataIconCell.m in Sources */,
 				24D4BD171D7198FE001E181F /* Encapsulation.m in Sources */,
 				44871B791D02B37800020DD9 /* NSArray+MASAdditions.m in Sources */,
@@ -5579,6 +5657,7 @@
 				44871AB31D02B35D00020DD9 /* UIView+Extension.m in Sources */,
 				44871AB21D02B35D00020DD9 /* UIBarButtonItem+LYJ.m in Sources */,
 				443730CD1D3FCC5600DED1D6 /* PictureContainerView.m in Sources */,
+				440189221DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCell.m in Sources */,
 				443729931D3FC78100DED1D6 /* Renzheng4ViewController.m in Sources */,
 				44871B781D02B37800020DD9 /* MASViewConstraint.m in Sources */,
 				44C9D81E1DBA182C007FED4C /* TankSearchController.m in Sources */,
@@ -5608,6 +5687,7 @@
 				44871B661D02B37800020DD9 /* IQUITextFieldView+Additions.m in Sources */,
 				44372A341D3FC7F000DED1D6 /* ProjectListProBaseModel.m in Sources */,
 				24D4BD001D71989F001E181F /* HeadlineViewController.m in Sources */,
+				440189211DE28D4B00CD4FA9 /* UITableView+FDKeyedHeightCache.m in Sources */,
 				44372AD51D3FC96400DED1D6 /* MWGridCell.m in Sources */,
 				44871B8C1D02B37800020DD9 /* MLLinkLabel.m in Sources */,
 				443730471D3FCC3600DED1D6 /* MineProjectCenterYuXuanCell.m in Sources */,
@@ -5637,6 +5717,7 @@
 				442E35FE1DB4AF7E00A6E1FE /* InvestDetailModel.m in Sources */,
 				24B3AAD41D7195FC0095A898 /* UIButton+UIButtonImageWithLable.m in Sources */,
 				4437299B1D3FC78100DED1D6 /* EditTableViewCell.m in Sources */,
+				440BAAA01DDFFF9300819722 /* SKTag.m in Sources */,
 				44871B911D02B37800020DD9 /* TAAnimatedDotView.m in Sources */,
 				442E36201DB4C98D00A6E1FE /* TankNoImageCell.m in Sources */,
 				44372AD01D3FC96400DED1D6 /* GTMBase64.m in Sources */,
@@ -5657,6 +5738,7 @@
 				443730BD1D3FCC5600DED1D6 /* ActivityBlackCoverView.m in Sources */,
 				44372AC91D3FC96400DED1D6 /* UIImage+Resize.m in Sources */,
 				24D4BCF91D719893001E181F /* ActivityInfoFrame.m in Sources */,
+				440BAAA21DDFFF9300819722 /* SKTagView.m in Sources */,
 				44372A441D3FC7F000DED1D6 /* ProjectDetailSceneView.m in Sources */,
 				44871B991D02B37800020DD9 /* SDWaitingView.m in Sources */,
 				4437301C1D3FCC3600DED1D6 /* MineViewController.m in Sources */,
@@ -5688,6 +5770,7 @@
 				44CDEA451D5572DD0063BAA4 /* DACircularProgressView.m in Sources */,
 				443729911D3FC78100DED1D6 /* Renzheng3ViewController.m in Sources */,
 				44871B8B1D02B37800020DD9 /* MLLabel.m in Sources */,
+				440189231DE28D4B00CD4FA9 /* UITableView+FDTemplateLayoutCellDebug.m in Sources */,
 				445EE0291D9A1F9000B96803 /* ActivityContentCell.m in Sources */,
 				44372ADB1D3FC96400DED1D6 /* MWZoomingScrollView.m in Sources */,
 				442E36101DB4AF7F00A6E1FE /* InvestPersonWhiteImageView.m in Sources */,
@@ -5713,6 +5796,7 @@
 				44372AD81D3FC96400DED1D6 /* MWPhotoBrowser.m in Sources */,
 				4437291A1D3FC6DF00DED1D6 /* RootViewController.m in Sources */,
 				443730031D3FCC3600DED1D6 /* AppSetChangePhoneVC.m in Sources */,
+				440189201DE28D4B00CD4FA9 /* UITableView+FDIndexPathHeightCache.m in Sources */,
 				443730111D3FCC3600DED1D6 /* MineDeatilAreaVC.m in Sources */,
 				443730121D3FCC3600DED1D6 /* MineGoldMingxiVC.m in Sources */,
 				44372A471D3FC7F000DED1D6 /* ProjectListCell.m in Sources */,
@@ -5798,6 +5882,7 @@
 				442E36121DB4AF7F00A6E1FE /* ThinkTankCell.m in Sources */,
 				4437297D1D3FC78100DED1D6 /* AreaViewController.m in Sources */,
 				442E360A1DB4AF7F00A6E1FE /* InvestOrganizationCell.m in Sources */,
+				440BAAA11DDFFF9300819722 /* SKTagButton.m in Sources */,
 				442E36041DB4AF7F00A6E1FE /* InvestCommitProjectPCell.m in Sources */,
 				44372A361D3FC7F000DED1D6 /* ProjectPPTModel.m in Sources */,
 				443730401D3FCC3600DED1D6 /* MineGoldMingXiEndCell.m in Sources */,
@@ -5835,6 +5920,7 @@
 				442E35FF1DB4AF7E00A6E1FE /* InvestListModel.m in Sources */,
 				44D444391DBB0D2C004B64B1 /* TankPointModel.m in Sources */,
 				44AC3A021D49A6FE00D9C878 /* CommentTD.m in Sources */,
+				440189251DE28D4C00CD4FA9 /* README.md in Sources */,
 				442E360E1DB4AF7F00A6E1FE /* InvestPersonCell.m in Sources */,
 				443730461D3FCC3600DED1D6 /* MineProjectCenterProCell.m in Sources */,
 				4437302A1D3FCC3600DED1D6 /* MineCollectionInvestModel.m in Sources */,

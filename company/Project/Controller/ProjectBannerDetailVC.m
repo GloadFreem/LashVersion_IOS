@@ -102,6 +102,7 @@
     
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
     [self.webView stopLoading];
+    
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (delegate.isLaunchedByNotification) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"comeBack" object:nil];

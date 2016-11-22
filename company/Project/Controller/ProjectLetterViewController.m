@@ -209,25 +209,7 @@
     [operateBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:operateBtn];
     _operateBtn = operateBtn;
-////    标题视图
-//    UIView *titleView = [UIView new];
-////    [titleView setBackgroundColor:[UIColor greenColor]];
-//    titleView.frame = CGRectMake(0, 0, 80, 25);
-//    
-//    UILabel *label = [UILabel new];
-//    label.text = @"站内信";
-//    label.font = BGFont(20);
-//    
-////    label.backgroundColor = [UIColor orangeColor];
-//    label.textColor  = [UIColor whiteColor];
-//    label.textAlignment = NSTextAlignmentCenter;
-//    [titleView addSubview:label];
-//    [label mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.mas_equalTo(titleView);
-//        make.centerY.mas_equalTo(titleView);
-//    }];
     
-//    self.navigationItem.titleView = titleView;
     self.navigationItem.title = @"站内信";
 }
 #pragma mark -底部视图设置

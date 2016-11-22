@@ -75,7 +75,6 @@ static BOOL const isProduction = TRUE; // 极光TRUE为生产环境
     // Override point for customization after application launch.
     _window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = [UIColor whiteColor];
-//    _myNav = [[MyNavViewController alloc] init];
     _tabBar = [[JTabBarController alloc] init];
     _tabBar.delegate = self;
     
@@ -98,8 +97,6 @@ static BOOL const isProduction = TRUE; // 极光TRUE为生产环境
     NSString* isStart= [data valueForKey:@"isStart"];
     NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
     NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
-    //激光推送Id
-//    NSString *regId = [JPUSHService registrationID];
     
     self.httpUtil = [[HttpUtils alloc]init];
     
@@ -107,23 +104,17 @@ static BOOL const isProduction = TRUE; // 极光TRUE为生产环境
         
         if (phoneNumber && password)
         {
-//            self.nav = [[UINavigationController alloc]initWithRootViewController:_tabBar];
-//            [self.nav setNavigationBarHidden:YES];
-//            self.nav.navigationBar.hidden = YES;
             [_window setRootViewController:_tabBar];
         }else{
             LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
             self.nav = [[UINavigationController alloc]initWithRootViewController:login];
-//            [self.nav setNavigationBarHidden:YES];
             [_window setRootViewController:self.nav];
         }
     }else{
         GuidePageViewController *vc = [GuidePageViewController new];
         self.nav = [[UINavigationController alloc]initWithRootViewController:vc];
-//        [self.nav setNavigationBarHidden:YES];
         [_window setRootViewController:self.nav];
     }
-
     [_window makeKeyAndVisible];
     
     //设置键盘防遮挡输入框
@@ -210,14 +201,12 @@ static BOOL const isProduction = TRUE; // 极光TRUE为生产环境
     NetworkStatus netStatus = [reachability currentReachabilityStatus];
     switch (netStatus) {
         case NotReachable:
-//            NSLog(@"====当前网络状态不可达=======http://www.cnblogs.com/xiaofeixiang");
             //网络不可用通知
         [[NSNotificationCenter defaultCenter] postNotificationName:@"netNotEnable" object:nil userInfo:nil];
             break;
         case ReachableViaWiFi:
-//            NSLog(@"====当前网络状态为Wifi=======博客园-Fly_Elephant");
+
         case ReachableViaWWAN:
-//            NSLog(@"====当前网络状态为3G=======keso");
             //网络可用通知
         [[NSNotificationCenter defaultCenter] postNotificationName:@"netEnable" object:nil userInfo:nil];
             
@@ -247,8 +236,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     //Optional
     NSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
 }
-
-
 
 // iOS 10 Support
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {

@@ -73,7 +73,6 @@
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",_textView.text,@"content", nil];
     //开始请求
-//    [self.httpUtil getDataFromAPIWithOps:REQUESTFEEDBACK postParam:dic type:0 delegate:self sel:@selector(requestFeedBack:)];
     [[EUNetWorkTool shareTool] POST:JZT_URL(REQUESTFEEDBACK) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = responseObject;
         if ([dic[@"status"] integerValue] == 200) {
@@ -85,32 +84,10 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[dic valueForKey:@"message"]];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
+        [[DialogUtil sharedInstance]showDlg:self.view textOnly:error.localizedDescription];
     }];
     
 }
-//-(void)requestFeedBack:(ASIHTTPRequest *)request
-//{
-//    NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];
-//    //    NSLog(@"返回:%@",jsonString);
-//    NSMutableDictionary* jsonDic = [jsonString JSONValue];
-//    if (jsonDic != nil) {
-//        NSString *status = [jsonDic valueForKey:@"status"];
-//        if ([status integerValue] ==200) {
-//            
-//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"感谢您的宝贵意见"];
-//            
-//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                [self leftBack];
-//            });
-////        [self performSelector:@selector(leftBack) withObject:nil afterDelay:3];
-//            
-//        }else{
-//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
-//        }
-//    }
-//    
-//}
 
 -(void)createTextView
 {

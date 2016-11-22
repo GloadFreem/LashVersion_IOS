@@ -69,9 +69,8 @@
         _tempArray = [NSMutableArray array];
     }
     self.nextPage = 0;
-    self.isUpLoading = NO;
     _isFirst = YES;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self loadHeadlineData];
     });
     
@@ -235,7 +234,6 @@
     __weak typeof(self) weakSelf = self;
     [[EUNetWorkTool shareTool] POST:JZT_URL(@"requestConsultList.action") parameters:paramsDic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = responseObject;
-        
 //                NSLog(@"今日投条请求成功====%@", dic);
         if ([dic[@"status"] intValue]== 200) {
             
@@ -253,19 +251,22 @@
             [_tableView.mj_header endRefreshing];
             [_tableView.mj_footer endRefreshing];
         }
+        
         weakSelf.startLoading = NO;
         if (_isFirst) {
             _isFirst = NO;
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        NSLog(@"打印错误%@",error.localizedDescription);
         [_tableView.mj_header endRefreshing];
         [_tableView.mj_footer endRefreshing];
-//        weakSelf.startLoading = NO;
         weakSelf.isNetRequestError  =YES;
     }];
 }
 
+-(void)refresh
+{
+    [self loadHeadlineData];
+}
 -(void)analysisThinkTankListData:(NSArray *)dataArray
 {
     NSDictionary *modelDic;

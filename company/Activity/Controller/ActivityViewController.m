@@ -84,6 +84,13 @@
     if (activityArray.count) {
         [self analysisActivityListData:activityArray];
         _haveData = YES;
+        if ([TDUtil checkNetworkState] != NetStatusNone)
+        {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.tableView.mj_header beginRefreshing];
+                [self loadActionListData];
+            });
+        }
     }else{
         if ([TDUtil checkNetworkState] != NetStatusNone)
         {

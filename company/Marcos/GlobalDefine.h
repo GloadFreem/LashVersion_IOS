@@ -184,6 +184,8 @@
 #define CERTIFY_TYPE @"2"
 #define CHANGE_PHONE_TYPE @"3"
 #define VERSION @"1"
+#define SHOWCERTAINNOTI @"showCertain"
+#define HIDECERTAINNOTI @"hideCertain"
 //身份证号
 #define USER_STATIC_IDNUMBER @"user_static_ido"
 //真实姓名

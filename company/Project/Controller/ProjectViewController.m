@@ -30,7 +30,7 @@
 #import "ProjectDetailController.h"
 #import "ProjectPrepareDetailVC.h"
 
-
+#import "ProjectSearchController.h"
 
 
 #define PROJECTLIST @"requestProjectList"
@@ -121,8 +121,7 @@
     _lastRoadPage = 0;
     _type = @"0";
     
-    _second = 0;
-    _secondLeave = 3;
+    
     //获得partner
     self.bannerPartner = [TDUtil encryKeyWithMD5:KEY action:BANNERSYSTEM];
     self.partner = [TDUtil encryKeyWithMD5:KEY action:PROJECTLIST];
@@ -135,7 +134,7 @@
     //设置 加载视图界面
     self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 49);
     
-//    [self setNav];
+    [self setNav];
     
     [self createUI];
     
@@ -146,7 +145,23 @@
 
     
 }
+-(void)setNav
+{
+    UIButton * search = [UIButton buttonWithType:UIButtonTypeCustom];
+//    search.tag = 0;
+    //通过判断返回数据状态来决定背景图片
+    [search setBackgroundImage:[UIImage imageNamed:@"nav_search"] forState:UIControlStateNormal];
+    search.size = search.currentBackgroundImage.size;
+    [search addTarget:self action:@selector(searchCilck) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:search];
+}
 
+-(void)searchCilck
+{
+    ProjectSearchController *search = [[ProjectSearchController alloc] init];
+    search.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:search animated:YES];
+}
 -(void)saveDate
 {
     NSString *firstLogin = [TDUtil CurrentDay];
@@ -165,7 +180,7 @@
         NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
         NSString *firstDate = [data objectForKey:@"firstLogin"];
         if ([currentTime isEqualToString:firstDate]) {
-            
+            [self loadVersion];
         }else{
             [self loadGoldCount];
         }
@@ -174,7 +189,7 @@
 
 -(void)loadGold
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSString *currentTime = [TDUtil CurrentDay];
         NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
         NSString *firstDate = [data objectForKey:@"firstLogin"];
@@ -376,13 +391,8 @@
         _page = _roadPage;
     }
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.partner,@"partner",[NSString stringWithFormat:@"%ld",(long)_page],@"page",[NSString stringWithFormat:@"%@",_type],@"type", nil];
-//    if (self.tableView.mj_header.isRefreshing || self.tableView.mj_footer.isRefreshing) {
-//        NSLog(@"正在刷新");
-//        
-//    }else{
-        //开始请求
+
         [self.httpUtil getDataFromAPIWithOps:REQUEST_PROJECT_LIST postParam:dic type:0 delegate:self sel:@selector(requestProjectList:)];
-//    }
     
 }
 
@@ -575,7 +585,6 @@
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.bannerPartner,@"partner", nil];
     //开始请求
     [self.httpUtil getDataFromAPIWithOps:BANNER_SYSTEM postParam:dic type:0 delegate:self sel:@selector(requestBannerList:)];
-    
 }
 
 -(void)requestBannerList:(ASIHTTPRequest *)request
@@ -979,6 +988,12 @@
             [self analysisNoRoadListData:noRoadArray];
         }
         _haveData = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([TDUtil checkNetworkState] != NetStatusNone){
+            [self.tableView.mj_header beginRefreshing];
+            [self startLoadBannerData];
+            }
+        });
     }else{
         if ([TDUtil checkNetworkState] != NetStatusNone)
         {

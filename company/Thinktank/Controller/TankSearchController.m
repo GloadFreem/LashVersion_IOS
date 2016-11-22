@@ -109,7 +109,8 @@
     self.searchBar.showsCancelButton = NO;
     [_searchView addSubview:self.searchBar];
     UIButton *cancleBtn = [UIButton new];
-    [cancleBtn setBackgroundColor:[TDUtil colorWithHexString:@"bfc0c5"]];
+//    [cancleBtn setBackgroundColor:[TDUtil colorWithHexString:@"bfc0c5"]];
+    [cancleBtn setBackgroundColor:self.searchBar.backgroundColor];
     [cancleBtn addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
     cancleBtn.titleLabel.font = BGFont(16);
@@ -120,9 +121,6 @@
     .centerYEqualToView(self.searchBar)
     .heightIs(44)
     .rightEqualToView(_searchView);
-//    [self.view addSubview:_searchView];
-//
-//    self.navigationItem.titleView = _searchView;
     
 }
 
@@ -142,11 +140,7 @@
 {
     if (searchBar == self.searchBar) {
         [self.searchBar resignFirstResponder];
-        //        self.searchBar.text = @"";
-        //        self.searchBar.showsCancelButton = NO;
         [self back];
-         ;
-//        NSLog(@"取消按钮点击");
     }
 }
 
@@ -579,8 +573,6 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:NO];
-    
-    
     [self.navigationController.navigationBar addSubview:_searchView];
     
 }
@@ -604,7 +596,6 @@
     
     if (self.isActive) {
         [self.searchBar becomeFirstResponder];
-//        NSLog(@"弹起");
         self.isActive = NO;
     }
     

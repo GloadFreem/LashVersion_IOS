@@ -303,23 +303,15 @@
 #pragma mark-------------------站内信通知信息----------------------
 -(void)setLetterStatus:(NSNotification*)notification
 {
-    //    UIButton * letterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    //    letterBtn.tag = 0;
     if (notification) {
         _hasMessage = YES;
         NSLog(@"通知设置的");
     }
     
     //通过判断返回数据状态来决定背景图片
-    //    [letterBtn setBackgroundImage:[UIImage imageNamed:@"message"] forState:UIControlStateNormal];
     if (_hasMessage) {//message_new@2x
         [_letterBtn setBackgroundImage:[UIImage imageNamed:@"message_new"] forState:UIControlStateNormal];
     }
-    
-    //    letterBtn.size = letterBtn.currentBackgroundImage.size;
-    //    [letterBtn addTarget:self action:@selector(buttonCilck:) forControlEvents:UIControlEventTouchUpInside];
-    //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:letterBtn];
-    //    _letterBtn = letterBtn;
 }
 
 -(void)createUI

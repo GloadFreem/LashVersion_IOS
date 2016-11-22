@@ -250,6 +250,10 @@
         
         if (response.responseCode == UMSResponseCodeSuccess) {
             
+            self.loadingViewFrame = self.view.frame;
+            self.startLoading = YES;
+            self.isTransparent = YES;
+            
             UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary]valueForKey:UMShareToWechatSession];
 //            snsAccount.openId
             //微信授权登录
@@ -263,11 +267,7 @@
             [data synchronize];
             
              NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.wePartner,@"partner",snsAccount.openId,@"wechatID",@"1",@"platform",regId,@"regid", nil];
-            self.loadingViewFrame = self.view.frame;
-
-            self.startLoading = YES;
-            self.isTransparent = YES;
-            
+        
             //开始请求
             [self.httpUtil getDataFromAPIWithOps:WECHATLOGINUSER postParam:dic type:0 delegate:self sel:@selector(requestWELogin:)];
             
