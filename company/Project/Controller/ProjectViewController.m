@@ -597,7 +597,7 @@
         NSString *status = [jsonDic valueForKey:@"status"];
         if ([status integerValue] == 200) {
             //保存数据
-            
+//            [[DialogUtil sharedInstance]showDlg:self.view textOnly:@"banner请求成功"];
             if ([jsonDic[@"data"] isKindOfClass:[NSArray class]]) {
                 NSMutableDictionary* dictM = [NSMutableDictionary dictionary];
                 dictM[@"data"] = jsonString;
@@ -613,7 +613,7 @@
             
             [self startLoadData];
         }else{
-        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
+//        [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }else{
 //        self.isNetRequestError  =YES;

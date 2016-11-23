@@ -40,6 +40,7 @@
 		440BAAA01DDFFF9300819722 /* SKTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 440BAA9B1DDFFF9300819722 /* SKTag.m */; };
 		440BAAA11DDFFF9300819722 /* SKTagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 440BAA9D1DDFFF9300819722 /* SKTagButton.m */; };
 		440BAAA21DDFFF9300819722 /* SKTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 440BAA9F1DDFFF9300819722 /* SKTagView.m */; };
+		44225C581DE4178500004B98 /* ProjectTagBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 44225C571DE4178500004B98 /* ProjectTagBaseModel.m */; };
 		442519AA1DD015C500242B0D /* tabBar_mine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 442519A81DD015C500242B0D /* tabBar_mine@2x.png */; };
 		442519AB1DD015C500242B0D /* tabBar_mine@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 442519A91DD015C500242B0D /* tabBar_mine@3x.png */; };
 		442E35F81DB4AF7E00A6E1FE /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442E35C71DB4AF7E00A6E1FE /* DiscoverViewController.m */; };
@@ -1061,6 +1062,8 @@
 		440BAA9D1DDFFF9300819722 /* SKTagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKTagButton.m; sourceTree = "<group>"; };
 		440BAA9E1DDFFF9300819722 /* SKTagView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKTagView.h; sourceTree = "<group>"; };
 		440BAA9F1DDFFF9300819722 /* SKTagView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKTagView.m; sourceTree = "<group>"; };
+		44225C561DE4178500004B98 /* ProjectTagBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectTagBaseModel.h; sourceTree = "<group>"; };
+		44225C571DE4178500004B98 /* ProjectTagBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectTagBaseModel.m; sourceTree = "<group>"; };
 		442519A81DD015C500242B0D /* tabBar_mine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabBar_mine@2x.png"; sourceTree = "<group>"; };
 		442519A91DD015C500242B0D /* tabBar_mine@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabBar_mine@3x.png"; sourceTree = "<group>"; };
 		442E35C61DB4AF7E00A6E1FE /* DiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverViewController.h; sourceTree = "<group>"; };
@@ -2839,6 +2842,8 @@
 				443729E71D3FC7EF00DED1D6 /* ProjectSceneCommentModel.m */,
 				443729E81D3FC7EF00DED1D6 /* ProjectSceneModel.h */,
 				443729E91D3FC7EF00DED1D6 /* ProjectSceneModel.m */,
+				44225C561DE4178500004B98 /* ProjectTagBaseModel.h */,
+				44225C571DE4178500004B98 /* ProjectTagBaseModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -5833,6 +5838,7 @@
 				443729951D3FC78100DED1D6 /* RenzhengViewController.m in Sources */,
 				44871B921D02B37800020DD9 /* TADotView.m in Sources */,
 				443730411D3FCC3600DED1D6 /* MineProjectCenterAddProjectCell.m in Sources */,
+				44225C581DE4178500004B98 /* ProjectTagBaseModel.m in Sources */,
 				44372A331D3FC7F000DED1D6 /* ProjectLetterModel.m in Sources */,
 				44372AC01D3FC96400DED1D6 /* NSString+Base64.m in Sources */,
 				443730511D3FCC3600DED1D6 /* MyDataNoArrowCell.m in Sources */,

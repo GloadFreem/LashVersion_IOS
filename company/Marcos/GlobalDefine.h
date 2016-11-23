@@ -169,8 +169,8 @@
 
 // 如果是DEBUG模式用测试服务器地址
 #if DEBUG
-#define JZT_URL(url) [@"http://192.168.10.166:8080/jinzht/" stringByAppendingString:url]
-#define SERVICE_URL @"http://192.168.10.166:8080/jinzht/"
+#define JZT_URL(url) [@"http://192.168.10.113:8080/jinzht/" stringByAppendingString:url]
+#define SERVICE_URL @"http://192.168.10.113:8080/jinzht/"
 #else
 #define JZT_URL(url) [@"http://www.jinzht.com:8080/jinzht/" stringByAppendingString:url]
 #define SERVICE_URL @"http://www.jinzht.com:8080/jinzht/"
@@ -186,6 +186,10 @@
 #define VERSION @"1"
 #define SHOWCERTAINNOTI @"showCertain"
 #define HIDECERTAINNOTI @"hideCertain"
+//微信ID
+#define USER_WECHAT_ID @"wechatID"
+//微信登陆标识
+#define IS_WECHAT_LOGIN @"weChatLogin"
 //身份证号
 #define USER_STATIC_IDNUMBER @"user_static_ido"
 //真实姓名
@@ -326,6 +330,14 @@
 #pragma mark----------------------------------------------------------------------------
 //项目列表
 #define REQUEST_PROJECT_LIST @"requestProjectList.action"
+//项目搜索tag
+#define REQUEST_PROJECT_TAG @"requestSearchCondition.action"
+//项目检索
+#define REQUEST_SEARCH_PROJECT_LIST @"requestSearchProjectList.action"
+//项目搜索search
+#define REQUEST_SEARCH_PROJECT_STR @"requestSearchFromStrProjectList.action"
+//项目搜索热门词汇
+#define REQUEST_SEARCH_HOTWORD @"requestHotWordList.action"
 //项目详情
 #define REQUEST_PROJECT_DETAIL @"requestProjectDetail.action"
 //财务状况

@@ -97,12 +97,14 @@ static BOOL const isProduction = TRUE; // 极光TRUE为生产环境
     NSString* isStart= [data valueForKey:@"isStart"];
     NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
     NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
+    NSString *isWeChatLogin = [data valueForKey:IS_WECHAT_LOGIN];
+    NSString *weChatID = [data valueForKey:USER_WECHAT_ID];
     
     self.httpUtil = [[HttpUtils alloc]init];
     
     if (isStart && [isStart isEqualToString:@"true"]){
         
-        if (phoneNumber && password)
+        if ((phoneNumber && password) || (isWeChatLogin && weChatID))
         {
             [_window setRootViewController:_tabBar];
         }else{

@@ -10,6 +10,7 @@
 #import "LoginRegistViewController.h"
 #define LOGINUSER @"isLoginUser"
 #define DENGLU @"loginUser"
+#define WELOGINUSER @"wechatLoginUser"
 
 @interface RootViewController ()
 {
@@ -203,10 +204,48 @@
 
 -(void)isAutoLogin
 {
+    //判断是哪种登录方式
+    
     //获取缓存数据
     NSUserDefaults* data = [NSUserDefaults standardUserDefaults];
     NSString *phoneNumber = [data valueForKey:STATIC_USER_DEFAULT_DISPATCH_PHONE];
     NSString *password = [data valueForKey:STATIC_USER_PASSWORD];
+    NSString *isWeChatLogin = [data valueForKey:IS_WECHAT_LOGIN];
+    NSString *weChatID = [data valueForKey:USER_WECHAT_ID];
+    //优先进行手机号登陆
+    if (phoneNumber.length && password.length) {
+        [self loginPhoneWithPhoneNumber:phoneNumber andPassword:password];
+    }else if (isWeChatLogin.length && weChatID.length){
+        [self loginWithWechatID:weChatID];
+    }else{
+        [self setLoginView];
+    }
+}
+-(void)loginWithWechatID:(NSString *)weChatID
+{
+    NSString *regId = [JPUSHService registrationID];
+    NSString *wePartner = [TDUtil encryKeyWithMD5:KEY action:WELOGINUSER];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",wePartner,@"partner",weChatID,@"wechatID",@"1",@"platform",regId,@"regid", nil];
+    LYJWeakSelf;
+    [[EUNetWorkTool shareTool] POST:JZT_URL(WECHATLOGINUSER) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] intValue]== 200){
+            weakSelf.loginSucess = YES;
+            weakSelf.loginFailed = NO;
+            NSLog(@"微信登陆成功");
+        }else{
+            weakSelf.loginFailed = YES;
+            weakSelf.loginSucess = NO;
+            [self setLoginView];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        weakSelf.loginSucess = NO;
+        weakSelf.loginFailed = YES;
+        [self setLoginView];
+    }];
+}
+-(void)loginPhoneWithPhoneNumber:(NSString *)phoneNumber andPassword:(NSString *)password
+{
     //激光推送Id
     NSString *regId = [JPUSHService registrationID];
     
@@ -215,41 +254,37 @@
     NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:KEY,@"key",partner,@"partner",phoneNumber,@"telephone",password,@"password",PLATFORM,@"platform", regId,@"regId",nil];
     LYJWeakSelf;
     [[EUNetWorkTool shareTool] POST:JZT_URL(USER_LOGIN) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"打印登录数据---%@",responseObject);
+        //        NSLog(@"打印登录数据---%@",responseObject);
         NSDictionary *dic = responseObject;
         if ([dic[@"status"] intValue]== 200){
             weakSelf.loginSucess = YES;
             weakSelf.loginFailed = NO;
-            NSLog(@"登陆成功");
+            NSLog(@"手机登陆成功");
         }else{
             weakSelf.loginFailed = YES;
             weakSelf.loginSucess = NO;
             
-            //进入登陆界面
-            LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
-            
-            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            
-            delegate.nav = [[UINavigationController alloc] initWithRootViewController:login];
-            
-            delegate.window.rootViewController = delegate.nav;
+            [self setLoginView];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        NSLog(@"登录错误---%@",error.localizedDescription);
+        //        NSLog(@"登录错误---%@",error.localizedDescription);
         weakSelf.loginSucess = NO;
         weakSelf.loginFailed = YES;
-        //进入登录界面
-        LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
-        
-        AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        
-        delegate.nav = [[UINavigationController alloc] initWithRootViewController:login];
-        
-        delegate.window.rootViewController = delegate.nav;
+        [self setLoginView];
     }];
-    
-}
 
+}
+-(void)setLoginView
+{
+    //进入登录界面
+    LoginRegistViewController * login = [[LoginRegistViewController alloc]init];
+    
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    delegate.nav = [[UINavigationController alloc] initWithRootViewController:login];
+    
+    delegate.window.rootViewController = delegate.nav;
+}
 -(void)requestFinished:(ASIHTTPRequest *)request
 {
     NSString *jsonString = [TDUtil convertGBKDataToUTF8String:request.responseData];

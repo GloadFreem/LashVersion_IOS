@@ -1573,6 +1573,8 @@
     [data removeObjectForKey:USER_STATIC_INVEST_AREAS];
     [data removeObjectForKey:USER_STATIC_INTRODUCE];
     [data removeObjectForKey:USER_STATIC_COMPANYINTRODUCE];
+    [data removeObjectForKey:IS_WECHAT_LOGIN];
+    [data removeObjectForKey:USER_WECHAT_ID];
     [data synchronize];
     
 }

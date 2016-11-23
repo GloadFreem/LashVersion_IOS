@@ -10,16 +10,32 @@
 #import "SKTagView.h"
 #import "UITableView+FDTemplateLayoutCell.h"
 #import "ProjectTagCell.h"
+#import "ProjectTagBaseModel.h"
+#import "ProjectListProBaseModel.h"
+#import "ProjectListProModel.h"
+#import "ProjectListCell.h"
+#import "ProjectNoRoadCell.h"
+#import "ProjectDetailController.h"
+#import "ProjectPrepareDetailVC.h"
+#define REQUESTSEARCHHOTWORD @"requestHotWordList"
+#define REQUESTSEARCHPROJECTSTR @"requestSearchFromStrProjectList"
+#define REQUESTSEARCHPROJECTLIST @"requestSearchProjectList"
+#define REQUESTPROJECTTAG @"requestSearchCondition"
 @interface ProjectSearchController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
 @property (nonatomic, strong) UIButton * operateBtn;
 @property (nonatomic, strong) UIView *tagView;
 @property (nonatomic, strong) UITableViewCustomView *tagTableView;
+@property (nonatomic, strong) NSMutableArray *tagViewBtnTagArray;
+@property (nonatomic, strong) NSMutableArray *tagCellTitleCommitArray;
 @property (nonatomic, strong) NSMutableArray *tagCellTitleArray;
 @property (nonatomic, strong) NSMutableArray *tagCategoryArray;
 @property (nonatomic, strong) NSMutableArray *tagCellHeightArray;
 @property (nonatomic, strong) NSMutableArray *tagCommitArray;
 @property (nonatomic, strong) NSMutableDictionary *selectedDic;
 @property (nonatomic, strong) UITableViewCustomView *resultTableView;
+@property (nonatomic, strong) NSMutableArray *searchResultArray;
+@property (nonatomic, strong) NSMutableArray *tempResultProArray;
+@property (nonatomic, strong) NSMutableArray *searchProjectStatusArray;
 
 @property (nonatomic, strong) UISearchBar *tagSearchBar;
 
@@ -31,6 +47,17 @@
 @property (nonatomic, strong) UISearchBar *searchBar;
 
 @property (nonatomic, assign) BOOL selected;
+
+@property (nonatomic, copy) NSString *loadTagPartner;
+@property (nonatomic, copy) NSString *searchProjectPartner;
+@property (nonatomic, copy) NSString *searchProjectStrPartner;
+@property (nonatomic, copy) NSString *searchHotWordPartner;
+@property (nonatomic, assign) NSInteger page;
+
+@property (strong, nonatomic) UIView *gifView;
+@property (strong, nonatomic) UIImageView *gifImageView;
+
+@property (nonatomic, assign) BOOL isTagSearch;
 @end
 
 static NSString *tagCellidentity = @"ProjectTagCell";
@@ -39,7 +66,14 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    _page = 0;
+    self.loadTagPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTPROJECTTAG];
+    self.searchProjectPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTSEARCHPROJECTLIST];
+    self.searchProjectStrPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTSEARCHPROJECTSTR];
+    self.searchHotWordPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTSEARCHHOTWORD];
+    NSMutableArray *searchResultArray = [NSMutableArray array];
+    self.searchResultArray = searchResultArray;
+    self.loadingViewFrame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showCetainStatus) name:SHOWCERTAINNOTI object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideCetainStatus) name:HIDECERTAINNOTI object:nil];
     // Do any additional setup after loading the view.
@@ -48,10 +82,71 @@ static NSString *tagCellidentity = @"ProjectTagCell";
     [self setNav];
     //结果视图
     [self setupResult];
+    
+    [self loadTagsData];
     //创建默认布局
-    [self setupTagView];
+    
+    //下载热门词汇
+    [self loadHotWord];
+    
 }
 
+-(void)loadHotWord
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.searchHotWordPartner,@"partner", nil];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_SEARCH_HOTWORD) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        NSLog(@"热刺出来啊---%@",dic);
+        if ([dic[@"status"] integerValue] == 200) {
+            self.hotDataSource = [NSMutableArray arrayWithArray:dic[@"data"]];
+        }else{
+        
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"热刺错误--%@",error.localizedDescription);
+    }];
+}
+-(void)loadTagsData
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.loadTagPartner,@"partner", nil];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_PROJECT_TAG) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSArray *data = [NSArray arrayWithArray:dic[@"data"]];
+            if (data.count > 0) {
+                //移除原先的数据、
+                [self.tagViewBtnTagArray removeAllObjects];
+                [self.tagCellTitleArray removeAllObjects];
+                [self.tagCellTitleCommitArray removeAllObjects];
+                NSArray *baseTagArray = [ProjectTagBaseModel mj_objectArrayWithKeyValuesArray:data];
+                for (NSInteger i = 0; i < baseTagArray.count; i ++) {
+                    ProjectTagBaseModel *tagBaseModel = baseTagArray[i];
+                    if (tagBaseModel.cData.count > 0) {
+                        [self.tagCellTitleArray addObject:tagBaseModel.cName];
+                        [self.tagCellTitleCommitArray addObject:tagBaseModel.cKey];
+                        NSMutableArray *tagTitleArray = [NSMutableArray array];
+                        [tagTitleArray addObject:@"不限"];
+                        [self.tagViewBtnTagArray addObject:[NSNumber numberWithInteger:0]];
+                        for (NSInteger j = 0; j < tagBaseModel.cData.count; j ++) {
+                            ProjectTagModel *tagModel = tagBaseModel.cData[j];
+                            [tagTitleArray addObject:tagModel.value];
+                            [self.tagViewBtnTagArray addObject:[NSNumber numberWithInteger:tagModel.itemKey]];
+                        }
+                        NSMutableDictionary *nsmDic = [NSMutableDictionary dictionary];
+                        [nsmDic setObject:tagTitleArray forKey:@"title"];
+                        [self.tagCategoryArray addObject:nsmDic];
+                    }
+                }
+            }
+            [self setupTagView];
+        }else{
+        
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+}
 -(void)showCetainStatus
 {
     _selected = YES;
@@ -114,10 +209,10 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 {
     if (!_tagView) {
         UIView *tagView = [[UIView alloc] initWithFrame:self.view.bounds];
-        tagView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        tagView.backgroundColor = [TDUtil colorWithHexString:@"f5f5f5"];;
         
         UITableViewCustomView *tableView = [[UITableViewCustomView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
-        tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        tableView.backgroundColor = [TDUtil colorWithHexString:@"f5f5f5"];
         tableView.tag = 1;
         tableView.delegate = self;
         tableView.dataSource = self;
@@ -148,6 +243,30 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 }
 
 #pragma mark--------------------结果视图----------------------
+//-(NSMutableArray *)searchResultArray
+//{
+//    if (!self.searchResultArray) {
+//        NSMutableArray *searchResultArray = [NSMutableArray array];
+//        self.searchResultArray = searchResultArray;
+//    }
+//    return self.searchResultArray;
+//}
+-(NSMutableArray *)searchProjectStatusArray
+{
+    if (!_searchProjectStatusArray) {
+        NSMutableArray *searchProjectStatusArray = [NSMutableArray array];
+        self.searchProjectStatusArray = searchProjectStatusArray;
+    }
+    return _searchProjectStatusArray;
+}
+-(NSMutableArray *)tempResultProArray
+{
+    if (!_tempResultProArray) {
+        NSMutableArray *tempResultProArray = [NSMutableArray array];
+        self.tempResultProArray = tempResultProArray;
+    }
+    return _tempResultProArray;
+}
 -(void)setupResult
 {
     [self.view addSubview:self.resultTableView];
@@ -156,25 +275,67 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 {
     if (!_resultTableView) {
         UITableViewCustomView *tableView = [[UITableViewCustomView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
-        tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        tableView.backgroundColor = [TDUtil colorWithHexString:@"f5f5f5"];
         tableView.tag = 0;
         tableView.delegate = self;
         tableView.dataSource = self;
-        tableView.bounces = NO;
+//        tableView.bounces = NO;
         tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(lastPage)];
+        tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(nextPage)];
+        tableView.isNone = NO;
         self.resultTableView = tableView;
     }
     return _resultTableView;
 }
-
+-(void)lastPage
+{
+    if (self.page > 0) {
+        self.page --;
+    }else{
+        self.page = 0;
+    }
+    if (self.isTagSearch) {
+        [self loadSearchProject];
+    }else{
+        [self searchProjectStrList];
+    }
+    
+}
+-(void)nextPage
+{
+    self.page ++;
+    if (self.isTagSearch) {
+        [self loadSearchProject];
+    }else{
+        [self searchProjectStrList];
+    }
+    
+}
 #pragma mark------------------搜索视图------------------------
+-(NSMutableArray *)tagViewBtnTagArray
+{
+    if (!_tagViewBtnTagArray) {
+        NSMutableArray *tagViewBtnTagArray = [NSMutableArray array];
+        self.tagViewBtnTagArray = tagViewBtnTagArray;
+    }
+    return _tagViewBtnTagArray;
+}
 -(NSMutableArray *)tagCellTitleArray
 {
     if (!_tagCellTitleArray) {
-        NSMutableArray *tagCellTitleArray = [[NSMutableArray alloc]initWithObjects:@"融资阶段",@"所属行业",@"融资额度",@"所在地",nil];
+        NSMutableArray *tagCellTitleArray = [NSMutableArray array];
         self.tagCellTitleArray = tagCellTitleArray;
     }
     return _tagCellTitleArray;
+}
+-(NSMutableArray *)tagCellTitleCommitArray
+{
+    if (!_tagCellTitleCommitArray) {
+        NSMutableArray *tagCellTitleCommitArray = [NSMutableArray array];
+        self.tagCellTitleCommitArray = tagCellTitleCommitArray;
+    }
+    return _tagCellTitleCommitArray;
 }
 -(NSMutableArray *)tagCellHeightArray
 {
@@ -203,7 +364,8 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 -(NSMutableArray *)tagCategoryArray
 {
     if (!_tagCategoryArray) {
-        NSMutableArray *tagCategoryArray = [[NSMutableArray alloc] initWithArray:@[@{@"first":@[@"不限",@"天使轮",@"A轮",@"B轮",@"IPO"]},@{@"first":@[@"不限",@"移动互联网",@"新材料",@"节能环保",@"生物制药",@"消费服务",@"信息技术",@"新能源",@"文化传媒",@"其他"]},@{@"first":@[@"不限",@"300万以下",@"300万~500万",@"500万~2000万",@"2000万~5000万",@"5000万以上"]},@{@"first":@[@"不限",@"西安",@"北京",@"广州",@"上海",@"深圳"]}]];
+//        NSMutableArray *tagCategoryArray = [[NSMutableArray alloc] initWithArray:@[@{@"first":@[@"不限",@"天使轮",@"A轮",@"B轮",@"IPO"]},@{@"first":@[@"不限",@"移动互联网",@"新材料",@"节能环保",@"生物制药",@"消费服务",@"信息技术",@"新能源",@"文化传媒",@"其他"]},@{@"first":@[@"不限",@"300万以下",@"300万~500万",@"500万~2000万",@"2000万~5000万",@"5000万以上"]},@{@"first":@[@"不限",@"西安",@"北京",@"广州",@"上海",@"深圳"]}]];
+        NSMutableArray *tagCategoryArray = [NSMutableArray array];
         self.tagCategoryArray = tagCategoryArray;
     }
     return _tagCategoryArray;
@@ -232,7 +394,6 @@ static NSString *tagCellidentity = @"ProjectTagCell";
         if (searchBar.text.length && ![searchBar.text isEqualToString:@""]) {
             [self.searchBar resignFirstResponder];
             // self.searchBar.placeholder = self.searchBar.text;
-            self.searchBar.text = @"";
             [self startSearch];
         }
     }
@@ -248,27 +409,167 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 {
     //检索标签
 //    [self checkSelectedTag];
+    self.isTagSearch = NO;
+    [self createLoadingView];
+    [self searchProjectStrList];
+    self.page = 0;
+    [self.searchResultArray removeAllObjects];
+    [self.tempResultProArray removeAllObjects];
+    [self.searchProjectStatusArray removeAllObjects];
     [_operateBtn setTitle:@"筛选" forState:UIControlStateNormal];
     _operateBtn.enabled = YES;
     _selected = NO;
     [self.view bringSubviewToFront:self.resultTableView];
     [_searchView removeFromSuperview];
 }
+-(void)searchProjectStrList
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%ld",self.page],@"page",self.searchBar.text,@"search", nil];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_SEARCH_PROJECT_STR) parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        if ([dic[@"status"] integerValue] == 200) {
+            NSLog(@"当前页%ld",self.page);
+            self.searchBar.text = @"";
+            [self.resultTableView.mj_header endRefreshing];
+            [self.resultTableView.mj_footer endRefreshing];
+            NSArray *dataArray = [NSArray arrayWithArray:dic[@"data"]];
+            if (self.page == 0) {
+                [self.searchResultArray removeAllObjects];
+                [self.tempResultProArray removeAllObjects];
+                [self.searchProjectStatusArray removeAllObjects];
+            }
+            if (dataArray.count > 0) {
+                [self analysisProjectListData:dataArray];
+            }
+        }else if ([dic[@"status"] integerValue] == 201){
+            NSLog(@"没有数据");
+            [self.resultTableView.mj_header endRefreshing];
+            [self.resultTableView.mj_footer endRefreshingWithNoMoreData];
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self removeLoadingView];
+        });
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"报错%@",error.localizedDescription);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self removeLoadingView];
+        });
+    }];
+}
 -(void)checkSelectedTag
 {
+//    self.startLoading = YES;
+//    self.isTransparent = YES;
+    [self createLoadingView];
+    
     ProjectTagCell *tagCell;
     NSIndexPath *indexPath;
 //    SKTagView *tagView;
     NSMutableArray *selectedArray = [NSMutableArray array];
-    [self.tagCommitArray removeAllObjects];
+//    [self.tagCommitArray removeAllObjects];
     [self.selectedDic removeAllObjects];
+    [self.searchResultArray removeAllObjects];
+    [self.tempResultProArray removeAllObjects];
+    [self.searchProjectStatusArray removeAllObjects];
     for (NSInteger i = 0; i < self.tagCategoryArray.count; i ++) {
         indexPath = [NSIndexPath indexPathForRow:i inSection:0];
         tagCell = [self.tagTableView cellForRowAtIndexPath:indexPath];
         selectedArray = tagCell.tagView.selectedArray;
-        [self.selectedDic setObject:selectedArray forKey:[NSString stringWithFormat:@"%ld",(long)i]];
+//        NSLog(@"打印数组---%@",selectedArray);
+        NSMutableString *str = [NSMutableString string];
+        if (selectedArray.count > 0) {
+            for (NSInteger j = 0; j < selectedArray.count; j ++) {
+                if (j == selectedArray.count - 1) {
+                    [str appendFormat:@"%@",selectedArray[j]];
+                }else{
+                    [str appendFormat:@"%@,",selectedArray[j]];
+                }
+            }
+        }
+        if (str.length > 0) {
+            [self.selectedDic setObject:str forKey:self.tagCellTitleCommitArray[i]];
+        }else{
+            [self.selectedDic setObject:@"0" forKey:self.tagCellTitleCommitArray[i]];
+        }
     }
+    [self loadSearchProject];
     NSLog(@"打印提交字典---%@",self.selectedDic);
+}
+-(void)loadSearchProject
+{
+    
+    [self.selectedDic setObject:[NSString stringWithFormat:@"%ld",self.page] forKey:@"page"];
+    [[EUNetWorkTool shareTool] POST:JZT_URL(REQUEST_SEARCH_PROJECT_LIST) parameters:self.selectedDic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject;
+        NSLog(@"%@",dic[@"status"]);
+        if ([dic[@"status"] integerValue] == 200) {
+            NSLog(@"当前页%ld",self.page);
+            [self.resultTableView.mj_header endRefreshing];
+            [self.resultTableView.mj_footer endRefreshing];
+            NSArray *dataArray = [NSArray arrayWithArray:dic[@"data"]];
+            if (self.page == 0) {
+                [self.searchResultArray removeAllObjects];
+                [self.tempResultProArray removeAllObjects];
+                [self.searchProjectStatusArray removeAllObjects];
+            }
+            if (dataArray.count > 0) {
+                [self analysisProjectListData:dataArray];
+            }
+        }else if([dic[@"status"] integerValue] == 201) {//其他状态码
+            NSLog(@"没有数据");
+            [self.resultTableView.mj_header endRefreshing];
+            [self.resultTableView.mj_footer endRefreshingWithNoMoreData];
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self removeLoadingView];
+        });
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        self.isNetRequestError  =YES;
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self removeLoadingView];
+        });
+        NSLog(@"请求错误---%@",error.localizedDescription);
+    }];
+}
+
+
+-(void)analysisProjectListData:(NSArray*)array
+{
+    NSArray *dataArray = [Project mj_objectArrayWithKeyValuesArray:array];
+    for (NSInteger i =0; i < dataArray.count; i ++) {
+        ProjectListProModel *listModel = [ProjectListProModel new];
+        Project *project = (Project*)dataArray[i];
+        listModel.startPageImage = project.startPageImage;
+        listModel.abbrevName = project.abbrevName;
+        listModel.address = project.address;
+        listModel.fullName = project.fullName;
+        listModel.status = project.financestatus.name;
+        listModel.projectId = project.projectId;
+        listModel.timeLeft = project.timeLeft;
+        [self.searchProjectStatusArray addObject:project.financestatus.name];//加入项目类别
+        listModel.areas = [project.industoryType componentsSeparatedByString:@"，"];
+        listModel.collectionCount = project.collectionCount;
+        if (project.roadshows.count) {
+            Roadshows *roadshows = project.roadshows[0];
+            listModel.financedMount = roadshows.roadshowplan.financedMount;
+            listModel.financeTotal = roadshows.roadshowplan.financeTotal;
+            listModel.endDate = roadshows.roadshowplan.endDate;
+        }
+        [self.tempResultProArray addObject:listModel];
+    }
+    self.searchResultArray = self.tempResultProArray;
+}
+-(void)setSearchResultArray:(NSMutableArray *)searchResultArray
+{
+    self->_searchResultArray = searchResultArray;
+    if (_searchResultArray.count <= 0) {
+        self.resultTableView.isNone = YES;
+    }else{
+        self.resultTableView.isNone = NO;
+    }
+    [self.resultTableView reloadData];
+    
 }
 -(void)cancle
 {
@@ -308,7 +609,7 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 {
     if (!_bottomSearchView) {
         UIView *bottomSearchView = [UIView new];
-        bottomSearchView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        bottomSearchView.backgroundColor = [TDUtil colorWithHexString:@"f5f5f5"];
     }
     return _bottomSearchView;
 }
@@ -352,6 +653,8 @@ static NSString *tagCellidentity = @"ProjectTagCell";
         //点击事件回调
         tagBtnView.didTapTagAtIndex = ^(NSUInteger idx){
             NSLog(@"点击了第%ld个",(unsigned long)idx);
+            self.searchBar.text = self.hotDataSource[idx];
+            [self startSearch];
         };
         //获取刚才加入多有tag之后的内在高度
         CGFloat tagHeight = tagBtnView.intrinsicContentSize.height;
@@ -366,7 +669,7 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 -(NSMutableArray *)hotDataSource
 {
     if (!_hotDataSource) {
-        NSMutableArray *hotDataSource = [[NSMutableArray alloc] initWithArray:@[@"O2O",@"移动互联网",@"医疗",@"教育",@"农业",@"汽车市场",@"工程",@"制造",@"大数据",@"机器人",@"人工智能",@"VR/AR",@"阴阳师",@"部落冲突",@"冰雪传奇"]];
+        NSMutableArray *hotDataSource = [NSMutableArray array];
         self.hotDataSource = hotDataSource;
     }
     return _hotDataSource;
@@ -405,7 +708,7 @@ static NSString *tagCellidentity = @"ProjectTagCell";
     if (tableView.tag == 1) {
         return self.tagCategoryArray.count;
     }
-    return 5;
+    return self.searchResultArray.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -415,27 +718,41 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 //        NSLog(@"打印高度---%f",height);
         return height;
     }
-    return 150;
+    return 172;
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView.tag == 0) {
-        static NSString *cellId=@"cell";
-        
-        UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
-        
-        if(cell==nil){
+        if (self.searchResultArray.count > 0) {
+            if ([self.searchProjectStatusArray[indexPath.row] isEqualToString:@"融资中"]) {
+                static NSString * cellId = @"ProjectListCell";
+                ProjectListCell * cell =[tableView dequeueReusableCellWithIdentifier:cellId];
+                if (cell == nil) {
+                    cell = [[[NSBundle mainBundle] loadNibNamed:@"ProjectListCell" owner:nil options:nil] lastObject];
+                }
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                if (self.searchResultArray[indexPath.row]) {
+                    cell.model = self.searchResultArray[indexPath.row];
+                }
+                return cell;
+            }
             
-            cell=[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-            
+            if ([self.searchProjectStatusArray[indexPath.row] isEqualToString:@"预选项目"]) {
+                static NSString * cellId =@"ProjectNoRoadCell";
+                ProjectNoRoadCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                if (cell == nil) {
+                    cell = [[[NSBundle mainBundle] loadNibNamed:cellId owner:nil options:nil] lastObject];
+                    
+                }
+                if (self.searchResultArray[indexPath.row]) {
+                    cell.model = self.searchResultArray[indexPath.row];
+                }
+                [cell.statusImage setHidden:YES];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                return cell;
+            }
         }
-        
-        cell.textLabel.text = @"结果出来了！！！";
-        cell.textLabel.textColor = [UIColor blueColor];
-        cell.textLabel.font = BGFont(50);
-        
-        return cell;
     }
     if (tableView.tag == 1) {
         ProjectTagCell *cell = [tableView dequeueReusableCellWithIdentifier:tagCellidentity];
@@ -464,13 +781,13 @@ static NSString *tagCellidentity = @"ProjectTagCell";
     // 给出两个字段，如果给的是0，那么就是变化的,如果给的不是0，那么就是固定的
     //        cell.tagView.regularWidth = 80;
     cell.tagView.regularHeight = 28;
-    NSArray *arr = [self.tagCategoryArray[indexpath.row] valueForKey:@"first"];
+    NSArray *arr = [self.tagCategoryArray[indexpath.row] valueForKey:@"title"];
     
     [arr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         SKTag *tag = [[SKTag alloc] initWithText:arr[idx]];
         tag.isTag = YES;
-        tag.index = idx;
+        tag.index = [self.tagViewBtnTagArray[idx] integerValue];
         tag.font = [UIFont systemFontOfSize:12];
         tag.textColor = [TDUtil colorWithHexString:@"474747"];
         tag.textSelectedColor = [UIColor whiteColor];
@@ -496,6 +813,25 @@ static NSString *tagCellidentity = @"ProjectTagCell";
     switch (tableView.tag) {
         case 0:{
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            ProjectListProModel *model = [ProjectListProModel new];
+            if ([self.searchProjectStatusArray[indexPath.row] isEqualToString:@"融资中"]) {
+                
+                ProjectDetailController * detail = [[ProjectDetailController alloc]init];
+                model = self.searchResultArray[indexPath.row];
+                detail.isPush = YES;
+                detail.projectId = model.projectId;
+                detail.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:detail animated:YES];
+            }
+            if ([self.searchProjectStatusArray[indexPath.row] isEqualToString:@"预选项目"]){
+                
+                ProjectPrepareDetailVC *detail = [ProjectPrepareDetailVC new];
+                model = self.searchResultArray[indexPath.row];
+                
+                detail.projectId = model.projectId;
+                detail.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:detail animated:YES];
+            }
         }
             break;
         case 1:{
@@ -517,28 +853,60 @@ static NSString *tagCellidentity = @"ProjectTagCell";
         }
             break;
         case 1:{
-            if (_selected) {
-                [self checkSelectedTag];
-                [_operateBtn setTitle:@"筛选" forState:UIControlStateNormal];
-//                _operateBtn.enabled = YES;
-                [self.view bringSubviewToFront:self.resultTableView];
-                _selected = NO;
-            }else{
+//            if (_selected) {
+////                [self.searchResultArray removeAllObjects];
+////                [self.tempResultProArray removeAllObjects];
+////                [self.searchProjectStatusArray removeAllObjects];
+////                [self checkSelectedTag];
+//                [_operateBtn setTitle:@"筛选" forState:UIControlStateNormal];
+////                _operateBtn.enabled = YES;
+//                [self.view bringSubviewToFront:self.resultTableView];
+//                _selected = NO;
+//            }else{
                 if ([_operateBtn.currentTitle isEqualToString:@"筛选"]) {
                     [_operateBtn setTitle:@"确定" forState:UIControlStateNormal];
                     _operateBtn.enabled = YES;
                     [self.view bringSubviewToFront:self.tagView];
                 }else{
+//                    [self.searchResultArray removeAllObjects];
+//                    [self.tempResultProArray removeAllObjects];
+//                    [self.searchProjectStatusArray removeAllObjects];
+                    self.page = 0;
+                    self.isTagSearch = YES;
+                    [self checkSelectedTag];
                     [_operateBtn setTitle:@"筛选" forState:UIControlStateNormal];
                     [self.view bringSubviewToFront:self.resultTableView];
                 }
                 
-            }
+//            }
             
         }
         default:
             break;
     }
+}
+
+#pragma mark-----创建loadingView
+-(void)createLoadingView
+{
+    
+    _gifView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
+    _gifView.backgroundColor = [UIColor whiteColor];
+    [self.resultTableView addSubview:_gifView];
+    
+    _gifImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 100*WIDTHCONFIG, 100*WIDTHCONFIG)];
+    _gifImageView.centerX = self.resultTableView.centerX;
+    _gifImageView.centerY = self.resultTableView.centerY - 50*WIDTHCONFIG;
+    UIImage *image = [UIImage sd_animatedGIFNamed:@"loadingView1"];
+    _gifImageView.image = image;
+    [self.resultTableView addSubview:_gifImageView];
+    
+}
+#pragma mark----移除loadingView
+-(void)removeLoadingView
+{
+    [_gifImageView removeFromSuperview];
+    [_gifView removeFromSuperview];
 }
 
 -(void)dealloc

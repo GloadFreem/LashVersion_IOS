@@ -264,10 +264,11 @@
             _wePic = snsAccount.iconURL;
             NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
             [data setValue:snsAccount.userName forKey:@"nickName"];
+            [data setValue:snsAccount.openId forKey:USER_WECHAT_ID];
             [data synchronize];
             
              NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.wePartner,@"partner",snsAccount.openId,@"wechatID",@"1",@"platform",regId,@"regid", nil];
-        
+            
             //开始请求
             [self.httpUtil getDataFromAPIWithOps:WECHATLOGINUSER postParam:dic type:0 delegate:self sel:@selector(requestWELogin:)];
             
@@ -289,7 +290,8 @@
             NSDictionary *idenTypeDic = [NSDictionary dictionaryWithDictionary:[data valueForKey:@"identityType"]];
             NSString *name = idenTypeDic[@"name"];
 //            NSInteger identifyId =(NSInteger)idenTypeDic[@"identiyTypeId"];
-            
+            NSUserDefaults* defaults =[NSUserDefaults standardUserDefaults];
+            [defaults setValue:@"YES" forKey:IS_WECHAT_LOGIN];
             if (name && [name isEqualToString:@"无身份"]) {//去认证
                 //进入身份完善信息界面
                 PerfectViewController *perfert = [PerfectViewController new];
@@ -302,15 +304,12 @@
                 JTabBarController * tabBarController = [[JTabBarController alloc]init];
                 tabBarController.delegate = delegate;
                 delegate.tabBar = tabBarController;
-//                delegate.nav = [[UINavigationController alloc]initWithRootViewController:delegate.tabBar];
+
                 delegate.window.rootViewController = delegate.tabBar;
                 
-                NSUserDefaults* data =[NSUserDefaults standardUserDefaults];
+                [defaults setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
+                [defaults setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
                 
-                [data setValue:[jsonDic[@"data"] valueForKey:@"userId"] forKey:USER_STATIC_USER_ID];
-                [data setValue:[jsonDic[@"data"] valueForKey:@"extUserId"] forKey:USER_STATIC_EXT_USER_ID];
-                
-//                [self removeFromParentViewController];
             }
             
         }else{
@@ -318,7 +317,6 @@
         [[DialogUtil sharedInstance]showDlg:self.view textOnly:[jsonDic valueForKey:@"message"]];
         }
     }
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated

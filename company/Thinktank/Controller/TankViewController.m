@@ -139,7 +139,7 @@ static void *RecordLastClickKey = @"RecordLastClickKey";
             //自动登录
             [self isAutoLogin];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                if (self.loginSucess ) {
+                if (self.loginSucess) {
                     [self loadAuthenData];
                     [self loadOtherData];
                 }

@@ -146,9 +146,9 @@
     NSMutableAttributedString* precentStr;
     if(_percent-_desValue>=1)
     {
-        precentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.1f%@",_desValue,self.percentUnit]];
+        precentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.0f%@",_desValue,self.percentUnit]];
     }else{
-        precentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.1f%@",_percent,self.percentUnit]];
+        precentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.0f%@",_percent,self.percentUnit]];
     }
     NSRange precentRange = NSMakeRange(0, precentStr.string.length);
     
@@ -165,7 +165,7 @@
                                                   context:nil];
     
     CGFloat precentX = _circleCenter.x - precentRect.size.width * 0.5;
-    CGFloat precentY = _circleCenter.y - 5 ;
+    CGFloat precentY = _circleCenter.y - 2;
     
     [precentStr drawAtPoint:CGPointMake(precentX, precentY)];
 }

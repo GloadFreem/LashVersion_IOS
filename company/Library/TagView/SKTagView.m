@@ -280,7 +280,7 @@
     btn.selected = !btn.selected;
     if (btn.selected) {
         if (btn != self.btnArray[0]) {
-            [self.statusArray replaceObjectAtIndex:btn.tag withObject:@"1"];
+            [self.statusArray replaceObjectAtIndex:[self.btnArray indexOfObject:btn] withObject:@"1"];
             //加入标签码
             if (![self.selectedArray containsObject:[NSString stringWithFormat:@"%ld",(long)btn.tag]]) {
             [self.selectedArray addObject:[NSString stringWithFormat:@"%ld",(long)btn.tag]];
@@ -292,14 +292,14 @@
 //            }
             
         }else{
-            [self.statusArray replaceObjectAtIndex:btn.tag withObject:@"0"];
+            [self.statusArray replaceObjectAtIndex:[self.btnArray indexOfObject:btn] withObject:@"0"];
             //删除标签码
             if ([self.selectedArray containsObject:[NSString stringWithFormat:@"%ld",(long)btn.tag]]) {
                 [self.selectedArray removeObject:[NSString stringWithFormat:@"%ld",(long)btn.tag]];
             }
         }
     }else{
-        [self.statusArray replaceObjectAtIndex:btn.tag withObject:@"0"];
+        [self.statusArray replaceObjectAtIndex:[self.btnArray indexOfObject:btn] withObject:@"0"];
         //删除标签码
         if ([self.selectedArray containsObject:[NSString stringWithFormat:@"%ld",(long)btn.tag]]) {
             [self.selectedArray removeObject:[NSString stringWithFormat:@"%ld",(long)btn.tag]];
@@ -316,7 +316,7 @@
                     [self.selectedArray removeAllObjects];
                 }else{
                     btn.selected = NO;
-                    [self.statusArray replaceObjectAtIndex:btn.tag withObject:@"0"];
+                    [self.statusArray replaceObjectAtIndex:[self.btnArray indexOfObject:btn] withObject:@"0"];
                 }
             }
         }else{

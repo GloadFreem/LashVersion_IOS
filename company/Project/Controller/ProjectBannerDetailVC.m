@@ -68,16 +68,17 @@
 #pragma mark-----创建loadingView
 -(void)createLoadingView
 {
-    _gifView = [[UIView alloc]initWithFrame:self.view.frame];
-    _gifView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:_gifView];
+    
+    _gifView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - 64)];
+    _gifView.backgroundColor = [UIColor clearColor];
+    [[[UIApplication sharedApplication] keyWindow] addSubview:_gifView];
     
     _gifImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 174*WIDTHCONFIG, 174*WIDTHCONFIG)];
     _gifImageView.centerX = self.view.centerX;
     _gifImageView.centerY = self.view.centerY - 50*WIDTHCONFIG;
     UIImage *image = [UIImage sd_animatedGIFNamed:@"loadingView"];
     _gifImageView.image = image;
-    [self.view addSubview:_gifImageView];
+    [[[UIApplication sharedApplication] keyWindow] addSubview:_gifImageView];
     
 }
 #pragma mark----移除loadingView

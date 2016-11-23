@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProjectSearchController : UIViewController
+@interface ProjectSearchController : RootViewController
 
 @end
