@@ -994,8 +994,7 @@
 		44EFCD231D5D79B300838CE0 /* noData@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44EFCD211D5D79B300838CE0 /* noData@2x.png */; };
 		44EFCD241D5D79B300838CE0 /* noData@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44EFCD221D5D79B300838CE0 /* noData@3x.png */; };
 		44F8098D1D59B29700756C1A /* DataBaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F8098C1D59B29700756C1A /* DataBaseHelper.m */; };
-		44FB7BE41DD0840800FF9E7A /* dock_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FB7BE21DD0840800FF9E7A /* dock_bg@2x.png */; };
-		44FB7BE51DD0840800FF9E7A /* dock_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FB7BE31DD0840800FF9E7A /* dock_bg@3x.png */; };
+		44FB7BE41DD0840800FF9E7A /* dock_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FB7BE21DD0840800FF9E7A /* dock_bg.png */; };
 		44FF81E51D5C55BF004B770E /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FF81E41D5C55BF004B770E /* LoadingView.m */; };
 		44FF81EA1D5C6C9D004B770E /* LoadingViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FF81E91D5C6C9D004B770E /* LoadingViewDelegate.m */; };
 		44FF81ED1D5C6DE1004B770E /* LoadingUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FF81EC1D5C6DE1004B770E /* LoadingUtil.m */; };
@@ -2361,8 +2360,7 @@
 		44F433101D8F8772005183CD /* company.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = company.entitlements; sourceTree = "<group>"; };
 		44F8098B1D59B29700756C1A /* DataBaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBaseHelper.h; sourceTree = "<group>"; };
 		44F8098C1D59B29700756C1A /* DataBaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataBaseHelper.m; sourceTree = "<group>"; };
-		44FB7BE21DD0840800FF9E7A /* dock_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dock_bg@2x.png"; sourceTree = "<group>"; };
-		44FB7BE31DD0840800FF9E7A /* dock_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dock_bg@3x.png"; sourceTree = "<group>"; };
+		44FB7BE21DD0840800FF9E7A /* dock_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dock_bg.png; sourceTree = "<group>"; };
 		44FF81E31D5C55BF004B770E /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
 		44FF81E41D5C55BF004B770E /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
 		44FF81E81D5C6C9D004B770E /* LoadingViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingViewDelegate.h; sourceTree = "<group>"; };
@@ -3450,8 +3448,7 @@
 		44372BC71D3FCB5C00DED1D6 /* tab */ = {
 			isa = PBXGroup;
 			children = (
-				44FB7BE21DD0840800FF9E7A /* dock_bg@2x.png */,
-				44FB7BE31DD0840800FF9E7A /* dock_bg@3x.png */,
+				44FB7BE21DD0840800FF9E7A /* dock_bg.png */,
 				442519A81DD015C500242B0D /* tabBar_mine@2x.png */,
 				442519A91DD015C500242B0D /* tabBar_mine@3x.png */,
 				44BAF7651DB1C6600025D049 /* discover_tab_sel@2x.png */,
@@ -4969,7 +4966,7 @@
 				44372E4F1D3FCB5C00DED1D6 /* iconfont-zan-detail@3x.png in Resources */,
 				44372E0D1D3FCB5C00DED1D6 /* icon-commit@3x.png in Resources */,
 				44372E461D3FCB5C00DED1D6 /* icon_shuline@2x.png in Resources */,
-				44FB7BE41DD0840800FF9E7A /* dock_bg@2x.png in Resources */,
+				44FB7BE41DD0840800FF9E7A /* dock_bg.png in Resources */,
 				44372EFE1D3FCB5C00DED1D6 /* Pie-chart@3x.png in Resources */,
 				44372E111D3FCB5C00DED1D6 /* icon-guanzhubg@3x.png in Resources */,
 				44372E4B1D3FCB5C00DED1D6 /* iconfont-dingwei@3x.png in Resources */,
@@ -5510,7 +5507,6 @@
 				44372DC11D3FCB5C00DED1D6 /* iconfont_share@2x.png in Resources */,
 				448E93221DD2B05F00A06997 /* logo_collect@2x.png in Resources */,
 				4484D1D61D194091001F4C3A /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
-				44FB7BE51DD0840800FF9E7A /* dock_bg@3x.png in Resources */,
 				44372EAB1D3FCB5C00DED1D6 /* jintiao11.png in Resources */,
 				44372E851D3FCB5C00DED1D6 /* bill_point@2x.png in Resources */,
 				44372E801D3FCB5C00DED1D6 /* bill-tixian@3x.png in Resources */,

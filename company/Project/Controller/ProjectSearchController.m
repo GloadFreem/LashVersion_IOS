@@ -58,6 +58,7 @@
 @property (strong, nonatomic) UIImageView *gifImageView;
 
 @property (nonatomic, assign) BOOL isTagSearch;
+@property (nonatomic, assign) BOOL isFirstEnter;
 @end
 
 static NSString *tagCellidentity = @"ProjectTagCell";
@@ -66,6 +67,7 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _isFirstEnter = YES;
     _page = 0;
     self.loadTagPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTPROJECTTAG];
     self.searchProjectPartner = [TDUtil encryKeyWithMD5:KEY action:REQUESTSEARCHPROJECTLIST];
@@ -90,7 +92,7 @@ static NSString *tagCellidentity = @"ProjectTagCell";
     [self loadHotWord];
     
 }
-
+#pragma mark---搜索热词
 -(void)loadHotWord
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.searchHotWordPartner,@"partner", nil];
@@ -106,6 +108,7 @@ static NSString *tagCellidentity = @"ProjectTagCell";
         NSLog(@"热刺错误--%@",error.localizedDescription);
     }];
 }
+#pragma mark---筛选标签---
 -(void)loadTagsData
 {
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:KEY,@"key",self.loadTagPartner,@"partner", nil];
@@ -564,7 +567,12 @@ static NSString *tagCellidentity = @"ProjectTagCell";
 {
     self->_searchResultArray = searchResultArray;
     if (_searchResultArray.count <= 0) {
+        if (_isFirstEnter) {
+            self.resultTableView.isNone = NO;
+            _isFirstEnter = NO;
+        }else{
         self.resultTableView.isNone = YES;
+        }
     }else{
         self.resultTableView.isNone = NO;
     }
